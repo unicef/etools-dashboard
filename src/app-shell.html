@@ -134,7 +134,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="nav-menu">
             <iron-selector selected="[[page]]" attr-for-selected="name" selectable="side-bar-item" role="navigation">
 
-              <side-bar-item name="section1" icon="description" href="/section1/tab1"></side-bar-item>
+              <side-bar-item name="map" icon="explore" href="/map"></side-bar-item>
               <side-bar-item name="section2" icon="book" href="/section2"></side-bar-item>
               <side-bar-item name="section3" icon="build" href="/section3"></side-bar-item>
               <div class="divider"></div>
@@ -164,7 +164,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   attr-for-selected="name"
                   fallback-selection="not-found"
                   role="main">
-        <page-section1 name="section1" route="{{subroute}}"></page-section1>
+        <page-map name="map"></page-map>
         <page-section2 name="section2" route="{{subroute}}"></page-section2>
         <page-section3 name="section3" route="{{subroute}}"></page-section3>
         <page-not-found name="not-found"></page-not-found>
@@ -217,7 +217,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       attached: function() {
         if (this.route.path === '/') {
-          this.set('route.path', '/section1/tab1');
+          this.set('route.path', '/map');
         }
       },
 
@@ -248,7 +248,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _routePageChanged: function(page) {
-        this.page = page || 'section1';
+        this.page = page || 'map';
       },
 
       _pageChanged: function(page) {

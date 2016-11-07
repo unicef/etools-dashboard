@@ -3,7 +3,7 @@
 <link rel="import" href="../../../bower_components/etools-content-panel/etools-content-panel.html">
 <link rel="import" href="../../app-elements/etools-map/etools-map.html">
 
-<dom-module id="page-with-sidebar">
+<dom-module id="page-with-map">
   <template>
     <style include="page-layout-styles">
       :host {
@@ -13,15 +13,8 @@
     </style>
 
     <div id="pageContent">
-      <etools-content-panel title="Some data">
-        <p>Tab 1 page data section...</p>
+      <etools-content-panel title="Worldwide map">
         <etools-map google-map-api-key="AIzaSyBaK1y6DPo4a8zLA9xD3IbwSPfayx8P8yk"></etools-map>
-      </etools-content-panel>
-    </div>
-
-    <div id="sidebar">
-      <etools-content-panel title="Some sidebar content">
-        <p>Synced from VISION</p>
       </etools-content-panel>
     </div>
 
@@ -32,7 +25,7 @@
       'use strict';
 
       Polymer({
-        is: 'page-with-sidebar'
+        is: 'page-with-map'
       });
 
     })();
