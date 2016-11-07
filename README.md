@@ -1,4 +1,4 @@
-eTools Frontend Template
+eTools Dashboard
 ====================================
 
 Installation
@@ -7,7 +7,7 @@ Installation
 Using git, clone to a local directory:
 
 ```bash
-$ git clone https://github.com/unicef-polymer/etools-frontend-template.git
+$ git clone https://github.com/unicef/etools-dash.git
 ```
 Assuming node and npm are already installed, make sure bower is also installed, if not run:
 
