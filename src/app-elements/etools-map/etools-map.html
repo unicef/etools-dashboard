@@ -18,9 +18,9 @@
 <link rel="import" href="../../../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../../../bower_components/neon-animation/animations/scale-up-animation.html">
 
-<link rel="import" href="../etools-dropdown-filter/etools-dropdown-filter.html">
+<link rel="import" href="../../app-elements/etools-dropdown-filter/etools-dropdown-filter.html">
 
-<link rel="import" href="../../scripts/lodash/lodash.html">
+<link rel="import" href="../../../scripts/lodash/lodash.html">
 
 
 <!--
@@ -172,23 +172,23 @@ Etools Map element
       },
 
       ready: function() {
-        this.resetMap();
-        this.updateResultsLabel(0);
+          this.resetMap();
+          this.updateResultsLabel(0);
       },
 
       submitSearch: function() {
           this.toggleSpinner();
           var query = '';
 
-          _.each(filterTypes, function(filterType) {
-              if (document.querySelector('#' + filterType).selectedItem !== undefined &&
-                  document.querySelector('#' + filterType).selectedItem !== null &&
-                  document.querySelector('#' + filterType).selectedItem.id !== '') {
-                  query += filterType + '=' + document.querySelector('#' + filterType).selectedItem.getAttribute('id') + '&';
+          _.each(this.filterTypes, function(filterType) {
+              if (this.$$('#' + filterType).selectedItem !== undefined &&
+                  this.$$('#' + filterType).selectedItem !== null &&
+                  this.$$('#' + filterType).selectedItem.id !== '') {
+                  query += filterType + '=' + this.$$('#' + filterType).selectedItem.getAttribute('id') + '&';
               }
           });
 
-          var searchUrl = locationsUrl + query;
+          var searchUrl = this.locationsUrl + query;
 
           $.getJSON(searchUrl, function(data) {
 
@@ -205,7 +205,7 @@ Etools Map element
       },
 
       toggleSpinner: function() {
-          var spinner = document.getElementById('loading-spinner');
+          var spinner = this.$$('loading-spinner');
           spinner.active = !spinner.active;        
       },
 
@@ -216,13 +216,13 @@ Etools Map element
       },
 
       resetFilters: function() {
-          _.each(filterTypes, function(filterType) {
-              document.querySelector('#' + filterType + '_listbox').selected = null;
+          _.each(this.filterTypes, function(filterType) {
+              this.$$('#' + filterType + '_listbox').selected = null;
           });
       },
 
       resetMap: function() {
-          var gmap = document.querySelector('google-map');
+          var gmap = this.$$('google-map');
           var markers = Polymer.dom(gmap).childNodes;
 
           _.each(markers, function(marker) {
@@ -230,15 +230,15 @@ Etools Map element
           });
 
           gmap.clear();
-          gmap.latitude = mapDefaultValues.latitude;
-          gmap.longitude = mapDefaultValues.longitude;
-          gmap.zoom = mapDefaultValues.zoom;
+          gmap.latitude = this.mapDefaultValues.latitude;
+          gmap.longitude = this.mapDefaultValues.longitude;
+          gmap.zoom = this.mapDefaultValues.zoom;
           gmap._updateCenter();
           gmap.style.display = '';
       },
 
       updateMap: function(locations){
-          var gmap = document.querySelector('google-map');
+          var gmap = this.$$('google-map');
           gmap.clear();
 
           _.each(locations, function(location, locationIndex) {
@@ -250,12 +250,12 @@ Etools Map element
               marker.setAttribute('click-events', true);
 
               marker.addEventListener('google-map-marker-click', function (e) {
-                  var dialog = document.getElementById('gmap_dialog');
+                  var dialog = this.$$('gmap_dialog');
 
                   if (dialog) {
                       injectBoundHTML(createDialogContent(locationIndex, location), dialog);
 
-                      var template = document.querySelector('template[is="dom-bind"]');
+                      var template = this.$$('template[is="dom-bind"]');
                       template.selected = 0;
 
                       dialog.open();
@@ -347,7 +347,7 @@ Etools Map element
       },
 
       updateResultsLabel: function(locationsSize) {
-          document.getElementById('results_label').innerHTML = locationsSize + ' locations';
+          this.$.results_label.innerHTML = locationsSize + ' locations';
       }
     });
   </script>
