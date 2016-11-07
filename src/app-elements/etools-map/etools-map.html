@@ -127,7 +127,7 @@ Etools Map element
           </div>
           <div class="row">
               <div class="col-md-12">
-                  <google-map fit-to-markers max-zoom="10" info open style="display:none;"></google-map>
+                  <google-map fit-to-markers max-zoom="10" info open style="display:none;" api-key="[[googleMapApiKey]]"></google-map>
                   <paper-dialog id="gmap_dialog" class="size-position" entry-animation="scale-up-animation" exit-animation="fade-out-animation"></paper-dialog>
               </div>
           </div>
@@ -168,6 +168,10 @@ Etools Map element
             longitude: -41.308594,
             zoom: 3
           }
+        },
+
+        googleMapApiKey: {
+            type: String
         }
       },
 
