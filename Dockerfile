@@ -6,12 +6,13 @@ WORKDIR /tmp
 RUN apk add git
 RUN npm install -g bower polymer-cli http-server
 RUN npm install
-RUN mkdir /code/
-RUN cp -a /tmp/node_modules /code/node_modules
-RUN echo '{"directory" : "/code/bower_components"}' > .bowerrc
 RUN bower --allow-root install
+RUN mkdir /code/
 ADD . /code/
 WORKDIR /code
+RUN cp -a /tmp/node_modules /code/node_modules
+RUN cp -a /tmp/bower_components /code/bower_components
 RUN npm install -g gulp-cli
 RUN gulp
 CMD ["http-server", "/code/build/bundled"]
+
