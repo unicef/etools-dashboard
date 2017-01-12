@@ -1,0 +1,94 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<script>
+  window.pmpBehaviors = window.pmpBehaviors || {};
+  pmpBehaviors.NotificationToastsBehavior = {
+
+    properties: {
+      _toast: {
+        type: Object,
+        value: null
+      },
+      _toastQueue: {
+        type: Array,
+        value: function() { return []; }
+      }
+    },
+
+    listeners: {
+      'toast': 'queueToast'
+    },
+
+    queueToast: function(e, detail) {
+      e.stopPropagation();
+      if (!this._toast) {
+        this._toast = document.createElement('paper-toast');
+        this.listen(this._toast, 'iron-overlay-closed', 'dequeueToast');
+        var closeToastBtn = document.createElement('paper-button');
+        closeToastBtn.innerHTML = 'Ok';
+        closeToastBtn.setAttribute('class', 'warning-toast-dismiss-btn');
+        closeToastBtn.addEventListener('tap', this._toggleToast.bind(this, this._toast));
+        Polymer.dom(this._toast).appendChild(closeToastBtn);
+        // this.$.layout is app-drawer-layout element from app-shell.html
+        var layout = this.$.layout;
+        if (layout) {
+          Polymer.dom(layout).appendChild(this._toast);
+        } else {
+          console.warn('app-drawer-layout element from app-shell must have id="layout"');
+        }
+
+      }
+
+      if (!this._toastQueue.length) {
+        this.push('_toastQueue', detail);
+        var toastProperties = this._prepareToastAndGetShowProperties(detail);
+        this._toast.show(toastProperties);
+      } else {
+        var alreadyInQueue = this._toastQueue.filter(function(toastDetail) {
+          return JSON.stringify(toastDetail) === JSON.stringify(detail);
+        });
+        if (alreadyInQueue.length === 0) {
+          this.push('_toastQueue', detail);
+        } // else already in the queue
+      }
+    },
+
+    dequeueToast: function() {
+      this.shift('_toastQueue');
+      if (this._toastQueue.length) {
+        var toastProperties = this._prepareToastAndGetShowProperties(this._toastQueue[0]);
+        this._toast.show(toastProperties);
+      }
+    },
+
+    _prepareToastAndGetShowProperties: function(detail) {
+      var closeToastBtn = Polymer.dom(this._toast).querySelector('paper-button');
+      // clone detail obj
+      var toastProperties = JSON.parse(JSON.stringify(detail));
+
+      toastProperties.duration = 0;
+      if (typeof detail === 'object' && typeof detail.showCloseBtn !== 'undefined') {
+        if (detail.showCloseBtn === true) {
+          closeToastBtn.removeAttribute('hidden');
+        } else {
+          closeToastBtn.setAttribute('hidden', true);
+          if (!detail.duration) {
+            toastProperties.duration = 5000;
+          }
+        }
+        delete toastProperties.showCloseBtn;
+      } else {
+        closeToastBtn.setAttribute('hidden', true);
+      }
+
+      return toastProperties;
+    },
+
+    _toggleToast: function(toast) {
+      if (toast) {
+        toast.toggle();
+      }
+    },
+
+  };
+</script>

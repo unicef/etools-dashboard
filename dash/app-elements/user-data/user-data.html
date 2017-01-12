@@ -2,34 +2,35 @@
 <link rel="import" href="../../../bower_components/etools-ajax/etools-ajax.html">
 <link rel="import" href="../../../scripts/lodash/lodash.html">
 
+<link rel="import" href="../../app-behaviors/data-element-behavior.html">
+
 <dom-module id="user-data">
 
   <template>
 
     <etools-ajax id="ajax"
                  endpoint="[[endpoint]]"
+                 caching-storage="custom"
+                 dexie-db-collection="user"
                  on-success="_handleResponse"
-                 on-fail="_handleError"
-                 caching-storage="dexie"></etools-ajax>
+                 on-fail="_handleError"></etools-ajax>
   </template>
 
   <script>
 
-    var _data = {};
-    var _userEls = [];
-
     var _setUserData = function(data) {
-      _data.user = data || {};
+
+      var user = data;
       _data.permissions = {};
+
       var permissions = this.getAllPermissions();
 
       if (!_.isEmpty(data)) {
-
         permissions.defaultPermissions.forEach(function(perm) {
           _data.permissions[perm] = true;
         });
         // if partner: (!staff)
-        if (!_data.user.is_staff) {
+        if (!user.is_staff) {
           permissions.partnerOnlyPermissions.forEach(function(perm) {
             _data.permissions[perm] = true;
           });
@@ -39,7 +40,7 @@
             _data.permissions[perm] = true;
           });
 
-          if (_data.user.profile.partner_staff_member) {
+          if (user.profile.partner_staff_member) {
             // staff that has faked partnership by setting partner_staff_member on their profile
             permissions.partnerPermissions.forEach(function(perm) {
               _data.permissions[perm] = true;
@@ -48,25 +49,26 @@
         }
       } else {
         //for testing
-        console.log('setting super permissions');
         permissions.superPermissions.forEach(function(perm) {
           _data.permissions[perm] = true;
         });
       }
 
-      this.load(_data);
-      _userEls.forEach(function(el) {
-        if (el !== this) { el.load(_data); }
-      });
+      _setData.bind(this)(data);
     };
 
     Polymer({
 
       is: 'user-data',
 
-      behaviors: [etoolsAppConfig.globals],
+      behaviors: [pmpBehaviors.DataElementBehavior],
 
       properties: {
+
+        endpointName: {
+          type: String,
+          value: 'user'
+        },
 
         user: {
           type: Object,
@@ -82,23 +84,7 @@
 
       },
 
-      ready: function() {
-        this.load(_data);
-      },
-
-      attached: function() {
-        if (_userEls.length === 0 && !_data.user) {
-          this.endpoint = this.getEndpoint('userInfo');
-        }
-        _userEls.push(this);
-      },
-
-      detached: function() {
-        _userEls.splice(_userEls.indexOf(this), 1);
-      },
-
       load: function(data) {
-        //console.log(data);
         if (data.user) {
           this._setUser(data.user);
           this._setPermissions(data.permissions);
@@ -107,7 +93,6 @@
 
       _handleResponse: function(res) {
         // TODO: check response to make sure it contains a valid user
-        console.log('resp');
         _setUserData.bind(this)(res.detail);
       },
 

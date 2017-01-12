@@ -1,0 +1,55 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/moment-element/moment-import.html">
+<script>
+  window.pmpBehaviors = window.pmpBehaviors || {};
+  pmpBehaviors.DateBehavior = {
+
+    /**
+     * Format date string to any format supported by momentjs
+     */
+    prettyDate: function(dateString, format) {
+      if (!format) {
+        format = 'D MMM YYYY';
+      }
+      if (typeof dateString === 'string' && dateString !== '') {
+        var date = new Date(dateString);
+        if (date.toString() !== 'Invalid Date') {
+          // using moment.utc() ensures that the date will not be changed no matter timezone the user has set
+          return moment.utc(date).format(format);
+        }
+      }
+      return '';
+    },
+
+    /**
+     * Prepare date from string
+     */
+    prepareDate: function(dateString) {
+      if (typeof dateString === 'string' && dateString !== '') {
+        var date = new Date(dateString);
+        if (date.toString() === 'Invalid Date') {
+          date = new Date();
+        }
+        return date;
+      } else {
+        return new Date();
+      }
+    },
+
+    /**
+     * Open input field assigned(as prefix or suffix) etools-datepicker on tap.
+     * Make sure you also have the data-selector attribute set on the input field.
+     */
+    openDatePicker: function(event) {
+      var id = Polymer.dom(event).localTarget.getAttribute('data-selector');
+      if (id) {
+        var datepickerId = '#' + id;
+        var datePicker = this.$$(datepickerId);
+        if (datePicker) {
+          datePicker.open = true;
+        }
+      }
+    }
+
+  };
+</script>
