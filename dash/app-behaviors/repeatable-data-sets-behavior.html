@@ -1,0 +1,146 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/etools-dialog/dynamic-dialog-behavior.html">
+
+<script>
+  window.pmpBehaviors = window.pmpBehaviors || {};
+  pmpBehaviors.RepeatableDataSetsBehaviorImpl = {
+    // make sure you add DynamicDialogBehavior too in your element
+    properties: {
+      dataItems: {
+        type: Array,
+        value: [],
+        notify: true
+      },
+      dataSetModel: {
+        type: Object,
+        value: null
+      },
+      open: {
+        type: Boolean,
+        value: true,
+        reflectToAttribute: true
+      },
+      editMode: {
+        type: Boolean,
+        value: true
+      },
+      deleteConfirmationTitle: {
+        type: String,
+        value: 'Delete confirmation'
+      },
+      deleteConfirmationMessage: {
+        type: String,
+        value: 'Are you sure you want to delete this item?'
+      }
+    },
+
+    attached: function() {
+      // create delete confirmation dialog
+      this._createDeleteConfirmationDialog();
+    },
+
+    detached: function() {
+      // remove delete confirmation dialog when the element is detached
+      this.removeDialog(this.deleteDialog);
+    },
+
+    _toggle: function() {
+      this.set('open', !this.open);
+    },
+
+    _getExpandBtnIcon: function(open) {
+      if (!open) {
+        return 'icons:expand-more';
+      }
+      return 'icons:expand-less';
+    },
+
+    _emptyList: function(listLength) {
+      return listLength === 0;
+    },
+
+    _getItemModelObject: function() {
+      if (this.dataSetModel === null) {
+        var newObj = {};
+        if (this.dataItems.length > 0 && typeof this.dataItems[0] === 'object') {
+          Object.keys(this.dataItems[0]).forEach(function(property) {
+            newObj[property] = ''; //(this.model[0][property]) ? this.model[0][property] :
+          }.bind(this));
+        }
+        return newObj;
+      } else {
+        return JSON.parse(JSON.stringify(this.dataSetModel));
+      }
+    },
+
+    _addElement: function() {
+      if (!this.editMode) {
+        return;
+      }
+      this._makeSureDataItemsAreValid();
+
+      var newObj = this._getItemModelObject();
+      this.push('dataItems', newObj);
+    },
+
+    _openDeleteConfirmation: function(event) {
+      if (!this.editMode) {
+        return;
+      }
+      this.elToDeleteIndex = parseInt(Polymer.dom(event).localTarget.getAttribute('data-args'), 10);
+      this.deleteDialog.opened = true;
+    },
+
+    _onDeleteConfirmation: function(event) {
+      this.deleteDialog.opened = false;
+      if (event.detail.confirmed === true) {
+        this._deleteElement(this.elToDeleteIndex);
+      }
+      this.elToDeleteIndex = -1;
+    },
+
+    _deleteElement: function(index) {
+      if (!this.editMode) {
+        return;
+      }
+      if (index !== null && typeof index !== 'undefined' && index !== -1) {
+        this.splice('dataItems', index, 1);
+      }
+    },
+
+    _createDeleteConfirmationDialog: function() {
+      var deleteConfirmationContent = document.createElement('p');
+      deleteConfirmationContent.innerHTML = this.deleteConfirmationMessage;
+      this.deleteDialog = this.createDialog(this.deleteConfirmationTitle, 'md', 'Yes',
+          'No', this._onDeleteConfirmation.bind(this), deleteConfirmationContent);
+    },
+
+    /**
+     * Get last data item
+     */
+    _getLastDataItem: function() {
+      if (Array.isArray(this.dataItems) && this.dataItems.length > 0) {
+        return this.dataItems[this.dataItems.length - 1];
+      } else {
+        this._makeSureDataItemsAreValid();
+        return null;
+      }
+
+    },
+
+    /**
+     * Check is dataItems is Array, if not init with empty Array
+     */
+    _makeSureDataItemsAreValid: function() {
+      if (!Array.isArray(this.dataItems)) {
+        this.set('dataItems', []);
+      }
+    }
+  };
+
+  pmpBehaviors.RepeatableDataSetsBehavior = [
+    etoolsBehaviors.DynamicDialogBehavior,
+    pmpBehaviors.RepeatableDataSetsBehaviorImpl
+  ];
+
+</script>
