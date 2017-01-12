@@ -16,7 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
@@ -27,9 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="app-config/etools-app-config.html">
 <link rel="import" href="app-elements/user-data/user-data.html">
 <link rel="import" href="app-elements/side-bar-item/side-bar-item.html">
-
-<link rel="import" href="app-elements/countries-dropdown/countries-dropdown.html">
-<link rel="import" href="app-elements/countries-data/countries-data.html">
+<link rel="import" href="app-behaviors/notification-toasts-behavior.html">
 
 <link rel="import" href="../styles/shared-styles.html">
 <link rel="import" href="../styles/page-layout-styles.html">
@@ -39,13 +37,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <template>
 
-    <style include="shared-styles">
+    <style include="page-layout-styles shared-styles">
 
       :host {
         display: block;
       }
 
       app-drawer {
+        z-index: 100;
         --app-drawer-width: 220px;
         --app-drawer-content-container: {
             background-color: var(--light-theme-content-color);
@@ -91,20 +90,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-bottom: 1px solid var(--dark-divider-color);
       }
 
-      .side-nav-wrapper .footer {
-        @apply(--layout-horizontal);
-        @apply(--layout-center-center);
-
-        margin-top: auto;
-        min-height: 26px;
-        padding: 16px 16px;
-        border-top: 1px solid var(--dark-divider-color);
-      }
-
-      #countries {
-        position: fixed;
-        top: 9px;
-        right: 20px;
+      .warning-toast-dismiss-btn {
+        text-transform: none;
+        color: #eeff41; /* TODO: replace with a var from above */
       }
 
     </style>
@@ -115,9 +103,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <app-route
         route="{{route}}"
-        pattern="/:page"
-        data="{{routeData}}"
-        tail="{{subroute}}"></app-route>
+        pattern$="[[baseUrl]]:page"
+        data="{{routeData}}"></app-route>
 
     <app-drawer-layout id="layout" responsive-width="850px" narrow="{{narrow}}" fullbleed>
 
@@ -133,26 +120,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <div class="nav-menu">
             <iron-selector selected="[[page]]" attr-for-selected="name" selectable="side-bar-item" role="navigation">
-
-              <side-bar-item name="map" icon="explore" href="/map"></side-bar-item>
-              <side-bar-item name="section2" icon="book" href="/section2"></side-bar-item>
-              <side-bar-item name="section3" icon="build" href="/section3"></side-bar-item>
-              <div class="divider"></div>
-
-              <!-- Permissions example: only display settings if the user has permission -->
-              <side-bar-item hidden$="{{!permissions.userInfoMenu}}" name="settings" icon="settings" href="/settings"></side-bar-item>
-
-              <side-bar-item name="user support" icon="help" href="/support"></side-bar-item>
-              <side-bar-item name="discussions" icon="question-answer" href="/discussion"></side-bar-item>
-              <side-bar-item name="information" icon="info" href="/information"></side-bar-item>
+                <template is="dom-if" if="[[permissions.loggedInDefault]]">
+                      <side-bar-item name="map" icon="explore" href$="[[baseUrl]]map"></side-bar-item>
+                      <side-bar-item name="section2" icon="book" href="[[baseUrl]]section2"></side-bar-item>
+                      <side-bar-item name="section3" icon="build" href="[[baseUrl]]section3"></side-bar-item>
+                      <div class="divider"></div>
+                </template>
+              <side-bar-item name="settings" icon="settings" href$="[[baseUrl]]settings"></side-bar-item>
+              <side-bar-item name="user support" icon="help" href$="[[baseUrl]]support"></side-bar-item>
+              <side-bar-item name="discussions" icon="question-answer" href$="[[baseUrl]]discussion"></side-bar-item>
+              <side-bar-item name="information" icon="info" href$="[[baseUrl]]information"></side-bar-item>
 
             </iron-selector>
           </div>
-
-          <div class="footer">
-            <img id="unicef-logo" src="../images/UNICEF_logo.png" alt="UNICEF logo">
-          </div>
-
         </div>
 
       </app-drawer>
@@ -164,10 +144,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   attr-for-selected="name"
                   fallback-selection="not-found"
                   role="main">
-        <page-map name="map"></page-map>
-        <page-section2 name="section2" route="{{subroute}}"></page-section2>
-        <page-section3 name="section3" route="{{subroute}}"></page-section3>
-        <page-not-found name="not-found"></page-not-found>
+
+          <template is="dom-if" id="privatePages" on-dom-change="_pagesStamped" if="[[permissions.loggedInDefault]]">
+            <page-map on-dom-change="_pagesStamped" name="map" route="[[subroute]]"></page-map>
+            <page-section2 name="section2" route="[[subroute]]"></page-section2>
+            <page-section3 name="section3" route="[[subroute]]"></page-section3>
+          </template>
+          <page-not-found name="not-found"></page-not-found>
       </iron-pages>
 
     </app-drawer-layout>
@@ -187,68 +170,92 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           reflectToAttribute: true,
           observer: '_pageChanged'
         },
-
+        route: {
+          type: Object
+        },
+        _pagesAvailable: {
+          type: Boolean,
+          value: false
+        },
         narrow: {
           type: Boolean,
           reflectToAttribute: true
         },
-
-        _toast: {
-          type: Object,
-          value: null
+        baseUrl: String,
+        initialLoad: {
+            type: Boolean,
+            value: true
         },
-
-        _toastQueue: {
-          type: Array,
-          value: function() { return []; }
+        permissions: {
+            type: Object,
+            value: null
         },
+        subroute: {
+          type: Object
+        }
 
       },
 
+      behaviors: [
+        etoolsAppConfig.globals,
+        pmpBehaviors.NotificationToastsBehavior
+      ],
+
       observers: [
-        '_routePageChanged(routeData.page)'
+        '_routePageChanged(routeData.page)',
+        '_permissionsPagesStamped(permissions, _pagesAvailable)'
       ],
 
       listeners: {
-        'toast': 'queueToast',
+//        'page-selected': '_pageSelected',
         'drawer': 'toggleDrawer',
         '404': '_pageNotFound',
+        'update-main-path': '_updateMainPath'
       },
 
       attached: function() {
-        if (this.route.path === '/') {
-          this.set('route.path', '/map');
-        }
-      },
+        // for some reason the "$=" will make basePath undefined, we need to use a local property
+        this.baseUrl = this.basePath;
 
+        //if (this.route.path === this.baseUrl) {
+        //  this.set('route.path', this.baseUrl + 'partners/list');
+        //}
+      },
+      _updateMainPath: function(event) {
+        this.set('route.path', this.baseUrl + event.detail.path);
+        event.stopPropagation();
+      },
+      _permissionsPagesStamped: function(permissions, _pagesAvailable) {
+        if (!permissions || !_pagesAvailable) {
+            return;
+        }
+        if ((this.route.path === this.baseUrl || this.route.path === '/') &&
+            permissions.loggedInDefault) {
+          // setting the default path
+          this.set('route.path', this.baseUrl + 'partners/list');
+        } else if (this.initialLoad) {
+          // reseting the page as the pages might not have been stamped
+          this._routePageChanged(this.routeData.page);
+        }
+
+        this.initialLoad = false;
+      },
       toggleDrawer: function() {
         this.$.drawer.toggle();
       },
 
-      queueToast: function(e, detail) {
-        if (!this._toast) {
-          this._toast = document.createElement('paper-toast');
-          this.listen(this._toast, 'iron-overlay-closed', 'dequeueToast');
-          Polymer.dom(this.$.layout).appendChild(this._toast);
-          Polymer.dom.flush();
-        }
-        if (!this._toastQueue.length) {
-          this.push('_toastQueue', detail);
-          this._toast.show(detail);
-        } else {
-          this.push('_toastQueue', detail);
-        }
-      },
-
-      dequeueToast: function() {
-        this.shift('_toastQueue');
-        if (this._toastQueue.length) {
-          this._toast.show(this._toastQueue[0]);
-        }
-      },
-
       _routePageChanged: function(page) {
-        this.page = page || 'map';
+        if ((this.route) && (this.baseUrl)) {
+          var subroute = JSON.parse(JSON.stringify(this.route));
+          subroute.path = this.route.path.substring(subroute.path.indexOf(this.baseUrl) + this.baseUrl.length);
+          this.set('subroute', subroute);
+        }
+
+        if (this._pagesAvailable || (['settings', 'etc'].indexOf(page) !== -1)) {
+          this.set('page', (page || 'partners'));
+        } else {
+          //console.log('No permissions yet or page hasn\'t stampped', page);
+        }
       },
 
       _pageChanged: function(page) {
@@ -259,6 +266,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _pageNotFound: function() {
         this.page = 'not-found';
         this.fire('toast', {text: 'Oops you hit a 404!'});
+      },
+
+      _pagesStamped: function() {
+        if (!this._pagesAvailable) {
+          this.$.privatePages.render();
+          this._pagesAvailable = true;
+        }
       }
 
     });
