@@ -252,6 +252,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _pageChanged: function(page) {
+        console.log('zzz')
         var resolvedPageUrl = this.resolveUrl('pages/page-' + page + '.html');
         this.importHref(resolvedPageUrl, null, this._pageNotFound, true);
       },
