@@ -1,0 +1,71 @@
+<script>
+
+  var _data = _data || {};
+  var _elements = _elements || {};
+
+  var _setData = function(data) {
+    _data[this.endpointName] = data || {};
+
+    this.load(_data);
+    _elements[this.endpointName].forEach(function(el) {
+      if (el !== this) { el.load(_data); }
+    });
+  };
+
+  window.pmpBehaviors = window.pmpBehaviors || {};
+  pmpBehaviors.DataElementBehaviorImpl = {
+
+    properties: {
+
+      data: {
+        type: Array,
+        readOnly: true,
+        notify: true
+      },
+
+      db: {
+        type: Object,
+        value: function() {
+          return etoolsAppConfig.db;
+        }
+      },
+
+    },
+
+    ready: function() {
+      if (!this.endpointName) {
+        console.warn('Please specify an endpointName property');
+      }
+      this.load(_data);
+    },
+
+    attached: function() {
+      _elements[this.endpointName] = _elements[this.endpointName] || [];
+      if (_elements[this.endpointName].length === 0 && !_data[this.endpointName]) {
+        this.endpoint = this.getEndpoint(this.endpointName);
+      }
+      _elements[this.endpointName].push(this);
+    },
+
+    detached: function() {
+      _elements[this.endpointName].splice(_elements[this.endpointName].indexOf(this), 1);
+    },
+
+    load: function(data) {
+      if (data[this.endpointName]) {
+        this._setData(data[this.endpointName]);
+      }
+    },
+
+    _handleResponse: function(res) {
+      _setData.bind(this)(res.detail);
+    }
+
+  };
+
+  pmpBehaviors.DataElementBehavior = [
+    etoolsAppConfig.globals,
+    pmpBehaviors.DataElementBehaviorImpl
+  ];
+
+</script>

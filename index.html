@@ -13,7 +13,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-
     <title>eTools</title>
     <meta name="description" content="Partnership Management Portal">
 
@@ -52,11 +51,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         dom: 'shadow',
         lazyRegister: true
       };
+      var serverBackend = (window.location.port !== '8080');
+      var baseUrl = serverBackend ? '/dash/' : '/';
 
       // Load webcomponentsjs polyfill if browser does not support native Web Components
       (function() {
         'use strict';
-
         var onload = function() {
           // For native Imports, manually fire WebComponentsReady so user code
           // can use the same code path for native and polyfill'd imports.
@@ -76,7 +76,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (!webComponentsSupported) {
           var script = document.createElement('script');
           script.async = true;
-          script.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
+          script.src = baseUrl + 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
           script.onload = onload;
           document.head.appendChild(script);
         } else {
@@ -84,15 +84,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       })();
 
+      // add base tag with href set to baseUrl
+      var base = document.createElement('base');
+      base.href = baseUrl;
+      document.head.appendChild(base);
+
       // Load pre-caching Service Worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/service-worker.js');
+          navigator.serviceWorker.register('service-worker.js');
         });
       }
-    </script>
 
-    <link rel="import" href="/src/app-shell.html">
+      // set app shell import path based on baseUrl
+      var appShellImport = document.createElement('link');
+      appShellImport.rel = 'import';
+      appShellImport.href = baseUrl + 'dash/app-shell.html';
+      document.head.appendChild(appShellImport);
+
+    </script>
 
     <style>
       body {
@@ -102,12 +112,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: 400;
         line-height: 1.5;
         min-height: 100vh;
-        background-color: #FAFAFA;
+        background-color: #EEEEEE;
         color: rgba(0, 0, 0, 0.87);
       }
     </style>
   </head>
-  <body unresolved>
+  <body>
     <app-shell></app-shell>
   </body>
 </html>
