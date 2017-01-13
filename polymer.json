@@ -2,10 +2,12 @@
   "entrypoint": "index.html",
   "shell": "src/app-shell.html",
   "fragments": [
-    "src/pages/page-map.html",
-    "src/pages/page-section2.html",
-    "src/pages/page-section3.html",
-    "src/pages/page-not-found.html"
+    "dash/pages/page-map.html",
+    "dash/pages/page-dashboard.html",
+    "dash/pages/page-section2.html",
+    "dash/pages/page-section3.html",
+    "dash/pages/page-not-found.html"
+
   ],
   "sourceGlobs": [
    "src/**/*",

@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <link rel="import" href="../app-elements/page-header/page-header.html">
+<link rel="import" href="../app-elements/page-footer/page-footer.html">
 
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../styles/shared-styles.html">
@@ -17,11 +18,11 @@
 
     </style>
 
-    <app-header-layout>
+    <app-header-layout has-scrolling-region fullbleed>
 
-      <app-header fixed shadow>
+      <app-header id="header" fixed shadow>
 
-        <page-header title="Page section 2"></page-header>
+        <page-header title="Page section 2222"></page-header>
 
       </app-header>
 
@@ -37,7 +38,7 @@
             </p>
         </div>
       </div>
-
+    <page-footer></page-footer>
     </app-header-layout>
 
   </template>
@@ -49,6 +50,7 @@
       is: 'page-section2',
 
       properties: {},
+
 
     });
 
