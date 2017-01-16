@@ -115,13 +115,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <app-toolbar class="header">
             <img id="etools-logo" src="../images/etools_logo.svg" alt="etools logo">
-            <paper-icon-button id="app-select" on-tap="openAppMenu" class="dark" icon="apps"></paper-icon-button>
           </app-toolbar>
 
           <div class="nav-menu">
             <iron-selector selected="[[page]]" attr-for-selected="name" selectable="side-bar-item" role="navigation">
                 <template is="dom-if" if="[[permissions.loggedInDefault]]">
-                      <side-bar-item name="map" icon="explore" href$="[[baseUrl]]map"></side-bar-item>
+                    <side-bar-item name="dashboard" icon="explore" href$="[[baseUrl]]dashboard"></side-bar-item>
+                    <side-bar-item name="map" icon="explore" href$="[[baseUrl]]map"></side-bar-item>
                       <side-bar-item name="section2" icon="book" href="[[baseUrl]]section2"></side-bar-item>
                       <side-bar-item name="section3" icon="build" href="[[baseUrl]]section3"></side-bar-item>
                       <div class="divider"></div>
@@ -146,7 +146,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   role="main">
 
           <template is="dom-if" id="privatePages" on-dom-change="_pagesStamped" if="[[permissions.loggedInDefault]]">
-            <page-map on-dom-change="_pagesStamped" name="map" route="[[subroute]]"></page-map>
+
+              <page-map  name="map" route="[[subroute]]"></page-map>
+              <page-dashboard name="dashboard" route="[[subroute]]"></page-dashboard>
             <page-section2 name="section2" route="[[subroute]]"></page-section2>
             <page-section3 name="section3" route="[[subroute]]"></page-section3>
           </template>
@@ -232,7 +234,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if ((this.route.path === this.baseUrl || this.route.path === '/') &&
             permissions.loggedInDefault) {
           // setting the default path
-          this.set('route.path', this.baseUrl + 'partners/list');
+          this.set('route.path', this.baseUrl + 'map');
         } else if (this.initialLoad) {
           // reseting the page as the pages might not have been stamped
           this._routePageChanged(this.routeData.page);
@@ -259,6 +261,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _pageChanged: function(page) {
+        console.log('changing to ', page)
         var resolvedPageUrl = this.resolveUrl('pages/page-' + page + '.html');
         this.importHref(resolvedPageUrl, null, this._pageNotFound, true);
       },
