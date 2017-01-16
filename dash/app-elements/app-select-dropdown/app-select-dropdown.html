@@ -1,0 +1,155 @@
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../styles/page-layout-styles.html">
+<link rel="import" href="../../../styles/shared-styles.html">
+<link rel="import" href="../../../styles/app-theme.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
+<link rel="import" href="../../../bower_components/paper-styles/color.html">
+
+<link rel="import" href="../../app-config/etools-app-config.html">
+
+<dom-module id="app-select-dropdown">
+    <style include="page-layout-styles shared-styles color app-theme">
+        :host{
+            position: relative;
+            color: var(--dark-primary-text-color);
+        }
+        paper-icon-button.apps-button {
+            width: 76px;
+            height: 60px;
+            padding: 12px 24px 12px 24px;
+            color : var(--title-toolbar-secondary-text-color);
+            border-right: 1px solid var(--light-divider-color);
+            z-index: 100;
+        }
+        paper-icon-button.work {
+           color: var(--paper-green-800);
+        }
+        paper-icon-button.partnership {
+            color: var(--paper-light-blue-600);
+        }
+        paper-icon-button.field {
+            color: var(--paper-blue-900);
+        }
+        paper-icon-button.data {
+            color: var(--paper-grey-700);
+        }
+        paper-icon-button.icon-opened {
+            background: white;
+            color: var(--dark-primary-text-color);
+        }
+         .container{
+             @apply(--layout-vertical);
+             position: relative;
+        }
+        .apps-select {
+            position: absolute;
+            background: var(--primary-element-background);
+            top: 60px;
+            z-index: 10;
+            padding: 0;
+        }
+        .content-wrapper{
+            @apply(--layout-horizontal);
+            @apply(--layout-center);
+            min-height: 60px;
+            padding: 24px;
+            box-sizing: border-box;
+            font-size: 14px;
+            white-space:nowrap;
+        }
+        .content-wrapper:nth-child(2){
+            flex-grow:1 ;
+        }
+        .panel-icon {
+            width: 85px;
+            height: 85px;
+            padding: 0;
+        }
+        .panel {
+            border-top: 1px solid rgba(0, 0, 0, 0.12);
+            border-right: 1px solid rgba(0, 0, 0, 0.12);
+            min-width: 266px;
+        }
+        .panel:hover {
+            background: var(--list-item-hover-color);
+        }
+        .panel-row{
+            @apply(--layout-horizontal);
+        }
+        .app-title {
+            font-size: 16px;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin: 0 16px;
+            line-height: 1.2;
+        }
+    </style>
+    <template>
+       <div class="container">
+        <paper-icon-button  on-tap="toggleMenu" class$="apps-button [[opened]]" icon="apps"></paper-icon-button>
+        <paper-material class="apps-select" hidden$="[[hidden]]">
+            <div class="content-wrapper">
+                Select an application or repository
+            </div>
+            <div class="panel-row">
+                <div class="content-wrapper panel">
+                    <paper-icon-button class="panel-icon work" icon="account-box"></paper-icon-button>
+                    <a href$="[[baseUrl]]/dash/" on-tap="_pageChanged" class="app-title">Work <br>Planning</a>
+                </div>
+                <div class="content-wrapper panel">
+                    <paper-icon-button class="panel-icon partnership" on-tap="_pageChanged" icon="social:group"></paper-icon-button>
+                    <a href="[[baseUrl]]/pmp/" class="app-title">Partnership <br>Management</a>
+                </div>
+            </div>
+            <div class="panel-row">
+                <div class="content-wrapper panel">
+                    <paper-icon-button class="panel-icon field" icon="track-changes"></paper-icon-button>
+                    <a href="#" class="app-title">Field <br>Monitoring</a>
+                </div>
+                <div class="content-wrapper panel">
+                    <paper-icon-button class="panel-icon data" icon="settings-applications"></paper-icon-button>
+                    <a href="#" class="app-title">Data <br>Sources</a>
+                </div>
+            </div>
+
+        </paper-material>
+
+    </template>
+    <script>
+        Polymer({
+            is : 'app-select-dropdown',
+            properties : {
+                hidden : {
+                    type: Boolean,
+                    value: true
+                },
+                opened: {
+                    type: String,
+                    value: ""
+                },
+                baseUrl : {
+                    type: String,
+                    value: ""
+                }
+            },
+            behaviors: [
+                etoolsAppConfig.globals,
+            ],
+            toggleMenu: function(){
+                this.hidden = !this.hidden;
+                if (this.opened) {
+                    this.opened = "";
+                }
+                else
+                    this.opened = 'icon-opened'
+            },
+            attached: function(){
+                this.baseUrl = this.baseSite;
+            },
+            detached: function () {
+                console.log('detached')
+            }
+        })
+    </script>
+</dom-module>

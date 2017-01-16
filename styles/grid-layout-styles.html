@@ -1,0 +1,76 @@
+<!-- This file will be dedicated for 12 columns content layout -->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<dom-module id="grid-layout-styles">
+  <template>
+    <style>
+      .row-h {
+        @apply(--layout-horizontal);
+      }
+      .row-v {
+        @apply(--layout-vertical);
+      }
+      .flex-c {
+        /* flex container */
+        @apply(--layout-flex);
+      }
+      .row-h + .row-h, .row-v + .row-v {
+        margin-top: 20px;
+      }
+      .row-h:first-child + .row-v {
+        margin-top: 0;
+      }
+      .no-overflow {
+        /* used to prevent flexbox to change it's size if content grows */
+        overflow: hidden;
+      }
+      .col {
+        @apply(--layout-horizontal);
+        box-sizing: border-box;
+      }
+      .col:not(:first-of-type) {
+        padding-left: 25px;
+      }
+
+      .col-2 {
+        flex: 0 0 16.66666667%;
+        max-width: 16.66666667%;
+      }
+
+      .col-3 {
+        flex: 0 0 25%;
+        max-width: 25%;
+      }
+
+      .col-4 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+      }
+
+      .col-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+      }
+
+      .col-9 {
+        flex: 0 0 75%;
+        max-width: 75%;
+      }
+
+      .col-10 {
+        flex: 0 0 83.33333333%;
+        max-width: 83.33333333%;
+      }
+
+      .col-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+      }
+
+      /* TODO: more classes will e added if needed */
+
+    </style>
+  </template>
+</dom-module>
