@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../app-elements/page-header/page-header.html">
+<link rel="import" href="../app-elements/page-footer/page-footer.html">
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../styles/shared-styles.html">
 
@@ -12,11 +13,6 @@
             }
         </style>
         <app-header-layout>
-
-            <app-header fixed shadow>
-                <page-header title="Dashboard"></page-header>
-            </app-header>
-
             <div class="page">
                 <div id="pageContent">
                     <h1>Dashboard Head</h1>
@@ -29,8 +25,9 @@
                     </p>
                 </div>
             </div>
-
         </app-header-layout>
+        <page-footer></page-footer>
+
     </template>
     <script>
 

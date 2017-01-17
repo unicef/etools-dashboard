@@ -5,25 +5,13 @@
 
 <link rel="import" href="../../../bower_components/etools-page-refresh/etools-page-refresh.html">
 <link rel="import" href="../countries-dropdown/countries-dropdown.html">
-<link rel="import" href="../../app-elements/app-select-dropdown/app-select-dropdown.html">
+<link rel="import" href="../app-select-dropdown/app-selector.html">
 <link rel="import" href="../../../styles/shared-styles.html">
 
 <dom-module id="page-header">
 
   <template>
     <style include="shared-styles">
-
-      /*div[main-title] {*/
-        /*position: relative;*/
-        /*bottom: 1px;*/
-        /*margin-left: 24px;*/
-        /*min-height: 30px;*/
-        /*background: url('../../../images/etools_logo_icon.png') no-repeat center left;*/
-        /*background-size: auto 48px;*/
-        /*padding-left: 48px;*/
-        /*font-size: 30px;*/
-        /*color: var(--light-primary-text-color);*/
-      /*}*/
 
       app-toolbar {
         padding: 0 16px 0 0;
@@ -35,6 +23,7 @@
 
       #menuButton {
         display: block;
+        margin: 0 16px;
       }
 
       .titlebar {
@@ -44,7 +33,7 @@
         color: var(--light-primary-text-color);
       }
       .titlebar img{
-        height: 48px;
+        width: 34px;
         margin: 0 8px 0 24px;
       }
       .content-align {
@@ -68,7 +57,7 @@
     <app-toolbar sticky class="content-align">
       <paper-icon-button id="menuButton" class="light" icon="menu" on-tap="openDrawer"></paper-icon-button>
       <div class="titlebar content-align">
-        <app-select-dropdown></app-select-dropdown>
+        <app-selector id="selector"></app-selector>
         <img src="../../../images/etools_logo_icon.png">
         eTools
       </div>
@@ -83,9 +72,18 @@
     (function() {
       Polymer({
         is: 'page-header',
-
+        listeners: {
+          'toggle-menu' : 'toggleMenu'
+        },
         openDrawer: function() {
           this.fire('drawer');
+        },
+        toggleMenu : function(){
+          console.log('menu iron')
+          var appSelector = this.$.selector;
+          if(appSelector.opened){
+            appSelector.toggleMenu()
+          }
         }
 
       });
