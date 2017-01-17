@@ -1,0 +1,146 @@
+<!-- Styles for list pages -->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<dom-module id="list-styles">
+
+  <template>
+
+    <style>
+
+      :host {
+        @apply(--layout-flex);
+      }
+
+      :host([hidden]) {
+        display: none;
+      }
+
+      a {
+        color: var(--accent-color);
+      }
+
+      #listControls {
+        @apply(--layout-horizontal);
+        padding: 6px 30px;
+        margin-bottom: 20px;
+      }
+
+      .wrap-controls, .fixed-controls,
+      .wrap-controls .filter{
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+      }
+
+      .wrap-controls {
+        @apply(--layout-wrap);
+        padding-bottom: 8px;
+      }
+
+      .wrap-controls > *:not(:last-child) {
+        margin-right: 15px;
+      }
+
+      .wrap-controls paper-input {
+        min-width: 200px;
+      }
+
+      .wrap-controls paper-dropdown-menu,
+      .wrap-controls .filter {
+        min-width: 250px;
+      }
+
+      .fixed-controls {
+        @apply(--layout-end-justified);
+
+        margin-left: auto;
+        white-space: nowrap;
+      }
+
+      .filters-divider {
+        height: calc(100% - 16px);
+        margin: 0 20px;
+        border-left: 2px solid var(--dark-divider-color);
+      }
+
+      #filterMenu {
+        max-width: 126px;
+      }
+
+      #filterMenu .button {
+        color: var(--accent-color);
+      }
+
+      #filterMenu .button iron-icon {
+        margin-right: 5px;
+      }
+
+      #filterMenu paper-item {
+        --paper-item: {
+          cursor: pointer;
+        };
+        --paper-item-selected: {
+          font-weight: normal !important;
+        };
+        --paper-item-focused: {
+          background-color: rgba(255, 255, 255, 1);
+        };
+        --paper-item-focused-before: {
+          background: none;
+          opacity: 0;
+        };
+        --paper-item-focused-after: {
+          background: none;
+          opacity: 0;
+        }
+      }
+
+      #hiddenToggle {
+        @apply(--layout-horizontal);
+
+        padding: 10px 8px 10px 8px;
+        cursor: pointer;
+        font-weight: normal;
+        font-size: 16px;
+      }
+
+      #hiddenToggle paper-toggle-button {
+        margin-left: 10px;
+      }
+
+      #list {
+        display: block;
+        opacity: 1;
+        transition: opacity 0.4s;
+        background-color: #FFFFFF;
+        padding: 0;
+      }
+
+      #list.hidden {
+        transition: none;
+        opacity: 0;
+      }
+
+      *[slot="row-data"],
+      *[slot="row-data-details"] {
+        @apply(--layout-horizontal);
+        @apply(--layout-flex);
+      }
+
+      .row-details-content {
+        font-size: 12px;
+      }
+      .row-details-content .rdc-title {
+        display: inline-block;
+        width: 100%;
+        color: var(--secondary-text-color, rgba(0, 0, 0, 0.54));
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+    </style>
+
+  </template>
+
+</dom-module>

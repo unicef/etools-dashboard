@@ -1,7 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-
 <link rel="import" href="../app-elements/page-header/page-header.html">
-
+<link rel="import" href="../app-elements/page-footer/page-footer.html">
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../styles/shared-styles.html">
 
@@ -11,19 +10,13 @@
 
     <style include="page-layout-styles shared-styles">
 
-    :host {
-      display: block;
-    }
+      :host {
+        display: block;
+      }
 
     </style>
 
-    <app-header-layout>
-
-      <app-header fixed shadow>
-
-        <page-header title="Page section 2"></page-header>
-
-      </app-header>
+    <app-header-layout >
 
       <div class="page">
         <div id="pageContent">
@@ -37,7 +30,7 @@
             </p>
         </div>
       </div>
-
+     <page-footer></page-footer>
     </app-header-layout>
 
   </template>
@@ -49,6 +42,7 @@
       is: 'page-section2',
 
       properties: {},
+
 
     });
 

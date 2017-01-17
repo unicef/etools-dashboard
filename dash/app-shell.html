@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="app-elements/page-header/page-header.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
@@ -115,13 +116,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <app-toolbar class="header">
             <img id="etools-logo" src="../images/etools_logo.svg" alt="etools logo">
-            <paper-icon-button id="app-select" on-tap="openAppMenu" class="dark" icon="apps"></paper-icon-button>
           </app-toolbar>
 
           <div class="nav-menu">
             <iron-selector selected="[[page]]" attr-for-selected="name" selectable="side-bar-item" role="navigation">
                 <template is="dom-if" if="[[permissions.loggedInDefault]]">
-                      <side-bar-item name="map" icon="explore" href$="[[baseUrl]]map"></side-bar-item>
+                    <side-bar-item name="dashboard" icon="explore" href$="[[baseUrl]]dashboard"></side-bar-item>
+                    <side-bar-item name="map" icon="explore" href$="[[baseUrl]]map"></side-bar-item>
                       <side-bar-item name="section2" icon="book" href="[[baseUrl]]section2"></side-bar-item>
                       <side-bar-item name="section3" icon="build" href="[[baseUrl]]section3"></side-bar-item>
                       <div class="divider"></div>
@@ -130,7 +131,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <side-bar-item name="user support" icon="help" href$="[[baseUrl]]support"></side-bar-item>
               <side-bar-item name="discussions" icon="question-answer" href$="[[baseUrl]]discussion"></side-bar-item>
               <side-bar-item name="information" icon="info" href$="[[baseUrl]]information"></side-bar-item>
-
             </iron-selector>
           </div>
         </div>
@@ -138,20 +138,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-drawer>
 
       <!-- Main content -->
+      <app-header-layout>
+          <app-header  fixed shadow>
+             <page-header id="pageheader" title="eTools"></page-header>
+          </app-header>
+          <iron-pages id="pages"
+                      selected="[[page]]"
+                      attr-for-selected="name"
+                      fallback-selection="not-found"
+                      role="main">
 
-      <iron-pages id="pages"
-                  selected="[[page]]"
-                  attr-for-selected="name"
-                  fallback-selection="not-found"
-                  role="main">
+              <template  is="dom-if" id="privatePages" on-dom-change="_pagesStamped" if="[[permissions.loggedInDefault]]">
+                  <page-dashboard name="dashboard" route="[[subroute]]"></page-dashboard>
+                  <page-map  name="map" route="[[subroute]]"></page-map>
+                  <page-section2 name="section2" route="[[subroute]]"></page-section2>
+                  <page-section3 name="section3" route="[[subroute]]"></page-section3>
+              </template>
+              <page-not-found name="not-found"></page-not-found>
+          </iron-pages>
+      </app-header-layout>
 
-          <template is="dom-if" id="privatePages" on-dom-change="_pagesStamped" if="[[permissions.loggedInDefault]]">
-            <page-map on-dom-change="_pagesStamped" name="map" route="[[subroute]]"></page-map>
-            <page-section2 name="section2" route="[[subroute]]"></page-section2>
-            <page-section3 name="section3" route="[[subroute]]"></page-section3>
-          </template>
-          <page-not-found name="not-found"></page-not-found>
-      </iron-pages>
 
     </app-drawer-layout>
 
@@ -192,8 +198,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         subroute: {
           type: Object
-        }
-
+        },
       },
 
       behaviors: [
@@ -216,10 +221,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       attached: function() {
         // for some reason the "$=" will make basePath undefined, we need to use a local property
         this.baseUrl = this.basePath;
-
         //if (this.route.path === this.baseUrl) {
         //  this.set('route.path', this.baseUrl + 'partners/list');
         //}
+         this.addEventToAppSelector();
+
+      },
+      addEventToAppSelector: function(){
+          this.addEventListener('iron-select', function(){
+              this.$.pageheader.fire('toggle-menu')
+          })
       },
       _updateMainPath: function(event) {
         this.set('route.path', this.baseUrl + event.detail.path);
@@ -232,7 +243,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if ((this.route.path === this.baseUrl || this.route.path === '/') &&
             permissions.loggedInDefault) {
           // setting the default path
-          this.set('route.path', this.baseUrl + 'partners/list');
+          this.set('route.path', this.baseUrl + 'map');
         } else if (this.initialLoad) {
           // reseting the page as the pages might not have been stamped
           this._routePageChanged(this.routeData.page);
@@ -259,6 +270,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _pageChanged: function(page) {
+        console.log('changing to ', page)
         var resolvedPageUrl = this.resolveUrl('pages/page-' + page + '.html');
         this.importHref(resolvedPageUrl, null, this._pageNotFound, true);
       },
@@ -273,8 +285,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.privatePages.render();
           this._pagesAvailable = true;
         }
-      }
-
+      },
     });
 
   </script>
