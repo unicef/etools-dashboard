@@ -1,0 +1,32 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../../bower_components/etools-ajax/etools-ajax.html">
+
+<link rel="import" href="../../../app-behaviors/data-element-behavior.html">
+
+<dom-module id="country-programme-data">
+
+    <template>
+        <etools-ajax id="ajax"
+                     endpoint="[[endpoint]]"
+                     caching-storage="custom"
+                     dexie-db-collection="countryProgramme"
+                     on-success="_handleResponse">
+        </etools-ajax>
+
+    </template>
+
+    <script>
+
+        Polymer({
+            is: 'country-programme-data',
+            properties : {
+                endpointName: {
+                    type: String,
+                    value: 'countryProgramme'
+                },
+            },
+            behaviors: [dashBehaviors.DataElementBehavior],
+
+        });
+    </script>
+</dom-module>

@@ -3,8 +3,15 @@
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
 <link rel="import" href="../../../styles/page-layout-styles.html">
-
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<link rel="import" href="dashboard-data/country-programme-data.html">
+<link rel="import" href="dashboard-data/office-data.html">
+
+<link rel="import" href="../data-table/data-table-footer.html">
+<link rel="import" href="../data-table/data-table-header.html">
+<link rel="import" href="../data-table/data-table-column.html">
+<link rel="import" href="../data-table/data-table-row.html">
 
 <link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
@@ -29,7 +36,15 @@
                 margin-bottom: 20px;
                 @apply(--layout-horizontal);
             }
+            .col-data {
+                display: inline-flex;
+                line-height: 24px;
+                height: 24px;
+            }
         </style>
+
+        <country-programme-data data="{{countryProgrammeItems}}"></country-programme-data>
+        <office-data data="{{officeItems}}"></office-data>
 
         <paper-material class="listControls" elevation="1">
             <div class="controls-wrapper">
@@ -44,22 +59,20 @@
                     <div class="dropdown-with-clear-btn">
                         <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
                         <paper-dropdown-menu label="Country Programme" placeholder="Select from list" noink>
-                            <paper-menu class="dropdown-content" attr-for-selected="text-content" selected="{{countryProgramme}}" on-iron-activate="_dropdownSelected">
-                                <paper-item>Bilateral / Multilateral</paper-item>
-                                <paper-item>Civil Society Organization</paper-item>
-                                <paper-item>Government</paper-item>
-                                <paper-item>UN Agency</paper-item>
+                            <paper-menu class="dropdown-content" attr-for-selected="text-content" selected="{{countryProgramme}}">
+                                <template is="dom-repeat" items="[[countryProgrammeItems]]">
+                                    <paper-item>[[item.name]]</paper-item>
+                                </template>
                             </paper-menu>
                         </paper-dropdown-menu>
                     </div>
                     <div class="dropdown-with-clear-btn">
                         <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
                         <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
-                            <paper-menu class="dropdown-content" attr-for-selected="text-content" selected="{{office}}" on-iron-activate="_dropdownSelected">
-                                <paper-item>Bilateral / Multilateral</paper-item>
-                                <paper-item>Civil Society Organization</paper-item>
-                                <paper-item>Government</paper-item>
-                                <paper-item>UN Agency</paper-item>
+                            <paper-menu class="dropdown-content" attr-for-selected="text-content" selected="{{office}}">
+                               <template is="dom-repeat" items="[[officeItems]]">
+                                   <paper-item>[[item.name]]</paper-item>
+                               </template>
                             </paper-menu>
                         </paper-dropdown-menu>
                     </div>
@@ -89,6 +102,42 @@
                     0
                 </div>
             </div>
+        </paper-material>
+
+        <paper-material id="list" elevation="1">
+            <data-table-header no-title>
+                <data-table-column class="flex-2">
+                    Partnerships (PD, SHPD, SSFA ToR, DCT to government)
+                </data-table-column>
+                <data-table-column class="flex">
+                    Number of Partnerships
+                </data-table-column>
+                <data-table-column class="flex">
+                    Total Value of Partnerships
+                </data-table-column>
+                <data-table-column class="flex">
+                    % of Active Partnerships
+                </data-table-column>
+            </data-table-header>
+            <template is="dom-repeat" items="[[listItems]]">
+                <data-table-row no-collapse>
+                    <div slot="row-data">
+                        <a href="#" class="col-data flex-2">
+                            [[item.partnerships]]
+                        </a>
+                        <span class="col-data flex">
+                            [[item.numPar]]
+                        </span>
+                        <span class="col-data flex">
+                            [[item.totalValue]]
+                        </span>
+                        <span class="col-data flex">
+                            [[item.percentActive]]%
+                        </span>
+                    </div>
+                </data-table-row>
+            </template>
+
 
         </paper-material>
     </template>
@@ -106,6 +155,41 @@
                     },
                     office : {
                         type: String
+                    },
+                    countryProgrammeItems : {
+                        type: Array,
+                    },
+                    officeItems : {
+                        type: Array,
+                    },
+                    listItems: {
+                        type: Array,
+                        value : [
+                            {
+                                partnerships : 'Active Programme Documents for this year',
+                                numPar: 105,
+                                totalValue: '$133,677,514',
+                                percentActive: 100
+                            },
+                            {
+                                partnerships : 'Approved Partnerships for this year',
+                                numPar: 97,
+                                totalValue: '$125,000,000',
+                                percentActive: 0
+                            },
+                            {
+                                partnerships : 'Active Partnerships approved in previous years',
+                                numPar: 8,
+                                totalValue: '$8,000,000',
+                                percentActive: 0
+                            },
+                            {
+                                partnerships : 'Expiring Partnerships in next two months',
+                                numPar: 90,
+                                totalValue: '$78,000,000',
+                                percentActive: 0
+                            }
+                        ]
                     }
                 }
             });

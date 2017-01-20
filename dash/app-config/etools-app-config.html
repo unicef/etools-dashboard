@@ -15,9 +15,9 @@ App global configuration
     etoolsCustomDexieDb.version(1).stores({
       collectionsList: 'name, expire',
       countries: 'id',
-      partners: 'id, name, rating, vendor_number',
-      agreements: 'id, name, agreement_number, partner_name, start, end',
-      user: 'id'
+      user: 'id',
+      countryProgramme: 'id, name, wbs, from_date',
+      offices: 'id, name'
     });
 
     var etoolsAppConfig = {
@@ -98,32 +98,21 @@ App global configuration
         exp: 30 * 60 * 1000, // 30min
         cachingKey: 'user'
       },
-      agreements: {
-        template: '/api/v2/agreements/',
-        exp: 30 * 60 * 1000, // 30min
-        cachingKey: 'agreements'
-      },
-      agreementDetails: {
-        template: '/api/v2/agreements/<%=id%>/',
-        exp: 30 * 60 * 1000 // 30min
+      countryProgramme: {
+         url: '/api/v2/reports/countryprogramme/',
+         exp: 6 * 60 * 60 * 1000,
+         cachingKey: 'countryProgramme'
+       },
+      offices: {
+         url : '/api/offices/',
+         exp: 6 * 60 * 60 * 1000,
+         cachingKey: 'offices'
       },
       countries: {
         url: '/api/countries/', // API request receives a 404 for now
         exp: 6 * 60 * 60 * 1000, // 6h
         cachingKey: 'countries'
       },
-      partners: {
-        url: '/api/v2/partners/',
-        exp: 6 * 60 * 60 * 1000, // 6h
-        cachingKey: 'partners'
-      },
-      partnerDetails: {
-        template: '/api/v2/partners/<%=id%>/',
-        exp: 6 * 60 * 60 * 1000, // 6h
-        // if this caching key is missing then the data will be cached with the url as key
-        // cachingKey: 'partnerDetails'
-      },
-
     };
     /* jshint ignore:start */
     etoolsAppConfig.endpoints = etoolsAppConfig.globals.serverBackend ? serverEps : localEps;
