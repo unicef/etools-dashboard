@@ -74,12 +74,25 @@
       .title-row h1[main-title] {
         @apply(--layout-flex);
         margin: 0;
-        /*font-weight: normal;*/
+        font-weight: normal;
         text-transform: capitalize;
         font-size: 24px;
         line-height: 1.3;
         min-height: 31px;
       }
+
+      .title-row h1[sub-title]{
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+      }
+
+      .title-row h2[sub-title]{
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
       .top-content-actions-wrapper {
         @apply(--layout-horizontal);
       }

@@ -1,40 +1,131 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
 <link rel="import" href="../app-elements/page-header/page-header.html">
 <link rel="import" href="../app-elements/page-footer/page-footer.html">
+
+<link rel="import" href="../app-elements/dashboard/dashboard-partnerships.html">
+
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../styles/shared-styles.html">
+<link rel="import" href="../../styles/buttons-styles.html">
 
 <dom-module id="page-dashboard">
 
     <template>
-        <style include="page-layout-styles shared-styles">
+
+        <style include="page-layout-styles shared-styles buttons-styles">
             :host {
                 display: block;
             }
         </style>
+
+        <app-route
+            route="{{route}}"
+            pattern="/d/:dashId/:dashTab"
+            active="{{tabsActive}}"
+            date="{{routeData}}"></app-route>
+
         <app-header-layout>
-            <div class="page">
-                <div id="pageContent">
-                    <h1>Dashboard Head</h1>
-                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when
-                        looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution
-                        of letters, as opposed to using 'Content here, content here', making it look like readable English.
-                        Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text,
-                        and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions
-                        have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                    </p>
+                <div class="page-top-content with-tabs">
+                    <div class="top-content">
+                        <div class="top-content-row title-row">
+                            <h1 main-title>
+                                Dashboard
+                            </h1>
+                            <div class="top-content-actions-wrapper">
+                                <div class="top-content-action">
+                                    <paper-button>
+                                        <iron-icon icon="print"></iron-icon>
+                                        Print
+                                    </paper-button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="top-content-row">
+                            <paper-tabs
+                                    selected="{{routeData.dashTab}}"
+                                    attr-for-selected="name"
+                                    fallback-selection="partnerships" noink bottom-item>
+
+                                <paper-tab name="personalized" link>
+                                    <span class="tab-content">Personalized</span>
+                                </paper-tab>
+
+                                <paper-tab name="hact" link>
+                                    <span class="tab-content">HACT</span>
+                                </paper-tab>
+
+                                <paper-tab name="trips" link>
+                                    <span class="tab-content">Trips</span>
+                                </paper-tab>
+
+                                <paper-tab name="partnerships" link>
+                                    <span class="tab-content">Partnerships</span>
+                                </paper-tab>
+
+                                <paper-tab name="map" link>
+                                    <span class="tab-content">Map</span>
+                                </paper-tab>
+
+                            </paper-tabs>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+            <iron-pages id="partnershipPages"
+                selected="{{partnershipPage}}"
+                attr-for-selected="name"
+                fallback-selection="partnerships"
+                role="main">
+
+                <div class="page" name="personalized">
+                    <interventions-list></interventions-list>
+                </div>
+                <div class="page" name="hact">
+                    <intervention-details></intervention-details>
+                </div>
+                <div class="page" name="trips">
+                    <intervention-supplies></intervention-supplies>
+                </div>
+                <div class="page" name="partnerships">
+                    <dashboard-partnerships></dashboard-partnerships>
+                </div>
+                <div class="page" name="map">
+                    <intervention-attachments></intervention-attachments>
+                </div>
+            </iron-pages>
+
+
+
         </app-header-layout>
-        <page-footer></page-footer>
 
     </template>
+
     <script>
 
         Polymer({
 
             is: 'page-dashboard',
-            properties: {},
+            properties: {
+                partnershipPage : {
+                    type : String,
+                    notify : true
+                }
+            },
+            observers: [
+                    '_resizeHeader(tabsActive)',
+                    '_pageChanged(routeData.dashTab)'
+            ],
+            _pageChanged : function(dashTab) {
+              this.set('partnershipPage', dashTab);
+            },
+            _resizeHeader : function() {
+                this.$$('app-header-layout').notifyResize();
+            },
 
 
         });

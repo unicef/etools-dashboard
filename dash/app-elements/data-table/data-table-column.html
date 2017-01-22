@@ -1,0 +1,122 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<dom-module id="data-table-column">
+
+  <template>
+
+    <style>
+
+      :host {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        height: 56px;
+        font-size: 12px;
+        color: var(--secondary-text-color);
+        font-weight: bold;
+      }
+
+      :host([sortable]) {
+        cursor: pointer;
+      }
+
+      #label {
+        margin-right: 5px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      #icon-wrapper, iron-icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      #up, #down {
+        display: none;
+      }
+
+      :host(:not([selected]):hover[sortable]) #up {
+        display: block;
+      }
+
+      :host([selected]) #label,
+      :host(:not([selected]):hover[sortable]) #label {
+        color: var(--primary-text-color, rgba(0, 0, 0, 0.87));
+      }
+
+      :host([selected][direction="asc"]) #up {
+        display: block;
+      }
+
+      :host([selected][direction="desc"]) #down {
+        display: block;
+      }
+
+      :host(:not([selected])) iron-icon {
+        color: var(--sort-icon-hover-color, rgba(0, 0, 0, 0.38));
+      }
+
+      :host([selected]) iron-icon {
+        color: var(--sort-icon-color, rgba(0, 0, 0, 0.87));
+      }
+
+    </style>
+
+    <span id="label">
+      <slot></slot>
+    </span>
+    <div id="icon-wrapper">
+      <iron-icon id="up" icon="arrow-upward"></iron-icon>
+      <iron-icon id="down" icon="arrow-downward"></iron-icon>
+    </div>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'data-table-column',
+
+      properties: {
+
+        selected: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+
+        field: {
+          type: String,
+        },
+
+        direction: {
+          type: String,
+          reflectToAttribute: true
+        },
+
+      },
+
+      listeners: {
+        'tap': '_sort'
+      },
+
+      _sort: function() {
+        if (!this.hasAttribute('sortable')) {
+          return;
+        }
+        if (!this.selected || !this.direction) {
+          this.set('selected', true);
+          this.set('direction', 'asc');
+        } else {
+          this.set('direction', this.direction === 'asc' ? 'desc' : 'asc');
+        }
+        this.fire('sort-changed', {field: this.field, direction: this.direction});
+      },
+
+    });
+
+  </script>
+
+</dom-module>

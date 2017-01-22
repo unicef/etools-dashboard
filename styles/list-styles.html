@@ -21,21 +21,22 @@
         color: var(--accent-color);
       }
 
-      #listControls {
+      .listControls {
         @apply(--layout-horizontal);
-        padding: 6px 30px;
+        padding: 8px 24px;
+        min-height: 64px;
         margin-bottom: 20px;
+        box-sizing: border-box;
       }
 
       .wrap-controls, .fixed-controls,
-      .wrap-controls .filter{
+      .wrap-controls .filter, .controls-wrapper{
         @apply(--layout-horizontal);
         @apply(--layout-center);
       }
 
       .wrap-controls {
         @apply(--layout-wrap);
-        padding-bottom: 8px;
       }
 
       .wrap-controls > *:not(:last-child) {
@@ -53,14 +54,13 @@
 
       .fixed-controls {
         @apply(--layout-end-justified);
-
         margin-left: auto;
         white-space: nowrap;
       }
 
       .filters-divider {
         height: calc(100% - 16px);
-        margin: 0 20px;
+        margin: 0 24px;
         border-left: 2px solid var(--dark-divider-color);
       }
 
@@ -137,6 +137,44 @@
         color: var(--secondary-text-color, rgba(0, 0, 0, 0.54));
         font-weight: bold;
         margin-bottom: 10px;
+      }
+
+      .trip {
+        @apply(--layout-horizontal);
+        @apply(--layout-justified);
+        @apply(--layout-center);
+        font-size: 26px;
+        font-weight: 500;
+        padding: 16px 24px;
+        min-width: 200px;
+        box-sizing: border-box;
+      }
+      .trip h1 {
+        font-size: 14px;
+        text-transform: uppercase;
+        font-weight: 500;
+        margin:0;
+        line-height: 16px;
+      }
+      .trips {
+        @apply(--layout-wrap);
+        @apply(--layout-horizontal);
+      }
+      .trip-type-one ,.trip-type-one h1{
+        background : var(--trip-color-one);
+        color: var(--trip-heading);
+      }
+      .trip-type-two, .trip-type-two h1 {
+        background: var(--trip-color-two);
+        color : var(--trip-heading);
+      }
+      .trip-type-three, .trip-type-three h1{
+        background: var(--trip-color-three);
+        color : var(--light-primary-text-color);
+      }
+      .trip-type-four, .trip-type-four h1 {
+        background: var(--trip-color-four);
+        color : var(--light-primary-text-color);
       }
 
     </style>
