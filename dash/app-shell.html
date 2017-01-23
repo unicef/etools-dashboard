@@ -98,7 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
-    <user-data permissions="{{permissions}}"></user-data>
+    <user-data user="{{user}}" permissions="{{permissions}}"></user-data>
 
     <app-location route="{{route}}"></app-location>
 
@@ -121,7 +121,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="nav-menu">
             <iron-selector selected="[[page]]" attr-for-selected="name" selectable="side-bar-item" role="navigation">
                 <template is="dom-if" if="[[permissions.loggedInDefault]]">
-                    <side-bar-item name="dashboard" icon="explore" href$="[[baseUrl]]dashboard/d"></side-bar-item>
+                    <side-bar-item name="dashboard" icon="explore" href$="[[baseUrl]]dashboard"></side-bar-item>
                     <side-bar-item name="map" icon="explore" href$="[[baseUrl]]map"></side-bar-item>
                       <side-bar-item name="section2" icon="book" href="[[baseUrl]]section2"></side-bar-item>
                       <side-bar-item name="section3" icon="build" href="[[baseUrl]]section3"></side-bar-item>
@@ -149,7 +149,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       role="main">
 
               <template  is="dom-if" id="privatePages" on-dom-change="_pagesStamped" if="[[permissions.loggedInDefault]]">
-                  <page-dashboard name="dashboard" route="[[subroute]]"></page-dashboard>
+                  <page-dashboard name="dashboard" route="[[subroute]]" user="[[user]]"></page-dashboard>
                   <page-map  name="map" route="[[subroute]]"></page-map>
                   <page-section2 name="section2" route="[[subroute]]"></page-section2>
                   <page-section3 name="section3" route="[[subroute]]"></page-section3>
@@ -268,7 +268,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _pageChanged: function(page) {
-        console.log('changing to ', page)
         var resolvedPageUrl = this.resolveUrl('pages/page-' + page + '.html');
         this.importHref(resolvedPageUrl, null, this._pageNotFound, true);
       },

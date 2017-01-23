@@ -8,19 +8,15 @@
 <link rel="import" href="dashboard-data/country-programme-data.html">
 <link rel="import" href="dashboard-data/office-data.html">
 
-<link rel="import" href="../data-table/data-table-footer.html">
 <link rel="import" href="../data-table/data-table-header.html">
 <link rel="import" href="../data-table/data-table-column.html">
 <link rel="import" href="../data-table/data-table-row.html">
 
 <link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
-<link rel="import" href="../../../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
-<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
 
 <link rel="import" href="../../app-behaviors/dropdown-behavior.html">
 
@@ -33,7 +29,6 @@
             }
             .by-type {
                 padding: 0;
-                margin-bottom: 20px;
                 @apply(--layout-horizontal);
             }
             .col-data {
@@ -46,7 +41,7 @@
         <country-programme-data data="{{countryProgrammeItems}}"></country-programme-data>
         <office-data data="{{officeItems}}"></office-data>
 
-        <paper-material class="listControls" elevation="1">
+        <paper-material class="list-panel listControls" elevation="1">
             <div class="controls-wrapper">
 
                 <div class="title-row">
@@ -80,7 +75,7 @@
             </div>
         </paper-material>
 
-        <paper-material class="by-type" elevation="1">
+        <paper-material class="list-panel by-type" elevation="1">
             <div class="trip title-row ">
                 <h2 sub-title>Partnerships by type</h2>
             </div>

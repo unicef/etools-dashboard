@@ -1,0 +1,149 @@
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../styles/page-layout-styles.html">
+<link rel="import" href="../../../styles/shared-styles.html">
+<link rel="import" href="../../../styles/app-theme.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../app-config/etools-app-config.html">
+
+<dom-module id="app-selector">
+    <style include="page-layout-styles shared-styles color app-theme">
+        :host{
+            position: relative;
+            color: var(--dark-primary-text-color);
+        }
+        paper-icon-button.apps-button {
+            width: 76px;
+            height: 60px;
+            padding: 12px 24px 12px 24px;
+            color : var(--title-toolbar-secondary-text-color);
+            border-right: 1px solid var(--light-divider-color);
+            z-index: 100;
+        }
+        paper-icon-button.work {
+           color: var(--paper-green-800);
+        }
+        paper-icon-button.partnership {
+            color: var(--paper-light-blue-600);
+        }
+        paper-icon-button.field {
+            color: var(--paper-blue-900);
+        }
+        paper-icon-button.data {
+            color: var(--paper-grey-700);
+        }
+        paper-icon-button.icon-opened {
+            background: white;
+            color: var(--dark-primary-text-color);
+        }
+         .container{
+             @apply(--layout-vertical);
+             position: relative;
+        }
+        .apps-select {
+            position: absolute;
+            background: var(--primary-element-background);
+            top: 60px;
+            z-index: 100;
+            padding: 0;
+        }
+        .content-wrapper{
+            @apply(--layout-horizontal);
+            @apply(--layout-center);
+            min-height: 60px;
+            padding: 24px;
+            box-sizing: border-box;
+            font-size: 14px;
+            white-space:nowrap;
+        }
+        .content-wrapper:nth-child(2){
+            flex-grow:1 ;
+        }
+        .panel-icon {
+            width: 85px;
+            height: 85px;
+            padding: 0;
+        }
+        .panel {
+            border-top: 1px solid rgba(0, 0, 0, 0.12);
+            border-right: 1px solid rgba(0, 0, 0, 0.12);
+            min-width: 266px;
+        }
+        .panel:nth-child(2){
+            border-right: none;
+        }
+        .panel:hover {
+            background: var(--list-item-hover-color);
+        }
+        .panel-row{
+            @apply(--layout-horizontal);
+        }
+        .app-title {
+            font-size: 16px;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin: 0 16px;
+            line-height: 1.2;
+            cursor: pointer;
+        }
+    </style>
+    <template>
+       <div class="container" >
+        <paper-icon-button  on-tap="toggleMenu" class$="apps-button [[opened]]" icon="apps"></paper-icon-button>
+        <iron-collapse id="selector">
+           <paper-material class="apps-select"  elevation="5">
+            <div class="content-wrapper">
+                Select an application or repository
+            </div>
+            <div class="panel-row">
+                <div class="content-wrapper panel">
+                    <paper-icon-button class="panel-icon work" icon="account-box"></paper-icon-button>
+                    <div id="dash" on-tap="goToPage" class="app-title">Work <br>Planning</div>
+                </div>
+                <div class="content-wrapper panel">
+                    <paper-icon-button class="panel-icon partnership" on-tap="_pageChanged" icon="social:group"></paper-icon-button>
+                    <div id="pmp" on-tap="goToPage" class="app-title">Partnership <br>Management</div>
+                </div>
+            </div>
+            <div class="panel-row">
+                <div class="content-wrapper panel">
+                    <paper-icon-button class="panel-icon field" icon="track-changes"></paper-icon-button>
+                    <div id="t2f" on-tap="goToPage" class="app-title">Field <br>Monitoring</div>
+                </div>
+                <div class="content-wrapper panel">
+                    <paper-icon-button class="panel-icon data" icon="settings-applications"></paper-icon-button>
+                    <div id="data" on-tap="goToPage" class="app-title">Data <br>Sources</div>
+                </div>
+            </div>
+
+          </paper-material>
+        </iron-collapse>
+         </div>
+    </template>
+    <script>
+        Polymer({
+            is : 'app-selector',
+            properties : {
+                opened: {
+                    type: String,
+                    value: "",
+                },
+                           },
+            behaviors : [
+                etoolsAppConfig.globals,
+            ],
+            toggleMenu : function(){
+                this.$.selector.toggle();
+                if (this.opened) {
+                    this.opened = "";
+                }
+                else
+                    this.opened = 'icon-opened'
+            },
+            goToPage : function (e) {
+                window.location.href = this.baseSite+'/' + e.target.id + '/';
+            },
+        })
+    </script>
+</dom-module>

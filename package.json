@@ -16,7 +16,7 @@
   "scripts": {
     "dev": "polymer serve & npm run watch",
     "test": "polymer test",
-    "watch": "browser-sync start --proxy localhost:8082 --files 'dash/*.html, dash/*.js, images/*' "
+    "watch": "browser-sync start --proxy localhost:8082 --files '**/*.html, **/*.js, images/*' "
   },
   "private": true,
   "devDependencies": {
