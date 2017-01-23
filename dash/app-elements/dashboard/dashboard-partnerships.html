@@ -1,0 +1,200 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../../styles/shared-styles.html">
+<link rel="import" href="../../../styles/list-styles.html">
+<link rel="import" href="../../../styles/page-layout-styles.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<link rel="import" href="dashboard-data/country-programme-data.html">
+<link rel="import" href="dashboard-data/office-data.html">
+
+<link rel="import" href="../data-table/data-table-footer.html">
+<link rel="import" href="../data-table/data-table-header.html">
+<link rel="import" href="../data-table/data-table-column.html">
+<link rel="import" href="../data-table/data-table-row.html">
+
+<link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../../app-behaviors/dropdown-behavior.html">
+
+<dom-module id="dashboard-partnerships">
+
+    <template>
+        <style include="shared-styles list-styles iron-flex iron-flex-factors page-layout-styles">
+            .grow {
+                @apply(--layout-flex);
+            }
+            .by-type {
+                padding: 0;
+                margin-bottom: 20px;
+                @apply(--layout-horizontal);
+            }
+            .col-data {
+                display: inline-flex;
+                line-height: 24px;
+                height: 24px;
+            }
+        </style>
+
+        <country-programme-data data="{{countryProgrammeItems}}"></country-programme-data>
+        <office-data data="{{officeItems}}"></office-data>
+
+        <paper-material class="listControls" elevation="1">
+            <div class="controls-wrapper">
+
+                <div class="title-row">
+                    <h1 sub-title>Partnerships</h1>
+                </div>
+
+                <div class="filters-divider"></div>
+
+                <div class="wrap-controls">
+                    <div class="dropdown-with-clear-btn">
+                        <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+                        <paper-dropdown-menu label="Country Programme" placeholder="Select from list" noink>
+                            <paper-menu class="dropdown-content" attr-for-selected="text-content" selected="{{countryProgramme}}">
+                                <template is="dom-repeat" items="[[countryProgrammeItems]]">
+                                    <paper-item>[[item.name]]</paper-item>
+                                </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+                    </div>
+                    <div class="dropdown-with-clear-btn">
+                        <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+                        <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
+                            <paper-menu class="dropdown-content" attr-for-selected="text-content" selected="{{office}}">
+                               <template is="dom-repeat" items="[[officeItems]]">
+                                   <paper-item>[[item.name]]</paper-item>
+                               </template>
+                            </paper-menu>
+                        </paper-dropdown-menu>
+                    </div>
+                </div>
+            </div>
+        </paper-material>
+
+        <paper-material class="by-type" elevation="1">
+            <div class="trip title-row ">
+                <h2 sub-title>Partnerships by type</h2>
+            </div>
+            <div class="trips grow">
+                <div class="trip trip-type-one grow">
+                    <h1>Bilateral <br>Multilateral</h1>
+                    0
+                </div>
+                <div class="trip trip-type-two grow">
+                    <h1>Civil Society <br>Organizations</h1>
+                    0
+                </div>
+                <div class="trip trip-type-three grow">
+                    <h1>UN Agency</h1>
+                    0
+                </div>
+                <div class="trip trip-type-four grow">
+                    <h1>Government</h1>
+                    0
+                </div>
+            </div>
+        </paper-material>
+
+        <paper-material id="list" elevation="1">
+            <data-table-header no-title>
+                <data-table-column class="flex-2">
+                    Partnerships (PD, SHPD, SSFA ToR, DCT to government)
+                </data-table-column>
+                <data-table-column class="flex">
+                    Number of Partnerships
+                </data-table-column>
+                <data-table-column class="flex">
+                    Total Value of Partnerships
+                </data-table-column>
+                <data-table-column class="flex">
+                    % of Active Partnerships
+                </data-table-column>
+            </data-table-header>
+            <template is="dom-repeat" items="[[listItems]]">
+                <data-table-row no-collapse>
+                    <div slot="row-data">
+                        <a href="#" class="col-data flex-2">
+                            [[item.partnerships]]
+                        </a>
+                        <span class="col-data flex">
+                            [[item.numPar]]
+                        </span>
+                        <span class="col-data flex">
+                            [[item.totalValue]]
+                        </span>
+                        <span class="col-data flex">
+                            [[item.percentActive]]%
+                        </span>
+                    </div>
+                </data-table-row>
+            </template>
+
+
+        </paper-material>
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+
+            Polymer({
+                is: 'dashboard-partnerships',
+                behaviors : [dashBehaviors.DropdownBehavior],
+                properties: {
+                    countryProgramme : {
+                        type: String
+                    },
+                    office : {
+                        type: String
+                    },
+                    countryProgrammeItems : {
+                        type: Array,
+                    },
+                    officeItems : {
+                        type: Array,
+                    },
+                    listItems: {
+                        type: Array,
+                        value : [
+                            {
+                                partnerships : 'Active Programme Documents for this year',
+                                numPar: 105,
+                                totalValue: '$133,677,514',
+                                percentActive: 100
+                            },
+                            {
+                                partnerships : 'Approved Partnerships for this year',
+                                numPar: 97,
+                                totalValue: '$125,000,000',
+                                percentActive: 0
+                            },
+                            {
+                                partnerships : 'Active Partnerships approved in previous years',
+                                numPar: 8,
+                                totalValue: '$8,000,000',
+                                percentActive: 0
+                            },
+                            {
+                                partnerships : 'Expiring Partnerships in next two months',
+                                numPar: 90,
+                                totalValue: '$78,000,000',
+                                percentActive: 0
+                            }
+                        ]
+                    }
+                }
+            });
+
+        })();
+    </script>
+
+</dom-module>

@@ -6,12 +6,19 @@
 <dom-module id="page-layout-styles">
   <template>
     <style>
+      [hidden] {
+        display: none;
+      }
       app-header-layout {
         position: inherit;
       }
 
       app-header {
-        background-color: var(--primary-background-color);
+        background-color: #2A3B46;  /* TODO: replace with app-theme var */
+      }
+
+      iron-pages[role="main"] {
+        @apply(--layout-flex);
       }
 
       .page {
@@ -21,12 +28,112 @@
       }
 
       #pageContent {
-        @apply(--layout-flex-9);
+        @apply(--layout-flex);
       }
 
       #sidebar {
-        @apply(--layout-flex-3);
+        width: 225px;
         padding-left: 25px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      .page-top-content {
+        background-color: #ffffff; /* TODO: replace with app-theme var */
+        border-bottom: 1px solid #bdbdbd; /* TODO: replace with app-theme var */
+        padding: 0 25px;
+        min-height: 85px;
+      }
+
+      .page-top-content.with-tabs {
+        min-height: 114px;
+        height: 114px;
+      }
+
+      .top-content {
+        @apply(--layout-vertical);
+        @apply(--layout-start-justified);
+        @apply(--layout-flex);
+      }
+
+      .top-content-row {
+        @apply(--layout-horizontal);
+        @apply(--layout-start-justified);
+      }
+
+      .top-content-row + .top-content-row {
+        margin-top: 5px;
+      }
+
+      .top-content-row.title-row {
+        margin: 30px 0 0;
+        padding: 0 25px;
+      }
+
+      .title-row h1[main-title] {
+        @apply(--layout-flex);
+        margin: 0;
+        font-weight: normal;
+        text-transform: capitalize;
+        font-size: 24px;
+        line-height: 1.3;
+        min-height: 31px;
+      }
+
+      .title-row h1[sub-title]{
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+      }
+
+      .title-row h2[sub-title]{
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .top-content-actions-wrapper {
+        @apply(--layout-horizontal);
+      }
+      .top-content-action {
+        @apply(--layout-vertical);
+        @apply(--layout-center-justified);
+      }
+      .top-content-action paper-button {
+        --paper-button: {
+          padding-top: 0;
+          padding-bottom: 0;
+          font-size: 16px;
+          font-weight: bold;
+          color: var(--dark-secondary-text-color);
+        };
+      }
+
+      .top-content-action paper-button iron-icon {
+        margin-right: 10px;
+      }
+
+      .page-top-content paper-tabs {
+        --paper-tabs-selection-bar-color: #00aeef; /* TODO: replace with app-theme var */
+      }
+
+      .page-top-content paper-tab {
+        --paper-tab-ink: #00aeef; /* TODO: replace with app-theme var */
+        padding: 0 25px;
+      }
+
+      .page-top-content paper-tab .tab-content {
+        color: var(--dark-secondary-text-color);
+        text-transform: uppercase;
+      }
+
+      .page-top-content paper-tab.iron-selected .tab-content {
+        color: #00aeef; /* TODO: replace with app-theme var */
+      }
+
+      .content-section:not(:first-of-type) {
+        margin-top: 25px;
       }
     </style>
   </template>

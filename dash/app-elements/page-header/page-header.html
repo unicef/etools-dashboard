@@ -4,32 +4,39 @@
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <link rel="import" href="../../../bower_components/etools-page-refresh/etools-page-refresh.html">
-
 <link rel="import" href="../countries-dropdown/countries-dropdown.html">
-
+<link rel="import" href="../app-select-dropdown/app-selector.html">
 <link rel="import" href="../../../styles/shared-styles.html">
 
 <dom-module id="page-header">
 
   <template>
     <style include="shared-styles">
-      div[main-title] {
-        position: relative;
-        bottom: 1px;
-        margin-left: 24px;
-        text-transform: capitalize;
+
+      app-toolbar {
+        padding: 0 16px 0 0;
       }
 
-      div[main-title],
       etools-page-refresh {
-        color: var(--light-primary-text-color);
+        color: #BCC1C6; /* TODO: replace with app-theme var */
       }
 
       #menuButton {
         display: block;
+        margin: 0 16px;
       }
 
-      .right-side {
+      .titlebar {
+        flex: 1 ;
+        font-size: 28px;
+        font-weight: 300;
+        color: var(--light-primary-text-color);
+      }
+      .titlebar img{
+        width: 34px;
+        margin: 0 8px 0 24px;
+      }
+      .content-align {
         @apply(--layout-horizontal);
         @apply(--layout-center);
       }
@@ -47,10 +54,14 @@
         }
       }
     </style>
-    <app-toolbar>
+    <app-toolbar sticky class="content-align">
       <paper-icon-button id="menuButton" class="light" icon="menu" on-tap="openDrawer"></paper-icon-button>
-      <div main-title>{{title}}</div>
-      <div class="right-side">
+      <div class="titlebar content-align">
+        <app-selector id="selector"></app-selector>
+        <img src="../../../images/etools_logo_icon.png">
+        eTools
+      </div>
+      <div class="content-align">
         <countries-dropdown id="countries" countries="[[countries]]"></countries-dropdown>
         <etools-page-refresh></etools-page-refresh>
       </div>
@@ -61,13 +72,17 @@
     (function() {
       Polymer({
         is: 'page-header',
-
-        properties: {
-          title: String
+        listeners: {
+          'toggle-menu' : 'toggleMenu'
         },
-
         openDrawer: function() {
           this.fire('drawer');
+        },
+        toggleMenu : function(){
+          var appSelector = this.$.selector;
+          if(appSelector.opened){
+            appSelector.toggleMenu()
+          }
         }
 
       });

@@ -13,8 +13,14 @@
   "engines": {
     "node": ">=4.0"
   },
+  "scripts": {
+    "dev": "polymer serve & npm run watch",
+    "test": "polymer test",
+    "watch": "browser-sync start --proxy localhost:8082 --files 'dash/*.html, dash/*.js, images/*' "
+  },
   "private": true,
   "devDependencies": {
+    "browser-sync": "^2.18.6",
     "css-slam": "^1.1.0",
     "del": "^2.2.1",
     "gulp": "gulpjs/gulp#4.0",
