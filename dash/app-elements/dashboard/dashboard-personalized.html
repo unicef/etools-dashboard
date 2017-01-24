@@ -3,6 +3,7 @@
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
 <link rel="import" href="../../../styles/page-layout-styles.html">
+<link rel="import" href="../../../styles/grid-layout-styles.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
@@ -12,34 +13,52 @@
 <link rel="import" href="../data-table/data-table-column.html">
 <link rel="import" href="../data-table/data-table-row.html">
 
+<link rel="import" href="dashboard-data/trips-data.html">
+
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../../../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
-
+<link rel="import" href="../../../scripts/moment/moment.html">
 <dom-module id="dashboard-personalized">
     <template>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-        <style include="shared-styles list-styles iron-flex iron-flex-factors page-layout-styles">
+        <style include="shared-styles grid-layout-styles list-styles iron-flex iron-flex-factors page-layout-styles">
+            :host {
+                width: 100%;
+            }
             .greeting {
                 padding : 0 24px;
                 font-size: 24px;
                 color: var(--secondary-text-color);
                 margin: 5px 0 30px 0;
             }
-            .trip-icon {
-                font-size: 36px;
-                width: 54px;
-                height: 54px;
-                background: var(--paper-blue-900);
-                color: var(--light-primary-text-color);
-            }
             .management-toolbar {
                 position: relative;
                 min-height: 54px;
                 box-sizing: border-box;
                 padding: 0 24px 0 0;
+            }
+            .toolbar-icon-container {
+                width: 54px;
+                height: 54px;
+                color: var(--light-primary-text-color);
+                @apply(--layout);
+                @apply(--layout-center-justified);
+                @apply(--layout-center);
+            }
+            .trip-management {
+                background: rgba(0, 97, 233, 1.0);  /* Temporary until design confirmed */
+            }
+            .partnership-management {
+                background: rgba(0, 153, 255, 1.0); /* Temporary until design confirmed */
+            }
+            .toolbar-icon {
+                width: 42px;
+                height: 42px;
             }
             .toolbar-title {
                 font-size: 16px;
@@ -50,7 +69,7 @@
                 margin-left: 24px;
             }
             .trips-list {
-                padding: 0;
+                width: calc(50% - 6px);
             }
             .trips-list:nth-child(1){
                 margin-right: 12px;
@@ -63,12 +82,14 @@
             data-table-row.wrapper {
                 padding-left:0;
             }
-
         </style>
+
+        <trips-data data="{{trips}}"></trips-data>
+
         <h1 class="greeting">Welcome, [[user.first_name]]</h1>
         <paper-material class="list-panel management-toolbar layout horizontal center">
-            <div class="trip-icon">
-                <i class="fa fa-globe" aria-hidden="true"></i>
+            <div class="toolbar-icon-container trip-management">
+                <iron-icon class="toolbar-icon" icon="language"></iron-icon>
             </div>
             <div class="toolbar-title toolbar-item flex-2">
                 Trip management
@@ -83,32 +104,124 @@
             </paper-button>
         </paper-material>
         <div class="layout horizontal">
-            <paper-material class="list-panel flex trips-list">
+
+            <!-- TRIPS -------------------------->
+
+            <paper-material class="list-panel trips-list clear-pad">
                 <data-table-header no-title class="list-title layout horizontal center">
                     <div >Trips</div>
                 </data-table-header>
-                <div class="top-content-row">
+                <div class="top-content-row tabs-header">
                     <paper-tabs selected="{{tripsTab}}"
                                 attr-for-selected="name"
                                 fallback-selection="myTrips" noink bottom-item>
-
                         <paper-tab name="myTrips" link>
                             <span class="tab-content">My Trips</span>
                         </paper-tab>
-
                         <paper-tab name="supervised" link>
                             <span class="tab-content">Supervised</span>
                         </paper-tab>
-
                     </paper-tabs>
                 </div>
+                <template is="dom-repeat" items="[[trips]]" as="trip">
+                    <data-table-row no-collapse>
+                        <div slot="row-data">
+                            <a href="#" class="col-data col">
+                                [[_getYear(trip.created_date)]]
+                            </a>
+                            <span class="description description-size col-data flex-2">
+                                [[trip.purpose_of_travel]]
+                              <!--Lorem ipsum dolor sit amet consecturasdfasdfasdfsadfasdfasdfdsafas asdfasdfasdfsadfasdfasdf morbi commodo egestas tellus nonmetis ante metus solrros-->
+                            </span>
+                            <div class="layout vertical start col-data col-2">
+                                <span class="col-data">[[_dateFormatted(trip.created_date)]]</span>
+                                <span class="suppData">[[trip.supervisor_name]]</span>
+                            </div>
+                        </div>
+                    </data-table-row>
+                </template>
             </paper-material>
-            <paper-material class="list-panel flex trips-list">
+
+            <!-- ACTION POINTS -------------------------->
+
+            <paper-material class="list-panel trips-list clear-pad">
                 <data-table-header no-title class="list-title layout horizontal center">
                     <span >Action Points</span>
                 </data-table-header>
+                <div class="top-content-row tabs-header">
+                    <paper-tabs selected="{{actionsTab}}"
+                                attr-for-selected="name"
+                                fallback-selection="assignedByMe" noink bottom-item>
+                        <paper-tab name="assignedToMe" link>
+                            <span class="tab-content">Assigned To Me</span>
+                        </paper-tab>
+                        <paper-tab name="assignedByMe" link>
+                            <span class="tab-content">Assigned By Me</span>
+                        </paper-tab>
+                    </paper-tabs>
+                </div>
+                <template is="dom-repeat" items="[[trips]]" as="trip">
+                    <data-table-row no-collapse>
+                        <div slot="row-data">
+                            <div class="layout vertical col-8 flex">
+                                <span class="col-data description">
+                                    <!--[[trip.purpose_of_travel]]-->
+                                    Long description test orem ipsum dolor sit amet consecturasdfasdfasdfsadfasdfasdfdsafas asdfasdfasdfsadfasdfasdf morbi commodo egestas tellus nonmetis ante metus solrros
+                                </span>
+                                <span class="suppData">Open</span>
+                            </div>
+                            <div class="layout vertical start col-data col-2">
+                                <span class="col-data">[[_dateFormatted(trip.created_date)]]</span>
+                                <span class="suppData">[[trip.supervisor_name]]</span>
+                            </div>
+                        </div>
+                    </data-table-row>
+                </template>
             </paper-material>
         </div>
+        <paper-material class="list-panel management-toolbar layout horizontal center">
+            <div class="toolbar-icon-container partnership-management">
+                <iron-icon class="toolbar-icon" icon="social:group"></iron-icon> <!-- Placeholder icon -->
+            </div>
+            <div class="toolbar-title toolbar-item flex-2">
+                Partnership management
+            </div>
+            <paper-button class="button toolbar-item">
+                <iron-icon icon="social:people"></iron-icon>
+                Partners
+            </paper-button>
+            <paper-button class="button toolbar-item">
+                <iron-icon icon="av:playlist-add-check"></iron-icon>
+                Agreements
+            </paper-button>
+            <paper-button class="button toolbar-item">
+                <iron-icon icon="verified-user"></iron-icon>
+                PD/SSFA TOR
+            </paper-button>
+            <paper-button class="button toolbar-item">
+                <iron-icon icon="account-balance"></iron-icon>
+                Goverment-in-simple
+            </paper-button>
+        </paper-material>
+        <paper-material class="list-panel clear-pad">
+            <data-table-header no-title class="list-title layout horizontal center">
+                <span >My Partnerships</span>
+            </data-table-header>
+            <template is="dom-repeat" items="[[myPartnerships]]">
+                <data-table-row no-collapse>
+                    <div slot="row-data">
+                        <a href="#" class="col-data flex">
+                            [[item.link]]
+                        </a>
+                        <span class="description description-size flex-3 col-data">
+                            [[item.description]]
+                        </span>
+                        <span class="col-data col-2">[[item.budget]](Total Budget)</span>
+                    </div>
+                </data-table-row>
+            </template>
+
+        </paper-material>
 
 
     </template>
@@ -121,12 +234,33 @@
                     type: String,
                     notify: true,
                     observer: '_setUser'
+                },
+                myPartnerships: {
+                    type: Array,
+                    value: [
+                        {
+                            link: 'LEBA/PCA201602/PD201604-04',
+                            description: 'Lorem ipsum dolor sit amet consecturasdfasdfasdfsadfasdfasdfdsafas asdfasdfasdfsadfasdfasdf morbi commodo egestas tellus nonmetis ante metus solrros',
+                            budget: '$30,000'
+                        },
+                        {
+                            link: 'MoH 2016',
+                            description: 'Sed Consequat ante metus, eu eusismad',
+                            budget: '$150,000'
+                        }
+                    ]
                 }
             },
             _setUser: function() {
                 if(!this.user.first_name) {
                     this.set('user.first_name', 'Marko')
                 }
+            },
+            _getYear: function (date) {
+                return moment(date).format("YYYY") + '/000010';
+            },
+            _dateFormatted: function(str){
+                return moment(str).format("DD MMM YYYY")
             }
         })
     </script>

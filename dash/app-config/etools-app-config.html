@@ -17,7 +17,8 @@ App global configuration
       countries: 'id',
       user: 'id',
       countryProgramme: 'id, name, wbs, from_date',
-      offices: 'id, name'
+      offices: 'id, name',
+      trips: 'id, supervisor_name, purpose_of_travel, traveler, created_date'
     });
 
     var etoolsAppConfig = {
@@ -89,7 +90,8 @@ App global configuration
         url: '../../data/partners.json',
         exp: 6 * 60 * 60 * 1000, // 6h
         cachingKey: 'partners'
-      }
+      },
+
     };
 
     var serverEps = {
@@ -113,6 +115,12 @@ App global configuration
         exp: 6 * 60 * 60 * 1000, // 6h
         cachingKey: 'countries'
       },
+      trips: {
+        url: '/api/trips/',
+        exp: 6 * 60 * 60 * 1000, // 6h
+        cachingKey: 'trips'
+
+      }
     };
     /* jshint ignore:start */
     etoolsAppConfig.endpoints = etoolsAppConfig.globals.serverBackend ? serverEps : localEps;
