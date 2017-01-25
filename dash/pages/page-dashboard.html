@@ -8,6 +8,7 @@
 <link rel="import" href="../app-elements/page-footer/page-footer.html">
 
 <link rel="import" href="../app-elements/dashboard/dashboard-partnerships.html">
+<link rel="import" href="../app-elements/dashboard/dashboard-personalized.html">
 
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../styles/shared-styles.html">
@@ -25,9 +26,9 @@
 
         <app-route
             route="{{route}}"
-            pattern="/d/:dashId/:dashTab"
+            pattern="/"
             active="{{tabsActive}}"
-            date="{{routeData}}"></app-route>
+            data="{{routeData}}"></app-route>
 
         <app-header-layout>
                 <div class="page-top-content with-tabs">
@@ -49,7 +50,7 @@
                             <paper-tabs
                                     selected="{{routeData.dashTab}}"
                                     attr-for-selected="name"
-                                    fallback-selection="partnerships" noink bottom-item>
+                                    fallback-selection="personalized" noink bottom-item>
 
                                 <paper-tab name="personalized" link>
                                     <span class="tab-content">Personalized</span>
@@ -79,11 +80,11 @@
             <iron-pages id="partnershipPages"
                 selected="{{partnershipPage}}"
                 attr-for-selected="name"
-                fallback-selection="partnerships"
+                fallback-selection="personalized"
                 role="main">
 
                 <div class="page" name="personalized">
-                    <interventions-list></interventions-list>
+                    <dashboard-personalized user="[[user]]"></dashboard-personalized>
                 </div>
                 <div class="page" name="hact">
                     <intervention-details></intervention-details>

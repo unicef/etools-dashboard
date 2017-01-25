@@ -11,6 +11,7 @@
 
       :host {
         @apply(--layout-flex);
+        font-weight: 500;
       }
 
       :host([hidden]) {
@@ -21,11 +22,17 @@
         color: var(--accent-color);
       }
 
+      .list-panel {
+        padding-left: 24px;
+        padding-right: 24px;
+        margin-bottom: 20px;
+      }
+
       .listControls {
         @apply(--layout-horizontal);
-        padding: 8px 24px;
+        padding-top: 8px;
+        padding-bottom: 8px;
         min-height: 64px;
-        margin-bottom: 20px;
         box-sizing: border-box;
       }
 
@@ -68,12 +75,15 @@
         max-width: 126px;
       }
 
-      #filterMenu .button {
+      .button {
         color: var(--accent-color);
+        text-transform: uppercase;
       }
 
-      #filterMenu .button iron-icon {
-        margin-right: 5px;
+      .button iron-icon {
+        margin-right: 12px;
+        color: var(--secondary-text-color);
+
       }
 
       #filterMenu paper-item {
@@ -98,7 +108,6 @@
 
       #hiddenToggle {
         @apply(--layout-horizontal);
-
         padding: 10px 8px 10px 8px;
         cursor: pointer;
         font-weight: normal;
@@ -126,6 +135,7 @@
       *[slot="row-data-details"] {
         @apply(--layout-horizontal);
         @apply(--layout-flex);
+        @apply(--layout-center);
       }
 
       .row-details-content {
@@ -138,12 +148,34 @@
         font-weight: bold;
         margin-bottom: 10px;
       }
+      .col-data {
+        line-height: 20px;
+        font-weight: normal;
+      }
+      a.col-data {
+        font-weight: 500;
+      }
+
+      .trips-list a {
+        padding-right: 24px;
+      }
+      .suppData {
+        font-size: 12px;
+        color: var(--dark-ink-color);
+      }
+      .description {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 16px;
+      }
+      .description-size {
+        max-width: 66.66666%;
+      }
 
       .trip {
         @apply(--layout-horizontal);
         @apply(--layout-justified);
         @apply(--layout-center);
-        font-size: 26px;
         font-weight: 500;
         padding: 16px 24px;
         min-width: 200px;
@@ -159,6 +191,12 @@
       .trips {
         @apply(--layout-wrap);
         @apply(--layout-horizontal);
+      }
+      .clear-pad {
+        padding: 0;
+      }
+      .tabs-header {
+        border-bottom: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
       }
       .trip-type-one ,.trip-type-one h1{
         background : var(--trip-color-one);

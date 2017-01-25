@@ -109,7 +109,7 @@
             <div class="panel-row">
                 <div class="content-wrapper panel">
                     <paper-icon-button class="panel-icon field" icon="track-changes"></paper-icon-button>
-                    <div id="field" on-tap="goToPage" class="app-title">Field <br>Monitoring</div>
+                    <div id="t2f" on-tap="goToPage" class="app-title">Field <br>Monitoring</div>
                 </div>
                 <div class="content-wrapper panel">
                     <paper-icon-button class="panel-icon data" icon="settings-applications"></paper-icon-button>
@@ -129,11 +129,7 @@
                     type: String,
                     value: "",
                 },
-                baseUrl : {
-                    type: String,
-                    value: ""
-                }
-            },
+                           },
             behaviors : [
                 etoolsAppConfig.globals,
             ],
@@ -145,11 +141,8 @@
                 else
                     this.opened = 'icon-opened'
             },
-            attached : function(){
-                this.baseUrl = this.baseSite + '/';
-            },
             goToPage : function (e) {
-                window.location.href = this.baseUrl + e.target.id + '/';
+                window.location.href = this.baseSite+'/' + e.target.id + '/';
             },
         })
     </script>
