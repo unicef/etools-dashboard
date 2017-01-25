@@ -73,8 +73,11 @@
         noTitle : {
           type: Boolean,
           observer: '_noTitle',
+        },
+        noCollapse: {
+          type: Boolean,
+          observer: '_noCollapse'
         }
-
       },
 
       listeners: {
@@ -104,11 +107,15 @@
       _noTitle: function(){
         this.customStyle = {
           '--data-table-header' : 'height: auto',
-          '--header-columns' : 'margin-left : 0; flex: 1',
           '--header-title' : 'display: none'
         }
         this.updateStyles();
+      },
+      _noCollapse: function(){
+        this.customStyle['--header-columns']='margin-left : 0; flex: 1';
+        this.updateStyles();
       }
+
 
     });
 

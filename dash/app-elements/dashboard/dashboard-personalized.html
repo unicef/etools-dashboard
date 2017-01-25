@@ -25,7 +25,6 @@
 <link rel="import" href="../../../scripts/moment/moment.html">
 <dom-module id="dashboard-personalized">
     <template>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <style include="shared-styles grid-layout-styles list-styles iron-flex iron-flex-factors page-layout-styles">
             :host {
                 width: 100%;
@@ -108,7 +107,7 @@
             <!-- TRIPS -------------------------->
 
             <paper-material class="list-panel trips-list clear-pad">
-                <data-table-header no-title class="list-title layout horizontal center">
+                <data-table-header  class="list-title layout horizontal center" no-title no-collapse>
                     <div >Trips</div>
                 </data-table-header>
                 <div class="top-content-row tabs-header">
@@ -145,7 +144,7 @@
             <!-- ACTION POINTS -------------------------->
 
             <paper-material class="list-panel trips-list clear-pad">
-                <data-table-header no-title class="list-title layout horizontal center">
+                <data-table-header  class="list-title layout horizontal center" no-title no-collapse>
                     <span >Action Points</span>
                 </data-table-header>
                 <div class="top-content-row tabs-header">
