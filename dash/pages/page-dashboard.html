@@ -9,6 +9,7 @@
 
 <link rel="import" href="../app-elements/dashboard/dashboard-partnerships.html">
 <link rel="import" href="../app-elements/dashboard/dashboard-personalized.html">
+<link rel="import" href="../app-elements/dashboard/dashboard-hact.html">
 
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../styles/shared-styles.html">
@@ -50,7 +51,7 @@
                             <paper-tabs
                                     selected="{{routeData.dashTab}}"
                                     attr-for-selected="name"
-                                    fallback-selection="personalized" noink bottom-item>
+                                    fallback-selection="hact" noink bottom-item>
 
                                 <paper-tab name="personalized" link>
                                     <span class="tab-content">Personalized</span>
@@ -87,7 +88,7 @@
                     <dashboard-personalized user="[[user]]"></dashboard-personalized>
                 </div>
                 <div class="page" name="hact">
-                    <intervention-details></intervention-details>
+                    <dashboard-hact></dashboard-hact>
                 </div>
                 <div class="page" name="trips">
                     <intervention-supplies></intervention-supplies>
