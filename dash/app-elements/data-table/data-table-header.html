@@ -20,7 +20,6 @@
         @apply(--data-table-header);
       }
 
-
       #title {
         width: 100%;
         height: 64px;
@@ -36,6 +35,11 @@
         margin-left: 48px;
         height: 56px;
         @apply(--header-columns);
+        @apply(--header-height);
+      }
+
+      #columns.end {
+        @apply(--layout-end);
       }
 
     </style>
@@ -77,7 +81,7 @@
         noCollapse: {
           type: Boolean,
           observer: '_noCollapse'
-        }
+        },
       },
 
       listeners: {
@@ -114,9 +118,22 @@
       _noCollapse: function(){
         this.customStyle['--header-columns']='margin-left : 0; flex: 1';
         this.updateStyles();
-      }
-
-
+      },
+      _noHeight: function(){
+        this.customStyle['--header-height'] = 'height: auto';
+        this.customStyle['--data-table-header'] = 'height: auto';
+        this.updateStyles();
+      },
+      attached: function(){
+        var _this = this;
+        //detect if any column is a group of columns with heading
+        Array.prototype.slice.call(this.children).map(function(col){
+          if(col.attributes.getNamedItem('group-heading')){
+               _this._noHeight();
+                _this.$.columns.classList.add('end');
+            }
+        });
+       }
     });
 
   </script>

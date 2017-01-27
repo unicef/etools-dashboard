@@ -1,6 +1,8 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
+<link rel="import" href="../../../styles/grid-layout-styles.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <link rel="import" href="../data-table/data-table-header.html">
 <link rel="import" href="../data-table/data-table-column.html">
@@ -12,11 +14,12 @@
 
 <dom-module id="dashboard-hact">
     <template>
-        <style include="shared-styles list-styles">
+        <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
             :host {
                 --paper-input-container-label: {
                     margin-left: 34px;
-                }
+                };
+                width: 100%;
             }
             #query {
                 padding-bottom: 8px;
@@ -24,6 +27,12 @@
             .search-bar {
                 padding-bottom: 7px;
                 padding-top: 7px;
+            }
+            .nowrap{
+                white-space: nowrap;
+            }
+            data-table-header data-table-column {
+                @apply(--layout-start);
             }
         </style>
         <paper-material class="list-panel search-bar" elevation="1">
@@ -42,9 +51,62 @@
             </div>
         </paper-material>
         <paper-material id="list" elevation="1">
-            <data-table-header id="listHeader" label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show" no-collapse>
-                <data-table-column class="flex-c" field="name" sortable>
+            <data-table-header label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show" no-collapse>
+                <data-table-column class="flex nowrap" field="name" sortable>
                     Implementing Partner
+                </data-table-column>
+                <data-table-column class="flex nowrap" field="partner_type" >
+                    Partner Type
+                </data-table-column>
+                <data-table-column class="flex nowrap" field="shared_partner" >
+                    Shared IP
+                </data-table-column>
+                <data-table-column class="flex" group-heading="CASH TRANSFERS in USD">
+                        <data-table-column class="nowrap" field="total_ct_cp">
+                            TOTAL for <br> current CP cycle
+                        </data-table-column>
+                        <data-table-column class="nowrap" field="hact_values.planned_cash_transfer">
+                           PLANNED for <br> current year
+                        </data-table-column>
+                        <data-table-column class="nowrap" field="total_ct_cy">
+                            ACTUAL for <br> current year
+                        </data-table-column>
+                </data-table-column>
+                <data-table-column class="flex" field="hact_values.micro_assessment_needed">
+                    Micro <br>Assessment
+                </data-table-column>
+                <data-table-column class="flex nowrap" field="rating">
+                    Risk Rating
+                </data-table-column>
+                <data-table-column class="flex" group-heading="PROGRAMMATIC VISITS">
+                    <data-table-column field="hact_values.planned_visits">
+                        Planned
+                    </data-table-column>
+                    <data-table-column field="hact_min_requirements.programmatic">
+                        M.R
+                    </data-table-column>
+                    <data-table-column field="hact_values.programmatic_visits">
+                        Done
+                    </data-table-column>
+                </data-table-column>
+                <data-table-column class="flex" group-heading="SPOT CHECKS">
+                    <data-table-column field="hact_min_requirements.spot_checks">
+                        M.R
+                    </data-table-column>
+                    <data-table-column field="hact_values.spot_checks">
+                        Done
+                    </data-table-column>
+                </data-table-column>
+                <data-table-column class="flex" group-heading="AUDITS">
+                    <data-table-column field="hact_values.audits_mr">
+                        M.R
+                    </data-table-column>
+                    <data-table-column field="hact_values.audits_done">
+                        Done
+                    </data-table-column>
+                </data-table-column>
+                <data-table-column class="flex nowrap" field="hact_values.follow_up_flags">
+                    Flag for <br> Follow up
                 </data-table-column>
             </data-table-header>
         </paper-material>
