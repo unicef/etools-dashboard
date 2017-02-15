@@ -18,6 +18,7 @@ App global configuration
       user: 'id',
       countryProgramme: 'id, name, wbs, from_date',
       offices: 'id, name',
+      partners: 'id, name',
       trips: 'id, supervisor_name, purpose_of_travel, traveler, created_date'
     });
 
@@ -119,7 +120,11 @@ App global configuration
         url: '/api/trips/',
         exp: 6 * 60 * 60 * 1000, // 6h
         cachingKey: 'trips'
-
+      },
+      partners: {
+          url: '/api/v2/partners/hact',
+          exp: 6 * 60 * 60 * 1000, // 6h
+          cachingKey: 'partners'
       }
     };
     /* jshint ignore:start */

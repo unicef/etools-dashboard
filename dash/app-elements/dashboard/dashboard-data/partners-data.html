@@ -1,0 +1,81 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../../bower_components/etools-ajax/etools-ajax.html">
+<link rel="import" href="../../../app-behaviors/data-element-behavior.html">
+
+<dom-module id="partners-data">
+    <template>
+        <etools-ajax id="ajax"
+                     endpoint="[[endpoint]]"
+                     caching-storage="custom"
+                     dexie-db-collection="partners"
+                     on-success="_handleResponse">
+        </etools-ajax>
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+
+            Polymer({
+                is : "partners-data",
+                behaviors: [dashBehaviors.DataElementBehavior],
+                properties: {
+                    endpointName: {
+                        type: String,
+                        value: 'partners'
+                    },
+                    currentQuery: {
+                        type: Object,
+                        value: null
+                    },
+                    filteredPartners: {
+                        type: Array,
+                        readOnly: true,
+                        notify: true
+                    },
+                    totalResults: {
+                        type: Number,
+                        readOnly: true,
+                        notify: true
+                    },
+
+                },
+                query: function (searchString, order, pageSize, pageNumber) {
+                    var self = this;
+                    this.db.transaction('r', this.db.partners, function(){
+                        this.currentQuery = Dexie.currentTransaction;
+                        var queryResult = self.db.partners.orderBy('name');
+                        if (order === 'desc'){
+                            queryResult = queryResult.reverse();
+                        }
+                        if (!_.isEmpty(searchString)){
+                            queryResult = queryResult.filter(function(partner){
+                                return _.includes(partner.name.toLowerCase(), searchString.toLowerCase())
+                            })
+                        }
+                        Dexie.ignoreTransaction(function() {
+                            queryResult.count(function(count) {
+                                self._setTotalResults(count);
+                                console.log('total', count)
+                            });
+                        });
+
+                        return queryResult
+                                .offset((pageNumber - 1) * pageSize)
+                                .limit(10)
+                                .toArray()
+
+                    }).then(function(result){
+                        console.log('zzz', result)
+                        self._setFilteredPartners(result)
+                    }).catch(function(error){
+                        console.error('Error querying partners: ', error)
+                    })
+                },
+
+            })
+
+        })();
+
+    </script>
+</dom-module>

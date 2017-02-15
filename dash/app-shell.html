@@ -37,7 +37,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="app-shell">
 
   <template>
-
     <style include="page-layout-styles shared-styles">
 
       :host {
@@ -107,7 +106,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         pattern$="[[baseUrl]]:page"
         data="{{routeData}}"></app-route>
 
-    <app-drawer-layout id="layout" responsive-width="850px" narrow="{{narrow}}" fullbleed>
+    <app-drawer-layout id="layout" responsive-width="850px" narrow="{{narrow}}" fullbleed force-narrow>
 
       <!-- Drawer content -->
       <app-drawer id="drawer" transition-duration="350">
@@ -121,16 +120,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="nav-menu">
             <iron-selector selected="[[page]]" attr-for-selected="name" selectable="side-bar-item" role="navigation">
                 <template is="dom-if" if="[[permissions.loggedInDefault]]">
-                    <side-bar-item name="dashboard" icon="explore" href$="[[baseUrl]]dashboard"></side-bar-item>
+                    <side-bar-item name="dashboard" icon="explore" href$="[[baseUrl]]dashboard/hact"></side-bar-item>
                     <side-bar-item name="map" icon="explore" href$="[[baseUrl]]map"></side-bar-item>
                       <side-bar-item name="section2" icon="book" href="[[baseUrl]]section2"></side-bar-item>
                       <side-bar-item name="section3" icon="build" href="[[baseUrl]]section3"></side-bar-item>
                       <div class="divider"></div>
                 </template>
-              <side-bar-item name="settings" icon="settings" href$="[[baseUrl]]settings"></side-bar-item>
-              <side-bar-item name="user support" icon="help" href$="[[baseUrl]]support"></side-bar-item>
-              <side-bar-item name="discussions" icon="question-answer" href$="[[baseUrl]]discussion"></side-bar-item>
-              <side-bar-item name="information" icon="info" href$="[[baseUrl]]information"></side-bar-item>
             </iron-selector>
           </div>
         </div>
@@ -150,9 +145,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               <template  is="dom-if" id="privatePages" on-dom-change="_pagesStamped" if="[[permissions.loggedInDefault]]">
                   <page-dashboard name="dashboard" route="[[subroute]]" user="[[user]]"></page-dashboard>
-                  <page-map  name="map" route="[[subroute]]"></page-map>
-                  <page-section2 name="section2" route="[[subroute]]"></page-section2>
-                  <page-section3 name="section3" route="[[subroute]]"></page-section3>
               </template>
               <page-not-found name="not-found"></page-not-found>
           </iron-pages>
@@ -241,7 +233,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if ((this.route.path === this.baseUrl || this.route.path === '/') &&
             permissions.loggedInDefault) {
           // setting the default path
-          this.set('route.path', this.baseUrl + 'map');
+          this.set('route.path', this.baseUrl + 'dashboard/hact');
         } else if (this.initialLoad) {
           // reseting the page as the pages might not have been stamped
           this._routePageChanged(this.routeData.page);
@@ -258,6 +250,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var subroute = JSON.parse(JSON.stringify(this.route));
           subroute.path = this.route.path.substring(subroute.path.indexOf(this.baseUrl) + this.baseUrl.length);
           this.set('subroute', subroute);
+            console.log('subroute is', subroute)
         }
 
         if (this._pagesAvailable || (['settings', 'etc'].indexOf(page) !== -1)) {
