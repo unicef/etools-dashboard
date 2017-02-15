@@ -27,7 +27,7 @@
 
         <app-route
             route="{{route}}"
-            pattern="/"
+            pattern="dashboard/:dashTab"
             active="{{tabsActive}}"
             data="{{routeData}}"></app-route>
 
@@ -88,7 +88,7 @@
                     <dashboard-personalized user="[[user]]"></dashboard-personalized>
                 </div>
                 <div class="page" name="hact">
-                    <dashboard-hact></dashboard-hact>
+                    <dashboard-hact active="[[tabsActive]]"></dashboard-hact>
                 </div>
                 <div class="page" name="trips">
                     <intervention-supplies></intervention-supplies>
@@ -100,8 +100,6 @@
                     <intervention-attachments></intervention-attachments>
                 </div>
             </iron-pages>
-
-
 
         </app-header-layout>
 
@@ -116,17 +114,29 @@
                 partnershipPage : {
                     type : String,
                     notify : true
+                },
+                routeData: {
+                    type: Object,
                 }
             },
             observers: [
                     '_resizeHeader(tabsActive)',
-                    '_pageChanged(routeData.dashTab)'
+                    '_pageChanged(routeData.dashTab)',
+                    '_updateUrlTab(routeData.dashTab)',
             ],
             _pageChanged : function(dashTab) {
               this.set('partnershipPage', dashTab);
             },
             _resizeHeader : function() {
                 this.$$('app-header-layout').notifyResize();
+            },
+            _updateUrlTab: function(tab) {
+                if (!tab) {
+                    return;
+                }
+                this.debounce('debounce-url-tab-update', function() {
+                    this.fire('update-main-path', {path: this.route.path}, {bubbles: false});
+                }.bind(this), 50);
             },
 
 

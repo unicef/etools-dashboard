@@ -20,10 +20,6 @@
       :host([sortable]) {
         cursor: pointer;
       }
-      :host(:not(:first-child)){
-        padding-left: 12px;
-      }
-
       #label {
         margin-right: 5px;
         -webkit-user-select: none;
@@ -148,9 +144,11 @@
         this.fire('sort-changed', {field: this.field, direction: this.direction});
       },
       _isGroup: function () {
-         this.$.label.classList.add('is-group');
-         this.customStyle['--column-height'] = 'height: auto';
-         this.updateStyles();
+          if(!_.isEmpty(this.groupHeading)){
+              this.$.label.classList.add('is-group');
+              this.customStyle['--column-height'] = 'height: auto';
+              this.updateStyles();
+          }
       },
       attached: function () {
         if (!this.hasAttribute('sortable')) {
