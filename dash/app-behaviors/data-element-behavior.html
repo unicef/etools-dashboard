@@ -1,22 +1,9 @@
 <script>
-
-  var _data = _data || {};
-  var _elements = _elements || {};
-
-  var _setData = function(data) {
-    _data[this.endpointName] = data || {};
-
-    this.load(_data);
-    _elements[this.endpointName].forEach(function(el) {
-      if (el !== this) { el.load(_data); }
-    });
-  };
-
-  window.dashBehaviors = window.dashBehaviors || {};
+  window.pmpBehaviors = window.dashBehaviors || {};
   dashBehaviors.DataElementBehaviorImpl = {
 
     properties: {
-
+      endpoint: Object,
       data: {
         type: Array,
         readOnly: true,
@@ -30,36 +17,40 @@
         }
       },
 
+      fireDataLoaded: {
+        type: Boolean,
+        value: false
+      },
+
+      showLoading: {
+        type: Boolean,
+        value: false
+      }
+
     },
 
     ready: function() {
+      this._elementReady();
+    },
+
+    _elementReady: function() {
       if (!this.endpointName) {
         console.warn('Please specify an endpointName property');
-      }
-      this.load(_data);
-    },
-
-    attached: function() {
-      _elements[this.endpointName] = _elements[this.endpointName] || [];
-      if (_elements[this.endpointName].length === 0 && !_data[this.endpointName]) {
+      } else {
         this.endpoint = this.getEndpoint(this.endpointName);
-      }
-      _elements[this.endpointName].push(this);
-    },
-
-    detached: function() {
-      _elements[this.endpointName].splice(_elements[this.endpointName].indexOf(this), 1);
-    },
-
-    load: function(data) {
-      if (data[this.endpointName]) {
-        this._setData(data[this.endpointName]);
       }
     },
 
     _handleResponse: function(res) {
-      _setData.bind(this)(res.detail);
-    }
+      this._setData(res.detail);
+      if (this.fireDataLoaded) {
+        if (!this.dataLoadedEventName) {
+          console.warn('Please specify data loaded event name(dataLoadedEventName property)');
+        } else {
+          this.fire(this.dataLoadedEventName);
+        }
+      }
+    },
 
   };
 

@@ -1,0 +1,101 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="date-behavior.html">
+<script>
+  window.dashBehaviors = window.dashBehaviors || {};
+  dashBehaviors.CommonGeneralBehaviorImpl = {
+
+    /**
+     * Prepare and return the string value we have to display on the interface.
+     * Ex: partners and agreements lists data values.
+     */
+    getDisplayValue: function(value, isDate, separator) {
+      if (typeof value === 'string' && value != '') {
+        if (isDate) {
+          return this.prettyDate(value);
+        } else {
+          return value;
+        }
+      } else if (Array.isArray(value) && value.length > 0) {
+        if (!separator) {
+          separator = ', ';
+        }
+        return value.join(separator);
+      } else if (typeof value === 'number') {
+        return value;
+      }
+      return '-';
+    },
+
+    /**
+     * Update URL params
+     */
+    updateAppState: function(routePath, qs, dispatchLocationChange) {
+      // Using replace state to change the URL here ensures the browser's
+      // back button doesn't take you through every query
+      var currentState = window.history.state;
+      window.history.replaceState(currentState, null,
+          routePath + (qs.length ? '?' + qs : ''));
+
+      if (dispatchLocationChange) {
+        // This event lets app-location and app-route know
+        // the URL has changed
+        window.dispatchEvent(new CustomEvent('location-changed'));
+      }
+    },
+
+    prepareEtoolsFileDataFromUrl: function(fileUrl) {
+      var files = [];
+      if (typeof fileUrl === 'string' && fileUrl !== '') {
+        var fileName = this.getFileNameFromURL(fileUrl);
+        files = [{
+          id: null,
+          file_name: fileName,
+          path: fileUrl
+        }];
+      }
+      return files;
+    },
+
+    getFileNameFromURL: function(url) {
+      return url.substr(url.lastIndexOf('/') + 1);
+    },
+
+    /**
+     * Validate string value
+     */
+    validateStringValue: function(stringValue) {
+      if (typeof stringValue === 'string' && stringValue !== '') {
+        return true;
+      }
+      return false;
+    },
+
+    /**
+     * Validate integer value
+     */
+    validateIdValue: function(idValue) {
+      var id = parseInt(idValue, 10);
+      if (isNaN(id) || (!isNaN(id) && id <= 0)) {
+        return false;
+      }
+      return true;
+    },
+
+    /**
+     * Reset field validation
+     */
+    fieldValidationReset: function(selector) {
+      var field = this.$$(selector);
+      if (field) {
+        field.invalid = false;
+      }
+      return field;
+    }
+
+  };
+
+  dashBehaviors.CommonGeneralBehavior = [
+    dashBehaviors.DateBehavior,
+    dashBehaviors.CommonGeneralBehaviorImpl
+  ];
+</script>

@@ -29,6 +29,7 @@
             route="{{route}}"
             pattern="dashboard/:dashTab"
             active="{{tabsActive}}"
+            query-params="{{queryParams}}"
             data="{{routeData}}"></app-route>
 
         <app-header-layout>
@@ -88,7 +89,7 @@
                     <dashboard-personalized user="[[user]]"></dashboard-personalized>
                 </div>
                 <div class="page" name="hact">
-                    <dashboard-hact active="[[tabsActive]]"></dashboard-hact>
+                    <dashboard-hact active="[[tabsActive]]" url-params="[[queryParams]]"></dashboard-hact>
                 </div>
                 <div class="page" name="trips">
                     <intervention-supplies></intervention-supplies>

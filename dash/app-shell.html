@@ -26,11 +26,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="app-config/etools-app-config.html">
 <link rel="import" href="app-elements/common-data-loaders.html">
+<link rel="import" href="../bower_components/etools-loading/etools-loading-behavior.html">
+<link rel="import" href="app-behaviors/notification-toasts-behavior.html">
 
 <link rel="import" href="app-elements/user-data/user-data.html">
 <link rel="import" href="app-elements/side-bar-item/side-bar-item.html">
 <link rel="import" href="app-elements/page-header/page-header.html">
-<link rel="import" href="app-behaviors/notification-toasts-behavior.html">
 
 <link rel="import" href="../styles/shared-styles.html">
 <link rel="import" href="../styles/page-layout-styles.html">
@@ -199,7 +200,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       behaviors: [
         etoolsAppConfig.globals,
-        pmpBehaviors.NotificationToastsBehavior
+        dashBehaviors.NotificationToastsBehavior,
+        etoolsBehaviors.LoadingBehavior
       ],
 
       observers: [
@@ -208,7 +210,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       listeners: {
-//        'page-selected': '_pageSelected',
+        'global-loading': '_handleLoading',
         'drawer': 'toggleDrawer',
         '404': '_pageNotFound',
         'update-main-path': '_updateMainPath',
@@ -221,6 +223,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         //if (this.route.path === this.baseUrl) {
         //  this.set('route.path', this.baseUrl + 'partners/list');
         //}
+      },
+      ready: function(){
+        // create loading element, used for global loading
+        this.globalLoadingElement = this.createLoading();
+        this.fire('global-loading', {message: 'Loading data...', active: true});
       },
       updateAppSelector: function(){
           this.$.pageheader.fire('toggle-menu')
@@ -279,6 +286,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this._pagesAvailable = true;
         }
       },
+      /**
+       * Show loading when data is requested from server, or save is in progress...
+       */
+      _handleLoading: function(event) {
+        event.stopImmediatePropagation();
+        this.debounce('showGlobalLoading', function() {
+          if (this.globalLoadingElement) {
+            var loadingMsg = 'Loading...';
+            if (event.detail && typeof event.detail.message === 'string' && event.detail.message !== '') {
+              loadingMsg = event.detail.message;
+            }
+            this.globalLoadingElement.loadingText = loadingMsg;
+            var isActive = (event.detail.active === true) ? true : false;
+            this.globalLoadingElement.active = isActive;
+          }
+        }, 50);
+      }
     });
 
   </script>
