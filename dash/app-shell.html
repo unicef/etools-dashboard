@@ -15,7 +15,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
-<link rel="import" href="app-elements/page-header/page-header.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
@@ -26,8 +25,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icons/social-icons.html">
 
 <link rel="import" href="app-config/etools-app-config.html">
+<link rel="import" href="app-elements/common-data-loaders.html">
+
 <link rel="import" href="app-elements/user-data/user-data.html">
 <link rel="import" href="app-elements/side-bar-item/side-bar-item.html">
+<link rel="import" href="app-elements/page-header/page-header.html">
 <link rel="import" href="app-behaviors/notification-toasts-behavior.html">
 
 <link rel="import" href="../styles/shared-styles.html">
@@ -96,6 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
     </style>
+    <common-data-loaders></common-data-loaders>
 
     <user-data user="{{user}}" permissions="{{permissions}}"></user-data>
 
