@@ -55,9 +55,13 @@
         },
         query: function (searchString, order, pageSize, pageNumber) {
           var self = this;
+          if (this.currentQuery) {
+            this.currentQuery.abort();
+          }
           this.db.transaction('r', this.db.partners, function () {
             this.currentQuery = Dexie.currentTransaction;
-            var queryResult = self.db.partners.orderBy('name');
+            var queryResult = self.db.partners;
+//            queryResult = queryResult.orderBy('name');
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
@@ -66,20 +70,18 @@
                 return _.includes(partner.name.toLowerCase(), searchString.toLowerCase())
               })
             }
-            Dexie.ignoreTransaction(function () {
-              queryResult.count(function (count) {
+            Dexie.ignoreTransaction(function() {
+              queryResult.count(function(count) {
                 self._setTotalResults(count);
-                console.log('total', count)
               });
             });
 
             return queryResult
                 .offset((pageNumber - 1) * pageSize)
-                .limit(10)
-                .toArray()
+                .limit(pageSize)
+                .toArray();
 
           }).then(function (result) {
-            console.log('zzz', result)
             self._setFilteredPartners(result)
           }).catch(function (error) {
             console.error('Error querying partners: ', error)
