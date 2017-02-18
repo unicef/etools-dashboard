@@ -1,0 +1,72 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/etools-ajax/etools-ajax.html">
+
+<link rel="import" href="redux-bahaviors/common-static-data-redux-bahavior.html">
+
+<dom-module id="country-programmes-data">
+
+  <template>
+    <etools-ajax id="ajax"
+                 endpoint="[[endpoint]]"
+                 caching-storage="dexie"
+                 on-success="_handleResponse"></etools-ajax>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+
+        is: 'country-programmes-data',
+        behaviors: [
+          dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
+          etoolsAppConfig.globals
+        ],
+        properties: {
+
+          endpoint: {
+            type: Object
+          }
+
+        },
+        actions: {
+          setCountryProgrammesData: function(cpData) {
+            return {
+              type: 'SET_CP_DATA',
+              countryProgrammes: cpData
+            }
+          }
+        },
+
+        ready: function() {
+          this.set('endpoint', this.getEndpoint('countryProgrammes'));
+        },
+
+        _handleResponse: function(response) {
+          if (response.detail && response.detail.length > 0) {
+            // set setUsersData values
+            this.dispatch('setCountryProgrammesData', this._prepareCpData(response.detail));
+          }
+        },
+
+        /**
+         * Prepare values for dropdowns
+         */
+        _prepareCpData: function(data) {
+          return data.map(function(d) {
+            return {
+              value: parseInt(d.id),
+              label: d.name,
+              from_date: d.from_date,
+              to_date: d.to_date,
+              wbs: d.wbs
+            };
+          });
+        }
+
+      });
+    })();
+  </script>
+
+</dom-module>

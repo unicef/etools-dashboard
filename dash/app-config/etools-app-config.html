@@ -16,7 +16,7 @@ App global configuration
       collectionsList: 'name, expire',
       countries: 'id',
       user: 'id',
-      countryProgramme: 'id, name, wbs, from_date',
+      countryProgrammes: 'id, name, wbs, from_date',
       offices: 'id, name',
       partners: 'id, name',
       trips: 'id, supervisor_name, purpose_of_travel, traveler, created_date'
@@ -101,10 +101,10 @@ App global configuration
         exp: 30 * 60 * 1000, // 30min
         cachingKey: 'user'
       },
-      countryProgramme: {
+      countryProgrammes: {
          url: '/api/v2/reports/countryprogramme/',
          exp: 6 * 60 * 60 * 1000,
-         cachingKey: 'countryProgramme'
+         cachingKey: 'countryProgrammes'
        },
       offices: {
          url : '/api/offices/',
@@ -125,7 +125,12 @@ App global configuration
           url: '/api/v2/partners/hact',
           exp: 6 * 60 * 60 * 1000, // 6h
           cachingKey: 'partners'
-      }
+      },
+      sectors: {
+        url: '/api/reports/sectors',
+        exp: 6 * 60 * 60 * 1000, // 6h
+        cachingKey: 'sectors'
+      },
     };
     /* jshint ignore:start */
     etoolsAppConfig.endpoints = etoolsAppConfig.globals.serverBackend ? serverEps : localEps;

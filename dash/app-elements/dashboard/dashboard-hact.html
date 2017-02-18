@@ -3,235 +3,395 @@
 <link rel="import" href="../../../styles/list-styles.html">
 <link rel="import" href="../../../styles/grid-layout-styles.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-
-<link rel="import" href="../data-table/data-table-header.html">
-<link rel="import" href="../data-table/data-table-column.html">
-<link rel="import" href="../data-table/data-table-row.html">
-
-<link rel="import" href="dashboard-data/partners-data.html">
-
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
 
+<link rel="import" href="../data-table/data-table-header.html">
+<link rel="import" href="../data-table/data-table-column.html">
+<link rel="import" href="../data-table/data-table-row.html">
+<link rel="import" href="../data-table/data-table-footer.html">
+
+
+<link rel="import" href="dashboard-data/partners-data.html">
+<link rel="import" href="../../app-behaviors/common-general-behavior.html">
+
 <dom-module id="dashboard-hact">
-    <template>
-        <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
-            :host {
-                --paper-input-container-label: {
-                    margin-left: 34px;
-                };
-                --paper-tooltip-opacity : 1;
-                width: 100%;
-            }
-            #query {
-                padding-bottom: 8px;
-            }
-            .search-bar {
-                padding-bottom: 7px;
-                padding-top: 7px;
-            }
-            .nowrap{
-                white-space: nowrap;
-            }
-            data-table-header data-table-column {
-                @apply(--layout-start);
-            }
-            data-table-row > div > *:not(:last-child) {
-                padding-right: 12px;
-            }
-            data-table-column:not(:last-child) {
-                padding-right: 12px;
-            }
-            .partner-link {
-                overflow:hidden;
-                text-overflow: ellipsis;
-                flex:0 0 12%;
-            }
-        </style>
-        <partners-data
-                id="partners"
-                filtered-partners="{{filteredPartners}}"
-                total-results="{{totalResults}}">
-        </partners-data>
-        <paper-material class="list-panel search-bar" elevation="1">
-            <div class="wrap-controls">
-                <paper-input id="query"
-                             type="search"
-                             autocomplete="off"
-                             value="[[queryString]]"
-                             on-keyup="_setQuery"
-                             placeholder="Type and search"
-                             label="Keywords"
-                             always-float-label
-                             on-search="_setQuery">
-                    <iron-icon icon="search" prefix></iron-icon>
-                </paper-input>
+  <template>
+    <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
+      :host {
+        --paper-input-container-label: {
+          margin-left: 34px;
+        };
+        --paper-tooltip-opacity: 1;
+        width: 100%;
+      }
+
+      #query {
+        padding-bottom: 8px;
+      }
+      .hact-list {
+        min-width: 1150px;
+      }
+
+      .search-bar {
+        padding-bottom: 7px;
+        padding-top: 7px;
+        box-sizing: border-box;
+      }
+
+      .nowrap {
+        white-space: nowrap;
+      }
+      .col-4-sub {
+        flex:0 0 calc(33.33333% - 4px);
+        max-width: calc(33.33333% - 4px);
+      }
+      .col-6-sub {
+        flex:0 0 calc(50% - 6px);
+        max-width: calc(50% - 6px);
+      }
+      .col-in-sub {
+        text-align: center;
+      }
+      .col-micro {
+        min-width: 86px;
+      }
+
+
+      data-table-header data-table-column {
+        @apply(--layout-start);
+        box-sizing: border-box;
+      }
+
+      data-table-column > data-table-column:last-child {
+        padding-right: 0;
+      }
+
+
+      data-table-row > div >div> *:not(:last-child) {
+        padding-right: 12px;
+      }
+      data-table-row > div >div> * {
+        box-sizing: border-box;
+      }
+
+      data-table-column{
+        padding-right: 12px;
+      }
+
+      .partner-link {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+      }
+    </style>
+    <partners-data
+        id="partners"
+        filtered-partners="{{filteredPartners}}"
+        total-results="{{totalResults}}"
+        fire-data-loaded show-loading
+        on-partners-loaded="_requiredDataHasBeenLoaded">
+    </partners-data>
+    <paper-material class="list-panel search-bar hact-list" elevation="1">
+      <div class="wrap-controls">
+        <paper-input id="query"
+                     type="search"
+                     autocomplete="off"
+                     value="[[queryString]]"
+                     on-keyup="_setQuery"
+                     placeholder="Type and search"
+                     label="Keywords"
+                     always-float-label
+                     on-search="_setQuery">
+          <iron-icon icon="search" prefix></iron-icon>
+        </paper-input>
+      </div>
+    </paper-material>
+    <paper-material id="list" class="hact-list" elevation="1">
+      <data-table-header label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show" no-collapse>
+        <div class="col-3 layout horizontal">
+          <data-table-column class="col-6  nowrap" id="name" sortable>
+            Implementing Partner
+          </data-table-column>
+          <data-table-column class="col-3  nowrap" id="partner_type">
+            Partner Type
+          </data-table-column>
+          <data-table-column class="col-3  nowrap" id="shared_partner">
+            Shared IP
+          </data-table-column>
+        </div>
+        <data-table-column class="col-3" group-heading="CASH TRANSFERS in USD">
+          <data-table-column class="nowrap col-4" id="total_ct_cp">
+            TOTAL for <br> current CP cycle
+          </data-table-column>
+          <data-table-column class="nowrap col-4" id="hact_values.planned_cash_transfer">
+            PLANNED for <br> current year
+          </data-table-column>
+          <data-table-column class="nowrap col-4" id="total_ct_cy">
+            ACTUAL for <br> current year
+          </data-table-column>
+        </data-table-column>
+        <data-table-column class="flex nowrap" id="hact_values.micro_assessment_needed">
+          Micro <br>Assessment
+        </data-table-column>
+       <div class="col-20 layout horizontal end">
+         <data-table-column class="col-4 nowrap" id="rating">
+           Risk Rating
+         </data-table-column>
+         <data-table-column class="col-8" group-heading="PROGRAMMATIC VISITS">
+           <data-table-column class="col-4 nowrap" id="hact_values.planned_visits">
+             Planned
+           </data-table-column>
+           <data-table-column class="col-4 nowrap" id="hact_min_requirements.programmatic">
+             M.R
+           </data-table-column>
+           <data-table-column class="col-4 nowrap" id="hact_values.programmatic_visits">
+             Done
+           </data-table-column>
+         </data-table-column>
+       </div>
+       <div class="col-30 layout horizontal end">
+          <data-table-column class="col-4" group-heading="SPOT CHECKS">
+            <data-table-column class="col-6" id="hact_min_requirements.spot_checks">
+              M.R
+            </data-table-column>
+            <data-table-column class="col-6" id="hact_values.spot_checks">
+              Done
+            </data-table-column>
+          </data-table-column>
+          <data-table-column class="col-4" group-heading="AUDITS">
+            <data-table-column class="col-6" id="hact_values.audits_mr">
+              M.R
+            </data-table-column>
+            <data-table-column class="col-6" id="hact_values.audits_done">
+              Done
+            </data-table-column>
+          </data-table-column>
+          <data-table-column class="col-2 nowrap" id="hact_values.follow_up_flags">
+            Flag for <br> Follow up
+          </data-table-column>
+        </div>
+      </data-table-header>
+      <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
+        <data-table-row no-collapse>
+          <div slot="row-data">
+            <div class="col-3 layout horizontal">
+              <span class="col-6 col-data partner-link" >
+                <a on-tap="_goToPage" id="[[partner.id]]" >
+                  [[partner.name]]
+                  <paper-tooltip position="right">[[partner.name]]</paper-tooltip>
+                </a>
+              </span>
+              <span class="col-3 col-data ">[[partner.partner_type]]</span>
+              <span class="col-3 col-data ">[[partner.shared_partner]]</span>
             </div>
-        </paper-material>
-        <paper-material id="list" elevation="1">
-            <data-table-header label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show" no-collapse>
-                <data-table-column class="flex nowrap" field="name" sortable>
-                    Implementing Partner
-                </data-table-column>
-                <data-table-column class="flex nowrap" field="partner_type" >
-                    Partner Type
-                </data-table-column>
-                <data-table-column class="flex nowrap" field="shared_partner" >
-                    Shared IP
-                </data-table-column>
-                <data-table-column class="flex-3" group-heading="CASH TRANSFERS in USD">
-                        <data-table-column class="nowrap" field="total_ct_cp">
-                            TOTAL for <br> current CP cycle
-                        </data-table-column>
-                        <data-table-column class="nowrap" field="hact_values.planned_cash_transfer">
-                           PLANNED for <br> current year
-                        </data-table-column>
-                        <data-table-column class="nowrap" field="total_ct_cy">
-                            ACTUAL for <br> current year
-                        </data-table-column>
-                </data-table-column>
-                <data-table-column class="flex nowrap" field="hact_values.micro_assessment_needed">
-                    Micro <br>Assessment
-                </data-table-column>
-                <data-table-column class="flex nowrap" field="rating">
-                    Risk Rating
-                </data-table-column>
-                <data-table-column class="flex-3" group-heading="PROGRAMMATIC VISITS">
-                    <data-table-column class="flex nowrap" field="hact_values.planned_visits">
-                        Planned
-                    </data-table-column>
-                    <data-table-column class="flex nowrap" field="hact_min_requirements.programmatic">
-                        M.R
-                    </data-table-column>
-                    <data-table-column class="flex nowrap" field="hact_values.programmatic_visits">
-                        Done
-                    </data-table-column>
-                </data-table-column>
-                <data-table-column class="flex-2" group-heading="SPOT CHECKS">
-                    <data-table-column field="hact_min_requirements.spot_checks">
-                        M.R
-                    </data-table-column>
-                    <data-table-column field="hact_values.spot_checks">
-                        Done
-                    </data-table-column>
-                </data-table-column>
-                <data-table-column class="flex-2" group-heading="AUDITS">
-                    <data-table-column field="hact_values.audits_mr">
-                        M.R
-                    </data-table-column>
-                    <data-table-column field="hact_values.audits_done">
-                        Done
-                    </data-table-column>
-                </data-table-column>
-                <data-table-column class="flex nowrap" field="hact_values.follow_up_flags">
-                    Flag for <br> Follow up
-                </data-table-column>
-            </data-table-header>
-            <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
-                <data-table-row no-collapse>
-                    <div slot="row-data">
-                        <a href="#" class="col-data partner-link">
-                            [[partner.name]]
-                            <paper-tooltip position="right">[[partner.name]]</paper-tooltip>
-                        </a>
-                        <template is="dom-repeat" items="[[tableFields]]" as="field">
-                            <span class="col-data flex">[[_getProp(partner, field)]]</span>
-                        </template>
+            <div class="col-3 layout horizontal">
+              <span class="col-data col-4-sub ">[[partner.total_ct_cp]]</span>
+              <span class="col-data col-4-sub">[[partner.hact_values.planned_cash_transfer]]</span>
+              <span class="col-data col-4-sub">[[partner.total_ct_cy]]</span>
+            </div>
+            <span class="col-data col-micro flex">[[partner.hact_values.micro_assessment_needed]]</span>
+            <div class="col-20 layout horizontal">
+              <span class="col-data col-4">[[partner.rating]]</span>
+              <div class="col-8 layout horizontal">
+                <span class="col-data col-4-sub">[[partner.hact_values.planned_visits]]</span>
+                <span class="col-data col-4-sub">[[hact_min_requirements.programmatic]]</span>
+                <span class="col-data col-4-sub">[[hact_values.programmatic_visits]]</span>
+              </div>
+            </div>
+            <div class="col-30 layout horizontal">
+              <div class="col-4 layout horizontal">
+                <span class="col-data col-6-sub ">[[partner.hact_min_requirements.spot_checks]]</span>
+                <span class="col-data col-6-sub">[[partner.hact_values.spot_checks]]</span>
+              </div>
+              <div class="col-4 layout horizontal">
+                <span class="col-data col-6-sub">[[partner.hact_values.audits_mr]]</span>
+                <span class="col-data col-6-sub">[[partner.hact_values.audits_done]]</span>
+              </div>
+              <span class="col-data col-2 ">[[partner.hact_values.follow_up_flags]]</span>
+            </div>
+          </div>
+        </data-table-row>
+      </template>
+      <data-table-footer
+          page-size="[[pageSize]]"
+          page-number="[[pageNumber]]"
+          total-results="[[totalResults]]"
+          visible-range="{{visibleRange}}"
+          on-page-size-changed="_pageSizeChanged"
+          on-page-number-changed="_pageNumberChanged">
+      </data-table-footer>
+    </paper-material>
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      var _lastListViewed = null;
 
-                    </div>
-                </data-table-row>
-            </template>
+      Polymer({
+        is: "dashboard-hact",
+        behaviors: [
+            dashBehaviors.CommonGeneralBehavior,
+            etoolsAppConfig.globals
+        ],
+        listeners: {
+          'sort-changed': '_sortOrderChanged',
+        },
 
-        </paper-material>
-    </template>
-    <script>
-        Polymer({
-            is : "dashboard-hact",
-            properties: {
-                filteredPartners: {
-                    type: Array,
-                    notify: true,
-                    observer: '_partnersChanged'
-                },
-                pageNumber: {
-                    type: Number
-                },
-                pageSize: {
-                    type: Number
-                },
-                sortOrder: {
-                    type: String
-                },
-                queryString: {
-                    type: String,
-                    notify: true,
-                    observer: '_doSearch'
-                },
-                tableFields: {
-                    type: Array,
-                    value: [
-                            'partner_type',
-                            'shared_partner',
-                            'total_ct_cp',
-                            'hact_values.planned_cash_transfer',
-                            'total_ct_cy',
-                            'hact_values.micro_assessment_needed',
-                            'rating',
-                            'hact_values.planned_visits',
-                            'hact_min_requirements.programmatic',
-                            'hact_values.programmatic_visits',
-                            'hact_min_requirements.spot_checks',
-                            'hact_values.spot_checks',
-                            'hact_values.audits_mr',
-                            'hact_values.audits_done',
-                            'hact_values.follow_up_flags'
-                    ]
-                }
-            },
-            observers: [
-                    '_init(active)',
-                    '_doSearch(queryString, pageNumber, pageSize, sortOrder)'
-            ],
-            _init : function(active) {
-                if(!active){
-                    return
-                }
-                this.set('pageNumber', 1);
-                this.set('pageSize', 10);
-                this.set('queryString','');
-                this.set('sortOrder','asc');
-            },
-            _doSearch : function() {
-                this.debounce('query', function() {
-                    this.$.partners.query(
-                            this.queryString,
-                            this.sortOrder,
-                            this.pageSize,
-                            this.pageNumber);
-                }, 200);
-            },
-            _getProp: function (obj,propStr) {
-                if(propStr === 'partner_type'){
-                    return this._getAbbr(_.get(obj,propStr))
-                }
-                return _.get(obj,propStr)
-            },
-            _getAbbr: function(str){
-              return _.chain(str)
-                      .split(' ')
-                      .map(function(word){
-                          return word[0].toUpperCase()
-                      })
-                      .join('');
-            },
-            _setQuery: function(){
-                this.set('queryString', this.$.query.value)
-            },
-            _partnersChanged: function () {
+        properties: {
+          filteredPartners: {
+            type: Array,
+            notify: true,
+          },
+          pageNumber: {
+            type: Number
+          },
+          pageSize: {
+            type: Number
+          },
+          sortOrder: {
+            type: String
+          },
+          queryString: {
+            type: String,
+            notify: true,
+            observer: '_qChanged'
+          },
+          forceDataRefresh: {
+            type: Boolean,
+            value: false
+          },
+          requiredDataLoaded: {
+            type: Boolean,
+            value: false
+          },
+          initComplete: {
+            type: Boolean,
+            value: false,
+          },
+          debounceTime: {
+            type: Number,
+            value: 50
+          },
+          urlParams: {
+            type: Object
+          },
+        },
+        observers: [
+          '_init(active)',
+          '_updateUrl(queryString, pageNumber, pageSize, sortOrder, requiredDataLoaded)'
+        ],
+        _init: function (active) {
+          var params = this.urlParams;
+          if (!active || !params) {
+            return
+          }
+          this.set('initComplete', false);
+          this.set('pageNumber', params.page? parseInt(params.page): 1);
+          this.set('pageSize', params.size? parseInt(params.size): 10);
+          this.set('queryString', params.q? params.q : '');
+          this.set('sortOrder', params.sort? params.sort : 'asc');
+          this.set('initComplete', true);
+        },
+        _filterPartnersData: function () {
+          this.debounce('query', function () {
+            this.$.partners.query(
+                this.queryString,
+                this.sortOrder,
+                this.pageSize,
+                this.pageNumber);
+          }, 200);
+        },
+        _updateUrl: function(){
+          if (!this.requiredDataLoaded || !this.initComplete) {
+            return;
+          }
+          var qs = this._buildQueryString();
+          if (qs !== _lastListViewed){
+            _lastListViewed = qs;
+            this.updateAppState('dashboard/hact', qs, true);
+            if (this.requiredDataLoaded) {
+              this._filterPartnersData();
             }
+          }else {
+            if (location.search === '') {
+              this.updateAppState('dashboard/hact', qs, false)
+            }
+            if (this.forceDataRefresh && this.requiredDataLoaded){
+              this._filterPartnersData();
+              this.set('forceDataRefresh', false);
+            }
+          }
+        },
+        _buildQueryString: function(){
+          var qs = [];
+          if (this.pageNumber > 1){
+            qs.push('page=' + this.pageNumber);
+          }
+          if (this.pageSize) {
+            qs.push('size=' + this.pageSize);
+          }
+          if (this.queryString) {
+            qs.push('q=' + this.queryString);
+          }
+          if (this.sortOrder){
+            qs.push('sort=' + this.sortOrder);
+          }
+          return qs.join('&');
 
-        })
-    </script>
+        },
+        _getProp: function (obj, propStr) {
+          if (propStr === 'partner_type') {
+            return this._getAbbr(_.get(obj, propStr))
+          }
+          return _.get(obj, propStr)
+        },
+        _getAbbr: function (str) {
+          return str.length> 12 ?
+              str
+              .split(' ')
+              .map(function (word) {
+                return word[0].toUpperCase()
+              })
+              .join('') : str;
+        },
+        _setQuery: function () {
+          this.set('queryString', this.$.query.value)
+        },
+        _qChanged: function(q) {
+          this.set('debounceTime', 300);
+          this.set('pageNumber', 1);
+        },
+        _pageSizeChanged: function(e) {
+          this.set('debounceTime', 200);
+          this.set('pageNumber', 1);
+          this.set('pageSize', parseInt(e.detail.value));
+        },
+        _pageNumberChanged: function(e) {
+          this.set('debounceTime', 50);
+          this.set('pageNumber', e.detail.value);
+        },
+        _sortOrderChanged: function(e) {
+          this.set('debounceTime', 150);
+          this.set('sortOrder', e.detail.direction);
+        },
+        _requiredDataHasBeenLoaded: function (e) {
+          e.stopImmediatePropagation();
+          if (_.isUndefined(this.filteredPartners) || (Array.isArray(this.filteredPartners)) && !this.filteredPartners.length) {
+            this.set('forceDataRefresh', true);
+          }
+          this.set('requiredDataLoaded', true);
+          this._init(this.active);
+          this.fire('global-loading', {active: false});
+        },
+        _goToPage : function (e) {
+          window.location.href = this.baseSite+'/pmp/partners/' + e.target.id + '/details';
+        },
+
+      })
+    })();
+
+  </script>
 </dom-module>

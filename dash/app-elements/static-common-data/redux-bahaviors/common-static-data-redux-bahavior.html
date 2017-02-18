@@ -1,0 +1,33 @@
+<link rel="import" href="../../../../bower_components/polymer-redux/polymer-redux.html">
+<script>
+  var initialDropdownDashboardData = {
+    countryProgrammes: [],
+    offices: [],
+    countries: [],
+    sectors: [],
+    partnersDropdownData: [],
+  };
+
+  var commonStaticDataStore = Redux.createStore(function(state, action) {
+    if (!state) {
+      return initialDropdownDashboardData;
+    }
+
+    switch (action.type) {
+      case 'SET_CP_DATA':
+        return Object.assign({}, state, { countryProgrammes: action.countryProgrammes });
+
+      case 'SET_SECTORS':
+        return Object.assign({}, state, { sectors: action.sectors });
+
+      case 'SET_OFFICES':
+        return Object.assign({}, state, { offices: action.offices });
+
+      case 'SET_PARTNERS_DROPDOWN':
+        return Object.assign({}, state, { partnersDropdownData: action.partnersDropdownData });
+    }
+  });
+
+  window.dashBehaviors = window.dashBehaviors || {};
+  dashBehaviors.EtoolsStaticCommonDataReduxBehavior = PolymerRedux(commonStaticDataStore);
+</script>

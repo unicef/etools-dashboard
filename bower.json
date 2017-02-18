@@ -54,7 +54,8 @@
     "google-map": "GoogleWebComponents/google-map#^1.1.14",
     "iron-dropdown": "^1.5.5",
     "moment": "^2.17.1",
-    "paper-tooltip": "^1.1.3"
+    "paper-tooltip": "^1.1.3",
+    "polymer-redux": "^0.4.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
