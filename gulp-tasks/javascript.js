@@ -25,7 +25,8 @@ var lint = lazypipe()
   .pipe(jscsStylish.combineWithHintResults)
   .pipe(jshint.reporter, jshintStylish)
   // Option to have js linting fail on error
-  .pipe(jshint.reporter, 'fail');
+  //.pipe(jshint.reporter, 'fail');
+  .pipe(jshint.reporter);
 
 module.exports = {
   minify: minify,

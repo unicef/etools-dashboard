@@ -1,0 +1,99 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="app-mixins.html">
+
+<dom-module id="buttons-styles">
+  <template>
+    <style>
+      :root {
+        --primary-button-default: {
+          color: #fff; /* TODO: replace with app-theme var */
+          /*font-size: 14px;*/
+          font-weight: bold;
+          padding: 5px 10px;
+        };
+
+        --primary-button-with-prefix: {
+          padding-right: 15px;
+        };
+      }
+
+      .buttons-section {
+        border-top: 1px solid var(--dark-divider-color);
+        padding: 25px;
+      }
+      .buttons-section.horizontal {
+        @apply(--layout-horizontal);
+      }
+      .buttons-section.vertical {
+        @apply(--layout-vertical);
+      }
+      a.text-button {
+        color: var(--ecp-header-bg);
+        text-transform: uppercase;
+        cursor: pointer;
+        padding-bottom: 8px;
+      }
+
+      .buttons-section.vertical .primary-btn:not(:first-of-type) {
+        margin-top: 15px;
+      }
+
+      .primary-btn {
+        background-color: #3A94FF; /* TODO: replace with app-theme var */
+        --paper-button: {
+          @apply(--primary-button-default);
+        };
+      }
+
+      .danger-btn {
+        background-color: #E54F2E; /* TODO: replace with app-theme var */
+      }
+
+      .warning-btn {
+        background-color: #F7A14B; /* TODO: replace with app-theme var */
+      }
+
+      .success-btn {
+        background-color: #75c300; /* TODO: replace with app-theme var */;
+      }
+
+      .primary-btn.with-prefix {
+        --paper-button: {
+          @apply(--primary-button-default);
+          @apply(--primary-button-with-prefix);
+        };
+      }
+
+      paper-button.w100 {
+        width: 100%;
+        margin-right: 0;
+        margin-left: 0;
+      }
+
+      .secondary-btn-wrapper {
+        width: 100%;
+        --paper-input-container-input: {
+          @apply(--basic-btn-style);
+        };
+      }
+
+      .secondary-btn {
+        --paper-button: {
+          @apply(--basic-btn-style);
+        };
+      }
+
+      .secondary-btn iron-icon {
+        margin-right: 5px;
+      }
+
+      /* responsive css rules */
+      @media (min-width: 850px) {
+
+      }
+
+    </style>
+  </template>
+</dom-module>

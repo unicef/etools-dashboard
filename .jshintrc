@@ -11,15 +11,22 @@
   "noarg": true,
   "quotmark": "single",
   "undef": true,
-  "unused": true,
   "newcap": false,
   "laxbreak": true,
+  "unused":false,
   "globals": {
     "Polymer": true,
     "_": true,
     "Dexie": true,
     "etoolsAppConfig": true,
     "etoolsAjaxDefaultDexieDbPrefix": true,
-    "DynamicCustomStyleBehavior": true
+    "DynamicCustomStyleBehavior": true,
+    "etoolsBehaviors": true,
+    "dashBehaviors": true,
+    "PolymerRedux": true,
+    "Redux": true,
+    "_data": true,
+    "_setData": true,
+    "moment": true
   }
 }

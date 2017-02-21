@@ -1,14 +1,14 @@
 {
-  "name": "polymer-starter-kit-custom-build",
+  "name": "dash",
   "version": "0.0.0",
-  "description": "A starting point for Polymer 1.0 custom build apps",
+  "description": "eTools Dashboard Portal",
   "repository": {
     "type": "git",
-    "url": "git@github.com:PolymerElements/generator-polymer-init-custom-build"
+    "url": "git@github.com:unicef/etools-dashboard"
   },
   "license": "http://polymer.github.io/LICENSE.txt",
   "bugs": {
-    "url": "https://github.com/PolymerElements/generator-polymer-init-custom-build/issues"
+    "url": "https://github.com/unicef/etools-partnership-management/blob/master/LICENSE.md"
   },
   "engines": {
     "node": ">=4.0"
@@ -20,7 +20,7 @@
   },
   "private": true,
   "devDependencies": {
-    "browser-sync": "^2.18.6",
+    "browser-sync": "^2.18.7",
     "css-slam": "^1.1.0",
     "del": "^2.2.1",
     "gulp": "gulpjs/gulp#4.0",
@@ -33,6 +33,8 @@
     "gulp-jscs": "^4.0.0",
     "gulp-jscs-stylish": "^1.4.0",
     "gulp-jshint": "^2.0.1",
+    "gulp-load-plugins": "^1.3.0",
+    "gulp-replace": "^0.5.4",
     "gulp-uglify": "^2.0.0",
     "gulp-useref": "^3.1.2",
     "gulp-util": "^3.0.7",
@@ -44,5 +46,9 @@
     "plylog": "^0.4.0",
     "polymer-build": "^0.4.0",
     "yargs": "^5.0.0"
+  },
+  "dependencies": {
+    "express": "^4.14.0",
+    "redux": "^3.6.0"
   }
 }
