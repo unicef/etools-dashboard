@@ -116,11 +116,6 @@ App global configuration
         exp: 6 * 60 * 60 * 1000, // 6h
         cachingKey: 'countries'
       },
-      trips: {
-        url: '/api/trips/',
-        exp: 6 * 60 * 60 * 1000, // 6h
-        cachingKey: 'trips'
-      },
       partners: {
           url: '/api/v2/partners/hact',
           exp: 6 * 60 * 60 * 1000, // 6h
@@ -131,6 +126,15 @@ App global configuration
         exp: 6 * 60 * 60 * 1000, // 6h
         cachingKey: 'sectors'
       },
+			trips: {
+				template : "/api/t2f/travels/?traveler=<%=id%>/"
+			},
+			tripsSupervised: {
+				template : "/api/t2f/travels/?supervisor=<%=id%>/"
+			},
+			actionPoints: {
+
+			}
     };
     /* jshint ignore:start */
     etoolsAppConfig.endpoints = etoolsAppConfig.globals.serverBackend ? serverEps : localEps;

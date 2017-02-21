@@ -23,6 +23,9 @@
       case 'SET_OFFICES':
         return Object.assign({}, state, { offices: action.offices });
 
+			case 'SET_TRIPS_DATA':
+				return Object.assign({}, state, {trips: action.trips})
+
       case 'SET_PARTNERS_DROPDOWN':
         return Object.assign({}, state, { partnersDropdownData: action.partnersDropdownData });
     }
