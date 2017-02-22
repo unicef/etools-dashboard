@@ -1,0 +1,41 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<!-- Styles applied to etools-file element -->
+
+<dom-module id="file-styles">
+  <template>
+    <style>
+
+      .file-wrapper {
+        max-width: 100%;
+      }
+
+      .file-container {
+        position: relative;
+      }
+
+      .file-container etools-file {
+        @apply(--layout-fit);
+      }
+      .file-container.space-left etools-file {
+        padding-left: 25px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      etools-file:not([multiple]) {
+        --etools-file-filename-container: {
+          width: auto;
+        };
+        --etools-file-readonly-filename-container: {
+          width: auto;
+        };
+        --etools-file-error: {
+          position: relative !important;
+        };
+      }
+
+    </style>
+  </template>
+</dom-module>

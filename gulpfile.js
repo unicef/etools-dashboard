@@ -31,7 +31,7 @@ global.config = {
   appName: 'app',
   polymerJsonPath: path.join(process.cwd(), 'polymer.json'),
   build: {
-    rootDirectory: 'build',
+    rootDirectory: 'build/dash',
     bundledDirectory: 'bundled',
     unbundledDirectory: 'unbundled',
     // Accepts either 'bundled', 'unbundled', or 'both'
@@ -46,9 +46,10 @@ global.config = {
   // Service Worker precache options based on
   // https://github.com/GoogleChrome/sw-precache#options-parameter
   swPrecacheConfig: {
+    replacePrefix: '/pmp/',
     navigateFallback: '/index.html'
   },
-  sourceCodeDirectory: './src'
+  sourceCodeDirectory: './dash'
 };
 
 // Change global config if building into eTools
@@ -85,8 +86,11 @@ var log = function (message) {
 
 function source() {
   return project.splitSource()
-  // Add your own build tasks here!
-    .pipe(gulpif('**/*.html', html.lint())).on('end', log('Linted HTML'))
+ // // Add your own build tasks here!
+    //.pipe(gulpif('**/*index*.js', html.productionBasePath())).on('end', log('Replaced Base'))
+    .pipe(gulpif('**/*.html', html.lint()))
+    .on('end', log('Linted HTML'))
+
     .pipe(gulpif('**/*.html', html.minify())).on('end', log('Minified HTML'))
 
     // lint CSS not working correctly. Not seeing temporary css files
@@ -94,7 +98,7 @@ function source() {
     .pipe(gulpif('**/*.{html,css}', css.minify())).on('end', log('Minified CSS'))
 
     // TODO: JS Linting issues to fix!!!
-    // .pipe(gulpif('**/*.js', javascript.lint())).on('end', log('Linted Javascript'))
+    .pipe(gulpif('**/*.js', javascript.lint())).on('end', log('Linted Javascript'))
     .pipe(gulpif('**/*.js', javascript.minify())).on('end', log('Minified Javascript'))
 
     .pipe(gulpif('**/*.{gif,jpg,svg}', images.minify())).on('end', log('Minified Images'))
