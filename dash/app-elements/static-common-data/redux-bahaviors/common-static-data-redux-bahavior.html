@@ -6,6 +6,10 @@
     countries: [],
     sectors: [],
     partnersDropdownData: [],
+    trips: [],
+    tripsSupervised: [],
+    actionPointsByMe: [],
+    actionPointsForMe: []
   };
 
   var commonStaticDataStore = Redux.createStore(function(state, action) {
@@ -24,7 +28,16 @@
         return Object.assign({}, state, { offices: action.offices });
 
 			case 'SET_TRIPS_DATA':
-				return Object.assign({}, state, {trips: action.trips})
+				return Object.assign({}, state, {trips: action.trips});
+
+      case 'SET_SUPERVISED_TRIPS_DATA':
+        return Object.assign({}, state, {tripsSupervised: action.trips});
+
+      case 'SET_ACTION_POINTS_BY_ME' :
+        return Object.assign({}, state, {actionPointsByMe: action.actionPoints});
+
+      case 'SET_ACTION_POINTS_FOR_ME' :
+        return Object.assign({}, state, {actionPointsForMe: action.actionPoints});
 
       case 'SET_PARTNERS_DROPDOWN':
         return Object.assign({}, state, { partnersDropdownData: action.partnersDropdownData });

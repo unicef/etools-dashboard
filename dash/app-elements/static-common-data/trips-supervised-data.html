@@ -1,0 +1,188 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/etools-ajax/etools-ajax.html">
+
+<link rel="import" href="redux-bahaviors/common-static-data-redux-bahavior.html">
+
+<dom-module id="trips-supervised-data">
+
+  <template>
+    <etools-ajax id="ajax"
+                 endpoint="[[endpoint]]"
+                 caching-storage="dexie"
+                 on-success="_handleResponse"></etools-ajax>
+  </template>
+
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+
+        is: 'trips-supervised-data',
+        behaviors: [
+          dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
+          etoolsAppConfig.globals
+        ],
+        properties: {
+
+          endpoint: {
+            type: Object
+          },
+          id: {
+            type: String,
+          },
+          // ### Temporary fake data , remove when endpoint can return data ###
+          fakeData: {
+            type: Object,
+            value: {
+              detail: {
+                "page_count": 10,
+                "data": [
+                  {
+                    "id": 1,
+                    "reference_number": "2017/000001",
+                    "traveler": "Edelwisa Guillen",
+                    "purpose": "SAP Training",
+                    "status": "planned",
+                    "section": 3,
+                    "office": 2,
+                    "start_date": "2017-03-06T05:00:00.074000Z",
+                    "end_date": "2017-03-10T05:00:00.151000Z"
+                  },
+                  {
+                    "id": 2,
+                    "reference_number": "2017/000002",
+                    "traveler": "Nikola Trncic",
+                    "purpose": "testing nik",
+                    "status": "sent_for_payment",
+                    "section": 3,
+                    "office": 2,
+                    "start_date": "2017-02-09T05:00:00.204000Z",
+                    "end_date": "2017-02-09T05:00:00.232000Z"
+                  },
+                  {
+                    "id": 4,
+                    "reference_number": "2017/000004",
+                    "traveler": "Aldo Arce",
+                    "purpose": null,
+                    "status": "planned",
+                    "section": 3,
+                    "office": 2,
+                    "start_date": "2017-02-17T05:00:00.688000Z",
+                    "end_date": "2017-02-22T05:00:00.712000Z"
+                  },
+                  {
+                    "id": 5,
+                    "reference_number": "2017/000005",
+                    "traveler": "Anu Girija Senan",
+                    "purpose": "CUBAN MISSION",
+                    "status": "planned",
+                    "section": 3,
+                    "office": 2,
+                    "start_date": "2017-02-24T05:00:00.556000Z",
+                    "end_date": null
+                  },
+                  {
+                    "id": 7,
+                    "reference_number": "2017/000007",
+                    "traveler": "Janani Panchalingam",
+                    "purpose": "meeting",
+                    "status": "sent_for_payment",
+                    "section": 3,
+                    "office": 2,
+                    "start_date": "2017-02-10T05:00:00.140000Z",
+                    "end_date": "2017-02-14T05:00:00.165000Z"
+                  },
+                  {
+                    "id": 8,
+                    "reference_number": "2017/000008",
+                    "traveler": "Aldo Arce",
+                    "purpose": "TESTING",
+                    "status": "planned",
+                    "section": 3,
+                    "office": 2,
+                    "start_date": "2016-12-01T05:00:00.928000Z",
+                    "end_date": "2017-02-10T05:00:00.948000Z"
+                  },
+                  {
+                    "id": 9,
+                    "reference_number": "2017/000009",
+                    "traveler": "Janani Panchalingam",
+                    "purpose": "Meeting",
+                    "status": "sent_for_payment",
+                    "section": 3,
+                    "office": 2,
+                    "start_date": "2017-02-11T05:00:00.676000Z",
+                    "end_date": "2017-02-20T05:00:00.691000Z"
+                  },
+                  {
+                    "id": 10,
+                    "reference_number": "2017/000010",
+                    "traveler": "Aldo Arce",
+                    "purpose": "TESTING TRIPS",
+                    "status": "approved",
+                    "section": 3,
+                    "office": 2,
+                    "start_date": "2016-12-01T05:00:00.393000Z",
+                    "end_date": "2017-01-04T05:00:00.409000Z"
+                  },
+                  {
+                    "id": 11,
+                    "reference_number": "2017/000011",
+                    "traveler": "Aldo Arce",
+                    "purpose": "TESTING DATES",
+                    "status": "submitted",
+                    "section": 3,
+                    "office": 2,
+                    "start_date": "2016-08-01T04:00:00.392000Z",
+                    "end_date": "2016-08-17T04:00:00.408000Z"
+                  },
+                  {
+                    "id": 12,
+                    "reference_number": "2017/000012",
+                    "traveler": "Nono Louise Harhoff",
+                    "purpose": "la la la",
+                    "status": "submitted",
+                    "section": 3,
+                    "office": 2,
+                    "start_date": "2017-02-27T21:00:00.141000Z",
+                    "end_date": "2017-02-28T21:00:00.176000Z"
+                  }
+                ],
+                "total_count": 96
+              }
+            }
+          }
+
+        },
+        actions: {
+          setSupervisedTripsData: function (trips) {
+            return {
+              type: 'SET_SUPERVISED_TRIPS_DATA',
+              trips: trips
+            }
+          }
+        },
+
+        ready: function () {
+          this.set('endpoint', this.getEndpoint('tripsSupervised',{id: this.id}));
+        },
+
+        _handleResponse: function (response) {
+          var data = _.get(response,'detail.data',[])
+          if (data.length) {
+            this.dispatch('setSupervisedTripsData', this._prepareTripsData(data));
+          }
+        },
+
+        _prepareTripsData: function (data) {
+          return data.map(function (trip) {
+            return _.pick(trip, ['start_date','purpose','reference_number','traveler']);
+          });
+        }
+
+      });
+    })();
+  </script>
+
+</dom-module>

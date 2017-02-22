@@ -127,14 +127,17 @@ App global configuration
         cachingKey: 'sectors'
       },
 			trips: {
-				template : "/api/t2f/travels/?traveler=<%=id%>/"
+				template : "/api/t2f/travels/?f_traveler=<%=id%>"
 			},
 			tripsSupervised: {
-				template : "/api/t2f/travels/?supervisor=<%=id%>/"
+				template : "/api/t2f/travels/?supervisor=<%=id%>"
 			},
-			actionPoints: {
-
-			}
+			actionPointsByMe: {
+        template : "/api/t2f/action_points/?f_assigned_by=<%=id%>"
+      },
+      actionPointsForMe: {
+        template : "/api/t2f/action_points/?f_person_responsible=<%=id%>"
+      }
     };
     /* jshint ignore:start */
     etoolsAppConfig.endpoints = etoolsAppConfig.globals.serverBackend ? serverEps : localEps;
