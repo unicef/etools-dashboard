@@ -43,7 +43,6 @@
 
         _handleResponse: function (response) {
           var data = _.get(response,'detail.data', response.detail);
-          console.log('partnerships response', data, response);
           if (data.length) {
             this.dispatch('setPartnerships', this._prepareData(data));
           }

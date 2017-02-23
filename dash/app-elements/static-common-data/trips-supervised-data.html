@@ -158,7 +158,6 @@
         },
         actions: {
           setSupervisedTripsData: function (trips) {
-            console.log('supervisd', trips)
             return {
               type: 'SET_SUPERVISED_TRIPS_DATA',
               trips: trips
@@ -167,7 +166,6 @@
         },
 
         _setEndpoint: function () {
-          console.log('supervised ep,', this.getEndpoint('tripsSupervised',{id: this.user.id}));
           this.set('endpoint', this.getEndpoint('tripsSupervised',{id: this.user.id}));
         },
 
