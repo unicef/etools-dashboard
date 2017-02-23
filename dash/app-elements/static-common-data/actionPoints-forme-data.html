@@ -24,13 +24,13 @@
           etoolsAppConfig.globals
         ],
         properties: {
-
           endpoint: {
             type: Object
           },
-          id: {
-            type: String,
-          },
+          user: {
+            type: Object,
+            observer: '_setEndpoint'
+          }
         },
         actions: {
           setActionPoints: function (actionPoints) {
@@ -41,8 +41,8 @@
           }
         },
 
-        ready: function () {
-          this.set('endpoint', this.getEndpoint('actionPointsForMe',{id: this.id}));
+        _setEndpoint: function () {
+          this.set('endpoint', this.getEndpoint('actionPointsForMe',{id: this.user.id}));
         },
 
         _handleResponse: function (response) {

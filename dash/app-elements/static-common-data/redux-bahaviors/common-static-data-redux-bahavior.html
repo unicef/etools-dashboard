@@ -9,7 +9,8 @@
     trips: [],
     tripsSupervised: [],
     actionPointsByMe: [],
-    actionPointsForMe: []
+    actionPointsForMe: [],
+    partnerships: []
   };
 
   var commonStaticDataStore = Redux.createStore(function(state, action) {
@@ -41,6 +42,10 @@
 
       case 'SET_PARTNERS_DROPDOWN':
         return Object.assign({}, state, { partnersDropdownData: action.partnersDropdownData });
+
+      case 'SET_PARTNERSHIPS' :
+        return Object.assign({}, state, { partnerships: action.partnerships });
+
     }
   });
 

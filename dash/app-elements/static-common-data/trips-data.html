@@ -24,12 +24,13 @@
 					etoolsAppConfig.globals
 				],
 				properties: {
-
 					endpoint: {
 						type: Object
 					},
-					// ### Temporary fake data , remove when endpoint can return data ###
-
+          user: {
+            type: Object,
+            observer: '_setEndpoint'
+          },
 				},
 				actions: {
 					setTripsData: function (trips) {
@@ -40,8 +41,8 @@
 					}
 				},
 
-				ready: function () {
-					this.set('endpoint', this.getEndpoint('trips',{id: this.id}));
+				_setEndpoint: function () {
+					this.set('endpoint', this.getEndpoint('trips',{id: this.user.id}));
 				},
 
 				_handleResponse: function (response) {
@@ -53,7 +54,7 @@
 
 				_prepareTripsData: function (data) {
 					return data.map(function (trip) {
-						return _.pick(trip, ['start_date','purpose','reference_number','supervisor_name']);
+						return _.pick(trip, ['id','start_date','purpose','reference_number','supervisor_name']);
 					});
 				}
 

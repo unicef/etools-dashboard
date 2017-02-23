@@ -28,8 +28,9 @@
           endpoint: {
             type: Object
           },
-          id: {
-            type: String,
+          user: {
+            type: Object,
+            observer: '_setEndpoint'
           },
           // ### Temporary fake data , remove when endpoint can return data ###
           fakeData: {
@@ -157,6 +158,7 @@
         },
         actions: {
           setSupervisedTripsData: function (trips) {
+            console.log('supervisd', trips)
             return {
               type: 'SET_SUPERVISED_TRIPS_DATA',
               trips: trips
@@ -164,8 +166,9 @@
           }
         },
 
-        ready: function () {
-          this.set('endpoint', this.getEndpoint('tripsSupervised',{id: this.id}));
+        _setEndpoint: function () {
+          console.log('supervised ep,', this.getEndpoint('tripsSupervised',{id: this.user.id}));
+          this.set('endpoint', this.getEndpoint('tripsSupervised',{id: this.user.id}));
         },
 
         _handleResponse: function (response) {
@@ -177,7 +180,7 @@
 
         _prepareTripsData: function (data) {
           return data.map(function (trip) {
-            return _.pick(trip, ['start_date','purpose','reference_number','traveler']);
+            return _.pick(trip, ['id','start_date','purpose','reference_number','traveler']);
           });
         }
 

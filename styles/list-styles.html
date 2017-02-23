@@ -159,9 +159,10 @@
       }
       a.col-data {
         font-weight: 500;
+        cursor: pointer;
       }
 
-      .trips-list a {
+      .list-panel a {
         padding-right: 24px;
       }
       .suppData {
@@ -171,7 +172,7 @@
       .description {
         overflow: hidden;
         text-overflow: ellipsis;
-        padding-right: 16px;
+        padding-right: 24px;
       }
       .description-size {
         max-width: 66.66666%;
@@ -196,6 +197,13 @@
       .trips {
         @apply(--layout-wrap);
         @apply(--layout-horizontal);
+      }
+      .trips-list {
+        width: calc(50% - 6px);
+      }
+
+      .trips-list:nth-child(1) {
+        margin-right: 12px;
       }
       .clear-pad {
         padding: 0;

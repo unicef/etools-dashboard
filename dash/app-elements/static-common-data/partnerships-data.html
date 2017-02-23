@@ -3,7 +3,7 @@
 
 <link rel="import" href="redux-bahaviors/common-static-data-redux-bahavior.html">
 
-<dom-module id="actionPoints-byme-data">
+<dom-module id="partnerships-data">
 
   <template>
     <etools-ajax id="ajax"
@@ -18,7 +18,7 @@
 
       Polymer({
 
-        is: 'actionPoints-byme-data',
+        is: 'partnerships-data',
         behaviors: [
           dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
           etoolsAppConfig.globals
@@ -27,34 +27,31 @@
           endpoint: {
             type: Object
           },
-          user: {
-            type: Object,
-            observer: '_setEndpoint'
-          }
         },
         actions: {
-          setActionPoints: function (actionPoints) {
+          setPartnerships: function (partnerships) {
             return {
-              type: 'SET_ACTION_POINTS_BY_ME',
-              actionPoints: actionPoints
+              type: 'SET_PARTNERSHIPS',
+              partnerships: partnerships
             }
           }
         },
 
-        _setEndpoint: function () {
-          this.set('endpoint', this.getEndpoint('actionPointsByMe',{id: this.user.id}));
+        ready: function () {
+          this.set('endpoint', this.getEndpoint('partnerships'));
         },
 
         _handleResponse: function (response) {
-          var data = _.get(response,'detail.data',[])
+          var data = _.get(response,'detail.data', response.detail);
+          console.log('partnerships response', data, response);
           if (data.length) {
-            this.dispatch('setActionPoints', this._prepareData(data));
+            this.dispatch('setPartnerships', this._prepareData(data));
           }
         },
 
         _prepareData: function (data) {
-          return data.map(function (actionPoint) {
-            return _.pick(actionPoint, ['status','description','created_at','person_responsible_name']);
+          return data.map(function (partnership) {
+            return _.pick(partnership, ['id','title', 'number', 'unicef_budget']);
           });
         }
 
