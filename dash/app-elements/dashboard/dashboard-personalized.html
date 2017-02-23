@@ -13,7 +13,6 @@
 <link rel="import" href="../data-table/data-table-column.html">
 <link rel="import" href="../data-table/data-table-row.html">
 
-<link rel="import" href="dashboard-data/trips-data.html">
 
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
@@ -23,244 +22,303 @@
 <link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../../bower_components/moment-element/moment-import.html">
+
+<link rel="import" href="../../app-behaviors/common-general-behavior.html">
+<link rel="import" href="../../app-elements/static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
 <dom-module id="dashboard-personalized">
-    <template>
-        <style include="shared-styles grid-layout-styles list-styles iron-flex iron-flex-factors page-layout-styles">
-            :host {
-                width: 100%;
-            }
-            .greeting {
-                padding : 0 24px;
-                font-size: 24px;
-                color: var(--secondary-text-color);
-                margin: 5px 0 30px 0;
-            }
-            .management-toolbar {
-                position: relative;
-                min-height: 54px;
-                box-sizing: border-box;
-                padding: 0 24px 0 0;
-            }
-            .toolbar-icon-container {
-                width: 54px;
-                height: 54px;
-                color: var(--light-primary-text-color);
-                @apply(--layout);
-                @apply(--layout-center-justified);
-                @apply(--layout-center);
-            }
-            .trip-management {
-                background: rgba(0, 97, 233, 1.0);  /* Temporary until design confirmed */
-            }
-            .partnership-management {
-                background: rgba(0, 153, 255, 1.0); /* Temporary until design confirmed */
-            }
-            .toolbar-icon {
-                width: 42px;
-                height: 42px;
-            }
-            .toolbar-title {
-                font-size: 16px;
-                text-transform: uppercase;
-                color: var(--dark-primary-text-color);
-            }
-            .toolbar-item {
-                margin-left: 24px;
-            }
-            .trips-list {
-                width: calc(50% - 6px);
-            }
-            .trips-list:nth-child(1){
-                margin-right: 12px;
-            }
-            .list-title {
-                font-size: 20px;
-                font-weight: 500;
-                min-height: 64px;
-            }
-            data-table-row.wrapper {
-                padding-left:0;
-            }
-        </style>
+  <template>
+    <style include="shared-styles grid-layout-styles list-styles iron-flex iron-flex-factors iron-flex-alignment page-layout-styles">
+      :host {
+        width: 100%;
+      }
 
-        <trips-data data="{{trips}}"></trips-data>
+      .greeting {
+        padding: 0 24px;
+        font-size: 24px;
+        color: var(--secondary-text-color);
+        margin: 5px 0 30px 0;
+      }
 
-        <h1 class="greeting">Welcome, [[user.first_name]]</h1>
-        <paper-material class="list-panel management-toolbar layout horizontal center">
-            <div class="toolbar-icon-container trip-management">
-                <iron-icon class="toolbar-icon" icon="language"></iron-icon>
-            </div>
-            <div class="toolbar-title toolbar-item flex-2">
-                Trip management
-            </div>
-            <paper-button class="button toolbar-item">
-                <iron-icon icon="maps:transfer-within-a-station"></iron-icon>
-                Travel 2 Field
-            </paper-button>
-            <paper-button class="button toolbar-item">
-                <iron-icon icon="list"></iron-icon>
-                Action Points
-            </paper-button>
-        </paper-material>
-        <div class="layout horizontal">
+      .management-toolbar {
+        position: relative;
+        min-height: 54px;
+        box-sizing: border-box;
+        padding: 0 24px 0 0;
+      }
 
-            <!-- TRIPS -------------------------->
+      .toolbar-icon-container {
+        width: 54px;
+        height: 54px;
+        color: var(--light-primary-text-color);
+        @apply(--layout);
+        @apply(--layout-center-justified);
+        @apply(--layout-center);
+      }
 
-            <paper-material class="list-panel trips-list clear-pad">
-                <data-table-header  class="list-title layout horizontal center" no-title no-collapse>
-                    <div >Trips</div>
-                </data-table-header>
-                <div class="top-content-row tabs-header">
-                    <paper-tabs selected="{{tripsTab}}"
-                                attr-for-selected="name"
-                                fallback-selection="myTrips" noink bottom-item>
-                        <paper-tab name="myTrips" link>
-                            <span class="tab-content">My Trips</span>
-                        </paper-tab>
-                        <paper-tab name="supervised" link>
-                            <span class="tab-content">Supervised</span>
-                        </paper-tab>
-                    </paper-tabs>
-                </div>
-                <template is="dom-repeat" items="[[trips]]" as="trip">
-                    <data-table-row no-collapse>
-                        <div slot="row-data">
-                            <a href="#" class="col-data col">
-                                [[_getYear(trip.created_date)]]
-                            </a>
-                            <span class="description description-size col-data flex-2">
-                                [[trip.purpose_of_travel]]
-                              <!--Lorem ipsum dolor sit amet consecturasdfasdfasdfsadfasdfasdfdsafas asdfasdfasdfsadfasdfasdf morbi commodo egestas tellus nonmetis ante metus solrros-->
-                            </span>
-                            <div class="layout vertical start col-data col-2">
-                                <span class="col-data">[[_dateFormatted(trip.created_date)]]</span>
-                                <span class="suppData">[[trip.supervisor_name]]</span>
-                            </div>
-                        </div>
-                    </data-table-row>
-                </template>
-            </paper-material>
+      .trip-management {
+        background: rgba(0, 97, 233, 1.0); /* Temporary until design confirmed */
+      }
 
-            <!-- ACTION POINTS -------------------------->
+      .partnership-management {
+        background: rgba(0, 153, 255, 1.0); /* Temporary until design confirmed */
+      }
 
-            <paper-material class="list-panel trips-list clear-pad">
-                <data-table-header  class="list-title layout horizontal center" no-title no-collapse>
-                    <span >Action Points</span>
-                </data-table-header>
-                <div class="top-content-row tabs-header">
-                    <paper-tabs selected="{{actionsTab}}"
-                                attr-for-selected="name"
-                                fallback-selection="assignedByMe" noink bottom-item>
-                        <paper-tab name="assignedToMe" link>
-                            <span class="tab-content">Assigned To Me</span>
-                        </paper-tab>
-                        <paper-tab name="assignedByMe" link>
-                            <span class="tab-content">Assigned By Me</span>
-                        </paper-tab>
-                    </paper-tabs>
-                </div>
-                <template is="dom-repeat" items="[[trips]]" as="trip">
-                    <data-table-row no-collapse>
-                        <div slot="row-data">
-                            <div class="layout vertical col-8 flex">
-                                <span class="col-data description">
-                                    <!--[[trip.purpose_of_travel]]-->
-                                    Long description test orem ipsum dolor sit amet consecturasdfasdfasdfsadfasdfasdfdsafas asdfasdfasdfsadfasdfasdf morbi commodo egestas tellus nonmetis ante metus solrros
-                                </span>
-                                <span class="suppData">Open</span>
-                            </div>
-                            <div class="layout vertical start col-data col-2">
-                                <span class="col-data">[[_dateFormatted(trip.created_date)]]</span>
-                                <span class="suppData">[[trip.supervisor_name]]</span>
-                            </div>
-                        </div>
-                    </data-table-row>
-                </template>
-            </paper-material>
+      .toolbar-icon {
+        width: 42px;
+        height: 42px;
+      }
+
+      .toolbar-title {
+        font-size: 16px;
+        text-transform: uppercase;
+        color: var(--dark-primary-text-color);
+      }
+
+      .toolbar-item {
+        margin-left: 24px;
+      }
+
+      .list-title {
+        font-size: 20px;
+        font-weight: 500;
+        min-height: 64px;
+      }
+
+      data-table-row.wrapper {
+        padding-left: 0;
+      }
+    </style>
+
+    <h1 class="greeting">Welcome, [[user.first_name]]</h1>
+    <paper-material class="list-panel management-toolbar layout horizontal center">
+      <div class="toolbar-icon-container trip-management">
+        <iron-icon class="toolbar-icon" icon="language"></iron-icon>
+      </div>
+      <div class="toolbar-title toolbar-item flex-2">
+        Trip management
+      </div>
+      <paper-button on-tap="_goToPage" app-name="t2f" page="travel-list" class="button toolbar-item">
+        <iron-icon icon="maps:transfer-within-a-station"></iron-icon>
+        Travel 2 Field
+      </paper-button>
+      <paper-button on-tap="_goToPage" app-name="t2f" page="action-points-list" class="button toolbar-item">
+        <iron-icon icon="list"></iron-icon>
+        Action Points
+      </paper-button>
+    </paper-material>
+    <div class="layout horizontal">
+
+      <!-- TRIPS -------------------------->
+
+      <paper-material class="list-panel trips-list clear-pad">
+        <data-table-header class="list-title layout horizontal center" no-title no-collapse>
+          <div>Trips</div>
+        </data-table-header>
+        <div class="top-content-row tabs-header">
+          <paper-tabs selected="{{tripsTab}}"
+                      attr-for-selected="name"
+                      fallback-selection="myTrips" noink bottom-item>
+            <paper-tab name="myTrips" link>
+              <span class="tab-content">My Trips</span>
+            </paper-tab>
+            <paper-tab name="tripsSupervised" link>
+              <span class="tab-content">Supervised</span>
+            </paper-tab>
+          </paper-tabs>
         </div>
-        <paper-material class="list-panel management-toolbar layout horizontal center">
-            <div class="toolbar-icon-container partnership-management">
-                <iron-icon class="toolbar-icon" icon="social:group"></iron-icon> <!-- Placeholder icon -->
+        <template is="dom-repeat" items="[[tripsItems]]" as="trip">
+          <data-table-row no-collapse>
+            <div slot="row-data">
+              <a on-tap="_goToPage" app-name="t2f" page="edit-travel" id="[[trip.id]]" class="col-data col">
+                [[trip.reference_number]]
+              </a>
+              <span class="description description-size col-data flex-2">
+                [[trip.purpose]]
+              </span>
+              <div class="layout vertical start col-data col-2 ">
+                <span class="col-data">[[_dateFormatted(trip.start_date)]]</span>
+                <span class="suppData">[[_getDisplayName('trips',trip)]]</span>
+              </div>
             </div>
-            <div class="toolbar-title toolbar-item flex-2">
-                Partnership management
+          </data-table-row>
+        </template>
+      </paper-material>
+
+      <!-- ACTION POINTS -------------------------->
+
+      <paper-material class="list-panel trips-list clear-pad">
+        <data-table-header class="list-title layout horizontal center" no-title no-collapse>
+          <span>Action Points</span>
+        </data-table-header>
+        <div class="top-content-row tabs-header">
+          <paper-tabs selected="{{actionsTab}}"
+                      attr-for-selected="name"
+                      fallback-selection="actionPointsForMe" noink bottom-item>
+            <paper-tab name="actionPointsForMe" link>
+              <span class="tab-content">Assigned To Me</span>
+            </paper-tab>
+            <paper-tab name="actionPointsByMe" link>
+              <span class="tab-content">Assigned By Me</span>
+            </paper-tab>
+          </paper-tabs>
+        </div>
+        <template is="dom-repeat" items="[[actionPointsItems]]" as="action">
+          <data-table-row no-collapse>
+            <div slot="row-data">
+              <div class="layout vertical col-10">
+                                <span class="col-data description">
+                                    [[action.description]]
+                                </span>
+                <span class="suppData">[[action.status]]</span>
+              </div>
+              <div class="layout vertical start col-data col-2 ">
+                <span class="col-data">[[_dateFormatted(action.created_at)]]</span>
+                <span class="suppData">[[_getDisplayName('actions',action)]]</span>
+              </div>
             </div>
-            <paper-button class="button toolbar-item">
-                <iron-icon icon="social:people"></iron-icon>
-                Partners
-            </paper-button>
-            <paper-button class="button toolbar-item">
-                <iron-icon icon="av:playlist-add-check"></iron-icon>
-                Agreements
-            </paper-button>
-            <paper-button class="button toolbar-item">
-                <iron-icon icon="verified-user"></iron-icon>
-                PD/SSFA TOR
-            </paper-button>
-            <paper-button class="button toolbar-item">
-                <iron-icon icon="account-balance"></iron-icon>
-                Goverment-in-simple
-            </paper-button>
-        </paper-material>
-        <paper-material class="list-panel clear-pad">
-            <data-table-header no-title no-collapse class="list-title layout horizontal center">
-                <span >My Partnerships</span>
-            </data-table-header>
-            <template is="dom-repeat" items="[[myPartnerships]]">
-                <data-table-row no-collapse>
-                    <div slot="row-data">
-                        <a href="#" class="col-data flex">
-                            [[item.link]]
-                        </a>
-                        <span class="description description-size flex-3 col-data">
-                            [[item.description]]
+          </data-table-row>
+        </template>
+      </paper-material>
+    </div>
+    <paper-material class="list-panel management-toolbar layout horizontal center">
+      <div class="toolbar-icon-container partnership-management">
+        <iron-icon class="toolbar-icon" icon="social:group"></iron-icon> <!-- Placeholder icon -->
+      </div>
+      <div class="toolbar-title toolbar-item flex-2">
+        Partnership management
+      </div>
+      <paper-button on-tap="_goToPage" app-name="pmp" page="partners/list" class="button toolbar-item">
+        <iron-icon icon="social:people"></iron-icon>
+        Partners
+      </paper-button>
+      <paper-button on-tap="_goToPage" app-name="pmp" page="agreements/list" class="button toolbar-item">
+        <iron-icon icon="av:playlist-add-check"></iron-icon>
+        Agreements
+      </paper-button>
+      <paper-button on-tap="_goToPage" app-name="pmp" page="interventions/list" class="button toolbar-item">
+        <iron-icon icon="verified-user"></iron-icon>
+        PD/SSFA TOR
+      </paper-button>
+      <paper-button on-tap="_goToPage" app-name="pmp" page="governments/list" class="button toolbar-item">
+        <iron-icon icon="account-balance"></iron-icon>
+        Goverment-in-simple
+      </paper-button>
+    </paper-material>
+
+    <!--MY PARTNERSHIPS-->
+
+    <paper-material class="list-panel clear-pad">
+      <data-table-header no-title no-collapse class="list-title layout horizontal center">
+        <span>My Partnerships</span>
+      </data-table-header>
+      <template is="dom-repeat" items="[[partnerships]]" as="partnership">
+        <data-table-row no-collapse>
+          <div slot="row-data">
+            <a  on-tap="_goToPage" app-name="pmp" page="interventions" id="[[partnership.id]]/details" class="col-data col-2">
+              [[partnership.number]]
+            </a>
+            <span class="description description-size flex-3 col-data">
+                            [[partnership.title]]
                         </span>
-                        <span class="col-data col-2">[[item.budget]](Total Budget)</span>
-                    </div>
-                </data-table-row>
-            </template>
+            <span class="col-data col-2 layout horizontal end-justified">[[_currencyFormat(partnership.unicef_budget)]] (Total Budget)</span>
+          </div>
+        </data-table-row>
+      </template>
 
-        </paper-material>
+    </paper-material>
 
 
-    </template>
+  </template>
 
-    <script>
-        Polymer({
-            is: "dashboard-personalized",
-            properties: {
-                user: {
-                    type: String,
-                    notify: true,
-                    observer: '_setUser'
-                },
-                myPartnerships: {
-                    type: Array,
-                    value: [
-                        {
-                            link: 'LEBA/PCA201602/PD201604-04',
-                            description: 'Lorem ipsum dolor sit amet consecturasdfasdfasdfsadfasdfasdfdsafas asdfasdfasdfsadfasdfasdf morbi commodo egestas tellus nonmetis ante metus solrros',
-                            budget: '$30,000'
-                        },
-                        {
-                            link: 'MoH 2016',
-                            description: 'Sed Consequat ante metus, eu eusismad',
-                            budget: '$150,000'
-                        }
-                    ]
-                }
+  <script>
+    Polymer({
+      is: "dashboard-personalized",
+      behaviors: [
+        dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
+        dashBehaviors.CommonGeneralBehavior,
+        etoolsAppConfig.globals
+      ],
+      observers: [
+          '_updateUrl(active)',
+          '_updateTrips(tripsTab,myTrips)',
+          '_updateActionPoints(actionsTab,actionPointsForMe)'
+      ],
+      properties: {
+        myPartnerships: {
+          type: Array,
+          value: [
+            {
+              link: 'LEBA/PCA201602/PD201604-04',
+              description: 'Lorem ipsum dolor sit amet consecturasdfasdfasdfsadfasdfasdfdsafas asdfasdfasdfsadfasdfasdf morbi commodo egestas tellus nonmetis ante metus solrros',
+              budget: '$30,000'
             },
-            _setUser: function() {
-                if(!this.user.first_name) {
-                    this.set('user.first_name', 'Marko')
-                }
-            },
-            _getYear: function (date) {
-                return moment(date).format("YYYY") + '/000010';
-            },
-            _dateFormatted: function(str){
-                return moment(str).format("DD MMM YYYY")
+            {
+              link: 'MoH 2016',
+              description: 'Sed Consequat ante metus, eu eusismad',
+              budget: '$150,000'
             }
-        })
-    </script>
+          ]
+        },
+        tripsItems:{
+          type: Array,
+          notify: true
+        },
+        myTrips: {
+          type: Array,
+          statePath: 'trips',
+        },
+        tripsSupervised: {
+          type: Array,
+          statePath: 'tripsSupervised'
+        },
+        actionPointsItems: {
+          type: Array,
+          notify: true
+        },
+        actionPointsByMe: {
+          type: Array,
+          statePath: 'actionPointsByMe'
+        },
+        actionPointsForMe: {
+          type: Array,
+          statePath: 'actionPointsForMe'
+        },
+        partnerships: {
+          type: Array,
+          statePath: 'partnerships'
+        }
+      },
+      _updateTrips: function() {
+        this._setItems(this.tripsTab,'tripsItems');
+      },
+      _updateActionPoints: function() {
+        this._setItems(this.actionsTab,'actionPointsItems');
+      },
+      _setItems: function(tab, itemsProp) {
+        var items = _.get(this, tab, []);
+        this.set(itemsProp, items);
+      },
+      _getDisplayName: function(type,item) {
+        if (type === 'trips'){
+          return item.supervisor_name || item.traveler
+        }else
+        return item.person_responsible_name || item.assigned_by_name ;
+      },
+      _dateFormatted: function(str) {
+        return moment(str).format("DD MMM YYYY")
+      },
+      _updateUrl: function(active) {
+        if(active) {
+          this.updateAppState('dashboard/personalized', [], true);
+        }
+      },
+      _goToPage: function(e) {
+        var path = [this.baseSite,e.target.getAttribute('app-name'),e.target.getAttribute('page')].join('/') +'/' + e.target.id;
+        window.location.href = path;
+      },
+       _currencyFormat: function (num) {
+        return "$" + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+      }
+    });
+  </script>
 </dom-module>

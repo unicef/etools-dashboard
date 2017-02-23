@@ -23,6 +23,7 @@
     "browser-sync": "^2.18.7",
     "css-slam": "^1.1.0",
     "del": "^2.2.1",
+    "eslint": "^3.16.0",
     "gulp": "gulpjs/gulp#4.0",
     "gulp-csslint": "^1.0.0",
     "gulp-html-extract": "^0.2.0",

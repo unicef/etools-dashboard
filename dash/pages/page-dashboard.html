@@ -17,132 +17,135 @@
 
 <dom-module id="page-dashboard">
 
-    <template>
+  <template>
 
-        <style include="page-layout-styles shared-styles buttons-styles">
-            :host {
-                display: block;
-            }
-        </style>
+    <style include="page-layout-styles shared-styles buttons-styles">
+      :host {
+        display: block;
+      }
+    </style>
 
-        <app-route
-            route="{{route}}"
-            pattern="dashboard/:dashTab"
-            active="{{tabsActive}}"
-            query-params="{{queryParams}}"
-            data="{{routeData}}"></app-route>
+    <app-route
+        route="{{route}}"
+        pattern="dashboard/:dashTab"
+        active="{{tabsActive}}"
+        query-params="{{queryParams}}"
+        data="{{routeData}}"></app-route>
 
-        <app-header-layout>
-                <div class="page-top-content with-tabs">
-                    <div class="top-content">
-                        <div class="top-content-row title-row">
-                            <h1 main-title>
-                                Dashboard
-                            </h1>
-                            <div class="top-content-actions-wrapper">
-                                <div class="top-content-action">
-                                    <paper-button>
-                                        <iron-icon icon="print"></iron-icon>
-                                        Print
-                                    </paper-button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="top-content-row">
-                            <paper-tabs
-                                    selected="{{routeData.dashTab}}"
-                                    attr-for-selected="name"
-                                    fallback-selection="hact" noink bottom-item>
-
-                                <paper-tab name="personalized" link>
-                                    <span class="tab-content">Personalized</span>
-                                </paper-tab>
-
-                                <paper-tab name="hact" link>
-                                    <span class="tab-content">HACT</span>
-                                </paper-tab>
-
-                                <paper-tab name="trips" link>
-                                    <span class="tab-content">Trips</span>
-                                </paper-tab>
-
-                                <paper-tab name="partnerships" link>
-                                    <span class="tab-content">Partnerships</span>
-                                </paper-tab>
-
-                                <paper-tab name="map" link>
-                                    <span class="tab-content">Map</span>
-                                </paper-tab>
-
-                            </paper-tabs>
-                        </div>
-                    </div>
-                </div>
-
-            <iron-pages id="partnershipPages"
-                selected="{{partnershipPage}}"
+    <app-header-layout>
+      <div class="page-top-content with-tabs">
+        <div class="top-content">
+          <div class="top-content-row title-row">
+            <h1 main-title>
+              Dashboard
+            </h1>
+            <div class="top-content-actions-wrapper">
+              <div class="top-content-action">
+                <paper-button>
+                  <iron-icon icon="print"></iron-icon>
+                  Print
+                </paper-button>
+              </div>
+            </div>
+          </div>
+          <div class="top-content-row">
+            <paper-tabs
+                selected="{{routeData.dashTab}}"
                 attr-for-selected="name"
-                fallback-selection="personalized"
-                role="main">
+                fallback-selection="personalized" noink bottom-item>
 
-                <div class="page" name="personalized">
-                    <dashboard-personalized user="[[user]]"></dashboard-personalized>
-                </div>
-                <div class="page" name="hact">
-                    <dashboard-hact active="[[tabsActive]]" url-params="[[queryParams]]"></dashboard-hact>
-                </div>
-                <div class="page" name="trips">
-                    <intervention-supplies></intervention-supplies>
-                </div>
-                <div class="page" name="partnerships">
-                    <dashboard-partnerships></dashboard-partnerships>
-                </div>
-                <div class="page" name="map">
-                    <intervention-attachments></intervention-attachments>
-                </div>
-            </iron-pages>
+              <paper-tab name="personalized" link>
+                <span class="tab-content">Personalized</span>
+              </paper-tab>
 
-        </app-header-layout>
+              <paper-tab name="hact" link>
+                <span class="tab-content">HACT</span>
+              </paper-tab>
 
-    </template>
+              <paper-tab name="trips" link>
+                <span class="tab-content">Trips</span>
+              </paper-tab>
 
-    <script>
+              <paper-tab name="partnerships" link>
+                <span class="tab-content">Partnerships</span>
+              </paper-tab>
 
-        Polymer({
+              <paper-tab name="map" link>
+                <span class="tab-content">Map</span>
+              </paper-tab>
 
-            is: 'page-dashboard',
-            properties: {
-                partnershipPage : {
-                    type : String,
-                    notify : true
-                },
-                routeData: {
-                    type: Object,
-                }
-            },
-            observers: [
-                    '_resizeHeader(tabsActive)',
-                    '_pageChanged(routeData.dashTab)',
-                    '_updateUrlTab(routeData.dashTab)',
-            ],
-            _pageChanged : function(dashTab) {
-              this.set('partnershipPage', dashTab);
-            },
-            _resizeHeader : function() {
-                this.$$('app-header-layout').notifyResize();
-            },
-            _updateUrlTab: function(tab) {
-                if (!tab) {
-                    return;
-                }
-                this.debounce('debounce-url-tab-update', function() {
-                    this.fire('update-main-path', {path: this.route.path}, {bubbles: false});
-                }.bind(this), 50);
-            },
+            </paper-tabs>
+          </div>
+        </div>
+      </div>
 
+      <iron-pages id="partnershipPages"
+                  selected="{{partnershipPage}}"
+                  attr-for-selected="name"
+                  fallback-selection="personalized"
+                  role="main">
+        <div class="page" name="hact">
+          <dashboard-hact active="[[_isActive(partnershipPage,'hact')]]" route="{{route}}"></dashboard-hact>
+        </div>
+        <div class="page" name="personalized">
+          <dashboard-personalized user="[[user]]" active="[[_isActive(partnershipPage,'personalized')]]" route="{{route}}" ></dashboard-personalized>
+        </div>
 
-        });
+        <div class="page" name="trips">
+          <intervention-supplies></intervention-supplies>
+        </div>
+        <div class="page" name="partnerships">
+          <dashboard-partnerships></dashboard-partnerships>
+        </div>
+        <div class="page" name="map">
+          <intervention-attachments></intervention-attachments>
+        </div>
+      </iron-pages>
 
-    </script>
+    </app-header-layout>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'page-dashboard',
+      properties: {
+        partnershipPage: {
+          type: String,
+          notify: true
+        },
+        routeData: {
+          type: Object,
+          notify: true
+        },
+      },
+      observers: [
+//        '_resizeHeader(tabsActive)',
+        '_pageChanged(routeData.dashTab)',
+        '_updateUrlTab(routeData.dashTab)',
+      ],
+      _pageChanged: function(dashTab) {
+        this.set('partnershipPage', dashTab);
+      },
+      _resizeHeader: function() {
+        this.$$('app-header-layout').notifyResize();
+      },
+      _updateUrlTab: function(tab) {
+        if (!tab) {
+          return;
+        }
+        this.debounce('debounce-url-tab-update', function() {
+          this.fire('update-main-path', {path: this.route.path}, {bubbles: false});
+        }.bind(this), 50);
+      },
+      _isActive: function(page,tab) {
+        return _.isEqual(page,tab);
+      },
+
+    });
+
+  </script>
 
 </dom-module>

@@ -1,21 +1,27 @@
 <link rel="import" href="static-common-data/offices-data.html">
 <link rel="import" href="static-common-data/country-programmes-data.html">
 <link rel="import" href="static-common-data/sectors-data.html">
-
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="static-common-data/trips-data.html">
+<link rel="import" href="static-common-data/trips-supervised-data.html">
+<link rel="import" href="static-common-data/actionPoints-forme-data.html">
+<link rel="import" href="static-common-data/actionPoints-byme-data.html">
+<link rel="import" href="static-common-data/partnerships-data.html">
 <dom-module id="common-data-loaders">
-    <template>
-        <offices-data></offices-data>
-        <country-programmes-data></country-programmes-data>
-        <sectors-data></sectors-data>
-    </template>
+  <template>
+    <offices-data></offices-data>
+    <country-programmes-data></country-programmes-data>
+    <sectors-data></sectors-data>
+    <trips-data user="[[user]]"></trips-data>
+    <trips-supervised-data user="[[user]]"></trips-supervised-data>
+    <actionPoints-forme-data user="[[user]]"></actionPoints-forme-data>
+    <actionPoints-byme-data user="[[user]]"></actionPoints-byme-data>
+    <partnerships-data></partnerships-data>
+  </template>
 
-    <script>
-        Polymer({
-            is : "common-data-loaders",
-            properties: {
-
-            },
-        })
-    </script>
+  <script>
+    Polymer({
+      is: "common-data-loaders",
+      properties: {},
+    })
+  </script>
 </dom-module>

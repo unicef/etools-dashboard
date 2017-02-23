@@ -1,0 +1,65 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/etools-ajax/etools-ajax.html">
+
+<link rel="import" href="redux-bahaviors/common-static-data-redux-bahavior.html">
+
+<dom-module id="actionPoints-byme-data">
+
+  <template>
+    <etools-ajax id="ajax"
+                 endpoint="[[endpoint]]"
+                 caching-storage="dexie"
+                 on-success="_handleResponse"></etools-ajax>
+  </template>
+
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+
+        is: 'actionPoints-byme-data',
+        behaviors: [
+          dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
+          etoolsAppConfig.globals
+        ],
+        properties: {
+          endpoint: {
+            type: Object
+          },
+          user: {
+            type: Object,
+            observer: '_setEndpoint'
+          }
+        },
+        actions: {
+          setActionPoints: function (actionPoints) {
+            return {
+              type: 'SET_ACTION_POINTS_BY_ME',
+              actionPoints: actionPoints
+            }
+          }
+        },
+
+        _setEndpoint: function () {
+          this.set('endpoint', this.getEndpoint('actionPointsByMe',{id: this.user.id}));
+        },
+
+        _handleResponse: function (response) {
+          var data = _.get(response,'detail.data',[])
+          if (data.length) {
+            this.dispatch('setActionPoints', this._prepareData(data));
+          }
+        },
+
+        _prepareData: function (data) {
+          return data.map(function (actionPoint) {
+            return _.pick(actionPoint, ['status','description','created_at','person_responsible_name']);
+          });
+        }
+
+      });
+    })();
+  </script>
+
+</dom-module>

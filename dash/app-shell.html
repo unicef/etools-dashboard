@@ -99,8 +99,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
     </style>
-    <common-data-loaders></common-data-loaders>
-
+    <common-data-loaders user="[[user]]"></common-data-loaders>
     <user-data user="{{user}}" permissions="{{permissions}}"></user-data>
 
     <app-location route="{{route}}"></app-location>
@@ -124,10 +123,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="nav-menu">
             <iron-selector selected="[[page]]" attr-for-selected="name" selectable="side-bar-item" role="navigation">
                 <template is="dom-if" if="[[permissions.loggedInDefault]]">
-                    <side-bar-item name="dashboard" icon="explore" href$="[[baseUrl]]dashboard/hact"></side-bar-item>
+                    <side-bar-item name="dashboard" icon="explore" href$="[[baseUrl]]dashboard"></side-bar-item>
                     <side-bar-item name="map" icon="explore" href$="[[baseUrl]]map"></side-bar-item>
-                      <side-bar-item name="section2" icon="book" href="[[baseUrl]]section2"></side-bar-item>
-                      <side-bar-item name="section3" icon="build" href="[[baseUrl]]section3"></side-bar-item>
                       <div class="divider"></div>
                 </template>
             </iron-selector>
@@ -243,7 +240,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if ((this.route.path === this.baseUrl || this.route.path === '/') &&
             permissions.loggedInDefault) {
           // setting the default path
-          this.set('route.path', this.baseUrl + 'dashboard/hact');
+          this.set('route.path', this.baseUrl + 'dashboard/personalized');
         } else if (this.initialLoad) {
           // reseting the page as the pages might not have been stamped
           this._routePageChanged(this.routeData.page);
@@ -260,7 +257,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var subroute = JSON.parse(JSON.stringify(this.route));
           subroute.path = this.route.path.substring(subroute.path.indexOf(this.baseUrl) + this.baseUrl.length);
           this.set('subroute', subroute);
-            console.log('subroute is', subroute)
         }
 
         if (this._pagesAvailable || (['settings', 'etc'].indexOf(page) !== -1)) {

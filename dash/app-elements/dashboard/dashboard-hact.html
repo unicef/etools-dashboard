@@ -87,6 +87,11 @@
         cursor: pointer;
       }
     </style>
+    <app-route
+        route="{{route}}"
+        pattern="dashboard/:dashTab"
+        query-params="{{queryParams}}"></app-route>
+
     <partners-data
         id="partners"
         filtered-partners="{{filteredPartners}}"
@@ -281,12 +286,12 @@
         },
         observers: [
           '_init(active)',
-          '_updateUrl(queryString, pageNumber, pageSize, sortOrder, requiredDataLoaded)'
+          '_updateUrl(queryString, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete)'
         ],
         _init: function (active) {
-          var params = this.urlParams;
-          if (!active || !params) {
-            return
+          var params = _.get(this, 'urlParams', {});
+          if (!active) {
+            return;
           }
           this.set('initComplete', false);
           this.set('pageNumber', params.page? parseInt(params.page): 1);
@@ -302,28 +307,25 @@
                 this.sortOrder,
                 this.pageSize,
                 this.pageNumber);
-          }, 200);
+          }, 50);
         },
         _updateUrl: function(){
-          if (!this.requiredDataLoaded || !this.initComplete) {
+          if (!this.initComplete) {
             return;
           }
           var qs = this._buildQueryString();
-          if (qs !== _lastListViewed){
-            _lastListViewed = qs;
-            this.updateAppState('dashboard/hact', qs, true);
-            if (this.requiredDataLoaded) {
-              this._filterPartnersData();
-            }
-          }else {
-            if (location.search === '') {
-              this.updateAppState('dashboard/hact', qs, false)
-            }
-            if (this.forceDataRefresh && this.requiredDataLoaded){
-              this._filterPartnersData();
+//          _lastListViewed = qs;
+          this.updateAppState('dashboard/hact', qs, true);
+          if (this.requiredDataLoaded) {
+            this._filterPartnersData();
+          }
+          if (location.search === '') {
+            this.updateAppState('dashboard/hact', qs, false)
+          }
+          if (this.forceDataRefresh && this.requiredDataLoaded) {
+            this._filterPartnersData();
               this.set('forceDataRefresh', false);
             }
-          }
         },
         _buildQueryString: function(){
           var qs = [];
@@ -379,7 +381,8 @@
         },
         _requiredDataHasBeenLoaded: function (e) {
           e.stopImmediatePropagation();
-          if (_.isUndefined(this.filteredPartners) || (Array.isArray(this.filteredPartners)) && !this.filteredPartners.length) {
+          var filtered = _.get(this,'filteredPartners', []);
+          if (_.isEmpty(filtered)) {
             this.set('forceDataRefresh', true);
           }
           this.set('requiredDataLoaded', true);
