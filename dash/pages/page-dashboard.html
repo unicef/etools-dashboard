@@ -15,6 +15,7 @@
 <link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../styles/buttons-styles.html">
 
+
 <dom-module id="page-dashboard">
 
   <template>
@@ -29,8 +30,12 @@
         route="{{route}}"
         pattern="dashboard/:dashTab"
         active="{{tabsActive}}"
-        query-params="{{queryParams}}"
         data="{{routeData}}"></app-route>
+    <app-route
+        route="{{route}}"
+        pattern="dashboard/hact"
+        active="{{hactActive}}"
+        query-params="{{queryParams}}"></app-route>
 
     <app-header-layout>
       <div class="page-top-content with-tabs">
@@ -85,7 +90,7 @@
                   fallback-selection="personalized"
                   role="main">
         <div class="page" name="hact">
-          <dashboard-hact active="[[_isActive(partnershipPage,'hact')]]" route="{{route}}"></dashboard-hact>
+          <dashboard-hact active="[[hactActive]]" url-params="[[queryParams]]" route="{{route}}"></dashboard-hact>
         </div>
         <div class="page" name="personalized">
           <dashboard-personalized user="[[user]]" active="[[_isActive(partnershipPage,'personalized')]]" route="{{route}}" ></dashboard-personalized>
@@ -122,15 +127,11 @@
         },
       },
       observers: [
-//        '_resizeHeader(tabsActive)',
         '_pageChanged(routeData.dashTab)',
         '_updateUrlTab(routeData.dashTab)',
       ],
       _pageChanged: function(dashTab) {
         this.set('partnershipPage', dashTab);
-      },
-      _resizeHeader: function() {
-        this.$$('app-header-layout').notifyResize();
       },
       _updateUrlTab: function(tab) {
         if (!tab) {
