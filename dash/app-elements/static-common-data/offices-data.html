@@ -44,9 +44,10 @@
         },
 
         _handleResponse: function(response) {
-          if (response.detail && response.detail.length > 0) {
+          var data = _.get(response,'detail.data',response.detail)
+          if (data.length) {
             // set offices values
-            this.dispatch('setOfficesData', this._prepareOfficesData(response.detail));
+            this.dispatch('setOfficesData', this._prepareOfficesData(data));
           }
         },
 
@@ -54,11 +55,8 @@
          * Prepare values for dropdowns
          */
         _prepareOfficesData: function(data) {
-          return data.map(function(d) {
-            return {
-              value: parseInt(d.id, 10),
-              label: d.name
-            };
+          return data.map(function(office) {
+            return _.pick(office, ['id','name']);
           });
         }
 
