@@ -44,9 +44,9 @@
         },
 
         _handleResponse: function(response) {
-          if (response.detail && response.detail.length > 0) {
-            // set setUsersData values
-            this.dispatch('setCountryProgrammesData', this._prepareCpData(response.detail));
+          var data = _.get(response,'detail.data',response.detail)
+          if (data.length) {
+            this.dispatch('setCountryProgrammesData', this._prepareCpData(data));
           }
         },
 
@@ -54,14 +54,8 @@
          * Prepare values for dropdowns
          */
         _prepareCpData: function(data) {
-          return data.map(function(d) {
-            return {
-              value: parseInt(d.id),
-              label: d.name,
-              from_date: d.from_date,
-              to_date: d.to_date,
-              wbs: d.wbs
-            };
+          return data.map(function(cp) {
+            return _.pick(cp, ['id','name']);
           });
         }
 

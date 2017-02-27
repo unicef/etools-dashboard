@@ -44,21 +44,24 @@
       .nowrap {
         white-space: nowrap;
       }
+
       .col-4-sub {
-        flex:0 0 calc(33.33333% - 4px);
+        flex: 0 0 calc(33.33333% - 4px);
         max-width: calc(33.33333% - 4px);
       }
+
       .col-6-sub {
-        flex:0 0 calc(50% - 6px);
+        flex: 0 0 calc(50% - 6px);
         max-width: calc(50% - 6px);
       }
+
       .col-in-sub {
         text-align: center;
       }
+
       .col-micro {
         min-width: 86px;
       }
-
 
       data-table-header data-table-column {
         @apply(--layout-start);
@@ -69,15 +72,15 @@
         padding-right: 0;
       }
 
-
-      data-table-row > div >div> *:not(:last-child) {
+      data-table-row > div > div > *:not(:last-child) {
         padding-right: 12px;
       }
-      data-table-row > div >div> * {
+
+      data-table-row > div > div > * {
         box-sizing: border-box;
       }
 
-      data-table-column{
+      data-table-column {
         padding-right: 12px;
       }
 
@@ -87,11 +90,6 @@
         cursor: pointer;
       }
     </style>
-    <app-route
-        route="{{route}}"
-        pattern="dashboard/:dashTab"
-        query-params="{{queryParams}}"></app-route>
-
     <partners-data
         id="partners"
         filtered-partners="{{filteredPartners}}"
@@ -141,23 +139,23 @@
         <data-table-column class="flex nowrap" id="hact_values.micro_assessment_needed">
           Micro <br>Assessment
         </data-table-column>
-       <div class="col-20 layout horizontal end">
-         <data-table-column class="col-4 nowrap" id="rating">
-           Risk Rating
-         </data-table-column>
-         <data-table-column class="col-8" group-heading="PROGRAMMATIC VISITS">
-           <data-table-column class="col-4 nowrap" id="hact_values.planned_visits">
-             Planned
-           </data-table-column>
-           <data-table-column class="col-4 nowrap" id="hact_min_requirements.programmatic">
-             M.R
-           </data-table-column>
-           <data-table-column class="col-4 nowrap" id="hact_values.programmatic_visits">
-             Done
-           </data-table-column>
-         </data-table-column>
-       </div>
-       <div class="col-30 layout horizontal end">
+        <div class="col-20 layout horizontal end">
+          <data-table-column class="col-4 nowrap" id="rating">
+            Risk Rating
+          </data-table-column>
+          <data-table-column class="col-8" group-heading="PROGRAMMATIC VISITS">
+            <data-table-column class="col-4 nowrap" id="hact_values.planned_visits">
+              Planned
+            </data-table-column>
+            <data-table-column class="col-4 nowrap" id="hact_min_requirements.programmatic">
+              M.R
+            </data-table-column>
+            <data-table-column class="col-4 nowrap" id="hact_values.programmatic_visits">
+              Done
+            </data-table-column>
+          </data-table-column>
+        </div>
+        <div class="col-30 layout horizontal end">
           <data-table-column class="col-4" group-heading="SPOT CHECKS">
             <data-table-column class="col-6" id="hact_min_requirements.spot_checks">
               M.R
@@ -183,8 +181,8 @@
         <data-table-row no-collapse>
           <div slot="row-data">
             <div class="col-3 layout horizontal">
-              <span class="col-6 col-data partner-link" >
-                <a on-tap="_goToPage" id="[[partner.id]]" >
+              <span class="col-6 col-data partner-link">
+                <a on-tap="_goToPage" id="[[partner.id]]">
                   [[partner.name]]
                   <paper-tooltip position="right">[[partner.name]]</paper-tooltip>
                 </a>
@@ -233,13 +231,12 @@
   <script>
     (function() {
       'use strict';
-      var _lastListViewed = null;
-
+      var _lastNavigated = null;
       Polymer({
         is: "dashboard-hact",
         behaviors: [
-            dashBehaviors.CommonGeneralBehavior,
-            etoolsAppConfig.globals
+          dashBehaviors.CommonGeneralBehavior,
+          etoolsAppConfig.globals
         ],
         listeners: {
           'sort-changed': '_sortOrderChanged',
@@ -280,28 +277,25 @@
             type: Number,
             value: 50
           },
-          urlParams: {
-            type: Object
-          },
         },
         observers: [
           '_init(active)',
           '_updateUrl(queryString, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete)'
         ],
-        _init: function (active) {
-          var params = _.get(this, 'urlParams', {});
-          if (!active) {
+        _init: function(active) {
+          var params = this.urlParams;
+          if (!active || !params) {
             return;
           }
           this.set('initComplete', false);
-          this.set('pageNumber', params.page? parseInt(params.page): 1);
-          this.set('pageSize', params.size? parseInt(params.size): 10);
-          this.set('queryString', params.q? params.q : '');
-          this.set('sortOrder', params.sort? params.sort : 'asc');
+          this.set('pageNumber', params.page ? parseInt(params.page) : 1);
+          this.set('pageSize', params.size ? parseInt(params.size) : 10);
+          this.set('queryString', params.q ? params.q : '');
+          this.set('sortOrder', params.sort ? params.sort : 'asc');
           this.set('initComplete', true);
         },
-        _filterPartnersData: function () {
-          this.debounce('query', function () {
+        _filterPartnersData: function() {
+          this.debounce('query', function() {
             this.$.partners.query(
                 this.queryString,
                 this.sortOrder,
@@ -309,27 +303,32 @@
                 this.pageNumber);
           }, 50);
         },
-        _updateUrl: function(){
+        _updateUrl: function() {
           if (!this.initComplete) {
             return;
           }
+
           var qs = this._buildQueryString();
-//          _lastListViewed = qs;
-          this.updateAppState('dashboard/hact', qs, true);
-          if (this.requiredDataLoaded) {
-            this._filterPartnersData();
-          }
-          if (location.search === '') {
-            this.updateAppState('dashboard/hact', qs, false)
-          }
-          if (this.forceDataRefresh && this.requiredDataLoaded) {
-            this._filterPartnersData();
+          if (qs !== _lastNavigated) {
+//            _lastNavigated = qs;
+            this.updateAppState('dashboard/hact', qs, true);
+            if (this.requiredDataLoaded) {
+              this._filterPartnersData();
+            }
+          } else {
+            if (location.search === '') {
+              this.updateAppState('dashboard/hact', qs, false)
+            }
+            if (this.forceDataRefresh && this.requiredDataLoaded) {
+              this._filterPartnersData();
               this.set('forceDataRefresh', false);
             }
+          }
+
         },
-        _buildQueryString: function(){
+        _buildQueryString: function() {
           var qs = [];
-          if (this.pageNumber > 1){
+          if (this.pageNumber > 1) {
             qs.push('page=' + this.pageNumber);
           }
           if (this.pageSize) {
@@ -338,29 +337,29 @@
           if (this.queryString) {
             qs.push('q=' + this.queryString);
           }
-          if (this.sortOrder){
+          if (this.sortOrder) {
             qs.push('sort=' + this.sortOrder);
           }
           return qs.join('&');
 
         },
-        _getProp: function (obj, propStr) {
+        _getProp: function(obj, propStr) {
           if (propStr === 'partner_type') {
             return this._getAbbr(_.get(obj, propStr))
           }
           return _.get(obj, propStr)
         },
-        _getAbbr: function (str) {
-          return str.length> 12 ?
+        _getAbbr: function(str) {
+          return str.length > 12 ?
               str
-              .split(' ')
-              .map(function (word) {
-                return word[0].toUpperCase()
-              })
-              .join('') : str;
+                  .split(' ')
+                  .map(function(word) {
+                    return word[0].toUpperCase()
+                  })
+                  .join('') : str;
         },
-        _setQuery: function () {
-          this.set('queryString', this.$.query.value)
+        _setQuery: function() {
+          this.set('queryString', this.$.query.value);
         },
         _qChanged: function(q) {
           this.set('debounceTime', 300);
@@ -379,9 +378,9 @@
           this.set('debounceTime', 150);
           this.set('sortOrder', e.detail.direction);
         },
-        _requiredDataHasBeenLoaded: function (e) {
+        _requiredDataHasBeenLoaded: function(e) {
           e.stopImmediatePropagation();
-          var filtered = _.get(this,'filteredPartners', []);
+          var filtered = _.get(this, 'filteredPartners', []);
           if (_.isEmpty(filtered)) {
             this.set('forceDataRefresh', true);
           }
@@ -389,8 +388,8 @@
           this._init(this.active);
           this.fire('global-loading', {active: false});
         },
-        _goToPage : function (e) {
-          window.location.href = this.baseSite+'/pmp/partners/' + e.target.id + '/details';
+        _goToPage: function(e) {
+          window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
         },
 
       })
