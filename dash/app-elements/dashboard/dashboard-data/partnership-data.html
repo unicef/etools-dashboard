@@ -35,15 +35,22 @@
           this.ajaxEl.set('method', 'GET');
         },
         _filterChanged: function(filter) {
-          console.log('filter changed')
           if (!_.isEmpty(filter)) {
             this.fire('global-loading', {message: 'Loading partnership data...', active: true});
-            this.set('endpoint', this.getEndpoint('partnership',
-                {
-                  country_programme: filter.country_programme,
-                  office: filter.office
-                }
-            ));
+            if(filter.office) {
+              this.set('endpoint', this.getEndpoint('partnershipOffice',
+                  {
+                    country_programme: filter.country_programme,
+                    office: filter.office
+                  }
+              ));
+            } else {
+              this.set('endpoint', this.getEndpoint('partnership',
+                  {
+                    country_programme: filter.country_programme,
+                  }
+              ));
+            }
           }
         },
         _handleResponse: function(response) {
