@@ -19,6 +19,7 @@
 <link rel="import" href="../../app-behaviors/dropdown-behavior.html">
 <link rel="import" href="../../app-behaviors/common-general-behavior.html">
 <link rel="import" href="../../app-elements/static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
+<link rel="import" href="dashboard-data/partnership-data.html">
 <dom-module id="dashboard-partnerships">
 
   <template>
@@ -33,7 +34,7 @@
       }
 
     </style>
-
+    <partnership-data partnership="{{partnership}}" filter="[[filter]]"></partnership-data>
     <paper-material class="list-panel listControls" elevation="1">
       <div class="controls-wrapper">
 
@@ -47,7 +48,7 @@
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
             <paper-dropdown-menu label="Country Programme" placeholder="Select from list" noink>
-              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{countryProgramme}}">
+              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{country_programme}}">
                 <template is="dom-repeat" items="[[countryProgrammeItems]]">
                   <paper-item id="[[item.id]]">[[item.name]]</paper-item>
                 </template>
@@ -75,19 +76,19 @@
       <div class="trips grow">
         <div class="trip trip-type-one grow">
           <h1>Bilateral <br>Multilateral</h1>
-          0
+          [[data.byType.0]]
         </div>
         <div class="trip trip-type-two grow">
           <h1>Civil Society <br>Organizations</h1>
-          0
+          [[data.byType.1]]
         </div>
         <div class="trip trip-type-three grow">
           <h1>UN Agency</h1>
-          0
+          [[data.byType.2]]
         </div>
         <div class="trip trip-type-four grow">
           <h1>Government</h1>
-          0
+          [[data.byType.3]]
         </div>
       </div>
     </paper-material>
@@ -107,21 +108,21 @@
           % of Active Partnerships
         </data-table-column>
       </data-table-header>
-      <template is="dom-repeat" items="[[listItems]]">
+      <template is="dom-repeat" items="[[data.rows]]" as="row">
         <data-table-row no-collapse>
           <div slot="row-data">
             <a href="#" class="col-data flex-2">
-              [[item.partnerships]]
+              [[row.title]]
             </a>
             <span class="col-data flex">
-                            [[item.numPar]]
-                        </span>
+              [[row.number_partnerships]]
+            </span>
             <span class="col-data flex">
-                            [[item.totalValue]]
-                        </span>
+              [[row.total_value]]
+            </span>
             <span class="col-data flex">
-                            [[item.percentActive]]%
-                        </span>
+              [[row.percent_active]]%
+            </span>
           </div>
         </data-table-row>
       </template>
@@ -140,12 +141,17 @@
           dashBehaviors.DropdownBehavior,
           dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
         ],
+        observers: [
+          'init(active)',
+        ],
         properties: {
-          countryProgramme: {
-            type: String
+          country_programme: {
+            type: String,
+            observer: '_filterChanged'
           },
           office: {
-            type: String
+            type: String,
+            observer: '_filterChanged'
           },
           countryProgrammeItems: {
             type: Array,
@@ -155,35 +161,67 @@
             type: Array,
             statePath: 'offices'
           },
-          listItems: {
-            type: Array,
-            value: [
-              {
-                partnerships: 'Active Programme Documents for this year',
-                numPar: 105,
-                totalValue: '$133,677,514',
-                percentActive: 100
-              },
-              {
-                partnerships: 'Approved Partnerships for this year',
-                numPar: 97,
-                totalValue: '$125,000,000',
-                percentActive: 0
-              },
-              {
-                partnerships: 'Active Partnerships approved in previous years',
-                numPar: 8,
-                totalValue: '$8,000,000',
-                percentActive: 0
-              },
-              {
-                partnerships: 'Expiring Partnerships in next two months',
-                numPar: 90,
-                totalValue: '$78,000,000',
-                percentActive: 0
-              }
-            ]
+          partnership: {
+            type: Object,
+            notify: true,
+            observer: '_partnershipChanged'
+          },
+          filter: {
+            type: Object,
+            notify: true,
+          },
+          data: {
+            type: Object,
+            notify: true
           }
+        },
+        init: function(active) {
+          if (active) {
+            this._filterChanged();
+          }
+        },
+        _filterChanged: function() {
+          var filter = {
+            country_programme: 0,
+            office: 0
+          }
+          if (this.country_programme && this.office) {
+            filter = {
+              country_programme: parseInt(this.country_programme, 10),
+              office: parseInt(this.office, 10)
+            }
+          }
+          if(!_.isEqual(this.filter, filter)) {
+            this.set('filter', filter);
+          }
+        },
+        _partnershipChanged: function(partnership) {
+          var formatted = {
+            rows: [
+              {
+                title: 'Active Programme Documents for this year',
+                number_partnerships: partnership.active_this_year_count,
+                total_value: partnership.active_this_year_value,
+                percent_active: partnership.active_this_year_percentage
+              },
+              {
+                title: 'Active Partnerships approved in previous years',
+                number_partnerships: partnership.active_last_year_count,
+                total_value: partnership.active_last_year_value,
+                percent_active: partnership.active_last_year_percentage
+              },
+              {
+                title: 'Expiring Partnerships in next two months',
+                number_partnerships: partnership.expire_in_two_months_count,
+                total_value: partnership.expire_in_two_months_value,
+                percent_active: partnership.expire_in_two_months_percentage
+              }
+            ],
+            byType: _.values(partnership.partners)
+          };
+          this.set('data', formatted);
+          console.log('data loaded')
+          this.fire('global-loading', {active: false});
         }
       });
 
