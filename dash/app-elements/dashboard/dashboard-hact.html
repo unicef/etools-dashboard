@@ -328,7 +328,6 @@
         },
         _buildQueryString: function() {
           var qs = [];
-          console.log('before build pageNum =', this.pageNumber);
           if (this.pageNumber > 1) {
             qs.push('page=' + this.pageNumber);
           }
@@ -369,13 +368,11 @@
         _pageSizeChanged: function(e) {
           this.set('debounceTime', 200);
           this.set('pageNumber', 1);
-          console.log('page size changed', e.detail.value);
           this.set('pageSize', parseInt(e.detail.value));
         },
         _pageNumberChanged: function(e) {
           this.set('debounceTime', 50);
           this.set('pageNumber', e.detail.value);
-          console.log('page number changed', e.detail.value)
         },
         _sortOrderChanged: function(e) {
           this.set('debounceTime', 150);

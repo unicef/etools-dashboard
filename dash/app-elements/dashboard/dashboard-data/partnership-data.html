@@ -55,7 +55,6 @@
         },
         _handleResponse: function(response) {
           var data = _.get(response,'detail');
-          console.log('partnership response', data);
           this._setPartnership(data);
         },
         _handleErrorResponse: function(response) {
