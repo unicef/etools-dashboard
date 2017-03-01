@@ -142,7 +142,7 @@
       properties: {
         opened: {
           type: String,
-          value: "",
+          value: '',
         },
       },
       behaviors: [
@@ -151,13 +151,13 @@
       toggleMenu: function() {
         this.$.selector.toggle();
         if (this.opened) {
-          this.opened = "";
+          this.opened = '';
+        } else {
+          this.opened = 'icon-opened';
         }
-        else
-          this.opened = 'icon-opened'
       },
       goToPage: function(e) {
-        var id = _.get(e,'target.id');
+        var id = _.get(e, 'target.id');
         if (!id) {
           id = Polymer.dom(e.target).parentNode.id;
         }

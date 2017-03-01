@@ -184,14 +184,14 @@
           var filter = {
             country_programme: 0,
             office: 0
-          }
+          };
           if (this.country_programme) {
             filter = {
               country_programme: parseInt(this.country_programme, 10),
               office: parseInt(this.office, 10)
             }
           }
-          if(!_.isEqual(this.filter, filter)) {
+          if (!_.isEqual(this.filter, filter)) {
             this.set('filter', filter);
           }
         },

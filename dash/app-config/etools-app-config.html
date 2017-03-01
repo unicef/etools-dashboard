@@ -107,7 +107,7 @@ App global configuration
          cachingKey: 'countryProgrammes'
        },
       offices: {
-         url : '/api/offices/',
+         url: '/api/offices/',
          exp: 6 * 60 * 60 * 1000,
          cachingKey: 'offices'
       },
@@ -130,26 +130,26 @@ App global configuration
         cachingKey: 'sectors'
       },
 			trips: {
-				template : "/api/t2f/travels/?f_traveler=<%=id%>"
+				template: '/api/t2f/travels/?f_traveler=<%=id%>'
 			},
 			tripsSupervised: {
-				template : "/api/t2f/travels/?f_supervisor=<%=id%>"
+				template: '/api/t2f/travels/?f_supervisor=<%=id%>'
 			},
 			actionPointsByMe: {
-        template : "/api/t2f/action_points/?f_assigned_by=<%=id%>"
+        template: '/api/t2f/action_points/?f_assigned_by=<%=id%>'
       },
       actionPointsForMe: {
-        template : "/api/t2f/action_points/?f_person_responsible=<%=id%>"
+        template: '/api/t2f/action_points/?f_person_responsible=<%=id%>'
       },
       partnerships: {
         // Temporary until real endpoint implemented
-        template : "/api/v2/interventions/?status=active"
+        template: '/api/v2/interventions/?status=active'
       },
       partnership: {
-        template: "/api/v2/partnership-dash/<%=country_programme%>"
+        template: '/api/v2/partnership-dash/<%=country_programme%>'
       },
       partnershipOffice: {
-        template: "/api/v2/partnership-dash/<%=country_programme%>/<%=office%>"
+        template: '/api/v2/partnership-dash/<%=country_programme%>/<%=office%>'
       },
     };
     /* jshint ignore:start */

@@ -221,13 +221,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         //  this.set('route.path', this.baseUrl + 'partners/list');
         //}
       },
-      ready: function(){
+      ready: function() {
         // create loading element, used for global loading
         this.globalLoadingElement = this.createLoading();
         this.fire('global-loading', {message: 'Loading data...', active: true});
       },
-      updateAppSelector: function(){
-          this.$.pageheader.fire('toggle-menu')
+      updateAppSelector: function() {
+          this.$.pageheader.fire('toggle-menu');
       },
       _updateMainPath: function(event) {
         this.set('route.path', this.baseUrl + event.detail.path);

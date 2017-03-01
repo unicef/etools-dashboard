@@ -9,7 +9,7 @@
      * Ex: partners and agreements lists data values.
      */
     getDisplayValue: function(value, isDate, separator) {
-      if (typeof value === 'string' && value != '') {
+      if (typeof value === 'string' && value !== '') {
         if (isDate) {
           return this.prettyDate(value);
         } else {
@@ -92,12 +92,12 @@
       return field;
     },
 
-    currencyFormat: function (num) {
-      if(!num){
+    currencyFormat: function(num) {
+      if (!num){
         return '$ 0';
       }
       num = parseInt(num);
-      return "$" + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+      return '$' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     }
 
   };
