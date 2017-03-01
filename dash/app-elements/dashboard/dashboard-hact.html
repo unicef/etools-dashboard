@@ -233,7 +233,7 @@
       'use strict';
       var _lastNavigated = null;
       Polymer({
-        is: "dashboard-hact",
+        is: 'dashboard-hact',
         behaviors: [
           dashBehaviors.CommonGeneralBehavior,
           etoolsAppConfig.globals
@@ -345,9 +345,9 @@
         },
         _getProp: function(obj, propStr) {
           if (propStr === 'partner_type') {
-            return this._getAbbr(_.get(obj, propStr))
+            return this._getAbbr(_.get(obj, propStr));
           }
-          return _.get(obj, propStr)
+          return _.get(obj, propStr);
         },
         _getAbbr: function(str) {
           return str.length > 12 ?

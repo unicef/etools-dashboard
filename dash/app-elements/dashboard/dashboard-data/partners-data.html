@@ -67,8 +67,8 @@
             }
             if (!_.isEmpty(searchString)) {
               queryResult = queryResult.filter(function (partner) {
-                return _.includes(partner.name.toLowerCase(), searchString.toLowerCase())
-              })
+                return _.includes(partner.name.toLowerCase(), searchString.toLowerCase());
+              });
             }
             Dexie.ignoreTransaction(function() {
               queryResult.count(function(count) {
@@ -82,9 +82,9 @@
                 .toArray();
 
           }).then(function (result) {
-            self._setFilteredPartners(result)
+            self._setFilteredPartners(result);
           }).catch(function (error) {
-            console.error('Error querying partners: ', error)
+            console.error('Error querying partners: ', error);
           })
         },
 
