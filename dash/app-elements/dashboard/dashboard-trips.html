@@ -17,6 +17,7 @@
 <link rel="import" href="../../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../../../bower_components/google-chart/google-chart-loader.html">
 
+<link rel="import" href="dashboard-data/trips-by-section-data.html">
 
 <dom-module id="dashboard-trips">
   <template>
@@ -35,6 +36,8 @@
         font-weight: 500;
       }
     </style>
+    <trips-by-section-data trips-data="{{tripsData}}" date="[[tripsDate]]"></trips-by-section-data>
+
     <paper-material class="list-panel listControls" elevation="1">
       <div class="controls-wrapper">
 
@@ -59,8 +62,8 @@
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
             <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
               <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{office}}">
-                <template is="dom-repeat" items="[[officeItems]]" as="office">
-                  <paper-item id="[[item.id]]">[[item.name]]</paper-item>
+                <template is="dom-repeat" items="[[offices]]" as="office">
+                  <paper-item id="[[office.id]]">[[office.name]]</paper-item>
                 </template>
               </paper-menu>
             </paper-dropdown-menu>
@@ -114,9 +117,9 @@
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
             <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
-              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{month}}">
-                <template is="dom-repeat" items="[[monthsItems]]" as="month">
-                  <paper-item id="[[]]">[[]]</paper-item>
+              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{apOffice}}">
+                <template is="dom-repeat" items="[[offices]]" as="office">
+                  <paper-item id="[[office.id]]">[[office.name]]</paper-item>
                 </template>
               </paper-menu>
             </paper-dropdown-menu>
@@ -131,7 +134,9 @@
       is: "dashboard-trips",
       observers: [
         '_formatChartData(month,office)',
-        '_init(active)'
+      ],
+      behaviors: [
+        dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
       ],
       properties: {
         fakeData: {
@@ -200,6 +205,18 @@
             "approved": 1
           }
         },
+        tripsData: {
+          type: Object,
+          observer: '_tripsDataChanged'
+        },
+        tripsDate: {
+          type: Object,
+          notify: true
+        },
+        offices: {
+          type: Array,
+          statePath: 'offices'
+        },
         chartData: {
           type: Array,
           notify:true,
@@ -233,7 +250,11 @@
             bar: { groupWidth: '22' },
           }
         },
-        actionPoints: {
+        actionPointsOptions: {
+          type: Object,
+          value : {
+
+          }
 
         }
       },
@@ -259,6 +280,9 @@
           _this.set('chartData', dt);
         });
       },
+      _tripsDataChanged : function(data) {
+
+      }
     })
   </script>
 </dom-module>

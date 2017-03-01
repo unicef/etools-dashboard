@@ -1,7 +1,8 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../../bower_components/etools-ajax/etools-ajax.html">
 <link rel="import" href="../../../app-behaviors/data-element-behavior.html">
-<dom-module id="partnership-data">
+
+<dom-module id="trips-by-section-data">
 
   <template>
     <etools-ajax id="ajax"
@@ -17,48 +18,41 @@
 
       Polymer({
 
-        is: 'partnership-data',
+        is: 'trips-by-section-data',
         behaviors: [
-            etoolsAppConfig.globals,
-            dashBehaviors.DataElementBehavior
+          etoolsAppConfig.globals,
+          dashBehaviors.DataElementBehavior
         ],
         properties: {
-          partnership: {
+          tripsData: {
             type: Object,
             readOnly: true,
             notify: true
           },
-          filter: {
+          date: {
             type: Object,
             observer: '_filterChanged'
           }
+
         },
         attached: function() {
           this.ajaxEl = this.$.ajax;
-          this.ajaxEl.set('method', 'GET');
+          this.ajaxEl.set('method', 'GET')
         },
-        _filterChanged: function(filter) {
+        _filterChanged: function(date) {
           if (!_.isEmpty(filter)) {
-            this.fire('global-loading', {message: 'Loading partnership data...', active: true});
-            if(filter.office) {
-              this.set('endpoint', this.getEndpoint('partnershipOffice',
-                  {
-                    country_programme: filter.country_programme,
-                    office: filter.office
-                  }
-              ));
-            } else {
-              this.set('endpoint', this.getEndpoint('partnership',
-                  {
-                    country_programme: filter.country_programme,
-                  }
-              ));
-            }
+            this.fire('global-loading', {message: 'Loading chart data...', active: true});
+            this.set('endpoint', this.getEndpoint('tripsBySection',
+                {
+                  year: date.year,
+                  month: date.month
+                }
+            ));
           }
         },
         _handleResponse: function(response) {
-          var data = _.get(response,'detail');
-          this._setPartnership(data);
+          var data = _.get(response, 'detail');
+          this._setTripsData(data);
         },
 
       });

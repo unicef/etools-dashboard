@@ -1,0 +1,50 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="redux-bahaviors/common-static-data-redux-bahavior.html">
+<link rel="import" href="../../../bower_components/moment-element/mo">
+<dom-module id="trips-months-data">
+
+  <template>
+
+  </template>
+
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+
+        is: 'trips-months-data',
+        behaviors: [
+          dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
+        ],
+        properties: {
+        },
+        actions: {
+          setMonthsData: function (months) {
+            return {
+              type: 'SET_TRIPS_MONTHS',
+              months: months
+            }
+          }
+        },
+        attached: function() {
+          var months = []
+        },
+        _handleResponse: function (response) {
+          var data = _.get(response,'detail.data',[])
+          if (data.length) {
+            this.dispatch('setTripsData', this._prepareTripsData(data));
+          }
+        },
+
+        _prepareTripsData: function (data) {
+          return data.map(function (trip) {
+            return _.pick(trip, ['id','start_date','purpose','reference_number','supervisor_name']);
+          });
+        }
+
+      });
+    })();
+  </script>
+
+</dom-module>
