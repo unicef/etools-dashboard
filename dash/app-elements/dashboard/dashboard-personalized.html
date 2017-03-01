@@ -230,7 +230,7 @@
 
   <script>
     Polymer({
-      is: "dashboard-personalized",
+      is: 'dashboard-personalized',
       behaviors: [
         dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
         dashBehaviors.CommonGeneralBehavior
@@ -241,7 +241,7 @@
           '_updateActionPoints(actionsTab,actionPointsForMe)'
       ],
       properties: {
-        tripsItems:{
+        tripsItems: {
           type: Array,
           notify: true
         },
@@ -271,26 +271,27 @@
         }
       },
       _updateTrips: function() {
-        this._setItems(this.tripsTab,'tripsItems');
+        this._setItems(this.tripsTab, 'tripsItems');
       },
       _updateActionPoints: function() {
-        this._setItems(this.actionsTab,'actionPointsItems');
+        this._setItems(this.actionsTab, 'actionPointsItems');
       },
       _setItems: function(tab, itemsProp) {
         var items = _.get(this, tab, []);
         this.set(itemsProp, items);
       },
-      _getDisplayName: function(type,item) {
+      _getDisplayName: function(type, item) {
         if (type === 'trips'){
-          return item.supervisor_name || item.traveler
-        }else
-        return item.person_responsible_name || item.assigned_by_name ;
+          return item.supervisor_name || item.traveler;
+        }else{
+          return item.person_responsible_name || item.assigned_by_name ;
+        }
       },
       _dateFormatted: function(str) {
-        return moment(str).format("DD MMM YYYY")
+        return moment(str).format('DD MMM YYYY');
       },
       _updateUrl: function(active) {
-        if(active) {
+        if (active) {
           this.updateAppState('dashboard/personalized', [], true);
         }
       },

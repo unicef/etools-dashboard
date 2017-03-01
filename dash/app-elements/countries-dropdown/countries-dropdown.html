@@ -116,7 +116,6 @@
       _countrySelected: function(e) {
           if (e.detail.item.countryId !== this.current) {
             //send post request to change_coutry endpoint
-            console.log('change_country_request');
             this.$.ajax.body = {country: e.detail.item.countryId};
             this.$.ajax.endpoint = this.getEndpoint('changeCountry');
           }
@@ -124,11 +123,10 @@
       },
       _handleResponse: function(res) {
         // TODO: before main refresh... move to base url
-        console.log('before refreshing move to baseurl')
         this.fire('main_refresh');
       },
-      _countrySelectorUpdate: function(countries){
-          if (Array.isArray(countries) && (countries.length > 1)){
+      _countrySelectorUpdate: function(countries) {
+          if (Array.isArray(countries) && (countries.length > 1)) {
               this.countrySelectorVisible = true;
           }
       },

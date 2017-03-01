@@ -317,7 +317,7 @@
             }
           } else {
             if (location.search === '') {
-              this.updateAppState('dashboard/hact', qs, false)
+              this.updateAppState('dashboard/hact', qs, false);
             }
             if (this.forceDataRefresh && this.requiredDataLoaded) {
               this._filterPartnersData();
@@ -355,8 +355,7 @@
                   .split(' ')
                   .map(function(word) {
                     return word[0].toUpperCase()
-                  })
-                  .join('') : str;
+                  }).join('') : str;
         },
         _setQuery: function() {
           this.set('queryString', this.$.query.value);
@@ -392,7 +391,7 @@
           window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
         },
 
-      })
+      });
     })();
 
   </script>
