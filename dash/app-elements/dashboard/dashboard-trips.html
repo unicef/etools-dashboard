@@ -101,12 +101,37 @@
       <google-chart-loader id="google">
       </google-chart-loader>
     </paper-material>
+
+<!--ACTION POINTS-->
+
+    <paper-material class="list-panel listControls" elevation="1">
+      <div class="controls-wrapper">
+        <div class="title-row">
+          <h1 sub-title>Action Points</h1>
+        </div>
+        <div class="filters-divider"></div>
+        <div class="wrap-controls">
+          <div class="dropdown-with-clear-btn">
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
+              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{month}}">
+                <template is="dom-repeat" items="[[monthsItems]]" as="month">
+                  <paper-item id="[[]]">[[]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+          </div>
+        </div>
+      </div>
+    </paper-material>
+
   </template>
   <script>
     Polymer({
       is: "dashboard-trips",
       observers: [
-        '_formatChartData(month,office)'
+        '_formatChartData(month,office)',
+        '_init(active)'
       ],
       properties: {
         fakeData: {
@@ -208,6 +233,14 @@
             bar: { groupWidth: '22' },
           }
         },
+        actionPoints: {
+
+        }
+      },
+      _init : function(active) {
+        if(active) {
+          this._formatChartData(this.fakeData);
+        }
       },
       _formatChartData: function(response) {
         var _this = this;
@@ -226,9 +259,6 @@
           _this.set('chartData', dt);
         });
       },
-      attached: function() {
-        this._formatChartData(this.fakeData);
-      }
     })
   </script>
 </dom-module>
