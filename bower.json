@@ -55,7 +55,8 @@
     "iron-dropdown": "^1.5.5",
     "moment": "^2.17.1",
     "paper-tooltip": "^1.1.3",
-    "polymer-redux": "^0.4.0"
+    "polymer-redux": "^0.4.0",
+    "google-chart": "^1.1.1"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

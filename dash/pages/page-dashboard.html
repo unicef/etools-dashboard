@@ -10,7 +10,7 @@
 <link rel="import" href="../app-elements/dashboard/dashboard-partnerships.html">
 <link rel="import" href="../app-elements/dashboard/dashboard-personalized.html">
 <link rel="import" href="../app-elements/dashboard/dashboard-hact.html">
-
+<link rel="import" href="../app-elements/dashboard/dashboard-trips.html">
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../styles/buttons-styles.html">
@@ -75,10 +75,6 @@
                 <span class="tab-content">Partnerships</span>
               </paper-tab>
 
-              <paper-tab name="map" link>
-                <span class="tab-content">Map</span>
-              </paper-tab>
-
             </paper-tabs>
           </div>
         </div>
@@ -97,13 +93,10 @@
         </div>
 
         <div class="page" name="trips">
-          <intervention-supplies></intervention-supplies>
+          <dashboard-trips></dashboard-trips>
         </div>
         <div class="page" name="partnerships">
           <dashboard-partnerships active="[[_isActive(partnershipPage,'partnerships')]]"></dashboard-partnerships>
-        </div>
-        <div class="page" name="map">
-          <intervention-attachments></intervention-attachments>
         </div>
       </iron-pages>
 

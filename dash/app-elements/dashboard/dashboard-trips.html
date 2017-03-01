@@ -1,0 +1,234 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../../styles/shared-styles.html">
+<link rel="import" href="../../../styles/list-styles.html">
+<link rel="import" href="../../../styles/page-layout-styles.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../../app-behaviors/dropdown-behavior.html">
+<link rel="import" href="../../app-behaviors/common-general-behavior.html">
+<link rel="import" href="../../app-elements/static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
+<link rel="import" href="../../../bower_components/google-chart/google-chart.html">
+<link rel="import" href="../../../bower_components/google-chart/google-chart-loader.html">
+
+
+<dom-module id="dashboard-trips">
+  <template>
+    <style include="list-styles iron-flex-factors shared-styles page-layout-styles grid">
+      .by-type {
+        padding: 0;
+        @apply(--layout-horizontal);
+      }
+      .viz {
+        width: 100%;
+      }
+      .chart-title {
+        font-size: 16px;
+        margin: 0;
+        line-height: 48px;
+        font-weight: 500;
+      }
+    </style>
+    <paper-material class="list-panel listControls" elevation="1">
+      <div class="controls-wrapper">
+
+        <div class="title-row">
+          <h1 sub-title>Trips</h1>
+        </div>
+
+        <div class="filters-divider"></div>
+
+        <div class="wrap-controls">
+          <div class="dropdown-with-clear-btn">
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <paper-dropdown-menu label="Month" placeholder="Select from list" noink>
+              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{month}}">
+                <template is="dom-repeat" items="[[monthsItems]]" as="month">
+                  <paper-item id="[[]]">[[]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+          </div>
+          <div class="dropdown-with-clear-btn">
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
+              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{office}}">
+                <template is="dom-repeat" items="[[officeItems]]" as="office">
+                  <paper-item id="[[item.id]]">[[item.name]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+          </div>
+        </div>
+      </div>
+    </paper-material>
+
+    <paper-material class="list-panel by-type" elevation="1">
+      <div class="trip title-row flex-2">
+        <h2 sub-title>Trips in country programme</h2>
+      </div>
+      <div class="trips flex-3">
+        <div class="trip trip-type-one flex-c">
+          <h1>Planned</h1>
+          [[data.byType.0]]
+        </div>
+        <div class="trip trip-type-two flex-c">
+          <h1>Approved</h1>
+          [[data.byType.1]]
+        </div>
+        <div class="trip trip-type-three flex-c">
+          <h1>Completed</h1>
+          [[data.byType.2]]
+        </div>
+      </div>
+    </paper-material>
+
+    <paper-material class="list-panel">
+        <h2 class="chart-title">Trips by section</h2>
+        <google-chart
+            id="tripsChart"
+            class="viz"
+            type="bar"
+            data="{{chartData}}"
+            options="[[tripsOptions]]">
+        </google-chart>
+      <google-chart-loader id="google">
+      </google-chart-loader>
+    </paper-material>
+  </template>
+  <script>
+    Polymer({
+      is: "dashboard-trips",
+      observers: [
+        '_formatChartData(month,office)'
+      ],
+      properties: {
+        fakeData: {
+          type: Object,
+          value: {
+            "completed": 0,
+            "travels_by_section": [
+              {
+                "planned_travels": 2,
+                "completed_travels": 3,
+                "section_id": 37,
+                "approved_travels": 1,
+                "section_name": "Adolescent & Youth"
+              },
+              {
+                "planned_travels": 3,
+                "completed_travels": 8,
+                "section_id": 7,
+                "approved_travels": 0,
+                "section_name": "Child Protection"
+              },
+              {
+                "planned_travels": 2,
+                "completed_travels": 2,
+                "section_id": 7,
+                "approved_travels": 4,
+                "section_name": "Communication"
+              },
+              {
+                "planned_travels": 0,
+                "completed_travels": 0,
+                "section_id": 7,
+                "approved_travels": 0,
+                "section_name": "ICT"
+              },
+              {
+                "planned_travels": 4,
+                "completed_travels": 9,
+                "section_id": 7,
+                "approved_travels": 2,
+                "section_name": "Health and Nutrition"
+              },
+              {
+                "planned_travels": 0,
+                "completed_travels": 0,
+                "section_id": 7,
+                "approved_travels": 0,
+                "section_name": "Operations"
+              },
+              {
+                "planned_travels": 0,
+                "completed_travels": 3,
+                "section_id": 7,
+                "approved_travels": 0,
+                "section_name": "SPPME"
+              },
+              {
+                "planned_travels": 1,
+                "completed_travels": 6,
+                "section_id": 7,
+                "approved_travels": 2,
+                "section_name": "WASH"
+              }
+            ],
+            "planned": 2,
+            "approved": 1
+          }
+        },
+        chartData: {
+          type: Array,
+          notify:true,
+          value:[]
+        },
+        tripsOptions: {
+          type: Object,
+          value : {
+            colors: ['#FCF39F','#BFE58A','#64BD00'],
+            legend: { position: "none" },
+            chartArea: {
+              width: '75%',
+              height:'75%',
+              top: '16',
+            },
+            isStacked: true,
+            hAxis: {
+              minValue: 1,
+              ticks: _.range(16),
+              gridlineColor: '#E8E8E8',
+            },
+            vAxis: {
+              minValue: 0,
+              textStyle: {
+                fontSize: 14,
+                color: 'rgba(255,0,0,0.24)',
+                lineHeight: 30
+              }
+            },
+            titlePosition: 'out',
+            bar: { groupWidth: '22' },
+          }
+        },
+      },
+      _formatChartData: function(response) {
+        var _this = this;
+        //receives data response when filters change
+        var travels = _.get(response, 'travels_by_section');
+        var formatted = [
+          ['Trips', 'Planned', 'Approved', 'Completed']
+        ];
+        travels.map(function(section) {
+          formatted.push([section.section_name,
+            section.planned_travels,
+            section.approved_travels,
+            section.completed_travels])
+        });
+        this.$.google.dataTable(formatted).then(function(dt) {
+          _this.set('chartData', dt);
+        });
+      },
+      attached: function() {
+        this._formatChartData(this.fakeData);
+      }
+    })
+  </script>
+</dom-module>

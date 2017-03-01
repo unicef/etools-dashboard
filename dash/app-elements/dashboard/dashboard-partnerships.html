@@ -24,15 +24,10 @@
 
   <template>
     <style include="shared-styles list-styles iron-flex iron-flex-factors page-layout-styles">
-      .grow {
-        @apply(--layout-flex);
-      }
-
       .by-type {
         padding: 0;
         @apply(--layout-horizontal);
       }
-
     </style>
     <partnership-data partnership="{{partnership}}" filter="[[filter]]"></partnership-data>
     <paper-material class="list-panel listControls" elevation="1">
@@ -73,20 +68,20 @@
       <div class="trip title-row ">
         <h2 sub-title>Partnerships by type</h2>
       </div>
-      <div class="trips grow">
-        <div class="trip trip-type-one grow">
+      <div class="trips flex-c">
+        <div class="trip trip-type-one flex-c">
           <h1>Bilateral <br>Multilateral</h1>
           [[data.byType.0]]
         </div>
-        <div class="trip trip-type-two grow">
+        <div class="trip trip-type-two flex-c">
           <h1>Civil Society <br>Organizations</h1>
           [[data.byType.1]]
         </div>
-        <div class="trip trip-type-three grow">
+        <div class="trip trip-type-three flex-c">
           <h1>UN Agency</h1>
           [[data.byType.2]]
         </div>
-        <div class="trip trip-type-four grow">
+        <div class="trip trip-type-four flex-c">
           <h1>Government</h1>
           [[data.byType.3]]
         </div>
