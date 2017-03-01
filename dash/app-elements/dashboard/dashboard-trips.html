@@ -52,8 +52,8 @@
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
             <paper-dropdown-menu label="Month" placeholder="Select from list" noink>
               <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{month}}">
-                <template is="dom-repeat" items="[[monthsItems]]" as="month">
-                  <paper-item id="[[]]">[[]]</paper-item>
+                <template is="dom-repeat" items="[[months]]" as="month">
+                  <paper-item id="[[month.number]]">[[month.name]]</paper-item>
                 </template>
               </paper-menu>
             </paper-dropdown-menu>
@@ -139,72 +139,72 @@
         dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
       ],
       properties: {
-        fakeData: {
-          type: Object,
-          value: {
-            "completed": 0,
-            "travels_by_section": [
-              {
-                "planned_travels": 2,
-                "completed_travels": 3,
-                "section_id": 37,
-                "approved_travels": 1,
-                "section_name": "Adolescent & Youth"
-              },
-              {
-                "planned_travels": 3,
-                "completed_travels": 8,
-                "section_id": 7,
-                "approved_travels": 0,
-                "section_name": "Child Protection"
-              },
-              {
-                "planned_travels": 2,
-                "completed_travels": 2,
-                "section_id": 7,
-                "approved_travels": 4,
-                "section_name": "Communication"
-              },
-              {
-                "planned_travels": 0,
-                "completed_travels": 0,
-                "section_id": 7,
-                "approved_travels": 0,
-                "section_name": "ICT"
-              },
-              {
-                "planned_travels": 4,
-                "completed_travels": 9,
-                "section_id": 7,
-                "approved_travels": 2,
-                "section_name": "Health and Nutrition"
-              },
-              {
-                "planned_travels": 0,
-                "completed_travels": 0,
-                "section_id": 7,
-                "approved_travels": 0,
-                "section_name": "Operations"
-              },
-              {
-                "planned_travels": 0,
-                "completed_travels": 3,
-                "section_id": 7,
-                "approved_travels": 0,
-                "section_name": "SPPME"
-              },
-              {
-                "planned_travels": 1,
-                "completed_travels": 6,
-                "section_id": 7,
-                "approved_travels": 2,
-                "section_name": "WASH"
-              }
-            ],
-            "planned": 2,
-            "approved": 1
-          }
-        },
+//        fakeData: {
+//          type: Object,
+//          value: {
+//            "completed": 0,
+//            "travels_by_section": [
+//              {
+//                "planned_travels": 2,
+//                "completed_travels": 3,
+//                "section_id": 37,
+//                "approved_travels": 1,
+//                "section_name": "Adolescent & Youth"
+//              },
+//              {
+//                "planned_travels": 3,
+//                "completed_travels": 8,
+//                "section_id": 7,
+//                "approved_travels": 0,
+//                "section_name": "Child Protection"
+//              },
+//              {
+//                "planned_travels": 2,
+//                "completed_travels": 2,
+//                "section_id": 7,
+//                "approved_travels": 4,
+//                "section_name": "Communication"
+//              },
+//              {
+//                "planned_travels": 0,
+//                "completed_travels": 0,
+//                "section_id": 7,
+//                "approved_travels": 0,
+//                "section_name": "ICT"
+//              },
+//              {
+//                "planned_travels": 4,
+//                "completed_travels": 9,
+//                "section_id": 7,
+//                "approved_travels": 2,
+//                "section_name": "Health and Nutrition"
+//              },
+//              {
+//                "planned_travels": 0,
+//                "completed_travels": 0,
+//                "section_id": 7,
+//                "approved_travels": 0,
+//                "section_name": "Operations"
+//              },
+//              {
+//                "planned_travels": 0,
+//                "completed_travels": 3,
+//                "section_id": 7,
+//                "approved_travels": 0,
+//                "section_name": "SPPME"
+//              },
+//              {
+//                "planned_travels": 1,
+//                "completed_travels": 6,
+//                "section_id": 7,
+//                "approved_travels": 2,
+//                "section_name": "WASH"
+//              }
+//            ],
+//            "planned": 2,
+//            "approved": 1
+//          }
+//        },
         tripsData: {
           type: Object,
           observer: '_tripsDataChanged'
@@ -216,6 +216,14 @@
         offices: {
           type: Array,
           statePath: 'offices'
+        },
+        months: {
+          type: Array,
+          statePath: 'tripsMonths'
+        },
+        month: {
+          type: String,
+          observer: '_setMonth'
         },
         chartData: {
           type: Array,
@@ -261,6 +269,11 @@
       _init : function(active) {
         if(active) {
           this._formatChartData(this.fakeData);
+        }
+      },
+      _setMonth: function(month) {
+        if (month) {
+
         }
       },
       _formatChartData: function(response) {

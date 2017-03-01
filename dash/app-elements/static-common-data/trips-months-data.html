@@ -1,6 +1,6 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="redux-bahaviors/common-static-data-redux-bahavior.html">
-<link rel="import" href="../../../bower_components/moment-element/mo">
+<link rel="import" href="../../../bower_components/moment-element/moment-import.html">
 <dom-module id="trips-months-data">
 
   <template>
@@ -8,7 +8,7 @@
   </template>
 
   <script>
-    (function () {
+    (function() {
       'use strict';
 
       Polymer({
@@ -17,10 +17,9 @@
         behaviors: [
           dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
         ],
-        properties: {
-        },
+        properties: {},
         actions: {
-          setMonthsData: function (months) {
+          setMonthsData: function(months) {
             return {
               type: 'SET_TRIPS_MONTHS',
               months: months
@@ -28,21 +27,15 @@
           }
         },
         attached: function() {
-          var months = []
-        },
-        _handleResponse: function (response) {
-          var data = _.get(response,'detail.data',[])
-          if (data.length) {
-            this.dispatch('setTripsData', this._prepareTripsData(data));
-          }
-        },
-
-        _prepareTripsData: function (data) {
-          return data.map(function (trip) {
-            return _.pick(trip, ['id','start_date','purpose','reference_number','supervisor_name']);
+          var months = moment.months().map(function(month, i) {
+            return {
+                    name: month,
+                    number: ("0" + (i + 1)).slice(-2),
+                    year: moment().year()
+                  };
           });
+          this.dispatch('setMonthsData', months);
         }
-
       });
     })();
   </script>
