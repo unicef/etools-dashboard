@@ -54,8 +54,8 @@
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
             <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
               <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{office}}">
-                <template is="dom-repeat" items="[[officeItems]]">
-                  <paper-item id="[[item.id]]">[[item.name]]</paper-item>
+                <template is="dom-repeat" items="[[officeItems]]" as="officeItem">
+                  <paper-item id="[[officeItem.id]]">[[officeItem.name]]</paper-item>
                 </template>
               </paper-menu>
             </paper-dropdown-menu>
@@ -179,14 +179,14 @@
           var filter = {
             country_programme: 0,
             office: 0
-          }
+          };
           if (this.country_programme) {
             filter = {
               country_programme: parseInt(this.country_programme, 10),
               office: parseInt(this.office, 10)
             }
           }
-          if(!_.isEqual(this.filter, filter)) {
+          if (!_.isEqual(this.filter, filter)) {
             this.set('filter', filter);
           }
         },

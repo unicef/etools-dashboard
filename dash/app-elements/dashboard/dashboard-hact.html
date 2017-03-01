@@ -191,9 +191,9 @@
               <span class="col-3 col-data ">[[partner.shared_partner]]</span>
             </div>
             <div class="col-3 layout horizontal">
-              <span class="col-data col-4-sub ">[[partner.total_ct_cp]]</span>
-              <span class="col-data col-4-sub">[[partner.hact_values.planned_cash_transfer]]</span>
-              <span class="col-data col-4-sub">[[partner.total_ct_cy]]</span>
+              <span class="col-data col-4-sub ">[[currencyFormat(partner.total_ct_cp)]]</span>
+              <span class="col-data col-4-sub">[[currencyFormat(partner.hact_values.planned_cash_transfer)]]</span>
+              <span class="col-data col-4-sub">[[currencyFormat(partner.total_ct_cy)]]</span>
             </div>
             <span class="col-data col-micro flex">[[partner.hact_values.micro_assessment_needed]]</span>
             <div class="col-20 layout horizontal">
@@ -233,7 +233,7 @@
       'use strict';
       var _lastNavigated = null;
       Polymer({
-        is: "dashboard-hact",
+        is: 'dashboard-hact',
         behaviors: [
           dashBehaviors.CommonGeneralBehavior,
           etoolsAppConfig.globals
@@ -345,9 +345,9 @@
         },
         _getProp: function(obj, propStr) {
           if (propStr === 'partner_type') {
-            return this._getAbbr(_.get(obj, propStr))
+            return this._getAbbr(_.get(obj, propStr));
           }
-          return _.get(obj, propStr)
+          return _.get(obj, propStr);
         },
         _getAbbr: function(str) {
           return str.length > 12 ?

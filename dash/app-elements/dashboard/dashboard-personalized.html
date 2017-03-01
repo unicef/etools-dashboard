@@ -218,7 +218,7 @@
             <span class="description description-size flex-3 col-data">
                             [[partnership.title]]
                         </span>
-            <span class="col-data col-2 layout horizontal end-justified">[[_currencyFormat(partnership.unicef_budget)]] (Total Budget)</span>
+            <span class="col-data col-2 layout horizontal end-justified">[[currencyFormat(partnership.unicef_budget)]] (Total Budget)</span>
           </div>
         </data-table-row>
       </template>
@@ -298,9 +298,6 @@
         var path = [this.baseSite,e.target.getAttribute('app-name'),e.target.getAttribute('page')].join('/') +'/' + e.target.id;
         window.location.href = path;
       },
-       _currencyFormat: function (num) {
-        return "$" + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
-      }
     });
   </script>
 </dom-module>
