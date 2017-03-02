@@ -2,6 +2,7 @@
 <link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../app-config/etools-app-config.html">
 
 <link rel="import" href="../../../bower_components/etools-ajax/etools-ajax.html">
 
@@ -116,19 +117,16 @@
       _countrySelected: function(e) {
           if (e.detail.item.countryId !== this.current) {
             //send post request to change_coutry endpoint
-            console.log('change_country_request');
             this.$.ajax.body = {country: e.detail.item.countryId};
             this.$.ajax.endpoint = this.getEndpoint('changeCountry');
           }
-          // this.set('country', this.$.repeat.itemForElement(e.detail.item));
       },
       _handleResponse: function(res) {
         // TODO: before main refresh... move to base url
-        console.log('before refreshing move to baseurl')
         this.fire('main_refresh');
       },
-      _countrySelectorUpdate: function(countries){
-          if (Array.isArray(countries) && (countries.length > 1)){
+      _countrySelectorUpdate: function(countries) {
+          if (Array.isArray(countries) && (countries.length > 1)) {
               this.countrySelectorVisible = true;
           }
       },
@@ -137,7 +135,9 @@
         console.log(err);
         console.log('TODO: this should be a larger alert.');
         this.$.countriesListbox.selected = this.current;
-        this.fire('toast', {text: 'Something went wrong changing your workspace. Please try again'});
+        this.fire('toast',
+            {text: 'Something went wrong changing your workspace. Please try again'}
+        );
       }
 
     });

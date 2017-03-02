@@ -64,7 +64,6 @@
       is: 'data-table-header',
 
       properties: {
-
         sortOrder: {
           type: Object,
           observer: '_sortOrderChanged',
@@ -74,7 +73,7 @@
           type: Object,
         },
 
-        noTitle : {
+        noTitle: {
           type: Boolean,
           observer: '_noTitle',
         },
@@ -108,27 +107,27 @@
         }
         this._lastSelectedCol = column;
       },
-      _noTitle: function(){
+      _noTitle: function() {
         this.customStyle = {
-          '--data-table-header' : 'height: auto',
-          '--header-title' : 'display: none'
-        }
+          '--data-table-header': 'height: auto',
+          '--header-title': 'display: none'
+        };
         this.updateStyles();
       },
-      _noCollapse: function(){
+      _noCollapse: function() {
         this.customStyle['--header-columns']='margin-left : 0; flex: 1';
         this.updateStyles();
       },
-      _noHeight: function(){
+      _noHeight: function() {
         this.customStyle['--header-height'] = 'height: auto';
         this.customStyle['--data-table-header'] = 'height: auto';
         this.updateStyles();
       },
-      attached: function(){
+      attached: function() {
         var _this = this;
         //detect if any column is a group of columns with heading
-        Array.prototype.slice.call(this.children).map(function(col){
-          if(col.attributes.getNamedItem('group-heading')){
+        Array.prototype.slice.call(this.children).map(function(col) {
+          if (col.attributes.getNamedItem('group-heading')) {
                _this._noHeight();
                 _this.$.columns.classList.add('end');
             }

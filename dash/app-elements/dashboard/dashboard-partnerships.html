@@ -5,6 +5,7 @@
 <link rel="import" href="../../../styles/page-layout-styles.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
+<link rel="import" href="../../app-config/etools-app-config.html">
 
 <link rel="import" href="../data-table/data-table-header.html">
 <link rel="import" href="../data-table/data-table-column.html">
@@ -184,7 +185,7 @@
             filter = {
               country_programme: parseInt(this.country_programme, 10),
               office: parseInt(this.office, 10)
-            }
+            };
           }
           if (!_.isEqual(this.filter, filter)) {
             this.set('filter', filter);
