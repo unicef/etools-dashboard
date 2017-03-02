@@ -24,6 +24,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/social-icons.html">
 
+<link rel="import" href="../scripts/polyfils/es6-polyfils.html">
+
 <link rel="import" href="app-config/etools-app-config.html">
 <link rel="import" href="app-elements/common-data-loaders.html">
 <link rel="import" href="../bower_components/etools-loading/etools-loading-behavior.html">
@@ -124,7 +126,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <iron-selector selected="[[page]]" attr-for-selected="name" selectable="side-bar-item" role="navigation">
                 <template is="dom-if" if="[[permissions.loggedInDefault]]">
                     <side-bar-item name="dashboard" icon="explore" href$="[[baseUrl]]dashboard"></side-bar-item>
-                    <side-bar-item name="map" icon="explore" href$="[[baseUrl]]map"></side-bar-item>
                       <div class="divider"></div>
                 </template>
             </iron-selector>
@@ -211,7 +212,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'drawer': 'toggleDrawer',
         '404': '_pageNotFound',
         'update-main-path': '_updateMainPath',
-        'iron-select' : 'updateAppSelector'
+        'iron-select': 'updateAppSelector'
       },
 
       attached: function() {
@@ -255,7 +256,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _routePageChanged: function(page) {
         if ((this.route) && (this.baseUrl)) {
           var subroute = JSON.parse(JSON.stringify(this.route));
-          subroute.path = this.route.path.substring(subroute.path.indexOf(this.baseUrl) + this.baseUrl.length);
+          subroute.path =
+              this.route.path.substring(subroute.path.indexOf(this.baseUrl) + this.baseUrl.length);
           this.set('subroute', subroute);
         }
 
@@ -290,7 +292,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.debounce('showGlobalLoading', function() {
           if (this.globalLoadingElement) {
             var loadingMsg = 'Loading...';
-            if (event.detail && typeof event.detail.message === 'string' && event.detail.message !== '') {
+            if (event.detail && typeof event.detail.message === 'string'
+                && event.detail.message !== '') {
               loadingMsg = event.detail.message;
             }
             this.globalLoadingElement.loadingText = loadingMsg;

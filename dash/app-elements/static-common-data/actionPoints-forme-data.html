@@ -1,4 +1,6 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../app-config/etools-app-config.html">
+
 <link rel="import" href="../../../bower_components/etools-ajax/etools-ajax.html">
 
 <link rel="import" href="redux-bahaviors/common-static-data-redux-bahavior.html">
@@ -37,7 +39,7 @@
             return {
               type: 'SET_ACTION_POINTS_FOR_ME',
               actionPoints: actionPoints
-            }
+            };
           }
         },
 
@@ -46,7 +48,7 @@
         },
 
         _handleResponse: function (response) {
-          var data = _.get(response,'detail.data',[])
+          var data = _.get(response,'detail.data',[]);
           if (data.length) {
             this.dispatch('setActionPoints', this._prepareData(data));
           }

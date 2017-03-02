@@ -2,6 +2,7 @@
 <link rel="import" href="../../../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../app-config/etools-app-config.html">
 
 <link rel="import" href="../../../bower_components/etools-page-refresh/etools-page-refresh.html">
 <link rel="import" href="../countries-dropdown/countries-dropdown.html">
@@ -106,7 +107,11 @@
         },
         _updateCountriesList: function(countries) {
           var arrayObj = countries.map(function(arrayItem) {
-            return {id: arrayItem.id, name: arrayItem.name, imgClass: this._getFlagIconClass(arrayItem.business_area_code)};
+            return {
+              id: arrayItem.id,
+              name: arrayItem.name,
+              imgClass: this._getFlagIconClass(arrayItem.business_area_code)
+            };
           }.bind(this));
           this.set('countries', arrayObj);
         }
