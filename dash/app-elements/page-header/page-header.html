@@ -106,7 +106,11 @@
         },
         _updateCountriesList: function(countries) {
           var arrayObj = countries.map(function(arrayItem) {
-            return {id: arrayItem.id, name: arrayItem.name, imgClass: this._getFlagIconClass(arrayItem.business_area_code)};
+            return {
+              id: arrayItem.id,
+              name: arrayItem.name,
+              imgClass: this._getFlagIconClass(arrayItem.business_area_code)
+            };
           }.bind(this));
           this.set('countries', arrayObj);
         }

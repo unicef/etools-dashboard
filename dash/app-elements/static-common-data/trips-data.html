@@ -37,16 +37,16 @@
 						return {
 							type: 'SET_TRIPS_DATA',
 							trips: trips
-						}
+						};
 					}
 				},
 
 				_setEndpoint: function () {
-					this.set('endpoint', this.getEndpoint('trips',{id: this.user.id}));
+					this.set('endpoint', this.getEndpoint('trips', {id: this.user.id}));
 				},
 
 				_handleResponse: function (response) {
-					var data = _.get(response,'detail.data',[])
+					var data = _.get(response, 'detail.data', []);
 					if (data.length) {
 						this.dispatch('setTripsData', this._prepareTripsData(data));
 					}

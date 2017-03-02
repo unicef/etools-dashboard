@@ -13,7 +13,7 @@
   </template>
 
   <script>
-    (function () {
+    (function() {
       'use strict';
 
       Polymer({
@@ -37,16 +37,16 @@
             return {
               type: 'SET_ACTION_POINTS_BY_ME',
               actionPoints: actionPoints
-            }
+            };
           }
         },
 
         _setEndpoint: function() {
-          this.set('endpoint', this.getEndpoint('actionPointsByMe',{id: this.user.id}));
+          this.set('endpoint', this.getEndpoint('actionPointsByMe', {id: this.user.id}));
         },
 
         _handleResponse: function(response) {
-          var data = _.get(response,'detail.data',[])
+          var data = _.get(response, 'detail.data', []);
           if (data.length) {
             this.dispatch('setActionPoints', this._prepareData(data));
           }
@@ -54,7 +54,9 @@
 
         _prepareData: function(data) {
           return data.map(function(actionPoint) {
-            return _.pick(actionPoint, ['status','description','created_at','person_responsible_name']);
+            return _.pick(actionPoint, [
+                'status','description','created_at','person_responsible_name'
+            ]);
           });
         }
 

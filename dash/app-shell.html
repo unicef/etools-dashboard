@@ -254,7 +254,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _routePageChanged: function(page) {
         if ((this.route) && (this.baseUrl)) {
           var subroute = JSON.parse(JSON.stringify(this.route));
-          subroute.path = this.route.path.substring(subroute.path.indexOf(this.baseUrl) + this.baseUrl.length);
+          subroute.path =
+              this.route.path.substring(subroute.path.indexOf(this.baseUrl) + this.baseUrl.length);
           this.set('subroute', subroute);
         }
 
@@ -289,7 +290,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.debounce('showGlobalLoading', function() {
           if (this.globalLoadingElement) {
             var loadingMsg = 'Loading...';
-            if (event.detail && typeof event.detail.message === 'string' && event.detail.message !== '') {
+            if (event.detail && typeof event.detail.message === 'string'
+                && event.detail.message !== '') {
               loadingMsg = event.detail.message;
             }
             this.globalLoadingElement.loadingText = loadingMsg;

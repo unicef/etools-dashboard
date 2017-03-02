@@ -280,7 +280,8 @@
         },
         observers: [
           '_init(active)',
-          '_updateUrl(queryString, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete)'
+          '_updateUrl(queryString, pageNumber, pageSize,' +
+          'sortOrder, requiredDataLoaded, initComplete)'
         ],
         _init: function(active) {
           var params = this.urlParams;
@@ -354,7 +355,7 @@
               str
                   .split(' ')
                   .map(function(word) {
-                    return word[0].toUpperCase()
+                    return word[0].toUpperCase();
                   }).join('') : str;
         },
         _setQuery: function() {

@@ -35,7 +35,7 @@
             return {
               type: 'SET_OFFICES',
               offices: officesData
-            }
+            };
           }
         },
 
@@ -44,7 +44,7 @@
         },
 
         _handleResponse: function(response) {
-          var data = _.get(response,'detail.data',response.detail)
+          var data = _.get(response,'detail.data',response.detail);
           if (data.length) {
             // set offices values
             this.dispatch('setOfficesData', this._prepareOfficesData(data));

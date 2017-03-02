@@ -38,7 +38,7 @@
             return {
               type: 'SET_SUPERVISED_TRIPS_DATA',
               trips: trips
-            }
+            };
           }
         },
 
@@ -47,7 +47,7 @@
         },
 
         _handleResponse: function (response) {
-          var data = _.get(response,'detail.data',[])
+          var data = _.get(response,'detail.data',[]);
           if (data.length) {
             this.dispatch('setSupervisedTripsData', this._prepareTripsData(data));
           }

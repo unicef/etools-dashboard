@@ -37,7 +37,7 @@
             return {
               type: 'SET_ACTION_POINTS_FOR_ME',
               actionPoints: actionPoints
-            }
+            };
           }
         },
 
@@ -46,7 +46,7 @@
         },
 
         _handleResponse: function (response) {
-          var data = _.get(response,'detail.data',[])
+          var data = _.get(response,'detail.data',[]);
           if (data.length) {
             this.dispatch('setActionPoints', this._prepareData(data));
           }

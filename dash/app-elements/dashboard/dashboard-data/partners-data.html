@@ -17,7 +17,7 @@
       'use strict';
 
       Polymer({
-        is: "partners-data",
+        is: 'partners-data',
         behaviors: [
           dashBehaviors.DataElementBehavior,
           etoolsAppConfig.globals
@@ -85,10 +85,10 @@
             self._setFilteredPartners(result);
           }).catch(function (error) {
             console.error('Error querying partners: ', error);
-          })
+          });
         },
 
-      })
+      });
 
     })();
 

@@ -296,7 +296,8 @@
         }
       },
       _goToPage: function(e) {
-        var path = [this.baseSite,e.target.getAttribute('app-name'),e.target.getAttribute('page')].join('/') +'/' + e.target.id;
+        var path = [this.baseSite, e.target.getAttribute('app-name'),
+              e.target.getAttribute('page')].join('/') +'/' + e.target.id;
         window.location.href = path;
       },
     });
