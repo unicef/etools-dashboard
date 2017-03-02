@@ -2,7 +2,7 @@
 <link rel="import" href="../../../../bower_components/etools-ajax/etools-ajax.html">
 <link rel="import" href="../../../app-behaviors/data-element-behavior.html">
 
-<dom-module id="trips-by-section-data">
+<dom-module id="action-pts-by-section-data">
 
   <template>
     <etools-ajax id="ajax"
@@ -17,46 +17,36 @@
 
       Polymer({
 
-        is: 'trips-by-section-data',
+        is: 'action-pts-by-section-data',
         behaviors: [
           etoolsAppConfig.globals,
           dashBehaviors.DataElementBehavior
         ],
         properties: {
-          tripsData: {
+          actionPointsData: {
             type: Object,
             readOnly: true,
             notify: true
           },
-          date: {
-            type: Object,
-            observer: '_filterChanged'
+          active: {
+            type: Boolean,
+            notify: true,
+            observer: '_init'
           }
-
         },
         attached: function() {
           this.ajaxEl = this.$.ajax;
           this.ajaxEl.set('method', 'GET');
         },
-        _filterChanged: function(date) {
-          if (!_.isEmpty(date)) {
-            console.log('date not empty , changed', date);
+        _init: function(active) {
+          if (active) {
             this.fire('global-loading', {message: 'Loading chart data...', active: true});
-            this.set('endpoint', this.getEndpoint('tripsBySection',
-                {
-                  year: date.year,
-                  month: date.monthId
-                }
-            ));
-          }else {
-            console.log('ep undefined');
-            this.set('endpoint', undefined);
+            this.set('endpoint', this.getEndpoint('actionPointsBySection'));
           }
         },
         _handleResponse: function(response) {
-          console.log('got response')
           var data = _.get(response, 'detail',[]);
-          this._setTripsData(data);
+          this._setActionPointsData(data);
         },
 
       });

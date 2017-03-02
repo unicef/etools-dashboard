@@ -52,7 +52,7 @@
             } else {
               this.set('endpoint', this.getEndpoint('partnership',
                   {
-                    country_programme: filter.country_programme,
+                    country_programme: filter.country_programme || '',
                   }
               ));
             }

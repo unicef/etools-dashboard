@@ -30,7 +30,7 @@
           var months = moment.months().map(function(month, i) {
             return {
                     name: month,
-                    number: ("0" + (i + 1)).slice(-2),
+                    monthId: ("0" + (i + 1)).slice(-2),
                     year: moment().year()
                   };
           });

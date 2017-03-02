@@ -29,6 +29,10 @@
         padding: 0;
         @apply(--layout-horizontal);
       }
+      span.title {
+        color: var(--accent-color);
+        font-weight: 500;
+      }
     </style>
     <partnership-data partnership="{{partnership}}" filter="[[filter]]"></partnership-data>
     <paper-material class="list-panel listControls" elevation="1">
@@ -107,9 +111,9 @@
       <template is="dom-repeat" items="[[data.rows]]" as="row">
         <data-table-row no-collapse>
           <div slot="row-data">
-            <a href="#" class="col-data flex-2">
+            <span class="col-data flex-2 title">
               [[row.title]]
-            </a>
+            </span>
             <span class="col-data flex">
               [[row.number_partnerships]]
             </span>
@@ -117,7 +121,7 @@
               [[row.total_value]]
             </span>
             <span class="col-data flex">
-              [[row.percent_active]]%
+              [[row.percent_active]]
             </span>
           </div>
         </data-table-row>
@@ -173,14 +177,14 @@
         },
         init: function(active) {
           if (active) {
-            this._filterChanged();
+            this.set('filter', {
+              country_programme: null,
+              office: null
+            });
           }
         },
         _filterChanged: function() {
-          var filter = {
-            country_programme: 0,
-            office: 0
-          };
+          var filter;
           if (this.country_programme) {
             filter = {
               country_programme: parseInt(this.country_programme, 10),
