@@ -14,6 +14,7 @@
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../styles/buttons-styles.html">
+<link rel="import" href="../app-config/etools-app-config.html">
 
 
 <dom-module id="page-dashboard">
@@ -24,6 +25,8 @@
       :host {
         display: block;
       }
+
+
     </style>
 
     <app-route
@@ -45,12 +48,27 @@
               Dashboard
             </h1>
             <div class="top-content-actions-wrapper">
-              <div class="top-content-action">
-                <paper-button>
-                  <iron-icon icon="print"></iron-icon>
-                  Print
+              <div class="top-content-action" hidden$="[[!hactActive]]">
+                <a target="_blank" href="[[csvUrl]]">
+                  <paper-button>
+                    <iron-icon icon="file-download"></iron-icon>
+                    Export
+                  </paper-button>
+                </a>
+              </div>
+              <div class="top-content-action" hidden$="[[!_isActive(partnershipPage,'trips')]]">
+                <paper-button class="primary-btn with-prefix" on-tap="_goToAddTrip" >
+                  <iron-icon icon="add"></iron-icon>
+                  Add New Trip
                 </paper-button>
               </div>
+              <!--// TODO: implement print-->
+              <!--<div class="top-content-action">-->
+                <!--<paper-button>-->
+                  <!--<iron-icon icon="print"></iron-icon>-->
+                  <!--Print-->
+                <!--</paper-button>-->
+              <!--</div>-->
             </div>
           </div>
           <div class="top-content-row">
@@ -86,14 +104,16 @@
                   fallback-selection="personalized"
                   role="main">
         <div class="page" name="hact">
-          <dashboard-hact active="[[hactActive]]" url-params="[[queryParams]]" route="{{route}}"></dashboard-hact>
+          <dashboard-hact active="[[hactActive]]" url-params="[[queryParams]]" route="{{route}}"
+                          csv-download-url="{{csvUrl}}"></dashboard-hact>
         </div>
         <div class="page" name="personalized">
-          <dashboard-personalized user="[[user]]" active="[[_isActive(partnershipPage,'personalized')]]" route="{{route}}" ></dashboard-personalized>
+          <dashboard-personalized user="[[user]]" active="[[_isActive(partnershipPage,'personalized')]]"
+                                  route="{{route}}"></dashboard-personalized>
         </div>
 
         <div class="page" name="trips">
-          <dashboard-trips active="[[_isActive(partnershipPage,'trips')]]"></dashboard-trips>
+          <dashboard-trips active="[[c]]"></dashboard-trips>
         </div>
         <div class="page" name="partnerships">
           <dashboard-partnerships active="[[_isActive(partnershipPage,'partnerships')]]"></dashboard-partnerships>
@@ -119,6 +139,9 @@
           notify: true
         },
       },
+      behaviors: [
+        etoolsAppConfig.globals
+      ],
       observers: [
         '_pageChanged(routeData.dashTab)',
         '_updateUrlTab(routeData.dashTab)',
@@ -137,6 +160,10 @@
       _isActive: function(page, tab) {
         return _.isEqual(page, tab);
       },
+      _goToAddTrip: function() {
+        console.log('basesite', this.baseSite)
+        window.location.href = this.baseSite +'/t2f/edit-travel/-1';
+      }
 
     });
 
