@@ -182,14 +182,16 @@
         },
         init: function(active) {
           if (active) {
-            this.set('filter', {
-              country_programme: null,
-              office: null
-            });
+            if (!this.filter) {
+              this.set('filter', {
+                country_programme: null,
+                office: null
+              });
+            }
           }
         },
         _filterChanged: function() {
-          var filter;
+          var filter = {country_programme: null, office: null};
           if (this.country_programme) {
             this.$.cpDropdown.invalid = false;
             filter = {
