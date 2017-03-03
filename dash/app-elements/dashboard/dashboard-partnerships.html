@@ -47,7 +47,11 @@
         <div class="wrap-controls">
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-            <paper-dropdown-menu label="Country Programme" placeholder="Select from list" noink>
+            <paper-dropdown-menu id="cpDropdown"
+                                 label="Country Programme"
+                                 placeholder="Select from list"
+                                 error-message="Must select country programme"
+                                 noink>
               <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{country_programme}}">
                 <template is="dom-repeat" items="[[countryProgrammeItems]]">
                   <paper-item id="[[item.id]]">[[item.name]]</paper-item>
@@ -187,10 +191,17 @@
         _filterChanged: function() {
           var filter;
           if (this.country_programme) {
+            this.$.cpDropdown.invalid = false;
             filter = {
               country_programme: parseInt(this.country_programme, 10),
               office: parseInt(this.office, 10)
             };
+          }else {
+            if (this.office) {
+              this.$.cpDropdown.invalid = true;
+            }else {
+              this.$.cpDropdown.invalid = false;
+            }
           }
           if (!_.isEqual(this.filter, filter)) {
             this.set('filter', filter);
