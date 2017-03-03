@@ -118,7 +118,7 @@
               [[row.number_partnerships]]
             </span>
             <span class="col-data flex">
-              [[row.total_value]]
+              [[currencyFormat(row.total_value)]]
             </span>
             <span class="col-data flex">
               [[row.percent_active]]
@@ -140,6 +140,7 @@
         behaviors: [
           dashBehaviors.DropdownBehavior,
           dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
+          dashBehaviors.CommonGeneralBehavior
         ],
         observers: [
           'init(active)',

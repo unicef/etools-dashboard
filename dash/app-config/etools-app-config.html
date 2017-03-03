@@ -143,7 +143,7 @@ App global configuration
       },
       partnerships: {
         // Temporary until real endpoint implemented
-        template: '/api/v2/interventions/?status=active'
+        template: '/api/v2/interventions/dash'
       },
       partnership: {
         template: '/api/v2/partnership-dash/<%=country_programme%>'
@@ -154,8 +154,14 @@ App global configuration
       tripsBySection: {
         template: '/api/t2f/travels/dashboard/<%=year%>/<%=month%>'
       },
+      tripsBySectionOffice: {
+        template: '/api/t2f/travels/dashboard/<%=year%>/<%=month%>/?office_id=<%=office%>'
+      },
       actionPointsBySection: {
         template: '/api/t2f/action_points/dashboard/'
+      },
+      actionPointsBySectionOffice: {
+        template: '/api/t2f/action_points/dashboard/?office_id=<%=office%>'
       }
 
     };

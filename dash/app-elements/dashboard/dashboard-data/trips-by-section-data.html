@@ -1,6 +1,7 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../../bower_components/etools-ajax/etools-ajax.html">
 <link rel="import" href="../../../app-behaviors/data-element-behavior.html">
+<link rel="import" href="../../../app-config/etools-app-config.html">
 
 <dom-module id="trips-by-section-data">
 
@@ -28,7 +29,7 @@
             readOnly: true,
             notify: true
           },
-          date: {
+          filter: {
             type: Object,
             observer: '_filterChanged'
           }
@@ -38,24 +39,31 @@
           this.ajaxEl = this.$.ajax;
           this.ajaxEl.set('method', 'GET');
         },
-        _filterChanged: function(date) {
-          if (!_.isEmpty(date)) {
-            console.log('date not empty , changed', date);
+        _filterChanged: function(filter) {
+          if (!_.isEmpty(filter)) {
             this.fire('global-loading', {message: 'Loading chart data...', active: true});
-            this.set('endpoint', this.getEndpoint('tripsBySection',
-                {
-                  year: date.year,
-                  month: date.monthId
-                }
-            ));
+            if (_.has(filter, 'office')) {
+              this.set('endpoint', this.getEndpoint('tripsBySectionOffice',
+                  {
+                    year: filter.year,
+                    month: filter.monthId,
+                    office: filter.office
+                  }
+              ));
+            }else {
+              this.set('endpoint', this.getEndpoint('tripsBySection',
+                  {
+                    year: filter.year,
+                    month: filter.monthId
+                  }
+              ));
+            }
           }else {
-            console.log('ep undefined');
-            this.set('endpoint', undefined);
+            this.ajaxEl.set('url', null);
           }
         },
         _handleResponse: function(response) {
-          console.log('got response')
-          var data = _.get(response, 'detail',[]);
+          var data = _.get(response, 'detail', []);
           this._setTripsData(data);
         },
 
