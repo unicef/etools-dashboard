@@ -114,9 +114,9 @@
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
             <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
-              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{apOffice}}">
+              <paper-menu class="dropdown-content" attr-for-selected="name" selected="{{apOffice}}">
                 <template is="dom-repeat" items="[[offices]]" as="office">
-                  <paper-item id="[[office.id]]">[[office.name]]</paper-item>
+                  <paper-item name="[[office.name]]">[[office.name]]</paper-item>
                 </template>
               </paper-menu>
             </paper-dropdown-menu>
@@ -218,16 +218,17 @@
             },
             isStacked: 'percent',
             hAxis: {
-              minValue: 1,
+              minValue: 0,
               gridlineColor: '#E8E8E8',
-              format: 'percent'
-            },
+              format: 'percent',
+              ticks: _.range(0.1,1,0.1)
+    },
             vAxis: {
               minValue: 0,
               textStyle: {
                 fontSize: 14,
                 lineHeight: 30
-              }
+              },
             },
             bar: { groupWidth: '22' },
             legend: {
