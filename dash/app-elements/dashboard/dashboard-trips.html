@@ -21,7 +21,7 @@
 <link rel="import" href="dashboard-data/action-pts-by-section-data.html">
 <dom-module id="dashboard-trips">
   <template>
-    <style include="list-styles iron-flex-factors shared-styles page-layout-styles grid">
+    <style include="list-styles iron-flex-factors shared-styles page-layout-styles">
       .by-type {
         padding: 0;
         @apply(--layout-horizontal);
@@ -96,9 +96,7 @@
         <google-chart
             id="tripsChart"
             class="viz"
-            type="bar"
-            data="{{tripsChart}}"
-            placeholder="No chart data.">
+            type="bar">
         </google-chart>
     </paper-material>
 
@@ -130,17 +128,15 @@
       <google-chart
           id="actionPointsChart"
           class="viz"
-          type="bar"
-          data="{{actionPointsChart}}">
+          type="bar">
       </google-chart>
     </paper-material>
 
   </template>
   <script>
     Polymer({
-      is: "dashboard-trips",
+      is: 'dashboard-trips',
       observers: [
-        '_formatChartData(month,office)',
         '_init(active)'
       ],
       behaviors: [
@@ -316,7 +312,7 @@
         var _this = this;
         this.$.google.dataTable(formatted).then(function(dt) {
             _this.$$('#' + chartName).options = _this[chartName+'Options'];
-            _this.set(chartName, dt);
+            _this.$$('#' + chartName).data = dt;
             _this.fire('global-loading',{active: false});
         });
       },
@@ -379,7 +375,7 @@
         var _this = this;
         this.$.google.dataTable(this.noDataMessage).then(function(dt) {
           _this.$$('#' + chartName).options = _this.noDataOptions;
-          _this.set(chartName, dt);
+          _this.$$('#' + chartName).data = dt;
         })
       }
     })
