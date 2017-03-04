@@ -42,7 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="app-shell">
 
   <template>
-    <style include="page-layout-styles shared-styles">
+    <style include="page-layout-styles iron-flex iron-flex-alignment shared-styles">
 
       :host {
         display: block;
@@ -57,9 +57,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       app-toolbar {
-        background-color: #0099FF;
-        color: white;
+        background-color: var(--dashboards-toolbar-color);
+        color: white;--dashboards-toolbar-color
         --app-toolbar-font-size: 16px;
+        text-transform: uppercase;
       }
 
       .side-nav-wrapper {
@@ -95,6 +96,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .side-nav-wrapper .nav-menu {
         padding: 8px 0;
       }
+      .nav-menu, .flexy {
+        @apply(--layout-flex);
+      }
+      .secondary-header {
+        color: var(--gray-dark);
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        font-size: 12px;
+        border-top: 1px solid var(--gray-lighter);
+      }
 
       .side-nav-wrapper .divider {
         margin: 8px 0;
@@ -104,6 +116,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .warning-toast-dismiss-btn {
         text-transform: none;
         color: #eeff41; /* TODO: replace with a var from above */
+      }
+      .lighter-item {
+        --dark-icon-color: var(--gray-light);
+        --dark-primary-text-color: var(--gray-light);
       }
 
     </style>
@@ -117,24 +133,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         pattern$="[[baseUrl]]:page"
         data="{{routeData}}"></app-route>
 
-    <app-drawer-layout id="layout" responsive-width="850px" narrow="{{narrow}}" fullbleed force-narrow>
+    <app-drawer-layout id="layout" responsive-width="850px" narrow="{{narrow}}" fullbleed >
 
       <!-- Drawer content -->
       <app-drawer id="drawer" transition-duration="350">
 
         <div class="side-nav-wrapper">
 
-          <app-toolbar class="header">
-            <img id="etools-logo" src="../images/etools_logo.svg" alt="etools logo">
+          <app-toolbar class="header uppercase">
+            Dashboards
           </app-toolbar>
 
-          <div class="nav-menu">
-            <iron-selector selected="[[page]]" attr-for-selected="name" selectable="side-bar-item" role="navigation">
-                <template is="dom-if" if="[[permissions.loggedInDefault]]">
-                    <side-bar-item name="dashboard" icon="explore" href$="[[baseUrl]]dashboard"></side-bar-item>
-                      <div class="divider"></div>
-                </template>
-            </iron-selector>
+          <div class="nav-menu layout vertical">
+
+            <div class="flexy"></div>
+
+            <div class="secondary-header">eTools Community Channels</div>
+            <side-bar-item name="Knowledge base" class="lighter-item" icon="maps:local-library" href="https://etools.uservoice.com"></side-bar-item>
+            <side-bar-item name="Discussion" class="lighter-item" icon="icons:question-answer" href="https://www.yammer.com/unicef.org/#/threads/inGroup?type=in_group&feedId=5782560"></side-bar-item>
+            <side-bar-item name="Information" class="lighter-item last-one" icon="icons:info" href="http://etools.unicefresults.org"></side-bar-item>
           </div>
         </div>
 
