@@ -1,0 +1,387 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../../styles/shared-styles.html">
+<link rel="import" href="../../../styles/list-styles.html">
+<link rel="import" href="../../../styles/page-layout-styles.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+
+<link rel="import" href="../../app-behaviors/dropdown-behavior.html">
+<link rel="import" href="../../app-behaviors/common-general-behavior.html">
+<link rel="import" href="../../app-elements/static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
+<link rel="import" href="../../../bower_components/google-chart/google-chart.html">
+<link rel="import" href="../../../bower_components/google-chart/google-chart-loader.html">
+
+<link rel="import" href="dashboard-data/trips-by-section-data.html">
+<link rel="import" href="dashboard-data/action-pts-by-section-data.html">
+<dom-module id="dashboard-trips">
+  <template>
+    <style include="list-styles iron-flex-factors shared-styles page-layout-styles grid">
+      .by-type {
+        padding: 0;
+        @apply(--layout-horizontal);
+      }
+      .viz {
+        width: 100%;
+      }
+      .chart-title {
+        font-size: 16px;
+        margin: 0;
+        line-height: 48px;
+        font-weight: 500;
+      }
+    </style>
+    <trips-by-section-data trips-data="{{tripsData}}" filter="[[tripsFilter]]"></trips-by-section-data>
+    <action-pts-by-section-data action-points-data="{{actionPointsData}}" filter="[[actionPtsFilter]]"></action-pts-by-section-data>
+    <google-chart-loader id="google"></google-chart-loader>
+
+    <paper-material class="list-panel listControls" elevation="1">
+      <div class="controls-wrapper">
+        <div class="title-row">
+          <h1 sub-title>Trips</h1>
+        </div>
+        <div class="filters-divider"></div>
+        <div class="wrap-controls">
+          <div class="dropdown-with-clear-btn">
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <paper-dropdown-menu label="Month" placeholder="Select from list" noink>
+              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{month}}">
+                <template is="dom-repeat" items="[[months]]" as="month">
+                  <paper-item id="[[month.monthId]]">[[month.name]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+          </div>
+          <div class="dropdown-with-clear-btn">
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
+              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{tripsOffice}}">
+                <template is="dom-repeat" items="[[offices]]" as="office">
+                  <paper-item id="[[office.id]]">[[office.name]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+          </div>
+        </div>
+      </div>
+    </paper-material>
+
+    <paper-material class="list-panel by-type" elevation="1">
+      <div class="trip title-row flex-2">
+        <h2 sub-title>Trips in country programme</h2>
+      </div>
+      <div class="trips flex-3">
+        <div class="trip trip-type-one flex-c">
+          <h1>Planned</h1>
+          [[tripsData.planned]]
+        </div>
+        <div class="trip trip-type-two flex-c">
+          <h1>Approved</h1>
+          [[tripsData.approved]]
+        </div>
+        <div class="trip trip-type-three flex-c">
+          <h1>Completed</h1>
+          [[tripsData.completed]]
+        </div>
+      </div>
+    </paper-material>
+
+    <paper-material class="list-panel">
+        <h2 class="chart-title">Trips by section</h2>
+        <google-chart
+            id="tripsChart"
+            class="viz"
+            type="bar"
+            data="{{tripsChart}}"
+            placeholder="No chart data.">
+        </google-chart>
+    </paper-material>
+
+<!--ACTION POINTS-->
+
+    <paper-material class="list-panel listControls" elevation="1">
+      <div class="controls-wrapper">
+        <div class="title-row">
+          <h1 sub-title>Action Points</h1>
+        </div>
+        <div class="filters-divider"></div>
+        <div class="wrap-controls">
+          <div class="dropdown-with-clear-btn">
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
+              <paper-menu class="dropdown-content" attr-for-selected="name" selected="{{apOffice}}">
+                <template is="dom-repeat" items="[[offices]]" as="office">
+                  <paper-item name="[[office.name]]">[[office.name]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+          </div>
+        </div>
+      </div>
+    </paper-material>
+
+    <paper-material class="list-panel">
+      <h2 class="chart-title">Action points by section</h2>
+      <google-chart
+          id="actionPointsChart"
+          class="viz"
+          type="bar"
+          data="{{actionPointsChart}}">
+      </google-chart>
+    </paper-material>
+
+  </template>
+  <script>
+    Polymer({
+      is: "dashboard-trips",
+      observers: [
+        '_formatChartData(month,office)',
+        '_init(active)'
+      ],
+      behaviors: [
+        dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
+        dashBehaviors.DropdownBehavior
+      ],
+      properties: {
+        tripsData: {
+          type: Object,
+          observer: '_tripsDataChanged'
+        },
+        tripsFilter: {
+          type: Object,
+          notify: true
+        },
+        offices: {
+          type: Array,
+          statePath: 'offices'
+        },
+        tripsOffice: {
+          type: String,
+          observer: '_tripsOfficeChanged'
+        },
+        tripsChart: {
+          type: Array,
+          notify:true,
+          value:[]
+        },
+        actionPointsData: {
+          type: Object,
+          observer: '_actionPointsDataChanged'
+        },
+        apOffice: {
+          type: String,
+          observer: '_apOfficeChanged'
+        },
+        actionPtsFilter: {
+          type: Object,
+          notify: true
+        },
+        months: {
+          type: Array,
+          statePath: 'tripsMonths'
+        },
+        month: {
+          type: String,
+          observer: '_setMonth'
+        },
+
+        tripsChartOptions: {
+          type: Object,
+          value : {
+            colors: ['#FCF39F','#BFE58A','#64BD00'],
+            legend: { position: "none" },
+            chartArea: {
+              width: '75%',
+              height:'75%',
+              top: '16',
+            },
+            isStacked: true,
+            hAxis: {
+              minValue: 1,
+              ticks: _.range(16),
+              gridlineColor: '#E8E8E8',
+            },
+            vAxis: {
+              minValue: 0,
+              textStyle: {
+                fontSize: 14,
+                lineHeight: 30
+              }
+            },
+            bar: { groupWidth: '22' },
+          }
+        },
+        actionPointsChart: {
+          type: Object,
+          notify:true
+        },
+        actionPointsChartOptions: {
+          type: Object,
+          value : {
+            colors: ['#8AD0FF','#EEEEEE'],
+            chartArea: {
+              width: '75%',
+              height:'75%',
+              top: '10%',
+            },
+            isStacked: 'percent',
+            hAxis: {
+              minValue: 0,
+              gridlineColor: '#E8E8E8',
+              format: 'percent',
+              ticks: _.range(0.1,1.1,0.1)
+            },
+            vAxis: {
+              minValue: 0,
+              textStyle: {
+                fontSize: 14,
+                lineHeight: 30
+              },
+            },
+            bar: { groupWidth: '22' },
+            legend: {
+              position: 'top',
+              alignment: 'end'
+            }
+          }
+        },
+        noDataOptions: {
+          type: Object,
+          value: {
+            legend: { position: "none" },
+            colors: ['transparent'],
+            chartArea: {
+              width: '50%',
+              left: '5%',
+              height:'75%',
+              top: '16',
+            },
+            vAxis: {
+              baselineColor: 'transparent',
+              gridlineColor: 'transparent'
+            },
+            hAxis: {
+              minValue: 1,
+              gridlineColor: 'transparent',
+              textStyle: {
+                color: 'transparent'
+              }
+            },
+            annotations: {
+              alwaysOutside: true,
+              textStyle : {
+                color: '#979797',
+                fontSize: 28,
+              },
+              stem: {
+                color: 'transparent',
+                length: '50%'
+              }
+            },
+            bar: { groupWidth: '22' }
+          }
+        },
+        noDataMessage: {
+          type: Array,
+          value: [['Bar', 'Time', { role: 'annotation' } ],
+            ['', 2, 'No chart data' ],
+          ]
+        }
+      },
+      _init: function(active) {
+        if(active) {
+          this._setNoData('tripsChart');
+          if(!this.actionPtsFilter) {
+            this.set('actionPtsFilter', {});
+          }
+        }
+      },
+      _setMonth: function(monthNum) {
+        if (monthNum) {
+          var monthObj = _.find(this.months, {monthId: monthNum});
+          this.set('tripsFilter', monthObj);
+        }else{
+          this._setNoData('tripsChart');
+          this.set('tripsFilter', {});
+          this.set('tripsOffice','');
+          this.set('tripsData',{});
+        }
+      },
+      _formatChartData: function(formatted, chartName) {
+        var _this = this;
+        this.$.google.dataTable(formatted).then(function(dt) {
+            _this.$$('#' + chartName).options = _this[chartName+'Options'];
+            _this.set(chartName, dt);
+            _this.fire('global-loading',{active: false});
+        });
+      },
+      _tripsDataChanged : function(data) {
+        if (!_.isEmpty(data)) {
+          var travels = _.get(data, 'travels_by_section', []);
+            if (!travels.length) {
+              this.fire('global-loading', {active: false});
+              this._setNoData('tripsChart');
+            }else {
+              var formatted = [
+                ['Trips', 'Planned', 'Approved', 'Completed']
+              ];
+              travels.map(function(section) {
+                formatted.push([section.section_name,
+                  section.planned_travels,
+                  section.approved_travels,
+                  section.completed_travels])
+              });
+              this._formatChartData(formatted,'tripsChart');
+            }
+        }
+      },
+      _tripsOfficeChanged: function(office) {
+        if (office) {
+          this.set('tripsFilter', _.assign({}, this.tripsFilter, {office:office}));
+        }else{
+          var monthObj = _.find(this.months,{monthId: this.month});
+          this.set('tripsFilter', monthObj);
+        }
+      },
+      _apOfficeChanged: function(officeName) {
+        var filter = {};
+        if (officeName) {
+          filter.office = _.find(this.offices, {name: officeName}).id;
+        }
+        this.set('actionPtsFilter', filter);
+      },
+      _actionPointsDataChanged: function(data) {
+        if (!_.isEmpty(data)) {
+          var actionPoints = _.get(data,'action_points_by_section',[]).filter(function(ap) {
+            return _.get(ap,'total_action_points');
+          });
+          if (!actionPoints.length) {
+            this.fire('global-loading', {active: false});
+            this._setNoData('actionPointsChart');
+          }else {
+            var formatted = [['Action Points', 'Closed', 'Total']];
+            actionPoints.forEach(function(ap) {
+              formatted.push([ap.section_name,
+                ap.completed_action_points,
+                ap.total_action_points
+                ]);
+            });
+            this._formatChartData(formatted,'actionPointsChart');
+          }
+        }
+      },
+      _setNoData: function(chartName) {
+        var _this = this;
+        this.$.google.dataTable(this.noDataMessage).then(function(dt) {
+          _this.$$('#' + chartName).options = _this.noDataOptions;
+          _this.set(chartName, dt);
+        })
+      }
+    })
+  </script>
+</dom-module>

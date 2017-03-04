@@ -10,7 +10,8 @@
     tripsSupervised: [],
     actionPointsByMe: [],
     actionPointsForMe: [],
-    partnerships: []
+    partnerships: [],
+    tripsMonths: []
   };
 
   var commonStaticDataStore = Redux.createStore(function(state, action) {
@@ -45,6 +46,9 @@
 
       case 'SET_PARTNERSHIPS' :
         return Object.assign({}, state, { partnerships: action.partnerships });
+
+      case 'SET_TRIPS_MONTHS' :
+        return Object.assign({}, state, { tripsMonths: action.months });
 
     }
   });

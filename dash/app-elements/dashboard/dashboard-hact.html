@@ -262,6 +262,10 @@
             notify: true,
             observer: '_qChanged'
           },
+          csvDownloadUrl: {
+            type: String,
+            notify: true
+          },
           forceDataRefresh: {
             type: Boolean,
             value: false
@@ -309,6 +313,7 @@
           if (!this.initComplete) {
             return;
           }
+          this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
 
           var qs = this._buildQueryString();
           if (qs !== _lastNavigated) {
@@ -344,6 +349,11 @@
           }
           return qs.join('&');
 
+        },
+        _buildCsvDownloadUrl: function() {
+          return this.queryString ?
+              this.getEndpoint('partners').url + '?' + 'search=' + this.queryString + '&format=csv' :
+              this.getEndpoint('partners').url + '?' + '&format=csv';
         },
         _getProp: function(obj, propStr) {
           if (propStr === 'partner_type') {
