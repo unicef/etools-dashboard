@@ -5,13 +5,15 @@
     offices: [],
     countries: [],
     sectors: [],
+    sections:[],
     partnersDropdownData: [],
     trips: [],
     tripsSupervised: [],
     actionPointsByMe: [],
     actionPointsForMe: [],
     partnerships: [],
-    tripsMonths: []
+    tripsMonths: [],
+    unicefUsersData:[]
   };
 
   var commonStaticDataStore = Redux.createStore(function(state, action) {
@@ -28,6 +30,9 @@
 
       case 'SET_OFFICES':
         return Object.assign({}, state, { offices: action.offices });
+
+      case 'SET_SECTIONS':
+        return Object.assign({}, state, { sections: action.sections });
 
 			case 'SET_TRIPS_DATA':
 				return Object.assign({}, state, {trips: action.trips});
@@ -49,6 +54,9 @@
 
       case 'SET_TRIPS_MONTHS' :
         return Object.assign({}, state, { tripsMonths: action.months });
+
+      case 'SET_UNICEF_USERS_DATA':
+        return Object.assign({}, state, { unicefUsersData: action.unicefUsersData });
 
     }
   });

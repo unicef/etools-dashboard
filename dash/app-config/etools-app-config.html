@@ -96,6 +96,11 @@ App global configuration
     };
 
     var serverEps = {
+      unicefUsers: {
+        url: '/users/api/',
+        exp: 60 * 60 * 1000, // 1h
+        cachingKey: 'unicefUsers'
+      },
       user: {
         url: '/users/api/profile/',
         exp: 30 * 60 * 1000, // 30min
@@ -128,6 +133,11 @@ App global configuration
         url: '/api/reports/sectors',
         exp: 6 * 60 * 60 * 1000, // 6h
         cachingKey: 'sectors'
+      },
+      sections: {
+        url : '/api/sections',
+        exp: 6 * 60 * 60 * 1000,
+        cachingKey: 'sections'
       },
 			trips: {
 				template: '/api/t2f/travels/?f_traveler=<%=id%>'
@@ -162,7 +172,10 @@ App global configuration
       },
       actionPointsBySectionOffice: {
         template: '/api/t2f/action_points/dashboard/?office_id=<%=office%>'
-      }
+      },
+      myProfile:  {
+        template: '/api/v2/users/myprofile/',
+      },
 
     };
     /* jshint ignore:start */
