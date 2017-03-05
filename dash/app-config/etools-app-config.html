@@ -32,6 +32,7 @@ App global configuration
         baseSite: window.location.origin,
         basePath: (window.location.port === '8080') ? '/' : '/dash/',
         serverBackend: (window.location.port !== '8080'),
+        loginPath: window.location.origin + '/login/',
 
         getEndpoint: function(endpointName, data) {
           var endpoint = JSON.parse(JSON.stringify(etoolsAppConfig.endpoints[endpointName]));
