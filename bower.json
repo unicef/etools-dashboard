@@ -50,8 +50,13 @@
     "paper-item": "PolymerElements/paper-item#^1.2.1",
     "paper-spinner": "PolymerElements/paper-spinner#^1.2.1",
     "neon-animation": "PolymerElements/neon-animation#^1.2.4",
-    "google-apis": "GoogleWebComponents/google-apis#1.1.1",
-    "google-map": "GoogleWebComponents/google-map#^1.1.14"
+    "google-apis": "GoogleWebComponents/google-apis#^1.1.7",
+    "google-map": "GoogleWebComponents/google-map#^1.1.14",
+    "iron-dropdown": "^1.5.5",
+    "moment": "^2.17.1",
+    "paper-tooltip": "^1.1.3",
+    "polymer-redux": "^0.4.0",
+    "google-chart": "^1.1.1"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

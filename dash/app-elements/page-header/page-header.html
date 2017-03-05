@@ -2,10 +2,11 @@
 <link rel="import" href="../../../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
-
 <link rel="import" href="../../../bower_components/etools-page-refresh/etools-page-refresh.html">
-
+<link rel="import" href="../app-selector/app-selector.html">
 <link rel="import" href="../countries-dropdown/countries-dropdown.html">
+<link rel="import" href="../user-profile-dialog/user-profile-dialog.html">
+<link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
 
 <link rel="import" href="../../../styles/shared-styles.html">
 
@@ -13,16 +14,26 @@
 
   <template>
     <style include="shared-styles">
+
+      app-toolbar {
+        padding: 0 16px 0 0;
+        background-color: var(--nonprod-header-color, #233944);
+      }
+
       div[main-title] {
         position: relative;
         bottom: 1px;
         margin-left: 24px;
-        text-transform: capitalize;
+        min-height: 30px;
+        background: url('../../../images/etools_logo_icon.png') no-repeat center left;
+        background-size: auto 48px;
+        padding-left: 48px;
+        font-size: 30px;
+        color: var(--light-primary-text-color);
       }
 
-      div[main-title],
-      etools-page-refresh {
-        color: var(--light-primary-text-color);
+      etools-page-refresh, #profile {
+        color: #BCC1C6; /* TODO: replace with app-theme var */
       }
 
       #menuButton {
@@ -37,6 +48,25 @@
       etools-page-refresh {
         margin-left: 25px;
       }
+      .titlebar {
+        flex: 1 ;
+        font-size: 28px;
+        font-weight: 300;
+        color: var(--light-primary-text-color);
+      }
+      .titlebar img{
+        width: 34px;
+        margin: 0 8px 0 24px;
+      }
+
+      .content-align {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+      }
+      #second-logo {
+        height: 32px;
+        width: auto;
+      }
 
       @media (min-width: 850px) {
         #menuButton {
@@ -47,12 +77,16 @@
         }
       }
     </style>
-    <app-toolbar>
+    <app-toolbar sticky class="content-align">
       <paper-icon-button id="menuButton" class="light" icon="menu" on-tap="openDrawer"></paper-icon-button>
-      <div main-title>{{title}}</div>
-      <div class="right-side">
-        <countries-dropdown id="countries" countries="[[countries]]"></countries-dropdown>
-        <etools-page-refresh></etools-page-refresh>
+      <div class="titlebar content-align">
+        <app-selector id="selector"></app-selector>
+        <img id="second-logo" src="../../../images/etools-logo-color-white.svg">
+      </div>
+      <div class="content-align">
+        <countries-dropdown id="countries" countries="[[countries]]" current="[[user.profile.country]]"></countries-dropdown>
+        <paper-icon-button id="profile" icon="social:person" role="button" on-tap="_openUserProfileDialog" aria-disabled="false"></paper-icon-button>
+        <etools-page-refresh id="refresh"></etools-page-refresh>
       </div>
     </app-toolbar>
   </template>
@@ -61,15 +95,76 @@
     (function() {
       Polymer({
         is: 'page-header',
-
         properties: {
-          title: String
+          countries: {
+            type: Array
+          },
+          user: {
+            type: Object,
+          },
+          userProfileDialog: Object
         },
-
+        observers: [
+          '_updateCountriesList(user.profile.countries_available)'
+        ],
+        listeners: {
+          'main_refresh': '_refresh_page'
+        },
         openDrawer: function() {
           this.fire('drawer');
-        }
+        },
+        _refresh_page: function(event) {
+          event.stopImmediatePropagation();
+          this.$.refresh._refresh();
+        },
+        _getFlagIconClass: function(id) {
+          var flagIdMap = {
+            '0': 'us',
+            '234R': 'syxb',
+            '2490': 'lb',
+            '4020': 'su',
+            '4140': 'sy',
+            '2070': 'in'
+          };
+          return 'flag-icon ' + 'flag-icon-' + flagIdMap[id];
+        },
+        _updateCountriesList: function(countries) {
+          var arrayObj = countries.map(function(arrayItem) {
+            return {id: arrayItem.id, name: arrayItem.name, imgClass: this._getFlagIconClass(arrayItem.business_area_code)};
+          }.bind(this));
+          this.set('countries', arrayObj);
+        },
+        ready: function() {
+          // init indicator dialog data
+          this.userProfileDialog = document.createElement('user-profile-dialog');
+          this.userProfileDialog.setAttribute('id', 'userProfileDialog');
 
+          // this hack is here because elemets added this way can't trigger global events, but they can listen to them
+          this.userProfileDialog.addEventListener('hacky-global-loading', function(event) {
+            this.fire('global-loading', event.detail);
+          }.bind(this), false);
+
+          Polymer.dom(document.querySelector('body')).appendChild(this.userProfileDialog);
+
+          var location = window.location.href;
+          var production = 'etools.unicef.com';
+
+          // If not production environment, changing header color to red
+          if (location.indexOf(production) === -1) {
+            this.customStyle['--nonprod-header-color'] = '#A73838';
+            this.updateStyles();
+          }
+        },
+
+        detached: function() {
+          if (this.userProfileDialog) {
+            Polymer.dom(document.querySelector('body')).removeChild(this.userProfileDialog);
+          }
+        },
+        // open indicator dialog to add or edit indicator
+        _openUserProfileDialog: function(event) {
+          this.userProfileDialog.openUserProfileDialog();
+        },
       });
     })();
   </script>

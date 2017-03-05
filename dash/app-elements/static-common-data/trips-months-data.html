@@ -1,0 +1,43 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="redux-bahaviors/common-static-data-redux-bahavior.html">
+<link rel="import" href="../../../bower_components/moment-element/moment-import.html">
+<dom-module id="trips-months-data">
+
+  <template>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+
+        is: 'trips-months-data',
+        behaviors: [
+          dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
+        ],
+        properties: {},
+        actions: {
+          setMonthsData: function(months) {
+            return {
+              type: 'SET_TRIPS_MONTHS',
+              months: months
+            }
+          }
+        },
+        attached: function() {
+          var months = moment.months().map(function(month, i) {
+            return {
+                    name: month,
+                    monthId: ("0" + (i + 1)).slice(-2),
+                    year: moment().year()
+                  };
+          });
+          this.dispatch('setMonthsData', months);
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

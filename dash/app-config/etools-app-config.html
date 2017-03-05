@@ -15,9 +15,11 @@ App global configuration
     etoolsCustomDexieDb.version(1).stores({
       collectionsList: 'name, expire',
       countries: 'id',
-      partners: 'id, name, rating, vendor_number',
-      agreements: 'id, name, agreement_number, partner_name, start, end',
-      user: 'id'
+      user: 'id',
+      countryProgrammes: 'id, name, wbs, from_date',
+      offices: 'id, name',
+      partners: 'id, name',
+      trips: 'id, supervisor_name, purpose_of_travel, traveler, created_date'
     });
 
     var etoolsAppConfig = {
@@ -30,6 +32,7 @@ App global configuration
         baseSite: window.location.origin,
         basePath: (window.location.port === '8080') ? '/' : '/dash/',
         serverBackend: (window.location.port !== '8080'),
+        loginPath: window.location.origin + '/login/',
 
         getEndpoint: function(endpointName, data) {
           var endpoint = JSON.parse(JSON.stringify(etoolsAppConfig.endpoints[endpointName]));
@@ -90,38 +93,89 @@ App global configuration
         exp: 6 * 60 * 60 * 1000, // 6h
         cachingKey: 'partners'
       }
+
     };
 
     var serverEps = {
+      unicefUsers: {
+        url: '/users/api/',
+        exp: 60 * 60 * 1000, // 1h
+        cachingKey: 'unicefUsers'
+      },
       user: {
         url: '/users/api/profile/',
         exp: 30 * 60 * 1000, // 30min
         cachingKey: 'user'
       },
-      agreements: {
-        template: '/api/v2/agreements/',
-        exp: 30 * 60 * 1000, // 30min
-        cachingKey: 'agreements'
-      },
-      agreementDetails: {
-        template: '/api/v2/agreements/<%=id%>/',
-        exp: 30 * 60 * 1000 // 30min
+      countryProgrammes: {
+         url: '/api/v2/reports/countryprogramme/',
+         exp: 6 * 60 * 60 * 1000,
+         cachingKey: 'countryProgrammes'
+       },
+      offices: {
+         url: '/api/offices/',
+         exp: 6 * 60 * 60 * 1000,
+         cachingKey: 'offices'
       },
       countries: {
         url: '/api/countries/', // API request receives a 404 for now
         exp: 6 * 60 * 60 * 1000, // 6h
         cachingKey: 'countries'
       },
-      partners: {
-        url: '/api/v2/partners/',
-        exp: 6 * 60 * 60 * 1000, // 6h
-        cachingKey: 'partners'
+      changeCountry: {
+        url: '/users/api/changecountry/'
       },
-      partnerDetails: {
-        template: '/api/v2/partners/<%=id%>/',
+      partners: {
+          url: '/api/v2/partners/hact',
+          exp: 6 * 60 * 60 * 1000, // 6h
+          cachingKey: 'partners'
+      },
+      sectors: {
+        url: '/api/reports/sectors',
         exp: 6 * 60 * 60 * 1000, // 6h
-        // if this caching key is missing then the data will be cached with the url as key
-        // cachingKey: 'partnerDetails'
+        cachingKey: 'sectors'
+      },
+      sections: {
+        url : '/api/sections',
+        exp: 6 * 60 * 60 * 1000,
+        cachingKey: 'sections'
+      },
+			trips: {
+				template: '/api/t2f/travels/?f_traveler=<%=id%>'
+			},
+			tripsSupervised: {
+				template: '/api/t2f/travels/?f_supervisor=<%=id%>'
+			},
+			actionPointsByMe: {
+        template: '/api/t2f/action_points/?f_assigned_by=<%=id%>'
+      },
+      actionPointsForMe: {
+        template: '/api/t2f/action_points/?f_person_responsible=<%=id%>'
+      },
+      partnerships: {
+        // Temporary until real endpoint implemented
+        template: '/api/v2/interventions/dash'
+      },
+      partnership: {
+        template: '/api/v2/partnership-dash/<%=country_programme%>'
+      },
+      partnershipOffice: {
+        template: '/api/v2/partnership-dash/<%=country_programme%>/<%=office%>'
+      },
+      tripsBySection: {
+        template: '/api/t2f/travels/dashboard/<%=year%>/<%=month%>'
+      },
+      tripsBySectionOffice: {
+        template: '/api/t2f/travels/dashboard/<%=year%>/<%=month%>/?office_id=<%=office%>'
+      },
+      actionPointsBySection: {
+        template: '/api/t2f/action_points/dashboard/'
+      },
+      actionPointsBySectionOffice: {
+        template: '/api/t2f/action_points/dashboard/?office_id=<%=office%>'
+      },
+      myProfile:  {
+        template: '/api/v2/users/myprofile/',
       },
 
     };

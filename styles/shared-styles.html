@@ -6,7 +6,9 @@
 <dom-module id="shared-styles">
   <template>
     <style>
-
+      *[hidden] {
+        display: none !important;
+      }
       h1 {
         font-size: 25px;
         margin: 16px 0;
@@ -77,6 +79,34 @@
       paper-icon-button.light {
         color: var(--light-icon-color);
         --paper-icon-button-ink-color: var(--light-ink-color);
+      }
+
+      paper-icon-button.clear {
+        width: 35px;
+        height: 35px;
+        top: 10px;
+      }
+
+      .dropdown-with-clear-btn {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        padding-bottom: 8px;
+      }
+
+      paper-input {
+        --paper-input-prefix: {
+          margin-top: -5px;
+          margin-right: 10px;
+          color: var(--dark-secondary-text-color);
+        };
+        --paper-input-suffix: {
+          margin-top: -5px;
+          margin-left: 10px;
+          color: var(--dark-secondary-text-color);
+        };
+      }
+      paper-dropdown-menu paper-item {
+        cursor: pointer;
       }
 
       /* responsive css rules */

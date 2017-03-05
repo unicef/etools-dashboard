@@ -1,22 +1,9 @@
 <script>
-
-  var _data = _data || {};
-  var _elements = _elements || {};
-
-  var _setData = function(data) {
-    _data[this.endpointName] = data || {};
-
-    this.load(_data);
-    _elements[this.endpointName].forEach(function(el) {
-      if (el !== this) { el.load(_data); }
-    });
-  };
-
-  window.pmpBehaviors = window.pmpBehaviors || {};
-  pmpBehaviors.DataElementBehaviorImpl = {
+  window.dashBehaviors = window.dashBehaviors || {};
+  dashBehaviors.DataElementBehaviorImpl = {
 
     properties: {
-
+      endpoint: Object,
       data: {
         type: Array,
         readOnly: true,
@@ -30,42 +17,81 @@
         }
       },
 
+      fireDataLoaded: {
+        type: Boolean,
+        value: false
+      },
+
+      showLoading: {
+        type: Boolean,
+        value: false
+      }
+
     },
 
     ready: function() {
+      this._elementReady();
+    },
+
+    _elementReady: function() {
       if (!this.endpointName) {
         console.warn('Please specify an endpointName property');
-      }
-      this.load(_data);
-    },
-
-    attached: function() {
-      _elements[this.endpointName] = _elements[this.endpointName] || [];
-      if (_elements[this.endpointName].length === 0 && !_data[this.endpointName]) {
+      } else {
         this.endpoint = this.getEndpoint(this.endpointName);
-      }
-      _elements[this.endpointName].push(this);
-    },
-
-    detached: function() {
-      _elements[this.endpointName].splice(_elements[this.endpointName].indexOf(this), 1);
-    },
-
-    load: function(data) {
-      if (data[this.endpointName]) {
-        this._setData(data[this.endpointName]);
       }
     },
 
     _handleResponse: function(res) {
-      _setData.bind(this)(res.detail);
+      this._setData(res.detail);
+      if (this.fireDataLoaded) {
+        if (!this.dataLoadedEventName) {
+          console.warn('Please specify data loaded event name(dataLoadedEventName property)');
+        } else {
+          this.fire(this.dataLoadedEventName);
+        }
+      }
+    },
+
+    _handleErrorResponse: function(response) {
+      this.fire('global-loading', {active: false});
+      var errors = response.detail.request.detail.request.response;
+      if (this.ajaxEl.method === 'POST' || this.ajaxEl.method === 'PATCH') {
+        // TODO: improve etools-ajax on-fail event data model (received errors)
+        var errorMessage = 'An error occurred during save!';
+        if (errors) {
+          var errorMessages = ['Errors occurred:\n'];
+          if (Array.isArray(errors) && errors.length > 0) {
+            errors.forEach(function(err) {
+              errorMessages.push(err + '\n');
+            });
+          } else if (typeof errors === 'object' && Object.keys(errors).length > 0) {
+            for (var errField in errors) {
+              if (typeof errors[errField] === 'string') {
+                errorMessages.push('Field ' + errField + ' - ' + errors[errField] + '\n');
+              } else if (typeof errors[errField] === 'object' && Object.keys(errors[errField]).length > 0) {
+                for (var errF in errors[errField]) {
+                  errorMessages.push('Field ' + errField + '(' + errF + ') - ' + errors[errField][errF] + '\n');
+                }
+              } else if (Array.isArray(errors[errField]) && errors[errField].length > 0) {
+                for(var key in errors[errField]) {
+                  errorMessages.push(errors[errField][key] + '\n');
+                }
+              }
+            }
+          }
+          if (errorMessages.length > 1) {
+            errorMessage = errorMessages.join('');
+          }
+        }
+        this.fire('toast', {text: errorMessage, showCloseBtn: true});
+      }
     }
 
   };
 
-  pmpBehaviors.DataElementBehavior = [
+  dashBehaviors.DataElementBehavior = [
     etoolsAppConfig.globals,
-    pmpBehaviors.DataElementBehaviorImpl
+    dashBehaviors.DataElementBehaviorImpl
   ];
 
 </script>

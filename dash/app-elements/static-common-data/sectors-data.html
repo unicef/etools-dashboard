@@ -1,0 +1,71 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../app-config/etools-app-config.html">
+
+<link rel="import" href="../../../bower_components/etools-ajax/etools-ajax.html">
+
+<link rel="import" href="redux-bahaviors/common-static-data-redux-bahavior.html">
+
+<dom-module id="sectors-data">
+
+  <template>
+    <etools-ajax id="ajax"
+                 endpoint="[[endpoint]]"
+                 caching-storage="dexie"
+                 on-success="_handleResponse"></etools-ajax>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+
+        is: 'sectors-data',
+        behaviors: [
+          dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
+          etoolsAppConfig.globals
+        ],
+        properties: {
+
+          endpoint: {
+            type: Object
+          }
+
+        },
+        actions: {
+          setSectors: function(sectorsData) {
+            return {
+              type: 'SET_SECTORS',
+              sectors: sectorsData
+            };
+          }
+        },
+
+        ready: function() {
+          this.set('endpoint', this.getEndpoint('sectors'));
+        },
+
+        _handleResponse: function(response) {
+          if (response.detail && response.detail.length > 0) {
+            // set sectors values
+            this.dispatch('setSectors', this._prepareSectorsData(response.detail));
+          }
+        },
+
+        /**
+         * Prepare values for dropdowns
+         */
+        _prepareSectorsData: function(data) {
+          return data.map(function(d) {
+            return {
+              value: parseInt(d.id, 10),
+              label: d.name
+            };
+          });
+        }
+
+      });
+    })();
+  </script>
+
+</dom-module>

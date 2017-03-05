@@ -1,0 +1,140 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+
+<dom-module id="data-table-header">
+
+  <template>
+
+    <style is="custom-style" include="iron-flex iron-flex-factors">
+
+      :host {
+        display: block;
+        border-bottom: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
+
+      }
+
+      paper-material {
+        padding: 0 24px;
+        height: 118px;
+        background-color: var(--primary-background-color, #FFFFFF);
+        @apply(--data-table-header);
+      }
+
+      #title {
+        width: 100%;
+        height: 64px;
+        line-height: 64px;
+        font-size: 20px;
+        color: var(--primary-text-color, rgba(0, 0, 0, 0.87));
+        @apply(--header-title);
+      }
+
+      #columns {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+        margin-left: 48px;
+        height: 56px;
+        @apply(--header-columns);
+        @apply(--header-height);
+      }
+
+      #columns.end {
+        @apply(--layout-end);
+      }
+
+    </style>
+
+    <paper-material elevation="0">
+      <div id="title">
+        <span>[[label]]</span>
+      </div>
+
+      <div id="columns">
+        <slot></slot>
+      </div>
+
+    </paper-material>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'data-table-header',
+
+      properties: {
+        sortOrder: {
+          type: Object,
+          observer: '_sortOrderChanged',
+        },
+
+        _lastSelectedCol: {
+          type: Object,
+        },
+
+        noTitle: {
+          type: Boolean,
+          observer: '_noTitle',
+        },
+        noCollapse: {
+          type: Boolean,
+          observer: '_noCollapse'
+        },
+      },
+
+      listeners: {
+        'sort-changed': '_handleSortChanged'
+      },
+
+      _handleSortChanged: function(e) {
+        var column = Polymer.dom(e).localTarget;
+        this._clearSelected(column);
+        this.set('sortOrder.field', e.detail.field);
+        this.set('sortOrder.direction', e.detail.field);
+      },
+
+      _sortOrderChanged: function(sortOrder) {
+        var column = this.queryEffectiveChildren('*[field="' + sortOrder.field + '"]');
+        this._clearSelected(column);
+        column.set('selected', true);
+        column.set('direction', sortOrder.direction);
+      },
+
+      _clearSelected: function(column) {
+        if (this._lastSelectedCol && this._lastSelectedCol !== column) {
+          this._lastSelectedCol.set('selected', null);
+        }
+        this._lastSelectedCol = column;
+      },
+      _noTitle: function() {
+        this.customStyle = {
+          '--data-table-header': 'height: auto',
+          '--header-title': 'display: none'
+        };
+        this.updateStyles();
+      },
+      _noCollapse: function() {
+        this.customStyle['--header-columns']='margin-left : 0; flex: 1';
+        this.updateStyles();
+      },
+      _noHeight: function() {
+        this.customStyle['--header-height'] = 'height: auto';
+        this.customStyle['--data-table-header'] = 'height: auto';
+        this.updateStyles();
+      },
+      attached: function() {
+        var _this = this;
+        //detect if any column is a group of columns with heading
+        Array.prototype.slice.call(this.children).map(function(col) {
+          if (col.attributes.getNamedItem('group-heading')) {
+               _this._noHeight();
+                _this.$.columns.classList.add('end');
+            }
+        });
+       }
+    });
+
+  </script>
+
+</dom-module>

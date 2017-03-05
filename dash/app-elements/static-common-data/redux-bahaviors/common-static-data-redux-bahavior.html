@@ -1,0 +1,66 @@
+<link rel="import" href="../../../../bower_components/polymer-redux/polymer-redux.html">
+<script>
+  var initialDropdownDashboardData = {
+    countryProgrammes: [],
+    offices: [],
+    countries: [],
+    sectors: [],
+    sections:[],
+    partnersDropdownData: [],
+    trips: [],
+    tripsSupervised: [],
+    actionPointsByMe: [],
+    actionPointsForMe: [],
+    partnerships: [],
+    tripsMonths: [],
+    unicefUsersData:[]
+  };
+
+  var commonStaticDataStore = Redux.createStore(function(state, action) {
+    if (!state) {
+      return initialDropdownDashboardData;
+    }
+
+    switch (action.type) {
+      case 'SET_CP_DATA':
+        return Object.assign({}, state, { countryProgrammes: action.countryProgrammes });
+
+      case 'SET_SECTORS':
+        return Object.assign({}, state, { sectors: action.sectors });
+
+      case 'SET_OFFICES':
+        return Object.assign({}, state, { offices: action.offices });
+
+      case 'SET_SECTIONS':
+        return Object.assign({}, state, { sections: action.sections });
+
+			case 'SET_TRIPS_DATA':
+				return Object.assign({}, state, {trips: action.trips});
+
+      case 'SET_SUPERVISED_TRIPS_DATA':
+        return Object.assign({}, state, {tripsSupervised: action.trips});
+
+      case 'SET_ACTION_POINTS_BY_ME' :
+        return Object.assign({}, state, {actionPointsByMe: action.actionPoints});
+
+      case 'SET_ACTION_POINTS_FOR_ME' :
+        return Object.assign({}, state, {actionPointsForMe: action.actionPoints});
+
+      case 'SET_PARTNERS_DROPDOWN':
+        return Object.assign({}, state, { partnersDropdownData: action.partnersDropdownData });
+
+      case 'SET_PARTNERSHIPS' :
+        return Object.assign({}, state, { partnerships: action.partnerships });
+
+      case 'SET_TRIPS_MONTHS' :
+        return Object.assign({}, state, { tripsMonths: action.months });
+
+      case 'SET_UNICEF_USERS_DATA':
+        return Object.assign({}, state, { unicefUsersData: action.unicefUsersData });
+
+    }
+  });
+
+  window.dashBehaviors = window.dashBehaviors || {};
+  dashBehaviors.EtoolsStaticCommonDataReduxBehavior = PolymerRedux(commonStaticDataStore);
+</script>

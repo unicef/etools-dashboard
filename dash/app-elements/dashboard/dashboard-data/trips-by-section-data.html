@@ -1,0 +1,73 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../../bower_components/etools-ajax/etools-ajax.html">
+<link rel="import" href="../../../app-behaviors/data-element-behavior.html">
+<link rel="import" href="../../../app-config/etools-app-config.html">
+
+<dom-module id="trips-by-section-data">
+
+  <template>
+    <etools-ajax id="ajax"
+                 endpoint="[[endpoint]]"
+                 on-success="_handleResponse"
+                 on-fail="_handleErrorResponse"></etools-ajax>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+
+        is: 'trips-by-section-data',
+        behaviors: [
+          etoolsAppConfig.globals,
+          dashBehaviors.DataElementBehavior
+        ],
+        properties: {
+          tripsData: {
+            type: Object,
+            readOnly: true,
+            notify: true
+          },
+          filter: {
+            type: Object,
+            observer: '_filterChanged'
+          }
+
+        },
+        attached: function() {
+          this.ajaxEl = this.$.ajax;
+          this.ajaxEl.set('method', 'GET');
+        },
+        _filterChanged: function(filter) {
+          if (!_.isEmpty(filter)) {
+            this.fire('global-loading', {message: 'Loading chart data...', active: true});
+            if (_.has(filter, 'office')) {
+              this.set('endpoint', this.getEndpoint('tripsBySectionOffice',
+                  {
+                    year: filter.year,
+                    month: filter.monthId,
+                    office: filter.office
+                  }
+              ));
+            }else {
+              this.set('endpoint', this.getEndpoint('tripsBySection',
+                  {
+                    year: filter.year,
+                    month: filter.monthId
+                  }
+              ));
+            }
+          }else {
+            this.ajaxEl.set('url', null);
+          }
+        },
+        _handleResponse: function(response) {
+          var data = _.get(response, 'detail', []);
+          this._setTripsData(data);
+        },
+
+      });
+    })();
+  </script>
+</dom-module>

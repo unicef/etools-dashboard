@@ -1,6 +1,7 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../app-config/etools-app-config.html">
+
 <link rel="import" href="../../../bower_components/etools-ajax/etools-ajax.html">
-<link rel="import" href="../../../scripts/lodash/lodash.html">
 
 <link rel="import" href="../../app-behaviors/data-element-behavior.html">
 
@@ -18,91 +19,85 @@
 
   <script>
 
-    var _setUserData = function(data) {
+    (function () {
+      'use strict';
 
-      var user = data;
-      _data.permissions = {};
+      Polymer({
 
-      var permissions = this.getAllPermissions();
+        is: 'user-data',
 
-      if (!_.isEmpty(data)) {
-        permissions.defaultPermissions.forEach(function(perm) {
-          _data.permissions[perm] = true;
-        });
-        // if partner: (!staff)
-        if (!user.is_staff) {
-          permissions.partnerOnlyPermissions.forEach(function(perm) {
-            _data.permissions[perm] = true;
-          });
-        } else {
-          // user is not partner but staff:
-          permissions.managementPermissions.forEach(function(perm) {
-            _data.permissions[perm] = true;
-          });
+        behaviors: [dashBehaviors.DataElementBehavior],
 
-          if (user.profile.partner_staff_member) {
-            // staff that has faked partnership by setting partner_staff_member on their profile
-            permissions.partnerPermissions.forEach(function(perm) {
-              _data.permissions[perm] = true;
+        properties: {
+
+          endpointName: {
+            type: String,
+            value: 'user'
+          },
+
+          user: {
+            type: Object,
+            readOnly: true,
+            notify: true
+          },
+
+          permissions: {
+            type: Object,
+            readOnly: true,
+            notify: true,
+          }
+
+        },
+
+        _handleResponse: function(res) {
+          // TODO: check response to make sure it contains a valid user
+          this._setUserData(res.detail);
+        },
+
+        _handleError: function(rsp, err) {
+          this._setUser(null);
+          this._setPermissions(null);
+        },
+
+        _setUserData: function(data) {
+          var _user = data;
+          var _permissions = {};
+
+          var permissionsList = this.getAllPermissions();
+
+          if (!_.isEmpty(data)) {
+            permissionsList.defaultPermissions.forEach(function(perm) {
+              _permissions[perm] = true;
+            });
+            if (!_user.is_staff) {
+              permissionsList.partnerOnlyPermissions.forEach(function(perm) {
+                _permissions[perm] = true;
+              });
+            } else {
+              // user is not partner but staff:
+              permissionsList.managementPermissions.forEach(function(perm) {
+                _permissions[perm] = true;
+              });
+
+              if (_user.profile.partner_staff_member) {
+                // staff that has faked partnership by setting partner_staff_member on their profile
+                permissionsList.partnerPermissions.forEach(function(perm) {
+                  _permissions[perm] = true;
+                });
+              }
+            }
+          } else {
+            //for testing
+            permissionsList.superPermissions.forEach(function(perm) {
+              _permissions[perm] = true;
             });
           }
+          this._setUser(_user);
+          this._setPermissions(_permissions);
         }
-      } else {
-        //for testing
-        permissions.superPermissions.forEach(function(perm) {
-          _data.permissions[perm] = true;
-        });
-      }
+      });
 
-      _setData.bind(this)(data);
-    };
-
-    Polymer({
-
-      is: 'user-data',
-
-      behaviors: [pmpBehaviors.DataElementBehavior],
-
-      properties: {
-
-        endpointName: {
-          type: String,
-          value: 'user'
-        },
-
-        user: {
-          type: Object,
-          readOnly: true,
-          notify: true
-        },
-
-        permissions: {
-          type: Object,
-          readOnly: true,
-          notify: true,
-        }
-
-      },
-
-      load: function(data) {
-        if (data.user) {
-          this._setUser(data.user);
-          this._setPermissions(data.permissions);
-        }
-      },
-
-      _handleResponse: function(res) {
-        // TODO: check response to make sure it contains a valid user
-        _setUserData.bind(this)(res.detail);
-      },
-
-      _handleError: function(rsp, err) {
-        console.log(rsp);
-        console.log(err);
-        _setUserData.bind(this)(null);
-      },
-
-    });
+    })();
 
   </script>
 

@@ -1,0 +1,98 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<dom-module id="repeatable-data-sets-styles">
+  <template>
+    <style>
+      .item-container {
+        background: #fff;
+        padding: 15px;
+      }
+
+      .item-container + .item-container {
+        margin-top: 0;
+      }
+
+      .item-actions-container .actions {
+        @apply(--layout-center-justified);
+        @apply(--layout-wrap);
+      }
+
+      .item-container .item-content {
+        margin-left: 10px;
+        padding-left: 25px;
+        border-left: 1px solid var(--darker-divider-color);
+      }
+
+      .action {
+        width: 36px;
+        height: 36px;
+      }
+
+      .action.delete {
+        color: var(--icon-delete-color);
+      }
+      .action.delete-activity {
+        color: var(--dark-disabled-icon-color);
+      }
+
+      #bottom-actions {
+        @apply(--layout-end-justified);
+        overflow: visible;
+      }
+
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="repeatable-data-sets-styles-v2">
+  <template>
+    <style>
+      .item-container {
+        padding: 8px 15px;
+      }
+
+      .item-actions-container .action.delete[disabled] {
+        visibility: hidden;
+      }
+
+      .item-actions-container {
+        position: relative;
+        padding-right: 10px;
+        border-right: 2px solid #00aeef; /* TODO: replace with app-theme var */;
+        margin-top: 25px;
+      }
+
+      .item-actions-container:before {
+        @apply(--layout-vertical);
+        @apply(--layout-center-justified);
+        position: absolute;
+        top: -32px;
+        right: -12px;
+        background-color: #00aeef; /* TODO: replace with app-theme var */;
+        color: #fff;
+        content: attr(data-item-nr);
+        text-align: center;
+        font-size: 12px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        z-index: 1;
+      }
+
+      .item-actions-container.locked {
+        border-right-color: var(--darker-divider-color);
+      }
+
+      .item-actions-container.locked:before {
+        background-color: var(--darker-divider-color);
+      }
+
+      .item-container .item-content {
+        margin-left: 0;
+        border-left: none;
+        padding-bottom: 25px;
+      }
+    </style>
+  </template>
+</dom-module>

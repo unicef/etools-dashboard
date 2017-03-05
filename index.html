@@ -82,6 +82,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         } else {
           onload();
         }
+        // adding redux
+        var reduxScript = document.createElement('script');
+        reduxScript.async = true;
+        reduxScript.src = baseUrl + 'node_modules/redux/dist/redux.min.js';
+        document.head.appendChild(reduxScript);
       })();
 
       // add base tag with href set to baseUrl

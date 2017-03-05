@@ -1,0 +1,172 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../app-elements/page-header/page-header.html">
+<link rel="import" href="../app-elements/page-footer/page-footer.html">
+
+<link rel="import" href="../app-elements/dashboard/dashboard-partnerships.html">
+<link rel="import" href="../app-elements/dashboard/dashboard-personalized.html">
+<link rel="import" href="../app-elements/dashboard/dashboard-hact.html">
+<link rel="import" href="../app-elements/dashboard/dashboard-trips.html">
+<link rel="import" href="../../styles/page-layout-styles.html">
+<link rel="import" href="../../styles/shared-styles.html">
+<link rel="import" href="../../styles/buttons-styles.html">
+<link rel="import" href="../app-config/etools-app-config.html">
+
+
+<dom-module id="page-dashboard">
+
+  <template>
+
+    <style include="page-layout-styles shared-styles buttons-styles">
+      :host {
+        display: block;
+      }
+
+
+    </style>
+
+    <app-route
+        route="{{route}}"
+        pattern="dashboard/:dashTab"
+        active="{{tabsActive}}"
+        data="{{routeData}}"></app-route>
+    <app-route
+        route="{{route}}"
+        pattern="dashboard/hact"
+        active="{{hactActive}}"
+        query-params="{{queryParams}}"></app-route>
+
+    <app-header-layout>
+      <div class="page-top-content with-tabs">
+        <div class="top-content">
+          <div class="top-content-row title-row">
+            <h1 main-title>
+              Dashboard
+            </h1>
+            <div class="top-content-actions-wrapper">
+              <div class="top-content-action" hidden$="[[!hactActive]]">
+                <a target="_blank" href="[[csvUrl]]">
+                  <paper-button>
+                    <iron-icon icon="file-download"></iron-icon>
+                    Export
+                  </paper-button>
+                </a>
+              </div>
+              <div class="top-content-action" hidden$="[[!_isActive(partnershipPage,'trips')]]">
+                <paper-button class="primary-btn with-prefix" on-tap="_goToAddTrip" >
+                  <iron-icon icon="add"></iron-icon>
+                  Add New Trip
+                </paper-button>
+              </div>
+              <!--// TODO: implement print-->
+              <!--<div class="top-content-action">-->
+                <!--<paper-button>-->
+                  <!--<iron-icon icon="print"></iron-icon>-->
+                  <!--Print-->
+                <!--</paper-button>-->
+              <!--</div>-->
+            </div>
+          </div>
+          <div class="top-content-row">
+            <paper-tabs
+                selected="{{routeData.dashTab}}"
+                attr-for-selected="name"
+                fallback-selection="personalized" noink bottom-item>
+
+              <paper-tab name="personalized" link>
+                <span class="tab-content">Personalized</span>
+              </paper-tab>
+
+              <paper-tab name="hact" link>
+                <span class="tab-content">HACT</span>
+              </paper-tab>
+
+              <paper-tab name="trips" link>
+                <span class="tab-content">Trips</span>
+              </paper-tab>
+
+              <paper-tab name="partnerships" link>
+                <span class="tab-content">Partnerships</span>
+              </paper-tab>
+
+            </paper-tabs>
+          </div>
+        </div>
+      </div>
+
+      <iron-pages id="partnershipPages"
+                  selected="{{partnershipPage}}"
+                  attr-for-selected="name"
+                  fallback-selection="personalized"
+                  role="main">
+        <div class="page" name="hact">
+          <dashboard-hact active="[[hactActive]]" url-params="[[queryParams]]" route="{{route}}"
+                          csv-download-url="{{csvUrl}}"></dashboard-hact>
+        </div>
+        <div class="page" name="personalized">
+          <dashboard-personalized user="[[user]]" active="[[_isActive(partnershipPage,'personalized')]]"
+                                  route="{{route}}"></dashboard-personalized>
+        </div>
+
+        <div class="page" name="trips">
+          <dashboard-trips active="[[c]]"></dashboard-trips>
+        </div>
+        <div class="page" name="partnerships">
+          <dashboard-partnerships active="[[_isActive(partnershipPage,'partnerships')]]"></dashboard-partnerships>
+        </div>
+      </iron-pages>
+
+    </app-header-layout>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'page-dashboard',
+      properties: {
+        partnershipPage: {
+          type: String,
+          notify: true
+        },
+        routeData: {
+          type: Object,
+          notify: true
+        },
+      },
+      behaviors: [
+        etoolsAppConfig.globals
+      ],
+      observers: [
+        '_pageChanged(routeData.dashTab)',
+        '_updateUrlTab(routeData.dashTab)',
+      ],
+      _pageChanged: function(dashTab) {
+        this.set('partnershipPage', dashTab);
+      },
+      _updateUrlTab: function(tab) {
+        if (!tab) {
+          return;
+        }
+        this.debounce('debounce-url-tab-update', function() {
+          this.fire('update-main-path', {path: this.route.path}, {bubbles: false});
+        }.bind(this), 50);
+      },
+      _isActive: function(page, tab) {
+        return _.isEqual(page, tab);
+      },
+      _goToAddTrip: function() {
+        console.log('basesite', this.baseSite)
+        window.location.href = this.baseSite +'/t2f/edit-travel/-1';
+      }
+
+    });
+
+  </script>
+
+</dom-module>

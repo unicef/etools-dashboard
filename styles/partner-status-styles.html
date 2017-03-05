@@ -1,0 +1,83 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<dom-module id="partner-status-styles">
+  <template>
+    <style>
+      .synced, .blocked, .marked-for-deletion, .not-synced {
+        @apply(--layout-vertical);
+        @apply(--layout-center-justified);
+        width: 24px;
+        height: 24px;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+      }
+
+      .synced {
+        background-color: #00A651; /* TODO: replace with app-theme var */
+      }
+
+      .blocked {
+        background-color: #FFA149; /* TODO: replace with app-theme var */
+      }
+
+      .not-synced {
+        background-color: #3A94FF; /* TODO: replace with app-theme var */
+      }
+
+      .synced iron-icon, .blocked iron-icon, .not-synced iron-icon {
+        --iron-icon-height: 16px;
+        --iron-icon-width: 16px;
+        color: #ffffff;
+        @apply(--layout-self-center);
+      }
+
+      .marked-for-deletion iron-icon {
+        position: relative;
+        color: #ED4A26; /* TODO: replace with app-theme var */
+      }
+      .marked-for-deletion iron-icon:after {
+        content: "\00d7";
+        color: #ffffff;
+        position: absolute;
+        z-index: 1;
+        bottom: 6px;
+        width: 14px;
+        height: 14px;
+        left: 8.5px;
+        font-weight: bold;
+      }
+
+      .sm-status-wrapper {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+      }
+
+      .sm-status-wrapper {
+        @apply(--layout-vertical);
+        @apply(--layout-center-justified);
+      }
+
+      .sm-status-wrapper .marked-for-deletion iron-icon:after {
+        bottom: 8px;
+      }
+
+      .sm-status-wrapper .synced iron-icon,
+      .sm-status-wrapper .blocked iron-icon,
+      .sm-status-wrapper .not-synced iron-icon {
+        --iron-icon-height: 14px;
+        --iron-icon-width: 14px;
+      }
+
+      .sm-status-wrapper .synced,
+      .sm-status-wrapper .blocked,
+      .sm-status-wrapper .not-synced {
+        width: 20px;
+        height: 20px;
+      }
+
+    </style>
+  </template>
+</dom-module>
