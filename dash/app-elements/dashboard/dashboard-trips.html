@@ -35,6 +35,9 @@
         line-height: 48px;
         font-weight: 500;
       }
+     .wrap-controls paper-dropdown-menu.sm-dropdown {
+        min-width: 88px;
+      }
     </style>
     <trips-by-section-data trips-data="{{tripsData}}" filter="[[tripsFilter]]"></trips-by-section-data>
     <action-pts-by-section-data action-points-data="{{actionPointsData}}" filter="[[actionPtsFilter]]"></action-pts-by-section-data>
@@ -49,7 +52,26 @@
         <div class="wrap-controls">
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-            <paper-dropdown-menu label="Month" placeholder="Select from list" noink>
+            <paper-dropdown-menu label="Year"
+                                 id="tripsYear"
+                                 class="sm-dropdown"
+                                 placeholder="Select from list"
+                                 error-message="Must select a year"
+                                 noink>
+              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{year}}">
+                <template is="dom-repeat" items="[[years]]" as="year">
+                  <paper-item id="[[year]]">[[year]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+          </div>
+          <div class="dropdown-with-clear-btn">
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <paper-dropdown-menu label="Month"
+                                 id="tripsMonth"
+                                 error-message="Must select a month"
+                                 class="sm-dropdown"
+                                 placeholder="Select from list" noink>
               <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{month}}">
                 <template is="dom-repeat" items="[[months]]" as="month">
                   <paper-item id="[[month.monthId]]">[[month.name]]</paper-item>
@@ -59,7 +81,9 @@
           </div>
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-            <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
+            <paper-dropdown-menu label="Office"
+                                 id="tripsOffice"
+                                 placeholder="Select from list" noink>
               <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{tripsOffice}}">
                 <template is="dom-repeat" items="[[offices]]" as="office">
                   <paper-item id="[[office.id]]">[[office.name]]</paper-item>
@@ -181,6 +205,14 @@
           type: Array,
           statePath: 'tripsMonths'
         },
+        years : {
+          type: Array,
+          statePath: 'tripsYears'
+        },
+        year: {
+          type: String,
+          observer: '_setYear'
+        },
         month: {
           type: String,
           observer: '_setMonth'
@@ -297,15 +329,64 @@
           }
         }
       },
-      _setMonth: function(monthNum) {
-        if (monthNum) {
-          var monthObj = _.find(this.months, {monthId: monthNum});
-          this.set('tripsFilter', monthObj);
-        }else{
-          this._setNoData('tripsChart');
-          this.set('tripsFilter', {});
-          this.set('tripsOffice','');
-          this.set('tripsData',{});
+      _setFilter: function() {
+        if (!this.year && !this.month) {
+          return;
+        }
+        if (!this.year) {
+          this._setInvalid('tripsYear');
+          return;
+        }
+        if (this.month) {
+          var monthObj = _.find(this.months, {monthId: this.month});
+          this.set('tripsFilter', _.assign({},monthObj, {year: this.year, office: this.tripsOffice}));
+        }
+      },
+      _setYear: function(year) {
+        if (year) {
+          this.$.tripsYear.invalid = false;
+          this._setFilter();
+        }else {
+          this._setInvalid('tripsYear');
+        }
+      },
+      _setMonth: function(month) {
+        if (month) {
+          this.$.tripsMonth.invalid = false;
+          this._setFilter();
+        } else {
+          this._setInvalid('tripsMonth');
+        }
+      },
+      _setInvalid: function(field) {
+        var _this = this;
+        this.set('tripsFilter', {});
+        this.set('tripsData', {});
+        this._setNoData('tripsChart');
+        var fields = [
+          {
+            name: 'year',
+            id: 'tripsYear'
+          },
+          {
+            name: 'month',
+            id: 'tripsMonth'
+          },
+          {
+            name: 'tripsOffice',
+            id: 'tripsOffice'
+          }
+        ];
+         _.remove(fields,{id: field});
+         var invalid = fields.reduce(function(isValid, _field){
+           return _this[_field.name] || isValid;
+         },false);
+        if (invalid && field !=='tripsOffice') {
+          this.$$('#'+ field).invalid = true;
+        } else {
+          fields.forEach(function(f) {
+            _this.$$('#' + f.id).invalid = false;
+          });
         }
       },
       _formatChartData: function(formatted, chartName) {
@@ -338,12 +419,20 @@
       },
       _tripsOfficeChanged: function(office) {
         if (office) {
-          this.set('tripsFilter', _.assign({}, this.tripsFilter, {office:office}));
-        }else{
-          var monthObj = _.find(this.months,{monthId: this.month});
-          this.set('tripsFilter', monthObj);
+          if (this._filterValid()){
+            this.set('tripsFilter', _.assign({}, this.tripsFilter, {office:office}));
+          }
+        }else {
+          this._setInvalid('tripsOffice');
+          this._setFilter();
         }
       },
+      _filterValid: function() {
+        this.$.tripsYear.invalid = this.year ? false: true;
+        this.$.tripsMonth.invalid = this.month ? false: true;
+        return this.year && this.month;
+      },
+
       _apOfficeChanged: function(officeName) {
         var filter = {};
         if (officeName) {
