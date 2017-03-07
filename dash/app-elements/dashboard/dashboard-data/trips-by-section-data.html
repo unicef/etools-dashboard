@@ -42,7 +42,7 @@
         _filterChanged: function(filter) {
           if (!_.isEmpty(filter)) {
             this.fire('global-loading', {message: 'Loading chart data...', active: true});
-            if (_.has(filter, 'office')) {
+            if (_.get(filter, 'office')) {
               this.set('endpoint', this.getEndpoint('tripsBySectionOffice',
                   {
                     year: filter.year,
