@@ -5,7 +5,7 @@
     offices: [],
     countries: [],
     sectors: [],
-    sections:[],
+    sections: [],
     partnersDropdownData: [],
     trips: [],
     tripsSupervised: [],
@@ -13,9 +13,47 @@
     actionPointsForMe: [],
     partnerships: [],
     tripsMonths: [],
-    tripsYears:[],
-    unicefUsersData:[]
+    tripsYears: [],
+    unicefUsersData: []
   };
+
+  function isa(type, action) {
+    return function(obj) {
+      if (type === obj.type) {
+        return action(obj);
+      }
+    }
+  }
+  function cat() {
+    var head = _.first(arguments);
+    if (existy(head)){
+      return head.concat.apply(head, _.rest(arguments));
+    }else {
+      return [];
+    }
+  }
+  function construct(head, tail) {
+    return cat([head], _.toArray(tail));
+  }
+  function existy(x) {
+    return x != null;
+  }
+
+  function _dispatch() {
+    var funs = _.toArray(arguments);
+    var size = funs.length;
+    return function(target) {
+      var ret = undefined;
+      var args = _.rest(arguments);
+      for (var funIndex = 0; funIndex < size; funIndex++) {
+        var fun = funs[funIndex];
+        ret = fun.apply(fun, construct(target, args));
+        if (existy(ret)) return ret;
+      }
+      return ret;
+    };
+  }
+
 
   var commonStaticDataStore = Redux.createStore(function(state, action) {
     if (!state) {
@@ -24,19 +62,19 @@
 
     switch (action.type) {
       case 'SET_CP_DATA':
-        return Object.assign({}, state, { countryProgrammes: action.countryProgrammes });
+        return Object.assign({}, state, {countryProgrammes: action.countryProgrammes});
 
       case 'SET_SECTORS':
-        return Object.assign({}, state, { sectors: action.sectors });
+        return Object.assign({}, state, {sectors: action.sectors});
 
       case 'SET_OFFICES':
-        return Object.assign({}, state, { offices: action.offices });
+        return Object.assign({}, state, {offices: action.offices});
 
       case 'SET_SECTIONS':
-        return Object.assign({}, state, { sections: action.sections });
+        return Object.assign({}, state, {sections: action.sections});
 
-			case 'SET_TRIPS_DATA':
-				return Object.assign({}, state, {trips: action.trips});
+      case 'SET_TRIPS_DATA':
+        return Object.assign({}, state, {trips: action.trips});
 
       case 'SET_SUPERVISED_TRIPS_DATA':
         return Object.assign({}, state, {tripsSupervised: action.trips});
@@ -48,19 +86,19 @@
         return Object.assign({}, state, {actionPointsForMe: action.actionPoints});
 
       case 'SET_PARTNERS_DROPDOWN':
-        return Object.assign({}, state, { partnersDropdownData: action.partnersDropdownData });
+        return Object.assign({}, state, {partnersDropdownData: action.partnersDropdownData});
 
       case 'SET_PARTNERSHIPS' :
-        return Object.assign({}, state, { partnerships: action.partnerships });
+        return Object.assign({}, state, {partnerships: action.partnerships});
 
       case 'SET_TRIPS_MONTHS' :
-        return Object.assign({}, state, { tripsMonths: action.months });
+        return Object.assign({}, state, {tripsMonths: action.months});
 
       case 'SET_TRIPS_YEARS' :
-        return Object.assign({}, state, { tripsYears: action.years });
+        return Object.assign({}, state, {tripsYears: action.years});
 
       case 'SET_UNICEF_USERS_DATA':
-        return Object.assign({}, state, { unicefUsersData: action.unicefUsersData });
+        return Object.assign({}, state, {unicefUsersData: action.unicefUsersData});
 
     }
   });
