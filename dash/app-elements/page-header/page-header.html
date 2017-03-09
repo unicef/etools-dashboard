@@ -132,6 +132,7 @@
           var arrayObj = countries.map(function(arrayItem) {
             return {id: arrayItem.id, name: arrayItem.name, imgClass: this._getFlagIconClass(arrayItem.business_area_code)};
           }.bind(this));
+          arrayObj = _.sortBy(arrayObj, function(c){ return c.name; });
           this.set('countries', arrayObj);
         },
         ready: function() {

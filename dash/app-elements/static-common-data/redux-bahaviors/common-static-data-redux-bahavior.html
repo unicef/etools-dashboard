@@ -13,6 +13,7 @@
     actionPointsForMe: [],
     partnerships: [],
     tripsMonths: [],
+    tripsYears:[],
     unicefUsersData:[]
   };
 
@@ -54,6 +55,9 @@
 
       case 'SET_TRIPS_MONTHS' :
         return Object.assign({}, state, { tripsMonths: action.months });
+
+      case 'SET_TRIPS_YEARS' :
+        return Object.assign({}, state, { tripsYears: action.years });
 
       case 'SET_UNICEF_USERS_DATA':
         return Object.assign({}, state, { unicefUsersData: action.unicefUsersData });

@@ -24,6 +24,12 @@
               type: 'SET_TRIPS_MONTHS',
               months: months
             }
+          },
+          setYearsData: function(years) {
+            return {
+              type: 'SET_TRIPS_YEARS',
+              years: years
+            }
           }
         },
         attached: function() {
@@ -31,10 +37,11 @@
             return {
                     name: month,
                     monthId: ("0" + (i + 1)).slice(-2),
-                    year: moment().year()
                   };
           });
+          var years = _.range(2015, moment().year()+1);
           this.dispatch('setMonthsData', months);
+          this.dispatch('setYearsData', years);
         }
       });
     })();
