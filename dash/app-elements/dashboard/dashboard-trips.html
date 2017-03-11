@@ -28,12 +28,20 @@
       }
       .viz {
         width: 100%;
+        @apply(--tripsChart);
+      }
+      .viz-actions {
+        width: 100%;
+        @apply(--actionPointsChart);
       }
       .chart-title {
         font-size: 16px;
         margin: 0;
         line-height: 48px;
         font-weight: 500;
+      }
+      .wrap-controls paper-dropdown-menu.sm-dropdown {
+        min-width: 88px;
       }
     </style>
     <trips-by-section-data trips-data="{{tripsData}}" filter="[[tripsFilter]]"></trips-by-section-data>
@@ -49,7 +57,26 @@
         <div class="wrap-controls">
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-            <paper-dropdown-menu label="Month" placeholder="Select from list" noink>
+            <paper-dropdown-menu label="Year"
+                                 id="tripsYear"
+                                 class="sm-dropdown"
+                                 placeholder="Select from list"
+                                 error-message="Must select a year"
+                                 noink>
+              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{year}}">
+                <template is="dom-repeat" items="[[years]]" as="year">
+                  <paper-item id="[[year]]">[[year]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+          </div>
+          <div class="dropdown-with-clear-btn">
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <paper-dropdown-menu label="Month"
+                                 id="tripsMonth"
+                                 error-message="Must select a month"
+                                 class="sm-dropdown"
+                                 placeholder="Select from list" noink>
               <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{month}}">
                 <template is="dom-repeat" items="[[months]]" as="month">
                   <paper-item id="[[month.monthId]]">[[month.name]]</paper-item>
@@ -59,7 +86,9 @@
           </div>
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-            <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
+            <paper-dropdown-menu label="Office"
+                                 id="tripsOffice"
+                                 placeholder="Select from list" noink>
               <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{tripsOffice}}">
                 <template is="dom-repeat" items="[[offices]]" as="office">
                   <paper-item id="[[office.id]]">[[office.name]]</paper-item>
@@ -92,15 +121,15 @@
     </paper-material>
 
     <paper-material class="list-panel">
-        <h2 class="chart-title">Trips by section</h2>
-        <google-chart
-            id="tripsChart"
-            class="viz"
-            type="bar">
-        </google-chart>
+      <h2 class="chart-title">Trips by section</h2>
+      <google-chart
+          id="tripsChart"
+          class="viz"
+          type="bar">
+      </google-chart>
     </paper-material>
 
-<!--ACTION POINTS-->
+    <!--ACTION POINTS-->
 
     <paper-material class="list-panel listControls" elevation="1">
       <div class="controls-wrapper">
@@ -127,7 +156,7 @@
       <h2 class="chart-title">Action points by section</h2>
       <google-chart
           id="actionPointsChart"
-          class="viz"
+          class="viz-actions"
           type="bar">
       </google-chart>
     </paper-material>
@@ -181,6 +210,14 @@
           type: Array,
           statePath: 'tripsMonths'
         },
+        years : {
+          type: Array,
+          statePath: 'tripsYears'
+        },
+        year: {
+          type: String,
+          observer: '_setYear'
+        },
         month: {
           type: String,
           observer: '_setMonth'
@@ -191,15 +228,19 @@
           value : {
             colors: ['#FCF39F','#BFE58A','#64BD00'],
             legend: { position: "none" },
+            animation: {
+              startup: true,
+              duration: 300,
+              easing: 'in'
+            },
             chartArea: {
-              width: '75%',
-              height:'75%',
               top: '16',
+              bottom: '32',
+              width: '75%',
             },
             isStacked: true,
             hAxis: {
               minValue: 1,
-              ticks: _.range(16),
               gridlineColor: '#E8E8E8',
             },
             vAxis: {
@@ -221,11 +262,17 @@
           value : {
             colors: ['#8AD0FF','#EEEEEE'],
             chartArea: {
+              top: '16',
+              bottom: '32',
               width: '75%',
-              height:'75%',
-              top: '10%',
+              height: '75%'
             },
             isStacked: 'percent',
+            animation: {
+              startup: true,
+              duration: 300,
+              easing: 'in'
+            },
             hAxis: {
               minValue: 0,
               gridlineColor: '#E8E8E8',
@@ -291,59 +338,121 @@
       },
       _init: function(active) {
         if(active) {
+          console.log('active');
           this._setNoData('tripsChart');
           if(!this.actionPtsFilter) {
+            console.log('at initi')
             this.set('actionPtsFilter', {});
           }
         }
       },
-      _setMonth: function(monthNum) {
-        if (monthNum) {
-          var monthObj = _.find(this.months, {monthId: monthNum});
-          this.set('tripsFilter', monthObj);
-        }else{
+      _setFilter: function() {
+        if (!this.year && !this.month) {
+          return;
+        }
+        if (!this.year) {
+          this._setInvalid('tripsYear');
+          return;
+        }
+        if (this.month) {
+          var monthObj = _.find(this.months, {monthId: this.month});
+          this.set('tripsFilter', _.assign({},monthObj, {year: this.year, office: this.tripsOffice}));
+        }
+      },
+      _setYear: function(year) {
+        if (year) {
+          this.$.tripsYear.invalid = false;
+          this._setFilter();
+        }else {
+          this._setInvalid('tripsYear');
+        }
+      },
+      _setMonth: function(month) {
+        if (month) {
+          this.$.tripsMonth.invalid = false;
+          this._setFilter();
+        } else {
+          this._setInvalid('tripsMonth');
           this._setNoData('tripsChart');
-          this.set('tripsFilter', {});
-          this.set('tripsOffice','');
-          this.set('tripsData',{});
+        }
+      },
+      _setInvalid: function(field) {
+        var _this = this;
+        this.set('tripsFilter', {});
+        this.set('tripsData', {});
+        var fields = [
+          {
+            name: 'year',
+            id: 'tripsYear'
+          },
+          {
+            name: 'month',
+            id: 'tripsMonth'
+          },
+          {
+            name: 'tripsOffice',
+            id: 'tripsOffice'
+          }
+        ];
+        _.remove(fields,{id: field});
+        var invalid = fields.reduce(function(isValid, _field){
+          return _this[_field.name] || isValid;
+        },false);
+        if (invalid && field !=='tripsOffice') {
+          this.$$('#'+ field).invalid = true;
+        } else {
+          fields.forEach(function(f) {
+            _this.$$('#' + f.id).invalid = false;
+          });
         }
       },
       _formatChartData: function(formatted, chartName) {
         var _this = this;
         this.$.google.dataTable(formatted).then(function(dt) {
-            _this.$$('#' + chartName).options = _this[chartName+'Options'];
-            _this.$$('#' + chartName).data = dt;
-            _this.fire('global-loading',{active: false});
+          //magic ratio number 32.71
+          _this.customStyle['--'+chartName] = 'height:' + Math.round(dt.getNumberOfRows()*32.71) + 'px; min-height: 300px';
+          _this.$$('#' + chartName).options = _this[chartName+'Options'];
+          _this.$$('#' + chartName).data = dt;
+          _this.fire('global-loading',{active: false});
+          _this.updateStyles();
         });
       },
       _tripsDataChanged : function(data) {
         if (!_.isEmpty(data)) {
           var travels = _.get(data, 'travels_by_section', []);
-            if (!travels.length) {
-              this.fire('global-loading', {active: false});
-              this._setNoData('tripsChart');
-            }else {
-              var formatted = [
-                ['Trips', 'Planned', 'Approved', 'Completed']
-              ];
-              travels.map(function(section) {
-                formatted.push([section.section_name,
-                  section.planned_travels,
-                  section.approved_travels,
-                  section.completed_travels])
-              });
-              this._formatChartData(formatted,'tripsChart');
-            }
+          if (!travels.length) {
+            this.fire('global-loading', {active: false});
+            this._setNoData('tripsChart');
+          }else {
+            var formatted = [
+              ['Trips', 'Planned', 'Approved', 'Completed']
+            ];
+            travels.map(function(section) {
+              formatted.push([section.section_name,
+                section.planned_travels,
+                section.approved_travels,
+                section.completed_travels])
+            });
+            this._formatChartData(formatted,'tripsChart');
+          }
         }
       },
       _tripsOfficeChanged: function(office) {
         if (office) {
-          this.set('tripsFilter', _.assign({}, this.tripsFilter, {office:office}));
-        }else{
-          var monthObj = _.find(this.months,{monthId: this.month});
-          this.set('tripsFilter', monthObj);
+          if (this._filterValid()){
+            this.set('tripsFilter', _.assign({}, this.tripsFilter, {office:office}));
+          }
+        }else {
+          this._setInvalid('tripsOffice');
+          this._setFilter();
         }
       },
+      _filterValid: function() {
+        this.$.tripsYear.invalid = this.year ? false: true;
+        this.$.tripsMonth.invalid = this.month ? false: true;
+        return this.year && this.month;
+      },
+
       _apOfficeChanged: function(officeName) {
         var filter = {};
         if (officeName) {
@@ -365,7 +474,7 @@
               formatted.push([ap.section_name,
                 ap.completed_action_points,
                 ap.total_action_points
-                ]);
+              ]);
             });
             this._formatChartData(formatted,'actionPointsChart');
           }
@@ -374,9 +483,12 @@
       _setNoData: function(chartName) {
         var _this = this;
         this.$.google.dataTable(this.noDataMessage).then(function(dt) {
+          _this.customStyle['--'+chartName]='height: 300px';
           _this.$$('#' + chartName).options = _this.noDataOptions;
           _this.$$('#' + chartName).data = dt;
-        })
+          _this.updateStyles();
+          _this.$$('#' + chartName).redraw();
+        });
       }
     })
   </script>

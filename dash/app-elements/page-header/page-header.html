@@ -132,6 +132,7 @@
           var arrayObj = countries.map(function(arrayItem) {
             return {id: arrayItem.id, name: arrayItem.name, imgClass: this._getFlagIconClass(arrayItem.business_area_code)};
           }.bind(this));
+          arrayObj = _.sortBy(arrayObj, function(c){ return c.name; });
           this.set('countries', arrayObj);
         },
         ready: function() {
@@ -146,8 +147,8 @@
 
           Polymer.dom(document.querySelector('body')).appendChild(this.userProfileDialog);
 
-          var location = window.location.hostname;
-          var production = 'etools.unicef.com';
+          var location = window.location.href;
+          var production = 'etools.unicef.org';
 
           // If not production environment, changing header color to red
           if (location.indexOf(production) === -1) {
