@@ -147,8 +147,8 @@
 
           Polymer.dom(document.querySelector('body')).appendChild(this.userProfileDialog);
 
-          var location = window.location.hostname;
-          var production = 'etools.unicef.com';
+          var location = window.location.href;
+          var production = 'etools.unicef.org';
 
           // If not production environment, changing header color to red
           if (location.indexOf(production) === -1) {
