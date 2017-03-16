@@ -1,6 +1,3 @@
-/**
- * Created by marko on 3/14/17.
- */
 /*
  This was created to keep all static data being loaded in one place. Use template below to add data
  from an endpoint into the redux store.
@@ -124,6 +121,22 @@ var Actions = [
     propsArray: ['sections'],
     endpointProps: {
       name: 'sections',
+      templateProps: {}
+    },
+    prepareData: function(data) {
+      return data.map(function(d) {
+        return {
+          value: parseInt(d.id, 10),
+          label: d.name
+        };
+      });
+    }
+  },
+  {
+    actionType: 'sectors',
+    propsArray: ['sectors'],
+    endpointProps: {
+      name: 'sectors',
       templateProps: {}
     },
     prepareData: function(data) {

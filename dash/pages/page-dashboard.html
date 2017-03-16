@@ -11,6 +11,9 @@
 <link rel="import" href="../app-elements/dashboard/dashboard-personalized.html">
 <link rel="import" href="../app-elements/dashboard/dashboard-hact.html">
 <link rel="import" href="../app-elements/dashboard/dashboard-trips.html">
+<link rel="import" href="../app-elements/dashboard/dashboard-map.html">
+
+
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../styles/buttons-styles.html">
@@ -93,6 +96,10 @@
                 <span class="tab-content">Partnerships</span>
               </paper-tab>
 
+              <paper-tab name="map" link>
+                <span class="tab-content">Map</span>
+              </paper-tab>
+
             </paper-tabs>
           </div>
         </div>
@@ -111,12 +118,14 @@
           <dashboard-personalized user="[[user]]" active="[[_isActive(partnershipPage,'personalized')]]"
                                   route="{{route}}"></dashboard-personalized>
         </div>
-
         <div class="page" name="trips">
           <dashboard-trips active="[[_isActive(partnershipPage,'trips')]]"></dashboard-trips>
         </div>
         <div class="page" name="partnerships">
           <dashboard-partnerships active="[[_isActive(partnershipPage,'partnerships')]]"></dashboard-partnerships>
+        </div>
+        <div class="page" name="map">
+          <dashboard-map active="[[_isActive(partnershipPage,'map')]]"></dashboard-map>
         </div>
       </iron-pages>
 

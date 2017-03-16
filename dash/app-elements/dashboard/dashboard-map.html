@@ -1,0 +1,135 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../../../styles/shared-styles.html">
+<link rel="import" href="../../../styles/list-styles.html">
+<link rel="import" href="../../../styles/page-layout-styles.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<link rel="import" href="../../app-behaviors/dropdown-behavior.html">
+<link rel="import" href="../../app-behaviors/list-filters-behavior.html">
+<link rel="import" href="../static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
+
+<dom-module id="dashboard-map">
+  <template>
+    <style include="shared-styles list-styles page-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
+      :host {
+        --paper-toggle-button-checked-bar-color: #88D4F7; /* TODO: replace with app-theme var */
+        --paper-toggle-button-checked-button-color: #3baaee; /* TODO: replace with app-theme var */
+      }
+    </style>
+
+    <paper-material class="list-panel listControls" elevation="1">
+      <div class="wrap-controls">
+        <div class="title-row">
+          <h1 sub-title>Partnerships</h1>
+        </div>
+      </div>
+      <div class="filters-divider"></div>
+      <div class="wrap-controls">
+        <template is="dom-repeat" items="[[selectedFilters]]" as="filter">
+          <div class="dropdown-with-clear-btn">
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <paper-dropdown-menu label$="[[filter.filterName]]" noink>
+              <paper-menu class="dropdown-content"
+                          attr-for-selected="name"
+                          on-iron-select="filterValueChanged"
+                          on-iron-deselect="filterValueChanged"
+                          data-filter-path$="[[filter.path]]"
+                          on-iron-activate="_dropdownSelected"
+                          selected=[[filter.alreadySelected]]>
+                <template is="dom-repeat" items="[[filter.selectionOptions]]" as="filterOption">
+                  <paper-item name="[[filterOption]]">[[filterOption]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+            <paper-icon-button class="remove" icon="cancel"
+                               on-tap="removeFilter"
+                               data-filter-name$="[[filter.filterName]]"
+                               data-reset-path$="[[filter.path]]">
+            </paper-icon-button>
+          </div>
+        </template>
+      </div>
+      <div class="fixed-controls">
+        <div class="filters-divider"></div>
+        <paper-menu-button id="filterMenu">
+          <paper-button class="button dropdown-trigger">
+            <iron-icon icon="filter-list"></iron-icon>
+            add filter
+          </paper-button>
+          <paper-menu class="dropdown-content">
+            <template is="dom-repeat" items="[[availableListFilterOptions]]">
+              <paper-item on-tap="selectFilter">[[item.filterName]]</paper-item>
+            </template>
+          </paper-menu>
+        </paper-menu-button>
+      </div>
+
+    </paper-material>
+  </template>
+
+  <script>
+    Polymer({
+      is: "dashboard-map",
+      behaviors: [
+        dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
+        dashBehaviors.ListFiltersBehavior,
+        dashBehaviors.DropdownBehavior
+
+      ],
+      properties: {
+        countryProgrammes: {
+          type: Array,
+          statePath: 'countryProgrammes'
+        },
+        countryProgramme: {
+          type: String
+        },
+        sectors: {
+          type: Array,
+          statePath: 'sectors'
+        },
+        sector: String,
+        selectedFilters: {
+          type: Array,
+          observer: 'check'
+        }
+
+
+      },
+      ready: function() {
+        this.initListFiltersData([
+          {
+            filterName: 'Country Programme',
+            type: 'dropdown',
+            alreadySelected: null,
+            selectionOptions: _.map(this.countryProgrammes, 'name'),
+            path: 'countryProgramme'
+          },
+          {
+            filterName: 'Sectors',
+            type: 'dropdown',
+            alreadySelected: null,
+            selectionOptions: _.map(this.sectors, 'value'),
+            path: 'sector'
+          },
+
+        ])
+      },
+      check: function(stuff) {
+        console.log('stuff', stuff);
+      }
+
+
+    })
+  </script>
+</dom-module>
+
