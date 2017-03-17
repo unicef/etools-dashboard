@@ -239,10 +239,6 @@
           dashBehaviors.CommonGeneralBehavior,
           etoolsAppConfig.globals
         ],
-        listeners: {
-          'sort-changed': '_sortOrderChanged',
-        },
-
         properties: {
           filteredPartners: {
             type: Array,
@@ -282,21 +278,30 @@
             type: Number,
             value: 50
           },
+          urlParams: {
+            type: Object,
+          }
         },
+
         observers: [
           '_init(active)',
           '_updateUrl(queryString, pageNumber, pageSize,' +
           'sortOrder, requiredDataLoaded, initComplete)'
         ],
+
+        listeners: {
+          'sort-changed': '_sortOrderChanged',
+        },
+
         _init: function(active) {
           var params = this.urlParams;
           if (!active || !params) {
             return;
           }
           this.set('initComplete', false);
-          this.set('pageNumber', params.page ? parseInt(params.page) : 1);
-          this.set('pageSize', params.size ? parseInt(params.size) : 10);
           this.set('queryString', params.q ? params.q : '');
+          this.set('pageSize', params.size ? parseInt(params.size) : 10);
+          this.set('pageNumber', params.page ? parseInt(params.page) : 1);
           this.set('sortOrder', params.sort ? params.sort : 'asc');
           this.set('initComplete', true);
         },

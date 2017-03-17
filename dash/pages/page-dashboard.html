@@ -19,7 +19,6 @@
 <link rel="import" href="../../styles/buttons-styles.html">
 <link rel="import" href="../app-config/etools-app-config.html">
 
-
 <dom-module id="page-dashboard">
 
   <template>
@@ -28,8 +27,6 @@
       :host {
         display: block;
       }
-
-
     </style>
 
     <app-route
@@ -111,7 +108,7 @@
                   fallback-selection="personalized"
                   role="main">
         <div class="page" name="hact">
-          <dashboard-hact active="[[hactActive]]" url-params="[[queryParams]]" route="{{route}}"
+          <dashboard-hact active="[[hactActive]]" url-params="[[queryParams]]"
                           csv-download-url="{{csvUrl}}"></dashboard-hact>
         </div>
         <div class="page" name="personalized">
