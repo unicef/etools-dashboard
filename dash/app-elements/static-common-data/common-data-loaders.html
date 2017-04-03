@@ -105,9 +105,7 @@
       },
       _handleResponse: function(response) {
         var data = _.get(response, 'detail.data', response.detail);
-        if (data.length) {
-          this.dispatch(this.nextAction.type, this.nextAction.prepareData(data));
-        }
+        this.dispatch(this.nextAction.type, this.nextAction.prepareData(data));
         this._callNext();
       },
 

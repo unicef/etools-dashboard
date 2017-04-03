@@ -1,0 +1,111 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../app-config/etools-app-config.html">
+
+<link rel="import" href="../../../../bower_components/etools-ajax/etools-ajax.html">
+<link rel="import" href="../../../app-behaviors/data-element-behavior.html">
+<dom-module id="map-interventions-data">
+  <template>
+    <etools-ajax id="ajax"
+                 endpoint="[[endpoint]]"
+                 caching-storage="custom"
+                 dexie-db-collection="mapInterventions"
+                 on-success="_handleResponse">
+    </etools-ajax>
+  </template>
+
+  <script>
+    Polymer({
+      is: "map-interventions-data",
+      behaviors: [
+        dashBehaviors.DataElementBehavior,
+        etoolsAppConfig.globals
+      ],
+      properties: {
+        endpointName: {
+          type: String,
+          value: 'mapInterventions'
+        },
+        currentQuery: {
+          type: Object,
+          value: null
+        },
+        filteredInterventions: {
+          type: Array,
+          readOnly: true,
+          notify: true
+        },
+        data: {
+          type: Array,
+          readOnly: true,
+          observer: '_normalizeIntData'
+        },
+        intLocMap: {
+          type: Object,
+          readOnly: true,
+          notify: true
+        }
+      },
+      // collects location specific data for all interventions
+      _normalizeIntData: function(data) {
+        if (!_.isEmpty(this.intLocMap)) {
+          return;
+        }
+        var interventionsLocationsMap = {};
+        data.map(function(int) {
+          var pickedInt = {};
+          pickedInt[int.id] = _.pick(int, 'partner', 'number', 'title');
+          var sec_locs = _.get(int, 'sector_locations');
+          sec_locs = _.flatten(sec_locs.map(function(sec) {
+            return _.get(sec,'locations',[]);
+          }));
+          var pickedSec = _.get(int, 'sector_locations').map(function(sector) {
+            return _.get(sector, 'sector');
+          }).reduce(function(curr, nxt) {
+            curr[nxt.id] = nxt;
+            return curr;
+          }, {});
+          pickedInt[int.id].sectors = pickedSec;
+          sec_locs.map(function(loc) {
+            var _loc = {};
+            if (!_.isEmpty(interventionsLocationsMap[loc.id])) {
+              var newInt = _.assign({}, interventionsLocationsMap[loc.id].interventions, pickedInt);
+              _loc[loc.id] = {
+                interventions: newInt
+              };
+            } else {
+              _loc[loc.id] = {
+                interventions: pickedInt,
+              }
+            }
+            _.assign(interventionsLocationsMap, _loc);
+          });
+        });
+        this._setIntLocMap(interventionsLocationsMap)
+      },
+      ready: function() {
+        if (this.showLoading) {
+          this.fire('global-loading', {message: 'Loading map data...', active: true});
+        }
+        this._elementReady();
+      },
+      query: function() {
+        var self = this;
+        this.db.transaction('r', this.db.mapInterventions, this.db.locations, function() {
+          var queryResult = self.db.mapInterventions.toCollection();
+          return Dexie.Promise.all([queryResult.toArray()])
+              .then(function(result) {
+                var locations = _.flatten(result[0].map(function(intervention) {
+                  var sec_locs = _.flatten(intervention.sector_locations.map(function(locs) {
+                    return locs.locations;
+                  }));
+                  return sec_locs;
+                }));
+                self._setFilteredInterventions(locations)
+              }).catch(function(error) {
+                console.error('Error querying interventions map: ', error);
+              });
+        });
+      },
+    });
+  </script>
+</dom-module>

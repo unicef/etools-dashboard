@@ -4,13 +4,13 @@
  Template object:
 
  {
-   actionType: '',
-   propsArray: [''],
-   endpointProps: {
-     name: '',
-     templateProps: {}
-   },
-   prepareData: function(data) {}
+ actionType: '',
+ propsArray: [''],
+ endpointProps: {
+ name: '',
+ templateProps: {}
+ },
+ prepareData: function(data) {}
  }
 
  */
@@ -162,6 +162,17 @@ var Actions = [
           label: d.full_name
         };
       });
+    }
+  },
+  {
+    actionType: 'static-status',
+    propsArray: ['statuses'],
+    endpointProps: {
+      name: 'static',
+      templateProps: {}
+    },
+    prepareData: function(data) {
+      return _.get(data, 'intervention_status');
     }
   }
 

@@ -56,7 +56,8 @@
     "moment": "^2.17.1",
     "paper-tooltip": "^1.1.3",
     "polymer-redux": "^0.4.0",
-    "google-chart": "^1.1.1"
+    "google-chart": "^1.1.1",
+    "leaflet-map": "^1.2.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

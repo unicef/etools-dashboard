@@ -7,6 +7,14 @@
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import"
+      href="../../../bower_components/etools-searchable-multiselection-menu/etools-searchable-multiselection-menu.html">
+<link rel="import" href="dashboard-data/partners-dropdown-data.html">
+<link rel="import" href="dashboard-data/map-interventions-data.html">
+<link rel="import" href="dashboard-data/map-locations-data.html">
+<link rel="import" href="../marker-dialog/marker-dialog.html">
+<link rel="import" href="../../../bower_components/leaflet-map/leaflet-map.html">
+<link rel="import" href="../../../bower_components/leaflet-map/leaflet-marker.html">
 
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
@@ -16,7 +24,6 @@
 <link rel="import" href="../../app-behaviors/dropdown-behavior.html">
 <link rel="import" href="../../app-behaviors/list-filters-behavior.html">
 <link rel="import" href="../static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
-
 <dom-module id="dashboard-map">
   <template>
     <style include="shared-styles list-styles page-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
@@ -24,8 +31,17 @@
         --paper-toggle-button-checked-bar-color: #88D4F7; /* TODO: replace with app-theme var */
         --paper-toggle-button-checked-button-color: #3baaee; /* TODO: replace with app-theme var */
       }
-    </style>
 
+      leaflet-map {
+        height: 700px;
+      }
+    </style>
+    <partners-dropdown-data partners="{{partners}}" active="[[getPartnersDropdown]]"></partners-dropdown-data>
+    <map-interventions-data id="mapData"
+                            int-loc-map="{{intLocMap}}"
+                            filtered-interventions="{{filteredInterventions}}"
+                            show-loading></map-interventions-data>
+    <map-locations-data id="locationsData" filtered-locations="{{filteredLocations}}" show-loading></map-locations-data>
     <paper-material class="list-panel listControls" elevation="1">
       <div class="wrap-controls">
         <div class="title-row">
@@ -74,8 +90,22 @@
       </div>
 
     </paper-material>
-  </template>
+    <paper-material class="map">
+      <template is="dom-if" if="[[mapDrawnInitially]]">
+        <leaflet-map fit-to-markers zoom="5">
+          <leaflet-tilelayer
+              url="https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZXRvb2xzIiwiYSI6ImNqMGw4N3NtejAyMDIzMnBocHBsYjBsbXoifQ.VA-gzjqtTu-vr-8Ex9oEpA">
+          </leaflet-tilelayer>
+          <template is="dom-repeat" items="[[markers]]" as="marker">
+            <leaflet-marker id="[[marker.id]]" latitude="[[marker.point.latitude]]"
+                            longitude="[[marker.point.longitude]]"
+                            on-click="_openModal"></leaflet-marker>
+          </template>
+        </leaflet-map>
+      </template>
 
+    </paper-material>
+  </template>
   <script>
     Polymer({
       is: "dashboard-map",
@@ -83,8 +113,8 @@
         dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
         dashBehaviors.ListFiltersBehavior,
         dashBehaviors.DropdownBehavior
-
       ],
+      observers: ['_init(countryProgrammes,sectors,statuses,active)'],
       properties: {
         countryProgrammes: {
           type: Array,
@@ -95,17 +125,65 @@
         },
         sectors: {
           type: Array,
-          statePath: 'sectors'
+          statePath: 'sectors',
         },
         sector: String,
+        statuses: {
+          type: Array,
+          statePath: 'statuses'
+        },
+        status: String,
         selectedFilters: {
           type: Array,
-          observer: 'check'
-        }
-
-
+        },
+        dashMap: {
+          type: Object
+        },
+        filteredInterventions: {
+          type: Array,
+          observer: '_callLocations'
+        },
+        filteredLocations: {
+          type: Array,
+          observer: '_plotMarkers'
+        },
+        mapDrawnInitially: {
+          type: Boolean,
+          notify: true,
+          value: false
+        },
+        intLocMap: {
+          type: Object,
+        },
+        markerDialog: Object,
       },
+
       ready: function() {
+        L.Icon.Default.imagePath = '../../dash/bower_components/leaflet/dist/images';
+        var markerEl = document.createElement('marker-dialog');
+        markerEl.setAttribute('id', 'markerDialog');
+        Polymer.dom(document.querySelector('body')).appendChild(markerEl);
+        this.markerDialog = document.querySelector('#markerDialog');
+      },
+      _openModal: function(e) {
+        var model = e.model.marker;
+        var interventions = _.values(this.intLocMap[model.id].interventions);
+        var data = {
+          name: model.name,
+          interventions: interventions,
+          type: model.gateway,
+        }
+        this.markerDialog.data = data;
+        this.markerDialog.opened = true;
+      },
+      _init: function() {
+        if (!this._allStaticDataLoaded()) {
+          return;
+        }
+//         first render of map only when tab is active, otherwise map tiles don't show
+        if (this.active && !this.mapDrawnInitially) {
+          this.set('mapDrawnInitially', true);
+        }
         this.initListFiltersData([
           {
             filterName: 'Country Programme',
@@ -118,16 +196,38 @@
             filterName: 'Sectors',
             type: 'dropdown',
             alreadySelected: null,
-            selectionOptions: _.map(this.sectors, 'value'),
+            selectionOptions: _.map(this.sectors, 'label'),
             path: 'sector'
           },
-
-        ])
+          {
+            filterName: 'Status',
+            type: 'dropdown',
+            alreadySelected: null,
+            selectionOptions: _.map(this.statuses, 'label'),
+            path: 'status'
+          },
+        ]);
+        this.set('latitude', 33.8338400000000021);
+        this.set('longitude', 35.6205100000000030);
+        this.$.mapData.query();
       },
-      check: function(stuff) {
-        console.log('stuff', stuff);
-      }
+      // ensure redux items loaded before initializing the filters
+      _allStaticDataLoaded: function() {
+        return this.countryProgrammes.length &&
+            this.sectors.length && this.statuses.length;
+      },
+      _callLocations: function(locations) {
+        this.fire('global-loading', {message: 'Loading map locations...', active: true});
+        this.$.locationsData.query(locations);
+      },
+      _plotMarkers: function(locations) {
+        var check = _.find(locations, {id: "123"});
+        locations = locations.slice(0, 10);
+        locations.push(check);
+        this.set('markers', locations);
+        this.fire('global-loading', {active: false});
 
+      }
 
     })
   </script>
