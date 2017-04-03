@@ -13,6 +13,13 @@
         width: 900px;
         min-height: 86px;
       }
+      paper-dialog paper-icon-button.close {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        margin:0 !important;
+        padding:0;
+      }
 
       paper-icon-button {
         width: 25px;
@@ -76,6 +83,7 @@
     <paper-dialog class="marker"
                   opened="{{opened}}"
                   with-backdrop>
+      <paper-icon-button class="close" icon="close" on-tap="_close"></paper-icon-button>
       <div class="layout horizontal start list-panel title-row">
         <paper-icon-button icon="communication:location-on"></paper-icon-button>
         <div class="layout vertical">
@@ -122,6 +130,9 @@
       },
       _values: function(obj) {
         return _.values(obj)
+      },
+      _close: function(e) {
+        this.opened = false;
       }
     })
   </script>
