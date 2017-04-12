@@ -165,7 +165,7 @@
         Polymer.dom(document.querySelector('body')).appendChild(markerEl);
         this.markerDialog = document.querySelector('#markerDialog');
       },
-      _openModal: function(e) {
+      _openModal: function(e) {;
         var model = e.model.marker;
         var interventions = _.values(this.intLocMap[model.id].interventions);
         var data = {

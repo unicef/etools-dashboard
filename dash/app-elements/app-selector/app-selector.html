@@ -1,8 +1,6 @@
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="app-selector-icons.html">
-<link rel="import" href="../../../styles/page-layout-styles.html">
-<link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/app-theme.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-styles/color.html">
@@ -10,7 +8,7 @@
 <link rel="import" href="../../app-config/etools-app-config.html">
 
 <dom-module id="app-selector">
-  <style include="page-layout-styles shared-styles">
+  <style>
     :host {
       position: relative;
       color: var(--dark-primary-text-color);
@@ -56,6 +54,7 @@
     .content-wrapper:nth-child(2) {
       flex-grow: 1;
     }
+
     .content-wrapper > a {
       display: flex;
       align-items: center;
@@ -105,7 +104,7 @@
           <div class="panel-row">
             <div class="content-wrapper panel">
               <a id="dash" on-tap="goToPage">
-                <paper-icon-button  class="panel-icon"
+                <paper-icon-button class="panel-icon"
                                    icon="app-selector-icons:dashIcon"></paper-icon-button>
                 <div class="app-title">Dashboards</div>
               </a>

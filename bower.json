@@ -57,7 +57,8 @@
     "paper-tooltip": "^1.1.3",
     "polymer-redux": "^0.4.0",
     "google-chart": "^1.1.1",
-    "leaflet-map": "^1.2.0"
+    "leaflet-map": "^1.2.0",
+    "etools-app-selector": "^1.0.3"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
