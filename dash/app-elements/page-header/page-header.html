@@ -46,7 +46,7 @@
       }
 
       etools-page-refresh {
-        margin-left: 25px;
+        margin-left: 24px;
       }
       .titlebar {
         flex: 1 ;
@@ -67,6 +67,12 @@
         height: 32px;
         width: auto;
       }
+      a.logout{
+        font-size: 16px;
+        color: var(--light-secondary-text-color);
+        font-weight: 400;
+        margin-left: 24px;
+      }
 
       @media (min-width: 850px) {
         #menuButton {
@@ -86,6 +92,7 @@
       <div class="content-align">
         <countries-dropdown id="countries" countries="[[countries]]" current="[[user.profile.country]]"></countries-dropdown>
         <paper-icon-button id="profile" icon="social:person" role="button" on-tap="_openUserProfileDialog" aria-disabled="false"></paper-icon-button>
+        <a class="logout" href="[[logout]]">Sign out</a>
         <etools-page-refresh id="refresh"></etools-page-refresh>
       </div>
     </app-toolbar>
@@ -101,6 +108,10 @@
           },
           user: {
             type: Object,
+          },
+          logout: {
+            type: String,
+            value: window.location.origin + '/api/logout'
           },
           userProfileDialog: Object
         },
