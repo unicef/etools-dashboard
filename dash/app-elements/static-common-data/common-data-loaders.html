@@ -106,6 +106,7 @@
       _handleResponse: function(response) {
         var data = _.get(response, 'detail.data', response.detail);
         this.dispatch(this.nextAction.type, this.nextAction.prepareData(data));
+
         this._callNext();
       },
 
