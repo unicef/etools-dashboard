@@ -18,7 +18,7 @@ App global configuration
       user: 'id',
       countryProgrammes: 'id, name, wbs, from_date',
       offices: 'id, name',
-      partners: 'id, name',
+      partners: 'name',
       trips: 'id, supervisor_name, purpose_of_travel, traveler, created_date'
     });
 
@@ -130,11 +130,6 @@ App global configuration
           exp: 6 * 60 * 60 * 1000, // 6h
           cachingKey: 'partners'
       },
-      sectors: {
-        url: '/api/reports/sectors',
-        exp: 6 * 60 * 60 * 1000, // 6h
-        cachingKey: 'sectors'
-      },
       sections: {
         url : '/api/sections',
         exp: 6 * 60 * 60 * 1000,
@@ -153,7 +148,6 @@ App global configuration
         template: '/api/t2f/action_points/?f_person_responsible=<%=id%>'
       },
       partnerships: {
-        // Temporary until real endpoint implemented
         template: '/api/v2/interventions/dash'
       },
       partnership: {
