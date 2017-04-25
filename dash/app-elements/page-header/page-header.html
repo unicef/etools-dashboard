@@ -46,15 +46,15 @@
       }
 
       etools-page-refresh {
-        margin-left: 25px;
+        margin-left: 24px;
       }
       .titlebar {
-        flex: 1 ;
+        flex: 1;
         font-size: 28px;
         font-weight: 300;
         color: var(--light-primary-text-color);
       }
-      .titlebar img{
+      .titlebar img {
         width: 34px;
         margin: 0 8px 0 24px;
       }
@@ -63,15 +63,26 @@
         @apply(--layout-horizontal);
         @apply(--layout-center);
       }
+
       #second-logo {
         height: 32px;
         width: auto;
+      }
+
+      a.logout {
+        font-size: 16px;
+        color: var(--light-primary-text-color);
+        font-weight: 400;
+        margin-left: 24px;
+        cursor: pointer;
+        -webkit-font-smoothing: antialiased;
       }
 
       @media (min-width: 850px) {
         #menuButton {
           display: none;
         }
+
         div[main-title] {
           margin-left: 32px;
         }
@@ -84,8 +95,11 @@
         <img id="second-logo" src="../../../images/etools-logo-color-white.svg">
       </div>
       <div class="content-align">
-        <countries-dropdown id="countries" countries="[[countries]]" current="[[user.profile.country]]"></countries-dropdown>
-        <paper-icon-button id="profile" icon="social:person" role="button" on-tap="_openUserProfileDialog" aria-disabled="false"></paper-icon-button>
+        <countries-dropdown id="countries" countries="[[countries]]"
+                            current="[[user.profile.country]]"></countries-dropdown>
+        <paper-icon-button id="profile" icon="social:person" role="button" on-tap="_openUserProfileDialog"
+                           aria-disabled="false"></paper-icon-button>
+        <a class="logout" on-tap="_logout">Sign out</a>
         <etools-page-refresh id="refresh"></etools-page-refresh>
       </div>
     </app-toolbar>
@@ -130,10 +144,19 @@
         },
         _updateCountriesList: function(countries) {
           var arrayObj = countries.map(function(arrayItem) {
-            return {id: arrayItem.id, name: arrayItem.name, imgClass: this._getFlagIconClass(arrayItem.business_area_code)};
+            return {
+              id: arrayItem.id,
+              name: arrayItem.name,
+              imgClass: this._getFlagIconClass(arrayItem.business_area_code)
+            };
           }.bind(this));
-          arrayObj = _.sortBy(arrayObj, function(c){ return c.name; });
+          arrayObj = _.sortBy(arrayObj, function(c) {
+            return c.name;
+          });
           this.set('countries', arrayObj);
+        },
+        _logout: function() {
+          window.location.href = window.location.origin + '/saml2/logout';
         },
         ready: function() {
           // init indicator dialog data
