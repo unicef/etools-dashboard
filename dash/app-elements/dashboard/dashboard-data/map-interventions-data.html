@@ -21,42 +21,37 @@
         etoolsAppConfig.globals
       ],
       properties: {
-        endpointName: {
-          type: String,
-          value: 'mapInterventions'
-        },
-        currentQuery: {
-          type: Object,
-          value: null
-        },
         filteredInterventions: {
           type: Array,
           readOnly: true,
           notify: true
         },
-        data: {
-          type: Array,
-          readOnly: true,
-          observer: '_normalizeIntData'
-        },
         intLocMap: {
           type: Object,
           readOnly: true,
-          notify: true
+          notify: true,
+        },
+        filter: {
+          type: Object,
+          observer: 'query',
+          notify: true,
         }
       },
-      // collects location specific data for all interventions
+      // This function examines each intervention sector location and stores the sector data and intervention data
+      // in a dictionary/object key with that location's id as the key. A location can appear in multiple interventions and in various sectors
+      // so all interventions with a particular sector location will have their data appended to that sector locations object store;
+      // here called 'intLocMap'.
       _normalizeIntData: function(data) {
         if (!_.isEmpty(this.intLocMap)) {
           return;
         }
         var interventionsLocationsMap = {};
-        data.map(function(int) {
+        data.map(function(int, i) {
           var pickedInt = {};
-          pickedInt[int.id] = _.pick(int, 'partner', 'number', 'title');
+          pickedInt[int.id] = _.pick(int, 'partner_name', 'number', 'title');
           var sec_locs = _.get(int, 'sector_locations');
           sec_locs = _.flatten(sec_locs.map(function(sec) {
-            return _.get(sec,'locations',[]);
+            return _.get(sec, 'locations', []);
           }));
           var pickedSec = _.get(int, 'sector_locations').map(function(sector) {
             return _.get(sector, 'sector');
@@ -67,45 +62,61 @@
           pickedInt[int.id].sectors = pickedSec;
           sec_locs.map(function(loc) {
             var _loc = {};
-            if (!_.isEmpty(interventionsLocationsMap[loc.id])) {
-              var newInt = _.assign({}, interventionsLocationsMap[loc.id].interventions, pickedInt);
-              _loc[loc.id] = {
+            if (!_.isEmpty(interventionsLocationsMap[loc])) {
+              var newInt = _.assign({}, interventionsLocationsMap[loc].interventions, pickedInt);
+              _loc[loc] = {
                 interventions: newInt
               };
             } else {
-              _loc[loc.id] = {
+              _loc[loc] = {
                 interventions: pickedInt,
               }
             }
             _.assign(interventionsLocationsMap, _loc);
           });
         });
-        this._setIntLocMap(interventionsLocationsMap)
+        this._setIntLocMap(interventionsLocationsMap);
+        this.set('filter', {status:'active'});
       },
-      ready: function() {
-        if (this.showLoading) {
-          this.fire('global-loading', {message: 'Loading map data...', active: true});
+      query: function(filter) {
+        if (_.isEmpty(this.intLocMap) && !_.isEmpty(filter)) {
+          return;
         }
-        this._elementReady();
+        var filterStr = '';
+        if (!_.isEmpty(filter)) {
+          var params = [];
+          _.keys(filter).forEach(function(k) {
+            params.push(k + '=' + filter[k]);
+          });
+          filterStr += '?' + params.join('&');
+        }
+        var newEp = this.getEndpoint('mapInterventions', {filter: filterStr});
+        if (_.isEqual(this.endpoint, newEp)) {
+          return;
+        }
+        this.set('endpoint', newEp);
+        this.fire('global-loading', {message: 'Loading map points...', active: true});
       },
-      query: function() {
+      _formatInterventions: function(data) {
         var self = this;
-        this.db.transaction('r', this.db.mapInterventions, this.db.locations, function() {
-          var queryResult = self.db.mapInterventions.toCollection();
-          return Dexie.Promise.all([queryResult.toArray()])
-              .then(function(result) {
-                var locations = _.flatten(result[0].map(function(intervention) {
-                  var sec_locs = _.flatten(intervention.sector_locations.map(function(locs) {
-                    return locs.locations;
-                  }));
-                  return sec_locs;
-                }));
-                self._setFilteredInterventions(locations)
-              }).catch(function(error) {
-                console.error('Error querying interventions map: ', error);
-              });
-        });
+        var locations = _.flatten(data.map(function(intervention) {
+          var sec_locs = _.flatten(intervention.sector_locations.map(function(locs) {
+            return locs.locations;
+          }));
+          return sec_locs;
+        }));
+        locations = _.uniq(locations);
+        self._setFilteredInterventions(locations);
       },
+      _handleResponse: function(res) {
+        this.fire('global-loading');
+        var data = _.get(res, 'detail.data', res.detail);
+        if (_.isEmpty(this.intLocMap)) {
+          this._normalizeIntData(data);
+        } else {
+          this._formatInterventions(data);
+        }
+      }
     });
   </script>
 </dom-module>

@@ -108,9 +108,7 @@
     filterValueChanged: function(event) {
       var filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
       var filterVal = Polymer.dom(event).localTarget.selected;
-      this.debounce('listFilterChanged', function() {
-        this.set(filterPath, filterVal);
-      }.bind(this), 50);
+      this.set(filterPath, filterVal);
     },
 
     /**

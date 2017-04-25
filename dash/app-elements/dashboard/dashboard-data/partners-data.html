@@ -24,6 +24,7 @@
           dashBehaviors.DataElementBehavior,
           etoolsAppConfig.globals
         ],
+        observers:['init(active)'],
         properties: {
           endpointName: {
             type: String,
@@ -47,13 +48,19 @@
             type: String,
             value: 'partners-loaded'
           },
+          firstLoad: {
+            type: Boolean,
+            value: false
+          }
 
         },
-        ready: function() {
-          if (this.showLoading) {
+        init: function(active) {
+          if (active && !this.firstLoad) {
+            console.log('hact active')
             this.fire('global-loading', {message: 'Loading partners data...', active: true});
+            this._elementReady();
+            this.set('firstLoad',true);
           }
-          this._elementReady();
         },
         query: function(searchString, order, pageSize, pageNumber) {
           var self = this;

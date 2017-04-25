@@ -411,14 +411,16 @@
           _this.customStyle['--'+chartName] = 'height:' + Math.round(dt.getNumberOfRows()*32.71) + 'px; min-height: 300px';
           _this.$$('#' + chartName).options = _this[chartName+'Options'];
           _this.$$('#' + chartName).data = dt;
-          _this.fire('global-loading',{active: false});
+          if(_this.active) {
+            _this.fire('global-loading',{active: false});
+          }
           _this.updateStyles();
         });
       },
       _tripsDataChanged : function(data) {
         if (!_.isEmpty(data)) {
           var travels = _.get(data, 'travels_by_section', []);
-          if (!travels.length) {
+          if (!travels.length && this.active) {
             this.fire('global-loading', {active: false});
             this._setNoData('tripsChart');
           }else {
@@ -463,7 +465,7 @@
           var actionPoints = _.get(data,'action_points_by_section',[]).filter(function(ap) {
             return _.get(ap,'total_action_points');
           });
-          if (!actionPoints.length) {
+          if (!actionPoints.length && this.active) {
             this.fire('global-loading', {active: false});
             this._setNoData('actionPointsChart');
           }else {

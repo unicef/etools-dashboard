@@ -95,6 +95,7 @@
         id="partners"
         filtered-partners="{{filteredPartners}}"
         total-results="{{totalResults}}"
+        active="[[active]]"
         fire-data-loaded show-loading
         on-partners-loaded="_requiredDataHasBeenLoaded">
     </partners-data>
@@ -402,7 +403,9 @@
           }
           this.set('requiredDataLoaded', true);
           this._init(this.active);
-          this.fire('global-loading', {active: false});
+          if(this.active){
+            this.fire('global-loading', {active: false});
+          }
         },
         _goToPage: function(e) {
           window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
