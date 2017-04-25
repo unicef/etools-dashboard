@@ -3,7 +3,7 @@
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../../bower_components/etools-page-refresh/etools-page-refresh.html">
-<link rel="import" href="../app-selector/app-selector.html">
+<link rel="import" href="../../../bower_components/etools-app-selector/etools-app-selector.html">
 <link rel="import" href="../countries-dropdown/countries-dropdown.html">
 <link rel="import" href="../user-profile-dialog/user-profile-dialog.html">
 <link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
@@ -48,12 +48,14 @@
       etools-page-refresh {
         margin-left: 24px;
       }
+
       .titlebar {
         flex: 1;
         font-size: 28px;
         font-weight: 300;
         color: var(--light-primary-text-color);
       }
+
       .titlebar img {
         width: 34px;
         margin: 0 8px 0 24px;
@@ -91,7 +93,7 @@
     <app-toolbar sticky class="content-align">
       <paper-icon-button id="menuButton" class="light" icon="menu" on-tap="openDrawer"></paper-icon-button>
       <div class="titlebar content-align">
-        <app-selector id="selector"></app-selector>
+        <etools-app-selector id="selector"></etools-app-selector>
         <img id="second-logo" src="../../../images/etools-logo-color-white.svg">
       </div>
       <div class="content-align">
@@ -99,6 +101,7 @@
                             current="[[user.profile.country]]"></countries-dropdown>
         <paper-icon-button id="profile" icon="social:person" role="button" on-tap="_openUserProfileDialog"
                            aria-disabled="false"></paper-icon-button>
+
         <a class="logout" on-tap="_logout">Sign out</a>
         <etools-page-refresh id="refresh"></etools-page-refresh>
       </div>
@@ -116,7 +119,7 @@
           user: {
             type: Object,
           },
-          userProfileDialog: Object
+          userProfileDialog: Object,
         },
         observers: [
           '_updateCountriesList(user.profile.countries_available)'
