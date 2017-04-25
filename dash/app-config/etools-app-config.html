@@ -20,8 +20,9 @@ App global configuration
       offices: 'id, name',
       partners: 'name',
       trips: 'id, supervisor_name, purpose_of_travel, traveler, created_date',
-      mapInterventions: 'id',
+      mapInterventions: 'id, status',
       locations: 'id'
+
     });
 
     var etoolsAppConfig = {
@@ -142,6 +143,7 @@ App global configuration
         exp: 6 * 60 * 60 * 1000, // 6h
         cachingKey: 'static'
       },
+
       sections: {
         url : '/api/sections',
         exp: 6 * 60 * 60 * 1000,
@@ -159,9 +161,7 @@ App global configuration
         template: '/api/t2f/action_points/?f_person_responsible=<%=id%>'
       },
       mapInterventions: {
-        url: '/api/v2/interventions/map',
-        exp: 6 * 60 * 60 * 1000,
-        cachingKey: 'mapInterventions'
+        template: '/api/v2/interventions/map<%=filter%>',
       },
       locations:{
         url: '/api/locations',

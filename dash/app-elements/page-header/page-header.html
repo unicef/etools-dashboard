@@ -46,7 +46,7 @@
       }
 
       etools-page-refresh {
-        margin-left: 25px;
+        margin-left: 24px;
       }
 
       .titlebar {
@@ -71,6 +71,15 @@
         width: auto;
       }
 
+      a.logout {
+        font-size: 16px;
+        color: var(--light-primary-text-color);
+        font-weight: 400;
+        margin-left: 24px;
+        cursor: pointer;
+        -webkit-font-smoothing: antialiased;
+      }
+
       @media (min-width: 850px) {
         #menuButton {
           display: none;
@@ -92,6 +101,8 @@
                             current="[[user.profile.country]]"></countries-dropdown>
         <paper-icon-button id="profile" icon="social:person" role="button" on-tap="_openUserProfileDialog"
                            aria-disabled="false"></paper-icon-button>
+
+        <a class="logout" on-tap="_logout">Sign out</a>
         <etools-page-refresh id="refresh"></etools-page-refresh>
       </div>
     </app-toolbar>
@@ -146,6 +157,9 @@
             return c.name;
           });
           this.set('countries', arrayObj);
+        },
+        _logout: function() {
+          window.location.href = window.location.origin + '/saml2/logout';
         },
         ready: function() {
           // init indicator dialog data

@@ -1,3 +1,4 @@
+
 /*
  This was created to keep all static data being loaded in one place. Use template below to add data
  from an endpoint into the redux store.
@@ -11,6 +12,7 @@
  templateProps: {}
  },
  prepareData: function(data) {}
+
  }
 
  */
@@ -149,6 +151,7 @@ var Actions = [
     }
   },
   {
+
     actionType: 'unicef-users',
     propsArray: ['unicefUsersData'],
     endpointProps: {
@@ -174,6 +177,7 @@ var Actions = [
     prepareData: function(data) {
       return _.get(data, 'intervention_status');
     }
+
   }
 
 ];

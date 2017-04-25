@@ -37,6 +37,7 @@
         init: function(active) {
           if (active) {
             this.set('endpointName', 'partnersDropdown');
+            this._elementReady();
           }
         },
         _handleResponsePartners: function(response) {

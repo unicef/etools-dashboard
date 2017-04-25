@@ -36,25 +36,26 @@
         }
       },
       ready: function() {
-        if (this.showLoading) {
-          this.fire('global-loading', {message: 'Loading map data...', active: true});
-        }
+        this.fire('global-loading', {message: 'Loading locations...', active:true});
         this._elementReady();
+      },
+      _handleResponse: function(res) {
+        this.fire('global-loading', {active:false});
       },
       query: function(locations) {
         var self = this;
         this.db.transaction('r', this.db.locations, function() {
           var queryResult = self.db.locations.toCollection();
           queryResult = queryResult.filter(function(res) {
-            var found = _.find(locations, {id: res.id});
-            if (found) {
+            var found = _.includes(locations, parseInt(res.id));
+            if (found && !_.isEmpty(res.geo_point)) {
               return res;
             }
           });
           return Dexie.Promise.all([queryResult.toArray()])
               .then(function(result) {
                 var parsed = result[0].map(function(p) {
-                  return _.assign({}, _.pick(p, 'name', 'id','gateway'), {point: self.parsePoint(p.point)})
+                  return _.assign({}, _.pick(p, 'name', 'id', 'location_type'), {point: self.parsePoint(p.geo_point)})
                 });
                 self._setFilteredLocations(parsed);
               }).catch(function(error) {
@@ -69,10 +70,12 @@
             latitude: parseFloat(pt[1]),
             longitude: parseFloat(pt[0])
           }
-        } else return null;
-
+        } else {
+          return null
+        }
       }
 
-    });
+    })
+    ;
   </script>
 </dom-module>

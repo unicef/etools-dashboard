@@ -32,6 +32,7 @@
       #query {
         padding-bottom: 8px;
       }
+
       .hact-list {
         min-width: 1150px;
       }
@@ -48,11 +49,13 @@
 
       .col-4-sub {
         flex: 0 0 calc(33.33333% - 4px);
+        flex-basis: calc(33.33333% - 4px);
         max-width: calc(33.33333% - 4px);
       }
 
       .col-6-sub {
         flex: 0 0 calc(50% - 6px);
+        flex-basis: calc(50% - 6px);
         max-width: calc(50% - 6px);
       }
 
@@ -90,11 +93,13 @@
         text-overflow: ellipsis;
         cursor: pointer;
       }
+
     </style>
     <partners-data
         id="partners"
         filtered-partners="{{filteredPartners}}"
         total-results="{{totalResults}}"
+        active="[[active]]"
         fire-data-loaded show-loading
         on-partners-loaded="_requiredDataHasBeenLoaded">
     </partners-data>
@@ -137,7 +142,7 @@
             ACTUAL for <br> current year
           </data-table-column>
         </data-table-column>
-        <data-table-column class="flex nowrap" id="hact_values.micro_assessment_needed">
+        <data-table-column class="col-micro nowrap" id="hact_values.micro_assessment_needed">
           Micro <br>Assessment
         </data-table-column>
         <div class="col-20 layout horizontal end">
@@ -402,7 +407,9 @@
           }
           this.set('requiredDataLoaded', true);
           this._init(this.active);
-          this.fire('global-loading', {active: false});
+          if(this.active){
+            this.fire('global-loading', {active: false});
+          }
         },
         _goToPage: function(e) {
           window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
