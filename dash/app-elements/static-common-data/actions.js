@@ -1,19 +1,18 @@
-/**
- * Created by marko on 3/14/17.
- */
+
 /*
  This was created to keep all static data being loaded in one place. Use template below to add data
  from an endpoint into the redux store.
  Template object:
 
  {
-   actionType: '',
-   propsArray: [''],
-   endpointProps: {
-     name: '',
-     templateProps: {}
-   },
-   prepareData: function(data) {}
+ actionType: '',
+ propsArray: [''],
+ endpointProps: {
+ name: '',
+ templateProps: {}
+ },
+ prepareData: function(data) {}
+
  }
 
  */
@@ -85,19 +84,19 @@ var Actions = [
       });
     }
   },
-  {
-    actionType: 'partnerships',
-    propsArray: ['partnerships'],
-    endpointProps: {
-      name: 'partnerships',
-      templateProps: {}
-    },
-    prepareData: function(data) {
-      return data.map(function(partnership) {
-        return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
-      });
-    }
-  },
+  // {
+  //   actionType: 'partnerships',
+  //   propsArray: ['partnerships'],
+  //   endpointProps: {
+  //     name: 'partnerships',
+  //     templateProps: {}
+  //   },
+  //   prepareData: function(data) {
+  //     return data.map(function(partnership) {
+  //       return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
+  //     });
+  //   }
+  // },
   {
     actionType: 'trips-months',
     propsArray: ['tripsMonths'],
@@ -136,6 +135,23 @@ var Actions = [
     }
   },
   {
+    actionType: 'sectors',
+    propsArray: ['sectors'],
+    endpointProps: {
+      name: 'sectors',
+      templateProps: {}
+    },
+    prepareData: function(data) {
+      return data.map(function(d) {
+        return {
+          value: parseInt(d.id, 10),
+          label: d.name
+        };
+      });
+    }
+  },
+  {
+
     actionType: 'unicef-users',
     propsArray: ['unicefUsersData'],
     endpointProps: {
@@ -150,6 +166,18 @@ var Actions = [
         };
       });
     }
+  },
+  {
+    actionType: 'static-status',
+    propsArray: ['statuses'],
+    endpointProps: {
+      name: 'static',
+      templateProps: {}
+    },
+    prepareData: function(data) {
+      return _.get(data, 'intervention_status');
+    }
+
   }
 
 ];

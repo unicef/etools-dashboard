@@ -1,0 +1,376 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import"
+      href="../../../bower_components/etools-searchable-multiselection-menu/etools-searchable-multiselection-menu.html">
+<link rel="import" href="dashboard-data/partners-dropdown-data.html">
+<link rel="import" href="dashboard-data/map-interventions-data.html">
+<link rel="import" href="dashboard-data/map-locations-data.html">
+<link rel="import" href="../marker-dialog/marker-dialog.html">
+<link rel="import" href="../../../bower_components/leaflet-map/leaflet-map.html">
+<link rel="import" href="../../../bower_components/leaflet-map/leaflet-marker.html">
+
+<link rel="import" href="../../../styles/shared-styles.html">
+<link rel="import" href="../../../styles/list-styles.html">
+<link rel="import" href="../../../styles/page-layout-styles.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<link rel="import" href="../../app-behaviors/dropdown-behavior.html">
+<link rel="import" href="../../app-behaviors/list-filters-behavior.html">
+<link rel="import" href="../static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
+<dom-module id="dashboard-map">
+  <template>
+    <style include="shared-styles list-styles page-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
+      :host {
+        --paper-toggle-button-checked-bar-color: #88D4F7; /* TODO: replace with app-theme var */
+        --paper-toggle-button-checked-button-color: #3baaee; /* TODO: replace with app-theme var */
+      }
+
+      leaflet-map {
+        height: 650px;
+      }
+
+      paper-menu {
+        max-width: 266px;
+      }
+
+      etools-searchable-multiselection-menu {
+        width: 366px;
+      }
+
+      .toggler {
+        display: flex;
+        bottom: 8px;
+        margin-bottom: 20px;
+        padding-left: 24px;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      paper-toggle-button {
+        margin-left: 16px;
+      }
+    </style>
+    <partners-dropdown-data partners="{{partners}}" active="[[active]]"></partners-dropdown-data>
+    <map-interventions-data id="mapData"
+                            filter="[[mapFilter]]"
+                            int-loc-map="{{intLocMap}}"
+                            filtered-interventions="{{filteredInterventions}}"
+                            show-loading></map-interventions-data>
+    <map-locations-data id="locationsData" filtered-locations="{{filteredLocations}}" show-loading></map-locations-data>
+    <paper-material class="list-panel listControls" elevation="1">
+      <div class="wrap-controls">
+        <div class="title-row">
+          <h1 sub-title>Partnerships</h1>
+        </div>
+      </div>
+      <div class="filters-divider"></div>
+      <div class="wrap-controls">
+        <template is="dom-repeat" items="[[selectedFilters]]" as="filter">
+          <div class="dropdown-with-clear-btn">
+            <template is="dom-if" if="[[_partnerFilter(filter)]]">
+              <etools-searchable-multiselection-menu
+                  label="[[filter.filterName]]"
+                  placeholder="&#8212;"
+                  options="[[filter.selectionOptions]]"
+                  value="[[filter.alreadySelected]]"
+                  on-value-change="_partnerChanged"
+                  custom-object-options="[[filter.selectionOptions]]"
+                  option-value="id"
+                  option-label="name"
+                  data-filter-path$="[[filter.path]]"></etools-searchable-multiselection-menu>
+              <paper-icon-button class="remove" icon="cancel"
+                                 on-tap="removeFilter"
+                                 data-filter-name$="[[filter.filterName]]"
+                                 data-reset-path$="[[filter.path]]">
+              </paper-icon-button>
+            </template>
+            <template is="dom-if" if="[[!_partnerFilter(filter)]]">
+              <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+              <paper-dropdown-menu label$="[[filter.filterName]]" noink>
+                <paper-menu class="dropdown-content"
+                            attr-for-selected="id"
+                            on-iron-select="filterValueChanged"
+                            on-iron-deselect="filterValueChanged"
+                            data-filter-path$="[[filter.path]]"
+                            selected=[[filter.alreadySelected]]>
+                  <template is="dom-repeat" items="[[filter.selectionOptions]]" as="filterOption">
+                    <paper-item id="[[filterOption.id]]">[[filterOption.name]]</paper-item>
+                  </template>
+                </paper-menu>
+              </paper-dropdown-menu>
+              <paper-icon-button class="remove" icon="cancel"
+                                 on-tap="removeFilter"
+                                 data-filter-name$="[[filter.filterName]]"
+                                 data-reset-path$="[[filter.path]]">
+              </paper-icon-button>
+            </template>
+          </div>
+        </template>
+      </div>
+      <div class="fixed-controls">
+        <div class="filters-divider"></div>
+        <paper-menu-button id="filterMenu">
+          <paper-button class="button dropdown-trigger">
+            <iron-icon icon="filter-list"></iron-icon>
+            add filter
+          </paper-button>
+          <paper-menu class="dropdown-content">
+            <template is="dom-repeat" items="[[availableListFilterOptions]]">
+              <paper-item on-tap="selectFilter">[[item.filterName]]</paper-item>
+            </template>
+          </paper-menu>
+        </paper-menu-button>
+      </div>
+    </paper-material>
+    <div class="toggler">
+      <p>Show all active</p>
+      <paper-toggle-button checked="{{showActive}}" toggles></paper-toggle-button>
+    </div>
+    <paper-material class="map">
+      <template is="dom-if" if="[[mapDrawnInitially]]">
+        <leaflet-map fit-to-markers zoom="5">
+          <leaflet-tilelayer
+              url="https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZXRvb2xzIiwiYSI6ImNqMGw4N3NtejAyMDIzMnBocHBsYjBsbXoifQ.VA-gzjqtTu-vr-8Ex9oEpA">
+          </leaflet-tilelayer>
+          <template is="dom-repeat" items="[[markers]]" as="marker">
+            <leaflet-marker id="[[marker.id]]"
+                            latitude="[[marker.point.latitude]]"
+                            longitude="[[marker.point.longitude]]"
+                            on-click="_openModal"></leaflet-marker>
+          </template>
+        </leaflet-map>
+      </template>
+
+    </paper-material>
+  </template>
+  <script>
+    Polymer({
+      is: "dashboard-map",
+      behaviors: [
+        dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
+        dashBehaviors.ListFiltersBehavior,
+        dashBehaviors.DropdownBehavior
+      ],
+      observers: [
+        '_init(countryProgrammes,sectors,statuses,active,partners)',
+      ],
+      properties: {
+        countryProgrammes: {
+          type: Array,
+          statePath: 'countryProgrammes'
+        },
+        country_programme: {
+          type: String,
+          observer: '_filterChanged'
+        },
+        sectors: {
+          type: Array,
+          statePath: 'sectors',
+        },
+        sector: {
+          type: String,
+          observer: '_filterChanged'
+        },
+        statuses: {
+          type: Array,
+          statePath: 'statuses'
+        },
+        status: {
+          type: String,
+          observer: '_filterChanged'
+        },
+        selectedFilters: {
+          type: Array,
+        },
+        dashMap: {
+          type: Object
+        },
+        mapFilter: {
+          type: Object,
+        },
+        filteredInterventions: {
+          type: Array,
+          observer: '_callLocations'
+        },
+        filteredLocations: {
+          type: Array,
+          observer: '_plotMarkers'
+        },
+        mapDrawnInitially: {
+          type: Boolean,
+          notify: true,
+          value: false
+        },
+        partner: {
+          type: String,
+          observer: '_filterChanged'
+        },
+        partners: {
+          type: Array,
+          value: []
+        },
+        intLocMap: {
+          type: Object,
+        },
+        showActive: {
+          type: Boolean,
+          value: false,
+          observer: '_toggleActive'
+        },
+        localActiveMarkers: {
+          type: Array,
+          value: []
+        },
+        markerDialog: Object,
+      },
+
+      ready: function() {
+        L.Icon.Default.imagePath = '../../dash/bower_components/leaflet/dist/images';
+        var markerEl = document.createElement('marker-dialog');
+        markerEl.setAttribute('id', 'markerDialog');
+        Polymer.dom(document.querySelector('body')).appendChild(markerEl);
+        this.markerDialog = document.querySelector('#markerDialog');
+      },
+      _openModal: function(e) {
+        var model = e.model.marker;
+        var interventions = _.values(this.intLocMap[model.id].interventions);
+        var data = {
+          name: model.name,
+          interventions: interventions,
+          type: model.location_type,
+        }
+        this.markerDialog.data = data;
+        this.markerDialog.opened = true;
+      },
+      _init: function() {
+        if (!this._allStaticDataLoaded()) {
+          return;
+        }
+//         first render of map only when tab is active, otherwise map tiles don't show
+        if (!this.mapDrawnInitially) {
+          this.initListFiltersData([
+            {
+              filterName: 'Country Programme',
+              type: 'dropdown',
+              alreadySelected: null,
+              selectionOptions: _.map(this.countryProgrammes, function(cp) {
+                return {
+                  name: cp.name,
+                  id: cp.id
+                }
+              }),
+              path: 'country_programme'
+            },
+            {
+              filterName: 'Sectors',
+              type: 'dropdown',
+              alreadySelected: null,
+              selectionOptions: _.map(this.sectors, function(o) {
+                return {
+                  name: o.label,
+                  id: o.value
+                }
+              }),
+              path: 'sector'
+            },
+            {
+              filterName: 'Status',
+              type: 'dropdown',
+              alreadySelected: null,
+              selectionOptions: _.map(this.statuses, function(o) {
+                return {
+                  name: o.label,
+                  id: o.value
+                }
+              }),
+              path: 'status'
+            },
+            {
+              filterName: 'Partners',
+              type: 'dropdown',
+              alreadySelected: null,
+              selectionOptions: _.map(this.partners, function(o) {
+                return {
+                  name: o.label,
+                  id: o.value
+                }
+              }),
+              path: 'partner'
+            },
+          ]);
+          this.set('mapFilter','');
+        }
+      },
+      _filterChanged: function(filt) {
+        var self = this;
+        var newFilter = {};
+        ['country_programme', 'status', 'sector', 'partner'].map(function(f) {
+          if (self[f]) {
+            newFilter[f] = self[f];
+          }
+        });
+        if (_.isEqual(this.mapFilter, newFilter)) {
+          return;
+        }
+        if (_.isEmpty(newFilter)) {
+          this.set('markers',[]);
+          this.set('showActive', false);
+          return;
+        }
+        this.set('mapFilter', newFilter);
+      },
+      // ensure redux items loaded before initializing the filters
+      _allStaticDataLoaded: function() {
+        return this.countryProgrammes.length &&
+            this.sectors.length && this.statuses.length && this.partners.length;
+      },
+      _callLocations: function(locations) {
+        this.fire('global-loading', {message: 'Loading map points...', active: true});
+        this.$.locationsData.query(locations);
+      },
+      _plotMarkers: function(locations) {
+        if (_.isEmpty(this.localActiveMarkers)) {
+          this.set('localActiveMarkers',locations);
+          this.fire('global-loading', {active: false});
+          return;
+        }
+        this.set('markers', locations);
+        if (this.active && !this.mapDrawnInitially) {
+          this.set('mapDrawnInitially', true);
+        }
+        this.fire('global-loading', {active: false});
+      },
+      _partnerFilter: function(filter) {
+        return filter.filterName === "Partners";
+      },
+      _partnerChanged: function(val) {
+        var id = _.get(val, 'detail.selectedValues.id');
+        this.set('partner', id);
+      },
+      _toggleActive: function(truthy) {
+        if (truthy) {
+          this.set('markers', this.localActiveMarkers);
+          if (this.active && !this.mapDrawnInitially) {
+            this.set('mapDrawnInitially', true);
+          }
+        } else {
+          if (_.isEqual(this.markers,this.localActiveMarkers)){
+            this.set('markers', []);
+          }
+        }
+      }
+
+    })
+  </script>
+</dom-module>
+

@@ -87,7 +87,6 @@
 
       _callNext: function() {
         if (this.toDispatch.length) {
-          this.fire('global-loading', {message: 'Loading page data...', active: true})
           var next = this.shift('toDispatch');
           var action = {};
           action[next.type] = next.action;
@@ -99,15 +98,12 @@
           } else {
             this.set('endpoint', next.endpoint);
           }
-        } else {
-          this.fire('global-loading', {active: false});
         }
       },
       _handleResponse: function(response) {
         var data = _.get(response, 'detail.data', response.detail);
-        if (data.length) {
-          this.dispatch(this.nextAction.type, this.nextAction.prepareData(data));
-        }
+        this.dispatch(this.nextAction.type, this.nextAction.prepareData(data));
+
         this._callNext();
       },
 
