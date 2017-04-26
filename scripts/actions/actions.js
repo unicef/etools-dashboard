@@ -84,19 +84,19 @@ var Actions = [
       });
     }
   },
-  // {
-  //   actionType: 'partnerships',
-  //   propsArray: ['partnerships'],
-  //   endpointProps: {
-  //     name: 'partnerships',
-  //     templateProps: {}
-  //   },
-  //   prepareData: function(data) {
-  //     return data.map(function(partnership) {
-  //       return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
-  //     });
-  //   }
-  // },
+  {
+    actionType: 'partnerships',
+    propsArray: ['partnerships'],
+    endpointProps: {
+      name: 'partnerships',
+      templateProps: {}
+    },
+    prepareData: function(data) {
+      return data.map(function(partnership) {
+        return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
+      });
+    }
+  },
   {
     actionType: 'trips-months',
     propsArray: ['tripsMonths'],
