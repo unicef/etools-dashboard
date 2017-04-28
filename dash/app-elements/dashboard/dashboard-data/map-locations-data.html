@@ -20,6 +20,7 @@
         dashBehaviors.DataElementBehavior,
         etoolsAppConfig.globals
       ],
+      observers: ['_init(active)'],
       properties: {
         endpointName: {
           type: String,
@@ -33,11 +34,20 @@
           type: Array,
           readOnly: true,
           notify: true
+        },
+        loaded: {
+          type: Boolean,
+          value: false
         }
       },
-      ready: function() {
-        this.fire('global-loading', {message: 'Loading locations...', active:true});
-        this._elementReady();
+      _init: function(active) {
+        if (active && !this.loaded) {
+          this.fire('global-loading', {message: 'Loading locations...', active:true});
+          this._elementReady();
+        }
+      },
+      _handleResponse: function(res) {
+        this.set('loaded', true);
       },
       query: function(locations) {
         var self = this;
