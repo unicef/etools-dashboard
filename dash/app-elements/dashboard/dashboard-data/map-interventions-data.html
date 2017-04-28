@@ -95,7 +95,7 @@
           return;
         }
         this.set('endpoint', newEp);
-        this.fire('global-loading', {message: 'Loading map points...', active: true});
+        this.fire('global-loading', {message: 'Loading map...', active: true});
       },
       _formatInterventions: function(data) {
         var self = this;
@@ -107,9 +107,9 @@
         }));
         locations = _.uniq(locations);
         self._setFilteredInterventions(locations);
+        this.fire('global-loading');
       },
       _handleResponse: function(res) {
-        this.fire('global-loading');
         var data = _.get(res, 'detail.data', res.detail);
         if (_.isEmpty(this.intLocMap)) {
           this._normalizeIntData(data);
