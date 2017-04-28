@@ -39,9 +39,6 @@
         this.fire('global-loading', {message: 'Loading locations...', active:true});
         this._elementReady();
       },
-      _handleResponse: function(res) {
-        this.fire('global-loading', {active:false});
-      },
       query: function(locations) {
         var self = this;
         this.db.transaction('r', this.db.locations, function() {
