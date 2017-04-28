@@ -1,0 +1,113 @@
+<!--<link rel="import" href="offices-data.html">-->
+<!--<link rel="import" href="country-programmes-data.html">-->
+<!--<link rel="import" href="sectors-data.html">-->
+<!--<link rel="import" href="trips-data.html">-->
+<!--<link rel="import" href="trips-supervised-data.html">-->
+<!--<link rel="import" href="actionPoints-forme-data.html">-->
+<!--<link rel="import" href="actionPoints-byme-data.html">-->
+<!--<link rel="import" href="partnerships-data.html">-->
+<!--<link rel="import" href="trips-months-data.html">-->
+<!--<link rel="import" href="sections-data.html">-->
+<!--<link rel="import" href="unicef-users-data.html">-->
+
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="redux-bahaviors/common-static-data-redux-bahavior.html">
+<link rel="import" href="../../app-config/etools-app-config.html">
+<link rel="import" href="../../app-behaviors/actions-behavior.html">
+<link rel="import" href="../../../bower_components/etools-ajax/etools-ajax.html">
+
+
+<dom-module id="common-data-loaders">
+  <template>
+    <etools-ajax id="ajax"
+                 endpoint="[[endpoint]]"
+                 caching-storage="dexie"
+                 on-success="_handleResponse"></etools-ajax>
+
+    <!--<trips-supervised-data user="[[user]]"></trips-supervised-data>-->
+    <!--<actionPoints-forme-data user="[[user]]"></actionPoints-forme-data>-->
+    <!--<actionPoints-byme-data user="[[user]]"></actionPoints-byme-data>-->
+    <!--<partnerships-data></partnerships-data>-->
+    <!--<trips-months-data></trips-months-data>-->
+    <!--<sections-data></sections-data>-->
+    <!--<unicef-users-data></unicef-users-data>-->
+  </template>
+  <script src="../../../scripts/actions/actions.js"></script>
+  <script>
+    Polymer({
+      is: 'common-data-loaders',
+      behaviors: [
+        dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
+        dashBehaviors.actionsBehavior,
+        etoolsAppConfig.globals
+      ],
+      properties: {
+        endpoint: {
+          type: Object
+        },
+        user: {
+          type: Object,
+          observer: 'init'
+        },
+        nextAction: {
+          type: Object
+        }
+      },
+      _reduxActions: {},
+      actionsToDispatch: function() {
+        var _this = this;
+        var mappedItems = Actions.map(function(a) {
+          var ACTION_CONST = _this.register(a.actionType);
+          var endpoint = a.endpointProps;
+          if (typeof endpoint === 'function') {
+            endpoint = endpoint.bind(_this)();
+          }
+          endpoint = _.isEmpty(endpoint) ? endpoint :
+              _.isEmpty(endpoint.templateProps) ? _this.getEndpoint(endpoint.name) :
+                  _this.getEndpoint(endpoint.name, endpoint.templateProps);
+
+          var actionObj = {
+            type: a.actionType,
+            action: _this.registerActionCreator(
+                ACTION_CONST,
+                a.propsArray
+            ),
+            endpoint: endpoint,
+            prepareData: _.isEmpty(endpoint) ? a.prepareData.bind(_this) : a.prepareData
+          };
+          return actionObj;
+        });
+        this.set('toDispatch', mappedItems);
+      },
+
+      init: function() {
+        this.actionsToDispatch();
+        this._callNext();
+      },
+
+      _callNext: function() {
+        if (this.toDispatch.length) {
+          var next = this.shift('toDispatch');
+          var action = {};
+          action[next.type] = next.action;
+          this.set('nextAction', next);
+          this.set('_reduxActions', Object.assign({}, this._reduxActions, action));
+          if (_.isEmpty(next.endpoint)) {
+            this.dispatch(next.type, next.prepareData());
+            this._callNext();
+          } else {
+            this.set('endpoint', next.endpoint);
+          }
+        }
+      },
+      _handleResponse: function(response) {
+        var data = _.get(response, 'detail.data', response.detail);
+        this.dispatch(this.nextAction.type, this.nextAction.prepareData(data));
+
+        this._callNext();
+      },
+
+
+    });
+  </script>
+</dom-module>

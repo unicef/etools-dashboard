@@ -1,0 +1,55 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../app-config/etools-app-config.html">
+
+<link rel="import" href="../../../../bower_components/etools-ajax/etools-ajax.html">
+<link rel="import" href="../../../app-behaviors/data-element-behavior.html">
+
+<dom-module id="partners-dropdown-data">
+  <template>
+    <etools-ajax id="ajax"
+                 endpoint="[[endpoint]]"
+                 on-success="_handleResponsePartners">
+    </etools-ajax>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'partners-dropdown-data',
+        behaviors: [
+          dashBehaviors.DataElementBehavior,
+          etoolsAppConfig.globals
+        ],
+        observers: [
+            'init(active)'
+        ],
+        properties: {
+          endpointName: {
+            type: String,
+          },
+          partners: {
+            type: Array,
+            notify:true,
+            readOnly: true
+          }
+        },
+        init: function(active) {
+          if (active) {
+            this.set('endpointName', 'partnersDropdown');
+            this._elementReady();
+          }
+        },
+        _handleResponsePartners: function(response) {
+          var data = _.get(response,'detail.data', response.detail);
+          this._setPartners(data.map(function(p){
+            return {
+              value: parseInt(p.id),
+              label: p.name
+            }
+          }));
+        }
+      });
+    })()
+  </script>
+</dom-module>

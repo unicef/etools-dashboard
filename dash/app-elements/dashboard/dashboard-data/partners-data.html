@@ -15,7 +15,7 @@
   </template>
 
   <script>
-    (function () {
+    (function() {
       'use strict';
 
       Polymer({
@@ -24,6 +24,7 @@
           dashBehaviors.DataElementBehavior,
           etoolsAppConfig.globals
         ],
+        observers:['init(active)'],
         properties: {
           endpointName: {
             type: String,
@@ -47,45 +48,45 @@
             type: String,
             value: 'partners-loaded'
           },
+          firstLoad: {
+            type: Boolean,
+            value: false
+          }
 
         },
-        ready: function () {
-          if (this.showLoading) {
-            this.fire('global-loading', {message: 'Loading partners data...', active:true});
+        init: function(active) {
+          if (active && !this.firstLoad) {
+            console.log('hact active')
+            this.fire('global-loading', {message: 'Loading partners data...', active: true});
+            this._elementReady();
+            this.set('firstLoad',true);
           }
-          this._elementReady();
         },
-        query: function (searchString, order, pageSize, pageNumber) {
+        query: function(searchString, order, pageSize, pageNumber) {
           var self = this;
-          if (this.currentQuery) {
-            this.currentQuery.abort();
-          }
-          this.db.transaction('r', this.db.partners, function () {
-            this.currentQuery = Dexie.currentTransaction;
+          this.db.transaction('r', this.db.partners, function() {
             var queryResult = self.db.partners;
-//            queryResult = queryResult.orderBy('name');
             if (order === 'desc') {
               queryResult = queryResult.reverse();
+            }else {
+              queryResult = queryResult.toCollection();
             }
             if (!_.isEmpty(searchString)) {
-              queryResult = queryResult.filter(function (partner) {
+              queryResult = queryResult.filter(function(partner) {
                 return _.includes(partner.name.toLowerCase(), searchString.toLowerCase());
               });
             }
-            Dexie.ignoreTransaction(function() {
-              queryResult.count(function(count) {
-                self._setTotalResults(count);
-              });
-            });
-
-            return queryResult
-                .offset((pageNumber - 1) * pageSize)
-                .limit(pageSize)
-                .toArray();
-
-          }).then(function (result) {
-            self._setFilteredPartners(result);
-          }).catch(function (error) {
+            return Dexie.Promise.all([
+              queryResult.count(),
+              // Use clone() as offset() and limit() otherwise mutates the same query that is counted
+              queryResult.clone()
+                  .offset((pageNumber - 1) * pageSize)
+                  .limit(pageSize)
+                  .toArray()]);
+          }).then(function(countAndResult) {
+            self._setTotalResults(countAndResult[0]);
+            self._setFilteredPartners(countAndResult[1]);
+          }).catch(function(error) {
             console.error('Error querying partners: ', error);
           });
         },

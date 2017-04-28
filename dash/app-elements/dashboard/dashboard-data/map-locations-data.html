@@ -1,0 +1,88 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../app-config/etools-app-config.html">
+
+<link rel="import" href="../../../../bower_components/etools-ajax/etools-ajax.html">
+<link rel="import" href="../../../app-behaviors/data-element-behavior.html">
+<dom-module id="map-locations-data">
+  <template>
+    <etools-ajax id="ajax"
+                 endpoint="[[endpoint]]"
+                 caching-storage="custom"
+                 dexie-db-collection="locations"
+                 on-success="_handleResponse">
+    </etools-ajax>
+  </template>
+
+  <script>
+    Polymer({
+      is: "map-locations-data",
+      behaviors: [
+        dashBehaviors.DataElementBehavior,
+        etoolsAppConfig.globals
+      ],
+      observers: ['_init(active)'],
+      properties: {
+        endpointName: {
+          type: String,
+          value: 'locations'
+        },
+        currentQuery: {
+          type: Object,
+          value: null
+        },
+        filteredLocations: {
+          type: Array,
+          readOnly: true,
+          notify: true
+        },
+        loaded: {
+          type: Boolean,
+          value: false
+        }
+      },
+      _init: function(active) {
+        if (active && !this.loaded) {
+          this.fire('global-loading', {message: 'Loading locations...', active:true});
+          this._elementReady();
+        }
+      },
+      _handleResponse: function(res) {
+        this.set('loaded', true);
+      },
+      query: function(locations) {
+        var self = this;
+        this.db.transaction('r', this.db.locations, function() {
+          var queryResult = self.db.locations.toCollection();
+          queryResult = queryResult.filter(function(res) {
+            var found = _.includes(locations, parseInt(res.id));
+            if (found && !_.isEmpty(res.geo_point)) {
+              return res;
+            }
+          });
+          return Dexie.Promise.all([queryResult.toArray()])
+              .then(function(result) {
+                var parsed = result[0].map(function(p) {
+                  return _.assign({}, _.pick(p, 'name', 'id', 'location_type'), {point: self.parsePoint(p.geo_point)})
+                });
+                self._setFilteredLocations(parsed);
+              }).catch(function(error) {
+                console.error('Error querying interventions map: ', error);
+              });
+        });
+      },
+      parsePoint: function(point) {
+        if (point) {
+          var pt = point.split('(').pop().slice(0, -1).split(' ');
+          return {
+            latitude: parseFloat(pt[1]),
+            longitude: parseFloat(pt[0])
+          }
+        } else {
+          return null
+        }
+      }
+
+    })
+    ;
+  </script>
+</dom-module>

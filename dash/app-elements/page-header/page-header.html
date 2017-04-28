@@ -3,7 +3,7 @@
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../../bower_components/etools-page-refresh/etools-page-refresh.html">
-<link rel="import" href="../app-selector/app-selector.html">
+<link rel="import" href="../../../bower_components/etools-app-selector/etools-app-selector.html">
 <link rel="import" href="../countries-dropdown/countries-dropdown.html">
 <link rel="import" href="../user-profile-dialog/user-profile-dialog.html">
 <link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
@@ -46,15 +46,17 @@
       }
 
       etools-page-refresh {
-        margin-left: 25px;
+        margin-left: 24px;
       }
+
       .titlebar {
-        flex: 1 ;
+        flex: 1;
         font-size: 28px;
         font-weight: 300;
         color: var(--light-primary-text-color);
       }
-      .titlebar img{
+
+      .titlebar img {
         width: 34px;
         margin: 0 8px 0 24px;
       }
@@ -63,15 +65,26 @@
         @apply(--layout-horizontal);
         @apply(--layout-center);
       }
+
       #second-logo {
         height: 32px;
         width: auto;
+      }
+
+      a.logout {
+        font-size: 16px;
+        color: var(--light-primary-text-color);
+        font-weight: 400;
+        margin-left: 24px;
+        cursor: pointer;
+        -webkit-font-smoothing: antialiased;
       }
 
       @media (min-width: 850px) {
         #menuButton {
           display: none;
         }
+
         div[main-title] {
           margin-left: 32px;
         }
@@ -80,12 +93,16 @@
     <app-toolbar sticky class="content-align">
       <paper-icon-button id="menuButton" class="light" icon="menu" on-tap="openDrawer"></paper-icon-button>
       <div class="titlebar content-align">
-        <app-selector id="selector"></app-selector>
+        <etools-app-selector id="selector"></etools-app-selector>
         <img id="second-logo" src="../../../images/etools-logo-color-white.svg">
       </div>
       <div class="content-align">
-        <countries-dropdown id="countries" countries="[[countries]]" current="[[user.profile.country]]"></countries-dropdown>
-        <paper-icon-button id="profile" icon="social:person" role="button" on-tap="_openUserProfileDialog" aria-disabled="false"></paper-icon-button>
+        <countries-dropdown id="countries" countries="[[countries]]"
+                            current="[[user.profile.country]]"></countries-dropdown>
+        <paper-icon-button id="profile" icon="social:person" role="button" on-tap="_openUserProfileDialog"
+                           aria-disabled="false"></paper-icon-button>
+
+        <a class="logout" on-tap="_logout">Sign out</a>
         <etools-page-refresh id="refresh"></etools-page-refresh>
       </div>
     </app-toolbar>
@@ -102,7 +119,7 @@
           user: {
             type: Object,
           },
-          userProfileDialog: Object
+          userProfileDialog: Object,
         },
         observers: [
           '_updateCountriesList(user.profile.countries_available)'
@@ -130,10 +147,19 @@
         },
         _updateCountriesList: function(countries) {
           var arrayObj = countries.map(function(arrayItem) {
-            return {id: arrayItem.id, name: arrayItem.name, imgClass: this._getFlagIconClass(arrayItem.business_area_code)};
+            return {
+              id: arrayItem.id,
+              name: arrayItem.name,
+              imgClass: this._getFlagIconClass(arrayItem.business_area_code)
+            };
           }.bind(this));
-          arrayObj = _.sortBy(arrayObj, function(c){ return c.name; });
+          arrayObj = _.sortBy(arrayObj, function(c) {
+            return c.name;
+          });
           this.set('countries', arrayObj);
+        },
+        _logout: function() {
+          window.location.href = window.location.origin + '/saml2/logout';
         },
         ready: function() {
           // init indicator dialog data
