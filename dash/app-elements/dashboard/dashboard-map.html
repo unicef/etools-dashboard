@@ -66,7 +66,8 @@
                             int-loc-map="{{intLocMap}}"
                             filtered-interventions="{{filteredInterventions}}"
                             show-loading></map-interventions-data>
-    <map-locations-data id="locationsData" filtered-locations="{{filteredLocations}}" show-loading></map-locations-data>
+    <map-locations-data id="locationsData" active="[[active]]" filtered-locations="{{filteredLocations}}"
+                        show-loading></map-locations-data>
     <paper-material class="list-panel listControls" elevation="1">
       <div class="wrap-controls">
         <div class="title-row">
@@ -162,9 +163,13 @@
         dashBehaviors.DropdownBehavior
       ],
       observers: [
-        '_init(countryProgrammes,sectors,statuses,active,partners)',
+        '_init(countryProgrammes,sectors,statuses,partners)',
       ],
       properties: {
+        active: {
+          type: Boolean,
+          observer: '_init'
+        },
         countryProgrammes: {
           type: Array,
           statePath: 'countryProgrammes'
@@ -241,7 +246,8 @@
         Polymer.dom(document.querySelector('body')).appendChild(markerEl);
         this.markerDialog = document.querySelector('#markerDialog');
       },
-      _openModal: function(e) {;
+      _openModal: function(e) {
+        ;
         var model = e.model.marker;
         var interventions = _.values(this.intLocMap[model.id].interventions);
         var data = {
@@ -253,9 +259,10 @@
         this.markerDialog.opened = true;
       },
       _init: function() {
-        if (!this._allStaticDataLoaded()) {
+        if (!this.active) {
           return;
         }
+        this.set('mapFilter', '');
 //         first render of map only when tab is active, otherwise map tiles don't show
         if (!this.mapDrawnInitially) {
           this.initListFiltersData([
@@ -308,7 +315,6 @@
               path: 'partner'
             },
           ]);
-          this.set('mapFilter','');
         }
       },
       _filterChanged: function(filt) {
@@ -323,7 +329,7 @@
           return;
         }
         if (_.isEmpty(newFilter)) {
-          this.set('markers',[]);
+          this.set('markers', []);
           this.set('showActive', false);
           return;
         }
@@ -340,7 +346,7 @@
       },
       _plotMarkers: function(locations) {
         if (_.isEmpty(this.localActiveMarkers)) {
-          this.set('localActiveMarkers',locations);
+          this.set('localActiveMarkers', locations);
           this.fire('global-loading', {active: false});
           return;
         }
@@ -364,7 +370,7 @@
             this.set('mapDrawnInitially', true);
           }
         } else {
-          if (_.isEqual(this.markers,this.localActiveMarkers)){
+          if (_.isEqual(this.markers, this.localActiveMarkers)) {
             this.set('markers', []);
           }
         }
