@@ -1,5 +1,9 @@
 <link rel="import" href="../../../../bower_components/polymer-redux/polymer-redux.html">
 <script>
+
+  var Redux = Redux || {};
+  var PolymerRedux = PolymerRedux || {};
+
   var initialDropdownDashboardData = {
     countryProgrammes: [],
     offices: [],
@@ -16,6 +20,7 @@
     tripsYears: [],
     unicefUsersData: []
   };
+  /** @polymerBehavior dashBehaviors.EtoolsStaticCommonDataReduxBehavior */
   var commonStaticDataStore = Redux.createStore(function(state, action) {
     if (!state) {
       return initialDropdownDashboardData;
