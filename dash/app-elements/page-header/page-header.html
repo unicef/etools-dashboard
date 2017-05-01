@@ -7,6 +7,8 @@
 <link rel="import" href="../countries-dropdown/countries-dropdown.html">
 <link rel="import" href="../user-profile-dialog/user-profile-dialog.html">
 <link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 
 <link rel="import" href="../../../styles/shared-styles.html">
 
@@ -33,7 +35,17 @@
       }
 
       etools-page-refresh, #profile {
-        color: #BCC1C6; /* TODO: replace with app-theme var */
+        color: var(--title-toolbar-secondary-text-color);
+      }
+
+      #profile.open, #accountProfile, #powerSettings {
+        color: var(--dark-secondary-text-color);
+      }
+
+      paper-icon-button#profile {
+        width: 60px;
+        height: 60px;
+        padding: 12px 16px;
       }
 
       #menuButton {
@@ -64,6 +76,7 @@
       .content-align {
         @apply(--layout-horizontal);
         @apply(--layout-center);
+        height: 60px;
       }
 
       #second-logo {
@@ -88,6 +101,39 @@
         div[main-title] {
           margin-left: 32px;
         }
+
+        .profile-container {
+          @apply(--layout-vertical);
+          justify-content: center;
+          height: 100%;
+        }
+
+        .dropdown-content {
+          position: absolute;
+          top: 60px;
+          z-index: 100;
+          background: var(--primary-background-color);
+          padding: 8px 0;
+          right: 81px;
+        }
+
+        .open {
+          background: var(--primary-background-color);
+        }
+
+        .dropdown-content .item {
+          height: 48px;
+          font-size: 16px;
+          color: var(--primary-text-color);
+          @apply(--layout-horizontal);
+          @apply(--layout-center);
+          padding: 0 16px 0 8px;
+          cursor: pointer;
+        }
+
+        .dropdown-content .item:hover {
+          background: var(--medium-theme-background-color);
+        }
       }
     </style>
     <app-toolbar sticky class="content-align">
@@ -99,10 +145,22 @@
       <div class="content-align">
         <countries-dropdown id="countries" countries="[[countries]]"
                             current="[[user.profile.country]]"></countries-dropdown>
-        <paper-icon-button id="profile" icon="social:person" role="button" on-tap="_openUserProfileDialog"
-                           aria-disabled="false"></paper-icon-button>
-
-        <a class="logout" on-tap="_logout">Sign out</a>
+        <div class="profile-container">
+          <paper-icon-button id="profile" icon="social:person" role="button" on-tap="_handleTap"
+                             aria-disabled="false" class$="[[opened]]"></paper-icon-button>
+          <iron-collapse id="userDropdown">
+            <paper-material elevation="5" class="dropdown-content" id="user-dropdown">
+              <div class="item" on-tap="_openUserProfileDialog">
+                <paper-icon-button id="accountProfile" icon="account-circle"></paper-icon-button>
+                Profile
+              </div>
+              <div class="item" on-tap="_logout">
+                <paper-icon-button id="powerSettings" icon="power-settings-new"></paper-icon-button>
+                Sign out
+              </div>
+            </paper-material>
+          </iron-collapse>
+        </div>
         <etools-page-refresh id="refresh"></etools-page-refresh>
       </div>
     </app-toolbar>
@@ -120,12 +178,19 @@
             type: Object,
           },
           userProfileDialog: Object,
+          opened: {
+            type: String,
+            value: ''
+          }
         },
         observers: [
           '_updateCountriesList(user.profile.countries_available)'
         ],
         listeners: {
           'main_refresh': '_refresh_page'
+        },
+        attached: function() {
+          document.addEventListener('click', this._onCaptureClick.bind(this), true);
         },
         openDrawer: function() {
           this.fire('drawer');
@@ -192,6 +257,34 @@
         _openUserProfileDialog: function(event) {
           this.userProfileDialog.openUserProfileDialog();
         },
+        _handleTap: function(e) {
+          this.$.userDropdown.toggle();
+          if (this.opened) {
+            this.set('opened', '');
+          } else {
+            this.set('opened', 'open');
+          }
+        },
+        _onCaptureClick: function(e) {
+          if (this._isInPath(Polymer.dom(e).path, 'id', 'profile')) {
+            return;
+          }
+          if (!this._isInPath(Polymer.dom(e).path, 'id', 'user-dropdown')) {
+            if (this.$.userDropdown.opened) {
+              this._handleTap();
+            }
+          }
+
+        },
+        _isInPath: function(path, prop, value) {
+          path = path || [];
+          for (var i = 0; i < path.length; i++) {
+            if (path[i][prop] === value) {
+              return true;
+            }
+          }
+          return false;
+        }
       });
     })();
   </script>
