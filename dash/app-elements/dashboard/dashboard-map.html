@@ -10,6 +10,7 @@
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import"
       href="../../../bower_components/etools-searchable-multiselection-menu/etools-searchable-multiselection-menu.html">
+<link rel="import" href="../../../bower_components/etools-loading/etools-loading.html">
 <link rel="import" href="dashboard-data/partners-dropdown-data.html">
 <link rel="import" href="dashboard-data/map-interventions-data.html">
 <link rel="import" href="dashboard-data/map-locations-data.html">
@@ -234,7 +235,11 @@
         },
         localActiveMarkers: {
           type: Array,
-          value: []
+          observer: '_renderPage'
+        },
+        shouldRender: {
+          type: Boolean,
+          value: false
         },
         markerDialog: Object,
       },
@@ -259,10 +264,12 @@
         this.markerDialog.opened = true;
       },
       _init: function() {
+        if (this.active) {
+          this.set('mapFilter', '');
+        }
         if (!this.active || !this._allStaticDataLoaded()) {
           return;
         }
-        this.set('mapFilter', '');
 //         first render of map only when tab is active, otherwise map tiles don't show
         if (!this.mapDrawnInitially) {
           this.initListFiltersData([
@@ -353,7 +360,7 @@
         this.set('markers', locations);
         if (this.active && !this.mapDrawnInitially && this._allStaticDataLoaded()) {
           this.set('mapDrawnInitially', true);
-        }else{
+        } else {
           this._init();
         }
         this.fire('global-loading', {active: false});
@@ -364,6 +371,11 @@
       _partnerChanged: function(val) {
         var id = _.get(val, 'detail.selectedValues.id');
         this.set('partner', id);
+      },
+      _renderPage: function(data) {
+        if (data.length) {
+          this.set('shouldRender', true);
+        }
       },
       _toggleActive: function(truthy) {
         if (truthy) {
