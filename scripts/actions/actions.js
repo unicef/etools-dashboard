@@ -92,9 +92,9 @@ var Actions = [
       templateProps: {}
     },
     prepareData: function(data) {
-      return data.map(function(partnership) {
-        return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
-      });
+     return data.length ? data.map(function(partnership) {
+           return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
+         }) : null;
     }
   },
   {

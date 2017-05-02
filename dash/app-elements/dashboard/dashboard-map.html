@@ -259,7 +259,7 @@
         this.markerDialog.opened = true;
       },
       _init: function() {
-        if (!this.active) {
+        if (!this.active || !this._allStaticDataLoaded()) {
           return;
         }
         this.set('mapFilter', '');
@@ -351,8 +351,10 @@
           return;
         }
         this.set('markers', locations);
-        if (this.active && !this.mapDrawnInitially) {
+        if (this.active && !this.mapDrawnInitially && this._allStaticDataLoaded()) {
           this.set('mapDrawnInitially', true);
+        }else{
+          this._init();
         }
         this.fire('global-loading', {active: false});
       },
