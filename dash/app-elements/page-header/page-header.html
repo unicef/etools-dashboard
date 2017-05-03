@@ -224,9 +224,12 @@
           this.set('countries', arrayObj);
         },
         _logout: function() {
-          window.location.href = window.location.origin + '/saml2/logout';
+          this._clearLocalStorage();
+          this._clearDexieDbs();
         },
         ready: function() {
+          this.dexieDbsNumber = 0;
+          this.deleteAttemptsOnDbs = [];
           // init indicator dialog data
           this.userProfileDialog = document.createElement('user-profile-dialog');
           this.userProfileDialog.setAttribute('id', 'userProfileDialog');
@@ -284,7 +287,35 @@
             }
           }
           return false;
-        }
+        },
+        _clearDexieDbs: function() {
+          // except Chrome and Opera this method will delete only the dbs created with Dexie
+          Dexie.getDatabaseNames(function(dbsNames) {
+            this.dexieDbsNumber = dbsNames.length;
+            if (this.dexieDbsNumber > 0) {
+              dbsNames.forEach(function(dbName) {
+                this._deleteDexieDb(dbName);
+              }.bind(this));
+            }
+          }.bind(this));
+        },
+        _deleteDexieDb: function(dbName) {
+          var db = new Dexie(dbName);
+          db.delete().catch(function(err) {
+            console.error("Could not delete indexedDB: " + dbName, err);
+          }).finally(function() {
+            this.push('deleteAttemptsOnDbs', dbName);
+            this._dexieDbsDeleted();
+          }.bind(this));
+        },
+        _clearLocalStorage: function() {
+          localStorage.clear();
+        },
+        _dexieDbsDeleted: function() {
+          if (this.dexieDbsNumber > 0 && this.deleteAttemptsOnDbs.length === this.dexieDbsNumber) {
+            window.location.href = window.location.origin + '/saml2/logout';
+          }
+        },
       });
     })();
   </script>
