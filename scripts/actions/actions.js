@@ -25,6 +25,7 @@ var Actions = [
       name: 'countryProgrammes'
     },
     prepareData: function(data) {
+      data = data || [];
       return data.map(function(cp) {
         return _.pick(cp, ['id', 'name']);
       });
@@ -38,6 +39,7 @@ var Actions = [
       templateProps: {}
     },
     prepareData: function(data) {
+      data = data || [];
       return data.map(function(office) {
         return _.pick(office, ['id', 'name']);
       });
@@ -51,6 +53,7 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
+      data = data || [];
       return data.map(function(trip) {
         return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']);
       });
@@ -64,6 +67,7 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
+      data = data || [];
       return data.map(function(trip) {
         return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'traveler']);
       });
@@ -77,6 +81,7 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
+      data = data || [];
       return data.map(function(actionPoint) {
         return _.pick(actionPoint, [
           'status', 'description', 'created_at', 'person_responsible_name'
@@ -126,6 +131,7 @@ var Actions = [
       templateProps: {}
     },
     prepareData: function(data) {
+      data = data || [];
       return data.map(function(d) {
         return {
           value: parseInt(d.id, 10),
@@ -142,6 +148,7 @@ var Actions = [
       templateProps: {}
     },
     prepareData: function(data) {
+      data = data || [];
       return data.map(function(d) {
         return {
           value: parseInt(d.id, 10),
@@ -159,6 +166,7 @@ var Actions = [
       templateProps: {}
     },
     prepareData: function(data) {
+      data = data || [];
       return data.map(function(d) {
         return {
           value: parseInt(d.user_id, 10),
