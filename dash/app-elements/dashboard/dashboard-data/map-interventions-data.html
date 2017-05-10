@@ -94,7 +94,7 @@
         if (_.isEqual(this.endpoint, newEp)) {
           return;
         }
-        this.fire('global-loading', {message: 'Loading map...', active: true});
+        this.fire('global-loading', {message: 'Loading map data...', active: true});
         this.set('endpoint', newEp);
       },
       _formatInterventions: function(data) {
@@ -107,7 +107,6 @@
         }));
         locations = _.uniq(locations);
         self._setFilteredInterventions(locations);
-        this.fire('global-loading');
       },
       _handleResponse: function(res) {
         var data = _.get(res, 'detail.data', res.detail);
