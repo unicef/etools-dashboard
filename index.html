@@ -59,6 +59,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       })();
 
       UserVoice.push(['addTrigger', {}]);
+      UserVoice.push(['set', {
+        target: 'self',
+        screenshot_enabled: false
+      }]);
       // Setup Polymer options
       window.Polymer = {
         dom: 'shadow',
