@@ -11,9 +11,11 @@
 <link rel="import"
       href="../../../bower_components/etools-searchable-multiselection-menu/etools-searchable-multiselection-menu.html">
 <link rel="import" href="../../../bower_components/etools-loading/etools-loading.html">
+
 <link rel="import" href="dashboard-data/partners-dropdown-data.html">
 <link rel="import" href="dashboard-data/map-interventions-data.html">
 <link rel="import" href="dashboard-data/map-locations-data.html">
+
 <link rel="import" href="../marker-dialog/marker-dialog.html">
 <link rel="import" href="../../../bower_components/leaflet-map/leaflet-map.html">
 <link rel="import" href="../../../bower_components/leaflet-map/leaflet-marker.html">
@@ -241,6 +243,10 @@
           type: Boolean,
           value: false
         },
+        availableListFilterOptions: {
+          type: Array,
+          value: []
+        },
         markerDialog: Object,
       },
 
@@ -252,26 +258,25 @@
         this.markerDialog = document.querySelector('#markerDialog');
       },
       _openModal: function(e) {
-        ;
         var model = e.model.marker;
         var interventions = _.values(this.intLocMap[model.id].interventions);
         var data = {
           name: model.name,
           interventions: interventions,
-          type: model.location_type,
-        }
+          type: model.location_type
+        };
         this.markerDialog.data = data;
         this.markerDialog.opened = true;
       },
       _init: function() {
-        if (this.active) {
+        if (this.active && _.isEmpty(this.localActiveMarkers)) {
           this.set('mapFilter', '');
         }
         if (!this.active || !this._allStaticDataLoaded()) {
           return;
         }
 //         first render of map only when tab is active, otherwise map tiles don't show
-        if (!this.mapDrawnInitially) {
+        if (!this.mapDrawnInitially && _.isEmpty(this.availableListFilterOptions)) {
           this.initListFiltersData([
             {
               filterName: 'Country Programme',
@@ -322,6 +327,9 @@
               path: 'partner'
             },
           ]);
+          if (!_.isEmpty(this.localActiveMarkers)) {
+            this.fire('global-loading');
+          }
         }
       },
       _filterChanged: function(filt) {
@@ -348,13 +356,15 @@
             this.sectors.length && this.statuses.length && this.partners.length;
       },
       _callLocations: function(locations) {
-        this.fire('global-loading', {message: 'Loading map points...', active: true});
+        this.fire('global-loading', {message: 'Loading map data...', active: true});
         this.$.locationsData.query(locations);
       },
       _plotMarkers: function(locations) {
         if (_.isEmpty(this.localActiveMarkers)) {
           this.set('localActiveMarkers', locations);
-          this.fire('global-loading', {active: false});
+          if (this.availableListFilterOptions.length) {
+            this.fire('global-loading');
+          }
           return;
         }
         this.set('markers', locations);
