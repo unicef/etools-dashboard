@@ -48,7 +48,7 @@
         var interventionsLocationsMap = {};
         data.map(function(int, i) {
           var pickedInt = {};
-          pickedInt[int.id] = _.pick(int, 'partner_name', 'number', 'title');
+          pickedInt[int.id] = _.pick(int, 'partner_name', 'number', 'title','id');
           var sec_locs = _.get(int, 'sector_locations');
           sec_locs = _.flatten(sec_locs.map(function(sec) {
             return _.get(sec, 'locations', []);
@@ -76,7 +76,6 @@
           });
         });
         this._setIntLocMap(interventionsLocationsMap);
-        this.set('filter', {status:'active'});
       },
       query: function(filter) {
         if (_.isEmpty(this.intLocMap) && !_.isEmpty(filter)) {
