@@ -3,7 +3,6 @@
 <link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../../bower_components/paper-menu-button/paper-menu-button.html">
@@ -62,6 +61,13 @@
       paper-toggle-button {
         margin-left: 16px;
       }
+
+      .error {
+        color: red;
+        left: 24px;
+        top: 60px;
+        position: absolute;
+      }
     </style>
     <partners-dropdown-data partners="{{partners}}" active="[[active]]"></partners-dropdown-data>
     <map-interventions-data id="mapData"
@@ -76,6 +82,8 @@
         <div class="title-row">
           <h1 sub-title>Partnerships</h1>
         </div>
+        <p hidden$="[[hasResult]]" class="error">No results for this query</p>
+
       </div>
       <div class="filters-divider"></div>
       <div class="wrap-controls">
@@ -136,13 +144,10 @@
         </paper-menu-button>
       </div>
     </paper-material>
-    <div class="toggler">
-      <p>Show all active</p>
-      <paper-toggle-button checked="{{showActive}}" toggles></paper-toggle-button>
-    </div>
     <paper-material class="map">
-      <template is="dom-if" if="[[mapDrawnInitially]]">
-        <leaflet-map fit-to-markers zoom="5">
+      <template is="dom-if" if="[[staticDataLoaded]]">
+        <leaflet-map fit-to-markers zoom="[[userCountry.initial_zoom]]" longitude="[[userCountry.longitude]]"
+                     latitude="[[userCountry.latitude]]">
           <leaflet-tilelayer
               url="https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZXRvb2xzIiwiYSI6ImNqMGw4N3NtejAyMDIzMnBocHBsYjBsbXoifQ.VA-gzjqtTu-vr-8Ex9oEpA">
           </leaflet-tilelayer>
@@ -154,7 +159,6 @@
           </template>
         </leaflet-map>
       </template>
-
     </paper-material>
   </template>
   <script>
@@ -166,12 +170,16 @@
         dashBehaviors.DropdownBehavior
       ],
       observers: [
-        '_init(countryProgrammes,sectors,statuses,partners)',
+        '_init(countryProgrammes,sectors,statuses,partners,userCountry)',
       ],
       properties: {
         active: {
           type: Boolean,
           observer: '_init'
+        },
+        hasResult: {
+          type: Boolean,
+          value: true
         },
         countryProgrammes: {
           type: Array,
@@ -192,6 +200,10 @@
         statuses: {
           type: Array,
           statePath: 'statuses'
+        },
+        userCountry: {
+          type: Object,
+          statePath: 'userCountry'
         },
         status: {
           type: String,
@@ -214,11 +226,6 @@
           type: Array,
           observer: '_plotMarkers'
         },
-        mapDrawnInitially: {
-          type: Boolean,
-          notify: true,
-          value: false
-        },
         partner: {
           type: String,
           observer: '_filterChanged'
@@ -230,22 +237,13 @@
         intLocMap: {
           type: Object,
         },
-        showActive: {
-          type: Boolean,
-          value: false,
-          observer: '_toggleActive'
-        },
-        localActiveMarkers: {
-          type: Array,
-          observer: '_renderPage'
-        },
-        shouldRender: {
-          type: Boolean,
-          value: false
-        },
         availableListFilterOptions: {
           type: Array,
           value: []
+        },
+        staticDataLoaded: {
+          type: Boolean,
+          value: false
         },
         markerDialog: Object,
       },
@@ -269,14 +267,19 @@
         this.markerDialog.opened = true;
       },
       _init: function() {
-        if (this.active && _.isEmpty(this.localActiveMarkers)) {
+        if (this.active && _.isEmpty(this.intLocMap)) {
+          //initialize the intLocMap object
+
           this.set('mapFilter', '');
         }
+
         if (!this.active || !this._allStaticDataLoaded()) {
           return;
+        }else {
+          this.set('staticDataLoaded', true);
         }
 //         first render of map only when tab is active, otherwise map tiles don't show
-        if (!this.mapDrawnInitially && _.isEmpty(this.availableListFilterOptions)) {
+        if (_.isEmpty(this.availableListFilterOptions)) {
           this.initListFiltersData([
             {
               filterName: 'Country Programme',
@@ -327,7 +330,7 @@
               path: 'partner'
             },
           ]);
-          if (!_.isEmpty(this.localActiveMarkers)) {
+          if (!_.isEmpty(this.availableListFilterOptions)) {
             this.fire('global-loading');
           }
         }
@@ -348,32 +351,30 @@
           this.set('showActive', false);
           return;
         }
+        this.set('hasResult', true);
         this.set('mapFilter', newFilter);
       },
       // ensure redux items loaded before initializing the filters
       _allStaticDataLoaded: function() {
-        return this.countryProgrammes.length &&
-            this.sectors.length && this.statuses.length && this.partners.length;
+        return this._allHaveValues('countryProgrammes', 'sectors', 'statuses', 'partners', 'userCountry');
+      },
+      _allHaveValues: function() {
+        var self = this;
+        var args = _.toArray(arguments);
+        return args.reduce(function(hasVal, prop) {
+          return !_.isEmpty(self[prop]) && hasVal;
+        }, true);
       },
       _callLocations: function(locations) {
         this.fire('global-loading', {message: 'Loading map data...', active: true});
         this.$.locationsData.query(locations);
       },
       _plotMarkers: function(locations) {
-        if (_.isEmpty(this.localActiveMarkers)) {
-          this.set('localActiveMarkers', locations);
-          if (this.availableListFilterOptions.length) {
-            this.fire('global-loading');
-          }
-          return;
+        if (!locations.length) {
+          this.set('hasResult', false);
         }
         this.set('markers', locations);
-        if (this.active && !this.mapDrawnInitially && this._allStaticDataLoaded()) {
-          this.set('mapDrawnInitially', true);
-        } else {
-          this._init();
-        }
-        this.fire('global-loading', {active: false});
+        this.fire('global-loading');
       },
       _partnerFilter: function(filter) {
         return filter.filterName === "Partners";
@@ -382,23 +383,6 @@
         var id = _.get(val, 'detail.selectedValues.id');
         this.set('partner', id);
       },
-      _renderPage: function(data) {
-        if (data.length) {
-          this.set('shouldRender', true);
-        }
-      },
-      _toggleActive: function(truthy) {
-        if (truthy) {
-          this.set('markers', this.localActiveMarkers);
-          if (this.active && !this.mapDrawnInitially) {
-            this.set('mapDrawnInitially', true);
-          }
-        } else {
-          if (_.isEqual(this.markers, this.localActiveMarkers)) {
-            this.set('markers', []);
-          }
-        }
-      }
 
     })
   </script>

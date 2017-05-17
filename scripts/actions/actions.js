@@ -1,4 +1,3 @@
-
 /*
  This was created to keep all static data being loaded in one place. Use template below to add data
  from an endpoint into the redux store.
@@ -97,9 +96,9 @@ var Actions = [
       templateProps: {}
     },
     prepareData: function(data) {
-     return data.length ? data.map(function(partnership) {
-           return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
-         }) : null;
+      return data.length ? data.map(function(partnership) {
+            return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
+          }) : null;
     }
   },
   {
@@ -183,9 +182,19 @@ var Actions = [
       templateProps: {}
     },
     prepareData: function(data) {
-      return _.get(data, 'intervention_status');
+      return _.get(data, 'intervention_status', []);
     }
-
+  },
+  {
+    actionType: 'user-country',
+    propsArray: ['userCountry'],
+    endpointProps: {
+      name: 'userCountry',
+      templateProps: {}
+    },
+    prepareData: function(data) {
+      return data[0];
+    }
   }
 
 ];

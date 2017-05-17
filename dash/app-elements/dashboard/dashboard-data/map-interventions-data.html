@@ -76,7 +76,6 @@
           });
         });
         this._setIntLocMap(interventionsLocationsMap);
-        this.set('filter', {status:'active'});
       },
       query: function(filter) {
         if (_.isEmpty(this.intLocMap) && !_.isEmpty(filter)) {
