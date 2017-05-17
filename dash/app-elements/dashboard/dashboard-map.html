@@ -257,6 +257,7 @@
       },
       _openModal: function(e) {
         var model = e.model.marker;
+        console.log('inters', this.intLocMap[model.id].interventions);
         var interventions = _.values(this.intLocMap[model.id].interventions);
         var data = {
           name: model.name,

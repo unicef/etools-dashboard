@@ -12,6 +12,7 @@
       .marker {
         width: 900px;
         min-height: 86px;
+        overflow: scroll;
       }
       paper-dialog paper-icon-button.close {
         position: absolute;
@@ -46,7 +47,7 @@
         line-height: 14px;
       }
 
-      paper-dialog span.partner-number {
+      paper-dialog a.partner-number {
         color: var(--accent-color);
         text-transform: uppercase;
         font-size: 14px;
@@ -102,8 +103,8 @@
             <div class="layout vertical start">
               <h2 class="partner-name">[[item.partner_name]]</h2>
               <div class="partner">
-                <span class="partner-number">[[item.number]]:</span>
-                <span class="partner-title">[[item.title]] </span>
+                <a class="partner-number" href="[[_getHref(item.id)]]" target="_blank">[[item.number]]:</a>
+                <span class="partner-title" >[[item.title]] </span>
               </div>
             </div>
           </div>
@@ -133,7 +134,10 @@
       },
       _close: function(e) {
         this.opened = false;
-      }
+      },
+      _getHref: function(id) {
+        return '/pmp/interventions/'+ id + '/details';
+      },
     })
   </script>
 </dom-module>
