@@ -1,0 +1,143 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../../../styles/shared-styles.html">
+<link rel="import" href="../../../styles/list-styles.html">
+<link rel="import" href="../../../styles/page-layout-styles.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<dom-module id="marker-dialog">
+  <template>
+    <style include="shared-styles list-styles page-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
+      .marker {
+        width: 900px;
+        min-height: 86px;
+        overflow: scroll;
+      }
+      paper-dialog paper-icon-button.close {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        margin:0 !important;
+        padding:0;
+      }
+
+      paper-icon-button {
+        width: 25px;
+        height: 25px;
+        padding: 0;
+        margin-right: 8px;
+        color: var(--dark-secondary-text-color);
+      }
+
+      paper-dialog h2 {
+        color: var(--dark-secondary-text-color);
+        line-height: 16px;
+        font-weight: normal;
+      }
+
+      paper-dialog h2.type {
+        margin-top: 8px;
+        font-size: 14px;
+      }
+
+      paper-dialog h2.partner-name {
+        font-size: 14px;
+        text-transform: uppercase;
+        line-height: 14px;
+      }
+
+      paper-dialog a.partner-number {
+        color: var(--accent-color);
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: bold;
+      }
+
+      paper-dialog span.partner-title {
+        margin-left: 4px;
+      }
+
+      paper-dialog .partner {
+        padding-top: 8px;
+      }
+      .interventions {
+        margin-bottom: 50px;
+      }
+
+      .interventions > div:nth-child(2) {
+        margin-left: 24px;
+      }
+
+      paper-dialog h2.sector {
+        background: var(--gray-light);
+        color: white;
+        width: 133px;
+        padding: 0 4px;
+        text-align: center;
+        font-size: 16px;
+        margin-bottom: 2px;
+      }
+
+
+    </style>
+    <paper-dialog class="marker"
+                  opened="{{opened}}"
+                  with-backdrop>
+      <paper-icon-button class="close" icon="close" on-tap="_close"></paper-icon-button>
+      <div class="layout horizontal start list-panel title-row">
+        <paper-icon-button icon="communication:location-on"></paper-icon-button>
+        <div class="layout vertical">
+          <h1 sub-title>[[data.name]]</h1>
+          <h2 class="type">[[data.type]]</h2>
+        </div>
+      </div>
+      <div class="layout vertical list-panel title-row">
+        <template is="dom-repeat" items="[[data.interventions]]">
+          <div class="layout horizontal interventions">
+            <div>
+              <template is="dom-repeat" items="[[_values(item.sectors)]]" as="sector">
+                <h2 class="sector">[[sector.name]]</h2>
+              </template>
+            </div>
+            <div class="layout vertical start">
+              <h2 class="partner-name">[[item.partner_name]]</h2>
+              <div class="partner">
+                <a class="partner-number" href="[[_getHref(item.id)]]" target="_blank">[[item.number]]:</a>
+                <span class="partner-title" >[[item.title]] </span>
+              </div>
+            </div>
+          </div>
+        </template>
+
+      </div>
+    </paper-dialog>
+  </template>
+
+  <script>
+    Polymer({
+      is: "marker-dialog",
+      properties: {
+        data: {
+          type: Object,
+        },
+        interventions: {
+          type: Array
+        },
+        opened: {
+          type: Boolean,
+          value: false,
+        },
+      },
+      _values: function(obj) {
+        return _.values(obj)
+      },
+      _close: function(e) {
+        this.opened = false;
+      },
+      _getHref: function(id) {
+        return '/pmp/interventions/'+ id + '/details';
+      },
+    })
+  </script>
+</dom-module>

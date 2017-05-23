@@ -1,0 +1,199 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<script>
+  window.dashBehaviors = window.dashBehaviors || {};
+  dashBehaviors.ListFiltersBehavior = {
+
+    properties: {
+      listFilterOptions: {
+        type: Array
+      },
+      availableListFilterOptions: {
+        type: Array
+      },
+      selectedFilters: {
+        type: Array
+      },
+    },
+
+    /**
+     * Init filter options properties.
+     * `filterOptions` object is particular for each list (see partners-list for example)
+     */
+    initListFiltersData: function(filterOptions) {
+      // init add filter menu options
+      this.set('listFilterOptions', filterOptions);
+      this.set('availableListFilterOptions', this.listFilterOptions);
+      this.set('selectedFilters', []);
+    },
+
+    // update filter data
+    updateFilters: function(filterName, property, newValue) {
+      // update main filters
+      if (this.listFilterOptions) {
+        if (this.listFilterOptions.length > 0) {
+          for (var i = 0; i < this.listFilterOptions.length; i++) {
+            if (this.listFilterOptions[i].filterName === filterName) {
+              this.set('listFilterOptions.' + i + '.' + property, newValue);
+              break;
+            }
+          }
+        }
+        // update available filters
+        var found = false;
+        if (this.availableListFilterOptions.length > 0) {
+          for (var i = 0; i < this.availableListFilterOptions.length; i++) {
+            if (this.availableListFilterOptions[i].filterName === filterName) {
+              this.set('availableListFilterOptions.' + i + '.' + property, newValue);
+              found = true;
+              break;
+            }
+          }
+        }
+        // if the filter was moved from available to selected then update in selected filters
+        if (!found) {
+          if (this.selectedFilters.length > 0) {
+            for (var i = 0; i < this.selectedFilters.length; i++) {
+              if (this.selectedFilters[i].filterName === filterName) {
+                this.set('selectedFilters.' + i + '.' + property, newValue);
+                break;
+              }
+            }
+          }
+        }
+      }
+    },
+
+    // select a filter from ADD FILTER menu
+    selectFilter: function(event) {
+      var selectedOption = event.model.item;
+      this.push('selectedFilters', selectedOption);
+      this.$.filterMenu.close();
+      this._updateAvailableFilterOptions();
+    },
+
+    // update ADD FILTER menu options
+    _updateAvailableFilterOptions: function() {
+      var availableOptions = this.listFilterOptions.filter(function(option) {
+        var selectedOpt = this.selectedFilters.filter(function(selectedFilter) {
+          return selectedFilter.filterName === option.filterName;
+        })[0];
+        return !selectedOpt;
+      }.bind(this));
+      this.set('availableListFilterOptions', availableOptions);
+    },
+
+    // remove already selected filter, also reset filter path value
+    removeFilter: function(event) {
+      var filterName = Polymer.dom(event).localTarget.getAttribute('data-filter-name');
+      var path = Polymer.dom(event).localTarget.getAttribute('data-reset-path');
+
+      var selectedFilterIndex = -1;
+      for (var i = 0; i < this.selectedFilters.length; i++) {
+        if (this.selectedFilters[i].filterName === filterName) {
+          selectedFilterIndex = i;
+          this.selectedFilters[i].alreadySelected = null;
+          break;
+        }
+      }
+
+      if (selectedFilterIndex > -1) {
+        // remove filter
+        this.splice('selectedFilters', selectedFilterIndex, 1);
+        this._updateAvailableFilterOptions();
+        this.set(path, null);
+      }
+    },
+
+    // filter value changed, update filter path with the new value
+    filterValueChanged: function(event) {
+      var filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
+      var filterVal = Polymer.dom(event).localTarget.selected;
+      this.set(filterPath, filterVal);
+    },
+
+    /**
+     * Check filter type. Filter type can be:
+     *  - 'dropdown'(dropdown created using polymer catalog elements)
+     *  - 'esmm' (etools-searchable-multiselection-menu)
+     *  - 'datepicker' (etools-datepicker)
+     */
+    filterTypeIs: function(expentedType, checkedTypeValue) {
+      return expentedType === checkedTypeValue;
+    },
+
+    // 'esmm' (etools-searchable-multiselection-menu) filter value changed
+    esmmValueChanged: function(event) {
+      var filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
+      var filterVal = event.detail.selectedValues;
+      this.set(filterPath, filterVal);
+    },
+
+    // change event for a etoold-datepicker filter
+    _filterDateHasChanged: function(event) {
+      var filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
+      var parentField = Polymer.dom(event).localTarget.parentNode;
+      if (parentField) {
+        parentField.value = event.detail.prettyDate;
+      }
+      this.set(filterPath, event.detail.jsonDate);
+      // console.log(event.detail, filterPath, parentField);
+    },
+
+    _validateFilterSelectedValue: function(value) {
+      return value && ((typeof value === 'string' && value !== '')
+          || (Array.isArray(value) && value.length > 0));
+    },
+    // update shown filters
+    updateShownFilters: function(filters) {
+      if (!filters) {
+        filters = [];
+      }
+      if (Array.isArray(filters) && filters.length > 0) {
+        filters.forEach(function(filter) {
+          // check available filters
+          if (this._validateFilterSelectedValue(filter.selectedValue)) {
+            var foundInAvailable = false;
+            if (this.availableListFilterOptions.length > 0) {
+              for (var i = 0; i < this.availableListFilterOptions.length; i++) {
+                if (this.availableListFilterOptions[i].filterName === filter.filterName) {
+                  if (this.availableListFilterOptions[i].type === 'esmm' || this.availableListFilterOptions[i].type === 'dropdown') {
+                    // update esmm dropdown selection
+                    this.set('availableListFilterOptions.' + i + '.alreadySelected', filter.selectedValue);
+                  } else if (this.availableListFilterOptions[i].type === 'datepicker') {
+                    // update datepicker selection
+                    this.set('availableListFilterOptions.' + i + '.dateSelected', filter.selectedValue);
+                  }
+                  // add filter to selected filters list
+                  this.push('selectedFilters', this.availableListFilterOptions[i]);
+                  foundInAvailable = true;
+                  break;
+                }
+              }
+            }
+            // if the filter is not in available filters lists,
+            // search it in selected filters lists and update selected value0
+            if (!foundInAvailable) {
+              if (this.selectedFilters.length > 0) {
+                for (var i = 0; i < this.selectedFilters.length; i++) {
+                  if (this.selectedFilters[i].filterName === filter.filterName) {
+                    if (this.selectedFilters[i].type === 'esmm' || this.selectedFilters[i].type === 'dropdown') {
+                      // update esmm dropdown selection
+                      this.set('selectedFilters.' + i + '.alreadySelected', filter.selectedValue);
+                    } else if (this.selectedFilters[i].type === 'datepicker') {
+                      // update datepicker selection
+                      this.set('selectedFilters.' + i + '.dateSelected', filter.selectedValue);
+                    }
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        }.bind(this));
+        // refresh available filters and remove those selected
+        this._updateAvailableFilterOptions();
+      }
+    }
+
+  };
+</script>

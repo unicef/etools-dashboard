@@ -24,10 +24,12 @@
 
 <link rel="import" href="../../app-behaviors/common-general-behavior.html">
 <link rel="import" href="../../app-elements/static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
+<link rel="import" href="../../../bower_components/etools-loading/etools-loading.html">
 
 <dom-module id="dashboard-personalized">
   <template>
-    <style include="shared-styles grid-layout-styles list-styles iron-flex iron-flex-factors iron-flex-alignment page-layout-styles">
+    <style
+        include="shared-styles grid-layout-styles list-styles iron-flex iron-flex-factors iron-flex-alignment page-layout-styles">
       :host {
         width: 100%;
       }
@@ -209,10 +211,14 @@
       <data-table-header no-title no-collapse class="list-title layout horizontal center">
         <span>My Partnerships</span>
       </data-table-header>
-      <template is="dom-repeat" items="[[partnerships]]" as="partnership">
+      <template is="dom-if" if="[[!allDataLoaded]]">
+        <etools-loading active></etools-loading>
+      </template>
+      <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden$="[[!allDataLoaded]]">
         <data-table-row no-collapse>
           <div slot="row-data">
-            <a  on-tap="_goToPage" app-name="pmp" page="interventions" id="[[partnership.id]]/details" class="col-data col-2">
+            <a on-tap="_goToPage" app-name="pmp" page="interventions" id="[[partnership.id]]/details"
+               class="col-data col-2">
               [[partnership.number]]
             </a>
             <span class="description description-size flex-3 col-data">
@@ -236,9 +242,9 @@
         dashBehaviors.CommonGeneralBehavior
       ],
       observers: [
-          '_updateUrl(active)',
-          '_updateTrips(tripsTab,myTrips)',
-          '_updateActionPoints(actionsTab,actionPointsForMe)'
+        '_updateUrl(active)',
+        '_updateTrips(tripsTab,myTrips)',
+        '_updateActionPoints(actionsTab,actionPointsForMe)'
       ],
       properties: {
         tripsItems: {
@@ -266,8 +272,12 @@
           statePath: 'actionPointsForMe'
         },
         partnerships: {
-          type: Array,
-          statePath: 'partnerships'
+          statePath: 'partnerships',
+          observer: '_dataLoaded',
+        },
+        allDataLoaded: {
+          type: Boolean,
+          value: false
         }
       },
       _updateTrips: function() {
@@ -276,15 +286,20 @@
       _updateActionPoints: function() {
         this._setItems(this.actionsTab, 'actionPointsItems');
       },
+      _dataLoaded: function(data) {
+        if ((data && data.length) || !data) {
+          this.set('allDataLoaded', true);
+        }
+      },
       _setItems: function(tab, itemsProp) {
         var items = _.get(this, tab, []);
         this.set(itemsProp, items);
       },
       _getDisplayName: function(type, item) {
-        if (type === 'trips'){
+        if (type === 'trips') {
           return item.supervisor_name || item.traveler;
-        }else{
-          return item.person_responsible_name || item.assigned_by_name ;
+        } else {
+          return item.person_responsible_name || item.assigned_by_name;
         }
       },
       _dateFormatted: function(str) {
@@ -297,7 +312,7 @@
       },
       _goToPage: function(e) {
         var path = [this.baseSite, e.target.getAttribute('app-name'),
-              e.target.getAttribute('page')].join('/') +'/' + e.target.id;
+              e.target.getAttribute('page')].join('/') + '/' + e.target.id;
         window.location.href = path;
       },
     });

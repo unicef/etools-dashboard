@@ -18,8 +18,10 @@ App global configuration
       user: 'id',
       countryProgrammes: 'id, name, wbs, from_date',
       offices: 'id, name',
-      partners: 'id, name',
-      trips: 'id, supervisor_name, purpose_of_travel, traveler, created_date'
+      partners: 'name',
+      trips: 'id, supervisor_name, purpose_of_travel, traveler, created_date',
+      mapInterventions: 'id, status',
+      locations: 'id'
     });
 
     var etoolsAppConfig = {
@@ -122,6 +124,9 @@ App global configuration
         exp: 6 * 60 * 60 * 1000, // 6h
         cachingKey: 'countries'
       },
+      userCountry: {
+        url : '/api/v2/users/country',
+      },
       changeCountry: {
         url: '/users/api/changecountry/'
       },
@@ -130,30 +135,42 @@ App global configuration
           exp: 6 * 60 * 60 * 1000, // 6h
           cachingKey: 'partners'
       },
-      sectors: {
-        url: '/api/reports/sectors',
+      partnersDropdown: {
+        url: '/api/v2/partners',
         exp: 6 * 60 * 60 * 1000, // 6h
-        cachingKey: 'sectors'
+        cachingKey: 'partnersDropdown'
       },
+      static: {
+        url: '/api/v2/dropdowns/static',
+        exp: 6 * 60 * 60 * 1000, // 6h
+        cachingKey: 'static'
+      },
+
       sections: {
         url : '/api/sections',
         exp: 6 * 60 * 60 * 1000,
         cachingKey: 'sections'
       },
-			trips: {
-				template: '/api/t2f/travels/?f_traveler=<%=id%>'
-			},
-			tripsSupervised: {
-				template: '/api/t2f/travels/?f_supervisor=<%=id%>'
-			},
+      sectors: {
+        url : '/api/reports/sectors',
+        exp: 6 * 60 * 60 * 1000,
+        cachingKey: 'sectors'
+      },
 			actionPointsByMe: {
         template: '/api/t2f/action_points/?f_assigned_by=<%=id%>'
       },
       actionPointsForMe: {
         template: '/api/t2f/action_points/?f_person_responsible=<%=id%>'
       },
+      mapInterventions: {
+        template: '/api/v2/interventions/map<%=filter%>',
+      },
+      locations:{
+        url: '/api/locations',
+        exp: 6 * 60 * 60 * 1000,
+        cachingKey: 'locations'
+      },
       partnerships: {
-        // Temporary until real endpoint implemented
         template: '/api/v2/interventions/dash'
       },
       partnership: {
@@ -161,6 +178,12 @@ App global configuration
       },
       partnershipOffice: {
         template: '/api/v2/partnership-dash/<%=country_programme%>/<%=office%>'
+      },
+      trips: {
+        template: '/api/t2f/travels/?f_traveler=<%=id%>'
+      },
+      tripsSupervised: {
+        template: '/api/t2f/travels/?f_supervisor=<%=id%>'
       },
       tripsBySection: {
         template: '/api/t2f/travels/dashboard/<%=year%>/<%=month%>'

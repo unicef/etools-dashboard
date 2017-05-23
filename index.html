@@ -8,6 +8,8 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
+<!--Dashboard maps release v1.0.0-->
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -46,6 +48,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="msapplication-tap-highlight" content="no">
 
     <script>
+      var UserVoice = window.UserVoice || [];
+      (function() {
+        var uv = document.createElement('script');
+        uv.type = 'text/javascript';
+        uv.async = true;
+        uv.src = '//widget.uservoice.com/s74dylVlP3CUCbVw6famA.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(uv, s);
+      })();
+
+      UserVoice.push(['addTrigger', {}]);
+      UserVoice.push(['set', {
+        target: 'self',
+        screenshot_enabled: false
+      }]);
+      // Setup Polymer options
+      window.Polymer = {
+        dom: 'shadow',
+        lazyRegister: true
+      };
       // Setup Polymer options
       window.Polymer = {
         dom: 'shadow',
