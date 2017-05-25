@@ -5,10 +5,6 @@
 <link rel="import" href="../../../bower_components/etools-page-refresh/etools-page-refresh.html">
 <link rel="import" href="../../../bower_components/etools-app-selector/etools-app-selector.html">
 <link rel="import" href="../countries-dropdown/countries-dropdown.html">
-<link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
-<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
-<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
-<link rel="import" href="../../../bower_components/etools-dexiejs/etools-dexiejs.html">
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../bower_components/etools-profile-dropdown/etools-profile-dropdown.html">
 <link rel="import" href="../user-profile-dialog/user-profile-data/user-profile-data.html">
@@ -135,10 +131,6 @@
             type: Object,
           },
           userProfileDialog: Object,
-          opened: {
-            type: String,
-            value: ''
-          },
           allOffices: {
             type: Object,
             notify: true
@@ -156,10 +148,6 @@
             type: Object,
             statePath: 'unicefUsersData'
           },
-          dataLoaded: {
-            type: Boolean,
-            value: false
-          }
         },
         observers: [
           '_updateCountriesList(user.profile.countries_available)',
