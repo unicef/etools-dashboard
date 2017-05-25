@@ -5,12 +5,11 @@
 <link rel="import" href="../../../bower_components/etools-page-refresh/etools-page-refresh.html">
 <link rel="import" href="../../../bower_components/etools-app-selector/etools-app-selector.html">
 <link rel="import" href="../countries-dropdown/countries-dropdown.html">
-<link rel="import" href="../user-profile-dialog/user-profile-dialog.html">
-<link rel="import" href="../../../bower_components/iron-icons/social-icons.html">
-<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
-<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
-
 <link rel="import" href="../../../styles/shared-styles.html">
+<link rel="import" href="../../../bower_components/etools-profile-dropdown/etools-profile-dropdown.html">
+<link rel="import" href="../user-profile-dialog/user-profile-data/user-profile-data.html">
+
+<link rel="import" href="../static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
 
 <dom-module id="page-header">
 
@@ -84,15 +83,6 @@
         width: auto;
       }
 
-      a.logout {
-        font-size: 16px;
-        color: var(--light-primary-text-color);
-        font-weight: 400;
-        margin-left: 24px;
-        cursor: pointer;
-        -webkit-font-smoothing: antialiased;
-      }
-
       @media (min-width: 850px) {
         #menuButton {
           display: none;
@@ -102,40 +92,10 @@
           margin-left: 32px;
         }
 
-        .profile-container {
-          @apply(--layout-vertical);
-          justify-content: center;
-          height: 100%;
-        }
-
-        .dropdown-content {
-          position: absolute;
-          top: 60px;
-          z-index: 100;
-          background: var(--primary-background-color);
-          padding: 8px 0;
-          right: 80px;
-        }
-
-        .open {
-          background: var(--primary-background-color);
-        }
-
-        .dropdown-content .item {
-          height: 48px;
-          font-size: 16px;
-          color: var(--primary-text-color);
-          @apply(--layout-horizontal);
-          @apply(--layout-center);
-          padding: 0 16px 0 8px;
-          cursor: pointer;
-        }
-
-        .dropdown-content .item:hover {
-          background: var(--medium-theme-background-color);
-        }
       }
     </style>
+    <user-profile-data id="userProfileData" user-profile="{{profile}}"></user-profile-data>
+
     <app-toolbar sticky class="content-align">
       <paper-icon-button id="menuButton" class="light" icon="menu" on-tap="openDrawer"></paper-icon-button>
       <div class="titlebar content-align">
@@ -145,22 +105,13 @@
       <div class="content-align">
         <countries-dropdown id="countries" countries="[[countries]]"
                             current="[[user.profile.country]]"></countries-dropdown>
-        <div class="profile-container">
-          <paper-icon-button id="profile" icon="social:person" role="button" on-tap="_handleTap"
-                             aria-disabled="false" class$="[[opened]]"></paper-icon-button>
-          <iron-collapse id="userDropdown">
-            <paper-material elevation="5" class="dropdown-content" id="user-dropdown">
-              <div class="item" on-tap="_openUserProfileDialog">
-                <paper-icon-button id="accountProfile" icon="account-circle"></paper-icon-button>
-                Profile
-              </div>
-              <div class="item" on-tap="_logout">
-                <paper-icon-button id="powerSettings" icon="power-settings-new"></paper-icon-button>
-                Sign out
-              </div>
-            </paper-material>
-          </iron-collapse>
-        </div>
+        <etools-profile-dropdown
+            sections="[[allSections]]"
+            offices="[[allOffices]]"
+            users="[[allUsers]]"
+            profile="{{profile}}"
+            on-save-profile="_saveProfile"
+        ></etools-profile-dropdown>
         <etools-page-refresh id="refresh"></etools-page-refresh>
       </div>
     </app-toolbar>
@@ -170,6 +121,8 @@
     (function() {
       Polymer({
         is: 'page-header',
+        behaviors: [dashBehaviors.EtoolsStaticCommonDataReduxBehavior],
+
         properties: {
           countries: {
             type: Array
@@ -178,19 +131,29 @@
             type: Object,
           },
           userProfileDialog: Object,
-          opened: {
-            type: String,
-            value: ''
-          }
+          allOffices: {
+            type: Object,
+            notify: true
+          },
+          offices: {
+            type: Array,
+            statePath: 'offices',
+            observer: '_convertOffices'
+          },
+          allSections: {
+            type: Object,
+            statePath: 'sections'
+          },
+          allUsers: {
+            type: Object,
+            statePath: 'unicefUsersData'
+          },
         },
         observers: [
-          '_updateCountriesList(user.profile.countries_available)'
+          '_updateCountriesList(user.profile.countries_available)',
         ],
         listeners: {
           'main_refresh': '_refresh_page'
-        },
-        attached: function() {
-          document.addEventListener('click', this._onCaptureClick.bind(this), true);
         },
         openDrawer: function() {
           this.fire('drawer');
@@ -211,7 +174,7 @@
           return 'flag-icon ' + 'flag-icon-' + flagIdMap[id];
         },
         _updateCountriesList: function(countries) {
-          if(!countries) {
+          if (!countries) {
             return;
           }
           var arrayObj = countries.map(function(arrayItem) {
@@ -226,99 +189,25 @@
           });
           this.set('countries', arrayObj);
         },
-        _logout: function() {
-          this._clearLocalStorage();
-          this._clearDexieDbs();
+        _saveProfile: function(e) {
+          this.set('profile', e.detail.profile);
+          this.$.userProfileData.saveProfile(this.profile);
         },
         ready: function() {
-          this.dexieDbsNumber = 0;
-          this.deleteAttemptsOnDbs = [];
-          // init indicator dialog data
-          this.userProfileDialog = document.createElement('user-profile-dialog');
-          this.userProfileDialog.setAttribute('id', 'userProfileDialog');
-
-          // this hack is here because elemets added this way can't trigger global events, but they can listen to them
-          this.userProfileDialog.addEventListener('hacky-global-loading', function(event) {
-            this.fire('global-loading', event.detail);
-          }.bind(this), false);
-
-          Polymer.dom(document.querySelector('body')).appendChild(this.userProfileDialog);
-
           var location = window.location.href;
           var production = 'etools.unicef.org';
-
           // If not production environment, changing header color to red
           if (location.indexOf(production) === -1) {
             this.customStyle['--nonprod-header-color'] = '#A73838';
             this.updateStyles();
           }
         },
-
-        detached: function() {
-          if (this.userProfileDialog) {
-            Polymer.dom(document.querySelector('body')).removeChild(this.userProfileDialog);
-          }
-        },
-        // open indicator dialog to add or edit indicator
-        _openUserProfileDialog: function(event) {
-          this.userProfileDialog.openUserProfileDialog();
-        },
-        _handleTap: function(e) {
-          this.$.userDropdown.toggle();
-          if (this.opened) {
-            this.set('opened', '');
-          } else {
-            this.set('opened', 'open');
-          }
-        },
-        _onCaptureClick: function(e) {
-          if (this._isInPath(Polymer.dom(e).path, 'id', 'profile')) {
-            return;
-          }
-          if (!this._isInPath(Polymer.dom(e).path, 'id', 'user-dropdown')) {
-            if (this.$.userDropdown.opened) {
-              this._handleTap();
-            }
-          }
-
-        },
-        _isInPath: function(path, prop, value) {
-          path = path || [];
-          for (var i = 0; i < path.length; i++) {
-            if (path[i][prop] === value) {
-              return true;
-            }
-          }
-          return false;
-        },
-        _clearDexieDbs: function() {
-          // except Chrome and Opera this method will delete only the dbs created with Dexie
-          Dexie.getDatabaseNames(function(dbsNames) {
-            this.dexieDbsNumber = dbsNames.length;
-            if (this.dexieDbsNumber > 0) {
-              dbsNames.forEach(function(dbName) {
-                this._deleteDexieDb(dbName);
-              }.bind(this));
-            }
-          }.bind(this));
-        },
-        _deleteDexieDb: function(dbName) {
-          var db = new Dexie(dbName);
-          db.delete().catch(function(err) {
-            console.error("Could not delete indexedDB: " + dbName, err);
-          }).finally(function() {
-            this.push('deleteAttemptsOnDbs', dbName);
-            this._dexieDbsDeleted();
-          }.bind(this));
-        },
-        _clearLocalStorage: function() {
-          localStorage.clear();
-        },
-        _dexieDbsDeleted: function() {
-          if (this.dexieDbsNumber > 0 && this.deleteAttemptsOnDbs.length === this.dexieDbsNumber) {
-            window.location.href = window.location.origin + '/saml2/logout';
-          }
-        },
+        _convertOffices: function(data) {
+          var offices = data.map(function(office) {
+            return {label: office.name, value: office.id}
+          });
+          this.set('allOffices', offices);
+        }
       });
     })();
   </script>

@@ -58,9 +58,13 @@
     "polymer-redux": "^0.4.0",
     "google-chart": "^1.1.1",
     "leaflet-map": "^1.2.0",
-    "etools-app-selector": "^1.0.3"
+    "etools-app-selector": "^1.0.3",
+    "etools-profile-dropdown": "^1.0.1"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
+  },
+  "resolutions": {
+    "etools-searchable-multiselection-menu": "^2.0.0"
   }
 }

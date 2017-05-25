@@ -28,7 +28,7 @@
         userProfile: {
           type: Object,
           notify: true
-        }
+        },
       },
       saveProfile: function (profile) {
         var url = this.endpoint.url;
@@ -36,7 +36,7 @@
             return;
         }
         if (!_.isEmpty(profile)) {
-          this.fire('hacky-global-loading', {message: 'Saving profile data...', active: true});
+          this.fire('global-loading', {message: 'Saving profile data...', active: true});
           this._prepareAndFireRequest('PATCH', profile, url);
         } else {
           this.fire('toast', {
@@ -64,10 +64,10 @@
       },
       _handleResponse: function(response) {
         this.set('userProfile', response.detail);
-        this.fire('hacky-global-loading', {active: false});
+        this.fire('global-loading');
       },
       _handleErrorResponse: function(response) {
-        this.fire('hacky-global-loading', {active: false});
+        this.fire('global-loading', {active: false});
         var errors = response.detail.request.detail.request.response;
         if (this.ajaxEl.method === 'POST' || this.ajaxEl.method === 'PATCH') {
           // TODO: improve etools-ajax on-fail event data model (received errors)
