@@ -152,15 +152,8 @@
         observers: [
           '_updateCountriesList(user.profile.countries_available)',
         ],
-        listeners: {
-          'main_refresh': '_refresh_page'
-        },
         openDrawer: function() {
           this.fire('drawer');
-        },
-        _refresh_page: function(event) {
-          event.stopImmediatePropagation();
-          this.$.refresh._refresh();
         },
         _getFlagIconClass: function(id) {
           var flagIdMap = {
