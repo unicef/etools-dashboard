@@ -211,10 +211,10 @@
       <data-table-header no-title no-collapse class="list-title layout horizontal center">
         <span>My Partnerships</span>
       </data-table-header>
-      <template is="dom-if" if="[[!allDataLoaded]]">
+      <template is="dom-if" if="[[!partnershipsLoaded]]">
         <etools-loading active></etools-loading>
       </template>
-      <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden$="[[!allDataLoaded]]">
+      <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden$="[[!partnershipsLoaded]]">
         <data-table-row no-collapse>
           <div slot="row-data">
             <a on-tap="_goToPage" app-name="pmp" page="interventions" id="[[partnership.id]]/details"
@@ -244,7 +244,8 @@
       observers: [
         '_updateUrl(active)',
         '_updateTrips(tripsTab,myTrips)',
-        '_updateActionPoints(actionsTab,actionPointsForMe)'
+        '_updateActionPoints(actionsTab,actionPointsForMe)',
+        '_staticDataLoaded(myTrips,tripsSupervised, actionPointsItems, actionPointsForMe)'
       ],
       properties: {
         tripsItems: {
@@ -273,9 +274,9 @@
         },
         partnerships: {
           statePath: 'partnerships',
-          observer: '_dataLoaded',
+          observer: '_checkPartnershipsData',
         },
-        allDataLoaded: {
+        partnershipsLoaded: {
           type: Boolean,
           value: false
         }
@@ -286,9 +287,14 @@
       _updateActionPoints: function() {
         this._setItems(this.actionsTab, 'actionPointsItems');
       },
-      _dataLoaded: function(data) {
+      _checkPartnershipsData: function(data) {
         if ((data && data.length) || !data) {
-          this.set('allDataLoaded', true);
+          this.set('partnershipsLoaded', true);
+        }
+      },
+      _staticDataLoaded: function() {
+        if (this.myTrips && this.tripsSupervised && this.actionPointsItems && this.actionPointsForMe){
+          this.fire('global-loading');
         }
       },
       _setItems: function(tab, itemsProp) {
