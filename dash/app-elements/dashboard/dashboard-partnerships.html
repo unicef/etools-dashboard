@@ -4,6 +4,7 @@
 <link rel="import" href="../../../styles/list-styles.html">
 <link rel="import" href="../../../styles/page-layout-styles.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../../styles/grid-layout-styles.html">
 
 <link rel="import" href="../../app-config/etools-app-config.html">
 
@@ -24,92 +25,79 @@
 <dom-module id="dashboard-partnerships">
 
   <template>
-    <style include="shared-styles list-styles iron-flex iron-flex-factors page-layout-styles">
+    <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors page-layout-styles">
       .by-type {
         padding: 0;
         @apply(--layout-horizontal);
       }
+
       span.title {
         color: var(--accent-color);
         font-weight: 500;
       }
+      data-table-header data-table-column:not(:first-child) {
+        box-sizing: border-box;
+        padding-left: 8px;
+
+      }
+      .col-small {
+        flex: 0 0 8.66666667%;
+        max-width: 8.66666667%;
+      }
     </style>
-    <partnership-data partnership="{{partnership}}" filter="[[filter]]"></partnership-data>
+    <!--<partnership-data partnership="{{partnership}}" filter="[[filter]]"></partnership-data>-->
     <paper-material class="list-panel listControls" elevation="1">
       <div class="controls-wrapper">
-
-        <div class="title-row">
-          <h1 sub-title>Partnerships</h1>
-        </div>
-
-        <div class="filters-divider"></div>
-
-        <div class="wrap-controls">
-          <div class="dropdown-with-clear-btn">
-            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-            <paper-dropdown-menu id="cpDropdown"
-                                 label="Country Programme"
-                                 placeholder="Select from list"
-                                 error-message="Must select country programme"
-                                 noink>
-              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{country_programme}}">
-                <template is="dom-repeat" items="[[countryProgrammeItems]]">
-                  <paper-item id="[[item.id]]">[[item.name]]</paper-item>
-                </template>
-              </paper-menu>
-            </paper-dropdown-menu>
-          </div>
-          <div class="dropdown-with-clear-btn">
-            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-            <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
-              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{office}}">
-                <template is="dom-repeat" items="[[officeItems]]" as="officeItem">
-                  <paper-item id="[[officeItem.id]]">[[officeItem.name]]</paper-item>
-                </template>
-              </paper-menu>
-            </paper-dropdown-menu>
-          </div>
-        </div>
-      </div>
-    </paper-material>
-
-    <paper-material class="list-panel by-type" elevation="1">
-      <div class="trip title-row ">
-        <h2 sub-title>Partnerships by type</h2>
-      </div>
-      <div class="trips flex-c">
-        <div class="trip trip-type-one flex-c">
-          <h1>Bilateral <br>Multilateral</h1>
-          [[data.byType.0]]
-        </div>
-        <div class="trip trip-type-two flex-c">
-          <h1>Civil Society <br>Organizations</h1>
-          [[data.byType.1]]
-        </div>
-        <div class="trip trip-type-three flex-c">
-          <h1>UN Agency</h1>
-          [[data.byType.2]]
-        </div>
-        <div class="trip trip-type-four flex-c">
-          <h1>Government</h1>
-          [[data.byType.3]]
-        </div>
+        <paper-input id="query"
+                     type="search"
+                     autocomplete="off"
+                     value="[[queryString]]"
+                     on-keyup="_setQuery"
+                     placeholder="Search partner name"
+                     always-float-label
+                     on-search="_setQuery">
+          <iron-icon icon="search" prefix></iron-icon>
+        </paper-input>
       </div>
     </paper-material>
 
     <paper-material id="list" elevation="1">
-      <data-table-header no-title no-collapse>
+      <data-table-header label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show"  no-collapse>
         <data-table-column class="flex-2">
-          Partnerships (PD, SHPD, SSFA ToR, DCT to government)
+          Partners
+        </data-table-column>
+        <data-table-column class="flex-2">
+          PD/SSFA Ref #
+        </data-table-column>
+        <data-table-column class="flex-2">
+          Section
         </data-table-column>
         <data-table-column class="flex">
-          Number of Partnerships
+          Field Office
         </data-table-column>
         <data-table-column class="flex">
-          Total Value of Partnerships
+          Status
         </data-table-column>
         <data-table-column class="flex">
-          % of Active Partnerships
+          Start Date <br> End Date
+        </data-table-column>
+        <data-table-column class="flex">
+          Total UNICEF <br>Cash ($)
+        </data-table-column>
+        <data-table-column class="flex">
+          Total UNICEF <br>Supplies ($)
+        </data-table-column>
+        <data-table-column class="flex">
+          CSO <br>Contr. ($)
+        </data-table-column>
+        <data-table-column class="flex">
+          Total <br> Budget ($)
+        </data-table-column>
+        <data-table-column class="flex">
+          $ Disburs. <br>To Date (%)
+        </data-table-column>
+        <data-table-column class="flex">
+          Days Since <br>Last PV
         </data-table-column>
       </data-table-header>
       <template is="dom-repeat" items="[[data.rows]]" as="row">
@@ -130,8 +118,6 @@
           </div>
         </data-table-row>
       </template>
-
-
     </paper-material>
   </template>
 
@@ -178,6 +164,131 @@
           data: {
             type: Object,
             notify: true
+          },
+          fakeData: {
+            type: Array,
+            value : [
+              {
+                partner: 'ABAAD RESOURCE CENTER FOR GENDER',
+                number: 'LEBA/PCA2017060623',
+                section: 'Communication for Development',
+                office: 'Beirut, Tyre',
+                status: 'Active',
+                start_date: '4 April 2016',
+                end_date: '3 April 2017',
+                total_unicef_cash: 1077515,
+                total_supplies: 12097,
+                cso_contribution: '0',
+                total_budget : 1077515,
+                disburs_to_date: 80,
+                days_last_pv: 32
+              },
+              {
+                partner: 'ABAAD RESOURCE CENTER FOR GENDER',
+                number: 'LEBA/PCA201623432',
+                section: 'Health and Nutrition',
+                office: 'Tripoli, Zahle',
+                status: 'Terminated',
+                start_date: '2 Feb 2017',
+                end_date: '30 Dec 2017',
+                total_unicef_cash: 264597,
+                total_supplies: 23091,
+                cso_contribution: 12009,
+                total_budget : 264597,
+                disburs_to_date: 20,
+                days_last_pv: 5
+              },
+              {
+                partner: 'ABAAD RESOURCE CENTER FOR GENDER',
+                number: 'PCA/LEBA/2014/05123123',
+                section: 'Adolescence & Youth',
+                office: 'Tripoli',
+                status: 'Active',
+                start_date: '16 Jun 2016',
+                end_date: '15 Jun 2017',
+                total_unicef_cash: 234120,
+                total_supplies: 9022,
+                cso_contribution: 234340,
+                total_budget : 234120,
+                disburs_to_date: 0,
+                days_last_pv: 12
+              },
+              {
+                partner: 'ACTED',
+                number: 'LEBA/PCA2017061231',
+                section: 'Communication for Development',
+                office: 'Beirut, Tyre',
+                status: 'Active',
+                start_date: '4 Apr 2016',
+                end_date: '3 Apr 2017',
+                total_unicef_cash: 1077515,
+                total_supplies: 23091,
+                cso_contribution: 12009,
+                total_budget : 1077212,
+                disburs_to_date: 12,
+                days_last_pv: 3
+              },
+              {
+                partner: 'ACTED',
+                number: 'LEBA/PCA20161223231',
+                section: 'Health and Nutrition',
+                office: 'Tripoli, Tyre',
+                status: 'Terminated',
+                start_date: '4 Apr 2016',
+                end_date: '3 Apr 2017',
+                total_unicef_cash: 341233,
+                total_supplies: 12332,
+                cso_contribution: 111233,
+                total_budget : 3322312,
+                disburs_to_date: 39,
+                days_last_pv: 9
+              },
+              {
+                partner: 'ACTION CONTRA LA FAIM LIBAN',
+                number: 'PCA/LEBA/2014/051212',
+                section: 'Advocacy and Communication',
+                office: 'Beirut, Tripoli',
+                status: 'Active',
+                start_date: '12 Jun 2016',
+                end_date: '8 Aug 2017',
+                total_unicef_cash: 21333122,
+                total_supplies: 99812,
+                cso_contribution: 299128,
+                total_budget : 20129199,
+                disburs_to_date: 10,
+                days_last_pv: 2
+              },
+              {
+                partner: 'ACTION CONTRA LA FAIM LIBAN',
+                number: 'LEBA/SSFA2012121',
+                section: 'WASH',
+                office: 'Qubbayat',
+                status: 'Active',
+                start_date: '2 Mar 2016',
+                end_date: '20 Sept 2017',
+                total_unicef_cash: 927126,
+                total_supplies: 28127,
+                cso_contribution: 28838,
+                total_budget : 65122221,
+                disburs_to_date: 39,
+                days_last_pv: 10
+              },
+              {
+                partner: 'ACTION CONTRA LA FAIM LIBAN',
+                number: 'PCA/LEBA/SSFA2012121',
+                section: 'Adolescence & Youth',
+                office: 'Tripoli',
+                status: 'Active',
+                start_date: '12 Jun 2016',
+                end_date: '03 Oct 2017',
+                total_unicef_cash: 8872821,
+                total_supplies: 399192,
+                cso_contribution: 21922,
+                total_budget : 8819821,
+                disburs_to_date: 100,
+                days_last_pv: 30
+              }
+            ]
           }
         },
         init: function(active) {
@@ -198,10 +309,10 @@
               country_programme: parseInt(this.country_programme, 10),
               office: parseInt(this.office, 10)
             };
-          }else {
+          } else {
             if (this.office) {
               this.$.cpDropdown.invalid = true;
-            }else {
+            } else {
               this.$.cpDropdown.invalid = false;
             }
           }
