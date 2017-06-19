@@ -109,7 +109,7 @@ var Actions = [
       return moment.months().map(function(month, i) {
         return {
           name: month,
-          monthId: ("0" + (i + 1)).slice(-2),
+          monthId: ('0' + (i + 1)).slice(-2),
         };
       });
     }
