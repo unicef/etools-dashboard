@@ -17,6 +17,7 @@
 
 <link rel="import" href="dashboard-data/partners-data.html">
 <link rel="import" href="../../app-behaviors/common-general-behavior.html">
+<link rel="import" href="../../app-behaviors/pagination-behavior.html">
 
 <dom-module id="dashboard-hact">
   <template>
@@ -109,11 +110,11 @@
                      type="search"
                      autocomplete="off"
                      value="[[queryString]]"
-                     on-keyup="_setQuery"
+                     on-keyup="setQuery"
                      placeholder="Type and search"
                      label="Keywords"
                      always-float-label
-                     on-search="_setQuery">
+                     on-search="setQuery">
           <iron-icon icon="search" prefix></iron-icon>
         </paper-input>
       </div>
@@ -229,8 +230,8 @@
           page-number="[[pageNumber]]"
           total-results="[[totalResults]]"
           visible-range="{{visibleRange}}"
-          on-page-size-changed="_pageSizeChanged"
-          on-page-number-changed="_pageNumberChanged">
+          on-page-size-changed="pageSizeChanged"
+          on-page-number-changed="pageNumberChanged">
       </data-table-footer>
     </paper-material>
   </template>
@@ -242,26 +243,13 @@
         is: 'dashboard-hact',
         behaviors: [
           dashBehaviors.CommonGeneralBehavior,
+          dashBehaviors.PaginationBehavior,
           etoolsAppConfig.globals
         ],
         properties: {
           filteredPartners: {
             type: Array,
-            notify: true,
-          },
-          pageNumber: {
-            type: Number
-          },
-          pageSize: {
-            type: Number
-          },
-          sortOrder: {
-            type: String
-          },
-          queryString: {
-            type: String,
-            notify: true,
-            observer: '_qChanged'
+            notify: true
           },
           csvDownloadUrl: {
             type: String,
@@ -289,27 +277,14 @@
         },
 
         observers: [
-          '_init(active)',
           '_updateUrl(queryString, pageNumber, pageSize,' +
           'sortOrder, requiredDataLoaded, initComplete)'
         ],
 
         listeners: {
-          'sort-changed': '_sortOrderChanged',
+          'sort-changed': 'sortOrderChanged',
         },
 
-        _init: function(active) {
-          var params = this.urlParams;
-          if (!active || !params) {
-            return;
-          }
-          this.set('initComplete', false);
-          this.set('queryString', params.q ? params.q : '');
-          this.set('pageSize', params.size ? parseInt(params.size) : 10);
-          this.set('pageNumber', params.page ? parseInt(params.page) : 1);
-          this.set('sortOrder', params.sort ? params.sort : 'asc');
-          this.set('initComplete', true);
-        },
         _filterPartnersData: function() {
           this.debounce('query', function() {
             this.$.partners.query(
@@ -325,9 +300,8 @@
           }
           this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
 
-          var qs = this._buildQueryString();
+          var qs = this.buildQueryString();
           if (qs !== _lastNavigated) {
-//            _lastNavigated = qs;
             this.updateAppState('dashboard/hact', qs, true);
             if (this.requiredDataLoaded) {
               this._filterPartnersData();
@@ -341,25 +315,8 @@
               this.set('forceDataRefresh', false);
             }
           }
-
         },
-        _buildQueryString: function() {
-          var qs = [];
-          if (this.pageNumber > 1) {
-            qs.push('page=' + this.pageNumber);
-          }
-          if (this.pageSize) {
-            qs.push('size=' + this.pageSize);
-          }
-          if (this.queryString) {
-            qs.push('q=' + this.queryString);
-          }
-          if (this.sortOrder) {
-            qs.push('sort=' + this.sortOrder);
-          }
-          return qs.join('&');
 
-        },
         _buildCsvDownloadUrl: function() {
           return this.queryString ?
               this.getEndpoint('partners').url + '?' + 'search=' + this.queryString + '&format=csv' :
@@ -379,26 +336,7 @@
                     return word[0].toUpperCase();
                   }).join('') : str;
         },
-        _setQuery: function() {
-          this.set('queryString', this.$.query.value);
-        },
-        _qChanged: function(q) {
-          this.set('debounceTime', 300);
-          this.set('pageNumber', 1);
-        },
-        _pageSizeChanged: function(e) {
-          this.set('debounceTime', 200);
-          this.set('pageNumber', 1);
-          this.set('pageSize', parseInt(e.detail.value));
-        },
-        _pageNumberChanged: function(e) {
-          this.set('debounceTime', 50);
-          this.set('pageNumber', e.detail.value);
-        },
-        _sortOrderChanged: function(e) {
-          this.set('debounceTime', 150);
-          this.set('sortOrder', e.detail.direction);
-        },
+
         _requiredDataHasBeenLoaded: function(e) {
           e.stopImmediatePropagation();
           var filtered = _.get(this, 'filteredPartners', []);

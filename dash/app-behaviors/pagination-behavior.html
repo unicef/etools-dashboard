@@ -1,0 +1,75 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<script>
+  window.dashBehaviors = window.dashBehaviors || {};
+  dashBehaviors.PaginationBehavior = {
+    properties: {
+      pageNumber: {
+        type: Number
+      },
+      pageSize: {
+        type: Number
+      },
+      sortOrder: {
+        type: String
+      },
+      queryString: {
+        type: String,
+        notify: true,
+        observer: 'qChanged'
+      },
+    },
+    observers: [
+      '_init(active)',
+    ],
+
+    _init: function(active) {
+      var params = this.urlParams;
+      if (!active || !params) {
+        return;
+      }
+      this.set('initComplete', false);
+      this.set('queryString', params.q ? params.q : '');
+      this.set('pageSize', params.size ? parseInt(params.size) : 10);
+      this.set('pageNumber', params.page ? parseInt(params.page) : 1);
+      this.set('sortOrder', params.sort ? params.sort : 'asc');
+      this.set('initComplete', true);
+    },
+    buildQueryString: function() {
+      var qs = [];
+      if (this.pageNumber > 1) {
+        qs.push('page=' + this.pageNumber);
+      }
+      if (this.pageSize) {
+        qs.push('size=' + this.pageSize);
+      }
+      if (this.queryString) {
+        qs.push('q=' + this.queryString);
+      }
+      if (this.sortOrder) {
+        qs.push('sort=' + this.sortOrder);
+      }
+      return qs.join('&');
+    },
+    qChanged: function(q) {
+      this.set('debounceTime', 300);
+      this.set('pageNumber', 1);
+    },
+    pageSizeChanged: function(e) {
+      this.set('debounceTime', 200);
+      this.set('pageNumber', 1);
+      this.set('pageSize', parseInt(e.detail.value));
+    },
+    pageNumberChanged: function(e) {
+      this.set('debounceTime', 50);
+      this.set('pageNumber', e.detail.value);
+    },
+    sortOrderChanged: function(e) {
+      this.set('debounceTime', 150);
+      this.set('sortOrder', e.detail.direction);
+    },
+    setQuery: function() {
+      this.set('queryString', this.$.query.value);
+    },
+
+  };
+</script>
