@@ -24,6 +24,7 @@
 
 <link rel="import" href="../../app-behaviors/common-general-behavior.html">
 <link rel="import" href="../../app-elements/static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
+<link rel="import" href="../../app-config/etools-app-config.html">
 <link rel="import" href="../../../bower_components/etools-loading/etools-loading.html">
 
 <dom-module id="dashboard-personalized">
@@ -166,7 +167,7 @@
             <div slot="row-data">
               <div class="layout vertical col-10">
                                 <span class="col-data description">
-                                    [[action.description]]
+                                    <a on-tap="_goToActionPoint">[[action.description]]</a>
                                 </span>
                 <span class="suppData">[[action.status]]</span>
               </div>
@@ -239,7 +240,8 @@
       is: 'dashboard-personalized',
       behaviors: [
         dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
-        dashBehaviors.CommonGeneralBehavior
+        dashBehaviors.CommonGeneralBehavior,
+        etoolsAppConfig.globals
       ],
       observers: [
         '_updateUrl(active)',
@@ -293,7 +295,7 @@
         }
       },
       _staticDataLoaded: function() {
-        if (this.myTrips && this.tripsSupervised && this.actionPointsItems && this.actionPointsForMe){
+        if (this.myTrips && this.tripsSupervised && this.actionPointsItems && this.actionPointsForMe) {
           this.fire('global-loading');
         }
       },
@@ -305,7 +307,10 @@
         if (type === 'trips') {
           return item.supervisor_name || item.traveler;
         } else {
-          return item.person_responsible_name || item.assigned_by_name;
+          if (this.actionsTab === 'actionPointsByMe') {
+            return item.person_responsible_name;
+          }
+          return item.assigned_by_name;
         }
       },
       _dateFormatted: function(str) {
@@ -321,6 +326,10 @@
               e.target.getAttribute('page')].join('/') + '/' + e.target.id;
         window.location.href = path;
       },
+      _goToActionPoint: function(e) {
+        var path = this.baseSite + '/' + 't2f/action-point/' + e.model.action.id;
+        window.open(path, '_blank');
+      }
     });
   </script>
 </dom-module>
