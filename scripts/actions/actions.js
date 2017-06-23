@@ -200,17 +200,6 @@ var Actions = [
     prepareData: function(data) {
       return _.get(data, 'intervention_status', []);
     }
-  },
-  {
-    actionType: 'user-country',
-    propsArray: ['userCountry'],
-    endpointProps: {
-      name: 'userCountry',
-      templateProps: {}
-    },
-    prepareData: function(data) {
-      return data[0];
-    }
   }
 
 ];

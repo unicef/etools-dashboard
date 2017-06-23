@@ -1,12 +1,13 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../../bower_components/etools-ajax/etools-ajax.html">
 <link rel="import" href="../../../app-behaviors/data-element-behavior.html">
+<link rel="import"
+      href="../../../app-elements/static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
 <link rel="import" href="../../../app-config/etools-app-config.html">
 
 <dom-module id="user-profile-data">
 
   <template>
-
     <etools-ajax id="ajax"
                  endpoint="[[endpoint]]"
                  on-success="_handleResponse"
@@ -17,8 +18,9 @@
     Polymer({
       is: 'user-profile-data',
       behaviors: [
-          dashBehaviors.DataElementBehavior,
-          etoolsAppConfig.globals
+        dashBehaviors.DataElementBehavior,
+        etoolsAppConfig.globals,
+        dashBehaviors.EtoolsStaticCommonDataReduxBehavior
       ],
       properties: {
         endpointName: {
@@ -30,10 +32,10 @@
           notify: true
         },
       },
-      saveProfile: function (profile) {
+      saveProfile: function(profile) {
         var url = this.endpoint.url;
         if (_.isEmpty(profile)) {
-            return;
+          return;
         }
         if (!_.isEmpty(profile)) {
           this.fire('global-loading', {message: 'Saving profile data...', active: true});
@@ -57,48 +59,15 @@
           this.$.ajax.set('url', url);
         }
       },
-      _resetAjax: function(){
+      _resetAjax: function() {
         this.$.ajax.set('params', null);
         this.$.ajax.set('body', null);
         this.$.ajax.set('url', null);
       },
       _handleResponse: function(response) {
-        this.set('userProfile', response.detail);
+//        this.set('userProfile', response.detail);
+        this.dispatch('user-profile', response.detail);
         this.fire('global-loading');
-      },
-      _handleErrorResponse: function(response) {
-        this.fire('global-loading', {active: false});
-        var errors = response.detail.request.detail.request.response;
-        if (this.ajaxEl.method === 'POST' || this.ajaxEl.method === 'PATCH') {
-          // TODO: improve etools-ajax on-fail event data model (received errors)
-          var errorMessage = 'An error occurred during save!';
-          if (errors) {
-            var errorMessages = ['Errors occurred:\n'];
-            if (Array.isArray(errors) && errors.length > 0) {
-              errors.forEach(function(err) {
-                errorMessages.push(err + '\n');
-              });
-            } else if (typeof errors === 'object' && Object.keys(errors).length > 0) {
-              for (var errField in errors) {
-                if (typeof errors[errField] === 'string') {
-                  errorMessages.push('Field ' + errField + ' - ' + errors[errField] + '\n');
-                } else if (typeof errors[errField] === 'object' && Object.keys(errors[errField]).length > 0) {
-                  for (var errF in errors[errField]) {
-                    errorMessages.push('Field ' + errField + '(' + errF + ') - ' + errors[errField][errF] + '\n');
-                  }
-                } else if (Array.isArray(errors[errField]) && errors[errField].length > 0) {
-                  for(var key in errors[errField]) {
-                    errorMessages.push(errors[errField][key] + '\n');
-                  }
-                }
-              }
-            }
-            if (errorMessages.length > 1) {
-              errorMessage = errorMessages.join('');
-            }
-          }
-          this.fire('toast', {text: errorMessage, showCloseBtn: true});
-        }
       },
     });
 
