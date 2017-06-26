@@ -23,9 +23,9 @@ var Actions = [
     endpointProps: {
       name: 'countryProgrammes'
     },
-    prepareData: function(data) {
+    prepareData: function (data) {
       data = data || [];
-      return data.map(function(cp) {
+      return data.map(function (cp) {
         return _.pick(cp, ['id', 'name']);
       });
     }
@@ -37,9 +37,9 @@ var Actions = [
       name: 'offices',
       templateProps: {}
     },
-    prepareData: function(data) {
+    prepareData: function (data) {
       data = data || [];
-      return data.map(function(office) {
+      return data.map(function (office) {
         return _.pick(office, ['id', 'name']);
       });
     }
@@ -47,13 +47,13 @@ var Actions = [
   {
     actionType: 'trips',
     propsArray: ['trips'],
-    endpointProps: function() {
+    endpointProps: function () {
       var ret = {name: 'trips', templateProps: {id: this.user.id}};
       return ret;
     },
-    prepareData: function(data) {
+    prepareData: function (data) {
       data = data || [];
-      return data.map(function(trip) {
+      return data.map(function (trip) {
         return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']);
       });
     }
@@ -61,13 +61,13 @@ var Actions = [
   {
     actionType: 'trips-supervised',
     propsArray: ['tripsSupervised'],
-    endpointProps: function() {
-      var ret = {name: 'tripsSupervised', templateProps: {id: this.user.id}};
-      return ret;
+    endpointProps: function () {
+      return {name: 'tripsSupervised', templateProps: {id: this.user.id}};
+
     },
-    prepareData: function(data) {
+    prepareData: function (data) {
       data = data || [];
-      return data.map(function(trip) {
+      return data.map(function (trip) {
         return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'traveler']);
       });
     }
@@ -75,15 +75,15 @@ var Actions = [
   {
     actionType: 'action-points-by-me',
     propsArray: ['actionPointsByMe'],
-    endpointProps: function() {
+    endpointProps: function () {
       var ret = {name: 'actionPointsByMe', templateProps: {id: this.user.id}};
       return ret;
     },
-    prepareData: function(data) {
+    prepareData: function (data) {
       data = data || [];
-      return data.map(function(actionPoint) {
+      return data.map(function (actionPoint) {
         return _.pick(actionPoint, [
-          'status', 'description', 'created_at', 'person_responsible_name','id'
+          'status', 'description', 'created_at', 'person_responsible_name', 'id'
         ]);
       });
     }
@@ -91,15 +91,15 @@ var Actions = [
   {
     actionType: 'action-points-for-me',
     propsArray: ['actionPointsForMe'],
-    endpointProps: function() {
+    endpointProps: function () {
       var ret = {name: 'actionPointsForMe', templateProps: {id: this.user.id}};
       return ret;
     },
-    prepareData: function(data) {
+    prepareData: function (data) {
       data = data || [];
-      return data.map(function(actionPoint) {
+      return data.map(function (actionPoint) {
         return _.pick(actionPoint, [
-          'status', 'description', 'created_at', 'assigned_by_name','id'
+          'status', 'description', 'created_at', 'assigned_by_name', 'id'
         ]);
       });
     }
@@ -111,18 +111,18 @@ var Actions = [
       name: 'partnerships',
       templateProps: {}
     },
-    prepareData: function(data) {
-      return data.length ? data.map(function(partnership) {
-            return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
-          }) : null;
+    prepareData: function (data) {
+      return data.length ? data.map(function (partnership) {
+        return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
+      }) : null;
     }
   },
   {
     actionType: 'trips-months',
     propsArray: ['tripsMonths'],
     endpointProps: {},
-    prepareData: function() {
-      return moment.months().map(function(month, i) {
+    prepareData: function () {
+      return moment.months().map(function (month, i) {
         return {
           name: month,
           monthId: ("0" + (i + 1)).slice(-2),
@@ -134,7 +134,7 @@ var Actions = [
     actionType: 'trips-years',
     propsArray: ['tripsYears'],
     endpointProps: {},
-    prepareData: function() {
+    prepareData: function () {
       return _.range(2015, moment().year() + 1);
     }
   },
@@ -145,9 +145,9 @@ var Actions = [
       name: 'sections',
       templateProps: {}
     },
-    prepareData: function(data) {
+    prepareData: function (data) {
       data = data || [];
-      return data.map(function(d) {
+      return data.map(function (d) {
         return {
           value: parseInt(d.id, 10),
           label: d.name
@@ -162,9 +162,9 @@ var Actions = [
       name: 'sectors',
       templateProps: {}
     },
-    prepareData: function(data) {
+    prepareData: function (data) {
       data = data || [];
-      return data.map(function(d) {
+      return data.map(function (d) {
         return {
           value: parseInt(d.id, 10),
           label: d.name
@@ -180,9 +180,9 @@ var Actions = [
       name: 'unicefUsers',
       templateProps: {}
     },
-    prepareData: function(data) {
+    prepareData: function (data) {
       data = data || [];
-      return data.map(function(d) {
+      return data.map(function (d) {
         return {
           value: parseInt(d.user_id, 10),
           label: d.full_name
@@ -197,7 +197,7 @@ var Actions = [
       name: 'static',
       templateProps: {}
     },
-    prepareData: function(data) {
+    prepareData: function (data) {
       return _.get(data, 'intervention_status', []);
     }
   }

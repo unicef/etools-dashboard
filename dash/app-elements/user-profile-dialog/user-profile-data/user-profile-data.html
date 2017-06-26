@@ -30,7 +30,21 @@
         userProfile: {
           type: Object,
           notify: true
+        }
+      },
+      actions: {
+        setUserProfileData: function(data) {
+          return {
+            type: 'SET_USER_PROFILE',
+            userProfile: data
+          };
         },
+        setUserPermissions: function (permissions) {
+          return {
+            type: 'SET_USER_PERMISSIONS',
+            permissions: permissions
+          };
+        }
       },
       saveProfile: function(profile) {
         var url = this.endpoint.url;
@@ -65,10 +79,44 @@
         this.$.ajax.set('url', null);
       },
       _handleResponse: function(response) {
-//        this.set('userProfile', response.detail);
-        this.dispatch('user-profile', response.detail);
+        var user = _.get(response, 'detail', {});
+        this._setPermissions(user);
+        this.dispatch('setUserProfileData', user);
         this.fire('global-loading');
       },
+      _setPermissions: function (user) {
+        var _permissions = {};
+        var permissionsList = this.getAllPermissions();
+        if (!_.isEmpty(user)) {
+          permissionsList.defaultPermissions.forEach(function(perm) {
+            _permissions[perm] = true;
+          });
+          if (!user.is_staff) {
+            permissionsList.partnerOnlyPermissions.forEach(function(perm) {
+              _permissions[perm] = true;
+            });
+          } else {
+            // user is not partner but staff:
+            permissionsList.managementPermissions.forEach(function(perm) {
+              _permissions[perm] = true;
+            });
+
+            if (user.partner_staff_member) {
+              // staff that has faked partnership by setting partner_staff_member on their profile
+              permissionsList.partnerPermissions.forEach(function(perm) {
+                _permissions[perm] = true;
+              });
+            }
+          }
+        } else {
+          //for testing
+          permissionsList.superPermissions.forEach(function(perm) {
+            _permissions[perm] = true;
+          });
+        }
+        this.dispatch('setUserPermissions', _permissions);
+
+      }
     });
 
   </script>
