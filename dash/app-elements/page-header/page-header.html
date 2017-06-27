@@ -105,7 +105,7 @@
       </div>
       <div class="content-align">
         <countries-dropdown id="countries" countries="[[countries]]"
-                            current="[[user.profile.country]]"></countries-dropdown>
+                            current="[[user.country.id]]"></countries-dropdown>
         <etools-profile-dropdown
             sections="[[allSections]]"
             offices="[[allOffices]]"
@@ -160,7 +160,7 @@
           }
         },
         observers: [
-          '_updateCountriesList(user.profile.countries_available)',
+          '_updateCountriesList(user.countries_available)',
         ],
         listeners: {
           'main_refresh': '_refresh_page'
