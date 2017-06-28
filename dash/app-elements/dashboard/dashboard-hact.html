@@ -198,7 +198,7 @@
             </div>
             <div class="col-3 layout horizontal">
               <span class="col-data col-4-sub ">[[currencyFormat(partner.total_ct_cp)]]</span>
-              <span class="col-data col-4-sub">[[_getGovernmentDisplay(partner,'hact_values.planned_cash_transfer')]]</span>
+              <span class="col-data col-4-sub">[[_getGovernmentDisplay(partner,'hact_values.planned_cash_transfer','true')]]</span>
               <span class="col-data col-4-sub">[[currencyFormat(partner.total_ct_cy)]]</span>
             </div>
             <span class="col-data col-micro flex">[[partner.hact_values.micro_assessment_needed]]</span>
@@ -379,12 +379,14 @@
                     return word[0].toUpperCase();
                   }).join('') : str;
         },
-        _getGovernmentDisplay: function(partner,prop) {
+        _getGovernmentDisplay: function(partner,prop,toCurrency) {
+          console.log('prop', prop , partnerValue)
+
           var partnerValue = _.get(partner, prop);
           if ( !partnerValue && partner.partner_type === 'Government') {
             return '-';
           } else {
-            return this.currencyFormat(partnerValue);
+            return toCurrency ? this.currencyFormat(partnerValue) : partnerValue;
           }
         },
         _setQuery: function() {
