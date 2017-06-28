@@ -205,6 +205,10 @@
           this._clearLocalStorage();
           window.location.href = window.location.origin + '/saml2/logout';
         },
+        _saveProfile: function (e) {
+          this.set('profile', e.detail.profile);
+          this.$.userProfileData.saveProfile(this.profile);
+        },
         _clearDexieDbs: function() {
           etoolsAppConfig.db.delete();
         },
