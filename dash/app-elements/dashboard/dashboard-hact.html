@@ -380,10 +380,8 @@
                   }).join('') : str;
         },
         _getGovernmentDisplay: function(partner,prop,toCurrency) {
-          console.log('prop', prop , partnerValue)
-
           var partnerValue = _.get(partner, prop);
-          if ( !partnerValue && partner.partner_type === 'Government') {
+          if (partner.partner_type === 'Government') {git
             return '-';
           } else {
             return toCurrency ? this.currencyFormat(partnerValue) : partnerValue;
