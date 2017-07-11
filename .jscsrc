@@ -1,10 +1,19 @@
+
 {
   "preset": "google",
   "disallowSpacesInAnonymousFunctionExpression": null,
   "disallowTrailingWhitespace": null,
-  "maximumLineLength": 100,
+  "maximumLineLength": 120,
   "validateIndentation": null,
   "requireOperatorBeforeLineBreak": null,
   "requireCamelCaseOrUpperCaseIdentifiers": {"ignoreProperties": true},
-  "excludeFiles": ["node_modules/**"]
+  "excludeFiles": ["node_modules/**"],
+  "jsDoc": {
+    "checkAnnotations": {
+      "preset": "closurecompiler",
+      "extra": {
+        "polymerBehavior": true
+      }
+    }
+  }
 }

@@ -56,7 +56,6 @@
         },
         init: function(active) {
           if (active && !this.firstLoad) {
-            console.log('hact active')
             this.fire('global-loading', {message: 'Loading partners data...', active: true});
             this._elementReady();
             this.set('firstLoad',true);
