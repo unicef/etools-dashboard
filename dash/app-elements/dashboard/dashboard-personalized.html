@@ -100,9 +100,12 @@
       <div class="toolbar-title toolbar-item flex-2">
         Trip management
       </div>
-      <paper-button on-tap="_goToPage" app-name="t2f" page="travel-list" class="button toolbar-item">
-        <iron-icon icon="maps:transfer-within-a-station"></iron-icon>
-        Travel 2 Field
+      <paper-button class="button toolbar-item">
+        <a href="[[baseSite]]/t2f/travel-list/" on-tap="_goToPage" app-name="t2f" page="travel-list">
+          <iron-icon icon="maps:transfer-within-a-station"></iron-icon>
+          Travel 2 Field
+        </a>
+
       </paper-button>
       <paper-button on-tap="_goToPage" app-name="t2f" page="action-points-list" class="button toolbar-item">
         <iron-icon icon="list"></iron-icon>
@@ -131,7 +134,8 @@
           <template is="dom-repeat" items="[[tripsItems]]" as="trip">
             <data-table-row no-collapse>
               <div slot="row-data">
-                <a on-tap="_goToPage" app-name="t2f" page="edit-travel" id="[[trip.id]]" class="col-data col">
+                <a on-tap="_goToPage" href="[[baseSite]]/t2f/edit-travel/[[trip.id]]" app-name="t2f" page="edit-travel"
+                   id="[[trip.id]]" class="col-data col">
                   [[trip.reference_number]]
                 </a>
                 <span class="description description-size col-data flex-2">
@@ -170,7 +174,7 @@
               <div slot="row-data">
                 <div class="layout vertical col-10">
                                 <span class="col-data description">
-                                    <a on-tap="_goToActionPoint">[[action.description]]</a>
+                                    <a on-tap="_goToActionPoint" href="[[baseSite]]/t2f/action-point/[[action.id]]">[[action.description]]</a>
                                 </span>
                   <span class="suppData">[[action.status]]</span>
                 </div>
@@ -185,7 +189,7 @@
       </paper-material>
     </div>
 
-    <!--MANAGEMENT TOOLBAR-->
+    <!-- PARTNERSHIP MANAGEMENT TOOLBAR-->
     <paper-material class="list-panel management-toolbar layout horizontal center">
       <div class="toolbar-icon-container partnership-management">
         <iron-icon class="toolbar-icon" icon="social:group"></iron-icon> <!-- Placeholder icon -->
@@ -193,21 +197,30 @@
       <div class="toolbar-title toolbar-item flex-2">
         Partnership management
       </div>
-      <paper-button on-tap="_goToPage" app-name="pmp" page="partners/list" class="button toolbar-item">
-        <iron-icon icon="social:people"></iron-icon>
-        Partners
+      <paper-button class="button toolbar-item">
+        <a on-tap="_goToPage" href="[[baseSite]]/pmp/partners/list" app-name="pmp" page="partners/list">
+          <iron-icon icon="social:people"></iron-icon>
+          Partners
+        </a>
       </paper-button>
-      <paper-button on-tap="_goToPage" app-name="pmp" page="agreements/list" class="button toolbar-item">
-        <iron-icon icon="av:playlist-add-check"></iron-icon>
-        Agreements
+      <paper-button class="button toolbar-item">
+        <a on-tap="_goToPage" href="[[baseSite]]/pmp/aggreements/list" app-name="pmp" page="agreements/list">
+          <iron-icon icon="av:playlist-add-check"></iron-icon>
+          Agreements
+        </a>
       </paper-button>
-      <paper-button on-tap="_goToPage" app-name="pmp" page="interventions/list" class="button toolbar-item">
-        <iron-icon icon="verified-user"></iron-icon>
-        PD/SSFA TOR
+      <paper-button class="button toolbar-item">
+        <a on-tap="_goToPage" href="[[baseSite]]/pmp/interventions/list" app-name="pmp"
+           page="interventions/list">
+          <iron-icon icon="verified-user"></iron-icon>
+          PD/SSFA TOR
+        </a>
       </paper-button>
-      <paper-button on-tap="_goToPage" app-name="pmp" page="governments/list" class="button toolbar-item">
-        <iron-icon icon="account-balance"></iron-icon>
-        Goverment-in-simple
+      <paper-button class="button toolbar-item">
+        <a on-tap="_goToPage" href="[[baseSite]]/pmp/governments/list" app-name="pmp" page="governments/list">
+          <iron-icon icon="account-balance"></iron-icon>
+          Goverment-in-simple
+        </a>
       </paper-button>
     </paper-material>
 
@@ -219,20 +232,23 @@
       <template is="dom-if" if="[[!partnershipsLoaded]]">
         <etools-loading active></etools-loading>
       </template>
-      <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden$="[[!partnershipsLoaded]]">
-        <data-table-row no-collapse>
-          <div slot="row-data">
-            <a on-tap="_goToPage" app-name="pmp" page="interventions" id="[[partnership.id]]/details"
-               class="col-data col-2">
-              [[partnership.number]]
-            </a>
-            <span class="description description-size flex-3 col-data">
+      <div class="list-content">
+        <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden$="[[!partnershipsLoaded]]">
+          <data-table-row no-collapse>
+            <div slot="row-data">
+              <a on-tap="_goToPage" href="[[baseSite]]/pmp/interventions/[[partnership.id]]/details" app-name="pmp"
+                 page="interventions" id="[[partnership.id]]/details"
+                 class="col-data col-2">
+                [[partnership.number]]
+              </a>
+              <span class="description description-size flex-3 col-data">
                             [[partnership.title]]
                         </span>
-            <span class="col-data col-2 layout horizontal end-justified">[[currencyFormat(partnership.unicef_budget)]] (Total Budget)</span>
-          </div>
-        </data-table-row>
-      </template>
+              <span class="col-data col-2 layout horizontal end-justified">[[currencyFormat(partnership.unicef_budget)]] (Total Budget)</span>
+            </div>
+          </data-table-row>
+        </template>
+      </div>
 
     </paper-material>
 
@@ -285,7 +301,7 @@
         partnershipsLoaded: {
           type: Boolean,
           value: false
-        }
+        },
       },
       _updateTrips: function() {
         this._setItems(this.tripsTab, 'tripsItems');
@@ -328,11 +344,11 @@
       _goToPage: function(e) {
         var path = [this.baseSite, e.target.getAttribute('app-name'),
               e.target.getAttribute('page')].join('/') + '/' + e.target.id;
-        window.location.href = path;
+        this.manageClickEvent(e, path);
       },
       _goToActionPoint: function(e) {
         var path = this.baseSite + '/' + 't2f/action-point/' + e.model.action.id;
-        window.open(path, '_blank');
+        this.manageClickEvent(e, path);
       }
     });
   </script>
