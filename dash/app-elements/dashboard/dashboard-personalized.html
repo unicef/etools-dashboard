@@ -245,7 +245,7 @@
       behaviors: [
         dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
         dashBehaviors.CommonGeneralBehavior,
-        etoolsAppConfig.globals
+        etoolsAppConfig.globals,
       ],
       observers: [
         '_updateUrl(active)',
@@ -285,6 +285,10 @@
         partnershipsLoaded: {
           type: Boolean,
           value: false
+        },
+        user: {
+          type: Object,
+          statePath: 'userProfile'
         }
       },
       _updateTrips: function() {

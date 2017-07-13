@@ -1,11 +1,10 @@
 
-
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="redux-bahaviors/common-static-data-redux-bahavior.html">
 <link rel="import" href="../../app-config/etools-app-config.html">
 <link rel="import" href="../../app-behaviors/actions-behavior.html">
 <link rel="import" href="../../../bower_components/etools-ajax/etools-ajax.html">
-
+<link rel="import" href="../../../bower_components/moment-element/moment-import.html">
 
 <dom-module id="common-data-loaders">
   <template>
@@ -29,7 +28,12 @@
         },
         user: {
           type: Object,
+          statePath: 'userProfile',
           observer: 'init'
+        },
+        initiated: {
+          type: Boolean,
+          value: false
         },
         nextAction: {
           type: Object
@@ -62,7 +66,10 @@
         this.set('toDispatch', mappedItems);
       },
 
-      init: function() {
+      init: function(user) {
+        if (this.initiated) {
+          return;
+        }
         this.actionsToDispatch();
         this._callNext();
       },
@@ -80,12 +87,13 @@
           } else {
             this.set('endpoint', next.endpoint);
           }
+        }else {
+          this.set('initiated', true);
         }
       },
       _handleResponse: function(response) {
         var data = _.get(response, 'detail.data', response.detail);
         this.dispatch(this.nextAction.type, this.nextAction.prepareData(data));
-
         this._callNext();
       },
 

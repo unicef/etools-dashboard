@@ -30,8 +30,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="app-elements/static-common-data/common-data-loaders.html">
 <link rel="import" href="../bower_components/etools-loading/etools-loading-behavior.html">
 <link rel="import" href="app-behaviors/notification-toasts-behavior.html">
+<link rel="import" href="app-elements/static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
 
-<link rel="import" href="app-elements/user-data/user-data.html">
+
+<link rel="import" href="app-elements/user-profile-dialog/user-profile-data/user-profile-data.html">
 <link rel="import" href="app-elements/side-bar-item/side-bar-item.html">
 <link rel="import" href="app-elements/page-header/page-header.html">
 <link rel="import" href="app-elements/page-footer/page-footer.html">
@@ -53,14 +55,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         z-index: 100;
         --app-drawer-width: 220px;
         --app-drawer-content-container: {
-            background-color: var(--light-theme-content-color);
+          background-color: var(--light-theme-content-color);
         };
       }
 
       app-toolbar {
         background-color: var(--dashboards-toolbar-color);
-        color: white;--dashboards-toolbar-color
-        --app-toolbar-font-size: 16px;
+        color: white;
+        --dashboards-toolbar-color --app-toolbar-font-size: 16px;
         text-transform: uppercase;
       }
 
@@ -97,9 +99,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .side-nav-wrapper .nav-menu {
         padding: 8px 0;
       }
+
       .nav-menu, .flexy {
         @apply(--layout-flex);
       }
+
       .secondary-header {
         color: var(--gray-dark);
         height: 60px;
@@ -118,15 +122,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         text-transform: none;
         color: #eeff41; /* TODO: replace with a var from above */
       }
+
       .lighter-item {
         --dark-icon-color: var(--gray-light);
         --dark-primary-text-color: var(--gray-light);
       }
 
     </style>
-    <common-data-loaders user="[[user]]"></common-data-loaders>
-    <user-data user="{{user}}" permissions="{{permissions}}"></user-data>
-
+    <common-data-loaders></common-data-loaders>
     <app-location route="{{route}}"></app-location>
 
     <app-route
@@ -150,9 +153,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="flexy"></div>
 
             <div class="secondary-header">eTools Community Channels</div>
-            <side-bar-item name="Knowledge base" class="lighter-item" icon="maps:local-library" href="https://etools.uservoice.com"></side-bar-item>
-            <side-bar-item name="Discussion" class="lighter-item" icon="icons:question-answer" href="https://www.yammer.com/unicef.org/#/threads/inGroup?type=in_group&feedId=5782560"></side-bar-item>
-            <side-bar-item name="Information" class="lighter-item last-one" icon="icons:info" href="http://etools.unicefresults.org"></side-bar-item>
+            <side-bar-item name="Knowledge base" class="lighter-item" icon="maps:local-library"
+                           href="https://etools.uservoice.com"></side-bar-item>
+            <side-bar-item name="Discussion" class="lighter-item" icon="icons:question-answer"
+                           href="https://www.yammer.com/unicef.org/#/threads/inGroup?type=in_group&feedId=5782560"></side-bar-item>
+            <side-bar-item name="Information" class="lighter-item last-one" icon="icons:info"
+                           href="http://etools.unicefresults.org"></side-bar-item>
           </div>
         </div>
 
@@ -160,21 +166,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- Main content -->
       <app-header-layout fullbleed has-scrolling-region>
-          <app-header  fixed shadow>
-             <page-header id="pageheader" title="eTools" user="[[user]]"></page-header>
-          </app-header>
-          <iron-pages id="pages"
-                      selected="[[page]]"
-                      attr-for-selected="name"
-                      fallback-selection="dashboard"
-                      role="main">
+        <app-header fixed shadow>
+          <page-header id="pageheader" title="eTools"></page-header>
+        </app-header>
+        <iron-pages id="pages"
+                    selected="[[page]]"
+                    attr-for-selected="name"
+                    fallback-selection="dashboard"
+                    role="main">
 
-              <template  is="dom-if" id="privatePages" on-dom-change="_pagesStamped" if="[[permissions.loggedInDefault]]">
-                  <page-dashboard name="dashboard" route="[[subroute]]" user="[[user]]"></page-dashboard>
-              </template>
-              <page-not-found name="not-found"></page-not-found>
-          </iron-pages>
-          <page-footer></page-footer>
+          <template is="dom-if" id="privatePages" on-dom-change="_pagesStamped" if="[[permissions.loggedInDefault]]">
+            <page-dashboard name="dashboard" route="[[subroute]]"></page-dashboard>
+          </template>
+          <page-not-found name="not-found"></page-not-found>
+        </iron-pages>
+        <page-footer></page-footer>
       </app-header-layout>
 
 
@@ -208,12 +214,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         baseUrl: String,
         initialLoad: {
-            type: Boolean,
-            value: true
+          type: Boolean,
+          value: true
         },
         permissions: {
-            type: Object,
-            value: null
+          type: Object,
+          statePath : 'permissions'
         },
         subroute: {
           type: Object
@@ -223,7 +229,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       behaviors: [
         etoolsAppConfig.globals,
         dashBehaviors.NotificationToastsBehavior,
-        etoolsBehaviors.LoadingBehavior
+        etoolsBehaviors.LoadingBehavior,
+        dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
       ],
 
       observers: [
@@ -240,31 +247,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'forbidden': '_onForbidden'
       },
 
-      attached: function() {
+      attached: function () {
         // for some reason the "$=" will make basePath undefined, we need to use a local property
         this.baseUrl = this.basePath;
         //if (this.route.path === this.baseUrl) {
         //  this.set('route.path', this.baseUrl + 'partners/list');
         //}
       },
-      ready: function() {
+      ready: function () {
         // create loading element, used for global loading
         this.globalLoadingElement = this.createLoading();
         this.fire('global-loading', {message: 'Loading data...', active: true});
       },
-      updateAppSelector: function() {
-          this.$.pageheader.fire('toggle-menu');
+      updateAppSelector: function () {
+        this.$.pageheader.fire('toggle-menu');
       },
-      _onForbidden: function(event) {
+      _onForbidden: function (event) {
         window.location.href = this.loginPath;
       },
-      _updateMainPath: function(event) {
+      _updateMainPath: function (event) {
         this.set('route.path', this.baseUrl + event.detail.path);
         event.stopPropagation();
       },
-      _permissionsPagesStamped: function(permissions, _pagesAvailable) {
+      _permissionsPagesStamped: function (permissions, _pagesAvailable) {
         if (!permissions || !_pagesAvailable) {
-            return;
+          return;
         }
         if ((this.route.path === this.baseUrl || this.route.path === '/') &&
             permissions.loggedInDefault) {
@@ -277,11 +284,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         this.initialLoad = false;
       },
-      toggleDrawer: function() {
+      toggleDrawer: function () {
         this.$.drawer.toggle();
       },
 
-      _routePageChanged: function(page) {
+      _routePageChanged: function (page) {
         if ((this.route) && (this.baseUrl)) {
           var subroute = JSON.parse(JSON.stringify(this.route));
           subroute.path =
@@ -296,17 +303,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       },
 
-      _pageChanged: function(page) {
+      _pageChanged: function (page) {
         var resolvedPageUrl = this.resolveUrl('pages/page-' + page + '.html');
         this.importHref(resolvedPageUrl, null, this._pageNotFound, true);
       },
 
-      _pageNotFound: function() {
+      _pageNotFound: function () {
         this.page = 'not-found';
         this.fire('toast', {text: 'Oops you hit a 404!'});
       },
 
-      _pagesStamped: function() {
+      _pagesStamped: function () {
         if (!this._pagesAvailable) {
           this.$.privatePages.render();
           this._pagesAvailable = true;
@@ -315,9 +322,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       /**
        * Show loading when data is requested from server, or save is in progress...
        */
-      _handleLoading: function(event) {
+      _handleLoading: function (event) {
         event.stopImmediatePropagation();
-        this.debounce('showGlobalLoading', function() {
+        this.debounce('showGlobalLoading', function () {
           if (this.globalLoadingElement) {
             var loadingMsg = 'Loading...';
             if (event.detail && typeof event.detail.message === 'string'

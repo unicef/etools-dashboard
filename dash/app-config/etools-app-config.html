@@ -100,15 +100,15 @@ App global configuration
 
     var serverEps = {
       unicefUsers: {
-        url: '/users/api/',
+        url: '/api/v2/users',
         exp: 60 * 60 * 1000, // 1h
         cachingKey: 'unicefUsers'
       },
-      user: {
-        url: '/users/api/profile/',
-        exp: 30 * 60 * 1000, // 30min
-        cachingKey: 'user'
-      },
+//      user: {
+//        url: '/users/api/profile/',
+//        exp: 30 * 60 * 1000, // 30min
+//        cachingKey: 'user'
+//      },
       countryProgrammes: {
          url: '/api/v2/reports/countryprogramme/',
          exp: 6 * 60 * 60 * 1000,
@@ -129,7 +129,7 @@ App global configuration
         url: '/api/v2/users/country'
       },
       changeCountry: {
-        url: '/users/api/changecountry/'
+        url: '/api/v2/users/changecountry/'
       },
       partners: {
           url: '/api/v2/partners/hact',
@@ -199,7 +199,7 @@ App global configuration
         template: '/api/t2f/action_points/dashboard/?office_id=<%=office%>'
       },
       myProfile:  {
-        template: '/users/myprofile/',
+        template: '/api/v2/users/profile/',
       },
 
     };
