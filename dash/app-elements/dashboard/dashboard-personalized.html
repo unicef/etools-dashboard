@@ -127,22 +127,24 @@
             </paper-tab>
           </paper-tabs>
         </div>
-        <template is="dom-repeat" items="[[tripsItems]]" as="trip">
-          <data-table-row no-collapse>
-            <div slot="row-data">
-              <a on-tap="_goToPage" app-name="t2f" page="edit-travel" id="[[trip.id]]" class="col-data col">
-                [[trip.reference_number]]
-              </a>
-              <span class="description description-size col-data flex-2">
+        <div class="list-content">
+          <template is="dom-repeat" items="[[tripsItems]]" as="trip">
+            <data-table-row no-collapse>
+              <div slot="row-data">
+                <a on-tap="_goToPage" app-name="t2f" page="edit-travel" id="[[trip.id]]" class="col-data col">
+                  [[trip.reference_number]]
+                </a>
+                <span class="description description-size col-data flex-2">
                 [[trip.purpose]]
               </span>
-              <div class="layout vertical start col-data col-2 ">
-                <span class="col-data">[[_dateFormatted(trip.start_date)]]</span>
-                <span class="suppData">[[_getDisplayName('trips',trip)]]</span>
+                <div class="layout vertical start col-data col-2 ">
+                  <span class="col-data">[[_dateFormatted(trip.start_date)]]</span>
+                  <span class="suppData">[[_getDisplayName('trips',trip)]]</span>
+                </div>
               </div>
-            </div>
-          </data-table-row>
-        </template>
+            </data-table-row>
+          </template>
+        </div>
       </paper-material>
 
       <!-- ACTION POINTS -------------------------->
@@ -162,22 +164,24 @@
             </paper-tab>
           </paper-tabs>
         </div>
-        <template is="dom-repeat" items="[[actionPointsItems]]" as="action">
-          <data-table-row no-collapse>
-            <div slot="row-data">
-              <div class="layout vertical col-10">
+        <div class="list-content">
+          <template is="dom-repeat" items="[[actionPointsItems]]" as="action">
+            <data-table-row no-collapse>
+              <div slot="row-data">
+                <div class="layout vertical col-10">
                                 <span class="col-data description">
                                     <a on-tap="_goToActionPoint">[[action.description]]</a>
                                 </span>
-                <span class="suppData">[[action.status]]</span>
+                  <span class="suppData">[[action.status]]</span>
+                </div>
+                <div class="layout vertical start col-data col-2 ">
+                  <span class="col-data">[[_dateFormatted(action.created_at)]]</span>
+                  <span class="suppData">[[_getDisplayName('actions',action)]]</span>
+                </div>
               </div>
-              <div class="layout vertical start col-data col-2 ">
-                <span class="col-data">[[_dateFormatted(action.created_at)]]</span>
-                <span class="suppData">[[_getDisplayName('actions',action)]]</span>
-              </div>
-            </div>
-          </data-table-row>
-        </template>
+            </data-table-row>
+          </template>
+        </div>
       </paper-material>
     </div>
 

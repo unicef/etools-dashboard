@@ -158,10 +158,10 @@ App global configuration
         cachingKey: 'sectors'
       },
 			actionPointsByMe: {
-        template: '/api/t2f/action_points/?f_assigned_by=<%=id%>'
+        template: '/api/t2f/action_points/?f_assigned_by=<%=id%>&f_status=ongoing'
       },
       actionPointsForMe: {
-        template: '/api/t2f/action_points/?f_person_responsible=<%=id%>'
+        template: '/api/t2f/action_points/?f_person_responsible=<%=id%>&f_status=ongoing'
       },
       mapInterventions: {
         template: '/api/v2/interventions/map<%=filter%>',
