@@ -238,7 +238,6 @@
   <script>
     (function() {
       'use strict';
-      var _lastNavigated = null;
       Polymer({
         is: 'dashboard-hact',
         behaviors: [
@@ -281,10 +280,6 @@
           'sortOrder, requiredDataLoaded, initComplete)'
         ],
 
-        listeners: {
-          'sort-changed': 'sortOrderChanged',
-        },
-
         _filterPartnersData: function() {
           this.debounce('query', function() {
             this.$.partners.query(
@@ -301,7 +296,7 @@
           this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
 
           var qs = this.buildQueryString();
-          if (qs !== _lastNavigated) {
+          if (qs !== null) {
             this.updateAppState('dashboard/hact', qs, true);
             if (this.requiredDataLoaded) {
               this._filterPartnersData();
@@ -344,7 +339,7 @@
             this.set('forceDataRefresh', true);
           }
           this.set('requiredDataLoaded', true);
-          this._init(this.active);
+          this.init(this.active);
           if (this.active) {
             this.fire('global-loading', {active: false});
           }

@@ -19,10 +19,13 @@
       },
     },
     observers: [
-      '_init(active)',
+      'init(active)',
     ],
+    listeners: {
+      'sort-changed': 'sortOrderChanged',
+    },
 
-    _init: function(active) {
+    init: function(active) {
       var params = this.urlParams;
       if (!active || !params) {
         return;

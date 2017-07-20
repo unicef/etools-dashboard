@@ -48,7 +48,12 @@
         text-align: right;
       }
     </style>
-    <!--<partnership-data partnership="{{partnership}}" filter="[[filter]]"></partnership-data>-->
+    <partnership-data id="partnerships"
+                      filtered-partnerships="{{filteredPartnerships}}"
+                      fire-data-loaded
+                      active="[[active]]"
+                      total-results="{{totalResults}}"
+                      on-partnerships-loaded="_requiredDataLoaded"></partnership-data>
     <paper-material class="list-panel listControls" elevation="1">
       <div class="controls-wrapper">
         <paper-input id="query"
@@ -103,32 +108,36 @@
           Days Since <br>Last PV
         </data-table-column>
       </data-table-header>
-      <template is="dom-repeat" items="[[fakeData]]" as="row">
+      <template is="dom-repeat" items="[[filteredPartnerships]]" as="row">
         <data-table-row no-collapse>
           <div slot="row-data">
             <span class="col-data flex-2 title">
-              [[row.partner]]
+              [[row.partner_name]]
             </span>
             <span class="col-data flex-2 title">
               [[row.number]]
             </span>
             <span class="col-data flex-2">
-              [[row.section]]
+              <template is="dom-repeat" items="{{row.sectors}}" as="">
+                [[item]]<br>
+              </template>
             </span>
             <span class="col-data flex">
-              [[row.office]]
+              <template is="dom-repeat" items="{{row.offices_names}}" as="">
+                [[item]]<br>
+              </template>
             </span>
             <span class="col-data flex">
               [[row.status]]
             </span>
             <span class="col-data flex">
-              [[row.start_date]] <br> [[row.end_date]]
+              [[row.start]] <br> [[row.end]]
             </span>
             <span class="col-data flex right-align">
-              [[currencyFormat(row.total_unicef_cash)]]
+              [[currencyFormat(row.unicef_cash)]]
             </span>
             <span class="col-data flex right-align">
-              [[currencyFormat(row.total_supplies)]]
+              [[currencyFormat(row.unicef_supplies)]]
             </span>
             <span class="col-data flex right-align">
               [[currencyFormat(row.cso_contribution)]]
@@ -137,7 +146,7 @@
               [[currencyFormat(row.total_budget)]]
             </span>
             <span class="col-data flex right-align">
-              [[row.disburs_to_date]]
+              [[_getDisbursements(row.disbursement,row.frs_total_frs_amt)]]%
             </span>
             <span class="col-data flex right-align">
               [[row.days_last_pv]]
@@ -164,271 +173,78 @@
         is: 'dashboard-partnerships',
         behaviors: [
           dashBehaviors.DropdownBehavior,
-          dashBehaviors.EtoolsStaticCommonDataReduxBehavior, ,
+          dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
           dashBehaviors.PaginationBehavior,
           dashBehaviors.CommonGeneralBehavior
         ],
         observers: [
-          'init(active)'
+          '_updateUrl(queryString, pageNumber, pageSize,' +
+          'sortOrder, requiredDataLoaded, initComplete)'
         ],
-        listeners: {
-          'sort-changed': 'sortOrderChanged'
-        },
+
         properties: {
-          filter: {
-            type: Object,
+          filteredPartnerships: {
+            type: Array,
             notify: true,
           },
-          data: {
-            type: Object,
-            notify: true
+          forceDataRefresh: {
+            type: Boolean,
+            value: false
           },
-          fakeData: {
-            type: Array,
-            value: [
-              {
-                partner: 'ABAAD RESOURCE CENTER FOR GENDER',
-                number: 'LEBA/PCA2017060623',
-                section: 'Communication for Development',
-                office: 'Beirut, Tyre',
-                status: 'Active',
-                start_date: '4 April 2016',
-                end_date: '3 April 2017',
-                total_unicef_cash: 1077515,
-                total_supplies: 12097,
-                cso_contribution: '0',
-                total_budget: 1077515,
-                disburs_to_date: 80,
-                days_last_pv: 32
-              },
-              {
-                partner: 'ABAAD RESOURCE CENTER FOR GENDER',
-                number: 'LEBA/PCA201623432',
-                section: 'Health and Nutrition',
-                office: 'Tripoli, Zahle',
-                status: 'Terminated',
-                start_date: '2 Feb 2017',
-                end_date: '30 Dec 2017',
-                total_unicef_cash: 264597,
-                total_supplies: 23091,
-                cso_contribution: 12009,
-                total_budget: 264597,
-                disburs_to_date: 20,
-                days_last_pv: 5
-              },
-              {
-                partner: 'ABAAD RESOURCE CENTER FOR GENDER',
-                number: 'PCA/LEBA/2014/05123123',
-                section: 'Adolescence & Youth',
-                office: 'Tripoli',
-                status: 'Active',
-                start_date: '16 Jun 2016',
-                end_date: '15 Jun 2017',
-                total_unicef_cash: 234120,
-                total_supplies: 9022,
-                cso_contribution: 234340,
-                total_budget: 234120,
-                disburs_to_date: 0,
-                days_last_pv: 12
-              },
-              {
-                partner: 'ACTED',
-                number: 'LEBA/PCA2017061231',
-                section: 'Communication for Development',
-                office: 'Beirut, Tyre',
-                status: 'Active',
-                start_date: '4 Apr 2016',
-                end_date: '3 Apr 2017',
-                total_unicef_cash: 1077515,
-                total_supplies: 23091,
-                cso_contribution: 12009,
-                total_budget: 1077212,
-                disburs_to_date: 12,
-                days_last_pv: 3
-              },
-              {
-                partner: 'ACTED',
-                number: 'LEBA/PCA20161223231',
-                section: 'Health and Nutrition',
-                office: 'Tripoli, Tyre',
-                status: 'Terminated',
-                start_date: '4 Apr 2016',
-                end_date: '3 Apr 2017',
-                total_unicef_cash: 341233,
-                total_supplies: 12332,
-                cso_contribution: 111233,
-                total_budget: 3322312,
-                disburs_to_date: 39,
-                days_last_pv: 9
-              },
-              {
-                partner: 'ACTION CONTRA LA FAIM LIBAN',
-                number: 'PCA/LEBA/2014/051212',
-                section: 'Advocacy and Communication',
-                office: 'Beirut, Tripoli',
-                status: 'Active',
-                start_date: '12 Jun 2016',
-                end_date: '8 Aug 2017',
-                total_unicef_cash: 21333122,
-                total_supplies: 99812,
-                cso_contribution: 299128,
-                total_budget: 20129199,
-                disburs_to_date: 10,
-                days_last_pv: 2
-              },
-              {
-                partner: 'ACTION CONTRA LA FAIM LIBAN',
-                number: 'LEBA/SSFA2012121',
-                section: 'WASH',
-                office: 'Qubbayat',
-                status: 'Active',
-                start_date: '2 Mar 2016',
-                end_date: '20 Sept 2017',
-                total_unicef_cash: 927126,
-                total_supplies: 28127,
-                cso_contribution: 28838,
-                total_budget: 65122221,
-                disburs_to_date: 39,
-                days_last_pv: 10
-              },
-              {
-                partner: 'ABAAD RESOURCE CENTER FOR GENDER',
-                number: 'LEBA/PCA201623432',
-                section: 'Health and Nutrition',
-                office: 'Tripoli, Zahle',
-                status: 'Terminated',
-                start_date: '2 Feb 2017',
-                end_date: '30 Dec 2017',
-                total_unicef_cash: 264597,
-                total_supplies: 23091,
-                cso_contribution: 12009,
-                total_budget: 264597,
-                disburs_to_date: 20,
-                days_last_pv: 5
-              },
-              {
-                partner: 'ACTED',
-                number: 'LEBA/PCA2017061231',
-                section: 'Communication for Development',
-                office: 'Beirut, Tyre',
-                status: 'Active',
-                start_date: '4 Apr 2016',
-                end_date: '3 Apr 2017',
-                total_unicef_cash: 1077515,
-                total_supplies: 23091,
-                cso_contribution: 12009,
-                total_budget: 1077212,
-                disburs_to_date: 12,
-                days_last_pv: 3
-              },
-              {
-                partner: 'ACTED',
-                number: 'LEBA/PCA20161223231',
-                section: 'Health and Nutrition',
-                office: 'Tripoli, Tyre',
-                status: 'Terminated',
-                start_date: '4 Apr 2016',
-                end_date: '3 Apr 2017',
-                total_unicef_cash: 341233,
-                total_supplies: 12332,
-                cso_contribution: 111233,
-                total_budget: 3322312,
-                disburs_to_date: 39,
-                days_last_pv: 9
-              },
-              {
-                partner: 'ACTION CONTRA LA FAIM LIBAN',
-                number: 'PCA/LEBA/SSFA2012121',
-                section: 'Adolescence & Youth',
-                office: 'Tripoli',
-                status: 'Active',
-                start_date: '12 Jun 2016',
-                end_date: '03 Oct 2017',
-                total_unicef_cash: 8872821,
-                total_supplies: 399192,
-                cso_contribution: 21922,
-                total_budget: 8819821,
-                disburs_to_date: 100,
-                days_last_pv: 30
-              },
-              {
-                partner: 'ABAAD RESOURCE CENTER FOR GENDER',
-                number: 'PCA/LEBA/2014/05123123',
-                section: 'Adolescence & Youth',
-                office: 'Tripoli',
-                status: 'Active',
-                start_date: '16 Jun 2016',
-                end_date: '15 Jun 2017',
-                total_unicef_cash: 234120,
-                total_supplies: 9022,
-                cso_contribution: 234340,
-                total_budget: 234120,
-                disburs_to_date: 0,
-                days_last_pv: 12
-              },
-              {
-                partner: 'ACTED',
-                number: 'LEBA/PCA2017061231',
-                section: 'Communication for Development',
-                office: 'Beirut, Tyre',
-                status: 'Active',
-                start_date: '4 Apr 2016',
-                end_date: '3 Apr 2017',
-                total_unicef_cash: 1077515,
-                total_supplies: 23091,
-                cso_contribution: 12009,
-                total_budget: 1077212,
-                disburs_to_date: 12,
-                days_last_pv: 3
-              },
-              {
-                partner: 'ACTED',
-                number: 'LEBA/PCA20161223231',
-                section: 'Health and Nutrition',
-                office: 'Tripoli, Tyre',
-                status: 'Terminated',
-                start_date: '4 Apr 2016',
-                end_date: '3 Apr 2017',
-                total_unicef_cash: 341233,
-                total_supplies: 12332,
-                cso_contribution: 111233,
-                total_budget: 3322312,
-                disburs_to_date: 39,
-                days_last_pv: 9
-              },
-              {
-                partner: 'ACTION CONTRA LA FAIM LIBAN',
-                number: 'PCA/LEBA/2014/051212',
-                section: 'Advocacy and Communication',
-                office: 'Beirut, Tripoli',
-                status: 'Active',
-                start_date: '12 Jun 2016',
-                end_date: '8 Aug 2017',
-                total_unicef_cash: 21333122,
-                total_supplies: 99812,
-                cso_contribution: 299128,
-                total_budget: 20129199,
-                disburs_to_date: 10,
-                days_last_pv: 2
-              },
-              {
-                partner: 'ACTION CONTRA LA FAIM LIBAN',
-                number: 'PCA/LEBA/SSFA2012121',
-                section: 'Adolescence & Youth',
-                office: 'Tripoli',
-                status: 'Active',
-                start_date: '12 Jun 2016',
-                end_date: '03 Oct 2017',
-                total_unicef_cash: 8872821,
-                total_supplies: 399192,
-                cso_contribution: 21922,
-                total_budget: 8819821,
-                disburs_to_date: 100,
-                days_last_pv: 30
-              }
-            ]
+          requiredDataLoaded: {
+            type: Boolean,
+            value: false
+          },
+          initComplete: {
+            type: Boolean,
+            value: false,
+          },
+          urlParams: {
+            type: Object,
+          },
+        },
+
+        _updateUrl: function() {
+          if (!this.initComplete) {
+            return;
+          }
+          var qs = this.buildQueryString();
+          if (qs !== null) {
+            this.updateAppState('dashboard/partnerships', qs, true);
+            if (this.requiredDataLoaded) {
+              this._filterPartnershipsData();
+            }
+          } else {
+            if (location.search === '') {
+              this.updateAppState('dashboard/partnerships', qs, false);
+            }
+            if (this.forceDataRefresh && this.requiredDataLoaded) {
+              this._filterPartnershipsData();
+              this.set('forceDataRefresh', false);
+            }
           }
         },
+
+        _filterPartnershipsData: function() {
+          this.$.partnerships.query(
+              this.queryString,
+              this.sortOrder,
+              this.pageSize,
+              this.pageNumber);
+        },
+
+        _requiredDataLoaded: function(e) {
+          e.stopImmediatePropagation();
+          var filtered = _.get(this, 'filteredPartnerships', []);
+          if (_.isEmpty(filtered)) {
+            this.set('forceDataRefresh', true);
+          }
+          this.set('requiredDataLoaded', true);
+          this.init(this.active);
+        },
+        _getDisbursements: function(disb,fr) {
+          return disb === '0.00' ? '0': Number(disb)/Number(fr)*100;
+        }
 
 
       });
