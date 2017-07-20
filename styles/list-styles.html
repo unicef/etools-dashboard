@@ -157,13 +157,18 @@
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      a.col-data {
-        font-weight: 500;
+      a.col-data , .description a{
+        font-weight: 400;
         cursor: pointer;
       }
 
       .list-panel a {
         padding-right: 24px;
+      }
+      .list-content {
+        /*7 list items max visible 49px x 7*/
+        max-height: 343px;
+        overflow: scroll;
       }
       .suppData {
         font-size: 12px;
@@ -201,6 +206,7 @@
       }
       .trips-list {
         width: calc(50% - 6px);
+        height: 100%;
       }
 
       .trips-list:nth-child(1) {
