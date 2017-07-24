@@ -9,7 +9,7 @@
     <etools-ajax id="ajax"
                  endpoint="[[endpoint]]"
                  caching-storage="custom"
-                 dexie-db-collection="partnerships_cso"
+                 dexie-db-collection="cso_dashboard"
                  on-success="_handleResponse"></etools-ajax>
   </template>
 
@@ -21,14 +21,14 @@
 
         is: 'partnership-data',
         behaviors: [
-            etoolsAppConfig.globals,
+            etoolsAppConfig,
             dashBehaviors.DataElementBehavior
         ],
         observers:['init(active)'],
         properties: {
           endpointName: {
             type: String,
-            value: 'partnerships_cso'
+            value: 'cso_dashboard'
           },
           currentQuery: {
             type: Object,
@@ -59,8 +59,8 @@
 
         query: function(searchString, order, pageSize, pageNumber, status) {
           var self = this;
-          this.db.transaction('r', this.db.partnerships_cso, function() {
-            var queryResult = self.db.partnerships_cso;
+          this.db.transaction('r', this.db.cso_dashboard, function() {
+            var queryResult = self.db.cso_dashboard;
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }else {
@@ -93,7 +93,7 @@
             self._setFilteredPartnerships(countAndResult[1]);
             self.fire('global-loading');
           }).catch(function(error) {
-            console.error('Error querying partners: ', error);
+            console.error('Error querying partnerships-dash: ', error);
           });
         },
 

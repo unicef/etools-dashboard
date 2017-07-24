@@ -12,18 +12,20 @@ App global configuration
      * https://github.com/dfahlander/Dexie.js/wiki/Design#database-versioning
      */
     var etoolsCustomDexieDb = new Dexie('dashApp');
-    etoolsCustomDexieDb.version(1).stores({
+    etoolsCustomDexieDb.version(2).stores({
       collectionsList: 'name, expire',
       countries: 'id',
       user: 'id',
       countryProgrammes: 'id, name, wbs, from_date',
       offices: 'id, name',
       partners: 'name',
-      partnerships_cso: 'id, partner_name',
+      cso_dashboard: 'partner_name',
       trips: 'id, supervisor_name, purpose_of_travel, traveler, created_date',
       mapInterventions: 'id, status',
       locations: 'id'
     });
+
+    var etoolsAjaxDefaultDexieDbPrefix = 'dashboard';
 
     var etoolsAppConfig = {
 
@@ -175,10 +177,10 @@ App global configuration
       partnerships: {
         template: '/api/v2/interventions/dash'
       },
-      partnerships_cso: {
+      cso_dashboard: {
         template: '/api/v2/interventions/partnership-dash/',
-        exp: 6 * 60 * 60 * 1000, // 6h
-        cachingKey: 'partnerships_cso',
+        exp: 60, // 6h
+        cachingKey: 'cso_dashboard',
       },
       trips: {
         template: '/api/t2f/travels/?f_traveler=<%=id%>'
