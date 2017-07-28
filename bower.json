@@ -69,6 +69,6 @@
   "resolutions": {
     "etools-searchable-multiselection-menu": "^2.0.0",
     "moment-element": "^2.0.0",
-    "paper-dialog": "PolymerElements/paper-dialog#^2.0.0"
+    "paper-dialog": "^2.0.0"
   }
 }
