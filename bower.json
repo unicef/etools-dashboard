@@ -41,7 +41,7 @@
     "etools-page-refresh": "^1.0.0",
     "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.7",
     "paper-fab": "PolymerElements/paper-fab#^1.2.1",
-    "etools-dialog": "^1.0.0",
+    "etools-dialog": "^2.0.0",
     "etools-loading": "^1.0.3",
     "etools-searchable-multiselection-menu": "^1.0.2",
     "etools-file": "^1.0.0",
