@@ -61,7 +61,8 @@
     "etools-app-selector": "^1.0.3",
     "etools-profile-dropdown": "^1.0.3",
     "etools-behaviors": "^1.0.1",
-    "iron-label": "^2.0.0"
+    "iron-label": "^2.0.0",
+    "webcomponentsjs": "^1.0.4"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
@@ -69,6 +70,7 @@
   "resolutions": {
     "etools-searchable-multiselection-menu": "^2.0.0",
     "moment-element": "^2.0.0",
-    "paper-dialog": "^2.0.0"
+    "paper-dialog": "^2.0.0",
+    "webcomponentsjs": "^0.7.24"
   }
 }
