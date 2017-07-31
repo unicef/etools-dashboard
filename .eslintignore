@@ -1,0 +1,5 @@
+.gitignore
+demo/*
+test/*
+node_modules/*
+es6-polyfills.html

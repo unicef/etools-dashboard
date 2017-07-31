@@ -83,7 +83,23 @@ var Actions = [
       data = data || [];
       return data.map(function(actionPoint) {
         return _.pick(actionPoint, [
-          'status', 'description', 'created_at', 'person_responsible_name'
+          'status', 'description', 'created_at', 'person_responsible_name','id'
+        ]);
+      });
+    }
+  },
+  {
+    actionType: 'action-points-for-me',
+    propsArray: ['actionPointsForMe'],
+    endpointProps: function() {
+      var ret = {name: 'actionPointsForMe', templateProps: {id: this.user.id}};
+      return ret;
+    },
+    prepareData: function(data) {
+      data = data || [];
+      return data.map(function(actionPoint) {
+        return _.pick(actionPoint, [
+          'status', 'description', 'created_at', 'assigned_by_name','id'
         ]);
       });
     }
@@ -109,7 +125,7 @@ var Actions = [
       return moment.months().map(function(month, i) {
         return {
           name: month,
-          monthId: ("0" + (i + 1)).slice(-2),
+          monthId: ('0' + (i + 1)).slice(-2),
         };
       });
     }
