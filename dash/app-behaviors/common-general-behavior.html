@@ -105,6 +105,11 @@
         window.location.href = path;
       }
     },
+    goToPage: function(e) {
+      var path = [this.baseSite, e.target.getAttribute('app-name'),
+            e.target.getAttribute('page')].join('/') + '/' + e.target.id;
+      this.manageClickEvent(e, path);
+    },
 
   };
 

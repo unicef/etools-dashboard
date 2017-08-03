@@ -101,13 +101,13 @@
         Trip management
       </div>
       <paper-button class="button toolbar-item">
-        <a href="[[baseSite]]/t2f/travel-list/" on-tap="_goToPage" app-name="t2f" page="travel-list">
+        <a href="[[baseSite]]/t2f/travel-list/" on-tap="goToPage" app-name="t2f" page="travel-list">
           <iron-icon icon="maps:transfer-within-a-station"></iron-icon>
           Travel 2 Field
         </a>
 
       </paper-button>
-      <paper-button on-tap="_goToPage" app-name="t2f" page="action-points-list" class="button toolbar-item">
+      <paper-button on-tap="goToPage" app-name="t2f" page="action-points-list" class="button toolbar-item">
         <iron-icon icon="list"></iron-icon>
         Action Points
       </paper-button>
@@ -134,7 +134,7 @@
           <template is="dom-repeat" items="[[tripsItems]]" as="trip">
             <data-table-row no-collapse>
               <div slot="row-data">
-                <a on-tap="_goToPage" href="[[baseSite]]/t2f/edit-travel/[[trip.id]]" app-name="t2f" page="edit-travel"
+                <a on-tap="goToPage" href="[[baseSite]]/t2f/edit-travel/[[trip.id]]" app-name="t2f" page="edit-travel"
                    id="[[trip.id]]" class="col-data col">
                   [[trip.reference_number]]
                 </a>
@@ -198,26 +198,26 @@
         Partnership management
       </div>
       <paper-button class="button toolbar-item">
-        <a on-tap="_goToPage" href="[[baseSite]]/pmp/partners/list" app-name="pmp" page="partners/list">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/list" app-name="pmp" page="partners/list">
           <iron-icon icon="social:people"></iron-icon>
           Partners
         </a>
       </paper-button>
       <paper-button class="button toolbar-item">
-        <a on-tap="_goToPage" href="[[baseSite]]/pmp/aggreements/list" app-name="pmp" page="agreements/list">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/aggreements/list" app-name="pmp" page="agreements/list">
           <iron-icon icon="av:playlist-add-check"></iron-icon>
           Agreements
         </a>
       </paper-button>
       <paper-button class="button toolbar-item">
-        <a on-tap="_goToPage" href="[[baseSite]]/pmp/interventions/list" app-name="pmp"
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/list" app-name="pmp"
            page="interventions/list">
           <iron-icon icon="verified-user"></iron-icon>
           PD/SSFA TOR
         </a>
       </paper-button>
       <paper-button class="button toolbar-item">
-        <a on-tap="_goToPage" href="[[baseSite]]/pmp/governments/list" app-name="pmp" page="governments/list">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/governments/list" app-name="pmp" page="governments/list">
           <iron-icon icon="account-balance"></iron-icon>
           Goverment-in-simple
         </a>
@@ -236,7 +236,7 @@
         <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden$="[[!partnershipsLoaded]]">
           <data-table-row no-collapse>
             <div slot="row-data">
-              <a on-tap="_goToPage" href="[[baseSite]]/pmp/interventions/[[partnership.id]]/details" app-name="pmp"
+              <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[partnership.id]]/details" app-name="pmp"
                  page="interventions" id="[[partnership.id]]/details"
                  class="col-data col-2">
                 [[partnership.number]]
@@ -341,11 +341,7 @@
           this.updateAppState('dashboard/personalized', [], true);
         }
       },
-      _goToPage: function(e) {
-        var path = [this.baseSite, e.target.getAttribute('app-name'),
-              e.target.getAttribute('page')].join('/') + '/' + e.target.id;
-        this.manageClickEvent(e, path);
-      },
+      
       _goToActionPoint: function(e) {
         var path = this.baseSite + '/' + 't2f/action-point/' + e.model.action.id;
         this.manageClickEvent(e, path);
