@@ -12,7 +12,7 @@ App global configuration
      * https://github.com/dfahlander/Dexie.js/wiki/Design#database-versioning
      */
     var etoolsCustomDexieDb = new Dexie('dashApp');
-    etoolsCustomDexieDb.version(2).stores({
+    etoolsCustomDexieDb.version(1).stores({
       collectionsList: 'name, expire',
       countries: 'id',
       user: 'id',
