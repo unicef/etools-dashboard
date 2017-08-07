@@ -61,11 +61,17 @@
           var self = this;
           this.db.transaction('r', this.db.cso_dashboard, function() {
             var queryResult = self.db.cso_dashboard;
+            queryResult.count().then(function(res) {
+              console.log('count now', res);
+            });
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             } else {
               queryResult = queryResult.toCollection();
             }
+            queryResult.count().then(function(res) {
+              console.log('count after ordering', res);
+            })
             if (!_.isEmpty(searchString)) {
               queryResult = queryResult.filter(function(partner) {
                 return _.includes(partner.partner_name.toLowerCase(), searchString.toLowerCase());
@@ -80,6 +86,9 @@
                 return partner.status !== 'closed';
               });
             }
+            queryResult.count().then(function(res) {
+              console.log('count after status', res);
+            })
 
             return Dexie.Promise.all([
               queryResult.count(),
