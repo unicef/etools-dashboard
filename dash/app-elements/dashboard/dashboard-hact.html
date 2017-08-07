@@ -342,6 +342,7 @@
         },
 
         _requiredDataHasBeenLoaded: function(e) {
+          this.fire('global-loading');
           e.stopImmediatePropagation();
           var filtered = _.get(this, 'filteredPartners', []);
           if (_.isEmpty(filtered)) {
