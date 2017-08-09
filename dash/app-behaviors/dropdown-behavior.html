@@ -9,14 +9,12 @@
       if (dropdown) {
         if (dropdown.is === 'paper-dropdown-menu') {
           var menu = Polymer.dom(dropdown).firstElementChild;
-          console.log('other menu', menu);
           if (menu && menu.selected) {
             menu.set('selected', null);
           }
         }
         else if (dropdown.is === 'etools-multi-selection-menu') {
           var menu = Polymer.dom(dropdown);
-          console.log(dropdown.selectedValues)
           if (dropdown.selectedValues) {
             dropdown.clearValues()
           }

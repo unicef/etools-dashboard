@@ -102,7 +102,7 @@
             </paper-dropdown-menu>
           </div>
         </div>
-        <paper-button class="primary-btn" on-tap="_setFilter" >
+        <paper-button class="primary-btn" on-tap="_setFilter" disabled="[[fetchDisabled]]" >
           Get Chart
         </paper-button>
       </div>
@@ -195,7 +195,7 @@
         },
         tripsOffice: {
           type: String,
-          observer: '_tripsOfficeChanged'
+          observer: '_valueChange'
         },
         tripsChart: {
           type: Array,
@@ -228,9 +228,13 @@
         },
         month: {
           type: String,
-          notify: true
+          notify: true,
+          observer: '_valueChange'
         },
-
+        fetchDisabled: {
+          type: Boolean,
+          value: false
+        },
         tripsChartOptions: {
           type: Object,
           value: {
@@ -361,33 +365,30 @@
         this._setFilter();
       },
       _setFilter: function() {
-        if (!this.year && !this.month) {
-          return;
-        }
+        this.set('fetchDisabled', true);
         if (!this.year) {
           this._setInvalid('tripsYear');
           return;
         }
+        var filter = {year: this.year, office_id: this.tripsOffice};
         if (this.month) {
           var monthObj = {months: this.month.join(',')};
-          this.set('tripsFilter', _.assign({}, monthObj, {year: this.year, office: this.tripsOffice}));
+           _.assign(filter, monthObj);
         }
+        this.set('tripsFilter', filter);
       },
       _setYear: function(year) {
         if (year) {
+          this._valueChange();
           this.$.tripsYear.invalid = false;
-          this._setFilter();
         } else {
           this._setInvalid('tripsYear');
+          this.set('fetchDisabled', true);
         }
       },
-      _setMonth: function(month) {
-        if (month) {
-          this.$.tripsMonth.invalid = false;
-          this._setFilter();
-        } else {
-          this._setInvalid('tripsMonth');
-          this._setNoData('tripsChart');
+      _valueChange: function() {
+        if (this.year) {
+          this.set('fetchDisabled', false);
         }
       },
       _setInvalid: function(field) {
@@ -451,16 +452,6 @@
             });
             this._formatChartData(formatted, 'tripsChart');
           }
-        }
-      },
-      _tripsOfficeChanged: function(office) {
-        if (office) {
-          if (this._filterValid()) {
-            this.set('tripsFilter', _.assign({}, this.tripsFilter, {office_id: office}));
-          }
-        } else {
-          this._setInvalid('tripsOffice');
-          this._setFilter();
         }
       },
       _filterValid: function() {
