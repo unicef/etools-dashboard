@@ -10,6 +10,7 @@
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
 
 <link rel="import" href="../../app-behaviors/dropdown-behavior.html">
 <link rel="import" href="../../app-behaviors/common-general-behavior.html">
@@ -73,17 +74,12 @@
           </div>
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-            <paper-dropdown-menu label="Month"
-                                 id="tripsMonth"
-                                 error-message="Must select a month"
-                                 class="sm-dropdown"
-                                 placeholder="Select from list" noink>
-              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{month}}">
-                <template is="dom-repeat" items="[[months]]" as="month">
-                  <paper-item id="[[month.monthId]]">[[month.name]]</paper-item>
-                </template>
-              </paper-menu>
-            </paper-dropdown-menu>
+            <etools-multi-selection-menu label="Month"
+                                         id="tripsMonth"
+                                         placeholder="Select from list"
+                                         error-message="Must select at least one month"
+                                         selected-values="{{month}}"
+                                         options="[[months]]"></etools-multi-selection-menu>
           </div>
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
