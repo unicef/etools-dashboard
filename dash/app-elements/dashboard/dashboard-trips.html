@@ -3,12 +3,14 @@
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
 <link rel="import" href="../../../styles/page-layout-styles.html">
+<link rel="import" href="../../../styles/buttons-styles.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
 <link rel="import"
       href="../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
@@ -24,7 +26,7 @@
 <link rel="import" href="dashboard-data/action-pts-by-section-data.html">
 <dom-module id="dashboard-trips">
   <template>
-    <style include="list-styles iron-flex-factors shared-styles page-layout-styles">
+    <style include="list-styles iron-flex-factors shared-styles page-layout-styles buttons-styles iron-flex-alignment">
       .by-type {
         padding: 0;
         @apply(--layout-horizontal);
@@ -57,12 +59,12 @@
     <google-chart-loader id="google"></google-chart-loader>
 
     <paper-material class="list-panel listControls" elevation="1">
-      <div class="controls-wrapper">
+      <div class="controls-wrapper flex">
         <div class="title-row">
           <h1 sub-title>Trips</h1>
         </div>
         <div class="filters-divider"></div>
-        <div class="wrap-controls">
+        <div class="wrap-controls flex">
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
             <paper-dropdown-menu label="Year"
@@ -85,8 +87,7 @@
                                          placeholder="Select from list"
                                          error-message="Must select at least one month"
                                          selected-values="{{month}}"
-                                         options="[[months]]"
-                                         on-paper-dropdown-close="changed"></etools-multi-selection-menu>
+                                         options="[[months]]"></etools-multi-selection-menu>
           </div>
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
@@ -101,6 +102,9 @@
             </paper-dropdown-menu>
           </div>
         </div>
+        <paper-button class="primary-btn" on-tap="_setFilter" >
+          Get Chart
+        </paper-button>
       </div>
     </paper-material>
 
@@ -340,9 +344,6 @@
           ]
         }
       },
-      changed: function(e) {
-        console.log('changed!', e);
-      },
       _init: function(active) {
         if (active) {
           this._initTripsChart();
@@ -368,7 +369,7 @@
           return;
         }
         if (this.month) {
-          var monthObj = {month: this.month.join(',')}
+          var monthObj = {months: this.month.join(',')};
           this.set('tripsFilter', _.assign({}, monthObj, {year: this.year, office: this.tripsOffice}));
         }
       },
@@ -455,7 +456,7 @@
       _tripsOfficeChanged: function(office) {
         if (office) {
           if (this._filterValid()) {
-            this.set('tripsFilter', _.assign({}, this.tripsFilter, {office: office}));
+            this.set('tripsFilter', _.assign({}, this.tripsFilter, {office_id: office}));
           }
         } else {
           this._setInvalid('tripsOffice');

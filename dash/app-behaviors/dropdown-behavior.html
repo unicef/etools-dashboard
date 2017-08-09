@@ -18,11 +18,10 @@
           var menu = Polymer.dom(dropdown);
           console.log(dropdown.selectedValues)
           if (dropdown.selectedValues) {
-            dropdown.set('selectedValues', null);
+            dropdown.clearValues()
           }
         }
       }
     }
-
-  };
+  }
 </script>

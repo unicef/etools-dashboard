@@ -60,6 +60,7 @@
         },
         _handleResponse: function(response) {
           var data = _.get(response, 'detail', []);
+          console.log('response', data);
           this._setTripsData(data);
         },
 
