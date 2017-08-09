@@ -16,8 +16,9 @@
 <link rel="import" href="../../app-elements/static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
 <link rel="import" href="../../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../../../bower_components/google-chart/google-chart-loader.html">
+<link rel="import" href="../../../bower_components/moment-element/moment-import.html">
 
-<link rel="import" href="dashboard-data/trips-by-section-data.html">
+<link rel="import" href="dashboard-data/trips-dashboard-data.html">
 <link rel="import" href="dashboard-data/action-pts-by-section-data.html">
 <dom-module id="dashboard-trips">
   <template>
@@ -44,7 +45,7 @@
         min-width: 88px;
       }
     </style>
-    <trips-by-section-data trips-data="{{tripsData}}" filter="[[tripsFilter]]"></trips-by-section-data>
+    <trips-dashboard-data trips-data="{{tripsData}}" filter="[[tripsFilter]]"></trips-dashboard-data>
     <action-pts-by-section-data action-points-data="{{actionPointsData}}" filter="[[actionPtsFilter]]"></action-pts-by-section-data>
     <google-chart-loader id="google"></google-chart-loader>
 
@@ -338,11 +339,20 @@
       },
       _init: function(active) {
         if(active) {
-          this._setNoData('tripsChart');
+          this._initTripsChart();
           if(!this.actionPtsFilter) {
             this.set('actionPtsFilter', {});
           }
         }
+      },
+      _initTripsChart: function() {
+        this.set('year', moment().year());
+        var monthsToDate = _.range(1,moment().month()+1).
+          map(function(month) {
+            return ('0' + (month)).slice(-2)
+          }).
+          join(',')
+        this.set('month', monthsToDate);
       },
       _setFilter: function() {
         if (!this.year && !this.month) {
