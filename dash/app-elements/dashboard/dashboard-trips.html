@@ -10,7 +10,8 @@
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
+<link rel="import"
+      href="../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
 
 <link rel="import" href="../../app-behaviors/dropdown-behavior.html">
 <link rel="import" href="../../app-behaviors/common-general-behavior.html">
@@ -28,26 +29,31 @@
         padding: 0;
         @apply(--layout-horizontal);
       }
+
       .viz {
         width: 100%;
         @apply(--tripsChart);
       }
+
       .viz-actions {
         width: 100%;
         @apply(--actionPointsChart);
       }
+
       .chart-title {
         font-size: 16px;
         margin: 0;
         line-height: 48px;
         font-weight: 500;
       }
+
       .wrap-controls paper-dropdown-menu.sm-dropdown {
         min-width: 88px;
       }
     </style>
     <trips-dashboard-data trips-data="{{tripsData}}" filter="[[tripsFilter]]"></trips-dashboard-data>
-    <action-pts-by-section-data action-points-data="{{actionPointsData}}" filter="[[actionPtsFilter]]"></action-pts-by-section-data>
+    <action-pts-by-section-data action-points-data="{{actionPointsData}}"
+                                filter="[[actionPtsFilter]]"></action-pts-by-section-data>
     <google-chart-loader id="google"></google-chart-loader>
 
     <paper-material class="list-panel listControls" elevation="1">
@@ -79,7 +85,8 @@
                                          placeholder="Select from list"
                                          error-message="Must select at least one month"
                                          selected-values="{{month}}"
-                                         options="[[months]]"></etools-multi-selection-menu>
+                                         options="[[months]]"
+                                         on-paper-dropdown-close="changed"></etools-multi-selection-menu>
           </div>
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
@@ -188,8 +195,8 @@
         },
         tripsChart: {
           type: Array,
-          notify:true,
-          value:[]
+          notify: true,
+          value: []
         },
         actionPointsData: {
           type: Object,
@@ -207,7 +214,7 @@
           type: Array,
           statePath: 'tripsMonths'
         },
-        years : {
+        years: {
           type: Array,
           statePath: 'tripsYears'
         },
@@ -217,14 +224,14 @@
         },
         month: {
           type: String,
-          observer: '_setMonth'
+          notify: true
         },
 
         tripsChartOptions: {
           type: Object,
-          value : {
-            colors: ['#FCF39F','#BFE58A','#64BD00'],
-            legend: { position: "none" },
+          value: {
+            colors: ['#FCF39F', '#BFE58A', '#64BD00'],
+            legend: {position: "none"},
             animation: {
               startup: true,
               duration: 300,
@@ -247,17 +254,17 @@
                 lineHeight: 30
               }
             },
-            bar: { groupWidth: '22' },
+            bar: {groupWidth: '22'},
           }
         },
         actionPointsChart: {
           type: Object,
-          notify:true
+          notify: true
         },
         actionPointsChartOptions: {
           type: Object,
-          value : {
-            colors: ['#8AD0FF','#EEEEEE'],
+          value: {
+            colors: ['#8AD0FF', '#EEEEEE'],
             chartArea: {
               top: '16',
               bottom: '32',
@@ -274,7 +281,7 @@
               minValue: 0,
               gridlineColor: '#E8E8E8',
               format: 'percent',
-              ticks: _.range(0.1,1.1,0.1)
+              ticks: _.range(0.1, 1.1, 0.1)
             },
             vAxis: {
               minValue: 0,
@@ -283,7 +290,7 @@
                 lineHeight: 30
               },
             },
-            bar: { groupWidth: '22' },
+            bar: {groupWidth: '22'},
             legend: {
               position: 'top',
               alignment: 'end'
@@ -293,12 +300,12 @@
         noDataOptions: {
           type: Object,
           value: {
-            legend: { position: "none" },
+            legend: {position: "none"},
             colors: ['transparent'],
             chartArea: {
               width: '50%',
               left: '5%',
-              height:'75%',
+              height: '75%',
               top: '16',
             },
             vAxis: {
@@ -314,7 +321,7 @@
             },
             annotations: {
               alwaysOutside: true,
-              textStyle : {
+              textStyle: {
                 color: '#979797',
                 fontSize: 28,
               },
@@ -323,32 +330,34 @@
                 length: '50%'
               }
             },
-            bar: { groupWidth: '22' }
+            bar: {groupWidth: '22'}
           }
         },
         noDataMessage: {
           type: Array,
-          value: [['Bar', 'Time', { role: 'annotation' } ],
-            ['', 2, 'No chart data' ],
+          value: [['Bar', 'Time', {role: 'annotation'}],
+            ['', 2, 'No chart data'],
           ]
         }
       },
+      changed: function(e) {
+        console.log('changed!', e);
+      },
       _init: function(active) {
-        if(active) {
+        if (active) {
           this._initTripsChart();
-          if(!this.actionPtsFilter) {
+          if (!this.actionPtsFilter) {
             this.set('actionPtsFilter', {});
           }
         }
       },
       _initTripsChart: function() {
         this.set('year', moment().year());
-        var monthsToDate = _.range(1,moment().month()+1).
-          map(function(month) {
-            return ('0' + (month)).slice(-2)
-          }).
-          join(',')
+        var monthsToDate = _.range(1, moment().month() + 1).map(function(month) {
+          return ('0' + (month)).slice(-2)
+        });
         this.set('month', monthsToDate);
+        this._setFilter();
       },
       _setFilter: function() {
         if (!this.year && !this.month) {
@@ -359,15 +368,15 @@
           return;
         }
         if (this.month) {
-          var monthObj = _.find(this.months, {monthId: this.month});
-          this.set('tripsFilter', _.assign({},monthObj, {year: this.year, office: this.tripsOffice}));
+          var monthObj = {month: this.month.join(',')}
+          this.set('tripsFilter', _.assign({}, monthObj, {year: this.year, office: this.tripsOffice}));
         }
       },
       _setYear: function(year) {
         if (year) {
           this.$.tripsYear.invalid = false;
           this._setFilter();
-        }else {
+        } else {
           this._setInvalid('tripsYear');
         }
       },
@@ -398,12 +407,12 @@
             id: 'tripsOffice'
           }
         ];
-        _.remove(fields,{id: field});
-        var invalid = fields.reduce(function(isValid, _field){
+        _.remove(fields, {id: field});
+        var invalid = fields.reduce(function(isValid, _field) {
           return _this[_field.name] || isValid;
-        },false);
-        if (invalid && field !=='tripsOffice') {
-          this.$$('#'+ field).invalid = true;
+        }, false);
+        if (invalid && field !== 'tripsOffice') {
+          this.$$('#' + field).invalid = true;
         } else {
           fields.forEach(function(f) {
             _this.$$('#' + f.id).invalid = false;
@@ -414,22 +423,22 @@
         var _this = this;
         this.$.google.dataTable(formatted).then(function(dt) {
           //magic ratio number 32.71
-          _this.customStyle['--'+chartName] = 'height:' + Math.round(dt.getNumberOfRows()*32.71) + 'px; min-height: 300px';
-          _this.$$('#' + chartName).options = _this[chartName+'Options'];
+          _this.customStyle['--' + chartName] = 'height:' + Math.round(dt.getNumberOfRows() * 32.71) + 'px; min-height: 300px';
+          _this.$$('#' + chartName).options = _this[chartName + 'Options'];
           _this.$$('#' + chartName).data = dt;
-          if(_this.active) {
-            _this.fire('global-loading',{active: false});
+          if (_this.active) {
+            _this.fire('global-loading', {active: false});
           }
           _this.updateStyles();
         });
       },
-      _tripsDataChanged : function(data) {
+      _tripsDataChanged: function(data) {
         if (!_.isEmpty(data)) {
           var travels = _.get(data, 'travels_by_section', []);
           if (!travels.length && this.active) {
             this.fire('global-loading', {active: false});
             this._setNoData('tripsChart');
-          }else {
+          } else {
             var formatted = [
               ['Trips', 'Planned', 'Approved', 'Completed']
             ];
@@ -439,23 +448,23 @@
                 section.approved_travels,
                 section.completed_travels])
             });
-            this._formatChartData(formatted,'tripsChart');
+            this._formatChartData(formatted, 'tripsChart');
           }
         }
       },
       _tripsOfficeChanged: function(office) {
         if (office) {
-          if (this._filterValid()){
-            this.set('tripsFilter', _.assign({}, this.tripsFilter, {office:office}));
+          if (this._filterValid()) {
+            this.set('tripsFilter', _.assign({}, this.tripsFilter, {office: office}));
           }
-        }else {
+        } else {
           this._setInvalid('tripsOffice');
           this._setFilter();
         }
       },
       _filterValid: function() {
-        this.$.tripsYear.invalid = this.year ? false: true;
-        this.$.tripsMonth.invalid = this.month ? false: true;
+        this.$.tripsYear.invalid = this.year ? false : true;
+        this.$.tripsMonth.invalid = this.month ? false : true;
         return this.year && this.month;
       },
 
@@ -468,13 +477,13 @@
       },
       _actionPointsDataChanged: function(data) {
         if (!_.isEmpty(data)) {
-          var actionPoints = _.get(data,'action_points_by_section',[]).filter(function(ap) {
-            return _.get(ap,'total_action_points');
+          var actionPoints = _.get(data, 'action_points_by_section', []).filter(function(ap) {
+            return _.get(ap, 'total_action_points');
           });
           if (!actionPoints.length && this.active) {
             this.fire('global-loading', {active: false});
             this._setNoData('actionPointsChart');
-          }else {
+          } else {
             var formatted = [['Action Points', 'Closed', 'Total']];
             actionPoints.forEach(function(ap) {
               formatted.push([ap.section_name,
@@ -482,14 +491,14 @@
                 ap.total_action_points
               ]);
             });
-            this._formatChartData(formatted,'actionPointsChart');
+            this._formatChartData(formatted, 'actionPointsChart');
           }
         }
       },
       _setNoData: function(chartName) {
         var _this = this;
         this.$.google.dataTable(this.noDataMessage).then(function(dt) {
-          _this.customStyle['--'+chartName]='height: 300px';
+          _this.customStyle['--' + chartName] = 'height: 300px';
           _this.$$('#' + chartName).options = _this.noDataOptions;
           _this.$$('#' + chartName).data = dt;
           _this.updateStyles();

@@ -124,8 +124,8 @@ var Actions = [
     prepareData: function() {
       return moment.months().map(function(month, i) {
         return {
-          name: month,
-          monthId: ('0' + (i + 1)).slice(-2),
+          label: month,
+          value: ('0' + (i + 1)).slice(-2),
         };
       });
     }

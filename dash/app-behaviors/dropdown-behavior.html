@@ -6,10 +6,20 @@
     // a paper-dropdown-menu to add a clear selection button
     clearDropdown: function(e) {
       var dropdown = Polymer.dom(e).localTarget.nextElementSibling;
-      if (dropdown && dropdown.is === 'paper-dropdown-menu') {
-        var menu = Polymer.dom(dropdown).firstElementChild;
-        if (menu && menu.selected) {
-          menu.set('selected', null);
+      if (dropdown) {
+        if (dropdown.is === 'paper-dropdown-menu') {
+          var menu = Polymer.dom(dropdown).firstElementChild;
+          console.log('other menu', menu);
+          if (menu && menu.selected) {
+            menu.set('selected', null);
+          }
+        }
+        else if (dropdown.is === 'etools-multi-selection-menu') {
+          var menu = Polymer.dom(dropdown);
+          console.log(dropdown.selectedValues)
+          if (dropdown.selectedValues) {
+            dropdown.set('selectedValues', null);
+          }
         }
       }
     }
