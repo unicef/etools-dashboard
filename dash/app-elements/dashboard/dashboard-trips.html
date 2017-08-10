@@ -87,6 +87,7 @@
                                          placeholder="Select from list"
                                          error-message="Must select at least one month"
                                          selected-values="{{month}}"
+                                         trigger-value-change-event
                                          options="[[months]]"></etools-multi-selection-menu>
           </div>
           <div class="dropdown-with-clear-btn">
@@ -356,6 +357,7 @@
           }
         }
       },
+
       _initTripsChart: function() {
         this.set('year', moment().year());
         var monthsToDate = _.range(1, moment().month() + 1).map(function(month) {
@@ -386,7 +388,8 @@
           this.set('fetchDisabled', true);
         }
       },
-      _valueChange: function() {
+      _valueChange: function(month) {
+        console.log('month changed to', month);
         if (this.year) {
           this.set('fetchDisabled', false);
         }
@@ -422,17 +425,16 @@
         }
       },
       _formatChartData: function(formatted, chartName) {
-        var _this = this;
-        this.$.google.dataTable(formatted).then(function(dt) {
-          //magic ratio number 32.71
-          _this.customStyle['--' + chartName] = 'height:' + Math.round(dt.getNumberOfRows() * 32.71) + 'px; min-height: 300px';
-          _this.$$('#' + chartName).options = _this[chartName + 'Options'];
-          _this.$$('#' + chartName).data = dt;
-          if (_this.active) {
-            _this.fire('global-loading', {active: false});
-          }
-          _this.updateStyles();
-        });
+//        var _this = this;
+//        this.$.google.dataTable(formatted).then(function(dt) {
+//          //magic ratio number 32.71
+//          _this.customStyle['--' + chartName] = 'height:' + Math.round(dt.getNumberOfRows() * 32.71) +
+//              'px; min-height: 300px';
+//          _this.$$('#' + chartName).options = _this[chartName + 'Options'];
+//          _this.$$('#' + chartName).data = dt;
+//          _this.updateStyles();
+//          console.log('google charts call done');
+//        });
       },
       _tripsDataChanged: function(data) {
         if (!_.isEmpty(data)) {
@@ -473,7 +475,6 @@
             return _.get(ap, 'total_action_points');
           });
           if (!actionPoints.length && this.active) {
-            this.fire('global-loading', {active: false});
             this._setNoData('actionPointsChart');
           } else {
             var formatted = [['Action Points', 'Closed', 'Total']];
