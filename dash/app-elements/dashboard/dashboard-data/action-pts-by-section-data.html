@@ -55,6 +55,7 @@
         _handleResponse: function(response) {
           var data = _.get(response, 'detail', []);
           this._setActionPointsData(data);
+          this.fire('global-loading');
         },
 
       });

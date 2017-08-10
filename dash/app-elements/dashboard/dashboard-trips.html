@@ -175,7 +175,8 @@
     Polymer({
       is: 'dashboard-trips',
       observers: [
-        '_init(active)'
+        '_init(active)',
+        '_alertStaticDataLoaded(offices,months,years)'
       ],
       behaviors: [
         dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
@@ -217,7 +218,6 @@
         },
         months: {
           type: Array,
-          statePath: 'tripsMonths'
         },
         years: {
           type: Array,
@@ -233,6 +233,10 @@
           observer: '_valueChange'
         },
         fetchDisabled: {
+          type: Boolean,
+          value: false
+        },
+        staticDataLoaded: {
           type: Boolean,
           value: false
         },
@@ -351,6 +355,9 @@
       },
       _init: function(active) {
         if (active) {
+          if (!this.staticDataLoaded){
+            this.fire('global-loading', {message: 'Loading page data...', active:true});
+          }
           this._initTripsChart();
           if (!this.actionPtsFilter) {
             this.set('actionPtsFilter', {});
@@ -360,6 +367,12 @@
 
       _initTripsChart: function() {
         this.set('year', moment().year());
+        this.set('months', moment.months().map(function(month, i) {
+          return {
+            label: month,
+            value: ('0' + (i + 1)).slice(-2),
+          };
+        }));
         var monthsToDate = _.range(1, moment().month() + 1).map(function(month) {
           return ('0' + (month)).slice(-2)
         });
@@ -389,9 +402,18 @@
         }
       },
       _valueChange: function(month) {
-        console.log('month changed to', month);
         if (this.year) {
           this.set('fetchDisabled', false);
+        }
+      },
+      _alertStaticDataLoaded: function(){
+        var args = _.toArray(arguments);
+        var allHaveValues = args.reduce(function(allHaveValues,item){
+          return !_.isEmpty(item) && allHaveValues;
+        },true);
+        if (allHaveValues){
+          this.set('staticDataLoaded', true);
+          this.fire('global-loading');
         }
       },
       _setInvalid: function(field) {
@@ -425,16 +447,16 @@
         }
       },
       _formatChartData: function(formatted, chartName) {
-//        var _this = this;
-//        this.$.google.dataTable(formatted).then(function(dt) {
-//          //magic ratio number 32.71
-//          _this.customStyle['--' + chartName] = 'height:' + Math.round(dt.getNumberOfRows() * 32.71) +
-//              'px; min-height: 300px';
-//          _this.$$('#' + chartName).options = _this[chartName + 'Options'];
-//          _this.$$('#' + chartName).data = dt;
-//          _this.updateStyles();
-//          console.log('google charts call done');
-//        });
+        var _this = this;
+        this.$.google.dataTable(formatted).then(function(dt) {
+          //magic ratio number 32.71
+          _this.customStyle['--' + chartName] = 'height:' + Math.round(dt.getNumberOfRows() * 32.71) +
+              'px; min-height: 300px';
+          _this.$$('#' + chartName).options = _this[chartName + 'Options'];
+          _this.$$('#' + chartName).data = dt;
+          _this.updateStyles();
+          console.log('google charts call done');
+        });
       },
       _tripsDataChanged: function(data) {
         if (!_.isEmpty(data)) {

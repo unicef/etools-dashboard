@@ -118,19 +118,6 @@ var Actions = [
     }
   },
   {
-    actionType: 'trips-months',
-    propsArray: ['tripsMonths'],
-    endpointProps: {},
-    prepareData: function() {
-      return moment.months().map(function(month, i) {
-        return {
-          label: month,
-          value: ('0' + (i + 1)).slice(-2),
-        };
-      });
-    }
-  },
-  {
     actionType: 'trips-years',
     propsArray: ['tripsYears'],
     endpointProps: {},
