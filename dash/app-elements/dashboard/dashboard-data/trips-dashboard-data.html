@@ -41,7 +41,6 @@
         },
         _filterChanged: function(filter) {
           if (!_.isEmpty(filter)) {
-            this.fire('global-loading', {message: 'Loading chart data...', active: true});
             this.async(function(){
               var endpointParams = _.keys(filter).filter(function(key){
                 return filter[key];
@@ -52,7 +51,10 @@
               join('&');
               var endpoint = this.getEndpoint('tripsDashboard');
               endpoint.url += endpointParams;
-              this.set('endpoint', endpoint);
+              if (!_.isEqual(endpoint, this.endpoint)){
+                this.fire('global-loading', {message: 'Loading trips chart data...', active: true});
+                this.set('endpoint', endpoint);
+              }
             }.bind(this));
 
           }else {
