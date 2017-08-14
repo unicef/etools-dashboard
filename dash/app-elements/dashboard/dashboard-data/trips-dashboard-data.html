@@ -3,7 +3,7 @@
 <link rel="import" href="../../../app-behaviors/data-element-behavior.html">
 <link rel="import" href="../../../app-config/etools-app-config.html">
 
-<dom-module id="trips-by-section-data">
+<dom-module id="trips-dashboard-data">
 
   <template>
     <etools-ajax id="ajax"
@@ -18,7 +18,7 @@
 
       Polymer({
 
-        is: 'trips-by-section-data',
+        is: 'trips-dashboard-data',
         behaviors: [
           etoolsAppConfig.globals,
           dashBehaviors.DataElementBehavior
@@ -41,23 +41,22 @@
         },
         _filterChanged: function(filter) {
           if (!_.isEmpty(filter)) {
-            this.fire('global-loading', {message: 'Loading chart data...', active: true});
-            if (_.get(filter, 'office')) {
-              this.set('endpoint', this.getEndpoint('tripsBySectionOffice',
-                  {
-                    year: filter.year,
-                    month: filter.monthId,
-                    office: filter.office
-                  }
-              ));
-            }else {
-              this.set('endpoint', this.getEndpoint('tripsBySection',
-                  {
-                    year: filter.year,
-                    month: filter.monthId
-                  }
-              ));
-            }
+            this.async(function(){
+              var endpointParams = _.keys(filter).filter(function(key){
+                return filter[key];
+              }).
+              map(function(k){
+                return k + '=' + filter[k];
+              }).
+              join('&');
+              var endpoint = this.getEndpoint('tripsDashboard');
+              endpoint.url += endpointParams;
+              if (!_.isEqual(endpoint, this.endpoint)){
+                this.fire('global-loading', {message: 'Loading trips chart data...', active: true});
+                this.set('endpoint', endpoint);
+              }
+            }.bind(this));
+
           }else {
             this.ajaxEl.set('url', null);
           }
@@ -65,6 +64,7 @@
         _handleResponse: function(response) {
           var data = _.get(response, 'detail', []);
           this._setTripsData(data);
+          this.fire('global-loading');
         },
 
       });

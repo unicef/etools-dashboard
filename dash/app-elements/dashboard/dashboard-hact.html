@@ -342,7 +342,6 @@
         },
 
         _requiredDataHasBeenLoaded: function(e) {
-          this.fire('global-loading');
           e.stopImmediatePropagation();
           var filtered = _.get(this, 'filteredPartners', []);
           if (_.isEmpty(filtered)) {
@@ -350,9 +349,6 @@
           }
           this.set('requiredDataLoaded', true);
           this.init(this.active);
-          if (this.active) {
-            this.fire('global-loading', {active: false});
-          }
         },
         _goToPage: function(e) {
           window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';

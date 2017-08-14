@@ -93,7 +93,7 @@
         if (_.isEqual(this.endpoint, newEp)) {
           return;
         }
-        this.fire('global-loading', {message: 'Loading map data...', active: true});
+//        this.fire('global-loading', {message: 'Loading map data...', active: true});
         this.set('endpoint', newEp);
       },
       _formatInterventions: function(data) {
@@ -114,6 +114,7 @@
         } else {
           this._formatInterventions(data);
         }
+//        this.fire('global-loading');
       }
     });
   </script>

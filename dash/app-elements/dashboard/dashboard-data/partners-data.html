@@ -48,17 +48,17 @@
             type: String,
             value: 'partners-loaded'
           },
-          firstLoad: {
+          loadedInitially: {
             type: Boolean,
             value: false
           }
 
         },
         init: function(active) {
-          if (active && !this.firstLoad) {
+          if (active && !this.loadedInitially) {
             this.fire('global-loading', {message: 'Loading partners data...', active: true});
             this._elementReady();
-            this.set('firstLoad',true);
+            this.set('loadedInitially',true);
           }
         },
         query: function(searchString, order, pageSize, pageNumber) {

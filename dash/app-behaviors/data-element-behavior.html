@@ -29,10 +29,6 @@
 
     },
 
-    ready: function() {
-      this._elementReady();
-    },
-
     _elementReady: function() {
       if (!this.endpointName) {
         console.warn('Please specify an endpointName property');
@@ -42,6 +38,7 @@
     },
 
     _handleResponse: function(res) {
+      this.fire('global-loading');
       this._setData(res.detail);
       if (this.fireDataLoaded) {
         if (!this.dataLoadedEventName) {
