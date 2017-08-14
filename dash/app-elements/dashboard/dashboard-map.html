@@ -257,7 +257,6 @@
       },
       _openModal: function(e) {
         var model = e.model.marker;
-        console.log('inters', this.intLocMap[model.id].interventions);
         var interventions = _.values(this.intLocMap[model.id].interventions);
         var data = {
           name: model.name,
@@ -268,16 +267,23 @@
         this.markerDialog.opened = true;
       },
       _init: function() {
-        if (this.active && _.isEmpty(this.intLocMap)) {
+        if (!this.active){
+          return;
+        }
+        if (_.isEmpty(this.intLocMap)) {
           //initialize the intLocMap object
-
           this.set('mapFilter', '');
+          this.fire('global-loading', {
+            message: 'Loading page data...',
+            active: true
+          });
         }
 
-        if (!this.active || !this._allStaticDataLoaded()) {
+        if (!this._allStaticDataLoaded()) {
           return;
         }else {
           this.set('staticDataLoaded', true);
+          this.fire('global-loading');
         }
 //         first render of map only when tab is active, otherwise map tiles don't show
         if (_.isEmpty(this.availableListFilterOptions)) {
@@ -331,9 +337,6 @@
               path: 'partner'
             },
           ]);
-          if (!_.isEmpty(this.availableListFilterOptions)) {
-            this.fire('global-loading');
-          }
         }
       },
       _filterChanged: function(filt) {
@@ -354,6 +357,10 @@
         }
         this.set('hasResult', true);
         this.set('mapFilter', newFilter);
+        this.fire('global-loading', {
+          message: 'Loading interventions...',
+          active: true
+        });
       },
       // ensure redux items loaded before initializing the filters
       _allStaticDataLoaded: function() {
@@ -367,7 +374,6 @@
         }, true);
       },
       _callLocations: function(locations) {
-        this.fire('global-loading', {message: 'Loading map data...', active: true});
         this.$.locationsData.query(locations);
       },
       _plotMarkers: function(locations) {

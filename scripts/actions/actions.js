@@ -52,10 +52,9 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      data = data || [];
-      return data.map(function(trip) {
+      return data.length ? data.map(function(trip) {
         return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']);
-      });
+      }): [];
     }
   },
   {
@@ -66,10 +65,9 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      data = data || [];
-      return data.map(function(trip) {
+      return data.length ? data.map(function(trip) {
         return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'traveler']);
-      });
+      }) : [];
     }
   },
   {
@@ -80,12 +78,11 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      data = data || [];
-      return data.map(function(actionPoint) {
+      return data.length? data.map(function(actionPoint) {
         return _.pick(actionPoint, [
           'status', 'description', 'created_at', 'person_responsible_name','id'
         ]);
-      });
+      }): [];
     }
   },
   {
@@ -96,12 +93,11 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      data = data || [];
-      return data.map(function(actionPoint) {
+      return data.length? data.map(function(actionPoint) {
         return _.pick(actionPoint, [
           'status', 'description', 'created_at', 'assigned_by_name','id'
         ]);
-      });
+      }): [];
     }
   },
   {

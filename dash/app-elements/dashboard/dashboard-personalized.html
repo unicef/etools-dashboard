@@ -279,7 +279,6 @@
           statePath: 'trips',
         },
         tripsSupervised: {
-          type: Array,
           statePath: 'tripsSupervised'
         },
         actionPointsItems: {
@@ -317,6 +316,11 @@
       _staticDataLoaded: function() {
         if (this.myTrips && this.tripsSupervised && this.actionPointsItems && this.actionPointsForMe) {
           this.fire('global-loading');
+        }else {
+          this.fire('global-loading',{
+            message: 'Loading data...',
+            active: true
+          });
         }
       },
       _setItems: function(tab, itemsProp) {
