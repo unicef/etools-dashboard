@@ -52,10 +52,9 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      data = data || [];
-      return data.map(function(trip) {
+      return data.length ? data.map(function(trip) {
         return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']);
-      });
+      }): [];
     }
   },
   {
@@ -66,10 +65,9 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      data = data || [];
-      return data.map(function(trip) {
+      return data.length ? data.map(function(trip) {
         return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'traveler']);
-      });
+      }) : [];
     }
   },
   {
@@ -80,12 +78,11 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      data = data || [];
-      return data.map(function(actionPoint) {
+      return data.length? data.map(function(actionPoint) {
         return _.pick(actionPoint, [
           'status', 'description', 'created_at', 'person_responsible_name','id'
         ]);
-      });
+      }): [];
     }
   },
   {
@@ -96,12 +93,11 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      data = data || [];
-      return data.map(function(actionPoint) {
+      return data.length? data.map(function(actionPoint) {
         return _.pick(actionPoint, [
           'status', 'description', 'created_at', 'assigned_by_name','id'
         ]);
-      });
+      }): [];
     }
   },
   {
@@ -115,19 +111,6 @@ var Actions = [
       return data.length ? data.map(function(partnership) {
             return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
           }) : null;
-    }
-  },
-  {
-    actionType: 'trips-months',
-    propsArray: ['tripsMonths'],
-    endpointProps: {},
-    prepareData: function() {
-      return moment.months().map(function(month, i) {
-        return {
-          name: month,
-          monthId: ('0' + (i + 1)).slice(-2),
-        };
-      });
     }
   },
   {

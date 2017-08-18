@@ -279,7 +279,6 @@
           statePath: 'trips',
         },
         tripsSupervised: {
-          type: Array,
           statePath: 'tripsSupervised'
         },
         actionPointsItems: {
@@ -317,6 +316,11 @@
       _staticDataLoaded: function() {
         if (this.myTrips && this.tripsSupervised && this.actionPointsItems && this.actionPointsForMe) {
           this.fire('global-loading');
+        }else {
+          this.fire('global-loading',{
+            message: 'Loading data...',
+            active: true
+          });
         }
       },
       _setItems: function(tab, itemsProp) {
@@ -343,7 +347,8 @@
       },
       
       _goToActionPoint: function(e) {
-        var path = this.baseSite + '/' + 't2f/action-point/' + e.model.action.id;
+        var origin = window.location.origin;
+        var path = origin + '/t2f/action-point/' + e.model.action.id;
         this.manageClickEvent(e, path);
       }
     });
