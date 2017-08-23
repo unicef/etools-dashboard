@@ -118,7 +118,6 @@
                   mr_spot_checks: picked.hact_min_requirements.spot_checks
                 });
             picked = _.omit(picked, ['hact_values', 'hact_min_requirements']);
-            console.log(picked)
             _(picked).each(function(val, key) {
               var currValue = sum[key] ? sum[key] : 0;
               if (key === 'shared_partner') {
