@@ -24,7 +24,7 @@
           dashBehaviors.DataElementBehavior,
           etoolsAppConfig.globals
         ],
-        observers:['init(active)'],
+        observers: ['init(active)'],
         properties: {
           endpointName: {
             type: String,
@@ -44,6 +44,11 @@
             readOnly: true,
             notify: true
           },
+          totals: {
+            type: Array,
+            notify: true,
+            readOnly: true
+          },
           dataLoadedEventName: {
             type: String,
             value: 'partners-loaded'
@@ -58,7 +63,7 @@
           if (active && !this.loadedInitially) {
             this.fire('global-loading', {message: 'Loading partners data...', active: true});
             this._elementReady();
-            this.set('loadedInitially',true);
+            this.set('loadedInitially', true);
           }
         },
         query: function(searchString, order, pageSize, pageNumber) {
@@ -67,7 +72,7 @@
             var queryResult = self.db.partners;
             if (order === 'desc') {
               queryResult = queryResult.reverse();
-            }else {
+            } else {
               queryResult = queryResult.toCollection();
             }
             if (!_.isEmpty(searchString)) {
@@ -83,13 +88,48 @@
                   .limit(pageSize)
                   .toArray()]);
           }).then(function(countAndResult) {
+            var queryResults = countAndResult[1];
+            self._setTotals(self._computeTotals(queryResults));
             self._setTotalResults(countAndResult[0]);
-            self._setFilteredPartners(countAndResult[1]);
+            self._setFilteredPartners(queryResults);
           }).catch(function(error) {
             console.error('Error querying partners: ', error);
           });
         },
-
+        _computeTotals: function(results) {
+          return _(results).reduce(function(sum, obj) {
+            var picked = _(obj).pick([
+              'shared_partner',
+              'total_ct_cp',
+              'hact_values',
+              'total_ct_cy',
+              'hact_min_requirements',
+            ]).value();
+            _.assign(picked, _.pick(picked.hact_values, [
+                  'planned_cash_transfer',
+                  'planned_visits',
+                  'programmatic_visits',
+                  'spot_checks',
+                  'audits_mr',
+                  'audits_done',
+                  'follow_up_flags'
+                ]), _.pick(picked.hact_min_requirements, 'programme_visits'),
+                {
+                  mr_spot_checks: picked.hact_min_requirements.spot_checks
+                });
+            picked = _.omit(picked, ['hact_values', 'hact_min_requirements']);
+            console.log(picked)
+            _(picked).each(function(val, key) {
+              var currValue = sum[key] ? sum[key] : 0;
+              if (key === 'shared_partner') {
+                sum[key] = currValue + (val === 'No' ? 0 : 1);
+              } else {
+                sum[key] = currValue + Number(val);
+              }
+            }).value();
+            return sum;
+          }, {});
+        },
       });
 
     })();

@@ -85,6 +85,19 @@
         box-sizing: border-box;
       }
 
+      data-table-row.totals {
+        --primary-background-color: var(--medium-theme-background-color);
+        --custom-style: {
+          background: var(--medium-theme-background-color);
+          border-top: 1px solid rgba(0, 0, 0, 0.24);
+          box-shadow: inset 0 -1px 0 0 rgba(0,0,0,0.24);
+        }
+      }
+
+      data-table-row.totals span{
+        font-weight: 500;
+      }
+
       data-table-column {
         padding-right: 12px;
       }
@@ -100,6 +113,7 @@
         id="partners"
         filtered-partners="{{filteredPartners}}"
         total-results="{{totalResults}}"
+        totals="{{totals}}"
         active="[[active]]"
         fire-data-loaded show-loading
         on-partners-loaded="_requiredDataHasBeenLoaded">
@@ -184,6 +198,45 @@
           </data-table-column>
         </div>
       </data-table-header>
+
+      <!--Row of Totals-->
+      <data-table-row class="totals" no-collapse>
+        <div slot="row-data">
+          <div class="col-3 layout horizontal">
+              <span class="col-6 col-data partner-link">
+                Total of [[totalResults]] IPs
+              </span>
+            <span class="col-3 col-data "></span>
+            <span class="col-3 col-data ">[[totals.shared_partner]]</span>
+          </div>
+          <div class="col-3 layout horizontal">
+            <span class="col-data col-4-sub ">[[currencyFormat(totals.total_ct_cp)]]</span>
+            <span class="col-data col-4-sub">[[currencyFormat(totals.planned_cash_transfer)]]</span>
+            <span class="col-data col-4-sub">[[currencyFormat(totals.total_ct_cy)]]</span>
+          </div>
+          <span class="col-data col-micro flex"></span>
+          <div class="col-20 layout horizontal">
+            <span class="col-data col-4"></span>
+            <div class="col-8 layout horizontal">
+              <span class="col-data col-4-sub">[[totals.planned_visits]]</span>
+              <span class="col-data col-4-sub">[[totals.programme_visits]]</span>
+              <span class="col-data col-4-sub">[[totals.programmatic_visits]]</span>
+            </div>
+          </div>
+          <div class="col-30 layout horizontal">
+            <div class="col-4 layout horizontal">
+              <span class="col-data col-6-sub ">[[totals.mr_spot_checks]]</span>
+              <span class="col-data col-6-sub">[[totals.spot_checks]]</span>
+            </div>
+            <div class="col-4 layout horizontal">
+              <span class="col-data col-6-sub">[[totals.audits_mr]]</span>
+              <span class="col-data col-6-sub">[[totals.audits_done]]</span>
+            </div>
+            <span class="col-data col-2 ">[[totals.follow_up_flags]]</span>
+          </div>
+        </div>
+      </data-table-row>
+
       <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
         <data-table-row no-collapse>
           <div slot="row-data">
@@ -272,6 +325,9 @@
           },
           urlParams: {
             type: Object,
+          },
+          totals: {
+            type: Array,
           }
         },
 
