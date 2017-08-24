@@ -103,7 +103,7 @@
             </paper-dropdown-menu>
           </div>
         </div>
-        <paper-button class="primary-btn" on-tap="_setFilter" disabled="[[fetchDisabled]]" >
+        <paper-button class="primary-btn" on-tap="_setFilter" disabled="[[fetchDisabled]]">
           Get Chart
         </paper-button>
       </div>
@@ -148,14 +148,25 @@
         <div class="filters-divider"></div>
         <div class="wrap-controls">
           <div class="dropdown-with-clear-btn">
+            <!--<paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>-->
+            <!--<paper-dropdown-menu label="Office" placeholder="Select from list" noink>-->
+            <!--<paper-menu class="dropdown-content" attr-for-selected="name" selected="{{apOffice}}">-->
+            <!--<template is="dom-repeat" items="[[offices]]" as="office">-->
+            <!--<paper-item name="[[office.name]]">[[office.name]]</paper-item>-->
+            <!--</template>-->
+            <!--</paper-menu>-->
+            <!--</paper-dropdown-menu>-->
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-            <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
-              <paper-menu class="dropdown-content" attr-for-selected="name" selected="{{apOffice}}">
-                <template is="dom-repeat" items="[[offices]]" as="office">
-                  <paper-item name="[[office.name]]">[[office.name]]</paper-item>
-                </template>
-              </paper-menu>
-            </paper-dropdown-menu>
+            <etools-multi-selection-menu label="Office"
+                                         id="actionPtsOffice"
+                                         placeholder="Select from list"
+                                         error-message="Must select at least one office"
+                                         selected-values="{{apOffice}}"
+                                         option-label="name"
+                                         option-value="id"
+                                         trigger-value-change-event
+                                         on-paper-dropdown-close="_apOfficeChanged"
+                                         options="[[offices]]"></etools-multi-selection-menu>
           </div>
         </div>
       </div>
@@ -176,7 +187,7 @@
       is: 'dashboard-trips',
       observers: [
         '_init(active)',
-        '_alertStaticDataLoaded(offices,months,years)'
+        '_alertStaticDataLoaded(offices,months,years)',
       ],
       behaviors: [
         dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
@@ -197,7 +208,7 @@
         },
         tripsOffice: {
           type: String,
-          observer: '_valueChange'
+          observer: '_monthChanged'
         },
         tripsChart: {
           type: Array,
@@ -210,6 +221,7 @@
         },
         apOffice: {
           type: String,
+          notify: true,
           observer: '_apOfficeChanged'
         },
         actionPtsFilter: {
@@ -230,7 +242,7 @@
         month: {
           type: String,
           notify: true,
-          observer: '_valueChange'
+          observer: '_monthChanged'
         },
         fetchDisabled: {
           type: Boolean,
@@ -355,8 +367,8 @@
       },
       _init: function(active) {
         if (active) {
-          if (!this.staticDataLoaded){
-            this.fire('global-loading', {message: 'Loading page data...', active:true});
+          if (!this.staticDataLoaded) {
+            this.fire('global-loading', {message: 'Loading page data...', active: true});
           }
           this._initTripsChart();
           if (!this.actionPtsFilter) {
@@ -373,7 +385,7 @@
             value: ('0' + (i + 1)).slice(-2),
           };
         }));
-        var monthsToDate = _.range(1, moment().month() + 1).map(function(month) {
+        var monthsToDate = _.range(1, moment().month() + 2).map(function(month) {
           return ('0' + (month)).slice(-2)
         });
         this.set('month', monthsToDate);
@@ -388,30 +400,30 @@
         var filter = {year: this.year, office_id: this.tripsOffice};
         if (this.month) {
           var monthObj = {months: this.month.join(',')};
-           _.assign(filter, monthObj);
+          _.assign(filter, monthObj);
         }
         this.set('tripsFilter', filter);
       },
       _setYear: function(year) {
         if (year) {
-          this._valueChange();
+          this._monthChanged();
           this.$.tripsYear.invalid = false;
         } else {
           this._setInvalid('tripsYear');
           this.set('fetchDisabled', true);
         }
       },
-      _valueChange: function(month) {
+      _monthChanged: function(month) {
         if (this.year) {
           this.set('fetchDisabled', false);
         }
       },
-      _alertStaticDataLoaded: function(){
+      _alertStaticDataLoaded: function() {
         var args = _.toArray(arguments);
-        var allHaveValues = args.reduce(function(allHaveValues,item){
+        var allHaveValues = args.reduce(function(allHaveValues, item) {
           return !_.isEmpty(item) && allHaveValues;
-        },true);
-        if (allHaveValues){
+        }, true);
+        if (allHaveValues) {
           this.set('staticDataLoaded', true);
           this.fire('global-loading');
         }
@@ -483,10 +495,13 @@
         return this.year && this.month;
       },
 
-      _apOfficeChanged: function(officeName) {
+      _apOfficeChanged: function() {
+        if (this.$.actionPtsOffice.$.dropdownMenu.opened){
+          return;
+        }
         var filter = {};
-        if (officeName) {
-          filter.office = _.find(this.offices, {name: officeName}).id;
+        if (this.apOffice && this.apOffice.length) {
+          filter.office = this.apOffice
         }
         this.set('actionPtsFilter', filter);
       },
