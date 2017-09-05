@@ -84,12 +84,15 @@
               queryResult.count(),
               // Use clone() as offset() and limit() otherwise mutates the same query that is counted
               queryResult.clone()
+                  .toArray(),
+              queryResult.clone()
                   .offset((pageNumber - 1) * pageSize)
                   .limit(pageSize)
                   .toArray()]);
           }).then(function(countAndResult) {
-            var queryResults = countAndResult[1];
-            self._setTotals(self._computeTotals(queryResults));
+            var queryResults = countAndResult[2];
+            var totalsQueryResults = countAndResult[1]
+            self._setTotals(self._computeTotals(totalsQueryResults));
             self._setTotalResults(countAndResult[0]);
             self._setFilteredPartners(queryResults);
           }).catch(function(error) {
@@ -97,6 +100,7 @@
           });
         },
         _computeTotals: function(results) {
+          console.log(results)
           return _(results).reduce(function(sum, obj) {
             var picked = _(obj).pick([
               'shared_partner',
