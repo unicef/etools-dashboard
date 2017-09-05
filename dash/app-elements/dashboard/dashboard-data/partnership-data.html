@@ -8,9 +8,9 @@
   <template>
     <etools-ajax id="ajax"
                  endpoint="[[endpoint]]"
-                 caching-storage="dexie"
-                 on-success="_handleResponse"
-                 on-fail="_handleErrorResponse"></etools-ajax>
+                 caching-storage="custom"
+                 dexie-db-collection="cso_dashboard"
+                 on-success="_handleResponse"></etools-ajax>
   </template>
 
   <script>
@@ -21,46 +21,80 @@
 
         is: 'partnership-data',
         behaviors: [
-            etoolsAppConfig.globals,
+            etoolsAppConfig,
             dashBehaviors.DataElementBehavior
         ],
+        observers:['init(active)'],
         properties: {
-          partnership: {
+          endpointName: {
+            type: String,
+            value: 'cso_dashboard'
+          },
+          currentQuery: {
             type: Object,
+            value: null
+          },
+          filteredPartnerships: {
+            type: Array,
             readOnly: true,
             notify: true
           },
-          filter: {
-            type: Object,
-            observer: '_filterChanged'
+          totalResults: {
+            type: Number,
+            readOnly: true,
+            notify: true
+          },
+          dataLoadedEventName: {
+            type: String,
+            value: 'partnerships-loaded'
           }
         },
-        attached: function() {
-          this.ajaxEl = this.$.ajax;
-          this.ajaxEl.set('method', 'GET');
+
+        init: function(active) {
+          if (active) {
+            this.fire('global-loading', {message: 'Loading interventions data...', active: true});
+            this._elementReady();
+          }
         },
-        _filterChanged: function(filter) {
-          if (!_.isEmpty(filter)) {
-            this.fire('global-loading', {message: 'Loading partnership data...', active: true});
-            if(filter.office) {
-              this.set('endpoint', this.getEndpoint('partnershipOffice',
-                  {
-                    country_programme: filter.country_programme,
-                    office: filter.office
-                  }
-              ));
+
+        query: function(searchString, order, pageSize, pageNumber, status) {
+          var self = this;
+          this.db.transaction('r', this.db.cso_dashboard, function() {
+            var queryResult = self.db.cso_dashboard;
+            if (order === 'desc') {
+              queryResult = queryResult.reverse();
             } else {
-              this.set('endpoint', this.getEndpoint('partnership',
-                  {
-                    country_programme: filter.country_programme || '',
-                  }
-              ));
+              queryResult = queryResult.toCollection();
             }
-          }
-        },
-        _handleResponse: function(response) {
-          var data = _.get(response,'detail');
-          this._setPartnership(data);
+            if (!_.isEmpty(searchString)) {
+              queryResult = queryResult.filter(function(partner) {
+                return _.includes(partner.partner_name.toLowerCase(), searchString.toLowerCase());
+              });
+            }
+            if (status) {
+              queryResult = queryResult.filter(function(partner) {
+                return partner.status === 'closed';
+              });
+            } else {
+              queryResult = queryResult.filter(function(partner) {
+                return partner.status !== 'closed';
+              });
+            }
+
+            return Dexie.Promise.all([
+              queryResult.count(),
+              // Use clone() as offset() and limit() otherwise mutates the same query that is counted
+              queryResult.clone()
+                  .offset((pageNumber - 1) * pageSize)
+                  .limit(pageSize)
+                  .toArray()]);
+          }).then(function(countAndResult) {
+            self._setTotalResults(countAndResult[0]);
+            self._setFilteredPartnerships(countAndResult[1]);
+            self.fire('global-loading');
+          }).catch(function(error) {
+            console.error('Error querying partnerships-dash: ', error);
+          });
         },
 
       });

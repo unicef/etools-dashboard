@@ -4,12 +4,14 @@
 <link rel="import" href="../../../styles/list-styles.html">
 <link rel="import" href="../../../styles/page-layout-styles.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../../styles/grid-layout-styles.html">
 
 <link rel="import" href="../../app-config/etools-app-config.html">
 
 <link rel="import" href="../data-table/data-table-header.html">
 <link rel="import" href="../data-table/data-table-column.html">
 <link rel="import" href="../data-table/data-table-row.html">
+<link rel="import" href="../data-table/data-table-footer.html">
 
 <link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
@@ -19,119 +21,157 @@
 
 <link rel="import" href="../../app-behaviors/dropdown-behavior.html">
 <link rel="import" href="../../app-behaviors/common-general-behavior.html">
+<link rel="import" href="../../app-behaviors/pagination-behavior.html">
 <link rel="import" href="../../app-elements/static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
 <link rel="import" href="dashboard-data/partnership-data.html">
 <dom-module id="dashboard-partnerships">
 
   <template>
-    <style include="shared-styles list-styles iron-flex iron-flex-factors page-layout-styles">
+    <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors page-layout-styles">
       .by-type {
         padding: 0;
         @apply(--layout-horizontal);
       }
+
       span.title {
         color: var(--accent-color);
         font-weight: 500;
       }
+
+      data-table-header data-table-column:not(:first-child), data-table-row span:not(:first-child) {
+        box-sizing: border-box;
+        padding-left: 8px;
+
+      }
+
+      .right-align {
+        text-align: right;
+      }
     </style>
-    <partnership-data partnership="{{partnership}}" filter="[[filter]]"></partnership-data>
+    <partnership-data id="partnerships"
+                      filtered-partnerships="{{filteredPartnerships}}"
+                      fire-data-loaded
+                      active="[[active]]"
+                      total-results="{{totalResults}}"
+                      on-partnerships-loaded="_requiredDataLoaded"></partnership-data>
     <paper-material class="list-panel listControls" elevation="1">
       <div class="controls-wrapper">
-
-        <div class="title-row">
-          <h1 sub-title>Partnerships</h1>
-        </div>
-
-        <div class="filters-divider"></div>
-
-        <div class="wrap-controls">
-          <div class="dropdown-with-clear-btn">
-            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-            <paper-dropdown-menu id="cpDropdown"
-                                 label="Country Programme"
-                                 placeholder="Select from list"
-                                 error-message="Must select country programme"
-                                 noink>
-              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{country_programme}}">
-                <template is="dom-repeat" items="[[countryProgrammeItems]]">
-                  <paper-item id="[[item.id]]">[[item.name]]</paper-item>
-                </template>
-              </paper-menu>
-            </paper-dropdown-menu>
-          </div>
-          <div class="dropdown-with-clear-btn">
-            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-            <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
-              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{office}}">
-                <template is="dom-repeat" items="[[officeItems]]" as="officeItem">
-                  <paper-item id="[[officeItem.id]]">[[officeItem.name]]</paper-item>
-                </template>
-              </paper-menu>
-            </paper-dropdown-menu>
-          </div>
-        </div>
-      </div>
-    </paper-material>
-
-    <paper-material class="list-panel by-type" elevation="1">
-      <div class="trip title-row ">
-        <h2 sub-title>Partnerships by type</h2>
-      </div>
-      <div class="trips flex-c">
-        <div class="trip trip-type-one flex-c">
-          <h1>Bilateral <br>Multilateral</h1>
-          [[data.byType.0]]
-        </div>
-        <div class="trip trip-type-two flex-c">
-          <h1>Civil Society <br>Organizations</h1>
-          [[data.byType.1]]
-        </div>
-        <div class="trip trip-type-three flex-c">
-          <h1>UN Agency</h1>
-          [[data.byType.2]]
-        </div>
-        <div class="trip trip-type-four flex-c">
-          <h1>Government</h1>
-          [[data.byType.3]]
-        </div>
+        <paper-input id="query"
+                     type="search"
+                     autocomplete="off"
+                     value="[[queryString]]"
+                     on-keyup="setQuery"
+                     placeholder="Search partner name"
+                     always-float-label
+                     on-search="setQuery">
+          <iron-icon icon="search" prefix></iron-icon>
+        </paper-input>
       </div>
     </paper-material>
 
     <paper-material id="list" elevation="1">
-      <data-table-header no-title no-collapse>
+      <data-table-header label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show" no-collapse>
+        <data-table-column class="flex-2" sortable>
+          Partners
+        </data-table-column>
         <data-table-column class="flex-2">
-          Partnerships (PD, SHPD, SSFA ToR, DCT to government)
+          PD/SSFA Ref #
+        </data-table-column>
+        <data-table-column class="flex-2">
+          Section
         </data-table-column>
         <data-table-column class="flex">
-          Number of Partnerships
+          Field Office
         </data-table-column>
         <data-table-column class="flex">
-          Total Value of Partnerships
+          Status
         </data-table-column>
         <data-table-column class="flex">
-          % of Active Partnerships
+          Start Date <br> End Date
+        </data-table-column>
+        <data-table-column class="flex right-align">
+          Total UNICEF <br>Cash ($)
+        </data-table-column>
+        <data-table-column class="flex right-align">
+          Total UNICEF <br>Supplies ($)
+        </data-table-column>
+        <data-table-column class="flex right-align">
+          CSO <br>Contr. ($)
+        </data-table-column>
+        <data-table-column class="flex right-align">
+          Total <br> Budget ($)
+        </data-table-column>
+        <data-table-column class="flex right-align">
+          $ Disburs. <br>To Date (%)
+        </data-table-column>
+        <data-table-column class="flex right-align">
+          Days Since <br>Last PV
         </data-table-column>
       </data-table-header>
-      <template is="dom-repeat" items="[[data.rows]]" as="row">
+      <template is="dom-repeat" items="[[filteredPartnerships]]" as="row">
         <data-table-row no-collapse>
           <div slot="row-data">
-            <span class="col-data flex-2 title">
-              [[row.title]]
+            <a on-tap="goToPage"
+               href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details"
+               app-name="pmp"
+               page="partners"
+               id="[[row.partner_id]]/details"
+               class="col-data flex-2 title">
+              [[row.partner_name]]
+            </a>
+            <a on-tap="goToPage"
+               href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details"
+               app-name="pmp"
+               page="interventions"
+               id="[[row.intervention_id]]/details"
+               class="col-data flex-2 title">
+              [[row.number]]
+            </a>
+            <span class="col-data flex-2">
+              <template is="dom-repeat" items="{{row.sectors}}" as="">
+                [[item]]<br>
+              </template>
             </span>
             <span class="col-data flex">
-              [[row.number_partnerships]]
+              <template is="dom-repeat" items="{{row.offices_names}}" as="">
+                [[item]]<br>
+              </template>
             </span>
             <span class="col-data flex">
-              [[currencyFormat(row.total_value)]]
+              [[row.status]]
             </span>
             <span class="col-data flex">
-              [[row.percent_active]]
+              [[row.start]] <br> [[row.end]]
+            </span>
+            <span class="col-data flex right-align">
+              [[currencyFormat(row.unicef_cash)]]
+            </span>
+            <span class="col-data flex right-align">
+              [[currencyFormat(row.unicef_supplies)]]
+            </span>
+            <span class="col-data flex right-align">
+              [[currencyFormat(row.cso_contribution)]]
+            </span>
+            <span class="col-data flex right-align">
+              [[currencyFormat(row.total_budget)]]
+            </span>
+            <span class="col-data flex right-align">
+              [[_getDisbursements(row.disbursement,row.frs_total_frs_amt)]]%
+            </span>
+            <span class="col-data flex right-align">
+              [[row.days_last_pv]]
             </span>
           </div>
         </data-table-row>
       </template>
-
-
+      <data-table-footer
+          page-size="[[pageSize]]"
+          page-number="[[pageNumber]]"
+          total-results="[[totalResults]]"
+          visible-range="{{visibleRange}}"
+          on-page-size-changed="pageSizeChanged"
+          on-page-number-changed="pageNumberChanged">
+      </data-table-footer>
     </paper-material>
   </template>
 
@@ -144,101 +184,80 @@
         behaviors: [
           dashBehaviors.DropdownBehavior,
           dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
+          dashBehaviors.PaginationBehavior,
           dashBehaviors.CommonGeneralBehavior
         ],
         observers: [
-          'init(active)',
+          '_updateUrl(queryString, pageNumber, pageSize,' +
+          'sortOrder, requiredDataLoaded, initComplete)'
         ],
-        properties: {
-          country_programme: {
-            type: String,
-            observer: '_filterChanged'
-          },
-          office: {
-            type: String,
-            observer: '_filterChanged'
-          },
-          countryProgrammeItems: {
-            type: Array,
-            statePath: 'countryProgrammes'
-          },
-          officeItems: {
-            type: Array,
-            statePath: 'offices'
-          },
-          partnership: {
-            type: Object,
-            notify: true,
-            observer: '_partnershipChanged'
-          },
-          filter: {
-            type: Object,
-            notify: true,
-          },
-          data: {
-            type: Object,
-            notify: true
-          }
-        },
-        init: function(active) {
-          if (active) {
-            if (!this.filter) {
-              this.set('filter', {
-                country_programme: null,
-                office: null
-              });
-            }
-          }
-        },
-        _filterChanged: function() {
-          var filter = {country_programme: null, office: null};
-          if (this.country_programme) {
-            this.$.cpDropdown.invalid = false;
-            filter = {
-              country_programme: parseInt(this.country_programme, 10),
-              office: parseInt(this.office, 10)
-            };
-          }else {
-            if (this.office) {
-              this.$.cpDropdown.invalid = true;
-            }else {
-              this.$.cpDropdown.invalid = false;
-            }
-          }
-          if (!_.isEqual(this.filter, filter)) {
-            this.set('filter', filter);
-          }
-        },
-        _partnershipChanged: function(partnership) {
-          var formatted = {
-            rows: [
-              {
-                title: 'Active Programme Documents for this year',
-                number_partnerships: partnership.active_this_year_count,
-                total_value: partnership.active_this_year_value,
-                percent_active: partnership.active_this_year_percentage
-              },
-              {
-                title: 'Active Partnerships approved in previous years',
-                number_partnerships: partnership.active_last_year_count,
-                total_value: partnership.active_last_year_value,
-                percent_active: partnership.active_last_year_percentage
-              },
-              {
-                title: 'Expiring Partnerships in next two months',
-                number_partnerships: partnership.expire_in_two_months_count,
-                total_value: partnership.expire_in_two_months_value,
-                percent_active: partnership.expire_in_two_months_percentage
-              }
-            ],
-            byType: _.values(partnership.partners)
-          };
-          this.set('data', formatted);
-          this.fire('global-loading', {active: false});
-        }
-      });
 
+        properties: {
+          filteredPartnerships: {
+            type: Array,
+            notify: true,
+          },
+          forceDataRefresh: {
+            type: Boolean,
+            value: false
+          },
+          requiredDataLoaded: {
+            type: Boolean,
+            value: false
+          },
+          initComplete: {
+            type: Boolean,
+            value: false,
+          },
+          urlParams: {
+            type: Object,
+          },
+        },
+
+        _updateUrl: function() {
+          if (!this.initComplete) {
+            return;
+          }
+          var qs = this.buildQueryString();
+          if (qs !== null) {
+            this.updateAppState('dashboard/partnerships', qs, true);
+            if (this.requiredDataLoaded) {
+              this._filterPartnershipsData();
+            }
+          } else {
+            if (location.search === '') {
+              this.updateAppState('dashboard/partnerships', qs, false);
+            }
+            if (this.forceDataRefresh && this.requiredDataLoaded) {
+              this._filterPartnershipsData();
+              this.set('forceDataRefresh', false);
+            }
+          }
+        },
+
+        _filterPartnershipsData: function() {
+          this.$.partnerships.query(
+              this.queryString,
+              this.sortOrder,
+              this.pageSize,
+              this.pageNumber);
+        },
+
+        _requiredDataLoaded: function(e) {
+          e.stopImmediatePropagation();
+          var filtered = _.get(this, 'filteredPartnerships', []);
+          if (_.isEmpty(filtered)) {
+            this.set('forceDataRefresh', true);
+          }
+          this.set('requiredDataLoaded', true);
+          this.init(this.active);
+        },
+        _getDisbursements: function(disb,fr) {
+          return disb === '0.00' ? '0': Number(disb)/Number(fr)*100;
+        }
+
+
+      });
     })();
   </script>
-
 </dom-module>

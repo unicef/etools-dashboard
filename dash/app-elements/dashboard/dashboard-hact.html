@@ -17,6 +17,7 @@
 
 <link rel="import" href="dashboard-data/partners-data.html">
 <link rel="import" href="../../app-behaviors/common-general-behavior.html">
+<link rel="import" href="../../app-behaviors/pagination-behavior.html">
 
 <dom-module id="dashboard-hact">
   <template>
@@ -47,24 +48,21 @@
         white-space: nowrap;
       }
 
-      .col-4-sub {
-        flex: 0 0 calc(33.33333% - 4px);
-        flex-basis: calc(33.33333% - 4px);
-        max-width: calc(33.33333% - 4px);
-      }
-
       .col-6-sub {
         flex: 0 0 calc(50% - 6px);
         flex-basis: calc(50% - 6px);
         max-width: calc(50% - 6px);
       }
-
-      .col-in-sub {
-        text-align: center;
-      }
-
+      
       .col-micro {
         min-width: 86px;
+      }
+      .group {
+        padding-right: 16px;
+        box-sizing: border-box;
+      }
+      .right {
+        text-align: right;
       }
 
       data-table-header data-table-column {
@@ -77,11 +75,30 @@
       }
 
       data-table-row > div > div > *:not(:last-child) {
-        padding-right: 12px;
+        padding-right: 16px;
       }
 
       data-table-row > div > div > * {
         box-sizing: border-box;
+      }
+
+      data-table-row.totals {
+        --primary-background-color: var(--medium-theme-background-color);
+        --custom-style: {
+          background: var(--medium-theme-background-color);
+          border-top: 1px solid rgba(0, 0, 0, 0.24);
+          box-shadow: inset 0 -1px 0 0 rgba(0,0,0,0.24);
+        }
+      }
+
+      data-table-column.around {
+        --custom-style: {
+          @apply(--layout-around-justified);
+        }
+      }
+
+      data-table-row.totals span{
+        font-weight: 500;
       }
 
       data-table-column {
@@ -99,6 +116,7 @@
         id="partners"
         filtered-partners="{{filteredPartners}}"
         total-results="{{totalResults}}"
+        totals="{{totals}}"
         active="[[active]]"
         fire-data-loaded show-loading
         on-partners-loaded="_requiredDataHasBeenLoaded">
@@ -109,11 +127,11 @@
                      type="search"
                      autocomplete="off"
                      value="[[queryString]]"
-                     on-keyup="_setQuery"
+                     on-keyup="setQuery"
                      placeholder="Type and search"
                      label="Keywords"
                      always-float-label
-                     on-search="_setQuery">
+                     on-search="setQuery">
           <iron-icon icon="search" prefix></iron-icon>
         </paper-input>
       </div>
@@ -132,13 +150,13 @@
           </data-table-column>
         </div>
         <data-table-column class="col-3" group-heading="CASH TRANSFERS in USD">
-          <data-table-column class="nowrap col-4" id="total_ct_cp">
+          <data-table-column class="nowrap" id="total_ct_cp">
             TOTAL for <br> current CP cycle
           </data-table-column>
-          <data-table-column class="nowrap col-4" id="hact_values.planned_cash_transfer">
+          <data-table-column class="nowrap" id="hact_values.planned_cash_transfer">
             PLANNED for <br> current year
           </data-table-column>
-          <data-table-column class="nowrap col-4" id="total_ct_cy">
+          <data-table-column class="nowrap" id="total_ct_cy">
             ACTUAL for <br> current year
           </data-table-column>
         </data-table-column>
@@ -150,31 +168,31 @@
             Risk Rating
           </data-table-column>
           <data-table-column class="col-8" group-heading="PROGRAMMATIC VISITS">
-            <data-table-column class="col-4 nowrap" id="hact_values.planned_visits">
+            <data-table-column class="nowrap" id="hact_values.planned_visits">
               Planned
             </data-table-column>
-            <data-table-column class="col-4 nowrap" id="hact_min_requirements.programme_visits">
+            <data-table-column class="nowrap" id="hact_min_requirements.programme_visits">
               M.R
             </data-table-column>
-            <data-table-column class="col-4 nowrap" id="hact_values.programmatic_visits">
+            <data-table-column class="nowrap" id="hact_values.programmatic_visits">
               Done
             </data-table-column>
           </data-table-column>
         </div>
         <div class="col-30 layout horizontal end">
-          <data-table-column class="col-4" group-heading="SPOT CHECKS">
-            <data-table-column class="col-6" id="hact_min_requirements.spot_checks">
+          <data-table-column class="col-4 around" group-heading="SPOT CHECKS" space-around>
+            <data-table-column id="hact_min_requirements.spot_checks">
               M.R
             </data-table-column>
-            <data-table-column class="col-6" id="hact_values.spot_checks">
+            <data-table-column id="hact_values.spot_checks">
               Done
             </data-table-column>
           </data-table-column>
-          <data-table-column class="col-4" group-heading="AUDITS">
-            <data-table-column class="col-6" id="hact_values.audits_mr">
+          <data-table-column class="col-4 around" group-heading="AUDITS" space-around>
+            <data-table-column id="hact_values.audits_mr">
               M.R
             </data-table-column>
-            <data-table-column class="col-6" id="hact_values.audits_done">
+            <data-table-column id="hact_values.audits_done">
               Done
             </data-table-column>
           </data-table-column>
@@ -183,6 +201,45 @@
           </data-table-column>
         </div>
       </data-table-header>
+
+      <!--Row of Totals-->
+      <data-table-row class="totals" no-collapse>
+        <div slot="row-data">
+          <div class="col-3 layout horizontal">
+              <span class="col-6 col-data partner-link">
+                Total of [[totalResults]] IPs
+              </span>
+            <span class="col-3 col-data "></span>
+            <span class="col-3 col-data ">[[totals.shared_partner]]</span>
+          </div>
+          <div class="col-3 layout horizontal justified group">
+            <span class="col-data flex">[[currencyFormat(totals.total_ct_cp)]]</span>
+            <span class="col-data">[[currencyFormat(totals.planned_cash_transfer)]]</span>
+            <span class="col-data flex right">[[currencyFormat(totals.total_ct_cy)]]</span>
+          </div>
+          <span class="col-data col-micro flex"></span>
+          <div class="col-20 layout horizontal">
+            <span class="col-data col-4"></span>
+            <div class="col-8 layout horizontal justified group">
+              <span class="col-data flex">[[totals.planned_visits]]</span>
+              <span class="col-data">[[totals.programme_visits]]</span>
+              <span class="col-data flex right">[[totals.programmatic_visits]]</span>
+            </div>
+          </div>
+          <div class="col-30 layout horizontal">
+            <div class="col-4 layout horizontal around-justified group">
+              <span class="col-data">[[totals.mr_spot_checks]]</span>
+              <span class="col-data">[[totals.spot_checks]]</span>
+            </div>
+            <div class="col-4 layout horizontal around-justified group">
+              <span class="col-data">[[totals.audits_mr]]</span>
+              <span class="col-data">[[totals.audits_done]]</span>
+            </div>
+            <span class="col-data col-2 ">[[totals.follow_up_flags]]</span>
+          </div>
+        </div>
+      </data-table-row>
+
       <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
         <data-table-row no-collapse>
           <div slot="row-data">
@@ -196,28 +253,28 @@
               <span class="col-3 col-data ">[[partner.partner_type]]</span>
               <span class="col-3 col-data ">[[partner.shared_partner]]</span>
             </div>
-            <div class="col-3 layout horizontal">
-              <span class="col-data col-4-sub ">[[currencyFormat(partner.total_ct_cp)]]</span>
-              <span class="col-data col-4-sub">[[_getGovernmentDisplay(partner,'hact_values.planned_cash_transfer','true')]]</span>
-              <span class="col-data col-4-sub">[[currencyFormat(partner.total_ct_cy)]]</span>
+            <div class="col-3 layout horizontal justified group">
+              <span class="col-data flex">[[currencyFormat(partner.total_ct_cp)]]</span>
+              <span class="col-data">[[_getGovernmentDisplay(partner,'hact_values.planned_cash_transfer','true')]]</span>
+              <span class="col-data flex right">[[currencyFormat(partner.total_ct_cy)]]</span>
             </div>
             <span class="col-data col-micro flex">[[partner.hact_values.micro_assessment_needed]]</span>
             <div class="col-20 layout horizontal">
               <span class="col-data col-4">[[partner.rating]]</span>
-              <div class="col-8 layout horizontal">
-                <span class="col-data col-4-sub">[[_getGovernmentDisplay(partner,'hact_values.planned_visits')]]</span>
-                <span class="col-data col-4-sub">[[partner.hact_min_requirements.programme_visits]]</span>
-                <span class="col-data col-4-sub">[[partner.hact_values.programmatic_visits]]</span>
+              <div class="col-8 layout horizontal justified group">
+                <span class="col-data flex">[[_getGovernmentDisplay(partner,'hact_values.planned_visits')]]</span>
+                <span class="col-data">[[partner.hact_min_requirements.programme_visits]]</span>
+                <span class="col-data flex right">[[partner.hact_values.programmatic_visits]]</span>
               </div>
             </div>
             <div class="col-30 layout horizontal">
-              <div class="col-4 layout horizontal">
-                <span class="col-data col-6-sub ">[[partner.hact_min_requirements.spot_checks]]</span>
-                <span class="col-data col-6-sub">[[partner.hact_values.spot_checks]]</span>
+              <div class="col-4 layout horizontal around-justified group">
+                <span class="col-data">[[partner.hact_min_requirements.spot_checks]]</span>
+                <span class="col-data">[[partner.hact_values.spot_checks]]</span>
               </div>
-              <div class="col-4 layout horizontal">
-                <span class="col-data col-6-sub">[[partner.hact_values.audits_mr]]</span>
-                <span class="col-data col-6-sub">[[partner.hact_values.audits_done]]</span>
+              <div class="col-4 layout horizontal around-justified group">
+                <span class="col-data">[[partner.hact_values.audits_mr]]</span>
+                <span class="col-data">[[partner.hact_values.audits_done]]</span>
               </div>
               <span class="col-data col-2 ">[[partner.hact_values.follow_up_flags]]</span>
             </div>
@@ -229,39 +286,25 @@
           page-number="[[pageNumber]]"
           total-results="[[totalResults]]"
           visible-range="{{visibleRange}}"
-          on-page-size-changed="_pageSizeChanged"
-          on-page-number-changed="_pageNumberChanged">
+          on-page-size-changed="pageSizeChanged"
+          on-page-number-changed="pageNumberChanged">
       </data-table-footer>
     </paper-material>
   </template>
   <script>
     (function() {
       'use strict';
-      var _lastNavigated = null;
       Polymer({
         is: 'dashboard-hact',
         behaviors: [
           dashBehaviors.CommonGeneralBehavior,
+          dashBehaviors.PaginationBehavior,
           etoolsAppConfig.globals
         ],
         properties: {
           filteredPartners: {
             type: Array,
-            notify: true,
-          },
-          pageNumber: {
-            type: Number
-          },
-          pageSize: {
-            type: Number
-          },
-          sortOrder: {
-            type: String
-          },
-          queryString: {
-            type: String,
-            notify: true,
-            observer: '_qChanged'
+            notify: true
           },
           csvDownloadUrl: {
             type: String,
@@ -285,31 +328,17 @@
           },
           urlParams: {
             type: Object,
+          },
+          totals: {
+            type: Array,
           }
         },
 
         observers: [
-          '_init(active)',
           '_updateUrl(queryString, pageNumber, pageSize,' +
           'sortOrder, requiredDataLoaded, initComplete)'
         ],
 
-        listeners: {
-          'sort-changed': '_sortOrderChanged',
-        },
-
-        _init: function(active) {
-          var params = this.urlParams;
-          if (!active || !params) {
-            return;
-          }
-          this.set('initComplete', false);
-          this.set('queryString', params.q ? params.q : '');
-          this.set('pageSize', params.size ? parseInt(params.size) : 10);
-          this.set('pageNumber', params.page ? parseInt(params.page) : 1);
-          this.set('sortOrder', params.sort ? params.sort : 'asc');
-          this.set('initComplete', true);
-        },
         _filterPartnersData: function() {
           this.debounce('query', function() {
             this.$.partners.query(
@@ -325,9 +354,8 @@
           }
           this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
 
-          var qs = this._buildQueryString();
-          if (qs !== _lastNavigated) {
-//            _lastNavigated = qs;
+          var qs = this.buildQueryString();
+          if (qs !== null) {
             this.updateAppState('dashboard/hact', qs, true);
             if (this.requiredDataLoaded) {
               this._filterPartnersData();
@@ -341,25 +369,8 @@
               this.set('forceDataRefresh', false);
             }
           }
-
         },
-        _buildQueryString: function() {
-          var qs = [];
-          if (this.pageNumber > 1) {
-            qs.push('page=' + this.pageNumber);
-          }
-          if (this.pageSize) {
-            qs.push('size=' + this.pageSize);
-          }
-          if (this.queryString) {
-            qs.push('q=' + this.queryString);
-          }
-          if (this.sortOrder) {
-            qs.push('sort=' + this.sortOrder);
-          }
-          return qs.join('&');
 
-        },
         _buildCsvDownloadUrl: function() {
           return this.queryString ?
               this.getEndpoint('partners').url + '?' + 'search=' + this.queryString + '&format=csv' :
@@ -379,36 +390,16 @@
                     return word[0].toUpperCase();
                   }).join('') : str;
         },
-        _getGovernmentDisplay: function(partner,prop,toCurrency) {
-          console.log('prop', prop , partnerValue)
 
+        _getGovernmentDisplay: function(partner,prop,toCurrency) {
           var partnerValue = _.get(partner, prop);
-          if ( !partnerValue && partner.partner_type === 'Government') {
+          if (partner.partner_type === 'Government') {
             return '-';
           } else {
             return toCurrency ? this.currencyFormat(partnerValue) : partnerValue;
           }
         },
-        _setQuery: function() {
-          this.set('queryString', this.$.query.value);
-        },
-        _qChanged: function(q) {
-          this.set('debounceTime', 300);
-          this.set('pageNumber', 1);
-        },
-        _pageSizeChanged: function(e) {
-          this.set('debounceTime', 200);
-          this.set('pageNumber', 1);
-          this.set('pageSize', parseInt(e.detail.value));
-        },
-        _pageNumberChanged: function(e) {
-          this.set('debounceTime', 50);
-          this.set('pageNumber', e.detail.value);
-        },
-        _sortOrderChanged: function(e) {
-          this.set('debounceTime', 150);
-          this.set('sortOrder', e.detail.direction);
-        },
+
         _requiredDataHasBeenLoaded: function(e) {
           e.stopImmediatePropagation();
           var filtered = _.get(this, 'filteredPartners', []);
@@ -416,10 +407,7 @@
             this.set('forceDataRefresh', true);
           }
           this.set('requiredDataLoaded', true);
-          this._init(this.active);
-          if (this.active) {
-            this.fire('global-loading', {active: false});
-          }
+          this.init(this.active);
         },
         _goToPage: function(e) {
           window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';

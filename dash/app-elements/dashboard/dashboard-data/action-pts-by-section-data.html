@@ -45,9 +45,10 @@
             this.set('endpoint', this.getEndpoint('actionPointsBySection'));
           } else {
             this.fire('global-loading', {message: 'Loading chart data...', active: true});
+
             this.set('endpoint', this.getEndpoint('actionPointsBySectionOffice',
                 {
-                  office: filter.office
+                  office: filter.office.join(',')
                 }
             ));
           }
@@ -55,6 +56,7 @@
         _handleResponse: function(response) {
           var data = _.get(response, 'detail', []);
           this._setActionPointsData(data);
+          this.fire('global-loading');
         },
 
       });
