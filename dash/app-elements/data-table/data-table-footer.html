@@ -66,7 +66,7 @@
         </paper-menu>
       </paper-dropdown-menu>
 
-      <span id="range">[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]]</span>
+      <span id="range">[[visibleRange.0]]-[[visibleRange.1]] of [[filteredTotalResults]]</span>
 
       <paper-icon-button icon="first-page" on-tap="_firstPage" disabled$="[[_pageBackDisabled(pageNumber)]]"></paper-icon-button>
 
@@ -98,19 +98,19 @@
           notify: true
         },
 
-        totalResults: {
+        filteredTotalResults: {
           type: Number
         },
 
         totalPages: {
           type: Number,
-          computed: '_computeTotalPages(pageSize, totalResults)',
+          computed: '_computeTotalPages(pageSize, filteredTotalResults)',
         },
 
         visibleRange: {
           type: Array,
           notify: true,
-          computed: '_computeVisibleRange(pageNumber, pageSize, totalResults, totalPages)'
+          computed: '_computeVisibleRange(pageNumber, pageSize, filteredTotalResults, totalPages)'
         },
 
       },
@@ -139,17 +139,17 @@
         }
       },
 
-      _computeTotalPages: function(pageSize, totalResults) {
+      _computeTotalPages: function(pageSize, filteredTotalResults) { 
         var result = 1;
-        if (pageSize < totalResults) {
-          result = Math.ceil(totalResults / pageSize);
+        if (pageSize < filteredTotalResults) {
+          result = Math.ceil(filteredTotalResults / pageSize);
         }
         return result;
       },
 
-      _computeVisibleRange: function(pageNumber, pageSize, totalResults, totalPages) {
+      _computeVisibleRange: function(pageNumber, pageSize, filteredTotalResults, totalPages) {
         var start = 1;
-        var end = totalResults;
+        var end = filteredTotalResults;
 
         if (pageNumber !== 1) {
           start = (pageNumber - 1) * pageSize + 1;

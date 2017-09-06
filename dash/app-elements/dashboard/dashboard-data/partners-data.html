@@ -44,6 +44,11 @@
             readOnly: true,
             notify: true
           },
+          filteredTotalResults: {
+            type: Number,
+            readOnly: true,
+            notify: true
+          },
           totals: {
             type: Array,
             notify: true,
@@ -54,6 +59,10 @@
             value: 'partners-loaded'
           },
           loadedInitially: {
+            type: Boolean,
+            value: false
+          },
+          resultsTotals: {
             type: Boolean,
             value: false
           }
@@ -68,6 +77,7 @@
         },
         query: function(searchString, order, pageSize, pageNumber) {
           var self = this;
+          var totalsQueryResults = this.db.partners.toArray();
           this.db.transaction('r', this.db.partners, function() {
             var queryResult = self.db.partners;
             if (order === 'desc') {
@@ -84,23 +94,23 @@
               queryResult.count(),
               // Use clone() as offset() and limit() otherwise mutates the same query that is counted
               queryResult.clone()
-                  .toArray(),
-              queryResult.clone()
                   .offset((pageNumber - 1) * pageSize)
                   .limit(pageSize)
                   .toArray()]);
           }).then(function(countAndResult) {
-            var queryResults = countAndResult[2];
-            var totalsQueryResults = countAndResult[1]
-            self._setTotals(self._computeTotals(totalsQueryResults));
-            self._setTotalResults(countAndResult[0]);
+            var queryResults = countAndResult[1];
+            if (!self.resultsTotals) {
+              self._setTotals(self._computeTotals(totalsQueryResults._value));
+              self._setTotalResults(countAndResult[0]);
+            }
+            self._setFilteredTotalResults(countAndResult[0])
             self._setFilteredPartners(queryResults);
           }).catch(function(error) {
             console.error('Error querying partners: ', error);
           });
         },
         _computeTotals: function(results) {
-          console.log(results)
+          this.resultsTotals = true
           return _(results).reduce(function(sum, obj) {
             var picked = _(obj).pick([
               'shared_partner',
@@ -134,7 +144,6 @@
           }, {});
         },
       });
-
     })();
 
   </script>
