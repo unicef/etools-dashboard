@@ -44,6 +44,11 @@
             readOnly: true,
             notify: true
           },
+          filteredTotalResults: {
+            type: Number,
+            readOnly: true,
+            notify: true
+          },
           totals: {
             type: Array,
             notify: true,
@@ -54,6 +59,10 @@
             value: 'partners-loaded'
           },
           loadedInitially: {
+            type: Boolean,
+            value: false
+          },
+          resultsTotals: {
             type: Boolean,
             value: false
           }
@@ -68,6 +77,10 @@
         },
         query: function(searchString, order, pageSize, pageNumber) {
           var self = this;
+          this.db.partners.toArray().then(function(res) {
+            self._setTotals(self._computeTotals(res))
+            self._setTotalResults(res.length);
+          })
           this.db.transaction('r', this.db.partners, function() {
             var queryResult = self.db.partners;
             if (order === 'desc') {
@@ -88,15 +101,14 @@
                   .limit(pageSize)
                   .toArray()]);
           }).then(function(countAndResult) {
-            var queryResults = countAndResult[1];
-            self._setTotals(self._computeTotals(queryResults));
-            self._setTotalResults(countAndResult[0]);
-            self._setFilteredPartners(queryResults);
+            self._setFilteredTotalResults(countAndResult[0])
+            self._setFilteredPartners(countAndResult[1]);
           }).catch(function(error) {
             console.error('Error querying partners: ', error);
           });
         },
         _computeTotals: function(results) {
+          this.resultsTotals = true
           return _(results).reduce(function(sum, obj) {
             var picked = _(obj).pick([
               'shared_partner',
@@ -130,7 +142,6 @@
           }, {});
         },
       });
-
     })();
 
   </script>

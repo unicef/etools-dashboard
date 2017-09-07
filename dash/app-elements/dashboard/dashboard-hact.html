@@ -53,7 +53,7 @@
         flex-basis: calc(50% - 6px);
         max-width: calc(50% - 6px);
       }
-      
+
       .col-micro {
         min-width: 86px;
       }
@@ -117,6 +117,7 @@
         filtered-partners="{{filteredPartners}}"
         total-results="{{totalResults}}"
         totals="{{totals}}"
+        filtered-total-results="{{filteredTotalResults}}"
         active="[[active]]"
         fire-data-loaded show-loading
         on-partners-loaded="_requiredDataHasBeenLoaded">
@@ -137,7 +138,7 @@
       </div>
     </paper-material>
     <paper-material id="list" class="hact-list" elevation="1">
-      <data-table-header label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show" no-collapse>
+      <data-table-header label="[[visibleRange.0]]-[[visibleRange.1]] of {{filteredTotalResults}} results to show" no-collapse>
         <div class="col-3 layout horizontal">
           <data-table-column class="col-6  nowrap" id="name" sortable>
             Implementing Partner
@@ -284,8 +285,8 @@
       <data-table-footer
           page-size="[[pageSize]]"
           page-number="[[pageNumber]]"
-          total-results="[[totalResults]]"
           visible-range="{{visibleRange}}"
+          filtered-total-results="[[filteredTotalResults]]"
           on-page-size-changed="pageSizeChanged"
           on-page-number-changed="pageNumberChanged">
       </data-table-footer>
@@ -348,12 +349,12 @@
                 this.pageNumber);
           }, 50);
         },
+
         _updateUrl: function() {
           if (!this.initComplete) {
             return;
           }
           this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
-
           var qs = this.buildQueryString();
           if (qs !== null) {
             this.updateAppState('dashboard/hact', qs, true);
@@ -376,12 +377,14 @@
               this.getEndpoint('partners').url + '?' + 'search=' + this.queryString + '&format=csv' :
               this.getEndpoint('partners').url + '?' + '&format=csv';
         },
+
         _getProp: function(obj, propStr) {
           if (propStr === 'partner_type') {
             return this._getAbbr(_.get(obj, propStr));
           }
           return _.get(obj, propStr);
         },
+
         _getAbbr: function(str) {
           return str.length > 12 ?
               str
@@ -409,6 +412,7 @@
           this.set('requiredDataLoaded', true);
           this.init(this.active);
         },
+
         _goToPage: function(e) {
           window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
         },

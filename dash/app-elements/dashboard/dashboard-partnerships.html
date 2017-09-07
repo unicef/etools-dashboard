@@ -253,7 +253,7 @@
           this.init(this.active);
         },
         _getDisbursements: function(disb,fr) {
-          return disb === '0.00' ? '0': Number(disb)/Number(fr)*100;
+          return disb === '0.00' ? '0': (Number(disb)/Number(fr)*100).toFixed(1);
         }
 
 
