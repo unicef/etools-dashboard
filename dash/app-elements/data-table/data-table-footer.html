@@ -57,7 +57,7 @@
     <div id="table-footer">
       <span id="rows">Rows per page:</span>
 
-      <paper-dropdown-menu vertical-align="bottom" horizontal-align="left" noink>
+      <paper-dropdown-menu vertical-align="top" horizontal-align="left" noink>
         <paper-menu class="dropdown-content" attr-for-selected="name" selected="{{pageSize}}">
           <paper-item name="5">5</paper-item>
           <paper-item name="10">10</paper-item>
@@ -139,7 +139,7 @@
         }
       },
 
-      _computeTotalPages: function(pageSize, filteredTotalResults) { 
+      _computeTotalPages: function(pageSize, filteredTotalResults) {
         var result = 1;
         if (pageSize < filteredTotalResults) {
           result = Math.ceil(filteredTotalResults / pageSize);
@@ -155,7 +155,7 @@
           start = (pageNumber - 1) * pageSize + 1;
         }
         if (pageNumber !== totalPages) {
-          end = start + pageSize - 1;
+          end = parseInt(start) + parseInt(pageSize) - 1;
         }
 
         return [start, end];
