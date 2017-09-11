@@ -98,7 +98,18 @@
       }
       num = parseInt(num);
       return '$' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-    }
+    },
+
+    manageClickEvent: function(e, path) {
+      if (!e.detail.sourceEvent.ctrlKey && !e.detail.sourceEvent.metaKey){
+        window.location.href = path;
+      }
+    },
+    goToPage: function(e) {
+      var path = [this.baseSite, e.target.getAttribute('app-name'),
+            e.target.getAttribute('page')].join('/') + '/' + e.target.id;
+      this.manageClickEvent(e, path);
+    },
 
   };
 

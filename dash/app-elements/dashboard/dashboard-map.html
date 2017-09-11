@@ -146,8 +146,8 @@
     </paper-material>
     <paper-material class="map">
       <template is="dom-if" if="[[staticDataLoaded]]">
-        <leaflet-map fit-to-markers zoom="[[userCountry.initial_zoom]]" longitude="[[userCountry.longitude]]"
-                     latitude="[[userCountry.latitude]]">
+        <leaflet-map fit-to-markers zoom="[[country.initial_zoom]]" longitude="[[country.longitude]]"
+                     latitude="[[country.latitude]]">
           <leaflet-tilelayer
               url="https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZXRvb2xzIiwiYSI6ImNqMGw4N3NtejAyMDIzMnBocHBsYjBsbXoifQ.VA-gzjqtTu-vr-8Ex9oEpA">
           </leaflet-tilelayer>
@@ -203,7 +203,11 @@
         },
         userCountry: {
           type: Object,
-          statePath: 'userCountry'
+          statePath: 'userCountry',
+          observer: '_validateUserCountry'
+        },
+        country: {
+          type: Object,
         },
         status: {
           type: String,
@@ -257,7 +261,6 @@
       },
       _openModal: function(e) {
         var model = e.model.marker;
-        console.log('inters', this.intLocMap[model.id].interventions);
         var interventions = _.values(this.intLocMap[model.id].interventions);
         var data = {
           name: model.name,
@@ -268,16 +271,24 @@
         this.markerDialog.opened = true;
       },
       _init: function() {
-        if (this.active && _.isEmpty(this.intLocMap)) {
+        if (!this.active){
+          return;
+        }
+        if (_.isEmpty(this.intLocMap)) {
           //initialize the intLocMap object
-
           this.set('mapFilter', '');
+          this.fire('global-loading', {
+            message: 'Loading page data...',
+            active: true
+          });
         }
 
-        if (!this.active || !this._allStaticDataLoaded()) {
+        if (!this._allStaticDataLoaded()) {
           return;
         }else {
           this.set('staticDataLoaded', true);
+          this._validateUserCountry();
+          this.fire('global-loading');
         }
 //         first render of map only when tab is active, otherwise map tiles don't show
         if (_.isEmpty(this.availableListFilterOptions)) {
@@ -331,9 +342,6 @@
               path: 'partner'
             },
           ]);
-          if (!_.isEmpty(this.availableListFilterOptions)) {
-            this.fire('global-loading');
-          }
         }
       },
       _filterChanged: function(filt) {
@@ -354,6 +362,10 @@
         }
         this.set('hasResult', true);
         this.set('mapFilter', newFilter);
+        this.fire('global-loading', {
+          message: 'Loading interventions...',
+          active: true
+        });
       },
       // ensure redux items loaded before initializing the filters
       _allStaticDataLoaded: function() {
@@ -367,7 +379,6 @@
         }, true);
       },
       _callLocations: function(locations) {
-        this.fire('global-loading', {message: 'Loading map data...', active: true});
         this.$.locationsData.query(locations);
       },
       _plotMarkers: function(locations) {
@@ -384,8 +395,22 @@
         var id = _.get(val, 'detail.selectedValues.id');
         this.set('partner', id);
       },
+      _validateUserCountry: function(userCountry) {
+        if (userCountry){
+          if (!userCountry.longitude || !userCountry.latitude) {
+            this.set('country', {
+              latitude: '40',
+              longitude: '38',
+              initial_zoom: 2
+            });
+            console.warn('The current user country does not provide map coordinates');
+          } else {
+            this.set('country', userCountry);
+          }
+        }
+      }
 
-    })
+    });
   </script>
 </dom-module>
 
