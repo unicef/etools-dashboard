@@ -198,26 +198,26 @@
         Partnership management
       </div>
       <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/list" app-name="pmp" page="partners/list">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/partners" app-name="pmp" page="partners/list">
           <iron-icon icon="social:people"></iron-icon>
           Partners
         </a>
       </paper-button>
       <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/aggreements/list" app-name="pmp" page="agreements/list">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/aggreements" app-name="pmp" page="agreements/list">
           <iron-icon icon="av:playlist-add-check"></iron-icon>
           Agreements
         </a>
       </paper-button>
       <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/list" app-name="pmp"
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions" app-name="pmp"
            page="interventions/list">
           <iron-icon icon="verified-user"></iron-icon>
           PD/SSFA TOR
         </a>
       </paper-button>
       <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/governments/list" app-name="pmp" page="governments/list">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/governments" app-name="pmp" page="governments/list">
           <iron-icon icon="account-balance"></iron-icon>
           Goverment-in-simple
         </a>
@@ -316,8 +316,8 @@
       _staticDataLoaded: function() {
         if (this.myTrips && this.tripsSupervised && this.actionPointsItems && this.actionPointsForMe) {
           this.fire('global-loading');
-        }else {
-          this.fire('global-loading',{
+        } else {
+          this.fire('global-loading', {
             message: 'Loading data...',
             active: true
           });
@@ -345,7 +345,7 @@
           this.updateAppState('dashboard/personalized', [], true);
         }
       },
-      
+
       _goToActionPoint: function(e) {
         var origin = window.location.origin;
         var path = origin + '/t2f/action-point/' + e.model.action.id;
