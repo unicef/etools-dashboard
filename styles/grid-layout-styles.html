@@ -26,13 +26,18 @@
         /* used to prevent flexbox to change it's size if content grows */
         overflow: hidden;
       }
-      
+
       .col {
         @apply(--layout-horizontal);
         box-sizing: border-box;
       }
       .col:not(:first-child) {
         padding-left: 24px;
+      }
+
+      .col-1 {
+        flex: 0 0 8.33333333%;
+        max-width: 8.33333333%%;
       }
 
       .col-2 {

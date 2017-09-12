@@ -54,6 +54,10 @@
         max-width: calc(50% - 6px);
       }
 
+      .padded {
+        padding-right: 4px;
+      }
+
       .header {
         height: 140px;
       }
@@ -88,9 +92,9 @@
         padding-right: 12px;
       }*/
 
-      data-table-row > div > div > *:not(:last-child) {
+      /*data-table-row > div > div > *:not(:last-child) {
         padding-right: 16px;
-      }
+      }*/
 
       *data-table-row > div > div > * {
         box-sizing: border-box;
@@ -152,10 +156,10 @@
       <data-table-header class="header" label="[[visibleRange.0]]-[[visibleRange.1]] of {{filteredTotalResults}} results to show" no-collapse>
         <div class="col-6 layout horizontal end">
           <div class="col-6 layout horizontal">
-            <data-table-column class="col-6 nowrap" id="name" sortable>
+            <data-table-column class="col-6 nowrap padded" id="name" sortable>
               Implementing Partner
             </data-table-column>
-            <data-table-column class="col-4 nowrap" id="partner_type">
+            <data-table-column class="col-4 nowrap padded" id="partner_type">
               Partner Type
             </data-table-column>
             <data-table-column class="col-2 nowrap" id="shared_partner">
@@ -163,10 +167,10 @@
             </data-table-column>
           </div>
           <data-table-column class="col-6 group" group-heading="CASH TRANSFERS in USD">
-            <data-table-column class="col-4 nowrap" id="total_ct_cp">
+            <data-table-column class="col-4 nowrap padded" id="total_ct_cp">
               TOTAL for <br> current CP cycle
             </data-table-column>
-            <data-table-column class="col-4 center nowrap" id="hact_values.planned_cash_transfer">
+            <data-table-column class="col-4 center nowrap padded" id="hact_values.planned_cash_transfer">
               PLANNED for <br> current year
             </data-table-column>
             <data-table-column class="col-4 right nowrap" id="total_ct_cy">
@@ -182,11 +186,11 @@
             Risk <br> Rating
           </data-table-column>
           <data-table-column class="col-6 group" group-heading="PROGRAMMATIC VISITS">
-            <data-table-column class="col-4" id="hact_values.planned_visits">
+            <data-table-column class="col-4 padded" id="hact_values.planned_visits">
               Planned
             </data-table-column>
-            <data-table-column class="col-4 center" id="hact_min_requirements.programme_visits">
-              Min.<br>Req.
+            <data-table-column class="col-4 center padded" id="hact_min_requirements.programme_visits">
+              M.R
             </data-table-column>
             <data-table-column class="col-4 right" id="hact_values.programmatic_visits">
               Done
@@ -194,26 +198,27 @@
           </data-table-column>
         </div>
         <div class="col-3 layout horizontal end">
+          <span class="col-1"></span>
           <data-table-column class="col-4 group" group-heading="SPOT CHECKS" space-around>
-            <data-table-column class="col-6 center" id="hact_min_requirements.spot_checks">
-              Min. <br> Req.
+            <data-table-column class="col-6 center padded" id="hact_min_requirements.spot_checks">
+              M.R
             </data-table-column>
             <data-table-column class="col-6 center" id="hact_values.spot_checks">
               Done
             </data-table-column>
           </data-table-column>
+          <span class="col-1"></span>
           <data-table-column class="col-4 group" group-heading="AUDITS" space-around>
-            <data-table-column class="col-6 center" id="hact_values.audits_mr">
-              Min. <br> Req.
+            <data-table-column class="col-6 center padded" id="hact_values.audits_mr">
+              M.R
             </data-table-column>
             <data-table-column class="col-6 center" id="hact_values.audits_done">
               Done
             </data-table-column>
           </data-table-column>
-          <data-table-column class="col-2 nowrap center" id="hact_values.follow_up_flags">
+          <data-table-column class="col-2 nowrap" id="hact_values.follow_up_flags">
             Flag for <br> Follow up
           </data-table-column>
-          <span class="col-2"></span>
         </div>
       </data-table-header>
 
@@ -221,37 +226,38 @@
       <data-table-row class="totals" no-collapse>
         <div slot="row-data">
           <div class="col-3 layout horizontal">
-              <span class="col-6 col-data partner-link">
+              <span class="col-6 col-data partner-link padded">
                 Total of [[totalResults]] IPs
               </span>
             <span class="col-4 col-data"></span>
             <span class="col-2 col-data">[[totals.shared_partner]]</span>
           </div>
           <div class="col-3 layout horizontal group">
-            <span class="col-4 col-data">[[currencyFormat(totals.total_ct_cp)]]<paper-tooltip position="right">[[currencyFormat(totals.total_ct_cp)]]</paper-tooltip></span>
-            <span class="col-4 center col-data">[[currencyFormat(totals.planned_cash_transfer)]]<paper-tooltip position="right">[[currencyFormat(totals.planned_cash_transfer)]]</paper-tooltip></span>
+            <span class="col-4 col-data padded">[[currencyFormat(totals.total_ct_cp)]]<paper-tooltip position="right">[[currencyFormat(totals.total_ct_cp)]]</paper-tooltip></span>
+            <span class="col-4 center col-data padded">[[currencyFormat(totals.planned_cash_transfer)]]<paper-tooltip position="right">[[currencyFormat(totals.planned_cash_transfer)]]</paper-tooltip></span>
             <span class="col-4 right col-data">[[currencyFormat(totals.total_ct_cy)]]<paper-tooltip position="right">[[currencyFormat(totals.total_ct_cy)]]</paper-tooltip></span>
           </div>
           <div class="col-3 layout horizontal">
             <span class="col-data col-3"></span>
             <span class="col-data col-3"></span>
             <div class="col-6 layout horizontal group">
-              <span class="col-data col-4">[[totals.planned_visits]]</span>
-              <span class="col-data col-4 center">[[totals.programme_visits]]</span>
+              <span class="col-data col-4 padded">[[totals.planned_visits]]</span>
+              <span class="col-data col-4 center padded">[[totals.programme_visits]]</span>
               <span class="col-data col-4 right">[[totals.programmatic_visits]]</span>
             </div>
           </div>
           <div class="col-3 layout horizontal">
+            <span class="col-1"></span>
             <div class="col-4 layout horizontal around-justified group">
-              <span class="col-data col-6 center">[[totals.mr_spot_checks]]</span>
+              <span class="col-data col-6 center padded">[[totals.mr_spot_checks]]</span>
               <span class="col-data col-6 center">[[totals.spot_checks]]</span>
             </div>
+            <span class="col-1"></span>
             <div class="col-4 layout horizontal around-justified group">
-              <span class="col-data col-6 center">[[totals.audits_mr]]</span>
+              <span class="col-data col-6 center padded">[[totals.audits_mr]]</span>
               <span class="col-data col-6 center">[[totals.audits_done]]</span>
             </div>
-            <span class="col-data col-2 center">[[totals.follow_up_flags]]</span>
-            <span class="col-2"></span>
+            <span class="col-data col-2">[[totals.follow_up_flags]]</span>
           </div>
         </div>
       </data-table-row>
@@ -260,40 +266,41 @@
         <data-table-row no-collapse>
           <div slot="row-data">
             <div class="col-3 layout horizontal">
-              <span class="col-6 col-data partner-link">
+              <span class="col-6 col-data partner-link padded">
                 <a on-tap="_goToPage" id="[[partner.id]]">
                   [[partner.name]]
                   <paper-tooltip position="right">[[partner.name]]</paper-tooltip>
                 </a>
               </span>
-              <span class="col-4 col-data">[[partner.partner_type]]<paper-tooltip position="right">[[partner.partner_type]]</paper-tooltip></span>
+              <span class="col-4 col-data padded">[[partner.partner_type]]<paper-tooltip position="right">[[partner.partner_type]]</paper-tooltip></span>
               <span class="col-2 col-data">[[partner.shared_partner]]</span>
             </div>
             <div class="col-3 layout horizontal group">
-              <span class="col-4 col-data">[[currencyFormat(partner.total_ct_cp)]]<paper-tooltip position="right">[[currencyFormat(partner.total_ct_cp)]]</paper-tooltip></span>
-              <span class="col-4 center col-data">[[_getGovernmentDisplay(partner,'hact_values.planned_cash_transfer','true')]]<paper-tooltip position="right">[[_getGovernmentDisplay(partner,'hact_values.planned_cash_transfer','true')]]</paper-tooltip></span>
+              <span class="col-4 col-data padded">[[currencyFormat(partner.total_ct_cp)]]<paper-tooltip position="right">[[currencyFormat(partner.total_ct_cp)]]</paper-tooltip></span>
+              <span class="col-4 center col-data padded">[[_getGovernmentDisplay(partner,'hact_values.planned_cash_transfer','true')]]<paper-tooltip position="right">[[_getGovernmentDisplay(partner,'hact_values.planned_cash_transfer','true')]]</paper-tooltip></span>
               <span class="col-4 right col-data">[[currencyFormat(partner.total_ct_cy)]]<paper-tooltip position="right">[[currencyFormat(partner.total_ct_cy)]]</paper-tooltip></span>
             </div>
             <div class="col-3 layout horizontal">
               <span class="col-data col-3 flex">[[partner.hact_values.micro_assessment_needed]]</span>
               <span class="col-data col-3">[[partner.rating]]<paper-tooltip position="right">[[partner.rating]]</paper-tooltip></span>
               <div class="col-6 layout horizontal group">
-                <span class="col-data col-4 flex">[[_getGovernmentDisplay(partner,'hact_values.planned_visits')]]</span>
-                <span class="col-data col-4 center flex">[[partner.hact_min_requirements.programme_visits]]</span>
+                <span class="col-data col-4 flex padded">[[_getGovernmentDisplay(partner,'hact_values.planned_visits')]]</span>
+                <span class="col-data col-4 center flex padded">[[partner.hact_min_requirements.programme_visits]]</span>
                 <span class="col-data col-4 right flex">[[partner.hact_values.programmatic_visits]]</span>
               </div>
             </div>
             <div class="col-3 layout horizontal">
+              <span class="col-1"></span>
               <div class="col-4 layout horizontal around-justified group">
-                <span class="col-data col-6 center flex">[[partner.hact_min_requirements.spot_checks]]</span>
+                <span class="col-data col-6 center flex padded">[[partner.hact_min_requirements.spot_checks]]</span>
                 <span class="col-data col-6 center flex">[[partner.hact_values.spot_checks]]</span>
               </div>
+              <span class="col-1"></span>
               <div class="col-4 layout horizontal around-justified group">
-                <span class="col-data col-6 center flex">[[partner.hact_values.audits_mr]]</span>
+                <span class="col-data col-6 center flex padded">[[partner.hact_values.audits_mr]]</span>
                 <span class="col-data col-6 center flex">[[partner.hact_values.audits_done]]</span>
               </div>
-              <span class="col-data col-2 center">[[partner.hact_values.follow_up_flags]]</span>
-              <span class="col-2"></span>
+              <span class="col-data col-2">[[partner.hact_values.follow_up_flags]]</span>
             </div>
           </div>
         </data-table-row>
