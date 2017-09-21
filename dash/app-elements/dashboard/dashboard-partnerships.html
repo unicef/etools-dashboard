@@ -305,8 +305,10 @@
           if (!active || !params) {
             return;
           }
-          this.fire('global-loading', {active: true, message: 'Loading Partnerships Data...', 
+          if (!this.availableListFilterOptions) {
+            this.fire('global-loading', {active: true, message: 'Loading Partnerships Data...', 
             loadingSource: 'filter-list'});
+          }
           this.set('initComplete', false);
           this.set('qs', params.qs ? params.qs : '');
           this.set('pageNumber', params.page ? parseInt(params.page) : 1);
@@ -444,10 +446,18 @@
         _filterPartnershipsData: function() {
           console.log('filtering....')
           this.$.partnerships.query(
-            this.queryString,
+            this.qs,
             this.sortOrder,
             this.pageSize,
-            this.pageNumber);
+            this.pageNumber,
+            _.map(this.selectedSectors,'label'),
+            _.map(this.selectedOffices, 'name'),
+            _.map(this.selectedStatuses, 'value'),
+            this.startAfterDate,
+            this.endBeforeDate,
+            this.startBeforeDate,
+            this.endAfterDate
+          );
         },
 
         _requiredDataLoaded: function(e) {
