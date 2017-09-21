@@ -52,9 +52,11 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      return data.length ? data.map(function(trip) {
-        return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']);
-      }): [];
+      return data.length
+        ? data.map(function(trip) {
+            return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']);
+          })
+        : [];
     }
   },
   {
@@ -65,9 +67,11 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      return data.length ? data.map(function(trip) {
-        return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'traveler']);
-      }) : [];
+      return data.length
+        ? data.map(function(trip) {
+            return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'traveler']);
+          })
+        : [];
     }
   },
   {
@@ -78,11 +82,11 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      return data.length? data.map(function(actionPoint) {
-        return _.pick(actionPoint, [
-          'status', 'description', 'created_at', 'person_responsible_name','id'
-        ]);
-      }): [];
+      return data.length
+        ? data.map(function(actionPoint) {
+            return _.pick(actionPoint, ['status', 'description', 'created_at', 'person_responsible_name', 'id']);
+          })
+        : [];
     }
   },
   {
@@ -93,11 +97,11 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      return data.length? data.map(function(actionPoint) {
-        return _.pick(actionPoint, [
-          'status', 'description', 'created_at', 'assigned_by_name','id'
-        ]);
-      }): [];
+      return data.length
+        ? data.map(function(actionPoint) {
+            return _.pick(actionPoint, ['status', 'description', 'created_at', 'assigned_by_name', 'id']);
+          })
+        : [];
     }
   },
   {
@@ -108,9 +112,11 @@ var Actions = [
       templateProps: {}
     },
     prepareData: function(data) {
-      return data.length ? data.map(function(partnership) {
+      return data.length
+        ? data.map(function(partnership) {
             return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
-          }) : null;
+          })
+        : null;
     }
   },
   {
@@ -156,7 +162,6 @@ var Actions = [
     }
   },
   {
-
     actionType: 'unicef-users',
     propsArray: ['unicefUsersData'],
     endpointProps: {
@@ -195,5 +200,4 @@ var Actions = [
       return data[0];
     }
   }
-
 ];

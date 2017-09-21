@@ -25,6 +25,7 @@
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <link rel="import" href="../../app-behaviors/dropdown-behavior.html">
+<link rel="import" href="../../app-behaviors/common-general-behavior.html">
 <link rel="import" href="../../app-behaviors/list-filters-behavior.html">
 <link rel="import" href="../static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
 <dom-module id="dashboard-map">
@@ -167,7 +168,8 @@
       behaviors: [
         dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
         dashBehaviors.ListFiltersBehavior,
-        dashBehaviors.DropdownBehavior
+        dashBehaviors.DropdownBehavior,
+        dashBehaviors.CommonGeneralBehavior
       ],
       observers: [
         '_init(countryProgrammes,sectors,statuses,partners,userCountry)',
@@ -283,7 +285,7 @@
           });
         }
 
-        if (!this._allStaticDataLoaded()) {
+        if (!this._allHaveValues('countryProgrammes', 'sectors', 'statuses', 'partners', 'userCountry')) {
           return;
         }else {
           this.set('staticDataLoaded', true);
@@ -368,16 +370,7 @@
         });
       },
       // ensure redux items loaded before initializing the filters
-      _allStaticDataLoaded: function() {
-        return this._allHaveValues('countryProgrammes', 'sectors', 'statuses', 'partners', 'userCountry');
-      },
-      _allHaveValues: function() {
-        var self = this;
-        var args = _.toArray(arguments);
-        return args.reduce(function(hasVal, prop) {
-          return !_.isEmpty(self[prop]) && hasVal;
-        }, true);
-      },
+     
       _callLocations: function(locations) {
         this.$.locationsData.query(locations);
       },

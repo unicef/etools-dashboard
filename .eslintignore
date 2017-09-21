@@ -1,5 +1,7 @@
 .gitignore
 demo/*
 test/*
-node_modules/*
 es6-polyfills.html
+gulpfile.js
+gulp-tasks/*
+build/*

@@ -52,7 +52,7 @@
 
         init: function(active) {
           if (active) {
-            this.fire('global-loading', {message: 'Loading interventions data...', active: true});
+            this.fire('global-loading', {message: 'Loading interventions data...', active: true, loadingSource: 'partner-data'});
             this._elementReady();
           }
         },
@@ -80,7 +80,6 @@
                 return partner.status !== 'closed';
               });
             }
-
             return Dexie.Promise.all([
               queryResult.count(),
               // Use clone() as offset() and limit() otherwise mutates the same query that is counted
@@ -91,7 +90,7 @@
           }).then(function(countAndResult) {
             self._setTotalResults(countAndResult[0]);
             self._setFilteredPartnerships(countAndResult[1]);
-            self.fire('global-loading');
+            self.fire('global-loading', {loadingSource: 'partner-data'});
           }).catch(function(error) {
             console.error('Error querying partnerships-dash: ', error);
           });

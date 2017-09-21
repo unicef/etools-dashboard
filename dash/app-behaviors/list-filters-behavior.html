@@ -73,6 +73,9 @@
 
     // update ADD FILTER menu options
     _updateAvailableFilterOptions: function() {
+      if (!(this.listFilterOptions instanceof Array && this.listFilterOptions.length > 0)) {
+        return;
+      }
       var availableOptions = this.listFilterOptions.filter(function(option) {
         var selectedOpt = this.selectedFilters.filter(function(selectedFilter) {
           return selectedFilter.filterName === option.filterName;
@@ -124,7 +127,7 @@
     // 'esmm' (etools-searchable-multiselection-menu) filter value changed
     esmmValueChanged: function(event) {
       var filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
-      var filterVal = event.detail.selectedValues;
+      var filterVal = event.detail.selectedItems;
       this.set(filterPath, filterVal);
     },
 
@@ -143,6 +146,7 @@
       return value && ((typeof value === 'string' && value !== '')
           || (Array.isArray(value) && value.length > 0));
     },
+    
     // update shown filters
     updateShownFilters: function(filters) {
       if (!filters) {
