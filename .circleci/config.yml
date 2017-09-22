@@ -20,39 +20,28 @@ jobs:
           key: dependency-cache-{{ checksum "bower.json" }}
       - run:
           name: Install bower components
-          command: bower --allow-root install
+          command: bower install --allow-root --config.interactive=false -s
       - save_cache:
           key: dependency-cache-{{ checksum "bower.json" }}
           paths:
             - bower_components
-  test:
-    docker:
-      - image: robertavram/etools-dash-base:tst
-    steps:
-      - checkout
       - run:
-          name: Test
-          command: polymer test
-      - store_artifacts:
-          path: test-results.xml
-          prefix: tests
-      - store_artifacts:
-          path: coverage
-          prefix: coverage
+          name: Run Tests:
+          command: test.sh
 
-  build_for_deploy:
-    machine:
-      enabled: true
-    branches:
-       only:
-         - develop
-         - staging
-         - master
-    steps:
-      - run:
-         name: Build Docker container
-         command: |
-            docker build -t unicef/etools-dash:${CIRCLE_BRANCH} .
+#  build_for_deploy:
+#    machine:
+#      enabled: true
+#    branches:
+#       only:
+#         - develop
+#         - staging
+#         - master
+#    steps:
+#      - run:
+#         name: Build Docker container
+#         command: |
+#            docker build -t unicef/etools-dash:${CIRCLE_BRANCH} .
 
 #  deploy:
 #    steps:
@@ -65,12 +54,12 @@ jobs:
 #              docker login
 #              docker push things
 #            fi
-
-workflows:
-  version: 2
-  build_and_test:
-    jobs:
-      - build
-      - test:
-          requires:
-            - build
+#
+#workflows:
+#  version: 2
+#  build_and_test:
+#    jobs:
+#      - build
+#      - test:
+#          requires:
+#            - build

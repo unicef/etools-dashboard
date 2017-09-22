@@ -1,5 +1,15 @@
-FROM mhart/alpine-node:7
-RUN apk update
-RUN apk add --update bash
-RUN apk add git
+FROM nodesource/trusty:6.3.0
+
+RUN apt-get update
+RUN apt-get install -qqy software-properties-common
+RUN add-apt-repository -y ppa:openjdk-r/ppa
+RUN apt-get update
+RUN sudo apt-get install --no-install-recommends -y openjdk-8-jre
+
 RUN npm install -g bower polymer-cli gulp-cli
+
+# install Firefox
+RUN apt-get install -qqy firefox
+
+# install xvfb
+RUN apt-get install -y xvfb;
