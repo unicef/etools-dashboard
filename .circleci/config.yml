@@ -31,7 +31,6 @@ jobs:
       - run:
           name: Run Tests:
           command: test.sh
-
 #  build_for_deploy:
 #    machine:
 #      enabled: true
@@ -45,7 +44,6 @@ jobs:
 #         name: Build Docker container
 #         command: |
 #            docker build -t unicef/etools-dash:${CIRCLE_BRANCH} .
-
 #  deploy:
 #    steps:
 #      - checkout
