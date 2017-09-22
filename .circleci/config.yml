@@ -27,7 +27,7 @@ jobs:
             - bower_components
   test:
     docker:
-      - image: circleci/node:7
+      - image: robertavram/etools-dash-base:tst
     steps:
       - checkout
       - run:
