@@ -52,10 +52,10 @@ jobs:
          - staging
          - master
     steps:
-      run:
-        name: Build Docker container
-        command: |
-          docker build -t unicef/etools-dash:${CIRCLE_BRANCH} .
+      - run:
+         name: Build Docker container
+         command: |
+            docker build -t unicef/etools-dash:${CIRCLE_BRANCH} .
 
   deploy:
     steps:
