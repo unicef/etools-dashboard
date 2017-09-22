@@ -51,7 +51,7 @@
       }
     </style>
     <partnership-data id="partnerships" filtered-partnerships="{{filteredPartnerships}}" fire-data-loaded active="[[active]]"
-      total-results="{{totalResults}}" on-partnerships-loaded="_requiredDataLoaded"></partnership-data>
+      total-results="{{totalResults}}" on-partnerships-loaded="_requiredDataLoaded" list-data-path="filteredPartnerships"></partnership-data>
     
       <paper-material class="list-panel listControls" elevation="1">
      
@@ -242,7 +242,7 @@
           'sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices,' +
           'selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate)',
           '_initListFilters(sectors, statuses, offices)',
-          '_init(active)'
+          '_init(active,sectors,statuses,offices)'
         ],
 
         properties: {
@@ -296,18 +296,30 @@
             type: Array,
             observer: '_filterChanged'
           },
-          
+          startAfterDate: {
+            type: String,
+            observer: '_dateChanged'
+          },
+          startBeforeDate: {
+            type: String,
+            observer: '_dateChanged'
+          },
+          endBeforeDate: {
+            type: String,
+            observer: '_dateChanged'
+          },
+          endAfterDate: {
+            type: String,
+            observer: '_dateChanged'
+          }
+
         },
 
-        _init: function(active) {
-          
+        _init: function(active,sectors,statuses,offices) {        
           var params = this.urlParams;
-          if (!active || !params) {
+          var staticLoaded = this._allHaveValues('sectors','statuses','offices');
+          if (!active || !params || !staticLoaded) {
             return;
-          }
-          if (!this.availableListFilterOptions) {
-            this.fire('global-loading', {active: true, message: 'Loading Partnerships Data...', 
-            loadingSource: 'filter-list'});
           }
           this.set('initComplete', false);
           this.set('qs', params.qs ? params.qs : '');
@@ -322,6 +334,8 @@
           this.set('startBeforeDate', params.startBefore? params.startBefore : '');
           this.set('endAfterDate', params.endAfter ? params.endAfter : '');
           this.set('initComplete', true);
+          this._updateSelectedFiltersValues();
+
         },
 
         _initListFilters: function(sectors, statuses, offices) {
@@ -381,11 +395,47 @@
 
             ]);
           }.bind(this), 100);
-          this.fire('global-loading', {loadingSource: 'filter-list'});
         },
 
+        _updateSelectedFiltersValues: function() { 
+          this.debounce('updateShownFilters', function() {
+            var filtersValues = [
+              {
+                filterName: 'Section/Cluster',
+                selectedValue: _.map(this.selectedSectors, 'value')
+              },
+              {
+                filterName: 'Field Office',
+                selectedValue: _.map(this.selectedOffices, 'id')
+              },
+              {
+                filterName: 'Status',
+                selectedValue: _.map(this.selectedStatuses, 'value')
+              },
+              {
+                filterName: 'Starts After',
+                selectedValue: this.startAfterDate
+              },
+              {
+                filterName: 'Starts Before',
+                selectedValue: this.startBeforeDate
+              },
+              {
+                filterName: 'Ends Before',
+                selectedValue: this.endBeforeDate
+              },
+              {
+                filterName: 'Ends After',
+                selectedValue: this.endAfterDate
+              }
+            ];
+            this.updateShownFilters(filtersValues);
+          }.bind(this), 200);
+        },
+
+
         _updateUrl: function() {
-          if (!this.initComplete) {
+          if (!this.initComplete ||  !this.requiredDataLoaded) {
             return;
           }
           var qs = this._buildQueryString();
@@ -444,7 +494,6 @@
         },
 
         _filterPartnershipsData: function() {
-          console.log('filtering....')
           this.$.partnerships.query(
             this.qs,
             this.sortOrder,
@@ -461,13 +510,52 @@
         },
 
         _requiredDataLoaded: function(e) {
-          e.stopImmediatePropagation();
-          var filtered = _.get(this, 'filteredPartnerships', []);
-          if (_.isEmpty(filtered)) {
+          event.stopImmediatePropagation();
+          var listDataPath = Polymer.dom(event).localTarget.getAttribute('list-data-path');
+          var list = this.get(listDataPath);
+
+          if (typeof list === 'undefined' ||
+              (Array.isArray(list) && list.length === 0)) {
             this.set('forceDataRefresh', true);
           }
+          // recheck params to trigger agreements filtering
+          this.set('initComplete', false);
           this.set('requiredDataLoaded', true);
           this._init(this.active);
+        },
+
+        _setSelectedOffices : function(officesStr) {
+          var officesIdsArr = officesStr.split('|');
+          if (!_.isEmpty(officesIdsArr)) {
+            officesIdsArr = officesIdsArr.map(function(n) {
+              return parseInt(n,10);
+            });
+            return this.offices.filter(function(o) {
+              return officesIdsArr.indexOf(parseInt(o.id,10)) > -1;
+            })
+          }
+          return [];
+        },
+
+        _setSelectedSectors: function(sectorsStr) {
+          var sectorsArr = sectorsStr.split('|');
+          if (!_.isEmpty(sectorsArr)) {
+            var selectedSectors = this.sectors.filter(function(s) {
+              return sectorsArr.indexOf(s.value) > -1;
+            });
+            return selectedSectors;
+          }
+          return [];
+        },
+
+        _setSelectedStatuses: function(statuses) {
+          var statusesStrArr = statuses.split('|');
+          if (_.isEmpty(this.statuses)) {
+            return [];
+          }
+          return this.statuses.filter(function(status) {
+            return statusesStrArr.indexOf(status.value) > -1;
+          });
         },
     
         _getDisbursements: function(disb, fr) {
@@ -485,6 +573,9 @@
         pageNumberChanged: function(e) {
           this.set('debounceTime', 50);
           this.set('pageNumber', e.detail.value);
+        },
+        _dateChanged: function(date) {
+          this.set('pageNumber', 1);
         },
 
 

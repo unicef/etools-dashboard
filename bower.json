@@ -25,7 +25,7 @@
     "iron-input": "^1.0.10",
     "iron-meta": "^1.1.2",
     "iron-icons": "^1.1.3",
-    "etools-ajax": "^1.0.0",
+    "etools-ajax": "unicef-polymer/etools-ajax#a72d415",
     "paper-styles": "^1.1.4",
     "paper-dropdown-menu": "^1.4.1",
     "etools-dropdown": "^1.0.4",
@@ -71,6 +71,7 @@
     "etools-searchable-multiselection-menu": "4109c20",
     "moment-element": "^2.0.0",
     "paper-dialog": "^2.0.0",
-    "webcomponentsjs": "^0.7.24"
+    "webcomponentsjs": "^0.7.24",
+    "etools-ajax": "a72d415"  
   }
 }

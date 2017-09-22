@@ -65,6 +65,7 @@
                         endBeforeDate, startBeforeDate, endAfterDate) {
           var self = this;
           this.db.transaction('r', this.db.cso_dashboard, function() {
+            self.fire('global-loading', {active: true, message: 'Loading data...'})
             var queryResult = self.db.cso_dashboard;
             if (order === 'desc') {
               queryResult = queryResult.reverse();
@@ -116,7 +117,7 @@
               }
               return true;
             });    
-            
+
             return Dexie.Promise.all([
               queryResult.count(),
               // Use clone() as offset() and limit() otherwise mutates the same query that is counted
@@ -127,6 +128,7 @@
           }).then(function(countAndResult) {
             self._setTotalResults(countAndResult[0]);
             self._setFilteredPartnerships(countAndResult[1]);
+            self.fire('global-loading');
             self.fire('global-loading', {loadingSource: 'partner-data'});
           }).catch(function(error) {
             console.error('Error querying partnerships-dash: ', error);

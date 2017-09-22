@@ -155,7 +155,7 @@ var Actions = [
       data = data || [];
       return data.map(function(d) {
         return {
-          value: parseInt(d.id, 10),
+          value: d.id,
           label: d.name
         };
       });
