@@ -26,11 +26,12 @@ jobs:
           paths:
             - bower_components
       - run:
-          name: Gulping:
+          name: Gulping
           command: gulp
       - run:
-          name: Run Tests:
+          name: Run Tests
           command: test.sh
+
 #  build_for_deploy:
 #    machine:
 #      enabled: true
