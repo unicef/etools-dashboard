@@ -57,17 +57,17 @@ jobs:
          command: |
             docker build -t unicef/etools-dash:${CIRCLE_BRANCH} .
 
-  deploy:
-    steps:
-      - checkout
-      # build and push Docker image
-      - deploy:
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "mybranch" ]; then
-              docker build things
-              docker login
-              docker push things
-            fi
+#  deploy:
+#    steps:
+#      - checkout
+#      # build and push Docker image
+#      - deploy:
+#          command: |
+#            if [ "${CIRCLE_BRANCH}" == "mybranch" ]; then
+#              docker build things
+#              docker login
+#              docker push things
+#            fi
 
 workflows:
   version: 2
