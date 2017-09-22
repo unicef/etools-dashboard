@@ -58,11 +58,11 @@ jobs:
 #              docker push things
 #            fi
 #
-#workflows:
-#  version: 2
-#  build_and_test:
-#    jobs:
-#      - build
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
 #      - test:
 #          requires:
 #            - build
