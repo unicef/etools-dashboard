@@ -1,8 +1,78 @@
 version: 2
 jobs:
-   build:
-     docker:
-       - image: circleci/node:7
-     steps:
-       - checkout
-       - run: echo "hello world"
+  build:
+    working_directory: /code
+    # The primary container is an instance of the first list image listed. Your build commands run in this container.
+    docker:
+      - image: circleci/node:7
+    steps:
+      - checkout
+      - run:
+          name: Update npm
+          command: 'sudo npm install -g npm@latest'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install npm wee
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - restore_cache:
+          key: dependency-cache-{{ checksum "bower.json" }}
+      - run:
+          name: Install bower components
+          command: bower install
+      - save_cache:
+          key: dependency-cache-{{ checksum "bower.json" }}
+          paths:
+            - bower_components
+  test:
+    docker:
+      - image: circleci/node:7
+    steps:
+      - checkout
+      - run:
+          name: Test
+          command: polymer test
+      - store_artifacts:
+          path: test-results.xml
+          prefix: tests
+      - store_artifacts:
+          path: coverage
+          prefix: coverage
+
+  build_for_deploy:
+    machine: true
+    branches:
+       only:
+         - develop
+         - staging
+         - master
+    steps:
+      run:
+        name: Build Docker container
+        command: |
+          docker build -t unicef/etools-dash:${CIRCLE_BRANCH} .
+
+  deploy:
+    steps:
+      - checkout
+      # build and push Docker image
+      - deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "mybranch" ]; then
+              docker build things
+              docker login
+              docker push things
+            fi
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
