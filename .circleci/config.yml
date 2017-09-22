@@ -26,6 +26,9 @@ jobs:
           paths:
             - bower_components
       - run:
+          name: Gulping:
+          command: gulp
+      - run:
           name: Run Tests:
           command: test.sh
 
