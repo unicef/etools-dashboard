@@ -30,7 +30,9 @@ jobs:
           command: gulp
       - run:
           name: Run Tests
-          command: test.sh
+          command: |
+            xvfb-run polymer test --skip-selenium-install
+
 
 #  build_for_deploy:
 #    machine:
