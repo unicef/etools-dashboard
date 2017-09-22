@@ -20,7 +20,7 @@ jobs:
           key: dependency-cache-{{ checksum "bower.json" }}
       - run:
           name: Install bower components
-          command: bower install
+          command: bower --allow-root install
       - save_cache:
           key: dependency-cache-{{ checksum "bower.json" }}
           paths:
