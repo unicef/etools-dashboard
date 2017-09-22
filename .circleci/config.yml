@@ -44,7 +44,8 @@ jobs:
           prefix: coverage
 
   build_for_deploy:
-    machine: true
+    machine:
+      enabled: true
     branches:
        only:
          - develop
