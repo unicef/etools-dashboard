@@ -12,7 +12,7 @@
       :host {
         @apply(--layout-flex);
         font-weight: 400;
-        --paper-input-container-color: var(--dark-ink-color);
+        --paper-input-container-color: var(--secondary-text-color);
       }
 
       :host([hidden]) {
@@ -50,10 +50,13 @@
       }
 
       .wrap-controls > *:not(:last-child) {
-        margin-right: 15px;
+        margin-right: 16px;
       }
 
       .wrap-controls paper-input {
+        min-width: 200px;
+      }
+      .wrap-controls .filter.esmm {
         min-width: 266px;
       }
 

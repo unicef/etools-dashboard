@@ -1,4 +1,3 @@
-
 {
   "preset": "google",
   "disallowSpacesInAnonymousFunctionExpression": null,
@@ -6,8 +5,12 @@
   "maximumLineLength": 120,
   "validateIndentation": null,
   "requireOperatorBeforeLineBreak": null,
-  "requireCamelCaseOrUpperCaseIdentifiers": {"ignoreProperties": true},
-  "excludeFiles": ["node_modules/**"],
+  "requireCamelCaseOrUpperCaseIdentifiers": {
+    "ignoreProperties": true
+  },
+  "excludeFiles": [
+    "node_modules/**"
+  ],
   "jsDoc": {
     "checkAnnotations": {
       "preset": "closurecompiler",

@@ -78,9 +78,9 @@
         query: function(searchString, order, pageSize, pageNumber) {
           var self = this;
           this.db.partners.toArray().then(function(res) {
-            self._setTotals(self._computeTotals(res))
+            self._setTotals(self._computeTotals(res));
             self._setTotalResults(res.length);
-          })
+          });
           this.db.transaction('r', this.db.partners, function() {
             var queryResult = self.db.partners;
             if (order === 'desc') {
@@ -101,7 +101,7 @@
                   .limit(pageSize)
                   .toArray()]);
           }).then(function(countAndResult) {
-            self._setFilteredTotalResults(countAndResult[0])
+            self._setFilteredTotalResults(countAndResult[0]);
             self._setFilteredPartners(countAndResult[1]);
           }).catch(function(error) {
             console.error('Error querying partners: ', error);
