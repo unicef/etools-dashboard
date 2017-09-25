@@ -7,6 +7,10 @@ dependencies:
   override:
     - docker build --rm=false -t unicef/etools-dashboard:$CIRCLE_BRANCH .
 
+  test:
+    override:
+      - echo "test"
+
 deployment:
    hub:
      branch: [develop, staging, master, pmp-redesign]
