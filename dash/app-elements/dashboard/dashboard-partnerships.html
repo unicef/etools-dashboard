@@ -18,7 +18,8 @@
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
+<link rel="import"
+      href="../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
 <link rel="import" href="../../../bower_components/etools-datepicker/etools-datepicker-button.html">
 
 <link rel="import" href="../../app-behaviors/dropdown-behavior.html">
@@ -50,81 +51,83 @@
         text-align: right;
       }
     </style>
-    <partnership-data id="partnerships" filtered-partnerships="{{filteredPartnerships}}" fire-data-loaded active="[[active]]"
-      total-results="{{totalResults}}" on-partnerships-loaded="_requiredDataLoaded" list-data-path="filteredPartnerships"></partnership-data>
-    
-      <paper-material class="list-panel listControls" elevation="1">
-     
+    <partnership-data id="partnerships" filtered-partnerships="{{filteredPartnerships}}" fire-data-loaded
+                      active="[[active]]"
+                      total-results="{{totalResults}}" on-partnerships-loaded="_requiredDataLoaded"
+                      list-data-path="filteredPartnerships"></partnership-data>
+
+    <paper-material class="list-panel listControls" elevation="1">
+
       <div class="wrap-controls">
         <paper-input id="query" type="search" autocomplete="off" value="{{qs}}" placeholder="Search"
-          always-float-label on-search="setQuery">
+                     always-float-label on-search="setQuery">
           <iron-icon icon="search" prefix></iron-icon>
         </paper-input>
         <template is="dom-repeat" items="[[selectedFilters]]" as="filter">
-            <!-- dropdown filters  -->
-              <template is="dom-if" if="[[filterTypeIs('esmm', filter.type)]]">
-                <div class="filter esmm">
-                    <etools-multi-selection-menu
-                        label="[[filter.filterName]]"
-                        placeholder="&#8212;"
-                        disabled$="[[!filter.selectionOptions.length]"
-                        options="[[filter.selectionOptions]]"
-                        option-value="[[filter.optionValue]]"
-                        option-label="[[filter.optionLabel]]"
-                        selected-values="[[filter.alreadySelected]]"
-                        trigger-value-change-event
-                        on-etools-selected-items-changed="esmmValueChanged"
-                        data-filter-path$="[[filter.path]]">
-                    </etools-multi-selection-menu>
-                    <paper-icon-button suffix class="remove-field remove" icon="cancel"
-                                      on-tap="removeFilter"
-                                      data-filter-name$="[[filter.filterName]]"
-                                      data-reset-path$="[[filter.path]]">
-                    </paper-icon-button>
-                  </div>
-              </template>  
-            <!-- date pickers -->
-              <template is="dom-if" if="[[filterTypeIs('datepicker', filter.type)]]">
-                  <div class="filter">
-                    <paper-input id$="datepicker_parent_[[filter.path]]"
-                                 label="[[filter.filterName]]"
-                                 value="[[prettyDate(filter.dateSelected)]]"
-                                 on-down="openDatePicker"
-                                 data-selector$="datepicker_[[filter.path]]">
-                      <etools-datepicker-button prefix
-                                                id$="datepicker_[[filter.path]]"
-                                                date="[[prepareDate(filter.dateSelected)]]"
-                                                format="D MMM YYYY"
-                                                parent-id$="datepicker_parent_[[filter.path]]"
-                                                data-filter-path$="[[filter.path]]"
-                                                on-date-has-changed="_filterDateHasChanged"
-                                                no-init show-clear-btn fire-date-has-changed>
-                      </etools-datepicker-button>
-                    </paper-input>
-                    <paper-icon-button suffix class="remove-field remove" icon="cancel"
-                                       on-tap="removeFilter"
-                                       data-filter-name$="[[filter.filterName]]"
-                                       data-reset-path$="[[filter.path]]">
-                    </paper-icon-button>
-                  </div>
-                </template>
+          <!-- dropdown filters  -->
+          <template is="dom-if" if="[[filterTypeIs('esmm', filter.type)]]">
+            <div class="filter esmm">
+              <etools-multi-selection-menu
+                  label="[[filter.filterName]]"
+                  placeholder="&#8212;"
+                  disabled$="[[!filter.selectionOptions.length]"
+                  options="[[filter.selectionOptions]]"
+                  option-value="[[filter.optionValue]]"
+                  option-label="[[filter.optionLabel]]"
+                  selected-values="[[filter.alreadySelected]]"
+                  trigger-value-change-event
+                  on-etools-selected-items-changed="esmmValueChanged"
+                  data-filter-path$="[[filter.path]]">
+              </etools-multi-selection-menu>
+              <paper-icon-button suffix class="remove-field remove" icon="cancel"
+                                 on-tap="removeFilter"
+                                 data-filter-name$="[[filter.filterName]]"
+                                 data-reset-path$="[[filter.path]]">
+              </paper-icon-button>
+            </div>
+          </template>
+          <!-- date pickers -->
+          <template is="dom-if" if="[[filterTypeIs('datepicker', filter.type)]]">
+            <div class="filter">
+              <paper-input id$="datepicker_parent_[[filter.path]]"
+                           label="[[filter.filterName]]"
+                           value="[[prettyDate(filter.dateSelected)]]"
+                           on-down="openDatePicker"
+                           data-selector$="datepicker_[[filter.path]]">
+                <etools-datepicker-button prefix
+                                          id$="datepicker_[[filter.path]]"
+                                          date="[[prepareDate(filter.dateSelected)]]"
+                                          format="D MMM YYYY"
+                                          parent-id$="datepicker_parent_[[filter.path]]"
+                                          data-filter-path$="[[filter.path]]"
+                                          on-date-has-changed="_filterDateHasChanged"
+                                          no-init show-clear-btn fire-date-has-changed>
+                </etools-datepicker-button>
+              </paper-input>
+              <paper-icon-button suffix class="remove-field remove" icon="cancel"
+                                 on-tap="removeFilter"
+                                 data-filter-name$="[[filter.filterName]]"
+                                 data-reset-path$="[[filter.path]]">
+              </paper-icon-button>
+            </div>
+          </template>
         </template>
       </div>
-        <div class="fixed-controls">
-            <div class="filters-divider"></div>
-            <paper-menu-button id="filterMenu" dynamic-align>
-              <paper-button class="button dropdown-trigger">
-                <iron-icon icon="filter-list"></iron-icon>
-                add filter
-              </paper-button>
-              <paper-menu class="dropdown-content">
-                <template is="dom-repeat" items="[[availableListFilterOptions]]">
-                  <paper-item on-tap="selectFilter">[[item.filterName]]</paper-item>
-                </template>
-              </paper-menu>
-            </paper-menu-button>
-          </div>
-      
+      <div class="fixed-controls">
+        <div class="filters-divider"></div>
+        <paper-menu-button id="filterMenu" dynamic-align>
+          <paper-button class="button dropdown-trigger">
+            <iron-icon icon="filter-list"></iron-icon>
+            add filter
+          </paper-button>
+          <paper-menu class="dropdown-content">
+            <template is="dom-repeat" items="[[availableListFilterOptions]]">
+              <paper-item on-tap="selectFilter">[[item.filterName]]</paper-item>
+            </template>
+          </paper-menu>
+        </paper-menu-button>
+      </div>
+
     </paper-material>
 
     <paper-material id="list" elevation="1">
@@ -169,21 +172,23 @@
       <template is="dom-repeat" items="[[filteredPartnerships]]" as="row">
         <data-table-row no-collapse>
           <div slot="row-data">
-            <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details" app-name="pmp" page="partners" id="[[row.partner_id]]/details"
-              class="col-data flex-2 title">
+            <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details" app-name="pmp"
+               page="partners" id="[[row.partner_id]]/details"
+               class="col-data flex-2 title">
               [[row.partner_name]]
             </a>
-            <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details" app-name="pmp" page="interventions"
-              id="[[row.intervention_id]]/details" class="col-data flex-2 title">
+            <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details" app-name="pmp"
+               page="interventions"
+               id="[[row.intervention_id]]/details" class="col-data flex-2 title">
               [[row.number]]
             </a>
             <span class="col-data flex-2">
-              <template is="dom-repeat" items="{{row.sectors}}" >
+              <template is="dom-repeat" items="{{row.sectors}}">
                 [[item]]<br>
               </template>
             </span>
             <span class="col-data flex">
-              <template is="dom-repeat" items="{{row.offices_names}}" >
+              <template is="dom-repeat" items="{{row.offices_names}}">
                 [[item]]<br>
               </template>
             </span>
@@ -214,13 +219,13 @@
           </div>
         </data-table-row>
       </template>
-      <data-table-footer 
-        page-size="[[pageSize]]" 
-        page-number="[[pageNumber]]"  
-        visible-range="{{visibleRange}}"
-        on-page-size-changed="pageSizeChanged" 
-        filtered-total-results="[[totalResults]]" 
-        on-page-number-changed="pageNumberChanged">
+      <data-table-footer
+          page-size="[[pageSize]]"
+          page-number="[[pageNumber]]"
+          visible-range="{{visibleRange}}"
+          on-page-size-changed="pageSizeChanged"
+          filtered-total-results="[[totalResults]]"
+          on-page-number-changed="pageNumberChanged">
       </data-table-footer>
     </paper-material>
   </template>
@@ -266,7 +271,7 @@
             type: Number,
             value: 50
           },
-          qs : {
+          qs: {
             type: String
           },
           urlParams: {
@@ -315,9 +320,9 @@
 
         },
 
-        _init: function(active,sectors,statuses,offices) {        
+        _init: function(active, sectors, statuses, offices) {
           var params = this.urlParams;
-          var staticLoaded = this._allHaveValues('sectors','statuses','offices');
+          var staticLoaded = this._allHaveValues('sectors', 'statuses', 'offices');
           if (!active || !params || !staticLoaded) {
             return;
           }
@@ -331,7 +336,7 @@
           this.set('selectedStatuses', params.status ? this._setSelectedStatuses(params.status) : []);
           this.set('startAfterDate', params.startAfter ? params.startAfter : '');
           this.set('endBeforeDate', params.endBefore ? params.endBefore : '');
-          this.set('startBeforeDate', params.startBefore? params.startBefore : '');
+          this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
           this.set('endAfterDate', params.endAfter ? params.endAfter : '');
           this.set('initComplete', true);
           this._updateSelectedFiltersValues();
@@ -397,7 +402,7 @@
           }.bind(this), 100);
         },
 
-        _updateSelectedFiltersValues: function() { 
+        _updateSelectedFiltersValues: function() {
           this.debounce('updateShownFilters', function() {
             var filtersValues = [
               {
@@ -433,9 +438,8 @@
           }.bind(this), 200);
         },
 
-
         _updateUrl: function() {
-          if (!this.initComplete ||  !this.requiredDataLoaded) {
+          if (!this.initComplete || !this.requiredDataLoaded) {
             return;
           }
           var qs = this._buildQueryString();
@@ -454,6 +458,7 @@
             }
           }
         },
+
         _buildQueryString: function() {
           var qs = [];
           if (this.pageNumber && this.pageNumber > 1) {
@@ -493,13 +498,23 @@
           return qs.join('&');
         },
 
+        _buildCsvDownloadUrl: function() {
+          var queryString = '';
+          var endpointUrl = '';
+          var params = [];
+
+          if (!_.isEmpty(this.selectedSectors)) {
+            params.push('sector=' + this.selectedSectors[0].value)
+          }
+        },
+
         _filterPartnershipsData: function() {
           this.$.partnerships.query(
             this.qs,
             this.sortOrder,
             this.pageSize,
             this.pageNumber,
-            _.map(this.selectedSectors,'label'),
+            _.map(this.selectedSectors, 'label'),
             _.map(this.selectedOffices, 'name'),
             _.map(this.selectedStatuses, 'value'),
             this.startAfterDate,
@@ -515,7 +530,7 @@
           var list = this.get(listDataPath);
 
           if (typeof list === 'undefined' ||
-              (Array.isArray(list) && list.length === 0)) {
+            (Array.isArray(list) && list.length === 0)) {
             this.set('forceDataRefresh', true);
           }
           // recheck params to trigger agreements filtering
@@ -524,14 +539,14 @@
           this._init(this.active);
         },
 
-        _setSelectedOffices : function(officesStr) {
+        _setSelectedOffices: function(officesStr) {
           var officesIdsArr = officesStr.split('|');
           if (!_.isEmpty(officesIdsArr)) {
             officesIdsArr = officesIdsArr.map(function(n) {
-              return parseInt(n,10);
+              return parseInt(n, 10);
             });
             return this.offices.filter(function(o) {
-              return officesIdsArr.indexOf(parseInt(o.id,10)) > -1;
+              return officesIdsArr.indexOf(parseInt(o.id, 10)) > -1;
             })
           }
           return [];
@@ -557,7 +572,7 @@
             return statusesStrArr.indexOf(status.value) > -1;
           });
         },
-    
+
         _getDisbursements: function(disb, fr) {
           return disb === '0.00' ? '0' : (Number(disb) / Number(fr) * 100).toFixed(1);
         },
