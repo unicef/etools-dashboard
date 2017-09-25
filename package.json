@@ -22,6 +22,7 @@
   },
   "private": true,
   "devDependencies": {
+    "babel-preset-es2017": "^6.24.1",
     "browser-sync": "^2.18.7",
     "css-slam": "^1.1.0",
     "del": "^2.2.1",
@@ -29,6 +30,8 @@
     "eslint-config-google": "^0.7.0",
     "eslint-plugin-html": "^2.0.0",
     "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-babel": "^7.0.0",
+    "gulp-crisper": "^1.1.0",
     "gulp-csslint": "^1.0.0",
     "gulp-html-extract": "^0.2.0",
     "gulp-htmlhint": "^0.3.1",
