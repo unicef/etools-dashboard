@@ -51,15 +51,15 @@ jobs:
             mv /tmp/docker/* /usr/bin
            # build and push Docker image
       - run:
-        name: Building the image
-        command: |
-          TAG=${CIRCLE_BRANCH}
-          docker build -t unicef/etools-dashboard:$TAG .
+          name: Building the image
+          command: |
+            TAG=${CIRCLE_BRANCH}
+            docker build -t unicef/etools-dashboard:$TAG .
       - run:
-        name: Pushing to Docker Hub
-        command: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASS
-          docker push unicef/etools-dashboard:$TAG
+          name: Pushing to Docker Hub
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker push unicef/etools-dashboard:$TAG
 
 workflows:
   version: 2
