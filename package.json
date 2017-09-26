@@ -16,7 +16,9 @@
   "scripts": {
     "dev": "polymer serve & npm run watch",
     "test": "polymer test",
-    "watch": "browser-sync start --proxy localhost:8082 --files '**/*.html, **/*.js, images/*' "
+    "watch": "browser-sync start --proxy localhost:8082 --files '**/*.html, **/*.js, images/*'",
+    "lint": "npm run lint:javascript && exit 0",
+    "lint:javascript": "eslint . --ext js,html && exit 0"
   },
   "private": true,
   "devDependencies": {
@@ -24,9 +26,9 @@
     "css-slam": "^1.1.0",
     "del": "^2.2.1",
     "eslint": "^3.19.0",
-    "eslint-config-google": "^0.8.0",
-    "eslint-plugin-html": "^3.0.0",
-    "gulp": "gulpjs/gulp#4.0",
+    "eslint-config-google": "^0.7.0",
+    "eslint-plugin-html": "^2.0.0",
+    "gulp": "github:gulpjs/gulp#4.0",
     "gulp-csslint": "^1.0.0",
     "gulp-html-extract": "^0.2.0",
     "gulp-htmlhint": "^0.3.1",
@@ -48,10 +50,12 @@
     "merge-stream": "^1.0.0",
     "plylog": "^0.4.0",
     "polymer-build": "^0.4.0",
+    "prettier-eslint": "^8.0.0",
     "yargs": "^5.0.0"
   },
   "dependencies": {
     "express": "^4.14.0",
-    "redux": "^3.6.0"
+    "redux": "^3.6.0",
+    "uglify-js-harmony": "^2.7.7"
   }
 }
