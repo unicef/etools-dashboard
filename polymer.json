@@ -5,7 +5,7 @@
     "dash/pages/page-dashboard.html",
     "dash/pages/page-not-found.html"
   ],
-  "sourceGlobs": [
+  "sources": [
    "dash/**/*",
    "images/**/*",
    "styles/**/*",
@@ -13,7 +13,7 @@
    "data/**/*",
    "bower.json"
   ],
-  "includeDependencies": [
+  "extraDependencies": [
     "bower_components/webcomponentsjs/webcomponents-lite.min.js"
   ]
 }
