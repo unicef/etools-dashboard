@@ -247,6 +247,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         //  this.set('route.path', this.baseUrl + 'partners/list');
         //}
       },
+      ready: function() {
+        // create loading element, used for global loading
+        this.globalLoadingElement = this.createLoading();
+        this.fire('global-loading', {message: 'Loading data...', active: true});
+      },
       updateAppSelector: function() {
           this.$.pageheader.fire('toggle-menu');
       },
@@ -307,6 +312,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this._pagesAvailable = true;
         }
       },
+      /**
+       * Show loading when data is requested from server, or save is in progress...
+       */
+      _handleLoading: function(event) {
+        event.stopImmediatePropagation();
+        this.debounce('showGlobalLoading', function() {
+          if (this.globalLoadingElement) {
+            var loadingMsg = 'Loading...';
+            if (event.detail && typeof event.detail.message === 'string'
+                && event.detail.message !== '') {
+              loadingMsg = event.detail.message;
+            }
+            this.globalLoadingElement.loadingText = loadingMsg;
+            var isActive = (event.detail.active === true) ? true : false;
+            this.globalLoadingElement.active = isActive;
+          }
+        }, 50);
+      }
     });
 
   </script>

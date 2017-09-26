@@ -3,8 +3,7 @@
 
 'use strict';
 
-const uglifyHarmony = require('uglify-js-harmony');
-const minifier = require('gulp-uglify/minifier');
+const uglify = require('gulp-uglify');
 const jshint = require('gulp-jshint');
 const jshintStylish = require('jshint-stylish');
 const jscs = require('gulp-jscs');
@@ -13,11 +12,10 @@ const lazypipe = require('lazypipe'); // Lazy pipe creates a reusable pipe strea
 
 // Minify Javascript
 function minify() {
-  var uglifyOptions = {
+  return uglify({
     preserveComments: false
     // options
-  };
-  return minifier(uglifyOptions, uglifyHarmony);
+  });
 }
 
 // Lint Javascript

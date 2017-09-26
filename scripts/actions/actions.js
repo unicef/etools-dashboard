@@ -52,11 +52,10 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      return data.length
-        ? data.map(function(trip) {
-            return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']);
-          })
-        : [];
+      data = data || [];
+      return data.map(function(trip) {
+        return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']);
+      });
     }
   },
   {
@@ -67,11 +66,10 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      return data.length
-        ? data.map(function(trip) {
-            return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'traveler']);
-          })
-        : [];
+      data = data || [];
+      return data.map(function(trip) {
+        return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'traveler']);
+      });
     }
   },
   {
@@ -82,11 +80,12 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      return data.length
-        ? data.map(function(actionPoint) {
-            return _.pick(actionPoint, ['status', 'description', 'created_at', 'person_responsible_name', 'id']);
-          })
-        : [];
+      data = data || [];
+      return data.map(function(actionPoint) {
+        return _.pick(actionPoint, [
+          'status', 'description', 'created_at', 'person_responsible_name','id'
+        ]);
+      });
     }
   },
   {
@@ -97,11 +96,12 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      return data.length
-        ? data.map(function(actionPoint) {
-            return _.pick(actionPoint, ['status', 'description', 'created_at', 'assigned_by_name', 'id']);
-          })
-        : [];
+      data = data || [];
+      return data.map(function(actionPoint) {
+        return _.pick(actionPoint, [
+          'status', 'description', 'created_at', 'assigned_by_name','id'
+        ]);
+      });
     }
   },
   {
@@ -112,11 +112,22 @@ var Actions = [
       templateProps: {}
     },
     prepareData: function(data) {
-      return data.length
-        ? data.map(function(partnership) {
+      return data.length ? data.map(function(partnership) {
             return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
-          })
-        : null;
+          }) : null;
+    }
+  },
+  {
+    actionType: 'trips-months',
+    propsArray: ['tripsMonths'],
+    endpointProps: {},
+    prepareData: function() {
+      return moment.months().map(function(month, i) {
+        return {
+          name: month,
+          monthId: ("0" + (i + 1)).slice(-2),
+        };
+      });
     }
   },
   {
@@ -155,13 +166,14 @@ var Actions = [
       data = data || [];
       return data.map(function(d) {
         return {
-          value: d.id,
+          value: parseInt(d.id, 10),
           label: d.name
         };
       });
     }
   },
   {
+
     actionType: 'unicef-users',
     propsArray: ['unicefUsersData'],
     endpointProps: {
@@ -200,4 +212,5 @@ var Actions = [
       return data[0];
     }
   }
+
 ];

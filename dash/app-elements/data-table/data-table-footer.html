@@ -57,7 +57,7 @@
     <div id="table-footer">
       <span id="rows">Rows per page:</span>
 
-      <paper-dropdown-menu horizontal-align="left" noink>
+      <paper-dropdown-menu vertical-align="bottom" horizontal-align="left" noink>
         <paper-menu class="dropdown-content" attr-for-selected="name" selected="{{pageSize}}">
           <paper-item name="5">5</paper-item>
           <paper-item name="10">10</paper-item>
@@ -66,7 +66,7 @@
         </paper-menu>
       </paper-dropdown-menu>
 
-      <span id="range">[[visibleRange.0]]-[[visibleRange.1]] of [[filteredTotalResults]]</span>
+      <span id="range">[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]]</span>
 
       <paper-icon-button icon="first-page" on-tap="_firstPage" disabled$="[[_pageBackDisabled(pageNumber)]]"></paper-icon-button>
 
@@ -98,19 +98,19 @@
           notify: true
         },
 
-        filteredTotalResults: {
+        totalResults: {
           type: Number
         },
 
         totalPages: {
           type: Number,
-          computed: '_computeTotalPages(pageSize, filteredTotalResults)',
+          computed: '_computeTotalPages(pageSize, totalResults)',
         },
 
         visibleRange: {
           type: Array,
           notify: true,
-          computed: '_computeVisibleRange(pageNumber, pageSize, filteredTotalResults, totalPages)'
+          computed: '_computeVisibleRange(pageNumber, pageSize, totalResults, totalPages)'
         },
 
       },
@@ -139,23 +139,23 @@
         }
       },
 
-      _computeTotalPages: function(pageSize, filteredTotalResults) {
+      _computeTotalPages: function(pageSize, totalResults) {
         var result = 1;
-        if (pageSize < filteredTotalResults) {
-          result = Math.ceil(filteredTotalResults / pageSize);
+        if (pageSize < totalResults) {
+          result = Math.ceil(totalResults / pageSize);
         }
         return result;
       },
 
-      _computeVisibleRange: function(pageNumber, pageSize, filteredTotalResults, totalPages) {
+      _computeVisibleRange: function(pageNumber, pageSize, totalResults, totalPages) {
         var start = 1;
-        var end = filteredTotalResults;
+        var end = totalResults;
 
         if (pageNumber !== 1) {
           start = (pageNumber - 1) * pageSize + 1;
         }
         if (pageNumber !== totalPages) {
-          end = parseInt(start) + parseInt(pageSize) - 1;
+          end = start + pageSize - 1;
         }
 
         return [start, end];

@@ -1,4 +1,4 @@
-<!-- This file will be dedicated for 12 columns content layout / with some added custom classes for in between sizes-->
+<!-- This file will be dedicated for 12 columns content layout -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
@@ -26,18 +26,12 @@
         /* used to prevent flexbox to change it's size if content grows */
         overflow: hidden;
       }
-
       .col {
         @apply(--layout-horizontal);
         box-sizing: border-box;
       }
       .col:not(:first-child) {
         padding-left: 24px;
-      }
-
-      .col-1 {
-        flex: 0 0 8.33333333%;
-        max-width: 8.33333333%%;
       }
 
       .col-2 {

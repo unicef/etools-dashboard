@@ -3,68 +3,58 @@
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
 <link rel="import" href="../../../styles/page-layout-styles.html">
-<link rel="import" href="../../../styles/buttons-styles.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
-<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
-<link rel="import"
-      href="../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
 
 <link rel="import" href="../../app-behaviors/dropdown-behavior.html">
 <link rel="import" href="../../app-behaviors/common-general-behavior.html">
 <link rel="import" href="../../app-elements/static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
 <link rel="import" href="../../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../../../bower_components/google-chart/google-chart-loader.html">
-<link rel="import" href="../../../bower_components/moment-element/moment-import.html">
 
-<link rel="import" href="dashboard-data/trips-dashboard-data.html">
+<link rel="import" href="dashboard-data/trips-by-section-data.html">
 <link rel="import" href="dashboard-data/action-pts-by-section-data.html">
 <dom-module id="dashboard-trips">
   <template>
-    <style include="list-styles iron-flex-factors shared-styles page-layout-styles buttons-styles iron-flex-alignment">
+    <style include="list-styles iron-flex-factors shared-styles page-layout-styles">
       .by-type {
         padding: 0;
         @apply(--layout-horizontal);
       }
-
       .viz {
         width: 100%;
         @apply(--tripsChart);
       }
-
       .viz-actions {
         width: 100%;
         @apply(--actionPointsChart);
       }
-
       .chart-title {
         font-size: 16px;
         margin: 0;
         line-height: 48px;
         font-weight: 500;
       }
-
       .wrap-controls paper-dropdown-menu.sm-dropdown {
         min-width: 88px;
       }
     </style>
-    <trips-dashboard-data trips-data="{{tripsData}}" filter="[[tripsFilter]]"></trips-dashboard-data>
-    <action-pts-by-section-data action-points-data="{{actionPointsData}}"
-                                filter="[[actionPtsFilter]]"></action-pts-by-section-data>
+    <trips-by-section-data trips-data="{{tripsData}}" filter="[[tripsFilter]]"></trips-by-section-data>
+    <action-pts-by-section-data action-points-data="{{actionPointsData}}" filter="[[actionPtsFilter]]"></action-pts-by-section-data>
     <google-chart-loader id="google"></google-chart-loader>
 
     <paper-material class="list-panel listControls" elevation="1">
-      <div class="controls-wrapper flex">
+      <div class="controls-wrapper">
         <div class="title-row">
           <h1 sub-title>Trips</h1>
         </div>
         <div class="filters-divider"></div>
-        <div class="wrap-controls flex">
+        <div class="wrap-controls">
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
             <paper-dropdown-menu label="Year"
@@ -82,13 +72,17 @@
           </div>
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-            <etools-multi-selection-menu label="Month"
-                                         id="tripsMonth"
-                                         placeholder="Select from list"
-                                         error-message="Must select at least one month"
-                                         selected-values="{{month}}"
-                                         trigger-value-change-event
-                                         options="[[months]]"></etools-multi-selection-menu>
+            <paper-dropdown-menu label="Month"
+                                 id="tripsMonth"
+                                 error-message="Must select a month"
+                                 class="sm-dropdown"
+                                 placeholder="Select from list" noink>
+              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{month}}">
+                <template is="dom-repeat" items="[[months]]" as="month">
+                  <paper-item id="[[month.monthId]]">[[month.name]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
           </div>
           <div class="dropdown-with-clear-btn">
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
@@ -103,9 +97,6 @@
             </paper-dropdown-menu>
           </div>
         </div>
-        <paper-button class="primary-btn" on-tap="_setFilter" disabled="[[fetchDisabled]]">
-          Get Chart
-        </paper-button>
       </div>
     </paper-material>
 
@@ -148,25 +139,14 @@
         <div class="filters-divider"></div>
         <div class="wrap-controls">
           <div class="dropdown-with-clear-btn">
-            <!--<paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>-->
-            <!--<paper-dropdown-menu label="Office" placeholder="Select from list" noink>-->
-            <!--<paper-menu class="dropdown-content" attr-for-selected="name" selected="{{apOffice}}">-->
-            <!--<template is="dom-repeat" items="[[offices]]" as="office">-->
-            <!--<paper-item name="[[office.name]]">[[office.name]]</paper-item>-->
-            <!--</template>-->
-            <!--</paper-menu>-->
-            <!--</paper-dropdown-menu>-->
             <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-            <etools-multi-selection-menu label="Office"
-                                         id="actionPtsOffice"
-                                         placeholder="Select from list"
-                                         error-message="Must select at least one office"
-                                         selected-values="{{apOffice}}"
-                                         option-label="name"
-                                         option-value="id"
-                                         trigger-value-change-event
-                                         on-paper-dropdown-close="_apOfficeChanged"
-                                         options="[[offices]]"></etools-multi-selection-menu>
+            <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
+              <paper-menu class="dropdown-content" attr-for-selected="name" selected="{{apOffice}}">
+                <template is="dom-repeat" items="[[offices]]" as="office">
+                  <paper-item name="[[office.name]]">[[office.name]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
           </div>
         </div>
       </div>
@@ -186,8 +166,7 @@
     Polymer({
       is: 'dashboard-trips',
       observers: [
-        '_init(active)',
-        '_alertStaticDataLoaded(offices,months,years)',
+        '_init(active)'
       ],
       behaviors: [
         dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
@@ -208,12 +187,12 @@
         },
         tripsOffice: {
           type: String,
-          observer: '_monthChanged'
+          observer: '_tripsOfficeChanged'
         },
         tripsChart: {
           type: Array,
-          notify: true,
-          value: []
+          notify:true,
+          value:[]
         },
         actionPointsData: {
           type: Object,
@@ -221,7 +200,6 @@
         },
         apOffice: {
           type: String,
-          notify: true,
           observer: '_apOfficeChanged'
         },
         actionPtsFilter: {
@@ -230,8 +208,9 @@
         },
         months: {
           type: Array,
+          statePath: 'tripsMonths'
         },
-        years: {
+        years : {
           type: Array,
           statePath: 'tripsYears'
         },
@@ -241,22 +220,14 @@
         },
         month: {
           type: String,
-          notify: true,
-          observer: '_monthChanged'
+          observer: '_setMonth'
         },
-        fetchDisabled: {
-          type: Boolean,
-          value: false
-        },
-        staticDataLoaded: {
-          type: Boolean,
-          value: false
-        },
+
         tripsChartOptions: {
           type: Object,
-          value: {
-            colors: ['#FCF39F', '#BFE58A', '#64BD00'],
-            legend: {position: "none"},
+          value : {
+            colors: ['#FCF39F','#BFE58A','#64BD00'],
+            legend: { position: "none" },
             animation: {
               startup: true,
               duration: 300,
@@ -279,17 +250,17 @@
                 lineHeight: 30
               }
             },
-            bar: {groupWidth: '22'},
+            bar: { groupWidth: '22' },
           }
         },
         actionPointsChart: {
           type: Object,
-          notify: true
+          notify:true
         },
         actionPointsChartOptions: {
           type: Object,
-          value: {
-            colors: ['#8AD0FF', '#EEEEEE'],
+          value : {
+            colors: ['#8AD0FF','#EEEEEE'],
             chartArea: {
               top: '16',
               bottom: '32',
@@ -306,7 +277,7 @@
               minValue: 0,
               gridlineColor: '#E8E8E8',
               format: 'percent',
-              ticks: _.range(0.1, 1.1, 0.1)
+              ticks: _.range(0.1,1.1,0.1)
             },
             vAxis: {
               minValue: 0,
@@ -315,7 +286,7 @@
                 lineHeight: 30
               },
             },
-            bar: {groupWidth: '22'},
+            bar: { groupWidth: '22' },
             legend: {
               position: 'top',
               alignment: 'end'
@@ -325,12 +296,12 @@
         noDataOptions: {
           type: Object,
           value: {
-            legend: {position: "none"},
+            legend: { position: "none" },
             colors: ['transparent'],
             chartArea: {
               width: '50%',
               left: '5%',
-              height: '75%',
+              height:'75%',
               top: '16',
             },
             vAxis: {
@@ -346,7 +317,7 @@
             },
             annotations: {
               alwaysOutside: true,
-              textStyle: {
+              textStyle : {
                 color: '#979797',
                 fontSize: 28,
               },
@@ -355,77 +326,52 @@
                 length: '50%'
               }
             },
-            bar: {groupWidth: '22'}
+            bar: { groupWidth: '22' }
           }
         },
         noDataMessage: {
           type: Array,
-          value: [['Bar', 'Time', {role: 'annotation'}],
-            ['', 2, 'No chart data'],
+          value: [['Bar', 'Time', { role: 'annotation' } ],
+            ['', 2, 'No chart data' ],
           ]
         }
       },
       _init: function(active) {
-        if (active) {
-          if (!this.staticDataLoaded) {
-            this.fire('global-loading', {message: 'Loading page data...', active: true});
-          }
-          this._initTripsChart();
-          if (!this.actionPtsFilter) {
+        if(active) {
+          this._setNoData('tripsChart');
+          if(!this.actionPtsFilter) {
             this.set('actionPtsFilter', {});
           }
         }
       },
-
-      _initTripsChart: function() {
-        this.set('year', moment().year());
-        this.set('months', moment.months().map(function(month, i) {
-          return {
-            label: month,
-            value: ('0' + (i + 1)).slice(-2),
-          };
-        }));
-        var monthsToDate = _.range(1, moment().month() + 2).map(function(month) {
-          return ('0' + (month)).slice(-2)
-        });
-        this.set('month', monthsToDate);
-        this._setFilter();
-      },
       _setFilter: function() {
-        this.set('fetchDisabled', true);
+        if (!this.year && !this.month) {
+          return;
+        }
         if (!this.year) {
           this._setInvalid('tripsYear');
           return;
         }
-        var filter = {year: this.year, office_id: this.tripsOffice};
         if (this.month) {
-          var monthObj = {months: this.month.join(',')};
-          _.assign(filter, monthObj);
+          var monthObj = _.find(this.months, {monthId: this.month});
+          this.set('tripsFilter', _.assign({},monthObj, {year: this.year, office: this.tripsOffice}));
         }
-        this.set('tripsFilter', filter);
       },
       _setYear: function(year) {
         if (year) {
-          this._monthChanged();
           this.$.tripsYear.invalid = false;
-        } else {
+          this._setFilter();
+        }else {
           this._setInvalid('tripsYear');
-          this.set('fetchDisabled', true);
         }
       },
-      _monthChanged: function(month) {
-        if (this.year) {
-          this.set('fetchDisabled', false);
-        }
-      },
-      _alertStaticDataLoaded: function() {
-        var args = _.toArray(arguments);
-        var allHaveValues = args.reduce(function(allHaveValues, item) {
-          return !_.isEmpty(item) && allHaveValues;
-        }, true);
-        if (allHaveValues) {
-          this.set('staticDataLoaded', true);
-          this.fire('global-loading');
+      _setMonth: function(month) {
+        if (month) {
+          this.$.tripsMonth.invalid = false;
+          this._setFilter();
+        } else {
+          this._setInvalid('tripsMonth');
+          this._setNoData('tripsChart');
         }
       },
       _setInvalid: function(field) {
@@ -446,12 +392,12 @@
             id: 'tripsOffice'
           }
         ];
-        _.remove(fields, {id: field});
-        var invalid = fields.reduce(function(isValid, _field) {
+        _.remove(fields,{id: field});
+        var invalid = fields.reduce(function(isValid, _field){
           return _this[_field.name] || isValid;
-        }, false);
-        if (invalid && field !== 'tripsOffice') {
-          this.$$('#' + field).invalid = true;
+        },false);
+        if (invalid && field !=='tripsOffice') {
+          this.$$('#'+ field).invalid = true;
         } else {
           fields.forEach(function(f) {
             _this.$$('#' + f.id).invalid = false;
@@ -462,20 +408,22 @@
         var _this = this;
         this.$.google.dataTable(formatted).then(function(dt) {
           //magic ratio number 32.71
-          _this.customStyle['--' + chartName] = 'height:' + Math.round(dt.getNumberOfRows() * 32.71) +
-              'px; min-height: 300px';
-          _this.$$('#' + chartName).options = _this[chartName + 'Options'];
+          _this.customStyle['--'+chartName] = 'height:' + Math.round(dt.getNumberOfRows()*32.71) + 'px; min-height: 300px';
+          _this.$$('#' + chartName).options = _this[chartName+'Options'];
           _this.$$('#' + chartName).data = dt;
+          if(_this.active) {
+            _this.fire('global-loading',{active: false});
+          }
           _this.updateStyles();
         });
       },
-      _tripsDataChanged: function(data) {
+      _tripsDataChanged : function(data) {
         if (!_.isEmpty(data)) {
           var travels = _.get(data, 'travels_by_section', []);
           if (!travels.length && this.active) {
             this.fire('global-loading', {active: false});
             this._setNoData('tripsChart');
-          } else {
+          }else {
             var formatted = [
               ['Trips', 'Planned', 'Approved', 'Completed']
             ];
@@ -485,34 +433,42 @@
                 section.approved_travels,
                 section.completed_travels])
             });
-            this._formatChartData(formatted, 'tripsChart');
+            this._formatChartData(formatted,'tripsChart');
           }
         }
       },
+      _tripsOfficeChanged: function(office) {
+        if (office) {
+          if (this._filterValid()){
+            this.set('tripsFilter', _.assign({}, this.tripsFilter, {office:office}));
+          }
+        }else {
+          this._setInvalid('tripsOffice');
+          this._setFilter();
+        }
+      },
       _filterValid: function() {
-        this.$.tripsYear.invalid = this.year ? false : true;
-        this.$.tripsMonth.invalid = this.month ? false : true;
+        this.$.tripsYear.invalid = this.year ? false: true;
+        this.$.tripsMonth.invalid = this.month ? false: true;
         return this.year && this.month;
       },
 
-      _apOfficeChanged: function() {
-        if (this.$.actionPtsOffice.$.dropdownMenu.opened){
-          return;
-        }
+      _apOfficeChanged: function(officeName) {
         var filter = {};
-        if (this.apOffice && this.apOffice.length) {
-          filter.office = this.apOffice
+        if (officeName) {
+          filter.office = _.find(this.offices, {name: officeName}).id;
         }
         this.set('actionPtsFilter', filter);
       },
       _actionPointsDataChanged: function(data) {
         if (!_.isEmpty(data)) {
-          var actionPoints = _.get(data, 'action_points_by_section', []).filter(function(ap) {
-            return _.get(ap, 'total_action_points');
+          var actionPoints = _.get(data,'action_points_by_section',[]).filter(function(ap) {
+            return _.get(ap,'total_action_points');
           });
           if (!actionPoints.length && this.active) {
+            this.fire('global-loading', {active: false});
             this._setNoData('actionPointsChart');
-          } else {
+          }else {
             var formatted = [['Action Points', 'Closed', 'Total']];
             actionPoints.forEach(function(ap) {
               formatted.push([ap.section_name,
@@ -520,14 +476,14 @@
                 ap.total_action_points
               ]);
             });
-            this._formatChartData(formatted, 'actionPointsChart');
+            this._formatChartData(formatted,'actionPointsChart');
           }
         }
       },
       _setNoData: function(chartName) {
         var _this = this;
         this.$.google.dataTable(this.noDataMessage).then(function(dt) {
-          _this.customStyle['--' + chartName] = 'height: 300px';
+          _this.customStyle['--'+chartName]='height: 300px';
           _this.$$('#' + chartName).options = _this.noDataOptions;
           _this.$$('#' + chartName).data = dt;
           _this.updateStyles();

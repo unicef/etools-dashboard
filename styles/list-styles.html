@@ -12,7 +12,7 @@
       :host {
         @apply(--layout-flex);
         font-weight: 400;
-        --paper-input-container-color: var(--secondary-text-color);
+        --paper-input-container-color: var(--dark-ink-color);
       }
 
       :host([hidden]) {
@@ -50,13 +50,10 @@
       }
 
       .wrap-controls > *:not(:last-child) {
-        margin-right: 16px;
+        margin-right: 15px;
       }
 
       .wrap-controls paper-input {
-        min-width: 200px;
-      }
-      .wrap-controls .filter.esmm {
         min-width: 266px;
       }
 
@@ -145,7 +142,6 @@
       .row-details-content {
         font-size: 12px;
       }
-
       .row-details-content .rdc-title {
         display: inline-block;
         width: 100%;
@@ -153,7 +149,6 @@
         font-weight: bold;
         margin-bottom: 10px;
       }
-
       .col-data {
         line-height: 20px;
         line-height: 20px;
@@ -162,23 +157,13 @@
         overflow: hidden;
         text-overflow: ellipsis;
       }
-
       a.col-data , .description a{
         font-weight: 400;
         cursor: pointer;
       }
 
-      a.col-data:not(:first-child) {
-        padding-left: 8px;
-      }
-
       .list-panel a {
         padding-right: 24px;
-      }
-      .list-content {
-        /*7 list items max visible 49px x 7*/
-        max-height: 343px;
-        overflow: scroll;
       }
       .suppData {
         font-size: 12px;
@@ -216,7 +201,6 @@
       }
       .trips-list {
         width: calc(50% - 6px);
-        height: 100%;
       }
 
       .trips-list:nth-child(1) {

@@ -1,0 +1,25 @@
+machine:
+   services:
+     - docker
+
+dependencies:
+  cache_directories:
+    - "~/dockercache"
+
+  override:
+    - if [[ -e ~/dockercache/dashboard.tar ]]; then docker load -i ~/dockercache/dashboard.tar; fi
+    - if [[ -e ~/dockercache/dashboardtest.tar ]]; then docker load -i ~/dockercache/dashboardtest.tar; fi
+    - docker build --rm=false -t unicef/etools-dashboard:$CIRCLE_BRANCH .
+    - docker build --rm=false -t unicef/etools-dashboard-test:$CIRCLE_BRANCH --file docker-test .
+    - mkdir -p ~/dockercache; docker save unicef/etools-dashboard-test > ~/dockercache/dashboardtest.tar; docker save unicef/etools-dashboard > ~/dockercache/dashboard.tar
+
+test:
+   override:
+     - docker run -it unicef/etools-dashboard-test:$CIRCLE_BRANCH
+
+deployment:
+   hub:
+     branch: [develop, staging, master, pmp-redesign]
+     commands:
+       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+       - docker push unicef/etools-dashboard

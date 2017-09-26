@@ -4,229 +4,134 @@
 <link rel="import" href="../../../styles/list-styles.html">
 <link rel="import" href="../../../styles/page-layout-styles.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../../../styles/grid-layout-styles.html">
 
 <link rel="import" href="../../app-config/etools-app-config.html">
 
 <link rel="import" href="../data-table/data-table-header.html">
 <link rel="import" href="../data-table/data-table-column.html">
 <link rel="import" href="../data-table/data-table-row.html">
-<link rel="import" href="../data-table/data-table-footer.html">
 
 <link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
-<link rel="import"
-      href="../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
-<link rel="import" href="../../../bower_components/etools-datepicker/etools-datepicker-button.html">
 
 <link rel="import" href="../../app-behaviors/dropdown-behavior.html">
 <link rel="import" href="../../app-behaviors/common-general-behavior.html">
-<link rel="import" href="../../app-behaviors/list-filters-behavior.html">
 <link rel="import" href="../../app-elements/static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
 <link rel="import" href="dashboard-data/partnership-data.html">
 <dom-module id="dashboard-partnerships">
 
   <template>
-    <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors page-layout-styles">
+    <style include="shared-styles list-styles iron-flex iron-flex-factors page-layout-styles">
       .by-type {
         padding: 0;
         @apply(--layout-horizontal);
       }
-
       span.title {
         color: var(--accent-color);
         font-weight: 500;
       }
-
-      data-table-header data-table-column:not(:first-child),
-      data-table-row span:not(:first-child) {
-        box-sizing: border-box;
-        padding-left: 8px;
-      }
-
-      .right-align {
-        text-align: right;
-      }
     </style>
-    <partnership-data id="partnerships" filtered-partnerships="{{filteredPartnerships}}" fire-data-loaded
-                      active="[[active]]"
-                      total-results="{{totalResults}}" on-partnerships-loaded="_requiredDataLoaded"
-                      list-data-path="filteredPartnerships"></partnership-data>
-
+    <partnership-data partnership="{{partnership}}" filter="[[filter]]"></partnership-data>
     <paper-material class="list-panel listControls" elevation="1">
+      <div class="controls-wrapper">
 
-      <div class="wrap-controls">
-        <paper-input id="query" type="search" autocomplete="off" value="{{qs}}" placeholder="Search"
-                     always-float-label on-search="setQuery">
-          <iron-icon icon="search" prefix></iron-icon>
-        </paper-input>
-        <template is="dom-repeat" items="[[selectedFilters]]" as="filter">
-          <!-- dropdown filters  -->
-          <template is="dom-if" if="[[filterTypeIs('esmm', filter.type)]]">
-            <div class="filter esmm">
-              <etools-multi-selection-menu
-                  label="[[filter.filterName]]"
-                  placeholder="&#8212;"
-                  disabled$="[[!filter.selectionOptions.length]"
-                  options="[[filter.selectionOptions]]"
-                  option-value="[[filter.optionValue]]"
-                  option-label="[[filter.optionLabel]]"
-                  selected-values="[[filter.alreadySelected]]"
-                  trigger-value-change-event
-                  on-etools-selected-items-changed="esmmValueChanged"
-                  data-filter-path$="[[filter.path]]">
-              </etools-multi-selection-menu>
-              <paper-icon-button suffix class="remove-field remove" icon="cancel"
-                                 on-tap="removeFilter"
-                                 data-filter-name$="[[filter.filterName]]"
-                                 data-reset-path$="[[filter.path]]">
-              </paper-icon-button>
-            </div>
-          </template>
-          <!-- date pickers -->
-          <template is="dom-if" if="[[filterTypeIs('datepicker', filter.type)]]">
-            <div class="filter">
-              <paper-input id$="datepicker_parent_[[filter.path]]"
-                           label="[[filter.filterName]]"
-                           value="[[prettyDate(filter.dateSelected)]]"
-                           on-down="openDatePicker"
-                           data-selector$="datepicker_[[filter.path]]">
-                <etools-datepicker-button prefix
-                                          id$="datepicker_[[filter.path]]"
-                                          date="[[prepareDate(filter.dateSelected)]]"
-                                          format="D MMM YYYY"
-                                          parent-id$="datepicker_parent_[[filter.path]]"
-                                          data-filter-path$="[[filter.path]]"
-                                          on-date-has-changed="_filterDateHasChanged"
-                                          no-init show-clear-btn fire-date-has-changed>
-                </etools-datepicker-button>
-              </paper-input>
-              <paper-icon-button suffix class="remove-field remove" icon="cancel"
-                                 on-tap="removeFilter"
-                                 data-filter-name$="[[filter.filterName]]"
-                                 data-reset-path$="[[filter.path]]">
-              </paper-icon-button>
-            </div>
-          </template>
-        </template>
-      </div>
-      <div class="fixed-controls">
+        <div class="title-row">
+          <h1 sub-title>Partnerships</h1>
+        </div>
+
         <div class="filters-divider"></div>
-        <paper-menu-button id="filterMenu" dynamic-align>
-          <paper-button class="button dropdown-trigger">
-            <iron-icon icon="filter-list"></iron-icon>
-            add filter
-          </paper-button>
-          <paper-menu class="dropdown-content">
-            <template is="dom-repeat" items="[[availableListFilterOptions]]">
-              <paper-item on-tap="selectFilter">[[item.filterName]]</paper-item>
-            </template>
-          </paper-menu>
-        </paper-menu-button>
-      </div>
 
+        <div class="wrap-controls">
+          <div class="dropdown-with-clear-btn">
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <paper-dropdown-menu id="cpDropdown"
+                                 label="Country Programme"
+                                 placeholder="Select from list"
+                                 error-message="Must select country programme"
+                                 noink>
+              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{country_programme}}">
+                <template is="dom-repeat" items="[[countryProgrammeItems]]">
+                  <paper-item id="[[item.id]]">[[item.name]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+          </div>
+          <div class="dropdown-with-clear-btn">
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <paper-dropdown-menu label="Office" placeholder="Select from list" noink>
+              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{office}}">
+                <template is="dom-repeat" items="[[officeItems]]" as="officeItem">
+                  <paper-item id="[[officeItem.id]]">[[officeItem.name]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
+          </div>
+        </div>
+      </div>
+    </paper-material>
+
+    <paper-material class="list-panel by-type" elevation="1">
+      <div class="trip title-row ">
+        <h2 sub-title>Partnerships by type</h2>
+      </div>
+      <div class="trips flex-c">
+        <div class="trip trip-type-one flex-c">
+          <h1>Bilateral <br>Multilateral</h1>
+          [[data.byType.0]]
+        </div>
+        <div class="trip trip-type-two flex-c">
+          <h1>Civil Society <br>Organizations</h1>
+          [[data.byType.1]]
+        </div>
+        <div class="trip trip-type-three flex-c">
+          <h1>UN Agency</h1>
+          [[data.byType.2]]
+        </div>
+        <div class="trip trip-type-four flex-c">
+          <h1>Government</h1>
+          [[data.byType.3]]
+        </div>
+      </div>
     </paper-material>
 
     <paper-material id="list" elevation="1">
-      <data-table-header label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show" no-collapse>
-        <data-table-column class="flex-2" sortable>
-          Partners
-        </data-table-column>
+      <data-table-header no-title no-collapse>
         <data-table-column class="flex-2">
-          PD/SSFA Ref #
-        </data-table-column>
-        <data-table-column class="flex-2">
-          Section
+          Partnerships (PD, SHPD, SSFA ToR, DCT to government)
         </data-table-column>
         <data-table-column class="flex">
-          Field Office
+          Number of Partnerships
         </data-table-column>
         <data-table-column class="flex">
-          Status
+          Total Value of Partnerships
         </data-table-column>
         <data-table-column class="flex">
-          Start Date <br> End Date
-        </data-table-column>
-        <data-table-column class="flex right-align">
-          Total UNICEF <br>Cash ($)
-        </data-table-column>
-        <data-table-column class="flex right-align">
-          Total UNICEF <br>Supplies ($)
-        </data-table-column>
-        <data-table-column class="flex right-align">
-          CSO <br>Contr. ($)
-        </data-table-column>
-        <data-table-column class="flex right-align">
-          Total <br> Budget ($)
-        </data-table-column>
-        <data-table-column class="flex right-align">
-          $ Disburs. <br>To Date (%)
-        </data-table-column>
-        <data-table-column class="flex right-align">
-          Days Since <br>Last PV
+          % of Active Partnerships
         </data-table-column>
       </data-table-header>
-      <template is="dom-repeat" items="[[filteredPartnerships]]" as="row">
+      <template is="dom-repeat" items="[[data.rows]]" as="row">
         <data-table-row no-collapse>
           <div slot="row-data">
-            <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details" app-name="pmp"
-               page="partners" id="[[row.partner_id]]/details"
-               class="col-data flex-2 title">
-              [[row.partner_name]]
-            </a>
-            <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details" app-name="pmp"
-               page="interventions"
-               id="[[row.intervention_id]]/details" class="col-data flex-2 title">
-              [[row.number]]
-            </a>
-            <span class="col-data flex-2">
-              <template is="dom-repeat" items="{{row.sectors}}">
-                [[item]]<br>
-              </template>
+            <span class="col-data flex-2 title">
+              [[row.title]]
             </span>
             <span class="col-data flex">
-              <template is="dom-repeat" items="{{row.offices_names}}">
-                [[item]]<br>
-              </template>
+              [[row.number_partnerships]]
             </span>
             <span class="col-data flex">
-              [[row.status]]
+              [[currencyFormat(row.total_value)]]
             </span>
             <span class="col-data flex">
-              [[row.start]] <br> [[row.end]]
-            </span>
-            <span class="col-data flex right-align">
-              [[currencyFormat(row.unicef_cash)]]
-            </span>
-            <span class="col-data flex right-align">
-              [[currencyFormat(row.unicef_supplies)]]
-            </span>
-            <span class="col-data flex right-align">
-              [[currencyFormat(row.cso_contribution)]]
-            </span>
-            <span class="col-data flex right-align">
-              [[currencyFormat(row.total_budget)]]
-            </span>
-            <span class="col-data flex right-align">
-              [[_getDisbursements(row.disbursement,row.frs_total_frs_amt)]]%
-            </span>
-            <span class="col-data flex right-align">
-              [[row.days_last_pv]]
+              [[row.percent_active]]
             </span>
           </div>
         </data-table-row>
       </template>
-      <data-table-footer
-          page-size="[[pageSize]]"
-          page-number="[[pageNumber]]"
-          visible-range="{{visibleRange}}"
-          on-page-size-changed="pageSizeChanged"
-          filtered-total-results="[[totalResults]]"
-          on-page-number-changed="pageNumberChanged">
-      </data-table-footer>
+
+
     </paper-material>
   </template>
 
@@ -239,362 +144,101 @@
         behaviors: [
           dashBehaviors.DropdownBehavior,
           dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
-          dashBehaviors.CommonGeneralBehavior,
-          dashBehaviors.ListFiltersBehavior
+          dashBehaviors.CommonGeneralBehavior
         ],
         observers: [
-          '_updateUrl(qs, pageNumber, pageSize,' +
-          'sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices,' +
-          'selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate)',
-          '_initListFilters(sectors, statuses, offices)',
-          '_init(active,sectors,statuses,offices)'
+          'init(active)',
         ],
-
         properties: {
-          filteredPartnerships: {
+          country_programme: {
+            type: String,
+            observer: '_filterChanged'
+          },
+          office: {
+            type: String,
+            observer: '_filterChanged'
+          },
+          countryProgrammeItems: {
             type: Array,
-            notify: true,
+            statePath: 'countryProgrammes'
           },
-          forceDataRefresh: {
-            type: Boolean,
-            value: false
-          },
-          requiredDataLoaded: {
-            type: Boolean,
-            value: false
-          },
-          initComplete: {
-            type: Boolean,
-            value: false,
-          },
-          debounceTime: {
-            type: Number,
-            value: 50
-          },
-          qs: {
-            type: String
-          },
-          urlParams: {
-            type: Object,
-          },
-          sectors: {
-            type: Array,
-            statePath: 'sectors'
-          },
-          statuses: {
-            type: Array,
-            statePath: 'statuses'
-          },
-          offices: {
+          officeItems: {
             type: Array,
             statePath: 'offices'
           },
-          selectedSectors: {
-            type: Array,
-            observer: '_filterChanged'
+          partnership: {
+            type: Object,
+            notify: true,
+            observer: '_partnershipChanged'
           },
-          selectedOffices: {
-            type: Array,
-            observer: '_filterChanged'
+          filter: {
+            type: Object,
+            notify: true,
           },
-          selectedStatuses: {
-            type: Array,
-            observer: '_filterChanged'
-          },
-          startAfterDate: {
-            type: String,
-            observer: '_dateChanged'
-          },
-          startBeforeDate: {
-            type: String,
-            observer: '_dateChanged'
-          },
-          endBeforeDate: {
-            type: String,
-            observer: '_dateChanged'
-          },
-          endAfterDate: {
-            type: String,
-            observer: '_dateChanged'
+          data: {
+            type: Object,
+            notify: true
           }
-
         },
-
-        _init: function(active, sectors, statuses, offices) {
-          var params = this.urlParams;
-          var staticLoaded = this._allHaveValues('sectors', 'statuses', 'offices');
-          if (!active || !params || !staticLoaded) {
-            return;
-          }
-          this.set('initComplete', false);
-          this.set('qs', params.qs ? params.qs : '');
-          this.set('pageNumber', params.page ? parseInt(params.page) : 1);
-          this.set('pageSize', params.size ? parseInt(params.size) : 10);
-          this.set('sortOrder', params.sort ? params.sort : 'asc');
-          this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
-          this.set('selectedOffices', params.offices ? this._setSelectedOffices(params.offices) : []);
-          this.set('selectedStatuses', params.status ? this._setSelectedStatuses(params.status) : []);
-          this.set('startAfterDate', params.startAfter ? params.startAfter : '');
-          this.set('endBeforeDate', params.endBefore ? params.endBefore : '');
-          this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
-          this.set('endAfterDate', params.endAfter ? params.endAfter : '');
-          this.set('initComplete', true);
-          this._updateSelectedFiltersValues();
-
-        },
-
-        _initListFilters: function(sectors, statuses, offices) {
-          this.debounce('init-list-filters', function() {
-            this.initListFiltersData([
-              {
-                filterName: 'Section/Cluster',
-                type: 'esmm',
-                optionValue: 'value',
-                optionLabel: 'label',
-                selectionOptions: this.sectors,
-                alreadySelected: [],
-                path: 'selectedSectors'
-              },
-              {
-                filterName: 'Field Office',
-                type: 'esmm',
-                optionValue: 'id',
-                optionLabel: 'name',
-                selectionOptions: this.offices,
-                alreadySelected: [],
-                path: 'selectedOffices'
-              },
-              {
-                filterName: 'Status',
-                type: 'esmm',
-                optionValue: 'value',
-                optionLabel: 'label',
-                selectionOptions: this.statuses,
-                alreadySelected: [],
-                path: 'selectedStatuses'
-              },
-              {
-                filterName: 'Starts After',
-                type: 'datepicker', // etools-datepicker
-                path: 'startAfterDate',
-                dateSelected: ''
-              },
-              {
-                filterName: 'Ends Before',
-                type: 'datepicker', // etools-datepicker
-                path: 'endBeforeDate',
-                dateSelected: ''
-              },
-              {
-                filterName: 'Starts Before',
-                type: 'datepicker', // etools-datepicker
-                path: 'startBeforeDate',
-                dateSelected: ''
-              },
-              {
-                filterName: 'Ends After',
-                type: 'datepicker', // etools-datepicker
-                path: 'endAfterDate',
-                dateSelected: ''
-              }
-
-            ]);
-          }.bind(this), 100);
-        },
-
-        _updateSelectedFiltersValues: function() {
-          this.debounce('updateShownFilters', function() {
-            var filtersValues = [
-              {
-                filterName: 'Section/Cluster',
-                selectedValue: _.map(this.selectedSectors, 'value')
-              },
-              {
-                filterName: 'Field Office',
-                selectedValue: _.map(this.selectedOffices, 'id')
-              },
-              {
-                filterName: 'Status',
-                selectedValue: _.map(this.selectedStatuses, 'value')
-              },
-              {
-                filterName: 'Starts After',
-                selectedValue: this.startAfterDate
-              },
-              {
-                filterName: 'Starts Before',
-                selectedValue: this.startBeforeDate
-              },
-              {
-                filterName: 'Ends Before',
-                selectedValue: this.endBeforeDate
-              },
-              {
-                filterName: 'Ends After',
-                selectedValue: this.endAfterDate
-              }
-            ];
-            this.updateShownFilters(filtersValues);
-          }.bind(this), 200);
-        },
-
-        _updateUrl: function() {
-          if (!this.initComplete || !this.requiredDataLoaded) {
-            return;
-          }
-          var qs = this._buildQueryString();
-          if (qs !== null) {
-            this.updateAppState('dashboard/partnerships', qs, true);
-            if (this.requiredDataLoaded) {
-              this._filterPartnershipsData();
-            }
-          } else {
-            if (location.search === '') {
-              this.updateAppState('dashboard/partnerships', qs, false);
-            }
-            if (this.forceDataRefresh && this.requiredDataLoaded) {
-              this._filterPartnershipsData();
-              this.set('forceDataRefresh', false);
+        init: function(active) {
+          if (active) {
+            if (!this.filter) {
+              this.set('filter', {
+                country_programme: null,
+                office: null
+              });
             }
           }
-        },
-
-        _buildQueryString: function() {
-          var qs = [];
-          if (this.pageNumber && this.pageNumber > 1) {
-            qs.push('page=' + this.pageNumber);
-          }
-          if (this.pageSize) {
-            qs.push('size=' + this.pageSize);
-          }
-          if (!_.isEmpty(this.qs)) {
-            qs.push('qs=' + this.qs);
-          }
-          if (!_.isEmpty(this.selectedSectors)) {
-            qs.push('sectors=' + _.map(this.selectedSectors, 'value').join('|'));
-          }
-          if (!_.isEmpty(this.selectedOffices)) {
-            qs.push('offices=' + _.map(this.selectedOffices, 'id').join('|'));
-          }
-          if (!_.isEmpty(this.selectedStatuses)) {
-            qs.push('status=' + _.map(this.selectedStatuses, 'value').join('|'));
-          }
-          if (!_.isEmpty(this.startAfterDate)) {
-            qs.push('startAfter=' + this.prettyDate(this.startAfterDate, 'YYYY-MM-DD'));
-          }
-          if (!_.isEmpty(this.endBeforeDate)) {
-            qs.push('endBefore=' + this.prettyDate(this.endBeforeDate, 'YYYY-MM-DD'));
-          }
-          if (!_.isEmpty(this.startBeforeDate)) {
-            qs.push('startBefore=' + this.prettyDate(this.startBeforeDate, 'YYYY-MM-DD'));
-          }
-          if (!_.isEmpty(this.endAfterDate)) {
-            qs.push('endAfter=' + this.prettyDate(this.endAfterDate, 'YYYY-MM-DD'));
-          }
-          if (!_.isEmpty(this.sortOrder)) {
-            qs.push('sort=' + this.sortOrder);
-          }
-
-          return qs.join('&');
-        },
-
-        _buildCsvDownloadUrl: function() {
-          var queryString = '';
-          var endpointUrl = '';
-          var params = [];
-
-          if (!_.isEmpty(this.selectedSectors)) {
-            params.push('sector=' + this.selectedSectors[0].value)
-          }
-        },
-
-        _filterPartnershipsData: function() {
-          this.$.partnerships.query(
-            this.qs,
-            this.sortOrder,
-            this.pageSize,
-            this.pageNumber,
-            _.map(this.selectedSectors, 'label'),
-            _.map(this.selectedOffices, 'name'),
-            _.map(this.selectedStatuses, 'value'),
-            this.startAfterDate,
-            this.endBeforeDate,
-            this.startBeforeDate,
-            this.endAfterDate
-          );
-        },
-
-        _requiredDataLoaded: function(e) {
-          event.stopImmediatePropagation();
-          var listDataPath = Polymer.dom(event).localTarget.getAttribute('list-data-path');
-          var list = this.get(listDataPath);
-
-          if (typeof list === 'undefined' ||
-            (Array.isArray(list) && list.length === 0)) {
-            this.set('forceDataRefresh', true);
-          }
-          // recheck params to trigger agreements filtering
-          this.set('initComplete', false);
-          this.set('requiredDataLoaded', true);
-          this._init(this.active);
-        },
-
-        _setSelectedOffices: function(officesStr) {
-          var officesIdsArr = officesStr.split('|');
-          if (!_.isEmpty(officesIdsArr)) {
-            officesIdsArr = officesIdsArr.map(function(n) {
-              return parseInt(n, 10);
-            });
-            return this.offices.filter(function(o) {
-              return officesIdsArr.indexOf(parseInt(o.id, 10)) > -1;
-            })
-          }
-          return [];
-        },
-
-        _setSelectedSectors: function(sectorsStr) {
-          var sectorsArr = sectorsStr.split('|');
-          if (!_.isEmpty(sectorsArr)) {
-            var selectedSectors = this.sectors.filter(function(s) {
-              return sectorsArr.indexOf(s.value) > -1;
-            });
-            return selectedSectors;
-          }
-          return [];
-        },
-
-        _setSelectedStatuses: function(statuses) {
-          var statusesStrArr = statuses.split('|');
-          if (_.isEmpty(this.statuses)) {
-            return [];
-          }
-          return this.statuses.filter(function(status) {
-            return statusesStrArr.indexOf(status.value) > -1;
-          });
-        },
-
-        _getDisbursements: function(disb, fr) {
-          return disb === '0.00' ? '0' : (Number(disb) / Number(fr) * 100).toFixed(1);
         },
         _filterChanged: function() {
-          this.set('debounceTime', 200);
-          this.set('pageNumber', 1);
+          var filter = {country_programme: null, office: null};
+          if (this.country_programme) {
+            this.$.cpDropdown.invalid = false;
+            filter = {
+              country_programme: parseInt(this.country_programme, 10),
+              office: parseInt(this.office, 10)
+            };
+          }else {
+            if (this.office) {
+              this.$.cpDropdown.invalid = true;
+            }else {
+              this.$.cpDropdown.invalid = false;
+            }
+          }
+          if (!_.isEqual(this.filter, filter)) {
+            this.set('filter', filter);
+          }
         },
-        pageSizeChanged: function(e) {
-          this.set('debounceTime', 200);
-          this.set('pageNumber', 1);
-          this.set('pageSize', parseInt(e.detail.value));
-        },
-        pageNumberChanged: function(e) {
-          this.set('debounceTime', 50);
-          this.set('pageNumber', e.detail.value);
-        },
-        _dateChanged: function(date) {
-          this.set('pageNumber', 1);
-        },
-
-
+        _partnershipChanged: function(partnership) {
+          var formatted = {
+            rows: [
+              {
+                title: 'Active Programme Documents for this year',
+                number_partnerships: partnership.active_this_year_count,
+                total_value: partnership.active_this_year_value,
+                percent_active: partnership.active_this_year_percentage
+              },
+              {
+                title: 'Active Partnerships approved in previous years',
+                number_partnerships: partnership.active_last_year_count,
+                total_value: partnership.active_last_year_value,
+                percent_active: partnership.active_last_year_percentage
+              },
+              {
+                title: 'Expiring Partnerships in next two months',
+                number_partnerships: partnership.expire_in_two_months_count,
+                total_value: partnership.expire_in_two_months_value,
+                percent_active: partnership.expire_in_two_months_percentage
+              }
+            ],
+            byType: _.values(partnership.partners)
+          };
+          this.set('data', formatted);
+          this.fire('global-loading', {active: false});
+        }
       });
+
     })();
   </script>
+
 </dom-module>

@@ -100,14 +100,11 @@
       <div class="toolbar-title toolbar-item flex-2">
         Trip management
       </div>
-      <paper-button class="button toolbar-item">
-        <a href="[[baseSite]]/t2f/travel-list/" on-tap="goToPage" app-name="t2f" page="travel-list">
-          <iron-icon icon="maps:transfer-within-a-station"></iron-icon>
-          Travel 2 Field
-        </a>
-
+      <paper-button on-tap="_goToPage" app-name="t2f" page="travel-list" class="button toolbar-item">
+        <iron-icon icon="maps:transfer-within-a-station"></iron-icon>
+        Travel 2 Field
       </paper-button>
-      <paper-button on-tap="goToPage" app-name="t2f" page="action-points-list" class="button toolbar-item">
+      <paper-button on-tap="_goToPage" app-name="t2f" page="action-points-list" class="button toolbar-item">
         <iron-icon icon="list"></iron-icon>
         Action Points
       </paper-button>
@@ -130,25 +127,22 @@
             </paper-tab>
           </paper-tabs>
         </div>
-        <div class="list-content">
-          <template is="dom-repeat" items="[[tripsItems]]" as="trip">
-            <data-table-row no-collapse>
-              <div slot="row-data">
-                <a on-tap="goToPage" href="[[baseSite]]/t2f/edit-travel/[[trip.id]]" app-name="t2f" page="edit-travel"
-                   id="[[trip.id]]" class="col-data col">
-                  [[trip.reference_number]]
-                </a>
-                <span class="description description-size col-data flex-2">
+        <template is="dom-repeat" items="[[tripsItems]]" as="trip">
+          <data-table-row no-collapse>
+            <div slot="row-data">
+              <a on-tap="_goToPage" app-name="t2f" page="edit-travel" id="[[trip.id]]" class="col-data col">
+                [[trip.reference_number]]
+              </a>
+              <span class="description description-size col-data flex-2">
                 [[trip.purpose]]
               </span>
-                <div class="layout vertical start col-data col-2 ">
-                  <span class="col-data">[[_dateFormatted(trip.start_date)]]</span>
-                  <span class="suppData">[[_getDisplayName('trips',trip)]]</span>
-                </div>
+              <div class="layout vertical start col-data col-2 ">
+                <span class="col-data">[[_dateFormatted(trip.start_date)]]</span>
+                <span class="suppData">[[_getDisplayName('trips',trip)]]</span>
               </div>
-            </data-table-row>
-          </template>
-        </div>
+            </div>
+          </data-table-row>
+        </template>
       </paper-material>
 
       <!-- ACTION POINTS -------------------------->
@@ -168,28 +162,26 @@
             </paper-tab>
           </paper-tabs>
         </div>
-        <div class="list-content">
-          <template is="dom-repeat" items="[[actionPointsItems]]" as="action">
-            <data-table-row no-collapse>
-              <div slot="row-data">
-                <div class="layout vertical col-10">
+        <template is="dom-repeat" items="[[actionPointsItems]]" as="action">
+          <data-table-row no-collapse>
+            <div slot="row-data">
+              <div class="layout vertical col-10">
                                 <span class="col-data description">
-                                    <a on-tap="_goToActionPoint" href="[[baseSite]]/t2f/action-point/[[action.id]]">[[action.description]]</a>
+                                    <a on-tap="_goToActionPoint">[[action.description]]</a>
                                 </span>
-                  <span class="suppData">[[action.status]]</span>
-                </div>
-                <div class="layout vertical start col-data col-2 ">
-                  <span class="col-data">[[_dateFormatted(action.created_at)]]</span>
-                  <span class="suppData">[[_getDisplayName('actions',action)]]</span>
-                </div>
+                <span class="suppData">[[action.status]]</span>
               </div>
-            </data-table-row>
-          </template>
-        </div>
+              <div class="layout vertical start col-data col-2 ">
+                <span class="col-data">[[_dateFormatted(action.created_at)]]</span>
+                <span class="suppData">[[_getDisplayName('actions',action)]]</span>
+              </div>
+            </div>
+          </data-table-row>
+        </template>
       </paper-material>
     </div>
 
-    <!-- PARTNERSHIP MANAGEMENT TOOLBAR-->
+    <!--MANAGEMENT TOOLBAR-->
     <paper-material class="list-panel management-toolbar layout horizontal center">
       <div class="toolbar-icon-container partnership-management">
         <iron-icon class="toolbar-icon" icon="social:group"></iron-icon> <!-- Placeholder icon -->
@@ -197,30 +189,21 @@
       <div class="toolbar-title toolbar-item flex-2">
         Partnership management
       </div>
-      <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/partners" app-name="pmp" page="partners">
-          <iron-icon icon="social:people"></iron-icon>
-          Partners
-        </a>
+      <paper-button on-tap="_goToPage" app-name="pmp" page="partners/list" class="button toolbar-item">
+        <iron-icon icon="social:people"></iron-icon>
+        Partners
       </paper-button>
-      <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/aggreements" app-name="pmp" page="agreements">
-          <iron-icon icon="av:playlist-add-check"></iron-icon>
-          Agreements
-        </a>
+      <paper-button on-tap="_goToPage" app-name="pmp" page="agreements/list" class="button toolbar-item">
+        <iron-icon icon="av:playlist-add-check"></iron-icon>
+        Agreements
       </paper-button>
-      <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions" app-name="pmp"
-           page="interventions">
-          <iron-icon icon="verified-user"></iron-icon>
-          PD/SSFA TOR
-        </a>
+      <paper-button on-tap="_goToPage" app-name="pmp" page="interventions/list" class="button toolbar-item">
+        <iron-icon icon="verified-user"></iron-icon>
+        PD/SSFA TOR
       </paper-button>
-      <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/governments" app-name="pmp" page="governments">
-          <iron-icon icon="account-balance"></iron-icon>
-          Goverment-in-simple
-        </a>
+      <paper-button on-tap="_goToPage" app-name="pmp" page="governments/list" class="button toolbar-item">
+        <iron-icon icon="account-balance"></iron-icon>
+        Goverment-in-simple
       </paper-button>
     </paper-material>
 
@@ -232,23 +215,20 @@
       <template is="dom-if" if="[[!partnershipsLoaded]]">
         <etools-loading active></etools-loading>
       </template>
-      <div class="list-content">
-        <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden$="[[!partnershipsLoaded]]">
-          <data-table-row no-collapse>
-            <div slot="row-data">
-              <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[partnership.id]]/details" app-name="pmp"
-                 page="interventions" id="[[partnership.id]]/details"
-                 class="col-data col-2">
-                [[partnership.number]]
-              </a>
-              <span class="description description-size flex-3 col-data">
+      <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden$="[[!partnershipsLoaded]]">
+        <data-table-row no-collapse>
+          <div slot="row-data">
+            <a on-tap="_goToPage" app-name="pmp" page="interventions" id="[[partnership.id]]/details"
+               class="col-data col-2">
+              [[partnership.number]]
+            </a>
+            <span class="description description-size flex-3 col-data">
                             [[partnership.title]]
                         </span>
-              <span class="col-data col-2 layout horizontal end-justified">[[currencyFormat(partnership.unicef_budget)]] (Total Budget)</span>
-            </div>
-          </data-table-row>
-        </template>
-      </div>
+            <span class="col-data col-2 layout horizontal end-justified">[[currencyFormat(partnership.unicef_budget)]] (Total Budget)</span>
+          </div>
+        </data-table-row>
+      </template>
 
     </paper-material>
 
@@ -279,6 +259,7 @@
           statePath: 'trips',
         },
         tripsSupervised: {
+          type: Array,
           statePath: 'tripsSupervised'
         },
         actionPointsItems: {
@@ -300,7 +281,7 @@
         partnershipsLoaded: {
           type: Boolean,
           value: false
-        },
+        }
       },
       _updateTrips: function() {
         this._setItems(this.tripsTab, 'tripsItems');
@@ -316,11 +297,6 @@
       _staticDataLoaded: function() {
         if (this.myTrips && this.tripsSupervised && this.actionPointsItems && this.actionPointsForMe) {
           this.fire('global-loading');
-        } else {
-          this.fire('global-loading', {
-            message: 'Loading data...',
-            active: true
-          });
         }
       },
       _setItems: function(tab, itemsProp) {
@@ -340,17 +316,19 @@
       _dateFormatted: function(str) {
         return moment(str).format('DD MMM YYYY');
       },
-      
       _updateUrl: function(active) {
         if (active) {
           this.updateAppState('dashboard/personalized', [], true);
         }
       },
-
+      _goToPage: function(e) {
+        var path = [this.baseSite, e.target.getAttribute('app-name'),
+              e.target.getAttribute('page')].join('/') + '/' + e.target.id;
+        window.location.href = path;
+      },
       _goToActionPoint: function(e) {
-        var origin = window.location.origin;
-        var path = origin + '/t2f/action-point/' + e.model.action.id;
-        this.manageClickEvent(e, path);
+        var path = this.baseSite + '/' + 't2f/action-point/' + e.model.action.id;
+        window.open(path, '_blank');
       }
     });
   </script>
