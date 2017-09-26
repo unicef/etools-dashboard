@@ -23,6 +23,7 @@
   "private": true,
   "devDependencies": {
     "babel-core": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-es2017": "^6.24.1",
     "browser-sync": "^2.18.7",
     "css-slam": "^1.1.0",
