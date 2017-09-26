@@ -73,6 +73,9 @@
 
     // update ADD FILTER menu options
     _updateAvailableFilterOptions: function() {
+      if (!(this.listFilterOptions instanceof Array && this.listFilterOptions.length > 0)) {
+        return;
+      }
       var availableOptions = this.listFilterOptions.filter(function(option) {
         var selectedOpt = this.selectedFilters.filter(function(selectedFilter) {
           return selectedFilter.filterName === option.filterName;
@@ -124,7 +127,7 @@
     // 'esmm' (etools-searchable-multiselection-menu) filter value changed
     esmmValueChanged: function(event) {
       var filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
-      var filterVal = event.detail.selectedValues;
+      var filterVal = event.detail.selectedItems;
       this.set(filterPath, filterVal);
     },
 
@@ -143,8 +146,9 @@
       return value && ((typeof value === 'string' && value !== '')
           || (Array.isArray(value) && value.length > 0));
     },
-    // update shown filters
-    updateShownFilters: function(filters) {
+         // update shown filters
+     updateShownFilters: function(filters) {
+      var i;
       if (!filters) {
         filters = [];
       }
@@ -153,16 +157,21 @@
           // check available filters
           if (this._validateFilterSelectedValue(filter.selectedValue)) {
             var foundInAvailable = false;
-            if (this.availableListFilterOptions.length > 0) {
-              for (var i = 0; i < this.availableListFilterOptions.length; i++) {
+            if (this.availableListFilterOptions instanceof Array && this.availableListFilterOptions.length > 0) {
+              for (i = 0; i < this.availableListFilterOptions.length; i++) {
                 if (this.availableListFilterOptions[i].filterName === filter.filterName) {
-                  if (this.availableListFilterOptions[i].type === 'esmm' || this.availableListFilterOptions[i].type === 'dropdown') {
+                  const type = this.availableListFilterOptions[i].type;
+                  let filterPath = '';
+                  if (type === 'esmm' || type === 'dropdown') {
                     // update esmm dropdown selection
-                    this.set('availableListFilterOptions.' + i + '.alreadySelected', filter.selectedValue);
-                  } else if (this.availableListFilterOptions[i].type === 'datepicker') {
+                    filterPath = 'availableListFilterOptions.' + i;
+                    this.set(filterPath + '.alreadySelected', filter.selectedValue);
+                  } else if (type === 'datepicker') {
                     // update datepicker selection
-                    this.set('availableListFilterOptions.' + i + '.dateSelected', filter.selectedValue);
+                    filterPath = 'availableListFilterOptions.' + i;
+                    this.set(filterPath + '.dateSelected', filter.selectedValue);
                   }
+                  this._disableFilter(filter, filterPath);
                   // add filter to selected filters list
                   this.push('selectedFilters', this.availableListFilterOptions[i]);
                   foundInAvailable = true;
@@ -171,18 +180,22 @@
               }
             }
             // if the filter is not in available filters lists,
-            // search it in selected filters lists and update selected value0
+            // search it in selected filters lists and update selected value
             if (!foundInAvailable) {
-              if (this.selectedFilters.length > 0) {
-                for (var i = 0; i < this.selectedFilters.length; i++) {
+              if (this.selectedFilters instanceof Array && this.selectedFilters.length > 0) {
+                for (i = 0; i < this.selectedFilters.length; i++) {
                   if (this.selectedFilters[i].filterName === filter.filterName) {
+                    var filterPath = '';
                     if (this.selectedFilters[i].type === 'esmm' || this.selectedFilters[i].type === 'dropdown') {
                       // update esmm dropdown selection
-                      this.set('selectedFilters.' + i + '.alreadySelected', filter.selectedValue);
+                      filterPath = 'selectedFilters.' + i;
+                      this.set(filterPath + '.alreadySelected', filter.selectedValue);
                     } else if (this.selectedFilters[i].type === 'datepicker') {
                       // update datepicker selection
-                      this.set('selectedFilters.' + i + '.dateSelected', filter.selectedValue);
+                      filterPath = 'selectedFilters.' + i;
+                      this.set(filterPath + '.dateSelected', filter.selectedValue);
                     }
+                    this._disableFilter(filter, filterPath);
                     break;
                   }
                 }
@@ -192,6 +205,12 @@
         }.bind(this));
         // refresh available filters and remove those selected
         this._updateAvailableFilterOptions();
+      }
+    },
+
+    _disableFilter: function(filterUpdateData, filterPath) {
+      if (filterUpdateData.hasOwnProperty('disabled') && filterPath !== '') {
+        this.set(filterPath + '.disabled', filterUpdateData.disabled);
       }
     }
 
