@@ -98,3 +98,4 @@ workflows:
                 - master
                 - staging
                 - develop
+                - rob-ci-updates
