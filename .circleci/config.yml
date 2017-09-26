@@ -50,40 +50,17 @@ jobs:
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin
            # build and push Docker image
-      - run: |
+      - run:
+        name: Building the image
+        command: |
           TAG=${CIRCLE_BRANCH}
           docker build -t unicef/etools-dashboard:$TAG .
+      - run:
+        name: Pushing to Docker Hub
+        command: |
           docker login -u $DOCKER_USER -p $DOCKER_PASS
           docker push unicef/etools-dashboard:$TAG
 
-#  build_and_deploy:
-#    machine:
-#      enabled: true
-#    branches:
-#       only:
-#         - develop
-#         - staging
-#         - master
-#    steps:
-#      - run:
-#         name: Build Docker container
-#         command: |
-#            docker build -t unicef/etools-dash:${CIRCLE_BRANCH} .
-#      - deploy:
-#         command: |
-#
-#  deploy:
-#    steps:
-#      - checkout
-#      # build and push Docker image
-#      - deploy:
-#          command: |
-#            if [ "${CIRCLE_BRANCH}" == "mybranch" ]; then
-#              docker build things
-#              docker login
-#              docker push things
-#            fi
-#
 workflows:
   version: 2
   build_and_test:
@@ -98,4 +75,4 @@ workflows:
                 - master
                 - staging
                 - develop
-                - rob-ci-updates
+                - prp-refactoring
