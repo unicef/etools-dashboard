@@ -17,16 +17,14 @@
   <script>
     (function() {
       'use strict';
-      class PartnersData {
-        this.is = 'partners-data';
-        get behaviors() {
-          return [
-            dashBehaviors.DataElementBehavior,
-            etoolsAppConfig.globals
-          ]
-        };
-        this.observers = ['init(active)'];
-        this.properties = {
+       Polymer( {
+        is: 'partners-data',
+        behaviors: [
+          dashBehaviors.DataElementBehavior,
+          etoolsAppConfig.globals
+        ],
+        observers: ['init(active)'],
+        properties: {
           endpointName: {
             type: String,
             value: 'partners'
@@ -68,15 +66,15 @@
             value: false
           }
 
-        };
-        init(active) {
+        },
+        init: function(active) {
           if (active && !this.loadedInitially) {
             this.fire('global-loading', {message: 'Loading partners data...', active: true});
             this._elementReady();
             this.set('loadedInitially', true);
           }
-        }
-        query(searchString, order, pageSize, pageNumber) {
+        },
+        query: function(searchString, order, pageSize, pageNumber) {
           var self = this;
           this.db.partners.toArray().then(function(res) {
             self._setTotals(self._computeTotals(res));
@@ -98,9 +96,9 @@
               queryResult.count(),
               // Use clone() as offset() and limit() otherwise mutates the same query that is counted
               queryResult.clone()
-                .offset((pageNumber - 1) * pageSize)
-                .limit(pageSize)
-                .toArray()]);
+                  .offset((pageNumber - 1) * pageSize)
+                  .limit(pageSize)
+                  .toArray()]);
           }).then(function(countAndResult) {
             self._setFilteredTotalResults(countAndResult[0]);
             self._setFilteredPartners(countAndResult[1]);
@@ -119,17 +117,17 @@
               'hact_min_requirements',
             ]).value();
             _.assign(picked, _.pick(picked.hact_values, [
-                'planned_cash_transfer',
-                'planned_visits',
-                'programmatic_visits',
-                'spot_checks',
-                'audits_mr',
-                'audits_done',
-                'follow_up_flags'
-              ]), _.pick(picked.hact_min_requirements, 'programme_visits'),
-              {
-                mr_spot_checks: picked.hact_min_requirements.spot_checks
-              });
+                  'planned_cash_transfer',
+                  'planned_visits',
+                  'programmatic_visits',
+                  'spot_checks',
+                  'audits_mr',
+                  'audits_done',
+                  'follow_up_flags'
+                ]), _.pick(picked.hact_min_requirements, 'programme_visits'),
+                {
+                  mr_spot_checks: picked.hact_min_requirements.spot_checks
+                });
             picked = _.omit(picked, ['hact_values', 'hact_min_requirements']);
             _(picked).each(function(val, key) {
               var currValue = sum[key] ? sum[key] : 0;
@@ -142,132 +140,9 @@
             return sum;
           }, {});
         },
-      }
-      Polymer({
-//        is: 'partners-data',
-//        behaviors: [
-//          dashBehaviors.DataElementBehavior,
-//          etoolsAppConfig.globals
-//        ],
-//        observers: ['init(active)'],
-//        properties: {
-//          endpointName: {
-//            type: String,
-//            value: 'partners'
-//          },
-//          currentQuery: {
-//            type: Object,
-//            value: null
-//          },
-//          filteredPartners: {
-//            type: Array,
-//            readOnly: true,
-//            notify: true
-//          },
-//          totalResults: {
-//            type: Number,
-//            readOnly: true,
-//            notify: true
-//          },
-//          filteredTotalResults: {
-//            type: Number,
-//            readOnly: true,
-//            notify: true
-//          },
-//          totals: {
-//            type: Array,
-//            notify: true,
-//            readOnly: true
-//          },
-//          dataLoadedEventName: {
-//            type: String,
-//            value: 'partners-loaded'
-//          },
-//          loadedInitially: {
-//            type: Boolean,
-//            value: false
-//          },
-//          resultsTotals: {
-//            type: Boolean,
-//            value: false
-//          }
-//
-//        },
-//        init: function(active) {
-//          if (active && !this.loadedInitially) {
-//            this.fire('global-loading', {message: 'Loading partners data...', active: true});
-//            this._elementReady();
-//            this.set('loadedInitially', true);
-//          }
-//        },
-//        query: function(searchString, order, pageSize, pageNumber) {
-//          var self = this;
-//          this.db.partners.toArray().then(function(res) {
-//            self._setTotals(self._computeTotals(res));
-//            self._setTotalResults(res.length);
-//          });
-//          this.db.transaction('r', this.db.partners, function() {
-//            var queryResult = self.db.partners;
-//            if (order === 'desc') {
-//              queryResult = queryResult.reverse();
-//            } else {
-//              queryResult = queryResult.toCollection();
-//            }
-//            if (!_.isEmpty(searchString)) {
-//              queryResult = queryResult.filter(function(partner) {
-//                return _.includes(partner.name.toLowerCase(), searchString.toLowerCase());
-//              });
-//            }
-//            return Dexie.Promise.all([
-//              queryResult.count(),
-//              // Use clone() as offset() and limit() otherwise mutates the same query that is counted
-//              queryResult.clone()
-//                  .offset((pageNumber - 1) * pageSize)
-//                  .limit(pageSize)
-//                  .toArray()]);
-//          }).then(function(countAndResult) {
-//            self._setFilteredTotalResults(countAndResult[0]);
-//            self._setFilteredPartners(countAndResult[1]);
-//          }).catch(function(error) {
-//            console.error('Error querying partners: ', error);
-//          });
-//        },
-//        _computeTotals: function(results) {
-//          this.resultsTotals = true
-//          return _(results).reduce(function(sum, obj) {
-//            var picked = _(obj).pick([
-//              'shared_partner',
-//              'total_ct_cp',
-//              'hact_values',
-//              'total_ct_cy',
-//              'hact_min_requirements',
-//            ]).value();
-//            _.assign(picked, _.pick(picked.hact_values, [
-//                  'planned_cash_transfer',
-//                  'planned_visits',
-//                  'programmatic_visits',
-//                  'spot_checks',
-//                  'audits_mr',
-//                  'audits_done',
-//                  'follow_up_flags'
-//                ]), _.pick(picked.hact_min_requirements, 'programme_visits'),
-//                {
-//                  mr_spot_checks: picked.hact_min_requirements.spot_checks
-//                });
-//            picked = _.omit(picked, ['hact_values', 'hact_min_requirements']);
-//            _(picked).each(function(val, key) {
-//              var currValue = sum[key] ? sum[key] : 0;
-//              if (key === 'shared_partner') {
-//                sum[key] = currValue + (val === 'No' ? 0 : 1);
-//              } else {
-//                sum[key] = currValue + Number(val);
-//              }
-//            }).value();
-//            return sum;
-//          }, {});
-//        },
       });
-    })();
+    }
+    )();
 
   </script>
 </dom-module>
