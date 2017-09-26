@@ -1,0 +1,78 @@
+version: 2
+jobs:
+  test:
+    working_directory: ~/code
+    # The primary container is an instance of the first list image listed. Your build commands run in this container.
+    docker:
+      - image: robertavram/etools-dash-base:tst
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install npm wee
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - restore_cache:
+          key: dependency-cache-{{ checksum "bower.json" }}
+      - run:
+          name: Install bower components
+          command: bower install --allow-root --config.interactive=false -s
+      - save_cache:
+          key: dependency-cache-{{ checksum "bower.json" }}
+          paths:
+            - bower_components
+      - run:
+          name: Gulping
+          command: gulp
+      - run:
+          name: Run Tests
+          command: |
+            xvfb-run polymer test --skip-selenium-install
+
+  build_and_deploy:
+    working_directory: ~/code
+    # The primary container is an instance of the first list image listed. Your build commands run in this container.
+    docker:
+      - image: robertavram/etools-dash-base:tst
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.03.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+           # build and push Docker image
+      - run:
+        name: Building the image
+        command: |
+          TAG=${CIRCLE_BRANCH}
+          docker build -t unicef/etools-dashboard:$TAG .
+      - run:
+        name: Pushing to Docker Hub
+        command: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+          docker push unicef/etools-dashboard:$TAG
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - test
+      - build_and_deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
+                - staging
+                - develop
+                - prp-refactoring
