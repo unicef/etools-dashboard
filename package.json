@@ -55,7 +55,7 @@
     "plylog": "^0.4.0",
     "polymer-build": "^0.4.0",
     "prettier-eslint": "^8.0.0",
-    "uglify-es": "^3.1.2",
+    "uglify-js-harmony": "^2.7.7",
     "yargs": "^5.0.0"
   },
   "dependencies": {

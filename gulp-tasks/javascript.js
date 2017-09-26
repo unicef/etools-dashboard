@@ -3,7 +3,7 @@
 
 'use strict';
 
-const uglifyEs = require('uglify-es');
+const harmony = require('uglify-js-harmony');
 const minifier = require('gulp-uglify/minifier');
 const jshint = require('gulp-jshint');
 const jshintStylish = require('jshint-stylish');
@@ -18,7 +18,7 @@ function minify() {
     preserveComments: false
     // options
   };
-  return minifier(uglifyOptions, uglifyEs);
+  return minifier(uglifyOptions, harmony);
 }
 
 // Lint Javascript
@@ -32,7 +32,7 @@ var lint = lazypipe()
   .pipe(jshint.reporter);
 
 const babelify = lazypipe()
-  .pipe(()=> (gulpif('*.html', $.crisper({scriptInHead:false}))))
+  .pipe(()=> ($.if('*.html', $.crisper({scriptInHead:false}))))
   .pipe(()=> ($.if('*.js', $.babel({
     presets: ['es2017']
   }))));
