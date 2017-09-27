@@ -362,7 +362,7 @@
             return;
           }
           this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
-          var qs = this.buildQueryString();
+          const qs = this.buildQueryString();
           if (qs !== null) {
             this.updateAppState('dashboard/hact', qs, true);
             if (this.requiredDataLoaded) {
@@ -402,7 +402,7 @@
         },
 
         _getGovernmentDisplay: function(partner,prop,toCurrency) {
-          var partnerValue = _.get(partner, prop);
+          const partnerValue = _.get(partner, prop);
           if (partner.partner_type === 'Government') {
             return '-';
           } else {

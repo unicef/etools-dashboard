@@ -442,7 +442,7 @@
           if (!this.initComplete || !this.requiredDataLoaded) {
             return;
           }
-          var qs = this._buildQueryString();
+          const qs = this._buildQueryString();
           if (qs !== null) {
             this.updateAppState('dashboard/partnerships', qs, true);
             if (this.requiredDataLoaded) {
@@ -460,7 +460,7 @@
         },
 
         _buildQueryString: function() {
-          var qs = [];
+          let qs = [];
           if (this.pageNumber && this.pageNumber > 1) {
             qs.push('page=' + this.pageNumber);
           }

@@ -324,7 +324,7 @@
         }
       },
       _setItems: function(tab, itemsProp) {
-        var items = _.get(this, tab, []);
+        const items = _.get(this, tab, []);
         this.set(itemsProp, items);
       },
       _getDisplayName: function(type, item) {
@@ -349,7 +349,7 @@
 
       _goToActionPoint: function(e) {
         var origin = window.location.origin;
-        var path = origin + '/t2f/action-point/' + e.model.action.id;
+        const path = origin + '/t2f/action-point/' + e.model.action.id;
         this.manageClickEvent(e, path);
       }
     });
