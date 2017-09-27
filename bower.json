@@ -1,5 +1,5 @@
 {
-  "name": "Etools dashboard - based on polymer starter kit 2",
+  "name": "dash",
   "authors": [
     "The eTools team"
   ],
@@ -65,7 +65,7 @@
     "webcomponentsjs": "^1.0.4"
   },
   "devDependencies": {
-    "web-component-tester": "^4.0.0"
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0"
   },
   "resolutions": {
     "etools-searchable-multiselection-menu": "4109c20",
