@@ -14,7 +14,7 @@ const $ = require('gulp-load-plugins')();
 const gulpif = require('gulp-if');
 // Minify Javascript
 function minify() {
-  var uglifyOptions = {
+  const uglifyOptions = {
     preserveComments: false
     // options
   };
@@ -22,7 +22,7 @@ function minify() {
 }
 
 // Lint Javascript
-var lint = lazypipe()
+const lint = lazypipe()
   .pipe(jshint)
   .pipe(jscs)
   .pipe(jscsStylish.combineWithHintResults)
