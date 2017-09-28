@@ -31,7 +31,7 @@
       // update main filters
       if (this.listFilterOptions) {
         if (this.listFilterOptions.length > 0) {
-          for (let i = 0; i < this.listFilterOptions.length; i++) {
+          for (var i = 0; i < this.listFilterOptions.length; i++) {
             if (this.listFilterOptions[i].filterName === filterName) {
               this.set('listFilterOptions.' + i + '.' + property, newValue);
               break;
@@ -39,9 +39,9 @@
           }
         }
         // update available filters
-        let found = false;
+        var found = false;
         if (this.availableListFilterOptions.length > 0) {
-          for (let i = 0; i < this.availableListFilterOptions.length; i++) {
+          for (var i = 0; i < this.availableListFilterOptions.length; i++) {
             if (this.availableListFilterOptions[i].filterName === filterName) {
               this.set('availableListFilterOptions.' + i + '.' + property, newValue);
               found = true;
@@ -52,9 +52,9 @@
         // if the filter was moved from available to selected then update in selected filters
         if (!found) {
           if (this.selectedFilters.length > 0) {
-            for (let j = 0; j < this.selectedFilters.length; j++) {
-              if (this.selectedFilters[j].filterName === filterName) {
-                this.set('selectedFilters.' + j + '.' + property, newValue);
+            for (var i = 0; i < this.selectedFilters.length; i++) {
+              if (this.selectedFilters[i].filterName === filterName) {
+                this.set('selectedFilters.' + i + '.' + property, newValue);
                 break;
               }
             }
@@ -65,7 +65,7 @@
 
     // select a filter from ADD FILTER menu
     selectFilter: function(event) {
-      let selectedOption = event.model.item;
+      var selectedOption = event.model.item;
       this.push('selectedFilters', selectedOption);
       this.$.filterMenu.close();
       this._updateAvailableFilterOptions();
@@ -76,8 +76,8 @@
       if (!(this.listFilterOptions instanceof Array && this.listFilterOptions.length > 0)) {
         return;
       }
-      let availableOptions = this.listFilterOptions.filter(function(option) {
-        let selectedOpt = this.selectedFilters.filter(function(selectedFilter) {
+      var availableOptions = this.listFilterOptions.filter(function(option) {
+        var selectedOpt = this.selectedFilters.filter(function(selectedFilter) {
           return selectedFilter.filterName === option.filterName;
         })[0];
         return !selectedOpt;
@@ -87,11 +87,11 @@
 
     // remove already selected filter, also reset filter path value
     removeFilter: function(event) {
-      let filterName = Polymer.dom(event).localTarget.getAttribute('data-filter-name');
-      let path = Polymer.dom(event).localTarget.getAttribute('data-reset-path');
+      var filterName = Polymer.dom(event).localTarget.getAttribute('data-filter-name');
+      var path = Polymer.dom(event).localTarget.getAttribute('data-reset-path');
 
-      let selectedFilterIndex = -1;
-      for (let i = 0; i < this.selectedFilters.length; i++) {
+      var selectedFilterIndex = -1;
+      for (var i = 0; i < this.selectedFilters.length; i++) {
         if (this.selectedFilters[i].filterName === filterName) {
           selectedFilterIndex = i;
           this.selectedFilters[i].alreadySelected = null;
@@ -109,8 +109,8 @@
 
     // filter value changed, update filter path with the new value
     filterValueChanged: function(event) {
-      let filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
-      let filterVal = Polymer.dom(event).localTarget.selected;
+      var filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
+      var filterVal = Polymer.dom(event).localTarget.selected;
       this.set(filterPath, filterVal);
     },
 
@@ -126,15 +126,15 @@
 
     // 'esmm' (etools-searchable-multiselection-menu) filter value changed
     esmmValueChanged: function(event) {
-      let filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
-      let filterVal = event.detail.selectedItems;
+      var filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
+      var filterVal = event.detail.selectedItems;
       this.set(filterPath, filterVal);
     },
 
     // change event for a etoold-datepicker filter
     _filterDateHasChanged: function(event) {
-      let filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
-      let parentField = Polymer.dom(event).localTarget.parentNode;
+      var filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
+      var parentField = Polymer.dom(event).localTarget.parentNode;
       if (parentField) {
         parentField.value = event.detail.prettyDate;
       }
@@ -143,12 +143,12 @@
     },
 
     _validateFilterSelectedValue: function(value) {
-      return value && ((typeof value === 'string' && value !== '') ||
-        (Array.isArray(value) && value.length > 0));
+      return value && ((typeof value === 'string' && value !== '')
+          || (Array.isArray(value) && value.length > 0));
     },
          // update shown filters
      updateShownFilters: function(filters) {
-      let i;
+      var i;
       if (!filters) {
         filters = [];
       }
@@ -156,7 +156,7 @@
         filters.forEach(function(filter) {
           // check available filters
           if (this._validateFilterSelectedValue(filter.selectedValue)) {
-            let foundInAvailable = false;
+            var foundInAvailable = false;
             if (this.availableListFilterOptions instanceof Array && this.availableListFilterOptions.length > 0) {
               for (i = 0; i < this.availableListFilterOptions.length; i++) {
                 if (this.availableListFilterOptions[i].filterName === filter.filterName) {
@@ -185,7 +185,7 @@
               if (this.selectedFilters instanceof Array && this.selectedFilters.length > 0) {
                 for (i = 0; i < this.selectedFilters.length; i++) {
                   if (this.selectedFilters[i].filterName === filter.filterName) {
-                    let filterPath = '';
+                    var filterPath = '';
                     if (this.selectedFilters[i].type === 'esmm' || this.selectedFilters[i].type === 'dropdown') {
                       // update esmm dropdown selection
                       filterPath = 'selectedFilters.' + i;

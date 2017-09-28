@@ -18,7 +18,7 @@
 
 var Actions = [
   {
-    actionType: 'countryProgrammes',
+    actionType: 'country-programmes',
     propsArray: ['countryProgrammes'],
     endpointProps: {
       name: 'countryProgrammes'
@@ -60,7 +60,7 @@ var Actions = [
     }
   },
   {
-    actionType: 'tripsSupervised',
+    actionType: 'trips-supervised',
     propsArray: ['tripsSupervised'],
     endpointProps: function() {
       var ret = {name: 'tripsSupervised', templateProps: {id: this.user.id}};
@@ -75,7 +75,7 @@ var Actions = [
     }
   },
   {
-    actionType: 'actionPointsByMe',
+    actionType: 'action-points-by-me',
     propsArray: ['actionPointsByMe'],
     endpointProps: function() {
       var ret = {name: 'actionPointsByMe', templateProps: {id: this.user.id}};
@@ -90,7 +90,7 @@ var Actions = [
     }
   },
   {
-    actionType: 'actionPointsForMe',
+    actionType: 'action-points-for-me',
     propsArray: ['actionPointsForMe'],
     endpointProps: function() {
       var ret = {name: 'actionPointsForMe', templateProps: {id: this.user.id}};
@@ -120,7 +120,7 @@ var Actions = [
     }
   },
   {
-    actionType: 'tripsYears',
+    actionType: 'trips-years',
     propsArray: ['tripsYears'],
     endpointProps: {},
     prepareData: function() {
@@ -162,7 +162,7 @@ var Actions = [
     }
   },
   {
-    actionType: 'unicefUsers',
+    actionType: 'unicef-users',
     propsArray: ['unicefUsersData'],
     endpointProps: {
       name: 'unicefUsers',
@@ -179,7 +179,7 @@ var Actions = [
     }
   },
   {
-    actionType: 'statuses',
+    actionType: 'static-status',
     propsArray: ['statuses'],
     endpointProps: {
       name: 'static',
@@ -190,7 +190,7 @@ var Actions = [
     }
   },
   {
-    actionType: 'userCountry',
+    actionType: 'user-country',
     propsArray: ['userCountry'],
     endpointProps: {
       name: 'userCountry',
