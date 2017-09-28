@@ -176,7 +176,7 @@
                                 <span class="col-data description">
                                     <a on-tap="_goToActionPoint" href="[[baseSite]]/t2f/action-point/[[action.id]]">[[action.description]]</a>
                                 </span>
-                  <span class="suppData">[[action.status]]</span>
+                  <span class="suppData">[[capitalizeWord(action.status)]]</span>
                 </div>
                 <div class="layout vertical start col-data col-2 ">
                   <span class="col-data">[[_dateFormatted(action.created_at)]]</span>
@@ -338,9 +338,9 @@
         }
       },
       _dateFormatted: function(str) {
-        return moment(str).format('DD MMM YYYY');
+          return str ? moment(str).format('DD MMM YYYY') : '';
       },
-      
+
       _updateUrl: function(active) {
         if (active) {
           this.updateAppState('dashboard/personalized', [], true);
