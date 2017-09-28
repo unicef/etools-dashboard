@@ -324,7 +324,7 @@
         }
       },
       _setItems: function(tab, itemsProp) {
-        const items = _.get(this, tab, []);
+        var items = _.get(this, tab, []);
         this.set(itemsProp, items);
       },
       _getDisplayName: function(type, item) {
@@ -340,7 +340,7 @@
       _dateFormatted: function(str) {
         return moment(str).format('DD MMM YYYY');
       },
-
+      
       _updateUrl: function(active) {
         if (active) {
           this.updateAppState('dashboard/personalized', [], true);
@@ -349,7 +349,7 @@
 
       _goToActionPoint: function(e) {
         var origin = window.location.origin;
-        const path = origin + '/t2f/action-point/' + e.model.action.id;
+        var path = origin + '/t2f/action-point/' + e.model.action.id;
         this.manageClickEvent(e, path);
       }
     });

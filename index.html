@@ -12,138 +12,139 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-  <title>Dashboard</title>
-  <meta name="description" content="eTools Dashboard">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+    <title>Dashboard</title>
+    <meta name="description" content="eTools Dashboard">
 
-  <link rel="icon" href="/images/favicon.ico">
+    <link rel="icon" href="/images/favicon.ico">
 
-  <!-- See https://goo.gl/OOhYW5 -->
-  <link rel="manifest" href="/manifest.json">
+    <!-- See https://goo.gl/OOhYW5 -->
+    <link rel="manifest" href="/manifest.json">
 
-  <!-- See https://goo.gl/qRE0vM -->
-  <meta name="theme-color" content="#2E3AA1">
+    <!-- See https://goo.gl/qRE0vM -->
+    <meta name="theme-color" content="#2E3AA1">
 
-  <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="eTools - Dashboard">
+    <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="eTools - Dashboard">
 
-  <!-- Add to homescreen for Safari on iOS -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="eTools - Dashboard">
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="eTools - Dashboard">
 
-  <!-- Homescreen icons -->
-  <link rel="apple-touch-icon" href="/images/manifest/icon-48x48.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="/images/manifest/icon-72x72.png">
-  <link rel="apple-touch-icon" sizes="96x96" href="/images/manifest/icon-96x96.png">
-  <link rel="apple-touch-icon" sizes="144x144" href="/images/manifest/icon-144x144.png">
-  <link rel="apple-touch-icon" sizes="192x192" href="/images/manifest/icon-192x192.png">
+    <!-- Homescreen icons -->
+    <link rel="apple-touch-icon" href="/images/manifest/icon-48x48.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/manifest/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="/images/manifest/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/manifest/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/images/manifest/icon-192x192.png">
 
-  <!-- Tile icon for Windows 8 (144x144 + tile color) -->
-  <meta name="msapplication-TileImage" content="/images/manifest/icon-144x144.png">
-  <meta name="msapplication-TileColor" content="#3f51b5">
-  <meta name="msapplication-tap-highlight" content="no">
+    <!-- Tile icon for Windows 8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="/images/manifest/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#3f51b5">
+    <meta name="msapplication-tap-highlight" content="no">
 
-  <script>
-    var UserVoice = window.UserVoice || [];
-    (function() {
-      var uv = document.createElement('script');
-      uv.type = 'text/javascript';
-      uv.async = true;
-      uv.src = '//widget.uservoice.com/s74dylVlP3CUCbVw6famA.js';
-      var s = document.getElementsByTagName('script')[0];
-      s.parentNode.insertBefore(uv, s);
-    })();
+    <script>
+      var UserVoice = window.UserVoice || [];
+      (function() {
+        var uv = document.createElement('script');
+        uv.type = 'text/javascript';
+        uv.async = true;
+        uv.src = '//widget.uservoice.com/s74dylVlP3CUCbVw6famA.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(uv, s);
+      })();
 
-    UserVoice.push(['addTrigger', {}]);
-    UserVoice.push(['set', {
-      target: 'self',
-      screenshot_enabled: false
-    }]);
-    // Setup Polymer options
-    window.Polymer = {
-      dom: 'shadow',
-      lazyRegister: true
-    };
-    // Setup Polymer options
-    window.Polymer = {
-      dom: 'shadow',
-      lazyRegister: true
-    };
-    var serverBackend = (window.location.port !== '8080');
-    var baseUrl = serverBackend ? '/dash/' : '/';
-
-    // Load webcomponentsjs polyfill if browser does not support native Web Components
-    (function() {
-      'use strict';
-      var onload = function(){
-        // For native Imports, manually fire WebComponentsReady so user code
-        // can use the same code path for native and polyfill'd imports.
-        if (!window.HTMLImports){
-          document.dispatchEvent(
-            new CustomEvent('WebComponentsReady', {bubbles: true})
-          );
-        }
+      UserVoice.push(['addTrigger', {}]);
+      UserVoice.push(['set', {
+        target: 'self',
+        screenshot_enabled: false
+      }]);
+      // Setup Polymer options
+      window.Polymer = {
+        dom: 'shadow',
+        lazyRegister: true
       };
+      // Setup Polymer options
+      window.Polymer = {
+        dom: 'shadow',
+        lazyRegister: true
+      };
+      var serverBackend = (window.location.port !== '8080');
+      var baseUrl = serverBackend ? '/dash/' : '/';
 
-      var webComponentsSupported = (
-        'registerElement' in document
-        && 'import' in document.createElement('link')
-        && 'content' in document.createElement('template')
-      );
+      // Load webcomponentsjs polyfill if browser does not support native Web Components
+      (function() {
+        'use strict';
+        var onload = function() {
+          // For native Imports, manually fire WebComponentsReady so user code
+          // can use the same code path for native and polyfill'd imports.
+          if (!window.HTMLImports) {
+            document.dispatchEvent(
+              new CustomEvent('WebComponentsReady', {bubbles: true})
+            );
+          }
+        };
 
-      if (!webComponentsSupported) {
-        var script = document.createElement('script');
-        script.async = true;
-        script.src = baseUrl + 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
-        script.onload = onload;
-        document.head.appendChild(script);
-      } else {
-        onload();
+        var webComponentsSupported = (
+          'registerElement' in document
+          && 'import' in document.createElement('link')
+          && 'content' in document.createElement('template')
+        );
+
+        if (!webComponentsSupported) {
+          var script = document.createElement('script');
+          script.async = true;
+          script.src = baseUrl + 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
+          script.onload = onload;
+          document.head.appendChild(script);
+        } else {
+          onload();
+        }
+        // adding redux
+        var reduxScript = document.createElement('script');
+        reduxScript.async = true;
+        reduxScript.src = baseUrl + 'node_modules/redux/dist/redux.min.js';
+        document.head.appendChild(reduxScript);
+      })();
+
+      // add base tag with href set to baseUrl
+      var base = document.createElement('base');
+      base.href = baseUrl;
+      document.head.appendChild(base);
+
+      // Load pre-caching Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('service-worker.js');
+        });
       }
-      // adding redux
-      var reduxScript = document.createElement('script');
-      reduxScript.async = true;
-      reduxScript.src = baseUrl + 'node_modules/redux/dist/redux.min.js';
-      document.head.appendChild(reduxScript);
-    })();
 
-    // add base tag with href set to baseUrl
-    var base = document.createElement('base');
-    base.href = baseUrl;
-    document.head.appendChild(base);
+      // set app shell import path based on baseUrl
+      var appShellImport = document.createElement('link');
+      appShellImport.rel = 'import';
+      appShellImport.href = baseUrl + 'dash/app-shell.html';
+      document.head.appendChild(appShellImport);
 
-    // Load pre-caching Service Worker
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('service-worker.js');
-      });
-    }
+    </script>
 
-    // set app shell import path based on baseUrl
-    var appShellImport = document.createElement('link');
-    appShellImport.rel = 'import';
-    appShellImport.href = baseUrl + 'dash/app-shell.html';
-    document.head.appendChild(appShellImport);
-  </script>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Roboto', 'Noto', sans-serif;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 1.5;
-      min-height: 100vh;
-      background-color: #EEEEEE;
-      color: rgba(0, 0, 0, 0.87);
-    }
-  </style>
-</head>
-<body>
-<app-shell></app-shell>
-</body>
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Roboto', 'Noto', sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.5;
+        min-height: 100vh;
+        background-color: #EEEEEE;
+        color: rgba(0, 0, 0, 0.87);
+      }
+    </style>
+  </head>
+  <body>
+    <app-shell></app-shell>
+  </body>
 </html>
