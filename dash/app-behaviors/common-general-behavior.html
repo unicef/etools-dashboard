@@ -96,20 +96,12 @@
 
     currencyFormat: function(num) {
       if (!num) {
-        return '$ 0';
-      }
-      num = parseInt(num);
-      return '$' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-    },
-
-    tableCurrencyFormat: function(num) {
-      if (!num) {
         return '0';
       }
       num = parseInt(num);
       return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     },
-
+    
     capitalizeWord: function(word) {
       return word.charAt(0).toUpperCase() + word.slice(1)
     },

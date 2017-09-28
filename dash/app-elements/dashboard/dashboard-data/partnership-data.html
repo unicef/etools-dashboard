@@ -131,7 +131,6 @@
                   .toArray()]);
             }).then(function (countAndResult) {
               self._setTotalResults(countAndResult[0]);
-              // console.log(countAndResult[1])
               self._setFilteredPartnerships(countAndResult[1]);
               self.fire('global-loading');
               self.fire('global-loading', {loadingSource: 'partner-data'});
