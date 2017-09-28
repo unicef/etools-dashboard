@@ -37,13 +37,12 @@
         data="{{routeData}}"
         query-params="{{queryParams}}"></app-route>
 
-  
     <app-header-layout>
       <div class="page-top-content with-tabs">
         <div class="top-content">
           <div class="top-content-row title-row">
             <h1 main-title>
-              Dashboard
+              [[pageTitle]]
             </h1>
             <div class="top-content-actions-wrapper">
               <div class="top-content-action" hidden$="[[!hactActive]]">
@@ -142,6 +141,9 @@
           type: Object,
           notify: true
         },
+        pageTitle: {
+          type: String
+        },
       },
       behaviors: [
         etoolsAppConfig.globals,
@@ -153,6 +155,7 @@
       ],
       _pageChanged: function(dashTab) {
         this.set('partnershipPage', dashTab);
+        dashTab === 'partnerships' ? this.set('pageTitle', 'CSO Dashboard') : this.set('pageTitle', 'Dashboard');
       },
       _updateUrlTab: function(tab) {
         if (!tab) {
