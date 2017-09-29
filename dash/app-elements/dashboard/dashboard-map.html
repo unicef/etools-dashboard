@@ -164,7 +164,7 @@
   </template>
   <script>
     Polymer({
-      is: "dashboard-map",
+      is: 'dashboard-map',
       behaviors: [
         dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
         dashBehaviors.ListFiltersBehavior,
@@ -256,15 +256,15 @@
 
       ready: function() {
         L.Icon.Default.imagePath = '../../dash/images';
-        var markerEl = document.createElement('marker-dialog');
+        let markerEl = document.createElement('marker-dialog');
         markerEl.setAttribute('id', 'markerDialog');
         Polymer.dom(document.querySelector('body')).appendChild(markerEl);
         this.markerDialog = document.querySelector('#markerDialog');
       },
       _openModal: function(e) {
-        var model = e.model.marker;
-        var interventions = _.values(this.intLocMap[model.id].interventions);
-        var data = {
+        let model = e.model.marker;
+        let interventions = _.values(this.intLocMap[model.id].interventions);
+        let data = {
           name: model.name,
           interventions: interventions,
           type: model.location_type
@@ -273,11 +273,11 @@
         this.markerDialog.opened = true;
       },
       _init: function() {
-        if (!this.active){
+        if (!this.active) {
           return;
         }
         if (_.isEmpty(this.intLocMap)) {
-          //initialize the intLocMap object
+          // initialize the intLocMap object
           this.set('mapFilter', '');
           this.fire('global-loading', {
             message: 'Loading page data...',
@@ -303,7 +303,7 @@
                 return {
                   name: cp.name,
                   id: cp.id
-                }
+                };
               }),
               path: 'country_programme'
             },
@@ -315,7 +315,7 @@
                 return {
                   name: o.label,
                   id: o.value
-                }
+                };
               }),
               path: 'sector'
             },
@@ -327,7 +327,7 @@
                 return {
                   name: o.label,
                   id: o.value
-                }
+                };
               }),
               path: 'status'
             },
@@ -339,7 +339,7 @@
                 return {
                   name: o.label,
                   id: o.value
-                }
+                };
               }),
               path: 'partner'
             },
@@ -347,8 +347,8 @@
         }
       },
       _filterChanged: function(filt) {
-        var self = this;
-        var newFilter = {};
+        let self = this;
+        let newFilter = {};
         ['country_programme', 'status', 'sector', 'partner'].map(function(f) {
           if (self[f]) {
             newFilter[f] = self[f];
@@ -370,7 +370,7 @@
         });
       },
       // ensure redux items loaded before initializing the filters
-     
+    
       _callLocations: function(locations) {
         this.$.locationsData.query(locations);
       },
@@ -382,14 +382,14 @@
         this.fire('global-loading');
       },
       _partnerFilter: function(filter) {
-        return filter.filterName === "Partners";
+        return filter.filterName === 'Partners';
       },
       _partnerChanged: function(val) {
-        var id = _.get(val, 'detail.selectedValues.id');
+        let id = _.get(val, 'detail.selectedValues.id');
         this.set('partner', id);
       },
       _validateUserCountry: function(userCountry) {
-        if (userCountry){
+        if (userCountry) {
           if (!userCountry.longitude || !userCountry.latitude) {
             this.set('country', {
               latitude: '40',

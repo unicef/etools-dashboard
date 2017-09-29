@@ -7,139 +7,139 @@
 
 <dom-module id="partnership-data">
 
-    <template>
-        <etools-ajax id="ajax"
-                     endpoint="[[endpoint]]"
-                     caching-storage="custom"
-                     dexie-db-collection="cso_dashboard"
-                     on-success="_handleResponse"></etools-ajax>
-    </template>
+  <template>
+    <etools-ajax id="ajax"
+                 endpoint="[[endpoint]]"
+                 caching-storage="custom"
+                 dexie-db-collection="cso_dashboard"
+                 on-success="_handleResponse"></etools-ajax>
+  </template>
 
-    <script>
-      (function () {
-        'use strict';
+  <script>
+    (function () {
+      'use strict';
 
-        Polymer({
+      Polymer({
 
-          is: 'partnership-data',
-          behaviors: [
-            etoolsAppConfig,
-            dashBehaviors.DataElementBehavior,
-            dashBehaviors.DateBehavior
-          ],
-          observers: ['init(active)'],
-          properties: {
-            endpointName: {
-              type: String,
-              value: 'cso_dashboard'
-            },
-            currentQuery: {
-              type: Object,
-              value: null
-            },
-            filteredPartnerships: {
-              type: Array,
-              readOnly: true,
-              notify: true
-            },
-            totalResults: {
-              type: Number,
-              readOnly: true,
-              notify: true
-            },
-            dataLoadedEventName: {
-              type: String,
-              value: 'partnerships-loaded'
-            },
+        is: 'partnership-data',
+        behaviors: [
+          etoolsAppConfig,
+          dashBehaviors.DataElementBehavior,
+          dashBehaviors.DateBehavior
+        ],
+        observers: ['init(active)'],
+        properties: {
+          endpointName: {
+            type: String,
+            value: 'cso_dashboard'
           },
+          currentQuery: {
+            type: Object,
+            value: null
+          },
+          filteredPartnerships: {
+            type: Array,
+            readOnly: true,
+            notify: true
+          },
+          totalResults: {
+            type: Number,
+            readOnly: true,
+            notify: true
+          },
+          dataLoadedEventName: {
+            type: String,
+            value: 'partnerships-loaded'
+          },
+        },
 
-          init: function (active) {
-            if (active) {
-              this.fire('global-loading', {
-                message: 'Loading interventions data...',
-                active: true,
-                loadingSource: 'partner-data'
-              });
-              this._elementReady();
+        init: function (active) {
+          if (active) {
+            this.fire('global-loading', {
+              message: 'Loading interventions data...',
+              active: true,
+              loadingSource: 'partner-data'
+            });
+            this._elementReady();
+          }
+        },
+
+        query: function (searchString, order, pageSize, pageNumber,
+                         sectors, offices, status, startAfterDate,
+                         endBeforeDate, startBeforeDate, endAfterDate) {
+          var self = this;
+          this.db.transaction('r', this.db.cso_dashboard, function () {
+            self.fire('global-loading', {active: true, message: 'Loading data...'})
+            var queryResult = self.db.cso_dashboard;
+            if (order === 'desc') {
+              queryResult = queryResult.reverse();
+            } else {
+              queryResult = queryResult.toCollection();
             }
-          },
-
-          query: function (searchString, order, pageSize, pageNumber,
-                           sectors, offices, status, startAfterDate,
-                           endBeforeDate, startBeforeDate, endAfterDate) {
-            var self = this;
-            this.db.transaction('r', this.db.cso_dashboard, function () {
-              self.fire('global-loading', {active: true, message: 'Loading data...'})
-              var queryResult = self.db.cso_dashboard;
-              if (order === 'desc') {
-                queryResult = queryResult.reverse();
-              } else {
-                queryResult = queryResult.toCollection();
-              }
-              queryResult = queryResult.filter(function (partner) {
-                if (!_.isEmpty(searchString)) {
-                  if (!_.includes(partner.partner_name.toLowerCase(), searchString.toLowerCase())) {
-                    return false;
-                  }
-                }
-                if (!_.isEmpty(sectors)) {
-                  if (!_.intersection(sectors, partner.sectors).length) {
-                    return false;
-                  }
-                }
-                if (!_.isEmpty(offices)) {
-                  if (!_.intersection(offices, partner.offices_names).length) {
-                    return false;
-                  }
-                }
-                if (!_.isEmpty(status)) {
-                  if (!_.includes(status, partner.status)) {
-                    return false;
-                  }
-                } else if (partner.status === 'closed') {
+            queryResult = queryResult.filter(function (partner) {
+              if (!_.isEmpty(searchString)) {
+                if (!_.includes(partner.partner_name.toLowerCase(), searchString.toLowerCase())) {
                   return false;
                 }
-                if (!_.isEmpty(startAfterDate) && !_.isEmpty(partner.start)) {
-                  if ((self.prepareDate(partner.start) < self.prepareDate(startAfterDate)) || _.isEmpty(partner.start)) {
-                    return false;
-                  }
+              }
+              if (!_.isEmpty(sectors)) {
+                if (!_.intersection(sectors, partner.sectors).length) {
+                  return false;
                 }
-                if (!_.isEmpty(endBeforeDate)) {
-                  if ((self.prepareDate(partner.end) > self.prepareDate(endBeforeDate)) || _.isEmpty(partner.end)) {
-                    return false;
-                  }
+              }
+              if (!_.isEmpty(offices)) {
+                if (!_.intersection(offices, partner.offices_names).length) {
+                  return false;
                 }
-                if ((!_.isEmpty(startBeforeDate) && !_.isEmpty(partner.start)) || _.isEmpty(partner.start)) {
-                  if (self.prepareDate(partner.start) > self.prepareDate(startBeforeDate)) {
-                    return false;
-                  }
+              }
+              if (!_.isEmpty(status)) {
+                if (!_.includes(status, partner.status)) {
+                  return false;
                 }
-                if ((!_.isEmpty(endAfterDate) && !_.isEmpty(partner.end)) || _.isEmpty(partner.end)) {
-                  if (self.prepareDate(partner.end) > self.prepareDate(endAfterDate)) {
-                    return false;
-                  }
+              } else if (partner.status === 'closed') {
+                return false;
+              }
+              if (!_.isEmpty(startAfterDate) && !_.isEmpty(partner.start)) {
+                if ((self.prepareDate(partner.start) < self.prepareDate(startAfterDate)) || _.isEmpty(partner.start)) {
+                  return false;
                 }
-                return true;
-              });
+              }
+              if (!_.isEmpty(endBeforeDate)) {
+                if ((self.prepareDate(partner.end) > self.prepareDate(endBeforeDate)) || _.isEmpty(partner.end)) {
+                  return false;
+                }
+              }
+              if ((!_.isEmpty(startBeforeDate) && !_.isEmpty(partner.start)) || _.isEmpty(partner.start)) {
+                if (self.prepareDate(partner.start) > self.prepareDate(startBeforeDate)) {
+                  return false;
+                }
+              }
+              if ((!_.isEmpty(endAfterDate) && !_.isEmpty(partner.end)) || _.isEmpty(partner.end)) {
+                if (self.prepareDate(partner.end) > self.prepareDate(endAfterDate)) {
+                  return false;
+                }
+              }
+              return true;
+            });
 
-              return Dexie.Promise.all([
-                queryResult.count(),
-                // Use clone() as offset() and limit() otherwise mutates the same query that is counted
-                queryResult.clone()
+            return Dexie.Promise.all([
+              queryResult.count(),
+              // Use clone() as offset() and limit() otherwise mutates the same query that is counted
+              queryResult.clone()
                   .offset((pageNumber - 1) * pageSize)
                   .limit(pageSize)
                   .toArray()]);
-            }).then(function (countAndResult) {
-              self._setTotalResults(countAndResult[0]);
-              self._setFilteredPartnerships(countAndResult[1]);
-              self.fire('global-loading');
-              self.fire('global-loading', {loadingSource: 'partner-data'});
-            }).catch(function (error) {
-              console.error('Error querying partnerships-dash: ', error);
-            });
-          },
+          }).then(function (countAndResult) {
+            self._setTotalResults(countAndResult[0]);
+            self._setFilteredPartnerships(countAndResult[1]);
+            self.fire('global-loading');
+            self.fire('global-loading', {loadingSource: 'partner-data'});
+          }).catch(function (error) {
+            console.error('Error querying partnerships-dash: ', error);
+          });
+        },
 
-        });
-      })();
-    </script>
+      });
+    })();
+  </script>
 </dom-module>
