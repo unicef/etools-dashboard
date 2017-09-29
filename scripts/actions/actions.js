@@ -68,7 +68,7 @@ var Actions = [
     },
     prepareData: function(data) {
       return data.length
-        ? data.map(function(trip) {
+        ? data.map(trip=> {
             return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'traveler']);
           })
         : [];

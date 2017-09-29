@@ -33,10 +33,7 @@ const lint = lazypipe()
 
 const babelify = lazypipe()
   .pipe(()=> ($.if('*.html', $.crisper({scriptInHead:false}))))
-  .pipe(()=> ($.if('*.js', $.babel({
-    presets: ['es2017'],
-    plugins: ['transform-object-rest-spread']
-  }))));
+  .pipe(()=> ($.if('*.js', $.babel())));
 
 module.exports = {
   babelify: babelify,
