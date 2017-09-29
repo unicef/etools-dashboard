@@ -133,7 +133,7 @@
     <paper-material id="list" elevation="1">
       <data-table-header label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show" no-collapse>
         <data-table-column class="flex-2" sortable>
-          Partners
+          IP Name
         </data-table-column>
         <data-table-column class="flex-2">
           PD/SSFA Ref #
@@ -193,10 +193,10 @@
               </template>
             </span>
             <span class="col-data flex">
-              [[row.status]]
+              [[capitalizeWord(row.status)]]
             </span>
             <span class="col-data flex">
-              [[row.start]] <br> [[row.end]]
+              [[prettyDate(row.start)]] <br> [[prettyDate(row.end)]]
             </span>
             <span class="col-data flex right-align">
               [[currencyFormat(row.unicef_cash)]]
@@ -211,7 +211,7 @@
               [[currencyFormat(row.total_budget)]]
             </span>
             <span class="col-data flex right-align">
-              [[_getDisbursements(row.disbursement,row.frs_total_frs_amt)]]%
+              [[_getDisbursements(row.disbursement,row.frs_total_frs_amt)]]
             </span>
             <span class="col-data flex right-align">
               [[row.days_last_pv]]
