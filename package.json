@@ -10,6 +10,16 @@
   "bugs": {
     "url": "https://github.com/unicef/etools-partnership-management/blob/master/LICENSE.md"
   },
+  "babel" : {
+    "presets": [
+      ["env", {
+      "targets":{
+        "browsers": ["last 2 versions", "ie >= 11"]
+      }
+    }]
+    ],
+    "plugins": ["transform-object-rest-spread"]
+  },
   "engines": {
     "node": ">=4.0"
   },
@@ -24,6 +34,7 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
     "babel-preset-es2017": "^6.24.1",
     "browser-sync": "^2.18.7",
     "css-slam": "^1.1.0",
