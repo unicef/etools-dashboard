@@ -16,7 +16,7 @@
 
  */
 
-var Actions = [
+const Actions = [
   {
     actionType: 'countryProgrammes',
     propsArray: ['countryProgrammes'],
@@ -114,7 +114,7 @@ var Actions = [
     prepareData: function(data) {
       return data.length
         ? data.map(function(partnership) {
-            return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
+            return _.pick(partnership, ['id', 'title', 'number', 'total_unicef_budget']);
           })
         : null;
     }

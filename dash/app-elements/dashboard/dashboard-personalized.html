@@ -173,9 +173,9 @@
             <data-table-row no-collapse>
               <div slot="row-data">
                 <div class="layout vertical col-10">
-                                <span class="col-data description">
-                                    <a on-tap="_goToActionPoint" href="[[baseSite]]/t2f/action-point/[[action.id]]">[[action.description]]</a>
-                                </span>
+                  <span class="col-data description">
+                    <a on-tap="_goToActionPoint" href="[[baseSite]]/t2f/action-point/[[action.id]]">[[action.description]]</a>
+                  </span>
                   <span class="suppData">[[capitalizeWord(action.status)]]</span>
                 </div>
                 <div class="layout vertical start col-data col-2 ">
@@ -242,9 +242,9 @@
                 [[partnership.number]]
               </a>
               <span class="description description-size flex-3 col-data">
-                            [[partnership.title]]
-                        </span>
-              <span class="col-data col-2 layout horizontal end-justified">$[[currencyFormat(partnership.unicef_budget)]] (Total Budget)</span>
+                [[partnership.title]]
+              </span>
+              <span class="col-data col-2 layout horizontal end-justified">$[[currencyFormat(partnership.total_unicef_budget)]] (Total Budget)</span>
             </div>
           </data-table-row>
         </template>
@@ -338,7 +338,7 @@
         }
       },
       _dateFormatted: function(str) {
-          return str ? moment(str).format('DD MMM YYYY') : '';
+        return str ? moment(str).format('DD MMM YYYY') : '';
       },
 
       _updateUrl: function(active) {
