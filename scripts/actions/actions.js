@@ -16,7 +16,7 @@
 
  */
 
-var Actions = [
+const Actions = [
   {
     actionType: 'countryProgrammes',
     propsArray: ['countryProgrammes'],
