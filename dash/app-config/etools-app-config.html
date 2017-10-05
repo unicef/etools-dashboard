@@ -42,8 +42,9 @@ App global configuration
         getEndpoint: function(endpointName, data) {
           var endpoint = JSON.parse(JSON.stringify(etoolsAppConfig.endpoints[endpointName]));
           if (endpoint && endpoint.hasOwnProperty('template') && endpoint.template !== '') {
-            endpoint.url = this.baseSite + _.template(endpoint.template)(data);
+            endpoint.url = window.location.origin + _.template(endpoint.template)(data);
           }
+
           return endpoint;
         },
 
@@ -178,7 +179,7 @@ App global configuration
         template: '/api/v2/interventions/dash'
       },
       cso_dashboard: {
-        template: '/api/v2/interventions/partnership-dash/',
+        template: '/api/v2/interventions/partnership-dash',
         exp: 6* 60 * 60 * 1000, // 6h
         cachingKey: 'cso_dashboard',
       },

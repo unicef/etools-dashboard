@@ -46,7 +46,7 @@ global.config = {
   // Service Worker precache options based on
   // https://github.com/GoogleChrome/sw-precache#options-parameter
   swPrecacheConfig: {
-    replacePrefix: '/pmp/',
+    replacePrefix: '/dash/',
     navigateFallback: '/index.html'
   },
   sourceCodeDirectory: './dash'
@@ -98,9 +98,9 @@ function source() {
     .pipe(gulpif('**/*.{html,css}', css.minify())).on('end', log('Minified CSS'))
 
     // TODO: JS Linting issues to fix!!!
+    .pipe(gulpif('**/*.{js,html}', javascript.babelify())).on('end', log('Transpiled JS'))
     .pipe(gulpif('**/*.js', javascript.lint())).on('end', log('Linted Javascript'))
     .pipe(gulpif('**/*.js', javascript.minify())).on('end', log('Minified Javascript'))
-
     .pipe(gulpif('**/*.{gif,jpg,svg}', images.minify())).on('end', log('Minified Images'))
 
     .pipe(project.rejoin()); // Call rejoin when you're finished

@@ -10,6 +10,24 @@
   "bugs": {
     "url": "https://github.com/unicef/etools-partnership-management/blob/master/LICENSE.md"
   },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "browsers": [
+              "last 2 versions",
+              "ie >= 11"
+            ]
+          }
+        }
+      ]
+    ],
+    "plugins": [
+      "transform-object-rest-spread"
+    ]
+  },
   "engines": {
     "node": ">=4.0"
   },
@@ -22,6 +40,9 @@
   },
   "private": true,
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
     "browser-sync": "^2.18.7",
     "css-slam": "^1.1.0",
     "del": "^2.2.1",
@@ -29,6 +50,8 @@
     "eslint-config-google": "^0.7.0",
     "eslint-plugin-html": "^2.0.0",
     "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-babel": "^7.0.0",
+    "gulp-crisper": "^1.1.0",
     "gulp-csslint": "^1.0.0",
     "gulp-html-extract": "^0.2.0",
     "gulp-htmlhint": "^0.3.1",
@@ -38,7 +61,7 @@
     "gulp-jscs": "^4.0.0",
     "gulp-jscs-stylish": "^1.4.0",
     "gulp-jshint": "^2.0.1",
-    "gulp-load-plugins": "^1.3.0",
+    "gulp-load-plugins": "^1.5.0",
     "gulp-replace": "^0.5.4",
     "gulp-uglify": "^2.0.0",
     "gulp-useref": "^3.1.2",
@@ -51,6 +74,7 @@
     "plylog": "^0.4.0",
     "polymer-build": "^0.4.0",
     "prettier-eslint": "^8.0.0",
+    "uglify-js-harmony": "^2.7.7",
     "yargs": "^5.0.0"
   },
   "dependencies": {

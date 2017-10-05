@@ -3,25 +3,26 @@
 
 'use strict';
 
-const uglifyHarmony = require('uglify-js-harmony');
+const harmony = require('uglify-js-harmony');
 const minifier = require('gulp-uglify/minifier');
 const jshint = require('gulp-jshint');
 const jshintStylish = require('jshint-stylish');
 const jscs = require('gulp-jscs');
 const jscsStylish = require('gulp-jscs-stylish');
 const lazypipe = require('lazypipe'); // Lazy pipe creates a reusable pipe stream
-
+const $ = require('gulp-load-plugins')();
+const gulpif = require('gulp-if');
 // Minify Javascript
 function minify() {
-  var uglifyOptions = {
+  const uglifyOptions = {
     preserveComments: false
     // options
   };
-  return minifier(uglifyOptions, uglifyHarmony);
+  return minifier(uglifyOptions, harmony);
 }
 
 // Lint Javascript
-var lint = lazypipe()
+const lint = lazypipe()
   .pipe(jshint)
   .pipe(jscs)
   .pipe(jscsStylish.combineWithHintResults)
@@ -30,7 +31,12 @@ var lint = lazypipe()
   //.pipe(jshint.reporter, 'fail');
   .pipe(jshint.reporter);
 
+const babelify = lazypipe()
+  .pipe(()=> ($.if('*.html', $.crisper({scriptInHead:false}))))
+  .pipe(()=> ($.if('*.js', $.babel())));
+
 module.exports = {
+  babelify: babelify,
   minify: minify,
   lint: lint
 };

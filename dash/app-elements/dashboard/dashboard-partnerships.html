@@ -176,11 +176,13 @@
                page="partners" id="[[row.partner_id]]/details"
                class="col-data flex-2 title">
               [[row.partner_name]]
+              <paper-tooltip fit-to-visible-bounds>[[row.partner_name]]</paper-tooltip>
             </a>
             <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details" app-name="pmp"
                page="interventions"
                id="[[row.intervention_id]]/details" class="col-data flex-2 title">
               [[row.number]]
+              <paper-tooltip fit-to-visible-bounds>[[row.number]]</paper-tooltip>
             </a>
             <span class="col-data flex-2">
               <template is="dom-repeat" items="{{row.sectors}}">
@@ -211,10 +213,11 @@
               [[currencyFormat(row.total_budget)]]
             </span>
             <span class="col-data flex right-align">
-              [[_getDisbursements(row.disbursement,row.frs_total_frs_amt)]]
+              [[_displayNonZero(row.disbursement)]] <br>
+              [[_getDisbPercent(row.disbursement,row.frs_total_frs_amt)]]
             </span>
             <span class="col-data flex right-align">
-              [[row.days_last_pv]]
+              [[_displayNonZero(row.days_last_pv)]]
             </span>
           </div>
         </data-table-row>
@@ -240,7 +243,8 @@
           dashBehaviors.DropdownBehavior,
           dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
           dashBehaviors.CommonGeneralBehavior,
-          dashBehaviors.ListFiltersBehavior
+          dashBehaviors.ListFiltersBehavior,
+          etoolsAppConfig.globals
         ],
         observers: [
           '_updateUrl(qs, pageNumber, pageSize,' +
@@ -273,6 +277,10 @@
           },
           qs: {
             type: String
+          },
+          csvDownloadUrl: {
+            type: String,
+            notify: true
           },
           urlParams: {
             type: Object,
@@ -340,7 +348,6 @@
           this.set('endAfterDate', params.endAfter ? params.endAfter : '');
           this.set('initComplete', true);
           this._updateSelectedFiltersValues();
-
         },
 
         _initListFilters: function(sectors, statuses, offices) {
@@ -442,7 +449,8 @@
           if (!this.initComplete || !this.requiredDataLoaded) {
             return;
           }
-          var qs = this._buildQueryString();
+          this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
+          const qs = this._buildQueryString();
           if (qs !== null) {
             this.updateAppState('dashboard/partnerships', qs, true);
             if (this.requiredDataLoaded) {
@@ -460,7 +468,7 @@
         },
 
         _buildQueryString: function() {
-          var qs = [];
+          let qs = [];
           if (this.pageNumber && this.pageNumber > 1) {
             qs.push('page=' + this.pageNumber);
           }
@@ -499,13 +507,8 @@
         },
 
         _buildCsvDownloadUrl: function() {
-          var queryString = '';
-          var endpointUrl = '';
-          var params = [];
-
-          if (!_.isEmpty(this.selectedSectors)) {
-            params.push('sector=' + this.selectedSectors[0].value)
-          }
+          console.log(this.getEndpoint('cso_dashboard'));
+          return `${this.getEndpoint('cso_dashboard').url}?format=csv`;
         },
 
         _filterPartnershipsData: function() {
@@ -526,8 +529,8 @@
 
         _requiredDataLoaded: function(e) {
           event.stopImmediatePropagation();
-          var listDataPath = Polymer.dom(event).localTarget.getAttribute('list-data-path');
-          var list = this.get(listDataPath);
+          const listDataPath = Polymer.dom(event).localTarget.getAttribute('list-data-path');
+          const list = this.get(listDataPath);
 
           if (typeof list === 'undefined' ||
             (Array.isArray(list) && list.length === 0)) {
@@ -540,14 +543,14 @@
         },
 
         _setSelectedOffices: function(officesStr) {
-          var officesIdsArr = officesStr.split('|');
+          let officesIdsArr = officesStr.split('|');
           if (!_.isEmpty(officesIdsArr)) {
             officesIdsArr = officesIdsArr.map(function(n) {
               return parseInt(n, 10);
             });
             return this.offices.filter(function(o) {
               return officesIdsArr.indexOf(parseInt(o.id, 10)) > -1;
-            })
+            });
           }
           return [];
         },
@@ -573,8 +576,9 @@
           });
         },
 
-        _getDisbursements: function(disb, fr) {
-          return disb === '0.00' ? '0' : (Number(disb) / Number(fr) * 100).toFixed(1);
+        _getDisbPercent: function(disb, total) {
+          return disb === '0.00' ? ''
+            : `(${(Number(disb) / Number(total) * 100).toFixed(1)})`;
         },
         _filterChanged: function() {
           this.set('debounceTime', 200);
