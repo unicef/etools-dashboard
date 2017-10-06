@@ -1,0 +1,32 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="piwik-element">
+  <script>
+    var _paq = _paq || [];
+    _paq.push(["trackPageView"]);
+    _paq.push(["enableLinkTracking"]);
+    (function () {
+      var u="//czue-unicef.innocraft.cloud/";
+      _paq.push(["setTrackerUrl", u + "piwik.php"]);
+      _paq.push(["setSiteId", '1']);
+      var d = document, g = d.createElement("script"), s = d.getElementsByTagName("script")[0];
+      g.type = "text/javascript";
+      g.defer = true;
+      g.async = true;
+      g.src = u + "piwik.js";
+      s.parentNode.insertBefore(g, s);
+    })();
+
+    Polymer({
+      is: 'piwik-element',
+
+      trackEvent: function(e) {
+        _paq.push(['trackEvent', document.title, 'tap', e.target._iconName])
+      },
+
+      attached: function() {
+        document.addEventListener('tap', this.trackEvent.bind(this));
+      },
+    });
+  </script>
+</dom-module>
