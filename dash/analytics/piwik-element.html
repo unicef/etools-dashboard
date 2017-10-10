@@ -2,6 +2,7 @@
 
 <dom-module id="piwik-element">
   <script>
+    // _paq array initialization and tracking script
     var _paq = _paq || [];
     _paq.push(["trackPageView"]);
     _paq.push(["enableLinkTracking"]);
@@ -10,22 +11,68 @@
       _paq.push(["setTrackerUrl", u + "piwik.php"]);
       _paq.push(["setSiteId", '1']);
       var d = document, g = d.createElement("script"), s = d.getElementsByTagName("script")[0];
-      g.type = "text/javascript";
-      g.defer = true;
-      g.async = true;
-      g.src = u + "piwik.js";
+      g.type = "text/javascript"; g.defer = true; g.async = true; g.src = u + "piwik.js";
       s.parentNode.insertBefore(g, s);
     })();
 
     Polymer({
       is: 'piwik-element',
-
-      trackEvent: function(e) {
-        _paq.push(['trackEvent', document.title, 'tap', e.target._iconName])
+      properties: {
+        page: {
+          type: String,
+          observer: 'pageView'
+        }
       },
 
+      // tracks exports and filtering
+      trackEvent: function(e) {
+        switch (e.detail.sourceEvent.currentTarget.innerText) {
+          case 'EXPORT':
+            _paq.push([
+              'trackEvent',
+              document.title,
+              'export',
+              e.srcElement.__data__.user.groups.map(g => g.name)
+            ])
+            break
+          case 'GET CHART':
+            _paq.push([
+              'trackEvent',
+              document.title,
+              'chart filtered',
+              e.srcElement.__data__.user.groups.map(g => g.name)])
+            break
+        }
+      },
+
+      // sets global event listener, sets global error listener
       attached: function() {
         document.addEventListener('tap', this.trackEvent.bind(this));
+        window.onerror = this.error
+      },
+
+      // handles tracking error messages
+      error: function (msg, url, lineNo, columnNo, error) {
+        var message = [
+          'Message: ' + msg,
+          'URL: ' + url,
+          'Line: ' + lineNo,
+          'Column: ' + columnNo,
+          'Error object: ' + JSON.stringify(error)
+        ].join(' - ');
+        _paq.push(['trackEvent', 'error', 'javascript error', message])
+      },
+
+      // tracks internal pageviews that aren't picked up with trackPageView
+      pageView: function() {
+        debugger
+        if (event && event.srcElement.__data__.route) {
+          _paq.push([
+            'trackEvent',
+            event.srcElement.__data__.route.path,
+            'tap',
+            'in-app navigation'])
+        }
       },
     });
   </script>
