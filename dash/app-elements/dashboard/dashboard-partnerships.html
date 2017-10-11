@@ -213,11 +213,11 @@
               [[currencyFormat(row.total_budget)]]
             </span>
             <span class="col-data flex right-align">
-              [[_displayNonZero(row.disbursement)]] <br>
-              [[_getDisbPercent(row.disbursement,row.frs_total_frs_amt)]]
+              [[_displayDisbursement(row.disbursement)]] <br>
+              [[_getDisbPercent(row.disbursement_percent)]]
             </span>
             <span class="col-data flex right-align">
-              [[_displayNonZero(row.days_last_pv)]]
+              [[displayNonZero(row.days_last_pv)]]
             </span>
           </div>
         </data-table-row>
@@ -341,7 +341,7 @@
           this.set('sortOrder', params.sort ? params.sort : 'asc');
           this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
           this.set('selectedOffices', params.offices ? this._setSelectedOffices(params.offices) : []);
-          this.set('selectedStatuses', params.status ? this._setSelectedStatuses(params.status) : []);
+          this.set('selectedStatuses', params.status ? this._setSelectedStatuses(params.status) : this._setSelectedStatuses('signed|active|ended|suspended|terminated'));
           this.set('startAfterDate', params.startAfter ? params.startAfter : '');
           this.set('endBeforeDate', params.endBefore ? params.endBefore : '');
           this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
@@ -507,7 +507,6 @@
         },
 
         _buildCsvDownloadUrl: function() {
-          console.log(this.getEndpoint('cso_dashboard'));
           return `${this.getEndpoint('cso_dashboard').url}?format=csv`;
         },
 
@@ -556,9 +555,9 @@
         },
 
         _setSelectedSectors: function(sectorsStr) {
-          var sectorsArr = sectorsStr.split('|');
+          const sectorsArr = sectorsStr.split('|');
           if (!_.isEmpty(sectorsArr)) {
-            var selectedSectors = this.sectors.filter(function(s) {
+            const selectedSectors = this.sectors.filter(function(s) {
               return sectorsArr.indexOf(s.value) > -1;
             });
             return selectedSectors;
@@ -567,7 +566,7 @@
         },
 
         _setSelectedStatuses: function(statuses) {
-          var statusesStrArr = statuses.split('|');
+          const statusesStrArr = statuses.split('|');
           if (_.isEmpty(this.statuses)) {
             return [];
           }
@@ -576,9 +575,9 @@
           });
         },
 
-        _getDisbPercent: function(disb, total) {
-          return disb === '0.00' ? ''
-            : `(${(Number(disb) / Number(total) * 100).toFixed(1)})`;
+        _getDisbPercent: function(perc) {
+          return perc === '0.00' ? ''
+            : `(${Number(perc).toFixed(0)})`;
         },
         _filterChanged: function() {
           this.set('debounceTime', 200);
@@ -595,6 +594,10 @@
         },
         _dateChanged: function(date) {
           this.set('pageNumber', 1);
+        },
+        _displayDisbursement: function(val) {
+          let nonZero = this.displayNonZero(val);
+          return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
         },
 
 
