@@ -21,6 +21,10 @@
         page: {
           type: String,
           observer: 'pageView'
+        },
+        queryEntered: {
+          type: Boolean,
+          value: false
         }
       },
 
@@ -45,10 +49,23 @@
         }
       },
 
-      // sets global event listener, sets global error listener
+      // sets global event listeners, sets global error listener
       attached: function() {
         document.addEventListener('tap', this.trackEvent.bind(this));
+        document.addEventListener('keyup', this.typing.bind(this));
         window.onerror = this.error
+      },
+
+      // checks if typing is in relevant input field, tracks search bar filtering
+      typing: function() {
+        if (event.path[0].value && event.path[7].id === 'query' && this.queryEntered === false) {
+          _paq.push([
+            'trackEvent',
+            document.title,
+            'search bar used',
+            event.srcElement.__data__.user.groups.map(g => g.name)])
+          this.set('queryEntered', true)
+        }
       },
 
       // handles tracking error messages
