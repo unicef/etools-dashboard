@@ -103,7 +103,7 @@
     },
 
     capitalizeWord: function(word) {
-      return word.charAt(0).toUpperCase() + word.slice(1)
+      return word.charAt(0).toUpperCase() + word.slice(1);
     },
 
     capitalizeWord: function(word) {
@@ -120,16 +120,18 @@
         e.target.getAttribute('page')].join('/') + '/' + e.target.id;
       this.manageClickEvent(e, path);
     },
-    _allHaveValues: function() {
-      var self = this;
-      var args = _.toArray(arguments);
+    _allHaveValues: function(...args) {
+      const self = this;
       return args.reduce(function(hasVal, prop) {
         return !_.isEmpty(self[prop]) && hasVal;
       }, true);
     },
-    _displayNonZero: function(val) {
+    displayNonZero: function(val) {
       return Number(val) ? val : '-';
     },
+    commaSplit: function(str) {
+      return str.split(',');
+    }
 
 
   };
