@@ -131,8 +131,13 @@
     },
     commaSplit: function(str) {
       return str.split(',');
+    },
+    strippedSpace: function(str) {
+      return str.split(',')
+        .map(function(item) {
+          return item[0]===' '? item.slice(1) : item;
+        });
     }
-
 
   };
 
