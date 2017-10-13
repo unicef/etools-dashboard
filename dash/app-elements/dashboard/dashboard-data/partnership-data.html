@@ -73,12 +73,13 @@
           var self = this;
           this.db.transaction('r', this.db.cso_dashboard, function() {
             self.fire('global-loading', {active: true, message: 'Loading data...'})
-            var queryResult = self.db.cso_dashboard;
+            var queryResult = self.db.cso_dashboard.orderBy('partner_name');
             if (order === 'desc') {
               queryResult = queryResult.reverse();
-            } else {
-              queryResult = queryResult.toCollection();
             }
+//            else {
+//              queryResult = queryResult.toCollection();
+//            }
             queryResult = queryResult.filter(function(partner) {
               if (!_.isEmpty(searchString)) {
                 if (!_.includes(partner.partner_name.toLowerCase(), searchString.toLowerCase())) {
