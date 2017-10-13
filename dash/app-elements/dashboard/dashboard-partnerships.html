@@ -253,6 +253,9 @@
           '_initListFilters(sectors, statuses, offices)',
           '_init(active,sectors,statuses,offices)'
         ],
+        listeners: {
+          'sort-changed': 'sortOrderChanged',
+        },
 
         properties: {
           filteredPartnerships: {
@@ -594,6 +597,10 @@
         },
         _dateChanged: function(date) {
           this.set('pageNumber', 1);
+        },
+        sortOrderChanged: function(e) {
+          this.set('debounceTime', 150);
+          this.set('sortOrder', e.detail.direction);
         },
         _displayDisbursement: function(val) {
           let nonZero = this.displayNonZero(val);
