@@ -84,7 +84,7 @@ const Actions = [
     prepareData: function(data) {
       return data.length
         ? data.map(function(actionPoint) {
-            return _.pick(actionPoint, ['status', 'description', 'created_at', 'person_responsible_name', 'id']);
+            return _.pick(actionPoint, ['status', 'description', 'created_at', 'person_responsible_name', 'id', 'due_date']);
           })
         : [];
     }
@@ -99,7 +99,7 @@ const Actions = [
     prepareData: function(data) {
       return data.length
         ? data.map(function(actionPoint) {
-            return _.pick(actionPoint, ['status', 'description', 'created_at', 'assigned_by_name', 'id']);
+            return _.pick(actionPoint, ['status', 'description', 'created_at', 'assigned_by_name', 'id', 'due_date']);
           })
         : [];
     }
