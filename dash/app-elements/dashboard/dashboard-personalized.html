@@ -179,7 +179,7 @@
                   <span class="suppData">[[capitalizeWord(action.status)]]</span>
                 </div>
                 <div class="layout vertical start col-data col-2 ">
-                  <span class="col-data">[[_dateFormatted(action.created_at)]]</span>
+                  <span class="col-data">[[_dateFormatted(action.due_date)]]</span>
                   <span class="suppData">[[_getDisplayName('actions',action)]]</span>
                 </div>
               </div>
@@ -204,7 +204,7 @@
         </a>
       </paper-button>
       <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/aggreements" app-name="pmp" page="agreements">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/agreements" app-name="pmp" page="agreements">
           <iron-icon icon="av:playlist-add-check"></iron-icon>
           Agreements
         </a>
@@ -217,7 +217,7 @@
         </a>
       </paper-button>
       <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/governments" app-name="pmp" page="governments">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/government-partners" app-name="pmp" page="governments">
           <iron-icon icon="account-balance"></iron-icon>
           Goverment-in-simple
         </a>
