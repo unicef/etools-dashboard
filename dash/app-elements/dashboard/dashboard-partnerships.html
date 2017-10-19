@@ -547,12 +547,8 @@
         _setSelectedOffices: function(officesStr) {
           let officesIdsArr = officesStr.split('|');
           if (!_.isEmpty(officesIdsArr)) {
-            officesIdsArr = officesIdsArr.map(function(n) {
-              return parseInt(n, 10);
-            });
-            return this.offices.filter(function(o) {
-              return officesIdsArr.indexOf(parseInt(o.id, 10)) > -1;
-            });
+            officesIdsArr = officesIdsArr.map(n=> parseInt(n, 10));
+            return this.offices.filter(o=> officesIdsArr.includes(parseInt(o.id, 10)));
           }
           return [];
         },
