@@ -13,7 +13,7 @@
   "undef": true,
   "newcap": false,
   "laxbreak": true,
-  "unused":false,
+  "unused": false,
   "globals": {
     "Polymer": true,
     "_": true,
@@ -28,5 +28,6 @@
     "_data": true,
     "_setData": true,
     "moment": true
-  }
+  },
+  "esversion" : 6
 }

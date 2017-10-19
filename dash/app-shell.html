@@ -240,37 +240,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'forbidden': '_onForbidden'
       },
 
-      attached: function() {
+      attached: function(){
         // for some reason the "$=" will make basePath undefined, we need to use a local property
         this.baseUrl = this.basePath;
         //if (this.route.path === this.baseUrl) {
         //  this.set('route.path', this.baseUrl + 'partners/list');
         //}
       },
-      ready: function() {
-        // create loading element, used for global loading
-        this.globalLoadingElement = this.createLoading();
-        this.fire('global-loading', {message: 'Loading data...', active: true});
-      },
-      updateAppSelector: function() {
+      updateAppSelector: function(){
           this.$.pageheader.fire('toggle-menu');
       },
-      _onForbidden: function(event) {
+      _onForbidden: function(event){
         window.location.href = this.loginPath;
       },
-      _updateMainPath: function(event) {
+      _updateMainPath: function(event){
         this.set('route.path', this.baseUrl + event.detail.path);
         event.stopPropagation();
       },
-      _permissionsPagesStamped: function(permissions, _pagesAvailable) {
-        if (!permissions || !_pagesAvailable) {
+      _permissionsPagesStamped: function(permissions, _pagesAvailable){
+        if(!permissions || !_pagesAvailable) {
             return;
         }
-        if ((this.route.path === this.baseUrl || this.route.path === '/') &&
+        if((this.route.path === this.baseUrl || this.route.path === '/') &&
             permissions.loggedInDefault) {
           // setting the default path
           this.set('route.path', this.baseUrl + 'dashboard/personalized');
-        } else if (this.initialLoad) {
+        } else if(this.initialLoad){
           // reseting the page as the pages might not have been stamped
           this._routePageChanged(this.routeData.page);
         }
@@ -312,24 +307,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this._pagesAvailable = true;
         }
       },
-      /**
-       * Show loading when data is requested from server, or save is in progress...
-       */
-      _handleLoading: function(event) {
-        event.stopImmediatePropagation();
-        this.debounce('showGlobalLoading', function() {
-          if (this.globalLoadingElement) {
-            var loadingMsg = 'Loading...';
-            if (event.detail && typeof event.detail.message === 'string'
-                && event.detail.message !== '') {
-              loadingMsg = event.detail.message;
-            }
-            this.globalLoadingElement.loadingText = loadingMsg;
-            var isActive = (event.detail.active === true) ? true : false;
-            this.globalLoadingElement.active = isActive;
-          }
-        }, 50);
-      }
     });
 
   </script>

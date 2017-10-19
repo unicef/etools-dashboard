@@ -1,5 +1,5 @@
 {
-  "name": "Etools dashboard - based on polymer starter kit 2",
+  "name": "dash",
   "authors": [
     "The eTools team"
   ],
@@ -25,7 +25,7 @@
     "iron-input": "^1.0.10",
     "iron-meta": "^1.1.2",
     "iron-icons": "^1.1.3",
-    "etools-ajax": "^1.0.0",
+    "etools-ajax": "unicef-polymer/etools-ajax#a72d415",
     "paper-styles": "^1.1.4",
     "paper-dropdown-menu": "^1.4.1",
     "etools-dropdown": "^1.0.4",
@@ -34,19 +34,19 @@
     "paper-tabs": "^1.6.2",
     "paper-listbox": "^1.1.2",
     "paper-toggle-button": "^1.3.0",
-    "etools-datepicker": "^1.0.0",
+    "etools-datepicker": "1.0.14",
     "etools-checkable-input": "^1.0.0",
     "etools-content-panel": "^1.0.1",
     "iron-form": "PolymerElements/iron-form#^1.1.4",
     "etools-page-refresh": "^1.0.0",
     "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.7",
     "paper-fab": "PolymerElements/paper-fab#^1.2.1",
-    "etools-dialog": "^1.0.0",
-    "etools-loading": "^1.0.3",
-    "etools-searchable-multiselection-menu": "^1.0.2",
+    "etools-dialog": "^1.1.0",
+    "etools-loading": "^1.1.0",
+    "etools-searchable-multiselection-menu": "2.2.4",
     "etools-file": "^1.0.0",
     "paper-button": "PolymerElements/paper-button#^1.0.14",
-    "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
+    "paper-dialog": "PolymerElements/paper-dialog#^2.0.0",
     "paper-item": "PolymerElements/paper-item#^1.2.1",
     "paper-spinner": "PolymerElements/paper-spinner#^1.2.1",
     "neon-animation": "PolymerElements/neon-animation#^1.2.4",
@@ -58,16 +58,20 @@
     "polymer-redux": "^0.4.0",
     "google-chart": "^1.1.1",
     "leaflet-map": "^1.2.0",
-    "etools-app-selector": "^1.0.3",
+    "etools-app-selector": "^1.0.7",
     "etools-profile-dropdown": "^1.0.3",
     "etools-behaviors": "^1.0.1",
-    "iron-label": "^2.0.0"
-
+    "iron-label": "^2.0.0",
+    "webcomponentsjs": "^1.0.4"
   },
   "devDependencies": {
-    "web-component-tester": "^4.0.0"
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0"
   },
   "resolutions": {
-    "etools-searchable-multiselection-menu": "^2.0.0"
+    "etools-searchable-multiselection-menu": "4109c20",
+    "moment-element": "^2.0.0",
+    "paper-dialog": "^2.0.0",
+    "webcomponentsjs": "^0.7.24",
+    "etools-ajax": "a72d415"
   }
 }

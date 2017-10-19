@@ -1,6 +1,5 @@
-
-
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
+
 <link rel="import" href="redux-bahaviors/common-static-data-redux-bahavior.html">
 <link rel="import" href="../../app-config/etools-app-config.html">
 <link rel="import" href="../../app-behaviors/actions-behavior.html">
@@ -9,10 +8,7 @@
 
 <dom-module id="common-data-loaders">
   <template>
-    <etools-ajax id="ajax"
-                 endpoint="[[endpoint]]"
-                 caching-storage="dexie"
-                 on-success="_handleResponse"></etools-ajax>
+    <etools-ajax id="ajax" endpoint="[[endpoint]]" caching-storage="dexie" on-success="_handleResponse"></etools-ajax>
   </template>
   <script src="../../../scripts/actions/actions.js"></script>
   <script>
@@ -37,22 +33,22 @@
       },
       _reduxActions: {},
       actionsToDispatch: function() {
-        var _this = this;
-        var mappedItems = Actions.map(function(a) {
-          var ACTION_CONST = _this.register(a.actionType);
-          var endpoint = a.endpointProps;
+        let _this = this;
+        let mappedItems = Actions.map(function(a) {
+          let ACTION_CONST = _this.register(a.actionType);
+          let endpoint = a.endpointProps;
           if (typeof endpoint === 'function') {
             endpoint = endpoint.bind(_this)();
           }
-          endpoint = _.isEmpty(endpoint) ? endpoint :
-              _.isEmpty(endpoint.templateProps) ? _this.getEndpoint(endpoint.name) :
-                  _this.getEndpoint(endpoint.name, endpoint.templateProps);
+          endpoint = _.isEmpty(endpoint) ? endpoint
+        : _.isEmpty(endpoint.templateProps) ? _this.getEndpoint(endpoint.name)
+        : _this.getEndpoint(endpoint.name, endpoint.templateProps);
 
-          var actionObj = {
+          let actionObj = {
             type: a.actionType,
             action: _this.registerActionCreator(
-                ACTION_CONST,
-                a.propsArray
+              ACTION_CONST,
+              a.propsArray
             ),
             endpoint: endpoint,
             prepareData: _.isEmpty(endpoint) ? a.prepareData.bind(_this) : a.prepareData
@@ -69,8 +65,8 @@
 
       _callNext: function() {
         if (this.toDispatch.length) {
-          var next = this.shift('toDispatch');
-          var action = {};
+          let next = this.shift('toDispatch');
+          let action = {};
           action[next.type] = next.action;
           this.set('nextAction', next);
           this.set('_reduxActions', Object.assign({}, this._reduxActions, action));
@@ -83,7 +79,7 @@
         }
       },
       _handleResponse: function(response) {
-        var data = _.get(response, 'detail.data', response.detail);
+        let data = _.get(response, 'detail.data', response.detail);
         this.dispatch(this.nextAction.type, this.nextAction.prepareData(data));
 
         this._callNext();

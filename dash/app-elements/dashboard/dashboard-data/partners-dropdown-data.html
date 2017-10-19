@@ -36,6 +36,10 @@
         },
         init: function(active) {
           if (active) {
+            this.fire('global-loading', {
+              message: 'Loading partners...',
+              active: true
+            });
             this.set('endpointName', 'partnersDropdown');
             this._elementReady();
           }
@@ -48,6 +52,7 @@
               label: p.name
             }
           }));
+          this.fire('global-loading');
         }
       });
     })()

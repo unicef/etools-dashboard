@@ -18,6 +18,7 @@
 <link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../styles/buttons-styles.html">
 <link rel="import" href="../app-config/etools-app-config.html">
+<link rel="import" href="../app-behaviors/page-utils-behavior.html">
 
 <dom-module id="page-dashboard">
 
@@ -33,11 +34,7 @@
         route="{{route}}"
         pattern="dashboard/:dashTab"
         active="{{tabsActive}}"
-        data="{{routeData}}"></app-route>
-    <app-route
-        route="{{route}}"
-        pattern="dashboard/hact"
-        active="{{hactActive}}"
+        data="{{routeData}}"
         query-params="{{queryParams}}"></app-route>
 
     <app-header-layout>
@@ -45,7 +42,7 @@
         <div class="top-content">
           <div class="top-content-row title-row">
             <h1 main-title>
-              Dashboard
+              [[pageTitle]]
             </h1>
             <div class="top-content-actions-wrapper">
               <div class="top-content-action" hidden$="[[!hactActive]]">
@@ -108,7 +105,7 @@
                   fallback-selection="personalized"
                   role="main">
         <div class="page" name="hact">
-          <dashboard-hact active="[[hactActive]]" url-params="[[queryParams]]"
+          <dashboard-hact active="[[_isActive(partnershipPage,'hact')]]" url-params="[[queryParams]]"
                           csv-download-url="{{csvUrl}}"></dashboard-hact>
         </div>
         <div class="page" name="personalized">
@@ -116,10 +113,12 @@
                                   route="{{route}}"></dashboard-personalized>
         </div>
         <div class="page" name="trips">
-          <dashboard-trips active="[[_isActive(partnershipPage,'trips')]]"></dashboard-trips>
+          <dashboard-trips active="[[_isActive(partnershipPage,'trips')]]" route="{{route}}"></dashboard-trips>
         </div>
         <div class="page" name="partnerships">
-          <dashboard-partnerships active="[[_isActive(partnershipPage,'partnerships')]]"></dashboard-partnerships>
+          <dashboard-partnerships active="[[_isActive(partnershipPage,'partnerships')]]"
+                                  url-params="[[queryParams]]"
+                                  csv-download-url="{{csvUrl}}"></dashboard-partnerships>
         </div>
         <div class="page" name="map">
           <dashboard-map active="[[_isActive(partnershipPage,'map')]]"></dashboard-map>
@@ -144,9 +143,13 @@
           type: Object,
           notify: true
         },
+        pageTitle: {
+          type: String
+        },
       },
       behaviors: [
-        etoolsAppConfig.globals
+        etoolsAppConfig.globals,
+        dashBehaviors.PageUtilsBehavior
       ],
       observers: [
         '_pageChanged(routeData.dashTab)',
@@ -154,6 +157,7 @@
       ],
       _pageChanged: function(dashTab) {
         this.set('partnershipPage', dashTab);
+        dashTab === 'partnerships' ? this.set('pageTitle', 'CSO Dashboard') : this.set('pageTitle', 'Dashboard');
       },
       _updateUrlTab: function(tab) {
         if (!tab) {

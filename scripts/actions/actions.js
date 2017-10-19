@@ -16,9 +16,9 @@
 
  */
 
-var Actions = [
+const Actions = [
   {
-    actionType: 'country-programmes',
+    actionType: 'countryProgrammes',
     propsArray: ['countryProgrammes'],
     endpointProps: {
       name: 'countryProgrammes'
@@ -52,56 +52,56 @@ var Actions = [
       return ret;
     },
     prepareData: function(data) {
-      data = data || [];
-      return data.map(function(trip) {
-        return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']);
-      });
+      return data.length
+        ? data.map(function(trip) {
+            return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']);
+          })
+        : [];
     }
   },
   {
-    actionType: 'trips-supervised',
+    actionType: 'tripsSupervised',
     propsArray: ['tripsSupervised'],
     endpointProps: function() {
       var ret = {name: 'tripsSupervised', templateProps: {id: this.user.id}};
       return ret;
     },
     prepareData: function(data) {
-      data = data || [];
-      return data.map(function(trip) {
-        return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'traveler']);
-      });
+      return data.length
+        ? data.map(trip=> {
+            return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'traveler']);
+          })
+        : [];
     }
   },
   {
-    actionType: 'action-points-by-me',
+    actionType: 'actionPointsByMe',
     propsArray: ['actionPointsByMe'],
     endpointProps: function() {
       var ret = {name: 'actionPointsByMe', templateProps: {id: this.user.id}};
       return ret;
     },
     prepareData: function(data) {
-      data = data || [];
-      return data.map(function(actionPoint) {
-        return _.pick(actionPoint, [
-          'status', 'description', 'created_at', 'person_responsible_name','id'
-        ]);
-      });
+      return data.length
+        ? data.map(function(actionPoint) {
+            return _.pick(actionPoint, ['status', 'description', 'created_at', 'person_responsible_name', 'id', 'due_date']);
+          })
+        : [];
     }
   },
   {
-    actionType: 'action-points-for-me',
+    actionType: 'actionPointsForMe',
     propsArray: ['actionPointsForMe'],
     endpointProps: function() {
       var ret = {name: 'actionPointsForMe', templateProps: {id: this.user.id}};
       return ret;
     },
     prepareData: function(data) {
-      data = data || [];
-      return data.map(function(actionPoint) {
-        return _.pick(actionPoint, [
-          'status', 'description', 'created_at', 'assigned_by_name','id'
-        ]);
-      });
+      return data.length
+        ? data.map(function(actionPoint) {
+            return _.pick(actionPoint, ['status', 'description', 'created_at', 'assigned_by_name', 'id', 'due_date']);
+          })
+        : [];
     }
   },
   {
@@ -112,26 +112,15 @@ var Actions = [
       templateProps: {}
     },
     prepareData: function(data) {
-      return data.length ? data.map(function(partnership) {
-            return _.pick(partnership, ['id', 'title', 'number', 'unicef_budget']);
-          }) : null;
+      return data.length
+        ? data.map(function(partnership) {
+            return _.pick(partnership, ['id', 'title', 'number', 'total_unicef_budget']);
+          })
+        : null;
     }
   },
   {
-    actionType: 'trips-months',
-    propsArray: ['tripsMonths'],
-    endpointProps: {},
-    prepareData: function() {
-      return moment.months().map(function(month, i) {
-        return {
-          name: month,
-          monthId: ("0" + (i + 1)).slice(-2),
-        };
-      });
-    }
-  },
-  {
-    actionType: 'trips-years',
+    actionType: 'tripsYears',
     propsArray: ['tripsYears'],
     endpointProps: {},
     prepareData: function() {
@@ -166,15 +155,14 @@ var Actions = [
       data = data || [];
       return data.map(function(d) {
         return {
-          value: parseInt(d.id, 10),
+          value: d.id,
           label: d.name
         };
       });
     }
   },
   {
-
-    actionType: 'unicef-users',
+    actionType: 'unicefUsers',
     propsArray: ['unicefUsersData'],
     endpointProps: {
       name: 'unicefUsers',
@@ -191,7 +179,7 @@ var Actions = [
     }
   },
   {
-    actionType: 'static-status',
+    actionType: 'statuses',
     propsArray: ['statuses'],
     endpointProps: {
       name: 'static',
@@ -202,7 +190,7 @@ var Actions = [
     }
   },
   {
-    actionType: 'user-country',
+    actionType: 'userCountry',
     propsArray: ['userCountry'],
     endpointProps: {
       name: 'userCountry',
@@ -212,5 +200,4 @@ var Actions = [
       return data[0];
     }
   }
-
 ];
