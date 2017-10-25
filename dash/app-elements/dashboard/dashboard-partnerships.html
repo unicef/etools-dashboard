@@ -151,7 +151,7 @@
         <data-table-column class="flex">
           Start Date <br> End Date
         </data-table-column>
-        <data-table-column class="flex right-align">
+        <data-table-column class="flex-2 right-align">
           Total UNICEF <br>Cash ($)
         </data-table-column>
         <data-table-column class="flex right-align">
@@ -201,8 +201,17 @@
             <span class="col-data flex">
               [[prettyDate(row.start)]] <br> [[prettyDate(row.end)]]
             </span>
-            <span class="col-data flex right-align">
-              [[currencyFormat(row.unicef_cash)]]
+            <span class="col-data flex-2 right-align">
+              <etools-info-tooltip
+                icon="report"
+                fit-to-visible-bounds
+                icon-first
+                right-aligned
+                important-warning
+                hide-tooltip="[[_isEqual(row.unicef_cash, row.frs_total_frs_amt)]]">
+                <span slot="field">[[currencyFormat(row.unicef_cash)]]</span>
+                <span slot="message">FR Amount does not equal Total UNICEF $ Cash</span>
+              </etools-info-tooltip>
             </span>
             <span class="col-data flex right-align">
               [[currencyFormat(row.unicef_supplies)]]
@@ -214,10 +223,8 @@
               [[currencyFormat(row.total_budget)]]
             </span>
             <span class="col-data flex right-align">
-              <etools-info-tooltip icon="report" important-warning hide-tooltip="[[_isEqual(row.unicef_cash, row.disbursement)]]" right-aligned>
-                <span slot="field">[[_displayDisbursement(row.disbursement)]]</span>
-                <span slot="message">FR Amount does not equal Total UNICEF $ Cash</span>
-              </etools-info-tooltip>
+              [[_displayDisbursement(row.disbursement)]]
+              <br>
               [[_getDisbPercent(row.disbursement_percent)]]
             </span>
             <span class="col-data flex right-align">
