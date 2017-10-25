@@ -21,6 +21,7 @@
 <link rel="import"
       href="../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
 <link rel="import" href="../../../bower_components/etools-datepicker/etools-datepicker-button.html">
+<link rel="import" href="../../../bower_components/etools-info-tooltip/etools-info-tooltip.html">
 
 <link rel="import" href="../../app-behaviors/dropdown-behavior.html">
 <link rel="import" href="../../app-behaviors/common-general-behavior.html">
@@ -213,7 +214,10 @@
               [[currencyFormat(row.total_budget)]]
             </span>
             <span class="col-data flex right-align">
-              [[_displayDisbursement(row.disbursement)]] <br>
+              <etools-info-tooltip icon="report" important-warning hide-tooltip="[[_frNotEqual(row.unicef_cash, row.disbursement)]]" right-aligned>
+                <span slot="field">[[_displayDisbursement(row.disbursement)]]</span>
+                <span slot="message">FR Amount does not equal Total UNICEF $ Cash</span>
+              </etools-info-tooltip>
               [[_getDisbPercent(row.disbursement_percent)]]
             </span>
             <span class="col-data flex right-align">
@@ -601,6 +605,9 @@
         _displayDisbursement: function(val) {
           let nonZero = this.displayNonZero(val);
           return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
+        },
+        _frNotEqual: function(total, disbursed) {
+          return disbursed === total
         },
 
 

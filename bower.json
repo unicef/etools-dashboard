@@ -62,7 +62,8 @@
     "etools-profile-dropdown": "^1.0.3",
     "etools-behaviors": "^1.0.1",
     "iron-label": "^2.0.0",
-    "webcomponentsjs": "^1.0.4"
+    "webcomponentsjs": "^1.0.4",
+    "etools-info-tooltip": "^1.0.3"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
