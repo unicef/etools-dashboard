@@ -134,7 +134,6 @@
                 .limit(pageSize)
                 .toArray()]);
           }).then(function(countAndResult) {
-            countAndResult[1][0].sectors = "Advocacy and Communication, Health and Nutrition, Adolescent & Youth, Child Protection";
             self._setTotalResults(countAndResult[0]);
             self._setFilteredPartnerships(countAndResult[1]);
             self.fire('global-loading');
