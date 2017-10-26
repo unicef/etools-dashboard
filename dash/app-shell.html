@@ -30,7 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="app-elements/static-common-data/common-data-loaders.html">
 <link rel="import" href="../bower_components/etools-loading/etools-loading-behavior.html">
 <link rel="import" href="app-behaviors/notification-toasts-behavior.html">
-<link rel="import" href="analytics/piwik-element.html">
+<link rel="import" href="analytics/etools-piwik-analytics.html">
 
 <link rel="import" href="app-elements/user-data/user-data.html">
 <link rel="import" href="app-elements/side-bar-item/side-bar-item.html">
@@ -125,7 +125,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
     </style>
-    <piwik-element page="[[route.path]]"></piwik-element>
+    <etools-piwik-analytics page="[[subroute.path]]" user="[[user]]"></etools-piwik-analytics>
     <common-data-loaders user="[[user]]"></common-data-loaders>
     <user-data user="{{user}}" permissions="{{permissions}}"></user-data>
 
