@@ -172,7 +172,7 @@
       </data-table-header>
       <template is="dom-repeat" items="[[filteredPartnerships]]" as="row">
         <data-table-row no-collapse>
-          <div slot="row-data">
+          <div style="height:100%;overflow:scroll" slot="row-data">
             <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details" app-name="pmp"
                page="partners" id="[[row.partner_id]]/details"
                class="col-data flex-2 title">
