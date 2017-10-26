@@ -54,11 +54,19 @@
       }
 
        data-table-row span:nth-child(3) {
-         display: flex;
-         align-items: center;
-         height:100%;
-        overflow-y: scroll;
+         white-space:normal;
+         overflow-y: scroll;
       }
+      div.sections{
+        height: 48px;
+        line-height: 48px;
+      }
+      div.sections > span {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: normal
+      }
+
     </style>
     <partnership-data id="partnerships" filtered-partnerships="{{filteredPartnerships}}" fire-data-loaded
                       active="[[active]]"
@@ -194,9 +202,14 @@
               <paper-tooltip fit-to-visible-bounds>[[row.number]]</paper-tooltip>
             </a>
             <span class="col-data flex-2">
-              <template is="dom-repeat" items="{{commaSplit(row.sectors)}}">
-                [[item]]<br>
-              </template>
+              <div class="sections">
+                <span >
+                  <template is="dom-repeat" items="{{commaSplit(row.sectors)}}">
+                    [[item]]
+                  </template>
+                </span>
+              </div>
+
             </span>
             <span class="col-data flex">
               <template is="dom-repeat" items="{{commaSplit(row.offices_names)}}">
