@@ -48,6 +48,11 @@
         padding-left: 8px;
       }
 
+      data-table-row {
+        height: 100%;
+        overflow-y: scroll;
+      }
+
       .right-align {
         text-align: right;
       }
@@ -172,7 +177,7 @@
       </data-table-header>
       <template is="dom-repeat" items="[[filteredPartnerships]]" as="row">
         <data-table-row no-collapse>
-          <div style="height:100%;overflow:scroll" slot="row-data">
+          <div slot="row-data">
             <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details" app-name="pmp"
                page="partners" id="[[row.partner_id]]/details"
                class="col-data flex-2 title">
