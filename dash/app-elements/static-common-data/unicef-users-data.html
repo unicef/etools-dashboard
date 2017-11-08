@@ -31,7 +31,7 @@
 
         },
         actions: {
-          setUsersData: function(usersData) {
+          setUnicefUsersData: function(usersData) {
             return {
               type: 'SET_UNICEF_USERS_DATA',
               unicefUsersData: usersData
@@ -46,7 +46,7 @@
         _handleResponse: function(response) {
           if (response.detail && response.detail.length > 0) {
             // set setUsersData values
-            this.dispatch('setUsersData', this._prepareUsersData(response.detail));
+            this.dispatch('setUnicefUsersData', this._prepareUsersData(response.detail));
           }
         },
 
