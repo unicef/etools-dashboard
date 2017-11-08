@@ -143,14 +143,9 @@
             type: Array,
             statePath: 'offices',
           },
-          sections: {
-            type: Array,
-            statePath: 'sections',
-          },
           allSections: {
-            type: Object,
-            notify: true,
-            computed: '_convertCollection(sections)',
+            type: Array,
+            statePath: 'sections'
           },
           allUsers: {
             type: Array,
