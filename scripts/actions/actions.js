@@ -162,7 +162,7 @@ const Actions = [
     }
   },
   {
-    actionType: 'unicefUsers',
+    actionType: 'unicefUsersData',
     propsArray: ['unicefUsersData'],
     endpointProps: {
       name: 'unicefUsers',
