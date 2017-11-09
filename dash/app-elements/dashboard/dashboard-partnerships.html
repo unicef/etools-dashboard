@@ -21,6 +21,7 @@
 <link rel="import"
       href="../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
 <link rel="import" href="../../../bower_components/etools-datepicker/etools-datepicker-button.html">
+<link rel="import" href="../../../bower_components/etools-info-tooltip/etools-info-tooltip.html">
 
 <link rel="import" href="../../app-behaviors/dropdown-behavior.html">
 <link rel="import" href="../../app-behaviors/common-general-behavior.html">
@@ -45,11 +46,27 @@
       data-table-row span:not(:first-child) {
         box-sizing: border-box;
         padding-left: 8px;
+
       }
 
       .right-align {
         text-align: right;
       }
+
+       data-table-row span:nth-child(3) {
+         white-space:normal;
+         overflow-y: auto;
+      }
+      div.sections{
+        height: 48px;
+        line-height: 48px;
+      }
+      div.sections > span {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: normal
+      }
+
     </style>
     <partnership-data id="partnerships" filtered-partnerships="{{filteredPartnerships}}" fire-data-loaded
                       active="[[active]]"
@@ -150,7 +167,7 @@
         <data-table-column class="flex">
           Start Date <br> End Date
         </data-table-column>
-        <data-table-column class="flex right-align">
+        <data-table-column class="flex-2 right-align">
           Total UNICEF <br>Cash ($)
         </data-table-column>
         <data-table-column class="flex right-align">
@@ -176,19 +193,26 @@
                page="partners" id="[[row.partner_id]]/details"
                class="col-data flex-2 title">
               [[row.partner_name]]
+              <paper-tooltip fit-to-visible-bounds>[[row.partner_name]]</paper-tooltip>
             </a>
             <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details" app-name="pmp"
                page="interventions"
                id="[[row.intervention_id]]/details" class="col-data flex-2 title">
               [[row.number]]
+              <paper-tooltip fit-to-visible-bounds>[[row.number]]</paper-tooltip>
             </a>
             <span class="col-data flex-2">
-              <template is="dom-repeat" items="{{row.sectors}}">
-                [[item]]<br>
-              </template>
+              <div class="sections">
+                <span >
+                  <template is="dom-repeat" items="{{commaSplit(row.sectors)}}">
+                    [[item]]<br>
+                  </template>
+                </span>
+              </div>
+
             </span>
             <span class="col-data flex">
-              <template is="dom-repeat" items="{{row.offices_names}}">
+              <template is="dom-repeat" items="{{commaSplit(row.offices_names)}}">
                 [[item]]<br>
               </template>
             </span>
@@ -198,8 +222,16 @@
             <span class="col-data flex">
               [[prettyDate(row.start)]] <br> [[prettyDate(row.end)]]
             </span>
-            <span class="col-data flex right-align">
-              [[currencyFormat(row.unicef_cash)]]
+            <span class="col-data flex-2 right-align">
+              <etools-info-tooltip
+                icon="report"
+                fit-to-visible-bounds
+                icon-first
+                right-aligned
+                hide-tooltip="[[_isEqual(row.unicef_cash, row.frs_total_frs_amt)]]">
+                <span slot="field">[[currencyFormat(row.unicef_cash)]]</span>
+                <span slot="message">FR Amount does not equal Total UNICEF $ Cash</span>
+              </etools-info-tooltip>
             </span>
             <span class="col-data flex right-align">
               [[currencyFormat(row.unicef_supplies)]]
@@ -211,10 +243,12 @@
               [[currencyFormat(row.total_budget)]]
             </span>
             <span class="col-data flex right-align">
-              [[_getDisbursements(row.disbursement,row.frs_total_frs_amt)]]
+              [[_displayDisbursement(row.disbursement)]]
+              <br>
+              [[_getDisbPercent(row.disbursement_percent)]]
             </span>
             <span class="col-data flex right-align">
-              [[row.days_last_pv]]
+              [[displayNonZero(row.days_last_pv)]]
             </span>
           </div>
         </data-table-row>
@@ -240,7 +274,8 @@
           dashBehaviors.DropdownBehavior,
           dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
           dashBehaviors.CommonGeneralBehavior,
-          dashBehaviors.ListFiltersBehavior
+          dashBehaviors.ListFiltersBehavior,
+          etoolsAppConfig.globals
         ],
         observers: [
           '_updateUrl(qs, pageNumber, pageSize,' +
@@ -249,6 +284,9 @@
           '_initListFilters(sectors, statuses, offices)',
           '_init(active,sectors,statuses,offices)'
         ],
+        listeners: {
+          'sort-changed': 'sortOrderChanged',
+        },
 
         properties: {
           filteredPartnerships: {
@@ -273,6 +311,10 @@
           },
           qs: {
             type: String
+          },
+          csvDownloadUrl: {
+            type: String,
+            notify: true
           },
           urlParams: {
             type: Object,
@@ -333,14 +375,13 @@
           this.set('sortOrder', params.sort ? params.sort : 'asc');
           this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
           this.set('selectedOffices', params.offices ? this._setSelectedOffices(params.offices) : []);
-          this.set('selectedStatuses', params.status ? this._setSelectedStatuses(params.status) : []);
+          this.set('selectedStatuses', params.status ? this._setSelectedStatuses(params.status) : this._setSelectedStatuses('signed|active|ended|suspended|terminated'));
           this.set('startAfterDate', params.startAfter ? params.startAfter : '');
           this.set('endBeforeDate', params.endBefore ? params.endBefore : '');
           this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
           this.set('endAfterDate', params.endAfter ? params.endAfter : '');
           this.set('initComplete', true);
           this._updateSelectedFiltersValues();
-
         },
 
         _initListFilters: function(sectors, statuses, offices) {
@@ -369,7 +410,7 @@
                 type: 'esmm',
                 optionValue: 'value',
                 optionLabel: 'label',
-                selectionOptions: this.statuses,
+                selectionOptions: this.statuses.slice(1),
                 alreadySelected: [],
                 path: 'selectedStatuses'
               },
@@ -442,7 +483,8 @@
           if (!this.initComplete || !this.requiredDataLoaded) {
             return;
           }
-          var qs = this._buildQueryString();
+          this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
+          const qs = this._buildQueryString();
           if (qs !== null) {
             this.updateAppState('dashboard/partnerships', qs, true);
             if (this.requiredDataLoaded) {
@@ -460,7 +502,7 @@
         },
 
         _buildQueryString: function() {
-          var qs = [];
+          let qs = [];
           if (this.pageNumber && this.pageNumber > 1) {
             qs.push('page=' + this.pageNumber);
           }
@@ -499,13 +541,7 @@
         },
 
         _buildCsvDownloadUrl: function() {
-          var queryString = '';
-          var endpointUrl = '';
-          var params = [];
-
-          if (!_.isEmpty(this.selectedSectors)) {
-            params.push('sector=' + this.selectedSectors[0].value)
-          }
+          return `${this.getEndpoint('cso_dashboard').url}?format=csv`;
         },
 
         _filterPartnershipsData: function() {
@@ -526,8 +562,8 @@
 
         _requiredDataLoaded: function(e) {
           event.stopImmediatePropagation();
-          var listDataPath = Polymer.dom(event).localTarget.getAttribute('list-data-path');
-          var list = this.get(listDataPath);
+          const listDataPath = Polymer.dom(event).localTarget.getAttribute('list-data-path');
+          const list = this.get(listDataPath);
 
           if (typeof list === 'undefined' ||
             (Array.isArray(list) && list.length === 0)) {
@@ -540,22 +576,18 @@
         },
 
         _setSelectedOffices: function(officesStr) {
-          var officesIdsArr = officesStr.split('|');
+          let officesIdsArr = officesStr.split('|');
           if (!_.isEmpty(officesIdsArr)) {
-            officesIdsArr = officesIdsArr.map(function(n) {
-              return parseInt(n, 10);
-            });
-            return this.offices.filter(function(o) {
-              return officesIdsArr.indexOf(parseInt(o.id, 10)) > -1;
-            })
+            officesIdsArr = officesIdsArr.map(n=> parseInt(n, 10));
+            return this.offices.filter(o=> officesIdsArr.includes(parseInt(o.id, 10)));
           }
           return [];
         },
 
         _setSelectedSectors: function(sectorsStr) {
-          var sectorsArr = sectorsStr.split('|');
+          const sectorsArr = sectorsStr.split('|');
           if (!_.isEmpty(sectorsArr)) {
-            var selectedSectors = this.sectors.filter(function(s) {
+            const selectedSectors = this.sectors.filter(function(s) {
               return sectorsArr.indexOf(s.value) > -1;
             });
             return selectedSectors;
@@ -564,7 +596,7 @@
         },
 
         _setSelectedStatuses: function(statuses) {
-          var statusesStrArr = statuses.split('|');
+          const statusesStrArr = statuses.split('|');
           if (_.isEmpty(this.statuses)) {
             return [];
           }
@@ -573,8 +605,9 @@
           });
         },
 
-        _getDisbursements: function(disb, fr) {
-          return disb === '0.00' ? '0' : (Number(disb) / Number(fr) * 100).toFixed(1);
+        _getDisbPercent: function(perc) {
+          return perc === '0.00' ? ''
+            : `(${Number(perc).toFixed(0)})`;
         },
         _filterChanged: function() {
           this.set('debounceTime', 200);
@@ -591,6 +624,17 @@
         },
         _dateChanged: function(date) {
           this.set('pageNumber', 1);
+        },
+        sortOrderChanged: function(e) {
+          this.set('debounceTime', 150);
+          this.set('sortOrder', e.detail.direction);
+        },
+        _displayDisbursement: function(val) {
+          let nonZero = this.displayNonZero(val);
+          return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
+        },
+        _isEqual: function(total, disbursed) {
+          return disbursed === total
         },
 
 

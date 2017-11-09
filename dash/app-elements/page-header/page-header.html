@@ -127,7 +127,6 @@
           dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
           etoolsAppConfig
         ],
-
         properties: {
           countries: {
             type: Array
@@ -135,24 +134,24 @@
           user: {
             type: Object,
           },
-          userProfileDialog: Object,
           allOffices: {
             type: Object,
-            notify: true
+            notify: true,
+            computed: '_convertCollection(offices)'
           },
           offices: {
             type: Array,
             statePath: 'offices',
-            observer: '_convertOffices'
           },
           allSections: {
-            type: Object,
+            type: Array,
             statePath: 'sections'
           },
           allUsers: {
-            type: Object,
+            type: Array,
             statePath: 'unicefUsersData'
           },
+          userProfileDialog: Object,
         },
         observers: [
           '_updateCountriesList(user.profile.countries_available)',
@@ -194,20 +193,19 @@
           });
           this.set('countries', arrayObj);
         },
-        _convertOffices: function(data) {
-          var offices = data.map(function(office) {
-            return {label: office.name, value: office.id}
+        _convertCollection: function(data) {
+          return data.map(function(item) {
+            return {label: item.name, value: item.id};
           });
-          this.set('allOffices', offices);
+        },
+        _saveProfile: function (e) {
+          this.set('profile', e.detail.profile);
+          this.$.userProfileData.saveProfile(this.profile);
         },
         _signOut: function() {
           this._clearDexieDbs();
           this._clearLocalStorage();
           window.location.href = window.location.origin + '/saml2/logout';
-        },
-        _saveProfile: function (e) {
-          this.set('profile', e.detail.profile);
-          this.$.userProfileData.saveProfile(this.profile);
         },
         _clearDexieDbs: function() {
           etoolsAppConfig.db.delete();

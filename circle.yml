@@ -3,13 +3,16 @@ machine:
      - docker
 
 dependencies:
+  cache_directories:
+    - "~/dockercache"
 
   override:
+
     - docker build --rm=false -t unicef/etools-dashboard:$CIRCLE_BRANCH .
 
 test:
-  override:
-    - "true"
+   override:
+     - "true"
 
 deployment:
    hub:

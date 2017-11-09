@@ -1,10 +1,10 @@
 <link rel="import" href="../../../../bower_components/polymer-redux/polymer-redux.html">
 <script>
 
-  var Redux = Redux || {};
-  var PolymerRedux = PolymerRedux || {};
+//  let Redux = Redux || {};
+//  var PolymerRedux = PolymerRedux || {};
 
-  var initialDropdownDashboardData = {
+  const initialDropdownDashboardData = {
     countryProgrammes: [],
     offices: [],
     countries: [],
@@ -21,18 +21,27 @@
     unicefUsersData: []
   };
   /** @polymerBehavior dashBehaviors.EtoolsStaticCommonDataReduxBehavior */
-  var commonStaticDataStore = Redux.createStore(function(state, action) {
+  const commonStaticDataStore = Redux.createStore((state, action)=> {
     if (!state) {
       return initialDropdownDashboardData;
     }
-    var newProp = {};
-    var value = _.find(_.keys(action), function(p) {
-      return p !== 'type'
-    });
-    newProp[value] = action[value];
-    return Object.assign({}, state, newProp);
+//    const test = {
+//      ...state,
+//      [action['type']]: action[action.type]
+//    };
+//    console.log('test for action', action.type , test);
+//    var newProp = {};
+//    console.log('action: ', action);
+//    const value = _.find(_.keys(action), (p)=> {
+//      return p !== 'type';
+//    });
+//    newProp[value] = action[value];
+//    return Object.assign({}, state, newProp);
+    return {
+      ...state,
+      [action['type']]: action[action.type]
+    };
   });
-
   window.dashBehaviors = window.dashBehaviors || {};
   dashBehaviors.EtoolsStaticCommonDataReduxBehavior = PolymerRedux(commonStaticDataStore);
 </script>

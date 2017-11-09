@@ -158,7 +158,7 @@
               PLANNED for <br> current year
             </data-table-column>
             <data-table-column class="col-4 right nowrap" id="total_ct_cy">
-              ACTUAL for <br> current year
+              Current Year  <br> (1 Oct - 30 Sep)
             </data-table-column>
           </data-table-column>
         </div>
@@ -217,9 +217,9 @@
             <span class="col-2 col-data">[[totals.shared_partner]]</span>
           </div>
           <div class="col-3 layout horizontal group">
-            <span class="col-4 col-data padded">$[[currencyFormat(totals.total_ct_cp)]]<paper-tooltip position="right">$[[currencyFormat(totals.total_ct_cp)]]</paper-tooltip></span>
-            <span class="col-4 center col-data padded">$[[currencyFormat(totals.planned_cash_transfer)]]<paper-tooltip position="right">$[[currencyFormat(totals.planned_cash_transfer)]]</paper-tooltip></span>
-            <span class="col-4 right col-data">$[[currencyFormat(totals.total_ct_cy)]]<paper-tooltip position="right">$[[currencyFormat(totals.total_ct_cy)]]</paper-tooltip></span>
+            <span class="col-4 col-data padded">$[[currencyFormat(totals.total_ct_cp)]]<paper-tooltip>$[[currencyFormat(totals.total_ct_cp)]]</paper-tooltip></span>
+            <span class="col-4 center col-data padded">$[[currencyFormat(totals.planned_cash_transfer)]]<paper-tooltip>$[[currencyFormat(totals.planned_cash_transfer)]]</paper-tooltip></span>
+            <span class="col-4 right col-data">$[[currencyFormat(totals.total_ct_cy)]]<paper-tooltip>$[[currencyFormat(totals.total_ct_cy)]]</paper-tooltip></span>
           </div>
           <div class="col-3 layout horizontal">
             <span class="col-data col-3"></span>
@@ -253,20 +253,20 @@
               <span class="col-6 col-data partner-link padded">
                 <a on-tap="_goToPage" id="[[partner.id]]">
                   [[partner.name]]
-                  <paper-tooltip position="right">[[partner.name]]</paper-tooltip>
+                  <paper-tooltip>[[partner.name]]</paper-tooltip>
                 </a>
               </span>
-              <span class="col-4 col-data padded">[[partner.partner_type]]<paper-tooltip position="right">[[partner.partner_type]]</paper-tooltip></span>
+              <span class="col-4 col-data padded">[[partner.partner_type]]<paper-tooltip>[[partner.partner_type]]</paper-tooltip></span>
               <span class="col-2 col-data">[[partner.shared_partner]]</span>
             </div>
             <div class="col-3 layout horizontal group">
-              <span class="col-4 col-data padded">$[[currencyFormat(partner.total_ct_cp)]]<paper-tooltip position="right">$[[currencyFormat(partner.total_ct_cp)]]</paper-tooltip></span>
-              <span class="col-4 center col-data padded">$[[_getGovernmentDisplay(partner,'hact_values.planned_cash_transfer','true')]]<paper-tooltip position="right">$[[_getGovernmentDisplay(partner,'hact_values.planned_cash_transfer','true')]]</paper-tooltip></span>
-              <span class="col-4 right col-data">$[[currencyFormat(partner.total_ct_cy)]]<paper-tooltip position="right">$[[currencyFormat(partner.total_ct_cy)]]</paper-tooltip></span>
+              <span class="col-4 col-data padded">$[[currencyFormat(partner.total_ct_cp)]]<paper-tooltip>$[[currencyFormat(partner.total_ct_cp)]]</paper-tooltip></span>
+              <span class="col-4 center col-data padded">$[[_getGovernmentDisplay(partner,'hact_values.planned_cash_transfer','true')]]<paper-tooltip>$[[_getGovernmentDisplay(partner,'hact_values.planned_cash_transfer','true')]]</paper-tooltip></span>
+              <span class="col-4 right col-data">$[[currencyFormat(partner.total_ct_cy)]]<paper-tooltip>$[[currencyFormat(partner.total_ct_cy)]]</paper-tooltip></span>
             </div>
             <div class="col-3 layout horizontal">
               <span class="col-data col-3 flex">[[partner.hact_values.micro_assessment_needed]]</span>
-              <span class="col-data col-3">[[partner.rating]]<paper-tooltip position="right">[[partner.rating]]</paper-tooltip></span>
+              <span class="col-data col-3">[[partner.rating]]<paper-tooltip>[[partner.rating]]</paper-tooltip></span>
               <div class="col-6 layout horizontal group">
                 <span class="col-data col-4 flex padded">[[_getGovernmentDisplay(partner,'hact_values.planned_visits')]]</span>
                 <span class="col-data col-4 center flex padded">[[partner.hact_min_requirements.programme_visits]]</span>
@@ -362,7 +362,7 @@
             return;
           }
           this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
-          var qs = this.buildQueryString();
+          const qs = this.buildQueryString();
           if (qs !== null) {
             this.updateAppState('dashboard/hact', qs, true);
             if (this.requiredDataLoaded) {
@@ -402,7 +402,7 @@
         },
 
         _getGovernmentDisplay: function(partner,prop,toCurrency) {
-          var partnerValue = _.get(partner, prop);
+          const partnerValue = _.get(partner, prop);
           if (partner.partner_type === 'Government') {
             return '-';
           } else {

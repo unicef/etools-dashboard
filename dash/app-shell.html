@@ -248,7 +248,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'toast': 'toastFired'
       },
 
-      attached: function() {
+      attached: function(){
         // for some reason the "$=" will make basePath undefined, we need to use a local property
         this.baseUrl = this.basePath;
         //if (this.route.path === this.baseUrl) {
@@ -261,22 +261,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       updateAppSelector: function() {
           this.$.pageheader.fire('toggle-menu');
       },
-      _onForbidden: function(event) {
+      _onForbidden: function(event){
         window.location.href = this.loginPath;
       },
-      _updateMainPath: function(event) {
+      _updateMainPath: function(event){
         this.set('route.path', this.baseUrl + event.detail.path);
         event.stopPropagation();
       },
-      _permissionsPagesStamped: function(permissions, _pagesAvailable) {
-        if (!permissions || !_pagesAvailable) {
+      _permissionsPagesStamped: function(permissions, _pagesAvailable){
+        if(!permissions || !_pagesAvailable) {
             return;
         }
-        if ((this.route.path === this.baseUrl || this.route.path === '/') &&
+        if((this.route.path === this.baseUrl || this.route.path === '/') &&
             permissions.loggedInDefault) {
           // setting the default path
           this.set('route.path', this.baseUrl + 'dashboard/personalized');
-        } else if (this.initialLoad) {
+        } else if(this.initialLoad){
           // reseting the page as the pages might not have been stamped
           this._routePageChanged(this.routeData.page);
         }

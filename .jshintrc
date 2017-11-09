@@ -28,5 +28,6 @@
     "_data": true,
     "_setData": true,
     "moment": true
-  }
+  },
+  "esversion" : 6
 }

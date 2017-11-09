@@ -19,7 +19,7 @@ App global configuration
       countryProgrammes: 'id, name, wbs, from_date',
       offices: 'id, name',
       partners: 'id',
-      cso_dashboard: 'intervention_id',
+      cso_dashboard: 'intervention_id, partner_name',
       trips: 'id, supervisor_name, purpose_of_travel, traveler, created_date',
       mapInterventions: 'id, status',
       locations: 'id'
@@ -42,8 +42,9 @@ App global configuration
         getEndpoint: function(endpointName, data) {
           var endpoint = JSON.parse(JSON.stringify(etoolsAppConfig.endpoints[endpointName]));
           if (endpoint && endpoint.hasOwnProperty('template') && endpoint.template !== '') {
-            endpoint.url = this.baseSite + _.template(endpoint.template)(data);
+            endpoint.url = window.location.origin + _.template(endpoint.template)(data);
           }
+
           return endpoint;
         },
 
@@ -161,15 +162,15 @@ App global configuration
         cachingKey: 'sectors'
       },
 			actionPointsByMe: {
-        template: '/api/t2f/action_points/?f_assigned_by=<%=id%>&f_status=ongoing'
+        template: '/api/t2f/action_points/?f_assigned_by=<%=id%>&mf_status=ongoing,open'
       },
       actionPointsForMe: {
-        template: '/api/t2f/action_points/?f_person_responsible=<%=id%>&f_status=ongoing'
+        template: '/api/t2f/action_points/?f_person_responsible=<%=id%>&mf_status=ongoing,open'
       },
       mapInterventions: {
         template: '/api/v2/interventions/map<%=filter%>',
       },
-      locations:{
+      locations: {
         url: '/api/locations',
         exp: 6 * 60 * 60 * 1000,
         cachingKey: 'locations'
@@ -178,7 +179,7 @@ App global configuration
         template: '/api/v2/interventions/dash'
       },
       cso_dashboard: {
-        template: '/api/v2/interventions/partnership-dash/',
+        template: '/api/v2/interventions/partnership-dash',
         exp: 6* 60 * 60 * 1000, // 6h
         cachingKey: 'cso_dashboard',
       },
