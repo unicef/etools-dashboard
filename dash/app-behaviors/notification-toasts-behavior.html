@@ -12,6 +12,10 @@
       _toastQueue: {
         type: Array,
         value: function() { return []; }
+      },
+      currentToastMessage: {
+        type: String,
+        value: ''
       }
     },
 
@@ -24,13 +28,13 @@
       if (!this._toast) {
         this._toast = document.createElement('paper-toast');
         this.listen(this._toast, 'iron-overlay-closed', 'dequeueToast');
-        var closeToastBtn = document.createElement('paper-button');
+        let closeToastBtn = document.createElement('paper-button');
         closeToastBtn.innerHTML = 'Ok';
         closeToastBtn.setAttribute('class', 'warning-toast-dismiss-btn');
         closeToastBtn.addEventListener('tap', this._toggleToast.bind(this, this._toast));
         Polymer.dom(this._toast).appendChild(closeToastBtn);
         // this.$.layout is app-drawer-layout element from app-shell.html
-        var layout = this.$.layout;
+        let layout = this.$.layout;
         if (layout) {
           Polymer.dom(layout).appendChild(this._toast);
         } else {
@@ -41,10 +45,10 @@
 
       if (!this._toastQueue.length) {
         this.push('_toastQueue', detail);
-        var toastProperties = this._prepareToastAndGetShowProperties(detail);
-        this._toast.show(toastProperties);
+        let toastProperties = this._prepareToastAndGetShowProperties(detail);
+        this._showtoast(toastProperties);
       } else {
-        var alreadyInQueue = this._toastQueue.filter(function(toastDetail) {
+        let alreadyInQueue = this._toastQueue.filter(function(toastDetail) {
           return JSON.stringify(toastDetail) === JSON.stringify(detail);
         });
         if (alreadyInQueue.length === 0) {
@@ -56,15 +60,15 @@
     dequeueToast: function() {
       this.shift('_toastQueue');
       if (this._toastQueue.length) {
-        var toastProperties = this._prepareToastAndGetShowProperties(this._toastQueue[0]);
-        this._toast.show(toastProperties);
+        let toastProperties = this._prepareToastAndGetShowProperties(this._toastQueue[0]);
+        this._showToast(toastProperties);
       }
     },
 
     _prepareToastAndGetShowProperties: function(detail) {
-      var closeToastBtn = Polymer.dom(this._toast).querySelector('paper-button');
+      let closeToastBtn = Polymer.dom(this._toast).querySelector('paper-button');
       // clone detail obj
-      var toastProperties = JSON.parse(JSON.stringify(detail));
+      let toastProperties = JSON.parse(JSON.stringify(detail));
 
       toastProperties.duration = 0;
       if (typeof detail === 'object' && typeof detail.showCloseBtn !== 'undefined') {
@@ -89,6 +93,11 @@
         toast.toggle();
       }
     },
+
+    _showToast: function(toastProperties) {
+      this.set('currentToastMessage', toastProperties.text);
+      this._toast.show(toastProperties);
+    }
 
   };
 </script>

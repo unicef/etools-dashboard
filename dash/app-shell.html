@@ -127,7 +127,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <etools-piwik-analytics page="[[subroute.path]]"
                             user="[[user]]"
-                            toast="[[toast]]"></etools-piwik-analytics>
+                            toast="[[currentToastMessage]]"></etools-piwik-analytics>
     <common-data-loaders user="[[user]]"></common-data-loaders>
     <user-data user="{{user}}" permissions="{{permissions}}"></user-data>
 
@@ -221,9 +221,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         subroute: {
           type: Object
-        },
-        toast: {
-          type: String
         }
       },
 
@@ -244,8 +241,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         '404': '_pageNotFound',
         'update-main-path': '_updateMainPath',
         'iron-select': 'updateAppSelector',
-        'forbidden': '_onForbidden',
-        'toast': 'toastFired'
+        'forbidden': '_onForbidden'
       },
 
       attached: function() {
@@ -254,9 +250,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         //if (this.route.path === this.baseUrl) {
         //  this.set('route.path', this.baseUrl + 'partners/list');
         //}
-      },
-      toastFired: function() {
-        this.set('toast', event.detail.text)
       },
       updateAppSelector: function() {
           this.$.pageheader.fire('toggle-menu');
