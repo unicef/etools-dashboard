@@ -116,7 +116,9 @@
           <dashboard-trips active="[[_isActive(partnershipPage,'trips')]]" route="{{route}}"></dashboard-trips>
         </div>
         <div class="page" name="partnerships">
-          <dashboard-partnerships active="[[_isActive(partnershipPage,'partnerships')]]" url-params="[[queryParams]]"></dashboard-partnerships>
+          <dashboard-partnerships active="[[_isActive(partnershipPage,'partnerships')]]"
+                                  url-params="[[queryParams]]"
+                                  csv-download-url="{{csvUrl}}"></dashboard-partnerships>
         </div>
         <div class="page" name="map">
           <dashboard-map active="[[_isActive(partnershipPage,'map')]]"></dashboard-map>

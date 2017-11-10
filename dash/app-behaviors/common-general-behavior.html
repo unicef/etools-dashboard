@@ -36,7 +36,7 @@
       // back button doesn't take you through every query
       var currentState = window.history.state;
       window.history.replaceState(currentState, null,
-          routePath + (qs.length ? '?' + qs : ''));
+        routePath + (qs.length ? '?' + qs : ''));
 
       if (dispatchLocationChange) {
         // This event lets app-location and app-route know
@@ -101,9 +101,9 @@
       num = parseInt(num);
       return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     },
-    
+
     capitalizeWord: function(word) {
-      return word.charAt(0).toUpperCase() + word.slice(1)
+      return word.charAt(0).toUpperCase() + word.slice(1);
     },
 
     manageClickEvent: function(e, path) {
@@ -113,16 +113,27 @@
     },
     goToPage: function(e) {
       var path = [this.baseSite, e.target.getAttribute('app-name'),
-            e.target.getAttribute('page')].join('/') + '/' + e.target.id;
+        e.target.getAttribute('page')].join('/') + '/' + e.target.id;
       this.manageClickEvent(e, path);
     },
-    _allHaveValues: function() {
-        var self = this;
-        var args = _.toArray(arguments);
-        return args.reduce(function(hasVal, prop) {
-          return !_.isEmpty(self[prop]) && hasVal;
-        }, true);
-      },
+    _allHaveValues: function(...args) {
+      const self = this;
+      return args.reduce(function(hasVal, prop) {
+        return !_.isEmpty(self[prop]) && hasVal;
+      }, true);
+    },
+    displayNonZero: function(val) {
+      return Number(val) ? val : '-';
+    },
+    commaSplit: function(str) {
+      return str.split(',');
+    },
+    strippedSpace: function(str) {
+      return str.split(',')
+        .map(function(item) {
+          return item[0]===' '? item.slice(1) : item;
+        });
+    }
 
   };
 

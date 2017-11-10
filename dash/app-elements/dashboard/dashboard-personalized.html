@@ -173,13 +173,13 @@
             <data-table-row no-collapse>
               <div slot="row-data">
                 <div class="layout vertical col-10">
-                                <span class="col-data description">
-                                    <a on-tap="_goToActionPoint" href="[[baseSite]]/t2f/action-point/[[action.id]]">[[action.description]]</a>
-                                </span>
-                  <span class="suppData">[[action.status]]</span>
+                  <span class="col-data description">
+                    <a on-tap="_goToActionPoint" href="[[baseSite]]/t2f/action-point/[[action.id]]">[[action.description]]</a>
+                  </span>
+                  <span class="suppData">[[capitalizeWord(action.status)]]</span>
                 </div>
                 <div class="layout vertical start col-data col-2 ">
-                  <span class="col-data">[[_dateFormatted(action.created_at)]]</span>
+                  <span class="col-data">[[_dateFormatted(action.due_date)]]</span>
                   <span class="suppData">[[_getDisplayName('actions',action)]]</span>
                 </div>
               </div>
@@ -204,7 +204,7 @@
         </a>
       </paper-button>
       <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/aggreements" app-name="pmp" page="agreements">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/agreements" app-name="pmp" page="agreements">
           <iron-icon icon="av:playlist-add-check"></iron-icon>
           Agreements
         </a>
@@ -217,7 +217,7 @@
         </a>
       </paper-button>
       <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/governments" app-name="pmp" page="governments">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/government-partners" app-name="pmp" page="governments">
           <iron-icon icon="account-balance"></iron-icon>
           Goverment-in-simple
         </a>
@@ -242,9 +242,9 @@
                 [[partnership.number]]
               </a>
               <span class="description description-size flex-3 col-data">
-                            [[partnership.title]]
-                        </span>
-              <span class="col-data col-2 layout horizontal end-justified">$[[currencyFormat(partnership.unicef_budget)]] (Total Budget)</span>
+                [[partnership.title]]
+              </span>
+              <span class="col-data col-2 layout horizontal end-justified">$[[currencyFormat(partnership.total_unicef_budget)]] (Total Budget)</span>
             </div>
           </data-table-row>
         </template>
@@ -324,7 +324,7 @@
         }
       },
       _setItems: function(tab, itemsProp) {
-        var items = _.get(this, tab, []);
+        const items = _.get(this, tab, []);
         this.set(itemsProp, items);
       },
       _getDisplayName: function(type, item) {
@@ -338,7 +338,7 @@
         }
       },
       _dateFormatted: function(str) {
-        return moment(str).format('DD MMM YYYY');
+        return str ? moment(str).format('DD MMM YYYY') : '';
       },
 
       _updateUrl: function(active) {
@@ -349,7 +349,7 @@
 
       _goToActionPoint: function(e) {
         var origin = window.location.origin;
-        var path = origin + '/t2f/action-point/' + e.model.action.id;
+        const path = origin + '/t2f/action-point/' + e.model.action.id;
         this.manageClickEvent(e, path);
       }
     });
