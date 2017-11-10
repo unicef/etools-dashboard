@@ -30,6 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="app-elements/static-common-data/common-data-loaders.html">
 <link rel="import" href="../bower_components/etools-loading/etools-loading-behavior.html">
 <link rel="import" href="app-behaviors/notification-toasts-behavior.html">
+<link rel="import" href="../bower_components/etools-piwik-analytics/etools-piwik-analytics.html">
 
 <link rel="import" href="app-elements/user-data/user-data.html">
 <link rel="import" href="app-elements/side-bar-item/side-bar-item.html">
@@ -124,6 +125,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
     </style>
+    <etools-piwik-analytics page="[[subroute.path]]"
+                            user="[[user]]"
+                            toast="[[toast]]"></etools-piwik-analytics>
     <common-data-loaders user="[[user]]"></common-data-loaders>
     <user-data user="{{user}}" permissions="{{permissions}}"></user-data>
 
@@ -218,6 +222,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         subroute: {
           type: Object
         },
+        toast: {
+          type: String
+        }
       },
 
       behaviors: [
@@ -237,7 +244,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         '404': '_pageNotFound',
         'update-main-path': '_updateMainPath',
         'iron-select': 'updateAppSelector',
-        'forbidden': '_onForbidden'
+        'forbidden': '_onForbidden',
+        'toast': 'toastFired'
       },
 
       attached: function(){
@@ -247,7 +255,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         //  this.set('route.path', this.baseUrl + 'partners/list');
         //}
       },
-      updateAppSelector: function(){
+      toastFired: function() {
+        this.set('toast', event.detail.text)
+      },
+      updateAppSelector: function() {
           this.$.pageheader.fire('toggle-menu');
       },
       _onForbidden: function(event){
