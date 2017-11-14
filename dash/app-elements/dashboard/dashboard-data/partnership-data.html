@@ -57,7 +57,14 @@
         },
 
         init: function(active) {
-          this._elementReady();
+          if (active) {
+            this.fire('global-loading', {
+              message: 'Loading interventions data...',
+              active: true,
+              loadingSource: 'partner-data'
+            });
+            this._elementReady();
+          }
         },
 
         query: function(searchString, order, pageSize, pageNumber,
@@ -130,6 +137,7 @@
             self._setTotalResults(countAndResult[0]);
             self._setFilteredPartnerships(countAndResult[1]);
             self.fire('global-loading');
+            self.fire('global-loading', {loadingSource: 'partner-data'});
           }).catch(function(error) {
             console.error('Error querying partnerships-dash: ', error);
           });
