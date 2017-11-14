@@ -68,9 +68,11 @@
       }
 
     </style>
-    <partnership-data id="partnerships" filtered-partnerships="{{filteredPartnerships}}" fire-data-loaded
+    <partnership-data id="partnerships" 
+    filtered-partnerships="{{filteredPartnerships}}" fire-data-loaded
                       active="[[active]]"
-                      total-results="{{totalResults}}" on-partnerships-loaded="_requiredDataLoaded"
+                      total-results="{{totalResults}}" 
+                      on-partnerships-loaded="_requiredDataLoaded"
                       list-data-path="filteredPartnerships"></partnership-data>
 
     <paper-material class="list-panel listControls" elevation="1">
@@ -363,8 +365,8 @@
         },
 
         _init: function(active, sectors, statuses, offices) {
-          var params = this.urlParams;
-          var staticLoaded = this._allHaveValues('sectors', 'statuses', 'offices');
+          let params = this.urlParams;
+          let staticLoaded = this._allHaveValues('sectors', 'statuses', 'offices');
           if (!active || !params || !staticLoaded) {
             return;
           }
@@ -445,7 +447,7 @@
 
         _updateSelectedFiltersValues: function() {
           this.debounce('updateShownFilters', function() {
-            var filtersValues = [
+            let filtersValues = [
               {
                 filterName: 'Section/Cluster',
                 selectedValue: _.map(this.selectedSectors, 'value')
@@ -560,7 +562,7 @@
           );
         },
 
-        _requiredDataLoaded: function(e) {
+        _requiredDataLoaded: function(event) {
           event.stopImmediatePropagation();
           const listDataPath = Polymer.dom(event).localTarget.getAttribute('list-data-path');
           const list = this.get(listDataPath);
@@ -578,8 +580,8 @@
         _setSelectedOffices: function(officesStr) {
           let officesIdsArr = officesStr.split('|');
           if (!_.isEmpty(officesIdsArr)) {
-            officesIdsArr = officesIdsArr.map(n=> parseInt(n, 10));
-            return this.offices.filter(o=> officesIdsArr.includes(parseInt(o.id, 10)));
+            officesIdsArr = officesIdsArr.map((n)=> parseInt(n, 10));
+            return this.offices.filter((o)=> officesIdsArr.includes(parseInt(o.id, 10)));
           }
           return [];
         },
@@ -634,7 +636,8 @@
           return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
         },
         _isEqual: function(total, disbursed) {
-          return disbursed === total
+          // return disbursed === total
+          return true;
         },
 
 

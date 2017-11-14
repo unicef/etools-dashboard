@@ -4,11 +4,18 @@
   dashBehaviors.DataElementBehaviorImpl = {
 
     properties: {
-      endpoint: Object,
+      endpoint: {
+        type: Object,
+      },
+      
       data: {
         type: Array,
         readOnly: true,
         notify: true
+      },
+
+      endpointName: {
+        observer: '_elementReady'
       },
 
       db: {
