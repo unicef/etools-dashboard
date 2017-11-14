@@ -70,10 +70,10 @@
         query: function(searchString, order, pageSize, pageNumber,
                         sectors, offices, status, startAfterDate,
                         endBeforeDate, startBeforeDate, endAfterDate) {
-          var self = this;
+          let self = this;
           this.db.transaction('r', this.db.cso_dashboard, function() {
-            self.fire('global-loading', {active: true, message: 'Loading data...'})
-            var queryResult = self.db.cso_dashboard.orderBy('partner_name');
+            self.fire('global-loading', {active: true, message: 'Loading data...'});
+            let queryResult = self.db.cso_dashboard.orderBy('partner_name');
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
@@ -134,7 +134,6 @@
                 .limit(pageSize)
                 .toArray()]);
           }).then(function(countAndResult) {
-            countAndResult[1][0].sectors = "Advocacy and Communication, Health and Nutrition, Adolescent & Youth, Child Protection";
             self._setTotalResults(countAndResult[0]);
             self._setFilteredPartnerships(countAndResult[1]);
             self.fire('global-loading');
