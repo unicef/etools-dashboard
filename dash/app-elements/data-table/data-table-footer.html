@@ -148,6 +148,9 @@
       },
 
       _computeVisibleRange: function(pageNumber, pageSize, filteredTotalResults, totalPages) {
+        if (filteredTotalResults === 0) {
+          return [0, 0]
+        }
         var start = 1;
         var end = filteredTotalResults;
 
