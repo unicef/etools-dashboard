@@ -54,6 +54,33 @@
             type: String,
             value: 'partnerships-loaded'
           },
+          predicates: {
+            type: Object,
+            value: function() {
+              return {
+              searchString: (qs, partner)=> _.includes(partner.partner_name.toLowerCase(), qs.toLowerCase()),
+              sectors: (sectors, partner)=> _.intersection(sectors, _.trim(partner.sectors)).length,
+              offices: (offices, partner)=> _.intersection(offices, _.trim(partner.offices_names)).length,
+              status: (status, partner)=> _.includes(status, partner.status)? true: partner.status==='closed'? false:true,
+              startAfterDate: (date, partner)=> _.isEmpty(partner.start) ? false
+                : this.prepareDate(partner.start) < this.prepareDate(date),
+              endBeforeDate: (date, partner)=> _.isEmpty(partner.end) ? false
+                : this.prepareDate(partner.end) > this.prepareDate(date),
+              startBeforedate: (date, partner)=> _.isEmpty(partner.start) ? false
+                :this.prepareDate(partner.start) > this.prepareDate(date),
+              endAfterDate: (date, partner)=> _.isEmpty(partner.end) ? false
+                : this.prepareDate(partner.end) < this.prepareDate(date)
+            };
+          }
+          },
+          tester: {
+            type: Object,
+            value: function() {
+              return {
+                val1: ()=> console.log('val1', this),
+                val2: function() {console.log('val2', this);}
+              };
+          }}
         },
 
         init: function(active) {
@@ -67,63 +94,30 @@
           }
         },
 
-        query: function(searchString, order, pageSize, pageNumber,
-                        sectors, offices, status, startAfterDate,
-                        endBeforeDate, startBeforeDate, endAfterDate) {
-          var self = this;
+        query: function(searchString, sectors, offices, status, startAfterDate,
+                        endBeforeDate, startBeforeDate, endAfterDate,
+                        order, pageSize, pageNumber) {
+          const fields = [...arguments];
+          const hasValue = (val)=> _.isNumber(val)? true : !_.isEmpty(val);
+          const idxToFilter = fp.compose(fp.without([8, 9, 10]),
+          [fp.map((arg)=> fp.indexOf(arg)(fields)),
+            fp.filter(hasValue)]);
+          const fieldsToFilterIdxs = idxToFilter(fields);
+          const predKeys = _.keys(this.predicates);
+          const toTest = _.pullAt([...predKeys], fieldsToFilterIdxs);
+
+          let self = this;
           this.db.transaction('r', this.db.cso_dashboard, function() {
-            self.fire('global-loading', {active: true, message: 'Loading data...'})
-            var queryResult = self.db.cso_dashboard.orderBy('partner_name');
+            self.fire('global-loading', {active: true, message: 'Loading data...'});
+            let queryResult = self.db.cso_dashboard.orderBy('partner_name');
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
-//            else {
-//              queryResult = queryResult.toCollection();
-//            }
-            queryResult = queryResult.filter(function(partner) {
-              if (!_.isEmpty(searchString)) {
-                if (!_.includes(partner.partner_name.toLowerCase(), searchString.toLowerCase())) {
-                  return false;
-                }
-              }
-              if (!_.isEmpty(sectors)) {
-                if (!_.intersection(sectors, self.strippedSpace(partner.sectors)).length) {
-                  return false;
-                }
-              }
-              if (!_.isEmpty(offices)) {
-                if (!_.intersection(offices, self.strippedSpace(partner.offices_names)).length) {
-                  return false;
-                }
-              }
-              if (!_.isEmpty(status)) {
-                if (!_.includes(status, partner.status)) {
-                  return false;
-                }
-              } else if (partner.status === 'closed') {
-                return false;
-              }
-              if (!_.isEmpty(startAfterDate) && !_.isEmpty(partner.start)) {
-                if ((self.prepareDate(partner.start) < self.prepareDate(startAfterDate)) || _.isEmpty(partner.start)) {
-                  return false;
-                }
-              }
-              if (!_.isEmpty(endBeforeDate)) {
-                if ((self.prepareDate(partner.end) > self.prepareDate(endBeforeDate)) || _.isEmpty(partner.end)) {
-                  return false;
-                }
-              }
-              if ((!_.isEmpty(startBeforeDate) && !_.isEmpty(partner.start)) || _.isEmpty(partner.start)) {
-                if (self.prepareDate(partner.start) > self.prepareDate(startBeforeDate)) {
-                  return false;
-                }
-              }
-              if ((!_.isEmpty(endAfterDate) && !_.isEmpty(partner.end)) || _.isEmpty(partner.end)) {
-                if (self.prepareDate(partner.end) < self.prepareDate(endAfterDate)) {
-                  return false;
-                }
-              }
-              return true;
+            const callPred = (pred, partner)=> self.predicates[pred](fields[predKeys.indexOf(pred)], partner);
+            queryResult = queryResult.filter((partner)=> {
+              return fp.every(
+                (pred)=> callPred(pred, partner), toTest
+              );
             });
 
             return Dexie.Promise.all([
@@ -134,7 +128,6 @@
                 .limit(pageSize)
                 .toArray()]);
           }).then(function(countAndResult) {
-            countAndResult[1][0].sectors = "Advocacy and Communication, Health and Nutrition, Adolescent & Youth, Child Protection";
             self._setTotalResults(countAndResult[0]);
             self._setFilteredPartnerships(countAndResult[1]);
             self.fire('global-loading');

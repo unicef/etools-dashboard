@@ -64,7 +64,8 @@
     "iron-label": "^2.0.0",
     "webcomponentsjs": "^1.0.4",
     "etools-piwik-analytics": "^1.0.0",
-    "etools-info-tooltip": "^1.0.3"
+    "etools-info-tooltip": "^1.0.3",
+    "lodash": "^4.17.4"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
@@ -76,6 +77,7 @@
     "webcomponentsjs": "^0.7.24",
     "etools-ajax": "a72d415",
     "neon-animation": "^2.0.1",
-    "paper-tooltip": "^2.0.0"
+    "paper-tooltip": "^2.0.0",
+    "lodash": "^4.17.4"
   }
 }

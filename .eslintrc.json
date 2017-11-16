@@ -11,7 +11,7 @@
     "browser": true,
     "es6": true
   },
-  "plugins": ["html"],
+  "plugins": ["html","lodash-fp"],
   "settings": {
     "html" : [".html"]
   },
@@ -24,6 +24,7 @@
     "camelcase": 1,
     "guard-for-in": 0,
     "comma-dangle": 0,
+    "no-invalid-this":0,
     "prefer-spread": 0,
     "linebreak-style": 0,
     "require-jsdoc": "off",
@@ -32,6 +33,7 @@
   "globals": {
     "Polymer": true,
     "_": true,
+    "fp":true,
     "moment": true,
     "dashBehaviors": true
   }
