@@ -117,7 +117,7 @@
                                           format="D MMM YYYY"
                                           parent-id$="datepicker_parent_[[filter.path]]"
                                           data-filter-path$="[[filter.path]]"
-                                          on-date-has-changed="_filterDateHasChanged"
+                                          on-date-has-changed="_notifyDateChanged"
                                           no-init show-clear-btn fire-date-has-changed>
                 </etools-datepicker-button>
               </paper-input>
@@ -444,7 +444,7 @@
         },
 
         _updateSelectedFiltersValues: function() {
-          this.debounce('updateShownFilters', function() {
+          this.debounce('updateShownFilters', ()=>{
             let filtersValues = [
               {
                 filterName: 'Section/Cluster',
@@ -476,7 +476,7 @@
               }
             ];
             this.updateShownFilters(filtersValues);
-          }.bind(this), 200);
+          }, 200);
         },
 
         _updateUrl: function() {
@@ -556,8 +556,12 @@
             this.endAfterDate,
             this.sortOrder,
             this.pageSize,
-            this.pageNumber,
-          );
+            this.pageNumber);
+        },
+
+        _notifyDateChanged: function(event) {
+          this._filterDateHasChanged(event);
+          this._updateSelectedFiltersValues();
         },
 
         _requiredDataLoaded: function(event) {
@@ -578,8 +582,8 @@
         _setSelectedOffices: function(officesStr) {
           let officesIdsArr = officesStr.split('|');
           if (!_.isEmpty(officesIdsArr)) {
-            officesIdsArr = officesIdsArr.map((n)=> parseInt(n, 10));
-            return this.offices.filter((o)=> officesIdsArr.includes(parseInt(o.id, 10)));
+            officesIdsArr = officesIdsArr.map(n=> parseInt(n, 10));
+            return this.offices.filter(o=> officesIdsArr.includes(parseInt(o.id, 10)));
           }
           return [];
         },

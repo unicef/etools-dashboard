@@ -62,25 +62,17 @@
               sectors: (sectors, partner)=> _.intersection(sectors, _.trim(partner.sectors)).length,
               offices: (offices, partner)=> _.intersection(offices, _.trim(partner.offices_names)).length,
               status: (status, partner)=> _.includes(status, partner.status)? true: partner.status==='closed'? false:true,
-              startAfterDate: (date, partner)=> _.isEmpty(partner.start) ? false
-                : this.prepareDate(partner.start) < this.prepareDate(date),
-              endBeforeDate: (date, partner)=> _.isEmpty(partner.end) ? false
-                : this.prepareDate(partner.end) > this.prepareDate(date),
-              startBeforedate: (date, partner)=> _.isEmpty(partner.start) ? false
-                :this.prepareDate(partner.start) > this.prepareDate(date),
-              endAfterDate: (date, partner)=> _.isEmpty(partner.end) ? false
-                : this.prepareDate(partner.end) < this.prepareDate(date)
+              startAfterDate: (date, partner)=> _.isEmpty(partner.start) ? true
+                : this.prepareDate(partner.start) > this.prepareDate(date),
+              endBeforeDate: (date, partner)=> _.isEmpty(partner.end) ? true
+                : this.prepareDate(partner.end) < this.prepareDate(date),
+              startBeforedate: (date, partner)=> _.isEmpty(partner.start) ? true
+                :this.prepareDate(partner.start) < this.prepareDate(date),
+              endAfterDate: (date, partner)=> _.isEmpty(partner.end) ? true
+                : this.prepareDate(partner.end) > this.prepareDate(date)
             };
           }
           },
-          tester: {
-            type: Object,
-            value: function() {
-              return {
-                val1: ()=> console.log('val1', this),
-                val2: function() {console.log('val2', this);}
-              };
-          }}
         },
 
         init: function(active) {
@@ -97,29 +89,27 @@
         query: function(searchString, sectors, offices, status, startAfterDate,
                         endBeforeDate, startBeforeDate, endAfterDate,
                         order, pageSize, pageNumber) {
-          const fields = [...arguments];
-          const hasValue = (val)=> _.isNumber(val)? true : !_.isEmpty(val);
-          const idxToFilter = fp.compose(fp.without([8, 9, 10]),
-          [fp.map((arg)=> fp.indexOf(arg)(fields)),
-            fp.filter(hasValue)]);
-          const fieldsToFilterIdxs = idxToFilter(fields);
+          const params = [...arguments];
+          const hasValue = val=> _.isNumber(val)? true : !_.isEmpty(val);
+          const idxOfParamsToFilter = fp.compose(fp.without([8, 9, 10]), // no predicates for order, pageSize, pageNumber
+            [fp.map(arg=> fp.indexOf(arg)(params)),
+              fp.filter(hasValue)]);
+          const fieldsToFilterIdxs = idxOfParamsToFilter(params);
           const predKeys = _.keys(this.predicates);
-          const toTest = _.pullAt([...predKeys], fieldsToFilterIdxs);
-
+          const predicatesWithValues = _.pullAt([...predKeys], fieldsToFilterIdxs);
+          console.log('filtering fields: ', predicatesWithValues);
           let self = this;
           this.db.transaction('r', this.db.cso_dashboard, function() {
             self.fire('global-loading', {active: true, message: 'Loading data...'});
+
             let queryResult = self.db.cso_dashboard.orderBy('partner_name');
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
-            const callPred = (pred, partner)=> self.predicates[pred](fields[predKeys.indexOf(pred)], partner);
-            queryResult = queryResult.filter((partner)=> {
-              return fp.every(
-                (pred)=> callPred(pred, partner), toTest
-              );
-            });
 
+            const callPred = (pred, partner)=> self.predicates[pred](params[predKeys.indexOf(pred)], partner);
+            queryResult = queryResult.filter(partner=> fp.every(
+              pred=> callPred(pred, partner), predicatesWithValues));
             return Dexie.Promise.all([
               queryResult.count(),
               // Use clone() as offset() and limit() otherwise mutates the same query that is counted

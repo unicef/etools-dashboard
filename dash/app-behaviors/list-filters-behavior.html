@@ -134,12 +134,7 @@
     // change event for a etoold-datepicker filter
     _filterDateHasChanged: function(event) {
       let filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
-      let parentField = Polymer.dom(event).localTarget.parentNode;
-      if (parentField) {
-        parentField.value = event.detail.prettyDate;
-      }
       this.set(filterPath, event.detail.jsonDate);
-      // console.log(event.detail, filterPath, parentField);
     },
 
     _validateFilterSelectedValue: function(value) {
@@ -149,11 +144,9 @@
          // update shown filters
      updateShownFilters: function(filters) {
       let i;
-      if (!filters) {
-        filters = [];
-      }
-      if (Array.isArray(filters) && filters.length > 0) {
-        filters.forEach(function(filter) {
+      filters = _.isEmpty(filters) ? [] : filters;
+      if (filters.length) {
+        filters.forEach(filter=> {
           // check available filters
           if (this._validateFilterSelectedValue(filter.selectedValue)) {
             let foundInAvailable = false;
@@ -202,7 +195,7 @@
               }
             }
           }
-        }.bind(this));
+        });
         // refresh available filters and remove those selected
         this._updateAvailableFilterOptions();
       }
