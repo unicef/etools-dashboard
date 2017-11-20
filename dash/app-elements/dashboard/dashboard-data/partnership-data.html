@@ -90,6 +90,7 @@
           let self = this;
           const {pageNumber, pageSize, order} = params;
           const predKeys = _.keys(this.predicates);
+
           this.db.transaction('r', this.db.cso_dashboard, function() {
             self.fire('global-loading', {active: true, message: 'Loading data...'});
             let queryResult = self.db.cso_dashboard.orderBy('partner_name');
