@@ -68,9 +68,11 @@
       }
 
     </style>
-    <partnership-data id="partnerships" filtered-partnerships="{{filteredPartnerships}}" fire-data-loaded
+    <partnership-data id="partnerships" 
+    filtered-partnerships="{{filteredPartnerships}}" fire-data-loaded
                       active="[[active]]"
-                      total-results="{{totalResults}}" on-partnerships-loaded="_requiredDataLoaded"
+                      total-results="{{totalResults}}" 
+                      on-partnerships-loaded="_requiredDataLoaded"
                       list-data-path="filteredPartnerships"></partnership-data>
 
     <paper-material class="list-panel listControls" elevation="1">
@@ -445,6 +447,7 @@
 
         _updateSelectedFiltersValues: function() {
           this.debounce('updateShownFilters', ()=>{
+
             let filtersValues = [
               {
                 filterName: 'Section/Cluster',
@@ -583,8 +586,8 @@
         _setSelectedOffices: function(officesStr) {
           let officesIdsArr = officesStr.split('|');
           if (!_.isEmpty(officesIdsArr)) {
-            officesIdsArr = officesIdsArr.map(n=> parseInt(n, 10));
-            return this.offices.filter(o=> officesIdsArr.includes(parseInt(o.id, 10)));
+            officesIdsArr = officesIdsArr.map((n)=> parseInt(n, 10));
+            return this.offices.filter((o)=> officesIdsArr.includes(parseInt(o.id, 10)));
           }
           return [];
         },
