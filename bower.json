@@ -42,7 +42,7 @@
     "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.7",
     "paper-fab": "PolymerElements/paper-fab#^1.2.1",
     "etools-dialog": "^1.1.0",
-    "etools-loading": "^1.1.0",
+    "etools-loading": "236aff6",
     "etools-searchable-multiselection-menu": "2.2.4",
     "etools-file": "^1.0.0",
     "paper-button": "PolymerElements/paper-button#^1.0.14",
