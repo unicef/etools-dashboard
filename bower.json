@@ -59,7 +59,7 @@
     "google-chart": "^1.1.1",
     "leaflet-map": "^1.2.0",
     "etools-app-selector": "^1.0.7",
-    "etools-profile-dropdown": "^1.0.6",
+    "etools-profile-dropdown": "09904ed1",
     "etools-behaviors": "^1.0.1",
     "iron-label": "^2.0.0",
     "webcomponentsjs": "^1.0.4",
