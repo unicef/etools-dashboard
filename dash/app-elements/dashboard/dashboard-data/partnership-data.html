@@ -58,20 +58,20 @@
             type: Object,
             value: function() {
               return {
-              searchString: (qs, partner)=> _.includes(partner.partner_name.toLowerCase(), qs.toLowerCase()),
-              sectors: (sectors, partner)=> _.intersection(sectors, _.trim(partner.sectors)).length,
-              offices: (offices, partner)=> _.intersection(offices, _.trim(partner.offices_names)).length,
-              status: (status, partner)=> _.includes(status, partner.status)? true: partner.status==='closed'? false:true,
-              startAfterDate: (date, partner)=> _.isEmpty(partner.start) ? true
-                : this.prepareDate(partner.start) > this.prepareDate(date),
-              endBeforeDate: (date, partner)=> _.isEmpty(partner.end) ? true
-                : this.prepareDate(partner.end) < this.prepareDate(date),
-              startBeforedate: (date, partner)=> _.isEmpty(partner.start) ? true
-                :this.prepareDate(partner.start) < this.prepareDate(date),
-              endAfterDate: (date, partner)=> _.isEmpty(partner.end) ? true
-                : this.prepareDate(partner.end) > this.prepareDate(date)
-            };
-          }
+                searchString: (qs, partner)=> qs.length ? _.includes(partner.partner_name.toLowerCase(), qs.toLowerCase()): true,
+                sectors: (sectors, partner)=> sectors.length ? !!_.intersection(sectors, _.trim(partner.sectors)).length : true,
+                offices: (offices, partner)=> offices.length ? !!_.intersection(offices, _.trim(partner.offices_names)).length : true,
+                status: (status, partner)=> status.length ? (_.includes(status, partner.status) ? true: partner.status==='closed'? false:true):true,
+                startAfterDate: (date, partner)=> _.isEmpty(partner.start) ? true
+                  : date.length ? this.prepareDate(partner.start) > this.prepareDate(date): true,
+                endBeforeDate: (date, partner)=> _.isEmpty(partner.end) ? true
+                  : date.length ? this.prepareDate(partner.end) < this.prepareDate(date) : true,
+                startBeforeDate: (date, partner)=> _.isEmpty(partner.start) ? true
+                  : date.length ? this.prepareDate(partner.start) < this.prepareDate(date) : true,
+                endAfterDate: (date, partner)=> _.isEmpty(partner.end) ? true
+                  : date.length ? this.prepareDate(partner.end) > this.prepareDate(date) : true
+              };
+            }
           },
         },
 
@@ -86,30 +86,20 @@
           }
         },
 
-        query: function(searchString, sectors, offices, status, startAfterDate,
-                        endBeforeDate, startBeforeDate, endAfterDate,
-                        order, pageSize, pageNumber) {
-          const params = [...arguments];
-          const hasValue = val=> _.isNumber(val)? true : !_.isEmpty(val);
-          const idxOfParamsToFilter = fp.compose(fp.without([8, 9, 10]), // no predicates for order, pageSize, pageNumber
-            [fp.map(arg=> fp.indexOf(arg)(params)),
-              fp.filter(hasValue)]);
-          const fieldsToFilterIdxs = idxOfParamsToFilter(params);
-          const predKeys = _.keys(this.predicates);
-          const predicatesWithValues = _.pullAt([...predKeys], fieldsToFilterIdxs);
-          console.log('filtering fields: ', predicatesWithValues);
+        query: function(params) {
           let self = this;
+          const {pageNumber, pageSize, order} = params;
+          const predKeys = _.keys(this.predicates);
           this.db.transaction('r', this.db.cso_dashboard, function() {
             self.fire('global-loading', {active: true, message: 'Loading data...'});
-
             let queryResult = self.db.cso_dashboard.orderBy('partner_name');
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
-
-            const callPred = (pred, partner)=> self.predicates[pred](params[predKeys.indexOf(pred)], partner);
-            queryResult = queryResult.filter(partner=> fp.every(
-              pred=> callPred(pred, partner), predicatesWithValues));
+            const callPred = (pred, partner)=> self.predicates[pred](params[pred], partner);
+            queryResult = queryResult.filter(
+                partner=> _.reduce(predKeys, (acc, pred)=> acc && callPred(pred, partner), true));
+    
             return Dexie.Promise.all([
               queryResult.count(),
               // Use clone() as offset() and limit() otherwise mutates the same query that is counted

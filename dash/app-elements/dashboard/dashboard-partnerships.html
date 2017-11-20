@@ -545,18 +545,19 @@
         },
 
         _filterPartnershipsData: function() {
-          this.$.partnerships.query(
-            this.qs,
-            _.map(this.selectedSectors, 'label'),
-            _.map(this.selectedOffices, 'name'),
-            _.map(this.selectedStatuses, 'value'),
-            this.startAfterDate,
-            this.endBeforeDate,
-            this.startBeforeDate,
-            this.endAfterDate,
-            this.sortOrder,
-            this.pageSize,
-            this.pageNumber);
+          this.$.partnerships.query({
+            searchString: this.qs,
+            sectors: _.map(this.selectedSectors, 'label'),
+            offices: _.map(this.selectedOffices, 'name'),
+            status: _.map(this.selectedStatuses, 'value'),
+            startAfterDate: this.startAfterDate,
+            endBeforeDate: this.endBeforeDate,
+            startBeforeDate: this.startBeforeDate,
+            endAfterDate: this.endAfterDate,
+            order: this.sortOrder,
+            pageSize: this.pageSize,
+            pageNumber: this.pageNumber
+          });
         },
 
         _notifyDateChanged: function(event) {
