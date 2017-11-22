@@ -63,7 +63,7 @@
     "etools-behaviors": "^1.0.1",
     "iron-label": "^2.0.0",
     "webcomponentsjs": "^1.0.4",
-    "etools-piwik-analytics": "^1.0.0",
+    "etools-piwik-analytics": "1.0.3",
     "etools-info-tooltip": "^1.0.3"
   },
   "devDependencies": {
