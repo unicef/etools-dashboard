@@ -58,7 +58,7 @@
     "polymer-redux": "^0.4.0",
     "google-chart": "^1.1.1",
     "leaflet-map": "^1.2.0",
-    "etools-app-selector": "^1.0.7",
+    "etools-app-selector": "^1.0.9",
     "etools-profile-dropdown": "^1.0.6",
     "etools-behaviors": "^1.0.1",
     "iron-label": "^2.0.0",
@@ -76,6 +76,7 @@
     "webcomponentsjs": "^0.7.24",
     "etools-ajax": "a72d415",
     "neon-animation": "^2.0.1",
-    "paper-tooltip": "^2.0.0"
+    "paper-tooltip": "^2.0.0",
+    "lodash": "^4.17.4"
   }
 }

@@ -96,11 +96,11 @@
       }
     </style>
     <user-profile-data id="userProfileData" user-profile="{{profile}}"></user-profile-data>
-
+    
     <app-toolbar sticky class="content-align">
       <paper-icon-button id="menuButton" class="light" icon="menu" on-tap="openDrawer"></paper-icon-button>
       <div class="titlebar content-align">
-        <etools-app-selector id="selector"></etools-app-selector>
+        <etools-app-selector id="selector" show-ap="[[profile.show_ap]]"></etools-app-selector>
         <img id="second-logo" src="../../../images/etools-logo-color-white.svg">
       </div>
       <div class="content-align">
@@ -167,7 +167,7 @@
           this.$.refresh._refresh();
         },
         _getFlagIconClass: function(id) {
-          var flagIdMap = {
+          let flagIdMap = {
             '0': 'us',
             '234R': 'syxb',
             '2490': 'lb',
@@ -181,7 +181,7 @@
           if (!countries) {
             return;
           }
-          var arrayObj = countries.map(function(arrayItem) {
+          let arrayObj = countries.map(function(arrayItem) {
             return {
               id: arrayItem.id,
               name: arrayItem.name,
@@ -198,7 +198,7 @@
             return {label: item.name, value: item.id};
           });
         },
-        _saveProfile: function (e) {
+        _saveProfile: function(e) {
           this.set('profile', e.detail.profile);
           this.$.userProfileData.saveProfile(this.profile);
         },
