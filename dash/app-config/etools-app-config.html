@@ -11,7 +11,7 @@ App global configuration
      * for db versioning check
      * https://github.com/dfahlander/Dexie.js/wiki/Design#database-versioning
      */
-    var etoolsCustomDexieDb = new Dexie('dashApp');
+    let etoolsCustomDexieDb = new Dexie('dashApp');
     etoolsCustomDexieDb.version(1).stores({
       collectionsList: 'name, expire',
       countries: 'id',
@@ -25,7 +25,7 @@ App global configuration
       locations: 'id'
     });
 
-    var etoolsAjaxDefaultDexieDbPrefix = 'dashboard';
+    let etoolsAjaxDefaultDexieDbPrefix = 'dashboard';
 
     var etoolsAppConfig = {
 
@@ -40,7 +40,7 @@ App global configuration
         loginPath: window.location.origin + '/login/',
 
         getEndpoint: function(endpointName, data) {
-          var endpoint = JSON.parse(JSON.stringify(etoolsAppConfig.endpoints[endpointName]));
+          let endpoint = JSON.parse(JSON.stringify(etoolsAppConfig.endpoints[endpointName]));
           if (endpoint && endpoint.hasOwnProperty('template') && endpoint.template !== '') {
             endpoint.url = window.location.origin + _.template(endpoint.template)(data);
           }
@@ -77,14 +77,14 @@ App global configuration
       }
     };
 
-    var localEps = {
+    let localEps = {
       user: {
         url: '/users/api/profile/',
         exp: 30 * 60 * 1000, // 30min
         cachingKey: 'user'
       },
       agreements: {
-        //template: '/management/api/stats/agreements/',
+        // template: '/management/api/stats/agreements/',
         url: '../../data/agreements.json',
         exp: 30 * 60 * 1000, // 30min
         cachingKey: 'agreements'
@@ -102,7 +102,7 @@ App global configuration
 
     };
 
-    var serverEps = {
+    let serverEps = {
       unicefUsers: {
         url: '/users/api/',
         exp: 60 * 60 * 1000, // 1h
@@ -152,12 +152,12 @@ App global configuration
       },
 
       sections: {
-        url : '/api/sections',
+        url: '/api/sections',
         exp: 6 * 60 * 60 * 1000,
         cachingKey: 'sections'
       },
       sectors: {
-        url : '/api/reports/sectors',
+        url: '/api/reports/sectors',
         exp: 6 * 60 * 60 * 1000,
         cachingKey: 'sectors'
       },
@@ -198,8 +198,8 @@ App global configuration
       actionPointsBySectionOffice: {
         template: '/api/t2f/action_points/dashboard/?office_id=<%=office%>'
       },
-      myProfile:  {
-        template: '/users/myprofile/',
+      myProfile: {
+        template: '/api/v3/users/profile/',
       },
 
     };
