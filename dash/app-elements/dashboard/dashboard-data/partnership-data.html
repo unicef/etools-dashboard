@@ -100,7 +100,6 @@
             const callPred = (pred, partner)=> self.predicates[pred](params[pred], partner);
             queryResult = queryResult.filter(
                 partner=> _.reduce(predKeys, (acc, pred)=> acc && callPred(pred, partner), true));
-    
             return Dexie.Promise.all([
               queryResult.count(),
               // Use clone() as offset() and limit() otherwise mutates the same query that is counted
