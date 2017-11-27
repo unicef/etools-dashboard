@@ -23,9 +23,9 @@ const Actions = [
     endpointProps: {
       name: 'countryProgrammes'
     },
-    prepareData: function(data) {
+    prepareData: data => {
       data = data || [];
-      return data.map(function(cp) {
+      return data.map(cp => {
         return _.pick(cp, ['id', 'name']);
       });
     }
@@ -37,9 +37,9 @@ const Actions = [
       name: 'offices',
       templateProps: {}
     },
-    prepareData: function(data) {
+    prepareData: data => {
       data = data || [];
-      return data.map(function(office) {
+      return data.map(office => {
         return _.pick(office, ['id', 'name']);
       });
     }
@@ -48,12 +48,11 @@ const Actions = [
     actionType: 'trips',
     propsArray: ['trips'],
     endpointProps: function() {
-      var ret = {name: 'trips', templateProps: {id: this.user.id}};
-      return ret;
+      return {name: 'trips', templateProps: {id: this.user.id}};
     },
-    prepareData: function(data) {
+    prepareData: data => {
       return data.length
-        ? data.map(function(trip) {
+        ? data.map(trip => {
             return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']);
           })
         : [];
@@ -63,12 +62,11 @@ const Actions = [
     actionType: 'tripsSupervised',
     propsArray: ['tripsSupervised'],
     endpointProps: function() {
-      var ret = {name: 'tripsSupervised', templateProps: {id: this.user.id}};
-      return ret;
+      return {name: 'tripsSupervised', templateProps: {id: this.user.id}};
     },
-    prepareData: function(data) {
+    prepareData: data => {
       return data.length
-        ? data.map(trip=> {
+        ? data.map(trip => {
             return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'traveler']);
           })
         : [];
@@ -78,12 +76,11 @@ const Actions = [
     actionType: 'actionPointsByMe',
     propsArray: ['actionPointsByMe'],
     endpointProps: function() {
-      var ret = {name: 'actionPointsByMe', templateProps: {id: this.user.id}};
-      return ret;
+      return {name: 'actionPointsByMe', templateProps: {id: this.user.id}};
     },
-    prepareData: function(data) {
+    prepareData: data => {
       return data.length
-        ? data.map(function(actionPoint) {
+        ? data.map(actionPoint => {
             return _.pick(actionPoint, ['status', 'description', 'created_at', 'person_responsible_name', 'id', 'due_date']);
           })
         : [];
@@ -93,12 +90,11 @@ const Actions = [
     actionType: 'actionPointsForMe',
     propsArray: ['actionPointsForMe'],
     endpointProps: function() {
-      var ret = {name: 'actionPointsForMe', templateProps: {id: this.user.id}};
-      return ret;
+      return {name: 'actionPointsForMe', templateProps: {id: this.user.id}};
     },
-    prepareData: function(data) {
+    prepareData: data => {
       return data.length
-        ? data.map(function(actionPoint) {
+        ? data.map(actionPoint => {
             return _.pick(actionPoint, ['status', 'description', 'created_at', 'assigned_by_name', 'id', 'due_date']);
           })
         : [];
@@ -111,9 +107,9 @@ const Actions = [
       name: 'partnerships',
       templateProps: {}
     },
-    prepareData: function(data) {
+    prepareData: data => {
       return data.length
-        ? data.map(function(partnership) {
+        ? data.map(partnership => {
             return _.pick(partnership, ['id', 'title', 'number', 'total_unicef_budget']);
           })
         : null;
@@ -123,7 +119,7 @@ const Actions = [
     actionType: 'tripsYears',
     propsArray: ['tripsYears'],
     endpointProps: {},
-    prepareData: function() {
+    prepareData: () => {
       return _.range(2015, moment().year() + 1);
     }
   },
@@ -134,9 +130,9 @@ const Actions = [
       name: 'sections',
       templateProps: {}
     },
-    prepareData: function(data) {
+    prepareData: data => {
       data = data || [];
-      return data.map(function(d) {
+      return data.map(d => {
         return {
           value: parseInt(d.id, 10),
           label: d.name
@@ -151,9 +147,9 @@ const Actions = [
       name: 'sectors',
       templateProps: {}
     },
-    prepareData: function(data) {
+    prepareData: data => {
       data = data || [];
-      return data.map(function(d) {
+      return data.map(d => {
         return {
           value: d.id,
           label: d.name
@@ -168,9 +164,9 @@ const Actions = [
       name: 'unicefUsers',
       templateProps: {}
     },
-    prepareData: function(data) {
+    prepareData: data => {
       data = data || [];
-      return data.map(function(d) {
+      return data.map(d => {
         return {
           value: parseInt(d.user_id, 10),
           label: d.full_name
@@ -185,7 +181,7 @@ const Actions = [
       name: 'static',
       templateProps: {}
     },
-    prepareData: function(data) {
+    prepareData: data => {
       return _.get(data, 'intervention_status', []);
     }
   },
@@ -196,7 +192,7 @@ const Actions = [
       name: 'userCountry',
       templateProps: {}
     },
-    prepareData: function(data) {
+    prepareData: data => {
       return data[0];
     }
   }
