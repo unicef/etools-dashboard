@@ -68,10 +68,10 @@
       }
 
     </style>
-    <partnership-data id="partnerships" 
+    <partnership-data id="partnerships"
     filtered-partnerships="{{filteredPartnerships}}" fire-data-loaded
                       active="[[active]]"
-                      total-results="{{totalResults}}" 
+                      total-results="{{totalResults}}"
                       on-partnerships-loaded="_requiredDataLoaded"
                       list-data-path="filteredPartnerships"></partnership-data>
 
@@ -119,7 +119,7 @@
                                           format="D MMM YYYY"
                                           parent-id$="datepicker_parent_[[filter.path]]"
                                           data-filter-path$="[[filter.path]]"
-                                          on-date-has-changed="_filterDateHasChanged"
+                                          on-date-has-changed="_notifyDateChanged"
                                           no-init show-clear-btn fire-date-has-changed>
                 </etools-datepicker-button>
               </paper-input>
@@ -446,7 +446,8 @@
         },
 
         _updateSelectedFiltersValues: function() {
-          this.debounce('updateShownFilters', function() {
+          this.debounce('updateShownFilters', ()=>{
+
             let filtersValues = [
               {
                 filterName: 'Section/Cluster',
@@ -478,7 +479,7 @@
               }
             ];
             this.updateShownFilters(filtersValues);
-          }.bind(this), 200);
+          }, 200);
         },
 
         _updateUrl: function() {
@@ -547,19 +548,24 @@
         },
 
         _filterPartnershipsData: function() {
-          this.$.partnerships.query(
-            this.qs,
-            this.sortOrder,
-            this.pageSize,
-            this.pageNumber,
-            _.map(this.selectedSectors, 'label'),
-            _.map(this.selectedOffices, 'name'),
-            _.map(this.selectedStatuses, 'value'),
-            this.startAfterDate,
-            this.endBeforeDate,
-            this.startBeforeDate,
-            this.endAfterDate
-          );
+          this.$.partnerships.query({
+            searchString: this.qs,
+            sectors: _.map(this.selectedSectors, 'label'),
+            offices: _.map(this.selectedOffices, 'name'),
+            status: _.map(this.selectedStatuses, 'value'),
+            startAfterDate: this.startAfterDate,
+            endBeforeDate: this.endBeforeDate,
+            startBeforeDate: this.startBeforeDate,
+            endAfterDate: this.endAfterDate,
+            order: this.sortOrder,
+            pageSize: this.pageSize,
+            pageNumber: this.pageNumber
+          });
+        },
+
+        _notifyDateChanged: function(event) {
+          this._filterDateHasChanged(event);
+          this._updateSelectedFiltersValues();
         },
 
         _requiredDataLoaded: function(event) {
