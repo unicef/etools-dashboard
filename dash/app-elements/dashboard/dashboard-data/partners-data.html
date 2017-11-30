@@ -76,11 +76,11 @@
         },
         query: function(searchString, order, pageSize, pageNumber) {
           let self = this;
-          this.db.partners.toArray().then(function(res) {
+          this.db.partners.toArray().then(res=> {
             self._setTotals(self._computeTotals(res));
             self._setTotalResults(res.length);
           });
-          this.db.transaction('r', this.db.partners, function() {
+          this.db.transaction('r', this.db.partners, ()=> {
             let queryResult = self.db.partners;
             if (order === 'desc') {
               queryResult = queryResult.reverse();
@@ -108,7 +108,7 @@
         },
         _computeTotals: function(results) {
           this.resultsTotals = true;
-          return _(results).reduce(function(sum, obj) {
+          return _(results).reduce((sum, obj)=> {
             let picked = _(obj).pick([
               'shared_partner',
               'total_ct_cp',
@@ -129,7 +129,7 @@
                   mr_spot_checks: picked.hact_min_requirements.spot_checks
                 });
             picked = _.omit(picked, ['hact_values', 'hact_min_requirements']);
-            _(picked).each(function(val, key) {
+            _(picked).each((val, key)=> {
               let currValue = sum[key] ? sum[key] : 0;
               if (key === 'shared_partner') {
                 sum[key] = currValue + (val === 'No' ? 0 : 1);
