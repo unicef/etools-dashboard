@@ -505,42 +505,22 @@
         },
 
         _buildQueryString: function() {
-          let qs = [];
-          if (this.pageNumber && this.pageNumber > 1) {
-            qs.push('page=' + this.pageNumber);
-          }
-          if (this.pageSize) {
-            qs.push('size=' + this.pageSize);
-          }
-          if (!_.isEmpty(this.qs)) {
-            qs.push('qs=' + this.qs);
-          }
-          if (!_.isEmpty(this.selectedSectors)) {
-            qs.push('sectors=' + _.map(this.selectedSectors, 'value').join('|'));
-          }
-          if (!_.isEmpty(this.selectedOffices)) {
-            qs.push('offices=' + _.map(this.selectedOffices, 'id').join('|'));
-          }
-          if (!_.isEmpty(this.selectedStatuses)) {
-            qs.push('status=' + _.map(this.selectedStatuses, 'value').join('|'));
-          }
-          if (!_.isEmpty(this.startAfterDate)) {
-            qs.push('startAfter=' + this.prettyDate(this.startAfterDate, 'YYYY-MM-DD'));
-          }
-          if (!_.isEmpty(this.endBeforeDate)) {
-            qs.push('endBefore=' + this.prettyDate(this.endBeforeDate, 'YYYY-MM-DD'));
-          }
-          if (!_.isEmpty(this.startBeforeDate)) {
-            qs.push('startBefore=' + this.prettyDate(this.startBeforeDate, 'YYYY-MM-DD'));
-          }
-          if (!_.isEmpty(this.endAfterDate)) {
-            qs.push('endAfter=' + this.prettyDate(this.endAfterDate, 'YYYY-MM-DD'));
-          }
-          if (!_.isEmpty(this.sortOrder)) {
-            qs.push('sort=' + this.sortOrder);
-          }
 
-          return qs.join('&');
+          let qs = [
+            this.pageNumber && this.pageNumber > 1 ? 'page=' + this.pageNumber : '',
+            this.pageSize ? 'size=' + this.pageSize : '',
+            !_.isEmpty(this.qs) ? qs.push('qs=' + this.qs) : '',
+            !_.isEmpty(this.selectedSectors) ? 'sectors=' + _.map(this.selectedSectors, 'value').join('|') : '',
+            !_.isEmpty(this.selectedOffices) ? 'offices=' + _.map(this.selectedOffices, 'id').join('|') : '',
+            !_.isEmpty(this.selectedStatuses) ? 'status=' + _.map(this.selectedStatuses, 'value').join('|') : '',
+            !_.isEmpty(this.startAfterDate) ? 'startAfter=' + this.prettyDate(this.startAfterDate, 'YYYY-MM-DD') : '',
+            !_.isEmpty(this.endBeforeDate) ? 'endBefore=' + this.prettyDate(this.endBeforeDate, 'YYYY-MM-DD') : '',
+            !_.isEmpty(this.startBeforeDate) ? 'startBefore=' + this.prettyDate(this.startBeforeDate, 'YYYY-MM-DD') : '',
+            !_.isEmpty(this.endAfterDate) ? 'endAfter=' + this.prettyDate(this.endAfterDate, 'YYYY-MM-DD') : '',
+            !_.isEmpty(this.sortOrder) ? 'sort=' + this.sortOrder : ''
+          ]
+
+          return _.filter(qs, e => { return e.length > 0 }).join('&')
         },
 
         _buildCsvDownloadUrl: function() {
