@@ -360,6 +360,57 @@
           endAfterDate: {
             type: String,
             observer: '_dateChanged'
+          },
+          params: {
+            type: Array,
+            value: function() { return [
+              {
+                qName: 'qs',
+                propName: 'qs',
+                xf: xs=> xs
+              },
+              {
+                qName: 'sort',
+                propName: 'sortOrder',
+                xf: xs=> xs
+              },
+              {
+                qName: 'sectors',
+                propName: 'selectedSectors',
+                xf: xs=> _.map(xs, 'value').join('|')
+              },
+              {
+                qName: 'offices',
+                propName: 'selectedOffices',
+                xf: xs=> _.map(xs, 'name').join('|')
+              },
+              {
+                qName: 'status',
+                propName: 'selectedStatuses',
+                xf: xs=> _.map(xs, 'value').join('|')
+              },
+              {
+                qName: 'startAfter',
+                propName: 'startAfterDate',
+                xf: xs=> this.prettyDate(xs, 'YYYY-MM-DD')
+              },
+              {
+                qName: 'endBefore',
+                propName: 'endBeforeDate',
+                xf: xs=> this.prettyDate(xs, 'YYYY-MM-DD')
+              },
+              {
+                qName: 'startBefore',
+                propName: 'startBeforeDate',
+                xf: xs=> this.prettyDate(xs, 'YYYY-MM-DD')
+              },
+              {
+                qName: 'endAfter',
+                propName: 'endAfterDate',
+                xf: xs=> this.prettyDate(xs, 'YYYY-MM-DD')
+              },
+    
+            ];}
           }
 
         },
@@ -447,8 +498,7 @@
 
         _updateSelectedFiltersValues: function() {
           this.debounce('updateShownFilters', ()=>{
-
-            let filtersValues = [
+        let filtersValues = [
               {
                 filterName: 'Section/Cluster',
                 selectedValue: _.map(this.selectedSectors, 'value')
@@ -504,43 +554,18 @@
           }
         },
 
-        _buildQueryString: function() {
-          let qs = [];
-          if (this.pageNumber && this.pageNumber > 1) {
-            qs.push('page=' + this.pageNumber);
-          }
-          if (this.pageSize) {
-            qs.push('size=' + this.pageSize);
-          }
-          if (!_.isEmpty(this.qs)) {
-            qs.push('qs=' + this.qs);
-          }
-          if (!_.isEmpty(this.selectedSectors)) {
-            qs.push('sectors=' + _.map(this.selectedSectors, 'value').join('|'));
-          }
-          if (!_.isEmpty(this.selectedOffices)) {
-            qs.push('offices=' + _.map(this.selectedOffices, 'id').join('|'));
-          }
-          if (!_.isEmpty(this.selectedStatuses)) {
-            qs.push('status=' + _.map(this.selectedStatuses, 'value').join('|'));
-          }
-          if (!_.isEmpty(this.startAfterDate)) {
-            qs.push('startAfter=' + this.prettyDate(this.startAfterDate, 'YYYY-MM-DD'));
-          }
-          if (!_.isEmpty(this.endBeforeDate)) {
-            qs.push('endBefore=' + this.prettyDate(this.endBeforeDate, 'YYYY-MM-DD'));
-          }
-          if (!_.isEmpty(this.startBeforeDate)) {
-            qs.push('startBefore=' + this.prettyDate(this.startBeforeDate, 'YYYY-MM-DD'));
-          }
-          if (!_.isEmpty(this.endAfterDate)) {
-            qs.push('endAfter=' + this.prettyDate(this.endAfterDate, 'YYYY-MM-DD'));
-          }
-          if (!_.isEmpty(this.sortOrder)) {
-            qs.push('sort=' + this.sortOrder);
-          }
+        _reduceParams: function() {
+          this.params.reduce((acc, {qName, propName, xf})=>{
+           return _.isEmpty(this[propName]) ? acc
+          : `${acc}&${qName}=${xf(this[propName])}`;
+          }, `page=${this.pageNumber}&size=${this.pageSize}`);
+        },
 
-          return qs.join('&');
+        _buildQueryString: function() {
+         return this.params.reduce((acc, {qName, propName, xf})=>{
+           return _.isEmpty(this[propName]) ? acc
+          : `${acc}&${qName}=${xf(this[propName])}`;
+          }, `page=${this.pageNumber}&size=${this.pageSize}`);
         },
 
         _buildCsvDownloadUrl: function() {
@@ -586,8 +611,8 @@
         _setSelectedOffices: function(officesStr) {
           let officesIdsArr = officesStr.split('|');
           if (!_.isEmpty(officesIdsArr)) {
-            officesIdsArr = officesIdsArr.map((n)=> parseInt(n, 10));
-            return this.offices.filter((o)=> officesIdsArr.includes(parseInt(o.id, 10)));
+            officesIdsArr = officesIdsArr.map(n=> parseInt(n, 10));
+            return this.offices.filter(o=> officesIdsArr.includes(parseInt(o.id, 10)));
           }
           return [];
         },
