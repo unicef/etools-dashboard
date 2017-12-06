@@ -48,7 +48,7 @@ const Actions = [
     actionType: 'trips',
     propsArray: ['trips'],
     endpointProps: function() {
-      var ret = {name: 'trips', templateProps: {id: this.user.id}};
+      let ret = {name: 'trips', templateProps: {id: this.user.id}};
       return ret;
     },
     prepareData: function(data) {
@@ -63,7 +63,7 @@ const Actions = [
     actionType: 'tripsSupervised',
     propsArray: ['tripsSupervised'],
     endpointProps: function() {
-      var ret = {name: 'tripsSupervised', templateProps: {id: this.user.id}};
+      let ret = {name: 'tripsSupervised', templateProps: {id: this.user.id}};
       return ret;
     },
     prepareData: function(data) {
@@ -78,7 +78,7 @@ const Actions = [
     actionType: 'actionPointsByMe',
     propsArray: ['actionPointsByMe'],
     endpointProps: function() {
-      var ret = {name: 'actionPointsByMe', templateProps: {id: this.user.id}};
+      let ret = {name: 'actionPointsByMe', templateProps: {id: this.user.id}};
       return ret;
     },
     prepareData: function(data) {
@@ -93,7 +93,7 @@ const Actions = [
     actionType: 'actionPointsForMe',
     propsArray: ['actionPointsForMe'],
     endpointProps: function() {
-      var ret = {name: 'actionPointsForMe', templateProps: {id: this.user.id}};
+      let ret = {name: 'actionPointsForMe', templateProps: {id: this.user.id}};
       return ret;
     },
     prepareData: function(data) {
