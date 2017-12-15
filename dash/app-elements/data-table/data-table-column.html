@@ -128,7 +128,12 @@
           type: String,
           observer: '_isGroup',
         },
-        spaceAround : {
+        headingAlign: {
+          type: String,
+          default: "center",
+          observer: '_changeHeadingAlign',
+        },
+        spaceAround: {
           type: Boolean,
           value: false,
           observer: '_isGroup'
@@ -150,6 +155,12 @@
           this.set('direction', this.direction === 'asc' ? 'desc' : 'asc');
         }
         this.fire('sort-changed', {field: this.field, direction: this.direction});
+      },
+      _changeHeadingAlign: function() {
+        if (!_.isEmpty(this.groupHeading)) {
+          this.$.heading.customStyle['group-heading.text-align'] = this.headingAlign
+          Polymer.updateStyles();
+        }
       },
       _isGroup: function() {
         if (!_.isEmpty(this.groupHeading)) {
