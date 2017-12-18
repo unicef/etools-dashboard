@@ -42,22 +42,13 @@
         padding: 0;
       }
 
-      /* .fix {
-        position: relative;
-      }
-
-      .fixie {
-        position: fixed;
-      } */
-
       .detail-list {
         min-width: 1600px;
       }
 
-      /* .buffer {
+      .buffer {
         background-color: rgb(248, 248, 248);
-        border-left: 1px solid rgba(0, 0, 0, 0.24);
-      } */
+      }
 
       .nowrap {
         white-space: nowrap;
@@ -112,14 +103,9 @@
 
       .vertical {
         @apply(--layout-horizontal);
-        /* @apply(--layout-flex); */
         @apply(--layout-center);
       }
 
-      /* data-table-header data-table-column {
-        @apply(--layout-start);
-        box-sizing: border-box;
-      } */
 
       data-table-row.totals {
         --primary-background-color: var(--medium-theme-background-color);
@@ -144,10 +130,6 @@
         background: var(--medium-theme-background-color);
       }
 
-      /* .fixed {
-        position: fixed;
-      }
-
       .table-scroll {
         overflow-x: scroll;
       } */
@@ -163,11 +145,6 @@
         font-weight: 500;
       }
 
-      /* .toggle-fields {
-        display: none;
-        flex-grow: 2;
-      } */
-
       data-table-header > div {
         display: flex;
       }
@@ -178,8 +155,6 @@
       data-table-row > div[slot="row-data"] > div > div > span > span,
       data-table-row > div[slot="row-data"] > div > div > div > span > span  {
         display: flex;
-        /* flex-flow: row nowrap; */
-        /* align-items: center; */
         min-height: 48px;
       }
 
@@ -206,41 +181,13 @@
         justify-content: center;
       }
 
-      /* data-table-row > div[slot="row-data"] > div > div > div > span {
-        align-items: center;
-        justify-content: center; 
-      } */
-
       data-table-row > div[slot="row-data"] > div > div > div {
         justify-content: center;
       }
 
-      /* data-table-row > div[slot="row-data"] > div > div > div > span > span {
-        align-items: center;
-        justify-content: center; 
-      } */
-
       .monetary {
         text-align: right;
       }
-
-      /* data-table-header > div > data-table-column > data-table-column,  */
-      /* data-table-row > div[slot="row-data"] > div:nth-of-type(2) > div > span {
-        text-align: right;
-        border-left: 1px solid rgba(0, 0, 0, 0.24);
-        box-sizing: border-box;
-        display: flex;
-        align-items: center;
-        flex-direction: row-reverse;
-        height: 100%;
-      } */
-
-      /* .toggle-container {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-evenly;
-        flex-grow: 1;
-      } */
 
       .year-and-toggles {
         display: flex;
@@ -330,12 +277,10 @@
                     <span class="col-3 right-side">Q3</span>
                     <span class="col-3 right-side">Q4</span>
                   </data-table-column>
-                  <!-- <data-table-column class="col-1 buffer"></data-table-column> -->
                 </data-table-column>
               </div>
               <div class="col-5 layout horizontal">
                 <data-table-column class="col-9 layout horizontal" group-heading="SPOT CHECKS">
-                  <!-- <data-table-column class="col-half buffer right-side"></data-table-column> -->
                   <data-table-column class="col-2 vertical right-side">
                     Liquidations <br>
                     1 Oct - 30 Sep
@@ -364,7 +309,6 @@
                     <span class="col-3 right-side">Q3</span>
                     <span class="col-3 right-side">Q4</span>
                   </data-table-column>
-                  <!-- <data-table-column class="col-half buffer right-side"></data-table-column> -->
                 </data-table-column>
                 <data-table-column class="col-3 layout horizontal" group-heading="AUDITS">
                   <data-table-column class="col-4 right-side" id="hact_values.audits_mr">
@@ -413,7 +357,6 @@
                 </div>
                 <div class="col-5 layout horizontal">
                   <div class="col-9 layout horizontal">
-                    <!-- <div class="col-1 buffer right-side right"></div> -->
                     <div class="col-2 right-side right vertical">X</div>
                     <div class="col-7 layout horizontal">
                       <div class="col-half buffer right-side"></div>
@@ -433,7 +376,6 @@
                       <span class="col-3 right-side">0</span>
                       <span class="col-3 right-side">[[totals.spot_checks]]</span>
                     </div>
-                    <!-- <div class="col-1 buffer right-side right"></div> -->
                   </div>
                   <div class="col-3 layout horizontal">
                     <div class="col-4 right-side vertical">[[totals.audits_mr]]</div>
@@ -447,7 +389,7 @@
             <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
               <data-table-row no-collapse>
                 <div slot="row-data">
-                  <div class="col-2 sticky-col col-data padded fixed">
+                  <div class="col-2 sticky-col col-data padded">
                     <span class="col-12 partner-link">
                       <a on-tap="_goToPage" id="[[partner.id]]">
                         [[partner.name]]
@@ -563,43 +505,6 @@
             type: Boolean,
           },
         },
-
-        // observers: [
-        //   '_updateUrl(queryString, pageNumber, pageSize,' +
-        //   'sortOrder, requiredDataLoaded, initComplete)'
-        // ],
-
-        // _filterPartnersData: function () {
-        //   this.debounce('query', function () {
-        //     this.$.partners.query(
-        //       this.queryString,
-        //       this.sortOrder,
-        //       this.pageSize,
-        //       this.pageNumber);
-        //   }, 50);
-        // },
-
-        // _updateUrl: function () {
-        //   if (!this.initComplete) {
-        //     return;
-        //   }
-        //   this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
-        //   const qs = this.buildQueryString();
-        //   if (qs !== null) {
-        //     this.updateAppState('dashboard/hact', qs, true);
-        //     if (this.requiredDataLoaded) {
-        //       this._filterPartnersData();
-        //     }
-        //   } else {
-        //     if (location.search === '') {
-        //       this.updateAppState('dashboard/hact', qs, false);
-        //     }
-        //     if (this.forceDataRefresh && this.requiredDataLoaded) {
-        //       this._filterPartnersData();
-        //       this.set('forceDataRefresh', false);
-        //     }
-        //   }
-        // },
 
         _buildCsvDownloadUrl: function () {
           return this.queryString ?
