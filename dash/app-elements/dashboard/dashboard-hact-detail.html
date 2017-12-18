@@ -80,11 +80,21 @@
         text-align: center;
       }
 
-      /* .quarters {
+      .quarters {
+        width: 100%;
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
+        justify-content: space-between;
+      }
+
+      /* .quarter-border {
+        border-left: 1px solid rgb(227, 227, 227);
+        box-sizing: border-box;
       } */
+
+      .quarter-item {
+        align-self: center;
+      }
 
       .right-side {
         text-align: right;
@@ -102,7 +112,7 @@
 
       .vertical {
         @apply(--layout-horizontal);
-        @apply(--layout-flex);
+        /* @apply(--layout-flex); */
         @apply(--layout-center);
       }
 
@@ -158,15 +168,60 @@
         flex-grow: 2;
       } */
 
-      /* data-table-header > div {
+      data-table-header > div {
         display: flex;
-      } */
+      }
 
-      data-table-row > div[slot="row-data"] > div > div {
+      data-table-row > div[slot="row-data"] > div > div,
+      data-table-row > div[slot="row-data"] > div > div > div > span,
+      data-table-row > div[slot="row-data"] > div > div > div > div > span,
+      data-table-row > div[slot="row-data"] > div > div > span > span,
+      data-table-row > div[slot="row-data"] > div > div > div > span > span  {
         display: flex;
         /* flex-flow: row nowrap; */
         /* align-items: center; */
-        min-height: 40px;
+        min-height: 48px;
+      }
+
+      data-table-header > data-table-column > data-table-column {
+        display: flex;
+      }
+
+      data-table-row > div[slot="row-data"] > div > div > span > span:not(:first-child),
+      data-table-row > div[slot="row-data"] > div > div > div > span > span:not(:first-child)  {
+        border-left: 1px solid rgb(227, 227, 227);
+        box-sizing: border-box;
+      }
+
+      data-table-row > div[slot="row-data"] > div > div > span > span,
+      data-table-row > div[slot="row-data"] > div > div > div > span > span,
+      data-table-row > div[slot="row-data"] > div > div > div > span,
+      data-table-row > div[slot="row-data"] > div > div > div > div > span,
+      data-table-row > div[slot="row-data"] > div > div > div > div {
+        align-items: center;
+        justify-content: center;
+      }
+
+      data-table-row > div[slot="row-data"] > div > div > span {
+        justify-content: center;
+      }
+
+      /* data-table-row > div[slot="row-data"] > div > div > div > span {
+        align-items: center;
+        justify-content: center; 
+      } */
+
+      data-table-row > div[slot="row-data"] > div > div > div {
+        justify-content: center;
+      }
+
+      /* data-table-row > div[slot="row-data"] > div > div > div > span > span {
+        align-items: center;
+        justify-content: center; 
+      } */
+
+      .monetary {
+        text-align: right;
       }
 
       /* data-table-header > div > data-table-column > data-table-column,  */
@@ -206,69 +261,69 @@
         /* font: normal 13px Arial, sans-serif; */
       /* } */
 
-      /* .table-wrapper {
+      /* #detail-table {
         position: relative
       } */
 
-      .table-scroller {
+      /* .table-scroller {
         margin-left: 16.66667%;
         overflow-x: scroll;
         overflow-y: visible;
-        /* padding-bottom: 5px; */
-        /* width: 600px; */
-      }
+        padding-bottom: 5px;
+        width: 1100px;
+      } */
 
-      /* .hact-detail-table .sticky-col { */
-        /* border-left: solid 1px #DDEFEF; */
-        /* border-right: solid 1px #DDEFEF; */
-        /* left: 0; */
-        /* position: absolute; */
-        /* top: auto; */
-        /* width: 120px; */
-      /* } */
+      /* .table-scroller .sticky-col {
+        border-left: solid 1px #DDEFEF;
+        border-right: solid 1px #DDEFEF;
+        left: 0;
+        position: absolute;
+        top: auto;
+        width: 120px;
+      } */
     </style>
 
     <paper-material id="detail-list" class="hact-list" elevation="1">
       <div id="detail-table" class="detail-list">
-        <!-- <div class="table-scroller"> -->
+        <div class="table-scroller">
           <!-- <div class="hact-detail-table"> -->
                   
             <!-- row of table headers -->
             <data-table-header no-collapse>
-              <data-table-column class="col-2 layout horizontal" group-heading="OWEUF">
+              <data-table-column class="col-2 layout horizontal sticky-col" group-heading=" ">
                 <data-table-column class="col-12 layout horizontal" id="name" sortable>
                   IP Name
                 </data-table-column>
               </data-table-column>
               <div class="col-5 layout horizontal">
-                <data-table-column class="col-4 layout horizontal" group-heading="EFHISU">
+                <data-table-column class="col-4 layout horizontal" group-heading=" blank ">
                   <data-table-column class="col-4 vertical nowrap padded" id="total_ct_cp">
                     Risk Rating
                   </data-table-column>
                   <data-table-column class="col-2 vertical nowrap padded" id="hact_values.planned_cash_transfer">
                     Flags
                   </data-table-column>
-                  <data-table-column class="col-6 right vertical padded nowrap" id="total_ct_cy">
-                    Cash Transfers <br>
+                  <data-table-column class="col-6 monetary vertical padded nowrap" id="total_ct_cy">
+                    Cash Transf <br>
                     1 Jan - 31 Dec
                   </data-table-column>
                 </data-table-column>
                 <data-table-column class="col-8 layout horizontal" group-heading="PROGRAMMATIC VISITS">
-                  <data-table-column class="col-3 nowrap padded right-side">
-                    Cash Transfers <br>
+                  <data-table-column class="col-2 nowrap monetary padded right-side">
+                    Cash Transf <br>
                     1 Oct - 30 Sep
                   </data-table-column>
-                  <data-table-column class="col-3 vertical right-side quarters" id="hact_values.micro_assessment_needed">
+                  <data-table-column class="col-4 vertical right-side quarters" id="hact_values.micro_assessment_needed">
                     Planned <br>
-                    <span class="col-3">Q1</span>
-                    <span class="col-3 right-side">Q2</span>
-                    <span class="col-3 right-side">Q3</span>
-                    <span class="col-3 right-side">Q4</span>
+                    <span class="col-3 quarter-item">Q1</span>
+                    <span class="col-3 quarter-item right-side">Q2</span>
+                    <span class="col-3 quarter-item right-side">Q3</span>
+                    <span class="col-3 quarter-item right-side">Q4</span>
                   </data-table-column>
                   <data-table-column class="col-2 nowrap vertical right-side" id="rating">
                     Minimum <br> Required
                   </data-table-column>
-                  <data-table-column class="col-3 vertical right-side quarters">
+                  <data-table-column class="col-4 vertical right-side quarters">
                     Completed <br>
                     <span class="col-3">Q1</span>
                     <span class="col-3 right-side">Q2</span>
@@ -285,19 +340,23 @@
                     Liquidations <br>
                     1 Oct - 30 Sep
                   </data-table-column>
-                  <data-table-column class="col-3 vertical right-side quarters">
-                    Planned <br>
-                    <span class="col-3">Q1</span>
-                    <span class="col-3 right-side">Q2</span>
-                    <span class="col-3 right-side">Q3</span>
-                    <span class="col-3 right-side">Q4</span>
-                  </data-table-column>
-                  <data-table-column class="col-2 vertical right-side">
-                    Minimum <br> Required
-                  </data-table-column>
-                  <data-table-column class="col-2 vertical right-side">
-                    Follow-up <br> Required
-                  </data-table-column>
+                  <div class="col-7 layout horizontal">
+                    <div class="col-half buffer right-side"></div>
+                    <data-table-column class="col-5 vertical right-side quarters">
+                      Planned <br>
+                      <span class="col-3">Q1</span>
+                      <span class="col-3 right-side">Q2</span>
+                      <span class="col-3 right-side">Q3</span>
+                      <span class="col-3 right-side">Q4</span>
+                    </data-table-column>
+                    <data-table-column class="col-3 vertical right-side">
+                      Minimum <br> Required
+                    </data-table-column>
+                    <data-table-column class="col-3 vertical right-side">
+                      Follow-up <br> Required
+                    </data-table-column>
+                    <div class="col-half buffer right-side"></div>
+                  </div>
                   <data-table-column class="col-3 vertical right-side quarters">
                     Completed <br>
                     <span class="col-3">Q1</span>
@@ -309,13 +368,13 @@
                 </data-table-column>
                 <data-table-column class="col-3 layout horizontal" group-heading="AUDITS">
                   <data-table-column class="col-4 right-side" id="hact_values.audits_mr">
-                    Required
+                    Req
                   </data-table-column>
                   <data-table-column class="col-4 right-side" id="hact_values.audits_done">
-                    Completed
+                    Comp
                   </data-table-column>
                   <data-table-column class="col-4 right-side">
-                    Outstanding <br> Findings
+                    O <br> F
                   </data-table-column>
                 </data-table-column>
               </div>
@@ -325,7 +384,7 @@
             <data-table-row class="totals" no-collapse>
               <div slot="row-data">
                 <div class="col-2 sticky-col col-data layout horizontal">
-                  <div class="col-12">
+                  <div class="col-12 vertical">
                     Total of [[totalResults]] IPs
                   </div>
                 </div>
@@ -333,18 +392,18 @@
                   <div class="col-4 layout horizontal">
                     <div class="col-4 nowrap padded vertical"></div>
                     <div class="col-2 nowrap padded vertical"></div>
-                    <div class="col-6 padded right nowrap vertical ">$[[currencyFormat(totals.total_ct_cy)]]</div>
+                    <div class="col-6 padded monetary nowrap vertical">$[[currencyFormat(totals.total_ct_cy)]]</div>
                   </div>
                   <div class="col-8 layout horizontal">
-                    <div class="col-3 nowrap padded right-side"></div>
-                    <div class="col-3 vertical right-side quarters">
+                    <div class="col-2 nowrap padded monetary vertical right-side">X</div>
+                    <div class="col-4 vertical right-side quarters">
                       <span class="col-3">0</span>
                       <span class="col-3 right-side">0</span>
                       <span class="col-3 right-side">0</span>
                       <span class="col-3 right-side">[[totals.planned_visits]]</span>
                     </div>
                     <div class="col-2 nowrap vertical right-side">[[totals.programme_visits]]</div>
-                    <div class="col-3 quarters vertical right-side">
+                    <div class="col-4 quarters vertical right-side">
                       <span class="col-3">0</span>
                       <span class="col-3 right-side">0</span>
                       <span class="col-3 right-side">0</span>
@@ -355,16 +414,20 @@
                 <div class="col-5 layout horizontal">
                   <div class="col-9 layout horizontal">
                     <!-- <div class="col-1 buffer right-side right"></div> -->
-                    <div class="col-2 right-side right"></div>
-                    <div class="col-3 right-side right">
-                      <span class="col-3">0</span>
-                      <span class="col-3 right-side">0</span>
-                      <span class="col-3 right-side">0</span>
-                      <span class="col-3 right-side">0</span>
+                    <div class="col-2 right-side right vertical">X</div>
+                    <div class="col-7 layout horizontal">
+                      <div class="col-half buffer right-side"></div>
+                      <div class="col-5 right-side right vertical">
+                        <span class="col-3">0</span>
+                        <span class="col-3 right-side">0</span>
+                        <span class="col-3 right-side">0</span>
+                        <span class="col-3 right-side">0</span>
+                      </div>
+                      <div class="col-3 right-side vertical">[[totals.mr_spot_checks]]</div>
+                      <div class="col-3 right-side vertical">[[totals.follow_up_flags]]</div>
+                      <div class="col-half buffer right-side"></div>
                     </div>
-                    <div class="col-2 right-side">[[totals.mr_spot_checks]]</div>
-                    <div class="col-2 right-side">[[totals.follow_up_flags]]</div>
-                    <div class="col-3 right-side">
+                    <div class="col-3 right-side vertical">
                       <span class="col-3">0</span>
                       <span class="col-3 right-side">0</span>
                       <span class="col-3 right-side">0</span>
@@ -373,9 +436,9 @@
                     <!-- <div class="col-1 buffer right-side right"></div> -->
                   </div>
                   <div class="col-3 layout horizontal">
-                    <div class="col-4 right-side">[[totals.audits_mr]]</div>
-                    <div class="col-4 right-side">[[totals.audits_done]]</div>
-                    <div class="col-4 right-side">X</div>
+                    <div class="col-4 right-side vertical">[[totals.audits_mr]]</div>
+                    <div class="col-4 right-side vertical">[[totals.audits_done]]</div>
+                    <div class="col-4 right-side vertical">X</div>
                   </div>
                 </div>
               </div>
@@ -392,56 +455,62 @@
                       </a>
                     </span>
                   </div>
-                    <div class="col-5 layout horizontal">
+                  <div class="col-5 layout horizontal">
                     <div class="col-4 layout horizontal">
-                      <span class="col-4 nowrap padded">[[partner.rating]]</span>
-                      <span class="col-2 nowrap padded">X</span>
-                      <span class="col-6 right padded nowrap">$[[currencyFormat(partner.total_ct_cy)]]</span>
+                      <span class="col-4 nowrap padded vertical">[[partner.rating]]</span>
+                      <span class="col-2 nowrap padded vertical">X</span>
+                      <span class="col-6 right padded nowrap vertical">$[[currencyFormat(partner.total_ct_cy)]]</span>
                     </div>
                     <div class="col-8 layout horizontalr">
-                      <span class="col-3 nowrap padded right-side">X</span>
-                      <span class="col-3 nowrapr vertical right-side">
+                      <span class="col-2 nowrap padded right-side vertical">X</span>
+                      <span class="col-4 nowrap vertical right-side">
                         <span class="col-3">0</span>
-                        <span class="col-3 right-side">0</span>
-                        <span class="col-3 right-side">0</span>
-                        <span class="col-3 right-side">[[_getGovernmentDisplay(partner,'hact_values.planned_visits')]]</span>
+                        <span class="col-3 quarter-border">0</span>
+                        <span class="col-3 quarter-border">0</span>
+                        <span class="col-3 quarter-border">[[_getGovernmentDisplay(partner,'hact_values.planned_visits')]]</span>
                       </span>
-                      <span class="col-2 nowrap right-side">[[partner.hact_min_requirements.programme_visits]]</span>
-                      <span class="col-3 right-side">
+                      <span class="col-2 nowrap right-side vertical">[[partner.hact_min_requirements.programme_visits]]</span>
+                      <span class="col-4 right-side vertical">
                         <span class="col-3">0</span>
-                        <span class="col-3 right-side">0</span>
-                        <span class="col-3 right-side">0</span>
-                        <span class="col-3 right-side">[[partner.hact_values.programmatic_visits]]</span>
+                        <span class="col-3 quarter-border">0</span>
+                        <span class="col-3 quarter-border">0</span>
+                        <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits]]</span>
                       </span>
                     </div>
                   </div>
                   <div class="col-5 layout horizontal">
                     <div class="col-9 layout horizontal"> 
-                      <span class="col-2 right-side">X</span>
-                      <span class="col-3 right-side">
+                      <span class="col-2 right-side vertical">X</span>
+                      <div class="col-7 layout horizontal">
+                        <span class="col-half buffer right-side"></span>
+                        <span class="col-5 right-side vertical">
+                          <span class="col-3">0</span>
+                          <span class="col-3 vertical quarter-border">0</span>
+                          <span class="col-3 quarter-border">0</span>
+                          <span class="col-3 quarter-border">0</span>
+                        </span>
+                        <span class="col-3 right-side vertical">[[partner.hact_min_requirements.spot_checks]]</span>
+                        <span class="col-3 right-side vertical">X</span>
+                        <span class="col-half buffer right-side"></span>
+                      </div>
+                      <span class="col-3 right-side vertical">
                         <span class="col-3">0</span>
-                        <span class="col-3 right-side">0</span>
-                        <span class="col-3 right-side">0</span>
-                        <span class="col-3 right-side">0</span>
-                      </span>
-                      <span class="col-2 right-side">[[partner.hact_min_requirements.spot_checks]]</span>
-                      <span class="col-2 right-side">X</span>
-                      <span class="col-3 right-side">
-                        <span class="col-3">0</span>
-                        <span class="col-3 right-side">0</span>
-                        <span class="col-3 right-side">0</span>
-                        <span class="col-3 right-side">[[partner.hact_values.spot_checks]]</span>
+                        <span class="col-3 quarter-border">0</span>
+                        <span class="col-3 quarter-border">0</span>
+                        <span class="col-3 quarter-border">[[partner.hact_values.spot_checks]]</span>
                       </span>
                     </div>
                     <div class="col-3 layout horizontal">
-                      <span class="col-4 right-side">[[partner.hact_values.audits_mr]]</span>
-                      <span class="col-4 right-side">[[partner.hact_values.audits_done]]</span>
-                      <span class="col-4 right-side">X</span>
+                      <span class="col-4 right-side vertical">[[partner.hact_values.audits_mr]]</span>
+                      <span class="col-4 right-side vertical">[[partner.hact_values.audits_done]]</span>
+                      <span class="col-4 right-side vertical">X</span>
                     </div>
                   </div>
                 </div>
               </data-table-row>
             </template>
+          </div>  
+        </div>
       </div>
       <data-table-footer class="fix" page-size="[[pageSize]]" page-number="[[pageNumber]]" visible-range="{{visibleRange}}" filtered-total-results="[[filteredTotalResults]]"
         on-page-size-changed="pageSizeChanged" on-page-number-changed="pageNumberChanged">

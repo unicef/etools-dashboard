@@ -82,6 +82,7 @@
         border-left: 1px solid rgba(0, 0, 0, 0.24);
         box-sizing: border-box;
         padding-right: 2px;
+        min-height: 48px;
       }
 
       .vertical {
@@ -135,21 +136,29 @@
 
       data-table-row > div[slot="row-data"] > div > div {
         display: flex;
-        flex-flow: row nowrap;
+        /* flex-flow: row nowrap; */
         align-items: center;
         min-height: 40px;
       }
 
-      /* data-table-header > div > data-table-column > data-table-column,  */
-      /* data-table-row > div[slot="row-data"] > div:nth-of-type(2) > div > span {
-        text-align: right;
-        border-left: 1px solid rgba(0, 0, 0, 0.24);
-        box-sizing: border-box;
+      data-table-row > div[slot="row-data"] > div:nth-of-type(2) > div > span {
         display: flex;
+        justify-content: center;
         align-items: center;
-        flex-direction: row-reverse;
-        height: 100%;
-      } */
+      }
+
+      /* data-table-header > div > data-table-column > data-table-column {  */
+      /* data-table-row > div[slot="row-data"] > div:nth-of-type(2) > div > span { */
+        /* text-align: right; */
+        /* border-left: 1px solid rgba(0, 0, 0, 0.24); */
+        /* box-sizing: border-box; */
+        /* display: flex; */
+        /* align-items: center; */
+        /* flex-direction: row-reverse; */
+        /* height: 100%; */
+        /* align-items: center; */
+        /* justify-content: center; */
+      /* } */
 
       .year-dropdown {
         max-width: 150px;
@@ -185,6 +194,12 @@
         padding-left: 1em;
         cursor: pointer;
         padding-bottom: 8px;
+      }
+
+      paper-button.detailed-assurance {
+        border-radius: 50px;
+        background: rgb(255, 255, 255);
+        cursor: pointer;
       }
 
       .partner-link {
@@ -224,9 +239,14 @@
 
         <paper-material class="hact-list" elevation="1">
           <div id="center-toggle">
-            <a on-tap="_detailToggle" id="toggle">
-              SHOW DETAILED ASSURANCE
-            </a>
+              <paper-button on-tap="_detailToggle" id="toggle" class="detailed-assurance" noink>
+                  <!-- <iron-icon class="dark"></iron-icon> -->
+                  <a>SHOW DETAILED ASSURANCE</a>
+                  
+                </paper-button>
+            <!-- <a on-tap="_detailToggle" id="toggle"> -->
+              <!-- SHOW DETAILED ASSURANCE -->
+            <!-- </a> -->
           </div>
         </paper-material>
 
@@ -270,12 +290,6 @@
                   <data-table-column class="col-4 layout horizontal toggle-container" group-heading="PROGRAMMATIC VISITS">
                     <data-table-column class="col-4 nowrap toggle-container vertical right-side" id="hact_values.micro_assessment_needed">
                       Planned
-                      <div class="toggle-fields">
-                        <span class="col-3">Q1</span>
-                        <span class="col-3 right-side">Q2</span>
-                        <span class="col-3 right-side">Q3</span>
-                        <span class="col-3 right-side">Q4</span>
-                      </div>
                     </data-table-column>
                     <data-table-column class="col-4 nowrap vertical right-side" id="rating">
                       Minimum <br> Required
@@ -598,6 +612,14 @@
         _detailToggle: function() {
           let pages = Polymer.dom(this.root).querySelectorAll("iron-pages")
           pages[1].selectNext()
+          let button = Polymer.dom(this.root).querySelector(".detailed-assurance")
+          if (!this.displayDetail) {
+            button.style.background = "rgb(236, 236, 236)"
+          } else {
+            button.style.background = "rgb(255, 255, 255)"
+          }
+          this.displayDetail = !this.displayDetail
+
         }
       });
     })();
