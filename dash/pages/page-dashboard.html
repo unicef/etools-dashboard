@@ -10,8 +10,10 @@
 <link rel="import" href="../app-elements/dashboard/dashboard-partnerships.html">
 <link rel="import" href="../app-elements/dashboard/dashboard-personalized.html">
 <link rel="import" href="../app-elements/dashboard/dashboard-hact.html">
+<link rel="import" href="../app-elements/dashboard/dashboard-hact-charts.html">
 <link rel="import" href="../app-elements/dashboard/dashboard-trips.html">
 <link rel="import" href="../app-elements/dashboard/dashboard-map.html">
+
 
 
 <link rel="import" href="../../styles/page-layout-styles.html">
@@ -105,8 +107,8 @@
                   fallback-selection="personalized"
                   role="main">
         <div class="page" name="hact">
-          <dashboard-hact active="[[_isActive(partnershipPage,'hact')]]" url-params="[[queryParams]]"
-                          csv-download-url="{{csvUrl}}"></dashboard-hact>
+          <dashboard-hact-charts active="[[_isActive(partnershipPage,'hact')]]" url-params="[[queryParams]]"
+                          csv-download-url="{{csvUrl}}"></dashboard-hact-charts>
         </div>
         <div class="page" name="personalized">
           <dashboard-personalized user="[[user]]" active="[[_isActive(partnershipPage,'personalized')]]"
