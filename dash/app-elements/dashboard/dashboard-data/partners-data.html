@@ -15,6 +15,9 @@
   </template>
 
   <script>
+
+
+
     (function() {
       'use strict';
        Polymer( {
@@ -118,13 +121,24 @@
             ]).value();
             _.assign(picked, _.pick(picked.hact_values, [
                   'planned_cash_transfer',
-                  'planned_visits',
-                  'programmatic_visits',
-                  'spot_checks',
-                  'audits_mr',
                   'audits_done',
                   'follow_up_flags'
                 ]), _.pick(picked.hact_min_requirements, 'programme_visits'),
+                {
+                  programmatic_visits_completed_total: picked.hact_values.programmatic_visits.completed.total
+                },
+                {
+                  programmatic_visits_planned_total: picked.hact_values.programmatic_visits.planned.total
+                },
+                {
+                  spot_checks_completed_total: picked.hact_values.spot_checks.completed.total
+                },
+                {
+                  audits_mr: picked.hact_values.audits.minumum_requirements
+                },
+                {
+                  outstanding_findings: picked.hact_values.audits.outstanding_findings
+                },
                 {
                   mr_spot_checks: picked.hact_min_requirements.spot_checks
                 });

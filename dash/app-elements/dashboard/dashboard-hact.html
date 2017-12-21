@@ -10,12 +10,8 @@
 <link rel="import" href="../../../bower_components/etools-dropdown/etools-dropdown.html">
 <link rel="import" href="../../app-config/etools-app-config.html">
 
-<link rel="import" href="../data-table/data-table-header.html">
-<link rel="import" href="../data-table/data-table-column.html">
-<link rel="import" href="../data-table/data-table-row.html">
-<link rel="import" href="../data-table/data-table-footer.html">
-<link rel="import" href="dashboard-hact-detail.html">
-
+<!-- <link rel="import" href="dashboard-hact-views/dashboard-hact-detail.html"> -->
+<link rel="import" href="dashboard-hact-views/dashboard-hact-general.html">
 
 <link rel="import" href="dashboard-data/partners-data.html">
 <link rel="import" href="../../app-behaviors/common-general-behavior.html">
@@ -40,82 +36,10 @@
         min-width: 1150px;
       }
 
-      /* .detail-list {
-        min-width: 1400px;
-        padding: 0 0;
-      } */
-
-      .buffer {
-        background-color: rgb(248, 248, 248);
-        border-left: 1px solid rgba(0, 0, 0, 0.24);
-      }
-
       .search-bar {
         padding-bottom: 8px;
         padding-top: 8px;
         box-sizing: border-box;
-      }
-
-      .nowrap {
-        white-space: nowrap;
-      }
-
-      .padded {
-        padding-right: 2px;
-      }
-
-      .group {
-        /* padding-right: 16px; */
-        box-sizing: border-box;
-      }
-
-      .right {
-        text-align: right;
-      }
-
-      .center {
-        text-align: center;
-      }
-
-      .right-side {
-        text-align: right;
-        border-left: 1px solid rgba(0, 0, 0, 0.24);
-        box-sizing: border-box;
-        padding-right: 2px;
-        min-height: 48px;
-      }
-
-      .vertical {
-        @apply(--layout-horizontal);
-        @apply(--layout-center);
-      }
-
-      data-table-header data-table-column {
-        @apply(--layout-start);
-        box-sizing: border-box;
-      }
-
-      data-table-row.totals {
-        --primary-background-color: var(--medium-theme-background-color);
-        --custom-style: {
-          background: var(--medium-theme-background-color);
-          border-top: 1px solid rgba(0, 0, 0, 0.24);
-          box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.24);
-        }
-      }
-
-      data-table-column.around {
-        --custom-style: {
-          @apply(--layout-around-justified);
-        }
-      }
-
-      data-table-row.totals span {
-        font-weight: 500;
-      }
-
-      data-table-row:hover {
-        background: var(--medium-theme-background-color);
       }
 
       #center-toggle {
@@ -129,48 +53,10 @@
         font-weight: 500;
       }
 
-      /* .toggle-fields {
-        display: none;
-        flex-grow: 2;
-      } */
-
-      data-table-row > div[slot="row-data"] > div > div {
-        display: flex;
-        /* flex-flow: row nowrap; */
-        align-items: center;
-        min-height: 40px;
-      }
-
-      data-table-row > div[slot="row-data"] > div:nth-of-type(2) > div > span {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      /* data-table-header > div > data-table-column > data-table-column {  */
-      /* data-table-row > div[slot="row-data"] > div:nth-of-type(2) > div > span { */
-        /* text-align: right; */
-        /* border-left: 1px solid rgba(0, 0, 0, 0.24); */
-        /* box-sizing: border-box; */
-        /* display: flex; */
-        /* align-items: center; */
-        /* flex-direction: row-reverse; */
-        /* height: 100%; */
-        /* align-items: center; */
-        /* justify-content: center; */
-      /* } */
-
       .year-dropdown {
         max-width: 150px;
         padding-left: 20px;
       }
-
-      /* .toggle-container {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-evenly;
-        flex-grow: 1;
-      } */
 
       .year-and-toggles {
         display: flex;
@@ -196,14 +82,17 @@
         padding-bottom: 8px;
       }
 
+      .dark-button {
+        background: rgb(216, 216, 216) !important;
+      }
+
+      .light-button {
+        background: rgb(255, 255, 255) !important;
+      }
+
       paper-button.detailed-assurance {
         border-radius: 50px;
         background: rgb(255, 255, 255);
-        cursor: pointer;
-      }
-
-      .partner-link {
-        overflow: hidden;
         cursor: pointer;
       }
     </style>
@@ -211,23 +100,26 @@
     <partners-data id="partners" filtered-partners="{{filteredPartners}}" total-results="{{totalResults}}" totals="{{totals}}"
       filtered-total-results="{{filteredTotalResults}}" active="[[active]]" fire-data-loaded show-loading on-partners-loaded="_requiredDataHasBeenLoaded">
     </partners-data>
-    <div class="year-and-toggles">
+    <!-- <div class="year-and-toggles">
       <div class="year-dropdown">
         <etools-dropdown label="Year" options="[[availableYears]]" dropdown-value="2017"></etools-dropdown>
       </div>
       <div>
-        <paper-button on-tap="_showPlan" noink class="curved-left">
+        <paper-button id="assurancePlan" on-tap="_toggleChartsView" noink class="curved-left">
           <iron-icon class="dark" icon="list"></iron-icon>
           ASSURANCE PLAN
         </paper-button>
-        <paper-button on-tap="_showDash" noink class="curved-right">
+        <paper-button id="dashboardCharts" on-tap="_toggleChartsView" noink class="curved-right">
           <iron-icon class="dark" icon="assessment"></iron-icon>
           DASHBOARD
         </paper-button>
       </div>
     </div>
-    <iron-pages selected="0">
-      <div>
+    <iron-pages id="hactPages"
+                selected="[[name]]"
+                attr-for-selected="name"
+                fallback-selection="hact-assurance">
+      <div name="hact-assurance"> -->
         <paper-material class="list-panel search-bar hact-list" elevation="1">
           <div class="wrap-controls">
             <paper-input id="query" type="search" autocomplete="off" value="[[queryString]]" on-keyup="setQuery" placeholder="Type and search"
@@ -237,195 +129,32 @@
           </div>
         </paper-material>
 
-        <paper-material class="hact-list" elevation="1">
+        <!-- <paper-material class="hact-list" elevation="1">
           <div id="center-toggle">
-              <paper-button on-tap="_detailToggle" id="toggle" class="detailed-assurance" noink>
-                  <!-- <iron-icon class="dark"></iron-icon> -->
-                  <a>SHOW DETAILED ASSURANCE</a>
-                  
-                </paper-button>
-            <!-- <a on-tap="_detailToggle" id="toggle"> -->
-              <!-- SHOW DETAILED ASSURANCE -->
-            <!-- </a> -->
+            <paper-button on-tap="_detailToggle" id="toggle" class="detailed-assurance" noink>
+              <a>SHOW DETAILED ASSURANCE</a>
+            </paper-button>
           </div>
-        </paper-material>
+        </paper-material> -->
 
-        <iron-pages selected="0">
-          <div>
-            <paper-material id="list" class="hact-list" elevation="1">
-              <!-- row of table headers -->
-              <data-table-header no-collapse>
-                <data-table-column class="col-6 layout horizontal" group-heading=" ">
-                  <div class="col-5 layout horizontal">
-                    <data-table-column class="col-10 nowrap vertical padded fixed" id="name" sortable>
-                      IP Name
-                    </data-table-column>
-                    <data-table-column class="col-2 nowrap vertical padded" id="partner_type">
-                      IP Type
-                    </data-table-column>
-                  </div>
-                  <div class="col-3 layout horizontal">
-                    <data-table-column class="col-3 vertical nowrap" id="shared_partner">
-                      Shared <br>
-                      IP
-                    </data-table-column>
-                    <data-table-column class="col-9 vertical nowrap" id="assessment_type">
-                      Assessment Type
-                    </data-table-column>
-                  </div>
-                  <div class="col-4 group layout horizontal">
-                    <data-table-column class="col-5 vertical nowrap padded" id="total_ct_cp">
-                      Risk Rating
-                    </data-table-column>
-                    <data-table-column class="col-2 vertical nowrap padded" id="hact_values.planned_cash_transfer">
-                      Flags
-                    </data-table-column>
-                    <data-table-column class="col-5 right vertical padded nowrap" id="total_ct_cy">
-                      Cash Transfers <br>
-                      1 Jan - 31 Dec
-                    </data-table-column>
-                  </div>
-                </data-table-column>
-                <div class="col-6 layout horizontal toggle-container">
-                  <data-table-column class="col-4 layout horizontal toggle-container" group-heading="PROGRAMMATIC VISITS">
-                    <data-table-column class="col-4 nowrap toggle-container vertical right-side" id="hact_values.micro_assessment_needed">
-                      Planned
-                    </data-table-column>
-                    <data-table-column class="col-4 nowrap vertical right-side" id="rating">
-                      Minimum <br> Required
-                    </data-table-column>
-                    <data-table-column class="col-4 vertical right-side">
-                      Completed
-                    </data-table-column>
-                  </data-table-column>
-                  <data-table-column class="col-3 layout horizontal" group-heading="SPOT CHECKS">
-                    <data-table-column class="col-1 vertical buffer right-side"></data-table-column>
-                    <data-table-column class="col-5 vertical right-side">
-                      Minimum <br> Required
-                    </data-table-column>
-                    <data-table-column class="col-5 vertical right-side">
-                      Completed
-                    </data-table-column>
-                    <data-table-column class="col-1 vertical buffer right-side"></data-table-column>
-                  </data-table-column>
-                  <data-table-column class="col-4 layout horizontal" group-heading="AUDITS">
-                    <data-table-column class="col-4 vertical right-side" id="hact_values.audits_mr">
-                      Required
-                    </data-table-column>
-                    <data-table-column class="col-4 vertical right-side" id="hact_values.audits_done">
-                      Completed
-                    </data-table-column>
-                    <data-table-column class="col-4 vertical right-side">
-                      Outstanding <br> Findings
-                    </data-table-column>
-                  </data-table-column>
-                  <data-table-column class="col-1 layout horizontal" group-heading="Hold">
-                    <data-table-column class="col-12 vertical right-side" id="hact_values.follow_up_flags">
-                      Follow-up
-                    </data-table-column>
-                  </data-table-column>
-                </div>
-              </data-table-header>
-
-              <!--Row of Totals-->
-              <data-table-row class="totals" no-collapse>
-                <div slot="row-data">
-                  <div class="col-6 layout horizontal">
-                    <div class="col-5 layout horizontal group">
-                      <span class="col-10 col-data partner-link padded vertical fixed">
-                        Total of [[totalResults]] IPs
-                      </span>
-                      <span class="col-2 col-data vertical"></span>
-                    </div>
-                    <div class="col-3 layout horizontal group">
-                      <span class="col-3 col-data vertical">[[totals.shared_partner]]</span>
-                      <span class="col-9 col-data vertical"></span>
-                    </div>
-                    <div class="col-4 layout horizontal group">
-                        <span class="col-5 col-data vertical"></span>
-                        <span class="col-2 col-data vertical"></span>
-                        <span class="col-5 col-data padded right">$[[currencyFormat(totals.total_ct_cy)]]</span>
-                    </div>
-                  </div>
-                  <div class="col-6 layout horizontal">
-                    <div class="col-4 layout horizontal group">
-                      <span class="col-4 right-side">[[totals.planned_visits]]</span>
-                      <span class="col-4 right-side">[[totals.programme_visits]]</span>
-                      <span class="col-4 right-side">[[totals.programmatic_visits]]</span>
-                    </div>
-                    <div class="col-3 layout horizontal group">
-                      <span class="col-1 right-side"></span>
-                      <span class="col-5 right-side">[[totals.mr_spot_checks]]</span>
-                      <span class="col-5 right-side">[[totals.spot_checks]]</span>
-                      <span class="col-1 right-side"></span>
-                    </div>
-                    <div class="col-4 layout horizontal group">
-                      <span class="col-4 right-side">[[totals.audits_mr]]</span>
-                      <span class="col-4 right-side">[[totals.audits_done]]</span>
-                      <span class="col-4 right-side"></span>
-                    </div>
-                    <div class="col-1 layout horizontal group">
-                      <span class="col-12 right-side">[[totals.follow_up_flags]]</span>
-                    </div>
-                  </div>
-                </div>
-              </data-table-row>
-
-              <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
-                <data-table-row no-collapse>
-                  <div slot="row-data">
-                    <div class="col-6 layout horizontal">
-                      <div class="col-5 layout horizontal">
-                        <span class="col-10 col-data partner-link padded fixed">
-                          <a on-tap="_goToPage" id="[[partner.id]]">
-                            [[partner.name]]
-                            <paper-tooltip>[[partner.name]]</paper-tooltip>
-                          </a>
-                        </span>
-                        <span class="col-2 col-data">[[partner.partner_type]]
-                          <paper-tooltip>[[partner.partner_type]]</paper-tooltip>
-                        </span>
-                      </div>
-                      <div class="col-3 layout horizontal">
-                        <span class="col-3 col-data">[[partner.shared_partner]]</span>
-                        <span class="col-9 col-data">ASSMT TYPE</span>
-                      </div>
-                      <div class="col-4 group layout horizontal">
-                        <span class="col-5 col-data">[[partner.rating]]</span>
-                        <span class="col-2 col-data">FLAGS</span>
-                        <span class="col-5 col-data right padded">$[[currencyFormat(partner.total_ct_cy)]]</span>
-                      </div>
-                    </div>
-                    <div class="col-6 layout horizontal">
-                      <div class="col-4 layout horizontal group">
-                        <span class="col-4 col-data toggler right-side">[[_getGovernmentDisplay(partner,'hact_values.planned_visits')]]</span>
-                        <span class="col-4 col-data right-side">[[partner.hact_min_requirements.programme_visits]]</span>
-                        <span class="col-4 col-data toggler right-side">[[partner.hact_values.programmatic_visits]]</span>
-                      </div>
-                      <div class="col-3 layout horizontal group">
-                        <span class="col-1 right-side buffer"></span>
-                        <span class="col-5 col-data right-side">[[partner.hact_min_requirements.spot_checks]]</span>
-                        <span class="col-5 col-data toggler right-side">[[partner.hact_values.spot_checks]]</span>
-                        <span class="col-1 right-side buffer"></span>
-                      </div>
-                      <div class="col-4 layout horizontal group">
-                        <span class="col-4 col-data right-side">[[partner.hact_values.audits_mr]]</span>
-                        <span class="col-4 col-data right-side">[[partner.hact_values.audits_done]]</span>
-                        <span class="col-4 right-side"></span>
-                      </div>
-                        <div class="col-1 layout horizontal">
-                          <span class="col-12 col-data right-side">[[partner.hact_values.follow_up_flags]]</span>
-                      </div>
-                    </div>
-                  </div>
-                </data-table-row>
-              </template>
-              <data-table-footer page-size="[[pageSize]]" page-number="[[pageNumber]]" visible-range="{{visibleRange}}" filtered-total-results="[[filteredTotalResults]]"
-                on-page-size-changed="pageSizeChanged" on-page-number-changed="pageNumberChanged">
-              </data-table-footer>
-            </paper-material>
-          </div>
-          <div>
+        <!-- <iron-pages id="hactAssurance"
+                    selected="[[subName]]"
+                    attr-for-selected="sub-name"
+                    fallback-selection="hact-general">
+          <div sub-name="hact-general"> -->
+            <dashboard-hact-general
+                              filtered-partners="[[filteredPartners]]" 
+                              totals="[[totals]]" 
+                              total-results="[[totalResults]]"
+                              page-size="[[pageSize]]"
+                              page-number="[[pageNumber]]"
+                              visible-range="{{visibleRange}}"
+                              filtered-total-results="[[filteredTotalResults]]"
+                              on-page-size-changed="pageSizeChanged"
+                              on-page-number-changed="pageNumberChanged">
+            </dashboard-hact-general>
+          <!-- </div>
+          <div sub-name="hact-detail">
             <dashboard-hact-detail 
                               filtered-partners="[[filteredPartners]]" 
                               totals="[[totals]]" 
@@ -440,8 +169,8 @@
           </div>
         </iron-pages>
       </div>
-      <div>GRAPH ELEMENT</div>
-    </iron-pages>
+      <div name="hact-dashboard">CHARTS ELEMENT</div>
+    </iron-pages> -->
   </template>
   <script>
     (function () {
@@ -585,42 +314,24 @@
           window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
         },
 
-        _showDash: function() {
-          if (!this.showDash) {
-            let pages = Polymer.dom(this.root).querySelectorAll("iron-pages")
-            pages[0].selectNext()
-            let buttonOne = Polymer.dom(this.root).querySelector(".curved-left")
-            buttonOne.style.background = "rgb(216, 216, 216)";
-            let buttonTwo = Polymer.dom(this.root).querySelector(".curved-right")
-            buttonTwo.style.background = "rgb(255, 255, 255)";
-            this.showDash = !this.showDash
-          }
-        },
+        // _toggleChartsView: function() {
+        //   this.$.hactPages.selectNext()
+        //   this.$.assurancePlan.toggleClass("light-button")
+        //   this.$.dashboardCharts.toggleClass("dark-button")
+        // },
 
-        _showPlan: function() {
-          if (this.showDash) {
-            let pages = Polymer.dom(this.root).querySelectorAll("iron-pages")
-            pages[0].selectNext()
-            let buttonOne = Polymer.dom(this.root).querySelector(".curved-left")
-            buttonOne.style.background = "rgb(255, 255, 255)";
-            let buttonTwo = Polymer.dom(this.root).querySelector(".curved-right")
-            buttonTwo.style.background = "rgb(216, 216, 216)";
-            this.showDash = !this.showDash
-          }
-        },
+        // _detailToggle: function() {
+        //   let pages = Polymer.dom(this.root).querySelectorAll("iron-pages")
+        //   pages[1].selectNext()
+        //   let button = Polymer.dom(this.root).querySelector(".detailed-assurance")
+        //   if (!this.displayDetail) {
+        //     button.style.background = "rgb(236, 236, 236)"
+        //   } else {
+        //     button.style.background = "rgb(255, 255, 255)"
+        //   }
+        //   this.displayDetail = !this.displayDetail
 
-        _detailToggle: function() {
-          let pages = Polymer.dom(this.root).querySelectorAll("iron-pages")
-          pages[1].selectNext()
-          let button = Polymer.dom(this.root).querySelector(".detailed-assurance")
-          if (!this.displayDetail) {
-            button.style.background = "rgb(236, 236, 236)"
-          } else {
-            button.style.background = "rgb(255, 255, 255)"
-          }
-          this.displayDetail = !this.displayDetail
-
-        }
+        // }
       });
     })();
 
