@@ -43,7 +43,7 @@
       }
 
       .detail-list {
-        min-width: 1600px;
+        min-width: 1850px;
       }
 
       .buffer {
@@ -88,7 +88,7 @@
       }
 
       .right-side {
-        text-align: right;
+        text-align: center;
         border-left: 1px solid rgba(0, 0, 0, 0.24);
         box-sizing: border-box;
         padding-right: 2px;
@@ -187,6 +187,7 @@
 
       .monetary {
         text-align: right;
+        justify-content: flex-end !important;
       }
 
       .year-and-toggles {
@@ -244,43 +245,43 @@
               </data-table-column>
               <div class="col-5 layout horizontal">
                 <data-table-column class="col-4 layout horizontal" group-heading=" blank ">
-                  <data-table-column class="col-4 vertical nowrap padded" id="total_ct_cp">
+                  <data-table-column class="col-4 vertical nowrap" id="total_ct_cp">
                     Risk Rating
                   </data-table-column>
-                  <data-table-column class="col-2 vertical nowrap padded" id="hact_values.planned_cash_transfer">
+                  <data-table-column class="col-2 vertical nowrap" id="hact_values.planned_cash_transfer">
                     Flags
                   </data-table-column>
                   <data-table-column class="col-6 monetary vertical padded nowrap" id="total_ct_cy">
-                    Cash Transf <br>
+                    Cash Transfer <br>
                     1 Jan - 31 Dec
                   </data-table-column>
                 </data-table-column>
-                <data-table-column class="col-8 layout horizontal" group-heading="PROGRAMMATIC VISITS">
-                  <data-table-column class="col-2 nowrap monetary padded right-side">
-                    Cash Transf <br>
-                    1 Oct - 30 Sep
+                <data-table-column class="col-8 nowrap monetary padded right-side" group-heading="PROGRAMMATIC VISITS">
+                  <data-table-column class="col-3 layout horizontal">
+                      Cash Transfer <br>
+                      1 Oct - 30 Sep
+                    </data-table-column>
+                    <data-table-column class="col-3 vertical right-side quarters" id="hact_values.micro_assessment_needed">
+                      Planned <br>
+                      <span class="col-3 quarter-item">Q1</span>
+                      <span class="col-3 quarter-item right-side">Q2</span>
+                      <span class="col-3 quarter-item right-side">Q3</span>
+                      <span class="col-3 quarter-item right-side">Q4</span>
+                    </data-table-column>
+                    <data-table-column class="col-3 nowrap vertical right-side" id="rating">
+                      Minimum <br> Required
+                    </data-table-column>
+                    <data-table-column class="col-3 vertical right-side quarters">
+                      Completed <br>
+                      <span class="col-3">Q1</span>
+                      <span class="col-3 right-side">Q2</span>
+                      <span class="col-3 right-side">Q3</span>
+                      <span class="col-3 right-side">Q4</span>
+                    </data-table-column>
                   </data-table-column>
-                  <data-table-column class="col-4 vertical right-side quarters" id="hact_values.micro_assessment_needed">
-                    Planned <br>
-                    <span class="col-3 quarter-item">Q1</span>
-                    <span class="col-3 quarter-item right-side">Q2</span>
-                    <span class="col-3 quarter-item right-side">Q3</span>
-                    <span class="col-3 quarter-item right-side">Q4</span>
-                  </data-table-column>
-                  <data-table-column class="col-2 nowrap vertical right-side" id="rating">
-                    Minimum <br> Required
-                  </data-table-column>
-                  <data-table-column class="col-4 vertical right-side quarters">
-                    Completed <br>
-                    <span class="col-3">Q1</span>
-                    <span class="col-3 right-side">Q2</span>
-                    <span class="col-3 right-side">Q3</span>
-                    <span class="col-3 right-side">Q4</span>
-                  </data-table-column>
-                </data-table-column>
               </div>
               <div class="col-5 layout horizontal">
-                <data-table-column class="col-9 layout horizontal" group-heading="SPOT CHECKS">
+                <data-table-column class="col-8 layout horizontal" group-heading="SPOT CHECKS">
                   <data-table-column class="col-2 vertical right-side">
                     Liquidations <br>
                     1 Oct - 30 Sep
@@ -310,15 +311,15 @@
                     <span class="col-3 right-side">Q4</span>
                   </data-table-column>
                 </data-table-column>
-                <data-table-column class="col-3 layout horizontal" group-heading="AUDITS">
+                <data-table-column class="col-4 layout horizontal" group-heading="AUDITS">
                   <data-table-column class="col-4 right-side" id="hact_values.audits_mr">
-                    Req
+                    Required
                   </data-table-column>
                   <data-table-column class="col-4 right-side" id="hact_values.audits_done">
-                    Comp
+                    Completed
                   </data-table-column>
                   <data-table-column class="col-4 right-side">
-                    O <br> F
+                    Outstanding <br> Findings
                   </data-table-column>
                 </data-table-column>
               </div>
@@ -334,20 +335,20 @@
                 </div>
                 <div class="col-5 layout horizontal">
                   <div class="col-4 layout horizontal">
-                    <div class="col-4 nowrap padded vertical"></div>
-                    <div class="col-2 nowrap padded vertical"></div>
-                    <div class="col-6 padded monetary nowrap vertical">$[[currencyFormat(totals.total_ct_cy)]]</div>
+                    <div class="col-4 nowrap vertical"></div>
+                    <div class="col-2 nowrap vertical"></div>
+                    <div class="col-6 padded monetary nowrap vertical">$[[currencyFormat(totals.total_ct_cp)]]</div>
                   </div>
                   <div class="col-8 layout horizontal">
-                    <div class="col-2 nowrap padded monetary vertical right-side">X</div>
-                    <div class="col-4 vertical right-side quarters">
+                    <div class="col-3 nowrap padded monetary vertical right-side">$[[currencyFormat(totals.total_ct_cy)]]</div>
+                    <div class="col-3 vertical right-side quarters">
                       <span class="col-3">0</span>
                       <span class="col-3 right-side">0</span>
                       <span class="col-3 right-side">0</span>
                       <span class="col-3 right-side">[[totals.planned_visits]]</span>
                     </div>
-                    <div class="col-2 nowrap vertical right-side">[[totals.programme_visits]]</div>
-                    <div class="col-4 quarters vertical right-side">
+                    <div class="col-3 nowrap vertical right-side">[[totals.programme_visits]]</div>
+                    <div class="col-3 quarters vertical right-side">
                       <span class="col-3">0</span>
                       <span class="col-3 right-side">0</span>
                       <span class="col-3 right-side">0</span>
@@ -356,7 +357,7 @@
                   </div>
                 </div>
                 <div class="col-5 layout horizontal">
-                  <div class="col-9 layout horizontal">
+                  <div class="col-8 layout horizontal">
                     <div class="col-2 right-side right vertical">X</div>
                     <div class="col-7 layout horizontal">
                       <div class="col-half buffer right-side"></div>
@@ -377,7 +378,7 @@
                       <span class="col-3 right-side">[[totals.spot_checks]]</span>
                     </div>
                   </div>
-                  <div class="col-3 layout horizontal">
+                  <div class="col-4 layout horizontal">
                     <div class="col-4 right-side vertical">[[totals.audits_mr]]</div>
                     <div class="col-4 right-side vertical">[[totals.audits_done]]</div>
                     <div class="col-4 right-side vertical">X</div>
@@ -399,20 +400,20 @@
                   </div>
                   <div class="col-5 layout horizontal">
                     <div class="col-4 layout horizontal">
-                      <span class="col-4 nowrap padded vertical">[[partner.rating]]</span>
-                      <span class="col-2 nowrap padded vertical">X</span>
-                      <span class="col-6 right padded nowrap vertical">$[[currencyFormat(partner.total_ct_cy)]]</span>
+                      <span class="col-4 nowrap vertical">[[partner.rating]]</span>
+                      <span class="col-2 nowrap vertical">X</span>
+                      <span class="col-6 right monetary padded nowrap vertical">$[[currencyFormat(partner.total_ct_cy)]]</span>
                     </div>
                     <div class="col-8 layout horizontalr">
-                      <span class="col-2 nowrap padded right-side vertical">X</span>
-                      <span class="col-4 nowrap vertical right-side">
+                      <span class="col-3 nowrap padded monetary right-side vertical">X</span>
+                      <span class="col-3 nowrap vertical right-side">
                         <span class="col-3">0</span>
                         <span class="col-3 quarter-border">0</span>
                         <span class="col-3 quarter-border">0</span>
                         <span class="col-3 quarter-border">[[_getGovernmentDisplay(partner,'hact_values.planned_visits')]]</span>
                       </span>
-                      <span class="col-2 nowrap right-side vertical">[[partner.hact_min_requirements.programme_visits]]</span>
-                      <span class="col-4 right-side vertical">
+                      <span class="col-3 nowrap right-side vertical">[[partner.hact_min_requirements.programme_visits]]</span>
+                      <span class="col-3 right-side vertical">
                         <span class="col-3">0</span>
                         <span class="col-3 quarter-border">0</span>
                         <span class="col-3 quarter-border">0</span>
@@ -421,7 +422,7 @@
                     </div>
                   </div>
                   <div class="col-5 layout horizontal">
-                    <div class="col-9 layout horizontal"> 
+                    <div class="col-8 layout horizontal"> 
                       <span class="col-2 right-side vertical">X</span>
                       <div class="col-7 layout horizontal">
                         <span class="col-half buffer right-side"></span>
@@ -442,7 +443,7 @@
                         <span class="col-3 quarter-border">[[partner.hact_values.spot_checks]]</span>
                       </span>
                     </div>
-                    <div class="col-3 layout horizontal">
+                    <div class="col-4 layout horizontal">
                       <span class="col-4 right-side vertical">[[partner.hact_values.audits_mr]]</span>
                       <span class="col-4 right-side vertical">[[partner.hact_values.audits_done]]</span>
                       <span class="col-4 right-side vertical">X</span>

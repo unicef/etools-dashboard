@@ -20,7 +20,7 @@
     "etools-content-toggle-button": "^1.0.0",
     "paper-material": "^1.0.6",
     "iron-collapse": "^1.2.1",
-    "iron-ajax": "^1.4.3",
+    "iron-ajax": "1.4.3",
     "paper-input": "^1.1.19",
     "iron-input": "^1.0.10",
     "iron-meta": "^1.1.2",
