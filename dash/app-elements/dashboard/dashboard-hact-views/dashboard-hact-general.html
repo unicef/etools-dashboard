@@ -41,7 +41,7 @@
       }
 
       .padded {
-        padding-right: 2px;
+        padding-right: 4px;
       }
 
       .group {
@@ -203,10 +203,10 @@
         <div slot="row-data">
           <div class="col-6 layout horizontal">
             <div class="col-4 layout horizontal group">
-              <span class="col-10 col-data partner-link padded vertical fixed">
+              <span class="col-9 col-data partner-link padded vertical fixed">
                 Total of [[totalResults]] IPs
               </span>
-              <span class="col-2 col-data vertical"></span>
+              <span class="col-3 col-data vertical"></span>
             </div>
             <div class="col-4 layout horizontal group">
               <span class="col-3 col-data vertical">[[totals.shared_partner]]</span>
@@ -232,11 +232,11 @@
             </div>
             <div class="col-4 layout horizontal group">
               <span class="col-3 right-side">[[totals.audits_mr]]</span>
-              <span class="col-4 right-side">[[totals.audits_done]]</span>
+              <span class="col-4 right-side">[[totals.audits_completed]]</span>
               <span class="col-5 right-side">[[totals.outstanding_findings]]</span>
             </div>
             <div class="col-1 layout horizontal group">
-              <span class="col-12 right-side">[[totals.follow_up_flags]]</span>
+              <span class="col-12 right-side">[[totals.follow_up_required]]</span>
             </div>
           </div>
         </div>
@@ -247,13 +247,13 @@
           <div slot="row-data">
             <div class="col-6 layout horizontal">
               <div class="col-4 layout horizontal">
-                <span class="col-10 col-data partner-link padded fixed">
+                <span class="col-9 col-data partner-link padded fixed">
                   <a on-tap="_goToPage" id="[[partner.id]]">
                     [[partner.name]]
                     <paper-tooltip>[[partner.name]]</paper-tooltip>
                   </a>
                 </span>
-                <span class="col-2 col-data">[[partner.partner_type]]
+                <span class="col-3 col-data">[[partner.partner_type_slug]]
                   <paper-tooltip>[[partner.partner_type]]</paper-tooltip>
                 </span>
               </div>
@@ -264,8 +264,14 @@
               <div class="col-4 group layout horizontal">
                 <span class="col-4 col-data">[[partner.rating]]</span>
                 <span class="col-2 col-data">
-                  <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
-                  <iron-icon id="threshold" class="hact-icon" icon="icons:report-problem" hidden="[[!partner.flags.approaching_threshold_flag]]"></iron-icon>
+                  <div>
+                    <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
+                    <paper-tooltip hidden="[[!partner.flags.expiring_assessment_flag]]">Micro assessment is expiring soon</paper-tooltip>
+                  </div>
+                  <div>
+                    <iron-icon id="threshold" class="hact-icon" icon="icons:report-problem" hidden="[[!partner.flags.approaching_threshold_flag]]"></iron-icon>
+                    <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment or audit report has not been submitted through the Auditor Portal</paper-tooltip>
+                  </div>
                 </span>
                 <span class="col-6 col-data right padded">$[[currencyFormat(partner.total_ct_cy)]]</span>
               </div>
@@ -284,11 +290,11 @@
               </div>
               <div class="col-4 layout horizontal group">
                 <span class="col-3 col-data right-side">[[partner.hact_values.audits.minimum_requirements]]</span>
-                <span class="col-4 col-data right-side">[[partner.hact_values.audits_done]]</span>
+                <span class="col-4 col-data right-side">[[partner.hact_values.audits.completed]]</span>
                 <span class="col-5 right-side">[[partner.hact_values.audits.outstanding_findings]]</span>
               </div>
               <div class="col-1 layout horizontal">
-                <span class="col-12 col-data right-side">[[partner.hact_values.follow_up_flags]]</span>
+                <span class="col-12 col-data right-side">[[partner.hact_values.spot_checks.follow_up_required]]</span>
               </div>
             </div>
           </div>

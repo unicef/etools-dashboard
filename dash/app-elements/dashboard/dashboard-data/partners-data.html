@@ -121,9 +121,13 @@
             ]).value();
             _.assign(picked, _.pick(picked.hact_values, [
                   'planned_cash_transfer',
-                  'audits_done',
-                  'follow_up_flags'
                 ]), _.pick(picked.hact_min_requirements, 'programme_visits'),
+                {
+                  follow_up_required: picked.hact_values.spot_checks.follow_up_required
+                },
+                {
+                  audits_completed: picked.hact_values.audits.completed
+                },
                 {
                   programmatic_visits_completed_total: picked.hact_values.programmatic_visits.completed.total
                 },
