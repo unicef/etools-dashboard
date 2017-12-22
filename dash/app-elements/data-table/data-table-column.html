@@ -48,13 +48,14 @@
         @apply(--layout-center);
         @apply(--layout-justified);
         @apply(--custom-style);
-        padding-top: 10px;
+        padding-top: 0;
         margin-right: 0;
       }
 
       .group-heading {
         border-bottom: 1px solid rgba(0, 0, 0, 0.12);
         padding-bottom: 10px;
+        padding-top: 10px;
         width: 100%;
         text-align: center;
         white-space: nowrap;
@@ -86,7 +87,7 @@
       }
 
     </style>
-    <div class="group-wrapper">
+    <div id="groupWrapper" class="group-wrapper">
       <template is="dom-if" if="[[groupHeading]]">
         <span class="group-heading">[[groupHeading]]</span>
       </template>
@@ -128,10 +129,20 @@
           type: String,
           observer: '_isGroup',
         },
-        spaceAround : {
+        headingAlign: {
+          type: String,
+          default: "center",
+          observer: '_changeHeadingAlign',
+        },
+        spaceAround: {
           type: Boolean,
           value: false,
           observer: '_isGroup'
+        },
+        transparent: {
+          type: Boolean,
+          value: false,
+          observer: '_makeTransparent'
         }
       },
 
@@ -151,6 +162,12 @@
         }
         this.fire('sort-changed', {field: this.field, direction: this.direction});
       },
+      _changeHeadingAlign: function() {
+        if (!_.isEmpty(this.groupHeading)) {
+          this.$.heading.customStyle['group-heading.text-align'] = this.headingAlign
+          Polymer.updateStyles();
+        }
+      },
       _isGroup: function() {
         if (!_.isEmpty(this.groupHeading)) {
           this.$.label.classList.add('is-group');
@@ -163,8 +180,14 @@
           this.customStyle['--icon-display'] = 'display: none';
           this.updateStyles();
         }
+      },
+      // allows for including headings that are not part of a group without altering spacing
+      _makeTransparent: function() {
+        if (this.transparent) {
+          let x = this.$.groupWrapper
+          x.style.color = "transparent"
+        }
       }
-
     });
 
   </script>
