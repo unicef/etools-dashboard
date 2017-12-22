@@ -87,7 +87,7 @@
       }
 
     </style>
-    <div class="group-wrapper">
+    <div id="groupWrapper" class="group-wrapper">
       <template is="dom-if" if="[[groupHeading]]">
         <span class="group-heading">[[groupHeading]]</span>
       </template>
@@ -138,6 +138,11 @@
           type: Boolean,
           value: false,
           observer: '_isGroup'
+        },
+        transparent: {
+          type: Boolean,
+          value: false,
+          observer: '_makeTransparent'
         }
       },
 
@@ -175,8 +180,14 @@
           this.customStyle['--icon-display'] = 'display: none';
           this.updateStyles();
         }
+      },
+      // allows for including headings that are not part of a group without altering spacing
+      _makeTransparent: function() {
+        if (this.transparent) {
+          let x = this.$.groupWrapper
+          x.style.color = "transparent"
+        }
       }
-
     });
 
   </script>

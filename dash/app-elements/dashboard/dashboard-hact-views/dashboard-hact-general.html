@@ -1,0 +1,332 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../../styles/shared-styles.html">
+<link rel="import" href="../../../../styles/list-styles.html">
+<link rel="import" href="../../../../styles/grid-layout-styles.html">
+<link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../app-config/etools-app-config.html">
+
+<link rel="import" href="../../data-table/data-table-header.html">
+<link rel="import" href="../../data-table/data-table-column.html">
+<link rel="import" href="../../data-table/data-table-row.html">
+<link rel="import" href="../../data-table/data-table-footer.html">
+
+<link rel="import" href="../../../app-behaviors/common-general-behavior.html">
+<link rel="import" href="../../../app-behaviors/pagination-behavior.html">
+
+<dom-module id="dashboard-hact-general">
+  <template>
+    <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
+      :host {
+        --paper-input-container-label: {
+          margin-left: 34px;
+        };
+        --paper-tooltip-opacity: 1;
+        width: 100%;
+      }
+
+      .hact-list {
+        min-width: 1150px;
+      }
+
+      .buffer {
+        background-color: rgb(248, 248, 248);
+        border-left: 1px solid rgba(0, 0, 0, 0.24);
+      }
+
+      .nowrap {
+        white-space: nowrap;
+      }
+
+      .padded {
+        padding-right: 2px;
+      }
+
+      .group {
+        box-sizing: border-box;
+      }
+
+      .right {
+        text-align: right;
+      }
+
+      .center {
+        text-align: center !important;
+      }
+
+      .hact-icon {
+        --iron-icon-height: 12px;
+        --iron-icon-width: 12px;
+      }
+
+      .right-side {
+        text-align: center;
+        border-left: 1px solid rgba(0, 0, 0, 0.24);
+        box-sizing: border-box;
+        padding-right: 2px;
+        min-height: 48px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .vertical {
+        @apply(--layout-horizontal);
+        @apply(--layout-center);
+      }
+
+      data-table-header data-table-column {
+        @apply(--layout-start);
+        box-sizing: border-box;
+      }
+
+      data-table-row.totals {
+        --primary-background-color: var(--medium-theme-background-color);
+        --custom-style: {
+          background: var(--medium-theme-background-color);
+          border-top: 1px solid rgba(0, 0, 0, 0.24);
+          box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.24);
+        }
+      }
+
+      data-table-column.around {
+        --custom-style: {
+          @apply(--layout-around-justified);
+        }
+      }
+
+      data-table-row.totals span {
+        font-weight: 500;
+      }
+
+      data-table-row:hover {
+        background: var(--medium-theme-background-color);
+      }
+
+      data-table-row > div[slot="row-data"] > div > div {
+        display: flex;
+        align-items: center;
+        height: 40px;
+      }
+
+      data-table-row > div[slot="row-data"] > div:nth-of-type(2) > div > span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .partner-link {
+        overflow: hidden;
+        cursor: pointer;
+      }
+    </style>
+
+    <paper-material id="list" class="hact-list" elevation="1">
+      <!-- row of table headers -->
+      <data-table-header no-collapse>
+        <data-table-column class="col-6 layout horizontal" group-heading="blank" transparent>
+          <div class="col-4 layout horizontal">
+            <data-table-column class="col-9 nowrap vertical padded fixed" id="name" sortable>
+              IP Name
+            </data-table-column>
+            <data-table-column class="col-3 nowrap vertical padded" id="partner_type">
+              IP Type
+            </data-table-column>
+          </div>
+          <div class="col-4 layout horizontal">
+            <data-table-column class="col-3 vertical nowrap" id="shared_partner">
+              Shared <br>
+              IP
+            </data-table-column>
+            <data-table-column class="col-9 vertical nowrap" id="assessment_type">
+              Assessment Type
+            </data-table-column>
+          </div>
+          <div class="col-4 group layout horizontal">
+            <data-table-column class="col-4 vertical nowrap padded" id="total_ct_cp">
+              Risk Rating
+            </data-table-column>
+            <data-table-column class="col-2 vertical nowrap padded" id="hact_values.planned_cash_transfer">
+              Flags
+            </data-table-column>
+            <data-table-column class="col-6 right vertical padded nowrap" id="total_ct_cy">
+              Cash Transfers <br>
+              1 Jan - 31 Dec
+            </data-table-column>
+          </div>
+        </data-table-column>
+        <div class="col-6 layout horizontal">
+          <data-table-column class="col-4 layout horizontal" group-heading="PROGRAMMATIC VISITS">
+            <data-table-column class="col-4 nowrap vertical center right-side" id="hact_values.micro_assessment_needed">
+              Planned
+            </data-table-column>
+            <data-table-column class="col-4 nowrap vertical center right-side" id="rating">
+              Minimum <br> Required
+            </data-table-column>
+            <data-table-column class="col-4 vertical center right-side">
+              Completed
+            </data-table-column>
+          </data-table-column>
+          <data-table-column class="col-3 layout horizontal" group-heading="SPOT CHECKS">
+            <data-table-column class="col-1 vertical center buffer right-side"></data-table-column>
+            <data-table-column class="col-5 vertical center right-side">
+              Minimum <br> Required
+            </data-table-column>
+            <data-table-column class="col-5 vertical center right-side">
+              Completed
+            </data-table-column>
+            <data-table-column class="col-1 vertical center buffer right-side"></data-table-column>
+          </data-table-column>
+          <data-table-column class="col-4 layout horizontal" group-heading="AUDITS">
+            <data-table-column class="col-3 vertical center right-side" id="hact_values.audits_mr">
+              Required
+            </data-table-column>
+            <data-table-column class="col-4 vertical center right-side" id="hact_values.audits_done">
+              Completed
+            </data-table-column>
+            <data-table-column class="col-5 vertical right-side">
+              Outstanding <br> Findings
+            </data-table-column>
+          </data-table-column>
+          <data-table-column class="col-1 layout horizontal" group-heading="blank" transparent>
+            <data-table-column class="col-12 vertical center right-side" id="hact_values.follow_up_flags">
+              Follow-up
+            </data-table-column>
+          </data-table-column>
+        </div>
+      </data-table-header>
+
+      <!--Row of Totals-->
+      <data-table-row class="totals" no-collapse>
+        <div slot="row-data">
+          <div class="col-6 layout horizontal">
+            <div class="col-4 layout horizontal group">
+              <span class="col-10 col-data partner-link padded vertical fixed">
+                Total of [[totalResults]] IPs
+              </span>
+              <span class="col-2 col-data vertical"></span>
+            </div>
+            <div class="col-4 layout horizontal group">
+              <span class="col-3 col-data vertical">[[totals.shared_partner]]</span>
+              <span class="col-9 col-data vertical"></span>
+            </div>
+            <div class="col-4 layout horizontal group">
+                <span class="col-4 col-data vertical"></span>
+                <span class="col-2 col-data vertical"></span>
+                <span class="col-6 col-data padded right">$[[currencyFormat(totals.total_ct_cy)]]</span>
+            </div>
+          </div>
+          <div class="col-6 layout horizontal">
+            <div class="col-4 layout horizontal group">
+              <span class="col-4 right-side">[[totals.programmatic_visits_planned_total]]</span>
+              <span class="col-4 right-side">[[totals.programme_visits]]</span>
+              <span class="col-4 right-side">[[totals.programmatic_visits_completed_total]]</span>
+            </div>
+            <div class="col-3 layout horizontal group">
+              <span class="col-1 right-side"></span>
+              <span class="col-5 right-side">[[totals.mr_spot_checks]]</span>
+              <span class="col-5 right-side">[[totals.spot_checks_completed_total]]</span>
+              <span class="col-1 right-side"></span>
+            </div>
+            <div class="col-4 layout horizontal group">
+              <span class="col-3 right-side">[[totals.audits_mr]]</span>
+              <span class="col-4 right-side">[[totals.audits_done]]</span>
+              <span class="col-5 right-side">[[totals.outstanding_findings]]</span>
+            </div>
+            <div class="col-1 layout horizontal group">
+              <span class="col-12 right-side">[[totals.follow_up_flags]]</span>
+            </div>
+          </div>
+        </div>
+      </data-table-row>
+
+      <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
+        <data-table-row no-collapse>
+          <div slot="row-data">
+            <div class="col-6 layout horizontal">
+              <div class="col-4 layout horizontal">
+                <span class="col-10 col-data partner-link padded fixed">
+                  <a on-tap="_goToPage" id="[[partner.id]]">
+                    [[partner.name]]
+                    <paper-tooltip>[[partner.name]]</paper-tooltip>
+                  </a>
+                </span>
+                <span class="col-2 col-data">[[partner.partner_type]]
+                  <paper-tooltip>[[partner.partner_type]]</paper-tooltip>
+                </span>
+              </div>
+              <div class="col-4 layout horizontal">
+                <span class="col-3 col-data">[[partner.shared_partner]]</span>
+                <span class="col-9 col-data">[[partner.type_of_assessment]]</span>
+              </div>
+              <div class="col-4 group layout horizontal">
+                <span class="col-4 col-data">[[partner.rating]]</span>
+                <span class="col-2 col-data">
+                  <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
+                  <iron-icon id="threshold" class="hact-icon" icon="icons:report-problem" hidden="[[!partner.flags.approaching_threshold_flag]]"></iron-icon>
+                </span>
+                <span class="col-6 col-data right padded">$[[currencyFormat(partner.total_ct_cy)]]</span>
+              </div>
+            </div>
+            <div class="col-6 layout horizontal">
+              <div class="col-4 layout horizontal group">
+                <span class="col-4 col-data right-side">[[_getGovernmentDisplay(partner,'hact_values.programmatic_visits.planned.total')]]</span>
+                <span class="col-4 col-data right-side">[[partner.hact_min_requirements.programme_visits]]</span>
+                <span class="col-4 col-data right-side">[[partner.hact_values.programmatic_visits.completed.total]]</span>
+              </div>
+              <div class="col-3 layout horizontal group">
+                <span class="col-1 right-side buffer"></span>
+                <span class="col-5 col-data right-side">[[partner.hact_min_requirements.spot_checks]]</span>
+                <span class="col-5 col-data right-side">[[partner.hact_values.spot_checks.completed.total]]</span>
+                <span class="col-1 right-side buffer"></span>
+              </div>
+              <div class="col-4 layout horizontal group">
+                <span class="col-3 col-data right-side">[[partner.hact_values.audits.minimum_requirements]]</span>
+                <span class="col-4 col-data right-side">[[partner.hact_values.audits_done]]</span>
+                <span class="col-5 right-side">[[partner.hact_values.audits.outstanding_findings]]</span>
+              </div>
+              <div class="col-1 layout horizontal">
+                <span class="col-12 col-data right-side">[[partner.hact_values.follow_up_flags]]</span>
+              </div>
+            </div>
+          </div>
+        </data-table-row>
+      </template>
+      <data-table-footer page-size="[[pageSize]]" page-number="[[pageNumber]]" visible-range="{{visibleRange}}" filtered-total-results="[[filteredTotalResults]]"
+        on-page-size-changed="pageSizeChanged" on-page-number-changed="pageNumberChanged">
+      </data-table-footer>
+    </paper-material>
+  </template>
+
+  <script>
+    (function () {
+      'use strict';
+      Polymer({
+        is: 'dashboard-hact-general',
+        behaviors: [
+          dashBehaviors.CommonGeneralBehavior,
+          dashBehaviors.PaginationBehavior,
+          etoolsAppConfig.globals
+        ],
+        properties: {
+          filteredPartners: {
+            type: Array,
+            notify: true
+          },
+        },
+
+        _getGovernmentDisplay: function(partner, prop, toCurrency) {
+          const partnerValue = _.get(partner, prop);
+          if (partner.partner_type === 'Government') {
+            return '-';
+          } else {
+            return toCurrency ? this.currencyFormat(partnerValue) : partnerValue;
+          }
+        },
+      });
+    })();
+
+  </script>
+</dom-module>
