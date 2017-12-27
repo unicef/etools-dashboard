@@ -294,22 +294,22 @@
                   <div class="col-4 layout horizontal">
                     <div class="col-4 nowrap vertical"></div>
                     <div class="col-2 nowrap vertical"></div>
-                    <div class="col-6 padded monetary nowrap vertical">$[[currencyFormat(totals.total_ct_cp)]]</div>
+                    <div class="col-6 padded monetary nowrap vertical">$0</div>
                   </div>
                   <div class="col-8 layout horizontal">
                     <div class="col-3 nowrap padded monetary vertical right-side">$[[currencyFormat(totals.total_ct_cy)]]</div>
                     <div class="col-3 vertical right-side quarters">
-                      <span class="col-3">0</span>
-                      <span class="col-3 right-side">0</span>
-                      <span class="col-3 right-side">0</span>
-                      <span class="col-3 right-side">[[totals.planned_visits]]</span>
+                      <span class="col-3">[[totals.programmatic_visits_planned_q1]]</span>
+                      <span class="col-3 right-side">[[totals.programmatic_visits_planned_q2]]</span>
+                      <span class="col-3 right-side">[[totals.programmatic_visits_planned_q3]]</span>
+                      <span class="col-3 right-side">[[totals.programmatic_visits_planned_q4]]</span>
                     </div>
                     <div class="col-3 nowrap vertical right-side">[[totals.programme_visits]]</div>
                     <div class="col-3 quarters vertical right-side">
-                      <span class="col-3">0</span>
-                      <span class="col-3 right-side">0</span>
-                      <span class="col-3 right-side">0</span>
-                      <span class="col-3 right-side">[[totals.programmatic_visits]]</span>
+                      <span class="col-3">[[totals.programmatic_visits_planned_q1]]</span>
+                      <span class="col-3 right-side">[[totals.programmatic_visits_planned_q2]]</span>
+                      <span class="col-3 right-side">[[totals.programmatic_visits_planned_q3]]</span>
+                      <span class="col-3 right-side">[[totals.programmatic_visits_planned_q4]]</span>
                     </div>
                   </div>
                 </div>
@@ -319,26 +319,26 @@
                     <div class="col-7 layout horizontal">
                       <div class="col-half buffer right-side"></div>
                       <div class="col-5 right-side right vertical">
-                        <span class="col-3">0</span>
-                        <span class="col-3 right-side">0</span>
-                        <span class="col-3 right-side">0</span>
-                        <span class="col-3 right-side">0</span>
+                        <span class="col-3">[[totals.spot_checks_planned_q1]]</span>
+                        <span class="col-3 right-side">[[totals.spot_checks_planned_q2]]</span>
+                        <span class="col-3 right-side">[[totals.spot_checks_planned_q3]]</span>
+                        <span class="col-3 right-side">[[totals.spot_checks_planned_q4]]</span>
                       </div>
                       <div class="col-3 right-side vertical">[[totals.mr_spot_checks]]</div>
-                      <div class="col-3 right-side vertical">[[totals.follow_up_flags]]</div>
+                      <div class="col-3 right-side vertical">[[totals.follow_up_required]]</div>
                       <div class="col-half buffer right-side"></div>
                     </div>
                     <div class="col-3 right-side vertical">
-                      <span class="col-3">0</span>
-                      <span class="col-3 right-side">0</span>
-                      <span class="col-3 right-side">0</span>
-                      <span class="col-3 right-side">[[totals.spot_checks]]</span>
+                      <span class="col-3">[[totals.spot_checks_completed_q1]]</span>
+                      <span class="col-3 right-side">[[totals.spot_checks_completed_q2]]</span>
+                      <span class="col-3 right-side">[[totals.spot_checks_completed_q3]]</span>
+                      <span class="col-3 right-side">[[totals.spot_checks_completed_q4]]</span>
                     </div>
                   </div>
                   <div class="col-4 layout horizontal">
                     <div class="col-4 right-side vertical">[[totals.audits_mr]]</div>
-                    <div class="col-4 right-side vertical">[[totals.audits_done]]</div>
-                    <div class="col-4 right-side vertical">X</div>
+                    <div class="col-4 right-side vertical">[[totals.audits_completed]]</div>
+                    <div class="col-4 right-side vertical">[[totals.outstanding_findings]]</div>
                   </div>
                 </div>
               </div>
