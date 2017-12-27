@@ -10,7 +10,8 @@
 <link rel="import" href="../../../bower_components/etools-dropdown/etools-dropdown.html">
 <link rel="import" href="../../app-config/etools-app-config.html">
 
-<!-- <link rel="import" href="dashboard-hact-views/dashboard-hact-detail.html"> -->
+<link rel="import" href="dashboard-hact-views/dashboard-hact-detail.html">
+<link rel="import" href="dashboard-hact-views/dashboard-hact-charts.html">
 <link rel="import" href="dashboard-hact-views/dashboard-hact-general.html">
 
 <link rel="import" href="dashboard-data/partners-data.html">
@@ -100,7 +101,7 @@
     <partners-data id="partners" filtered-partners="{{filteredPartners}}" total-results="{{totalResults}}" totals="{{totals}}"
       filtered-total-results="{{filteredTotalResults}}" active="[[active]]" fire-data-loaded show-loading on-partners-loaded="_requiredDataHasBeenLoaded">
     </partners-data>
-    <!-- <div class="year-and-toggles">
+    <div class="year-and-toggles">
       <div class="year-dropdown">
         <etools-dropdown label="Year" options="[[availableYears]]" dropdown-value="2017"></etools-dropdown>
       </div>
@@ -119,7 +120,7 @@
                 selected="[[name]]"
                 attr-for-selected="name"
                 fallback-selection="hact-assurance">
-      <div name="hact-assurance"> -->
+      <div name="hact-assurance">
         <paper-material class="list-panel search-bar hact-list" elevation="1">
           <div class="wrap-controls">
             <paper-input id="query" type="search" autocomplete="off" value="[[queryString]]" on-keyup="setQuery" placeholder="Type and search"
@@ -129,19 +130,19 @@
           </div>
         </paper-material>
 
-        <!-- <paper-material class="hact-list" elevation="1">
+        <paper-material class="hact-list" elevation="1">
           <div id="center-toggle">
             <paper-button on-tap="_detailToggle" id="toggle" class="detailed-assurance" noink>
               <a>SHOW DETAILED ASSURANCE</a>
             </paper-button>
           </div>
-        </paper-material> -->
+        </paper-material>
 
-        <!-- <iron-pages id="hactAssurance"
+        <iron-pages id="hactAssurance"
                     selected="[[subName]]"
                     attr-for-selected="sub-name"
                     fallback-selection="hact-general">
-          <div sub-name="hact-general"> -->
+          <div sub-name="hact-general">
             <dashboard-hact-general
                               filtered-partners="[[filteredPartners]]" 
                               totals="[[totals]]" 
@@ -153,7 +154,7 @@
                               on-page-size-changed="pageSizeChanged"
                               on-page-number-changed="pageNumberChanged">
             </dashboard-hact-general>
-          <!-- </div>
+          </div>
           <div sub-name="hact-detail">
             <dashboard-hact-detail 
                               filtered-partners="[[filteredPartners]]" 
@@ -169,8 +170,10 @@
           </div>
         </iron-pages>
       </div>
-      <div name="hact-dashboard">CHARTS ELEMENT</div>
-    </iron-pages> -->
+      <div name="hact-dashboard">
+        <dashboard-hact-charts></dashboard-hact-charts>
+      </div>
+    </iron-pages>
   </template>
   <script>
     (function () {
@@ -305,24 +308,24 @@
           window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
         },
 
-        // _toggleChartsView: function() {
-        //   this.$.hactPages.selectNext()
-        //   this.$.assurancePlan.toggleClass("light-button")
-        //   this.$.dashboardCharts.toggleClass("dark-button")
-        // },
+        _toggleChartsView: function() {
+          this.$.hactPages.selectNext()
+          this.$.assurancePlan.toggleClass("light-button")
+          this.$.dashboardCharts.toggleClass("dark-button")
+        },
 
-        // _detailToggle: function() {
-        //   let pages = Polymer.dom(this.root).querySelectorAll("iron-pages")
-        //   pages[1].selectNext()
-        //   let button = Polymer.dom(this.root).querySelector(".detailed-assurance")
-        //   if (!this.displayDetail) {
-        //     button.style.background = "rgb(236, 236, 236)"
-        //   } else {
-        //     button.style.background = "rgb(255, 255, 255)"
-        //   }
-        //   this.displayDetail = !this.displayDetail
+        _detailToggle: function() {
+          let pages = Polymer.dom(this.root).querySelectorAll("iron-pages")
+          pages[1].selectNext()
+          let button = Polymer.dom(this.root).querySelector(".detailed-assurance")
+          if (!this.displayDetail) {
+            button.style.background = "rgb(236, 236, 236)"
+          } else {
+            button.style.background = "rgb(255, 255, 255)"
+          }
+          this.displayDetail = !this.displayDetail
 
-        // }
+        }
       });
     })();
 
