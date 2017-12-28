@@ -25,18 +25,6 @@
     if (!state) {
       return initialDropdownDashboardData;
     }
-//    const test = {
-//      ...state,
-//      [action['type']]: action[action.type]
-//    };
-//    console.log('test for action', action.type , test);
-//    var newProp = {};
-//    console.log('action: ', action);
-//    const value = _.find(_.keys(action), (p)=> {
-//      return p !== 'type';
-//    });
-//    newProp[value] = action[value];
-//    return Object.assign({}, state, newProp);
     return {
       ...state,
       [action['type']]: action[action.type]
