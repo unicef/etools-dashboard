@@ -130,16 +130,16 @@ App global configuration
         cacheTableName: 'user'
       },
       countryProgrammes: {
-         url: '/api/v2/reports/countryprogramme/',
-         exp: 6 * 60 * 60 * 1000,
-         cachingKey: 'countryProgrammes',
-         cacheTableName: 'countryProgrammes'
+        url: '/api/v2/reports/countryprogramme/',
+        exp: 6 * 60 * 60 * 1000,
+        cachingKey: 'countryProgrammes',
+        cacheTableName: 'countryProgrammes'
        },
       offices: {
-         url: '/api/offices/',
-         exp: 6 * 60 * 60 * 1000,
-         cachingKey: 'offices',
-         cacheTableName: 'offices'
+        url: '/api/offices/',
+        exp: 6 * 60 * 60 * 1000,
+        cachingKey: 'offices',
+        cacheTableName: 'offices'
       },
       countries: {
         url: '/api/countries/', // API request receives a 404 for now
@@ -172,7 +172,6 @@ App global configuration
         cachingKey: 'static',
         cacheTableName: 'static'
       },
-
       sections: {
         url: '/api/sections',
         exp: 6 * 60 * 60 * 1000,
@@ -199,6 +198,7 @@ App global configuration
       },
       mapInterventions: {
         template: '/api/v2/interventions/map<%=filter%>',
+        cacheTableName: 'mapInterventions'
       },
       locations: {
         url: '/api/locations',
@@ -222,13 +222,13 @@ App global configuration
         template: '/api/t2f/travels/?f_traveler=<%=id%>',
         exp: 6* 60 * 60 * 1000,
         cachingKey: 'trips',
-        // cacheTableName: 'trips'
+        cacheTableName: 'trips'
       },
       tripsSupervised: {
         template: '/api/t2f/travels/?f_supervisor=<%=id%>',
         exp: 6* 60 * 60 * 1000,
         cachingKey: 'tripsSupervised',
-        // cacheTableName: 'tripsSupervised'
+        cacheTableName: 'tripsSupervised'
       },
       tripsDashboard: {
         template: '/api/t2f/travels/dashboard/?'
