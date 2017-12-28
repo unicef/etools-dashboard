@@ -110,8 +110,10 @@
           });
         },
         _computeTotals: function(results) {
+          console.log(results)
           this.resultsTotals = true;
           return _(results).reduce((sum, obj)=> {
+            console.log(obj)
             let picked = _(obj).pick([
               'shared_partner',
               'total_ct_cp',
@@ -119,6 +121,7 @@
               'total_ct_cy',
               'hact_min_requirements',
             ]).value();
+            console.log(picked)
             _.assign(picked, _.pick(picked.hact_values, [
                   'planned_cash_transfer',
                 ]), _.pick(picked.hact_min_requirements, 'programme_visits'),
