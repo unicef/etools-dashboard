@@ -7,13 +7,11 @@
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../bower_components/etools-dropdown/etools-dropdown.html">
 <link rel="import" href="../../app-config/etools-app-config.html">
 
-<link rel="import" href="../data-table/data-table-header.html">
-<link rel="import" href="../data-table/data-table-column.html">
-<link rel="import" href="../data-table/data-table-row.html">
-<link rel="import" href="../data-table/data-table-footer.html">
-
+<!-- <link rel="import" href="dashboard-hact-views/dashboard-hact-detail.html"> -->
+<link rel="import" href="dashboard-hact-views/dashboard-hact-general.html">
 
 <link rel="import" href="dashboard-data/partners-data.html">
 <link rel="import" href="../../app-behaviors/common-general-behavior.html">
@@ -44,263 +42,138 @@
         box-sizing: border-box;
       }
 
-      .nowrap {
-        white-space: nowrap;
-      }
-
-      .col-6-sub {
-        flex: 0 0 calc(50% - 6px);
-        flex-basis: calc(50% - 6px);
-        max-width: calc(50% - 6px);
-      }
-
-      .padded {
-        padding-right: 4px;
-      }
-
-      .header {
-        height: 140px;
-      }
-
-      .group {
-        padding-right: 16px;
-        box-sizing: border-box;
-      }
-
-      .right {
-        text-align: right;
-      }
-
-      .center {
+      #center-toggle {
+        width: 100%;
         text-align: center;
       }
 
-      data-table-header data-table-column {
-        @apply(--layout-start);
-        box-sizing: border-box;
-      }
-
-      *data-table-row > div > div > * {
-        box-sizing: border-box;
-      }
-
-      data-table-row.totals {
-        --primary-background-color: var(--medium-theme-background-color);
-        --custom-style: {
-          background: var(--medium-theme-background-color);
-          border-top: 1px solid rgba(0, 0, 0, 0.24);
-          box-shadow: inset 0 -1px 0 0 rgba(0,0,0,0.24);
-        }
-      }
-
-      data-table-column.around {
-        --custom-style: {
-          @apply(--layout-around-justified);
-        }
-      }
-
-      data-table-row.totals span{
+      #toggle {
+        font-size: 12px;
+        cursor: pointer;
         font-weight: 500;
       }
 
-      .partner-link {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        cursor: pointer;
+      .year-dropdown {
+        max-width: 150px;
+        padding-left: 20px;
       }
 
+      .year-and-toggles {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      paper-button.curved-left {
+        border-radius: 50px 0 0 50px;
+        background: rgb(255, 255, 255);
+        margin-right: 0;
+        padding-right: 1em;
+        cursor: pointer;
+        padding-bottom: 8px;
+      }
+
+      paper-button.curved-right {
+        border-radius: 0 50px 50px 0;
+        background: rgb(216, 216, 216);
+        margin-left: 0;
+        padding-left: 1em;
+        cursor: pointer;
+        padding-bottom: 8px;
+      }
+
+      .dark-button {
+        background: rgb(216, 216, 216) !important;
+      }
+
+      .light-button {
+        background: rgb(255, 255, 255) !important;
+      }
+
+      paper-button.detailed-assurance {
+        border-radius: 50px;
+        background: rgb(255, 255, 255);
+        cursor: pointer;
+      }
     </style>
-    <partners-data
-        id="partners"
-        filtered-partners="{{filteredPartners}}"
-        total-results="{{totalResults}}"
-        totals="{{totals}}"
-        filtered-total-results="{{filteredTotalResults}}"
-        active="[[active]]"
-        fire-data-loaded show-loading
-        on-partners-loaded="_requiredDataHasBeenLoaded">
+
+    <partners-data id="partners" filtered-partners="{{filteredPartners}}" total-results="{{totalResults}}" totals="{{totals}}"
+      filtered-total-results="{{filteredTotalResults}}" active="[[active]]" fire-data-loaded show-loading on-partners-loaded="_requiredDataHasBeenLoaded">
     </partners-data>
-    <paper-material class="list-panel search-bar hact-list" elevation="1">
-      <div class="wrap-controls">
-        <paper-input id="query"
-                     type="search"
-                     autocomplete="off"
-                     value="[[queryString]]"
-                     on-keyup="setQuery"
-                     placeholder="Type and search"
-                     label="Keywords"
-                     always-float-label
-                     on-search="setQuery">
-          <iron-icon icon="search" prefix></iron-icon>
-        </paper-input>
+    <!-- <div class="year-and-toggles">
+      <div class="year-dropdown">
+        <etools-dropdown label="Year" options="[[availableYears]]" dropdown-value="2017"></etools-dropdown>
       </div>
-    </paper-material>
+      <div>
+        <paper-button id="assurancePlan" on-tap="_toggleChartsView" noink class="curved-left">
+          <iron-icon class="dark" icon="list"></iron-icon>
+          ASSURANCE PLAN
+        </paper-button>
+        <paper-button id="dashboardCharts" on-tap="_toggleChartsView" noink class="curved-right">
+          <iron-icon class="dark" icon="assessment"></iron-icon>
+          DASHBOARD
+        </paper-button>
+      </div>
+    </div>
+    <iron-pages id="hactPages"
+                selected="[[name]]"
+                attr-for-selected="name"
+                fallback-selection="hact-assurance">
+      <div name="hact-assurance"> -->
+        <paper-material class="list-panel search-bar hact-list" elevation="1">
+          <div class="wrap-controls">
+            <paper-input id="query" type="search" autocomplete="off" value="[[queryString]]" on-keyup="setQuery" placeholder="Type and search"
+              label="Keywords" always-float-label on-search="setQuery">
+              <iron-icon icon="search" prefix></iron-icon>
+            </paper-input>
+          </div>
+        </paper-material>
 
-    <paper-material id="list" class="hact-list" elevation="1">
-      <data-table-header class="header" label="[[visibleRange.0]]-[[visibleRange.1]] of {{filteredTotalResults}} results to show" no-collapse>
-        <div class="col-6 layout horizontal end">
-          <div class="col-6 layout horizontal">
-            <data-table-column class="col-6 nowrap padded" id="name" sortable>
-              Implementing Partner
-            </data-table-column>
-            <data-table-column class="col-4 nowrap padded" id="partner_type">
-              Partner Type
-            </data-table-column>
-            <data-table-column class="col-2 nowrap" id="shared_partner">
-              Shared <br> IP
-            </data-table-column>
+        <!-- <paper-material class="hact-list" elevation="1">
+          <div id="center-toggle">
+            <paper-button on-tap="_detailToggle" id="toggle" class="detailed-assurance" noink>
+              <a>SHOW DETAILED ASSURANCE</a>
+            </paper-button>
           </div>
-          <data-table-column class="col-6 group" group-heading="CASH TRANSFERS in USD">
-            <data-table-column class="col-4 nowrap padded" id="total_ct_cp">
-              TOTAL for <br> current CP cycle
-            </data-table-column>
-            <data-table-column class="col-4 center nowrap padded" id="hact_values.planned_cash_transfer">
-              PLANNED for <br> current year
-            </data-table-column>
-            <data-table-column class="col-4 right nowrap" id="total_ct_cy">
-              Current Year  <br> (1 Oct - 30 Sep)
-            </data-table-column>
-          </data-table-column>
-        </div>
-        <div class="col-3 layout horizontal end">
-          <data-table-column class="col-3 nowrap" id="hact_values.micro_assessment_needed">
-            Micro <br> Assmt.
-          </data-table-column>
-          <data-table-column class="col-3 nowrap" id="rating">
-            Risk <br> Rating
-          </data-table-column>
-          <data-table-column class="col-6 group" group-heading="PROGRAMMATIC VISITS">
-            <data-table-column class="col-4 padded" id="hact_values.planned_visits">
-              Planned
-            </data-table-column>
-            <data-table-column class="col-4 center padded" id="hact_min_requirements.programme_visits">
-              M.R
-            </data-table-column>
-            <data-table-column class="col-4 right" id="hact_values.programmatic_visits">
-              Done
-            </data-table-column>
-          </data-table-column>
-        </div>
-        <div class="col-3 layout horizontal end">
-          <span class="col-1"></span>
-          <data-table-column class="col-4 group" group-heading="SPOT CHECKS" space-around>
-            <data-table-column class="col-6 center padded" id="hact_min_requirements.spot_checks">
-              M.R
-            </data-table-column>
-            <data-table-column class="col-6 center" id="hact_values.spot_checks">
-              Done
-            </data-table-column>
-          </data-table-column>
-          <span class="col-1"></span>
-          <data-table-column class="col-4 group" group-heading="AUDITS" space-around>
-            <data-table-column class="col-6 center padded" id="hact_values.audits_mr">
-              M.R
-            </data-table-column>
-            <data-table-column class="col-6 center" id="hact_values.audits_done">
-              Done
-            </data-table-column>
-          </data-table-column>
-          <data-table-column class="col-2 nowrap" id="hact_values.follow_up_flags">
-            Flag for <br> Follow up
-          </data-table-column>
-        </div>
-      </data-table-header>
+        </paper-material> -->
 
-      <!--Row of Totals-->
-      <data-table-row class="totals" no-collapse>
-        <div slot="row-data">
-          <div class="col-3 layout horizontal">
-              <span class="col-6 col-data partner-link padded">
-                Total of [[totalResults]] IPs
-              </span>
-            <span class="col-4 col-data"></span>
-            <span class="col-2 col-data">[[totals.shared_partner]]</span>
+        <!-- <iron-pages id="hactAssurance"
+                    selected="[[subName]]"
+                    attr-for-selected="sub-name"
+                    fallback-selection="hact-general">
+          <div sub-name="hact-general"> -->
+            <dashboard-hact-general
+                              filtered-partners="[[filteredPartners]]" 
+                              totals="[[totals]]" 
+                              total-results="[[totalResults]]"
+                              page-size="[[pageSize]]"
+                              page-number="[[pageNumber]]"
+                              visible-range="{{visibleRange}}"
+                              filtered-total-results="[[filteredTotalResults]]"
+                              on-page-size-changed="pageSizeChanged"
+                              on-page-number-changed="pageNumberChanged">
+            </dashboard-hact-general>
+          <!-- </div>
+          <div sub-name="hact-detail">
+            <dashboard-hact-detail 
+                              filtered-partners="[[filteredPartners]]" 
+                              totals="[[totals]]" 
+                              total-results="[[totalResults]]"
+                              page-size="[[pageSize]]"
+                              page-number="[[pageNumber]]"
+                              visible-range="{{visibleRange}}"
+                              filtered-total-results="[[filteredTotalResults]]"
+                              on-page-size-changed="pageSizeChanged"
+                              on-page-number-changed="pageNumberChanged">
+            </dashboard-hact-detail>
           </div>
-          <div class="col-3 layout horizontal group">
-            <span class="col-4 col-data padded">$[[currencyFormat(totals.total_ct_cp)]]<paper-tooltip>$[[currencyFormat(totals.total_ct_cp)]]</paper-tooltip></span>
-            <span class="col-4 center col-data padded">$[[currencyFormat(totals.planned_cash_transfer)]]<paper-tooltip>$[[currencyFormat(totals.planned_cash_transfer)]]</paper-tooltip></span>
-            <span class="col-4 right col-data">$[[currencyFormat(totals.total_ct_cy)]]<paper-tooltip>$[[currencyFormat(totals.total_ct_cy)]]</paper-tooltip></span>
-          </div>
-          <div class="col-3 layout horizontal">
-            <span class="col-data col-3"></span>
-            <span class="col-data col-3"></span>
-            <div class="col-6 layout horizontal group">
-              <span class="col-data col-4 padded">[[totals.planned_visits]]</span>
-              <span class="col-data col-4 center padded">[[totals.programme_visits]]</span>
-              <span class="col-data col-4 right">[[totals.programmatic_visits]]</span>
-            </div>
-          </div>
-          <div class="col-3 layout horizontal">
-            <span class="col-1"></span>
-            <div class="col-4 layout horizontal around-justified group">
-              <span class="col-data col-6 center padded">[[totals.mr_spot_checks]]</span>
-              <span class="col-data col-6 center">[[totals.spot_checks]]</span>
-            </div>
-            <span class="col-1"></span>
-            <div class="col-4 layout horizontal around-justified group">
-              <span class="col-data col-6 center padded">[[totals.audits_mr]]</span>
-              <span class="col-data col-6 center">[[totals.audits_done]]</span>
-            </div>
-            <span class="col-data col-2">[[totals.follow_up_flags]]</span>
-          </div>
-        </div>
-      </data-table-row>
-
-      <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
-        <data-table-row no-collapse>
-          <div slot="row-data">
-            <div class="col-3 layout horizontal">
-              <span class="col-6 col-data partner-link padded">
-                <a on-tap="_goToPage" id="[[partner.id]]">
-                  [[partner.name]]
-                  <paper-tooltip>[[partner.name]]</paper-tooltip>
-                </a>
-              </span>
-              <span class="col-4 col-data padded">[[partner.partner_type]]<paper-tooltip>[[partner.partner_type]]</paper-tooltip></span>
-              <span class="col-2 col-data">[[partner.shared_partner]]</span>
-            </div>
-            <div class="col-3 layout horizontal group">
-              <span class="col-4 col-data padded">$[[currencyFormat(partner.total_ct_cp)]]<paper-tooltip>$[[currencyFormat(partner.total_ct_cp)]]</paper-tooltip></span>
-              <span class="col-4 center col-data padded">$[[_getGovernmentDisplay(partner,'hact_values.planned_cash_transfer','true')]]<paper-tooltip>$[[_getGovernmentDisplay(partner,'hact_values.planned_cash_transfer','true')]]</paper-tooltip></span>
-              <span class="col-4 right col-data">$[[currencyFormat(partner.total_ct_cy)]]<paper-tooltip>$[[currencyFormat(partner.total_ct_cy)]]</paper-tooltip></span>
-            </div>
-            <div class="col-3 layout horizontal">
-              <span class="col-data col-3 flex">[[partner.hact_values.micro_assessment_needed]]</span>
-              <span class="col-data col-3">[[partner.rating]]<paper-tooltip>[[partner.rating]]</paper-tooltip></span>
-              <div class="col-6 layout horizontal group">
-                <span class="col-data col-4 flex padded">[[_getGovernmentDisplay(partner,'hact_values.planned_visits')]]</span>
-                <span class="col-data col-4 center flex padded">[[partner.hact_min_requirements.programme_visits]]</span>
-                <span class="col-data col-4 right flex">[[partner.hact_values.programmatic_visits]]</span>
-              </div>
-            </div>
-            <div class="col-3 layout horizontal">
-              <span class="col-1"></span>
-              <div class="col-4 layout horizontal around-justified group">
-                <span class="col-data col-6 center flex padded">[[partner.hact_min_requirements.spot_checks]]</span>
-                <span class="col-data col-6 center flex">[[partner.hact_values.spot_checks]]</span>
-              </div>
-              <span class="col-1"></span>
-              <div class="col-4 layout horizontal around-justified group">
-                <span class="col-data col-6 center flex padded">[[partner.hact_values.audits_mr]]</span>
-                <span class="col-data col-6 center flex">[[partner.hact_values.audits_done]]</span>
-              </div>
-              <span class="col-data col-2">[[partner.hact_values.follow_up_flags]]</span>
-            </div>
-          </div>
-        </data-table-row>
-      </template>
-      <data-table-footer
-          page-size="[[pageSize]]"
-          page-number="[[pageNumber]]"
-          visible-range="{{visibleRange}}"
-          filtered-total-results="[[filteredTotalResults]]"
-          on-page-size-changed="pageSizeChanged"
-          on-page-number-changed="pageNumberChanged">
-      </data-table-footer>
-    </paper-material>
+        </iron-pages>
+      </div>
+      <div name="hact-dashboard">CHARTS ELEMENT</div>
+    </iron-pages> -->
   </template>
   <script>
-    (function() {
+    (function () {
       'use strict';
       Polymer({
         is: 'dashboard-hact',
@@ -339,6 +212,14 @@
           },
           totals: {
             type: Array,
+          },
+          displayDetail: {
+            type: Boolean,
+            value: false
+          },
+          showDash: {
+            type: Boolean,
+            value: false
           }
         },
 
@@ -347,17 +228,17 @@
           'sortOrder, requiredDataLoaded, initComplete)'
         ],
 
-        _filterPartnersData: function() {
-          this.debounce('query', function() {
+        _filterPartnersData: function () {
+          this.debounce('query', function () {
             this.$.partners.query(
-                this.queryString,
-                this.sortOrder,
-                this.pageSize,
-                this.pageNumber);
+              this.queryString,
+              this.sortOrder,
+              this.pageSize,
+              this.pageNumber);
           }, 50);
         },
 
-        _updateUrl: function() {
+        _updateUrl: function () {
           if (!this.initComplete) {
             return;
           }
@@ -379,29 +260,29 @@
           }
         },
 
-        _buildCsvDownloadUrl: function() {
+        _buildCsvDownloadUrl: function () {
           return this.queryString ?
-              this.getEndpoint('partners').url + '?' + 'search=' + this.queryString + '&format=csv' :
-              this.getEndpoint('partners').url + '?' + '&format=csv';
+            this.getEndpoint('partners').url + '?' + 'search=' + this.queryString + '&format=csv' :
+            this.getEndpoint('partners').url + '?' + '&format=csv';
         },
 
-        _getProp: function(obj, propStr) {
+        _getProp: function (obj, propStr) {
           if (propStr === 'partner_type') {
             return this._getAbbr(_.get(obj, propStr));
           }
           return _.get(obj, propStr);
         },
 
-        _getAbbr: function(str) {
+        _getAbbr: function (str) {
           return str.length > 12 ?
-              str
-                  .split(' ')
-                  .map(function(word) {
-                    return word[0].toUpperCase();
-                  }).join('') : str;
+            str
+              .split(' ')
+              .map(function (word) {
+                return word[0].toUpperCase();
+              }).join('') : str;
         },
 
-        _getGovernmentDisplay: function(partner,prop,toCurrency) {
+        _getGovernmentDisplay: function (partner, prop, toCurrency) {
           const partnerValue = _.get(partner, prop);
           if (partner.partner_type === 'Government') {
             return '-';
@@ -410,9 +291,9 @@
           }
         },
 
-        _requiredDataHasBeenLoaded: function(e) {
+        _requiredDataHasBeenLoaded: function (e) {
           e.stopImmediatePropagation();
-          var filtered = _.get(this, 'filteredPartners', []);
+          let filtered = _.get(this, 'filteredPartners', []);
           if (_.isEmpty(filtered)) {
             this.set('forceDataRefresh', true);
           }
@@ -420,10 +301,28 @@
           this.init(this.active);
         },
 
-        _goToPage: function(e) {
+        _goToPage: function (e) {
           window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
         },
 
+        // _toggleChartsView: function() {
+        //   this.$.hactPages.selectNext()
+        //   this.$.assurancePlan.toggleClass("light-button")
+        //   this.$.dashboardCharts.toggleClass("dark-button")
+        // },
+
+        // _detailToggle: function() {
+        //   let pages = Polymer.dom(this.root).querySelectorAll("iron-pages")
+        //   pages[1].selectNext()
+        //   let button = Polymer.dom(this.root).querySelector(".detailed-assurance")
+        //   if (!this.displayDetail) {
+        //     button.style.background = "rgb(236, 236, 236)"
+        //   } else {
+        //     button.style.background = "rgb(255, 255, 255)"
+        //   }
+        //   this.displayDetail = !this.displayDetail
+
+        // }
       });
     })();
 

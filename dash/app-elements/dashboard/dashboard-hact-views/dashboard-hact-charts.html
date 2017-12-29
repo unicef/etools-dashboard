@@ -1,0 +1,878 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../../styles/shared-styles.html">
+<link rel="import" href="../../../../styles/list-styles.html">
+<link rel="import" href="../../../../styles/grid-layout-styles.html">
+<link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../app-config/etools-app-config.html">
+
+<link rel="import" href="../../../../bower_components/google-chart/google-chart.html">
+<link rel="import" href="../../../../bower_components/google-chart/google-chart-loader.html">
+
+<dom-module id="dashboard-hact-charts">
+  <template>
+    <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
+      :host {
+        --divider-light-color: #E0E0E0;
+        --assuranceChart: {
+          height: 75px;
+          width: auto;
+        };
+        --columnChart: {
+          height: 400px;
+        };
+        font-size: 16px;
+      }
+
+      .hact-title {
+        font-size: 16px;
+        height: 56px;
+      }
+
+      .divider {
+        background-color: rgba(0, 0, 0, 0.3);
+        height: 1px;
+      }
+
+      .border-bottom {
+        border-bottom: 1px solid var(--divider-light-color);
+      }
+
+      .hact-paper {
+        padding: 0;
+      }
+
+      .component {
+        padding: 16px 24px;
+        box-sizing: border-box;
+      }
+
+      .border-right {
+        border-right: 1px solid var(--divider-light-color);
+      }
+
+      .assurance-color {
+        color: var(--secondary-text-color);
+      }
+
+      .assurance-data {
+        margin-right: 48px;
+      }
+
+      .prog-visits {
+        margin: 16px 0 0 24px;
+      }
+
+      .micro {
+        margin: 0 0 16px 0;
+      }
+
+      .spot {
+        padding-right: 0;
+        margin-right: 24px;
+      }
+
+      .tuck-left-top {
+        padding-left: 0;
+        padding-top: 0
+      }
+
+      .tuck-left-bottom {
+        padding-bottom: 0;
+      }
+
+      .viz {
+        width: 100%;
+        @apply(--assuranceChart);
+      }
+
+      .viz-col {
+        width: 100%;
+        @apply(--columnChart)
+      }
+
+      .completed {
+        font-weight: 500;
+        font-size: 24px;
+        color: #000
+      }
+
+      .subheading {
+        font-size: 11px;
+      }
+
+      .sub-col {
+        padding-left: 12px;
+      }
+
+      .financial-col {
+        margin: 16px 24px;
+      }
+
+      .financial-col > div {
+        border-bottom: 1px solid var(--divider-light-color);
+        line-height: 32px;
+        padding: 0 12px;
+      }
+
+      .label {
+        font-size: 13px;
+      }
+
+      .risk-ratings {
+        line-height: 16px;
+      }
+
+      .risk-ratings > div {
+        border-bottom: 1px solid var(--divider-light-color);
+        padding: 8px 0;
+      }
+
+      .ratings-wrapper {
+        padding-top: 32px;
+        margin-left: 24px;
+      }
+
+      .financial-highlight {
+        background-color: var(--medium-theme-background-color);
+      }
+
+      .financial-col .audit-line:not(:last-of-type) {
+        border-bottom: none;
+      }
+
+      .risk-rating-title {
+        color: var(--secondary-text-color);
+        margin-bottom: 12px;
+        font-size: 14px;
+      }
+
+      .marker {
+        height: 18px;
+        width: 6px;
+      }
+
+      .risk-not-required {
+        background-color: #D8D8D8;
+      }
+
+      .risk-low {
+        background-color: #2FB0F2;
+      }
+
+      .risk-medium {
+        background-color: #FFCC00;
+      }
+
+      .risk-significant {
+        background-color: #F05454;
+      }
+
+      .risk-high {
+        background-color: #740E0E;
+      }
+
+      .spot-checks-table {
+        margin-top: 20%;
+      }
+    </style>
+    <google-chart-loader id="google"></google-chart-loader>
+
+    <!--Assurance Activities-->
+    <paper-material class="list-panel hact-paper layout  center-center">
+      <div class="hact-title component">
+        Assurance Activities
+      </div>
+      <div class="divider"></div>
+
+      <div class="layout column">
+
+        <div class="layout horizontal  ">
+
+          <div class="component flex-1 layout horizontal center border-right border-bottom tuck-left-top prog-visits ">
+            <div class="col-3 assurance-color">
+              Programmatic <br>Visits
+            </div>
+            <div class="flex-1 layout column">
+              <google-chart
+                  id="progVisitsChart"
+                  class="viz"
+                  type="bar">
+              </google-chart>
+            </div>
+
+          </div>
+
+          <div class="component flex-1 layout horizontal center border-bottom spot">
+            <div class="col-3 assurance-color">
+              Spot <br> Checks
+            </div>
+            <div class="flex-1 layout column">
+              <google-chart
+                  id="spotChecksChart"
+                  class="viz"
+                  type="bar">
+              </google-chart>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="layout horizontal">
+
+          <div class="component  flex-1 layout horizontal center border-right tuck-left-bottom micro ">
+            <div class="col-3 assurance-color">
+              Micro <br> Assessments
+            </div>
+            <div class="flex-1 layout horizontal">
+              <div class="assurance-data">
+                <div class="completed">[[fakeData.microAssessments.completed]]</div>
+                <div class="subheading assurance-color">Completed</div>
+              </div>
+              <div class="assurance-data">
+                <div class="completed">[[fakeData.microAssessments.missing]]</div>
+                <div class="subheading assurance-color">Missing</div>
+              </div>
+            </div>
+
+
+          </div>
+          <div class="component flex-1 layout horizontal center ">
+            <div class="col-3 assurance-color">
+              Scheduled <br> Audits
+            </div>
+            <div class="flex-1 layout horizontal">
+              <div class="assurance-data">
+                <div class="completed">[[fakeData.scheduledAudits.completed]]</div>
+                <div class="subheading assurance-color">Completed</div>
+              </div>
+            </div>
+            <div class="col-2 assurance-color">
+              Special <br> Audits
+            </div>
+            <div class="flex-1 layout horizontal">
+              <div class="assurance-data">
+                <div class="completed">[[fakeData.specialAudits.completed]]</div>
+                <div class="subheading assurance-color">Completed</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </paper-material>
+
+    <!--Financial Findings -->
+    <paper-material class="list-panel hact-paper layout  center-center ">
+      <div class="hact-title component">
+        Financial Findings
+      </div>
+      <div class="divider"></div>
+      <div class="layout horizontal">
+        <div class="financial-col label flex-1 layout column">
+          <template is="dom-repeat" items="[[fakeData.financialFindings]]">
+            <div class$="layout horizontal justified [[isHighlighted(item.highlighted)]]">
+              <div class="fin-title flex-1">[[item.name]]</div>
+              <div class="fin-amount">[[item.value]]</div>
+            </div>
+          </template>
+        </div>
+
+        <div class="financial-col label flex-1 layout column">
+          <div class="layout horizontal justified">
+            <div class="fin-title flex-1">[[fakeData.findingsNumbers.0.name]]</div>
+            <div class="fin-amount">[[fakeData.findingsNumbers.0.value]]</div>
+          </div>
+          <div class="layout horizontal justified">
+            <div class="fin-title flex-1">[[fakeData.findingsNumbers.1.name]]</div>
+            <div class="fin-amount">[[fakeData.findingsNumbers.1.value]]</div>
+          </div>
+          <div class="layout horizontal justified">
+            <div class="fin-title flex-1">[[fakeData.findingsNumbers.2.name]]</div>
+            <div class="fin-amount">[[fakeData.findingsNumbers.2.value]]</div>
+          </div>
+          <div class="layout horizontal justified audit-line">
+            <div class="fin-title flex-1">[[fakeData.findingsNumbers.3.name]]</div>
+          </div>
+          <template is="dom-repeat" items="[[fakeData.findingsNumbers.3.value]]">
+            <div class="layout horizontal justified audit-line">
+              <div class="fin-title flex-1 sub-col">-[[item.name]]</div>
+              <div class="fin-amount">[[item.value]]</div>
+            </div>
+          </template>
+
+
+        </div>
+      </div>
+    </paper-material>
+
+    <!--Cash Transfer Amounts-->
+    <paper-material class="list-panel hact-paper layout  center-center ">
+      <div class="hact-title component">
+        Total Cash Transfers by Cash Transfer Amounts
+      </div>
+      <div class="divider"></div>
+      <div class="layout horizontal">
+        <div class="col-8 component">
+          <google-chart
+              id="cashTransfersAmountsChart"
+              class="viz-col"
+              type="column">
+          </google-chart>
+        </div>
+        <div class="col-3 component ratings-wrapper layout column">
+          <div class="risk-rating-title">Risk Ratings</div>
+          <div class="layout column risk-ratings label">
+
+            <div class="layout horizontal">
+              <div class="marker risk-not-required"></div>
+              <div class="flex-1 sub-col">Not Required</div>
+              <div>[[fakeData.riskRatings.0]]</div>
+            </div>
+
+            <div class="layout horizontal">
+              <div class="marker risk-low"></div>
+              <div class="flex-1 sub-col">Low</div>
+              <div>[[fakeData.riskRatings.1]]</div>
+            </div>
+
+            <div class="layout horizontal">
+              <div class="marker risk-medium"></div>
+              <div class="flex-1 sub-col">Medium</div>
+              <div>[[fakeData.riskRatings.2]]</div>
+            </div>
+
+            <div class="layout horizontal">
+              <div class="marker risk-significant"></div>
+              <div class="flex-1 sub-col">Significant</div>
+              <div>[[fakeData.riskRatings.3]]</div>
+            </div>
+
+            <div class="layout horizontal">
+              <div class="marker risk-high"></div>
+              <div class="flex-1 sub-col">High</div>
+              <div>[[fakeData.riskRatings.4]]</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </paper-material>
+
+    <!--IP Risk Rating-->
+    <paper-material class="list-panel hact-paper layout center-center ">
+      <div class="hact-title component">
+        Total Cash Transfers by IP Risk Rating
+      </div>
+      <div class="divider"></div>
+      <div class="layout horizontal">
+        <div class="col-8 component">
+          <google-chart
+              id="cashTransfersRiskRatingsChart"
+              class="viz-col"
+              type="column">
+          </google-chart>
+        </div>
+        <div class="col-3 component ratings-wrapper layout column">
+          <div class="risk-rating-title">Risk Ratings</div>
+          <div class="layout column risk-ratings label">
+
+            <div class="layout horizontal">
+              <div class="marker risk-not-required"></div>
+              <div class="flex-1 sub-col">Not Required</div>
+              <div>[[fakeData.riskRatings.0]]</div>
+            </div>
+
+            <div class="layout horizontal">
+              <div class="marker risk-low"></div>
+              <div class="flex-1 sub-col">Low</div>
+              <div>[[fakeData.riskRatings.1]]</div>
+            </div>
+
+            <div class="layout horizontal">
+              <div class="marker risk-medium"></div>
+              <div class="flex-1 sub-col">Medium</div>
+              <div>[[fakeData.riskRatings.2]]</div>
+            </div>
+
+            <div class="layout horizontal">
+              <div class="marker risk-significant"></div>
+              <div class="flex-1 sub-col">Significant</div>
+              <div>[[fakeData.riskRatings.3]]</div>
+            </div>
+
+            <div class="layout horizontal">
+              <div class="marker risk-high"></div>
+              <div class="flex-1 sub-col">High</div>
+              <div>[[fakeData.riskRatings.4]]</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </paper-material>
+
+    <!--PARTNER TYPE / SPOT CHECKS COMPLETED-->
+    <div class="layout horizontal flex-1">
+
+      <paper-material class="list-panel hact-paper half-paper layout center-center">
+        <div class="hact-title component">
+          Cash Transfers by Partner Type
+        </div>
+        <div class="divider"></div>
+        <div class="layout horizontal">
+          <div class="flex-1 component">
+            <google-chart
+                id="cashTransfersPartnerTypeChart"
+                class="viz-col"
+                type="column">
+            </google-chart>
+          </div>
+
+        </div>
+      </paper-material>
+
+      <paper-material class="list-panel hact-paper half-paper layout center-center">
+        <div class="hact-title component">
+          Spot Checks Completed
+        </div>
+        <div class="divider"></div>
+        <div class="layout horizontal component">
+          <div class="col-40">
+            <google-chart
+                id="spotChecksCompletedChart"
+                class="viz-col"
+                type="pie">
+            </google-chart>
+          </div>
+          <div class="flex-1">
+            <div class="component ratings-wrapper spot-checks-table layout column">
+              <div class="risk-rating-title">Completed By</div>
+              <div class="layout column risk-ratings label">
+
+                <div class="layout horizontal">
+                  <div class="marker risk-low"></div>
+                  <div class="flex-1 sub-col">Staff</div>
+                  <div>[[fakeData.charts.spotChecksCompleted.1.1]]</div>
+                </div>
+
+                <div class="layout horizontal">
+                  <div class="marker risk-medium"></div>
+                  <div class="flex-1 sub-col">Service Providers</div>
+                  <div>[[fakeData.charts.spotChecksCompleted.2.1]]</div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </paper-material>
+    </div>
+
+  </template>
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'dashboard-hact-charts',
+        observers: ['_init(active)'],
+        properties: {
+          assuranceChartOptions: {
+            type: Object,
+            value: {
+              legend: {position: 'none'},
+              bars: 'horizontal',
+              bar: {groupWidth: '65%'},
+              colors: ['transparent'],
+              chartArea: {
+                top: '8',
+                bottom: '0',
+                left: '0',
+                width: '85%',
+              },
+              isStacked: true,
+              annotations: {
+                textStyle: {
+                  color: '#fff',
+                  auraColor: 'transparent',
+                },
+                stem: {
+                  color: 'none',
+                  display: 'none'
+                },
+                boxStyle: {
+                  display: 'none'
+                }
+              },
+              hAxis: {
+                baselineColor: 'none',
+                ticks: [],
+                textPosition: 'none'
+              },
+              vAxis: {
+                baselineColor: 'none',
+                ticks: [],
+                display: 'none',
+                textPosition: 'none'
+              },
+            }
+          },
+          cashTransfersAmountsOptions: {
+            type: Object,
+            value: {
+              isStacked: true,
+              legend: {position: 'none'},
+              bar: {groupWidth: '35%'},
+              chartArea: {
+                top: '32',
+                bottom: '150',
+                right: '88',
+                width: '65%',
+                height: '55%',
+              },
+              colors: ['#D8D8D8', '#2BB0F2', '#FECC02', '#F05656', '#751010', "#000000"],
+              hAxis: {
+                title: 'Cash Transfer Amounts',
+                format: 'currency',
+                slantedText: true,
+                slantedTextAngle: 315,
+                textStyle: {
+                  color: '#000000',
+                  opacity: 0.54,
+                  fontSize: 14,
+                  bold: false,
+                  italic: false
+                }
+              },
+              vAxes: {
+                0: {
+                  title: 'Total Cash Transfers Jan - Dec (USD)',
+                  format: 'currency',
+                  titleTextStyle: {
+                    color: '#000000',
+                    opacity: 0.54,
+                    fontSize: 14,
+                    bold: false,
+                    italic: false
+                  },
+                  textStyle: {
+                    color: '#000000',
+                    opacity: 0.54,
+                    fontSize: 14,
+                    bold: false,
+                    italic: false
+                  }
+                },
+                1: {
+                  title: 'Number of IPs (All Risk Ratings)',
+                  titleTextStyle: {
+                    italic: false
+                  },
+                }
+              },
+              series: {
+                5: {
+                  targetAxisIndex: 1,
+                  type: 'line'
+                }
+              }
+            }
+          },
+          cashTransfersRiskRatingsOptions: {
+            type: Object,
+            value: {
+              legend: {position: 'none'},
+              bar: {groupWidth: '35%'},
+              chartArea: {
+                top: '32',
+                bottom: '150',
+                right: '88',
+                width: '65%',
+                height: '55%',
+              },
+              hAxis: {
+                title: 'Risk Rating',
+                textStyle: {
+                  color: '#000000',
+                  opacity: 0.54,
+                  fontSize: 14,
+                  bold: false,
+                  italic: false
+                }
+              },
+              vAxes: {
+                0: {
+                  title: 'Total Cash Transfers Jan - Dec (USD)',
+                  format: 'currency',
+                  titleTextStyle: {
+                    color: '#000000',
+                    opacity: 0.54,
+                    fontSize: 14,
+                    bold: false,
+                    italic: false
+                  },
+                  textStyle: {
+                    color: '#000000',
+                    opacity: 0.54,
+                    fontSize: 14,
+                    bold: false,
+                    italic: false
+                  }
+                },
+                1: {
+                  title: 'Number of IPs (All Risk Ratings)',
+                  titleTextStyle: {
+                    italic: false
+                  },
+                }
+              },
+              series: {
+                1: {
+                  targetAxisIndex: 1,
+                  type: 'line',
+                  color: '#000000',
+                }
+              }
+            }
+          },
+          cashTransfersPartnerTypeOptions: {
+            type: Object,
+            value: {
+              legend: {position: 'none'},
+              bar: {groupWidth: '35%'},
+              chartArea: {
+                top: '32',
+                bottom: '150',
+                right: '88',
+                width: '65%',
+                height: '55%',
+              },
+              hAxis: {
+                textStyle: {
+                  color: '#000000',
+                  opacity: 0.54,
+                  fontSize: 14,
+                  bold: false,
+                  italic: false
+                }
+              },
+              vAxes: {
+                0: {
+                  title: 'Total Cash Transfers Jan - Dec (USD)',
+                  format: 'currency',
+                  titleTextStyle: {
+                    color: '#000000',
+                    opacity: 0.54,
+                    fontSize: 14,
+                    bold: false,
+                    italic: false
+                  },
+                  textStyle: {
+                    color: '#000000',
+                    opacity: 0.54,
+                    fontSize: 14,
+                    bold: false,
+                    italic: false
+                  }
+                },
+                1: {
+                  title: 'Number of Partners',
+                  titleTextStyle: {
+                    italic: false
+                  },
+                }
+              },
+              series: {
+                1: {
+                  targetAxisIndex: 1,
+                  type: 'line',
+                  color: '#000000',
+                }
+              }
+            }
+          },
+          spotChecksCompletedOptions: {
+            type: Object,
+            value: {
+              legend: 'none',
+              slices: [{color: "#2BB0F2"}, {color: "#FECC02"}],
+              chartArea: {
+                top: '64',
+                height: '55%',
+              },
+            }
+          },
+          fakeData: {
+            type: Object,
+            value: function() {
+              return {
+                progVisits: {
+                  completed: 38,
+                  minRequired: 32
+                },
+                spotChecks: {
+                  completed: 12,
+                  minRequired: 26
+                },
+                microAssessments: {
+                  completed: 24,
+                  missing: 8
+                },
+                scheduledAudits: {
+                  completed: 80,
+                },
+                specialAudits: {
+                  completed: 56
+                },
+                financialFindings: [
+                  {
+                    name: 'Total Audited Expenditure',
+                    value: 34345000,
+                    highlighted: false
+                  },
+                  {
+                    name: 'Total Financial Findings',
+                    value: 1239300,
+                    highlighted: true
+                  },
+                  {
+                    name: 'Refunds',
+                    value: 345000,
+                    highlighted: false
+                  },
+                  {
+                    name: 'Additional Supporting Documentation Received',
+                    value: 235678,
+                    highlighted: false
+                  },
+                  {
+                    name: 'Justification Provided and Accepted',
+                    value: 5540,
+                    highlighted: false
+                  },
+                  {
+                    name: 'Write-off Recorded',
+                    value: 89567,
+                    highlighted: false
+                  },
+                  {
+                    name: 'Outstanding(Requires Follow-up)',
+                    value: 900000,
+                    highlighted: true
+                  }],
+                findingsNumbers: [
+                  {
+                    name: 'Number of High Priority Findings',
+                    value: 20,
+                  },
+                  {
+                    name: 'Number of Medium Priority Findings',
+                    value: 30,
+                  },
+                  {
+                    name: 'Number of Low Priority Findings',
+                    value: 45,
+                  },
+                  {
+                    name: 'Audit Opinion',
+                    value: [
+                      {
+                        name: 'qualified', value: 34
+                      },
+                      {
+                        name: 'unqualified', value: 22
+                      },
+                      {name: 'denial', value: 10},
+                      {name: 'adverse', value: 40}
+                    ]
+                  }
+                ],
+                charts: {
+                  cashTransfersAmounts: [
+                    ['Risk Rating', 'Not Required', 'Low', 'Medium', 'Significant', 'High', 'Number of IPs'],
+                    ['$0-50,0000', 0, 200000, 100000, 30000, 0, 37],
+                    ['$50,001-100,0000', 410000, 0, 360000, 120000, 40000, 15],
+                    ['$100,001-350,0000', 225000, 515000, 400000, 0, 0, 15],
+                    ['$350,001-500,0000', 143000, 35000, 350000, 0, 100000, 5],
+                    ['>$500,000', 85000, 66000, 240000, 400000, 20000, 20],
+                  ],
+                  cashTransfersRiskRatings: [
+                    ['Risk Rating', 'Total Cash Transfers', {role: 'style'}, 'Number of IPs'],
+                    ['Not Required', 10000, '#D8D8D8', 5],
+                    ['Low', 35000, '#2BB0F2', 12],
+                    ['Medium', 55000, '#FECC02', 4],
+                    ['Significant', 15000, '#F05656', 6],
+                    ['High', 3500, '#751010', 4],
+                  ],
+                  cashTransfersPartnerType: [
+                    ['Partner Type', 'Total Cash Transfers', {role: 'style'}, 'Number of Partners'],
+                    ['CSO', 60000, '#FECC02', 15],
+                    ['GOV', 93000, '#F05656', 5],
+                  ],
+                  spotChecksCompleted: [
+                    ['Completed by', 'Count'],
+                    ['Staff', 18],
+                    ['Service Providers', 8]
+                  ]
+                },
+                riskRatings: [
+                  10, 20, 50, 2, 2
+                ],
+              }
+            }
+          }
+        },
+
+        _init: function(active) {
+          if (active) {
+            this.drawCharts();
+          }
+        },
+
+        _formatChartData: function(data, chartName, options) {
+          this.$.google.dataTable(data).then(dt => {
+            this.$$('#' + chartName).options = options;
+            this.$$('#' + chartName).data = dt;
+            this.updateStyles();
+          });
+        },
+
+        drawCharts: function() {
+          this.drawProgVisitsChart();
+          _.keys(this.fakeData.charts).map(chart => {
+            this.drawChart(chart);
+          });
+        },
+
+        AssuranceActivitiesBars(entity){
+          return [
+            ['Data', 'Text', {role: 'annotation'}, 'Count', {role: 'style'}, {role: 'annotation'}],
+            ['', 0, 'Completed', entity.completed,
+              entity.completed >= entity.minRequired ? '#1B9C5C' : '#F05454', entity.completed],
+            ['', 0, 'Minimum Required', entity.minRequired, '#A7A7A7', entity.minRequired],
+          ]
+        },
+
+        drawProgVisitsChart() {
+          const {progVisits, spotChecks} = this.fakeData;
+          const progVisitsData = this.AssuranceActivitiesBars(progVisits);
+          const spotChecksData = this.AssuranceActivitiesBars(spotChecks);
+          this._formatChartData(progVisitsData, 'progVisitsChart', this.assuranceChartOptions);
+          this._formatChartData(spotChecksData, 'spotChecksChart', this.assuranceChartOptions);
+        },
+
+        drawChart (dataName) {
+          const data = this.fakeData.charts[dataName];
+          this._formatChartData(data, `${dataName}Chart`, this[`${dataName}Options`]);
+        },
+
+        isHighlighted: function(highlighted) {
+          return highlighted ? 'financial-highlight' : '';
+        }
+
+      })
+      ;
+    })();
+  </script>
+</dom-module>

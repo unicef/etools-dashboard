@@ -16,14 +16,24 @@ App global configuration
       collectionsList: 'name, expire',
       countries: 'id',
       user: 'id',
+      unicefUsers: 'id',
       countryProgrammes: 'id, name, wbs, from_date',
       offices: 'id, name',
       partners: 'id',
       cso_dashboard: 'intervention_id, partner_name',
       trips: 'id, supervisor_name, purpose_of_travel, traveler, created_date',
+      tripsSupervised: 'id,traveler',
       mapInterventions: 'id, status',
-      locations: 'id'
+      locations: 'id',
+      actionPointsByMe: 'id',
+      actionPointsForMe: 'id',
+      partnerships: 'id',
+
+      listsExpireMapTable: "&name, expire",
+      ajaxDefaultDataTable: "&cacheKey, data, expire"
     });
+
+    window.EtoolsRequestCacheDb = etoolsCustomDexieDb;
 
     let etoolsAjaxDefaultDexieDbPrefix = 'dashboard';
 
@@ -81,23 +91,27 @@ App global configuration
       user: {
         url: '/users/api/profile/',
         exp: 30 * 60 * 1000, // 30min
-        cachingKey: 'user'
+        cachingKey: 'user',
+        cacheTableName: 'user'
       },
       agreements: {
         // template: '/management/api/stats/agreements/',
         url: '../../data/agreements.json',
         exp: 30 * 60 * 1000, // 30min
-        cachingKey: 'agreements'
+        cachingKey: 'agreements',
+        cacheTableName: 'agreements'
       },
       countries: {
         url: '../../data/countries.json',
         exp: 6 * 60 * 60 * 1000, // 6h
-        cachingKey: 'countries'
+        cachingKey: 'countries',
+        cacheTableName: 'countries'
       },
       partners: {
         url: '../../data/partners.json',
         exp: 6 * 60 * 60 * 1000, // 6h
-        cachingKey: 'partners'
+        cachingKey: 'partners',
+        cacheTableName: 'partners'
       }
 
     };
@@ -106,27 +120,32 @@ App global configuration
       unicefUsers: {
         url: '/users/api/',
         exp: 60 * 60 * 1000, // 1h
-        cachingKey: 'unicefUsers'
+        cachingKey: 'unicefUsers',
+        cacheTableName: 'unicefUsers'
       },
       user: {
         url: '/users/api/profile/',
         exp: 30 * 60 * 1000, // 30min
-        cachingKey: 'user'
+        cachingKey: 'user',
+        cacheTableName: 'user'
       },
       countryProgrammes: {
-         url: '/api/v2/reports/countryprogramme/',
-         exp: 6 * 60 * 60 * 1000,
-         cachingKey: 'countryProgrammes'
+        url: '/api/v2/reports/countryprogramme/',
+        exp: 6 * 60 * 60 * 1000,
+        cachingKey: 'countryProgrammes',
+        cacheTableName: 'countryProgrammes'
        },
       offices: {
-         url: '/api/offices/',
-         exp: 6 * 60 * 60 * 1000,
-         cachingKey: 'offices'
+        url: '/api/offices/',
+        exp: 6 * 60 * 60 * 1000,
+        cachingKey: 'offices',
+        cacheTableName: 'offices'
       },
       countries: {
         url: '/api/countries/', // API request receives a 404 for now
         exp: 6 * 60 * 60 * 1000, // 6h
-        cachingKey: 'countries'
+        cachingKey: 'countries',
+        cacheTableName: 'countries'
       },
       userCountry: {
 //        url : '/users/country',
@@ -136,58 +155,80 @@ App global configuration
         url: '/users/api/changecountry/'
       },
       partners: {
-          url: '/api/v2/partners/hact',
-          exp: 6 * 60 * 60 * 1000, // 6h
-          cachingKey: 'partners'
+        url: '/api/v2/partners/hact',
+        exp: 6 * 60 * 60 * 1000, // 6h
+        cachingKey: 'partners',
+        cacheTableName: 'partners'
       },
       partnersDropdown: {
         url: '/api/v2/partners',
         exp: 6 * 60 * 60 * 1000, // 6h
-        cachingKey: 'partnersDropdown'
+        cachingKey: 'partnersDropdown',
+        cacheTableName: 'partnersDropdown'
       },
       static: {
         url: '/api/v2/dropdowns/static',
         exp: 6 * 60 * 60 * 1000, // 6h
-        cachingKey: 'static'
+        cachingKey: 'static',
+        cacheTableName: 'static'
       },
-
       sections: {
         url: '/api/sections',
         exp: 6 * 60 * 60 * 1000,
-        cachingKey: 'sections'
+        cachingKey: 'sections',
+        cacheTableName: 'sections'
       },
       sectors: {
         url: '/api/reports/sectors',
         exp: 6 * 60 * 60 * 1000,
-        cachingKey: 'sectors'
+        cachingKey: 'sectors',
+        cacheTableName: 'sectors'
       },
 			actionPointsByMe: {
-        template: '/api/t2f/action_points/?f_assigned_by=<%=id%>&mf_status=ongoing,open'
+        template: '/api/t2f/action_points/?f_assigned_by=<%=id%>&mf_status=ongoing,open',
+        exp: 6 * 60 * 60 * 1000,
+        cachingKey: 'actionPointsByMe',
+        cacheTableName: 'actionPointsByMe'
       },
       actionPointsForMe: {
-        template: '/api/t2f/action_points/?f_person_responsible=<%=id%>&mf_status=ongoing,open'
+        template: '/api/t2f/action_points/?f_person_responsible=<%=id%>&mf_status=ongoing,open',
+        exp: 6 * 60 * 60 * 1000,
+        cachingKey: 'actionPointsForMe',
+        cacheTableName: 'actionPointsForMe'
       },
       mapInterventions: {
         template: '/api/v2/interventions/map<%=filter%>',
+        cacheTableName: 'mapInterventions'
       },
       locations: {
         url: '/api/locations',
         exp: 6 * 60 * 60 * 1000,
-        cachingKey: 'locations'
+        cachingKey: 'locations',
+        cacheTableName: 'locations'
       },
       partnerships: {
-        template: '/api/v2/interventions/dash'
+        template: '/api/v2/interventions/dash',
+        exp: 6 * 60 * 60 * 1000,
+        cachingKey: 'partnerships',
+        cacheTableName: 'partnerships'
       },
       cso_dashboard: {
         template: '/api/v2/interventions/partnership-dash',
         exp: 6* 60 * 60 * 1000, // 6h
         cachingKey: 'cso_dashboard',
+        cacheTableName: 'cso_dashboard'
       },
       trips: {
-        template: '/api/t2f/travels/?f_traveler=<%=id%>'
+        template: '/api/t2f/travels/?f_traveler=<%=id%>',
+        exp: 6* 60 * 60 * 1000,
+        cachingKey: 'trips',
+        cacheTableName: 'trips'
       },
       tripsSupervised: {
-        template: '/api/t2f/travels/?f_supervisor=<%=id%>'
+        template: '/api/t2f/travels/?f_supervisor=<%=id%>',
+        exp: 6* 60 * 60 * 1000,
+        cachingKey: 'tripsSupervised',
+        cacheTableName: 'tripsSupervised'
       },
       tripsDashboard: {
         template: '/api/t2f/travels/dashboard/?'
