@@ -197,6 +197,9 @@
                   outstanding_findings: picked.outstanding_findings
                 },
                 {
+                  liquidations: picked.hact_values.spot_checks.liquidations
+                },
+                {
                   mr_spot_checks: picked.hact_min_requirements.spot_checks
                 });
             picked = _.omit(picked, ['hact_values', 'hact_min_requirements']);

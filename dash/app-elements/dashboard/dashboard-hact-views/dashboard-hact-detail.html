@@ -64,9 +64,9 @@
         box-sizing: border-box;
       }
 
-      /* .right {
+      .right {
         text-align: right;
-      } */
+      }
 
       .center {
         text-align: center;
@@ -153,7 +153,7 @@
         justify-content: center;
       }
 
-      data-table-row > div[slot="row-data"] > div > div > span, 
+      data-table-row > div[slot="row-data"] > div > div > span.centered, 
       data-table-row > div[slot="row-data"] > div > div > div {
         justify-content: center;
       }
@@ -164,8 +164,13 @@
       }
 
       .partner-link {
-        overflow: hidden;
+        /* overflow: inherit; */
         cursor: pointer;
+      }
+
+      .sticky-col {
+        white-space: normal !important; 
+        flex-wrap: wrap;
       }
 
       /* .hact-detail-table { */
@@ -223,8 +228,9 @@
                     1 JAN - 31 DEC
                   </data-table-column>
                 </data-table-column>
-                <data-table-column class="col-8 nowrap monetary padded" group-heading="PROGRAMMATIC VISITS">
-                  <data-table-column class="col-3 layout horizontal right-side">
+                <data-table-column class="col-8 nowrap padded" group-heading="PROGRAMMATIC VISITS">
+                  
+                  <data-table-column class="col-3 layout monetary horizontal right-side">
                     Cash Transfers <br>
                     1 OCT - 30 SEP
                   </data-table-column>
@@ -250,12 +256,11 @@
               <div class="col-5 layout horizontal">
                 <data-table-column class="col-8 layout horizontal" group-heading="SPOT CHECKS">
                   <data-table-column class="col-half buffer"></data-table-column>
-                  <data-table-column class="col-2 vertical right-side">
+                  <data-table-column class="col-2 vertical monetary right-side">
                     Liquidations <br>
                     1 Oct - 30 Sep
                   </data-table-column>
                   <div class="col-6 layout horizontal">
-                    <!-- <div class="col-half buffer right-side"></div> -->
                     <data-table-column class="col-6 vertical right-side quarters">
                       Planned <br>
                       <span class="col-3 quarter-item">Q1</span>
@@ -269,7 +274,6 @@
                     <data-table-column class="col-3 vertical right-side">
                       Follow-up <br> Required
                     </data-table-column>
-                    <!-- <div class="col-half buffer right-side"></div> -->
                   </div>
                   <data-table-column class="col-3 vertical right-side quarters">
                     Completed <br>
@@ -287,7 +291,7 @@
                   <data-table-column class="col-4 right-side" id="hact_values.audits_done">
                     Completed
                   </data-table-column>
-                  <data-table-column class="col-4 right-side">
+                  <data-table-column class="col-4 right-side monetary">
                     Outstanding <br> Findings
                   </data-table-column>
                 </data-table-column>
@@ -328,9 +332,8 @@
                 <div class="col-5 layout horizontal">
                   <div class="col-8 layout horizontal">
                     <div class="col-half buffer"></div>
-                    <div class="col-2 right-side right vertical">X</div>
+                    <div class="col-2 right-side right monetary vertical">$[[totals.liquidations]]</div>
                     <div class="col-6 layout horizontal">
-                      <!-- <div class="col-half buffer right-side"></div> -->
                       <div class="col-6 right-side right vertical">
                         <span class="col-3">[[totals.spot_checks_planned_q1]]</span>
                         <span class="col-3 right-side">[[totals.spot_checks_planned_q2]]</span>
@@ -339,7 +342,6 @@
                       </div>
                       <div class="col-3 right-side vertical">[[totals.mr_spot_checks]]</div>
                       <div class="col-3 right-side vertical">[[totals.follow_up_required]]</div>
-                      <!-- <div class="col-half buffer right-side"></div> -->
                     </div>
                     <div class="col-3 right-side vertical">
                       <span class="col-3">[[totals.spot_checks_completed_q1]]</span>
@@ -352,7 +354,7 @@
                   <div class="col-4 layout horizontal">
                     <div class="col-4 right-side vertical">[[totals.audits_mr]]</div>
                     <div class="col-4 right-side vertical">[[totals.audits_completed]]</div>
-                    <div class="col-4 right-side vertical">[[totals.outstanding_findings]]</div>
+                    <div class="col-4 right-side monetary vertical">$[[totals.outstanding_findings]]</div>
                   </div>
                 </div>
               </div>
@@ -392,7 +394,7 @@
                         <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits.planned.q3]]</span>
                         <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits.planned.q4]]</span>
                       </span>
-                      <span class="col-3 nowrap right-side vertical">[[partner.hact_min_requirements.programme_visits]]</span>
+                      <span class="col-3 nowrap right-side centered vertical">[[partner.hact_min_requirements.programme_visits]]</span>
                       <span class="col-3 right-side vertical">
                         <span class="col-3">[[partner.hact_values.programmatic_visits.completed.q1]]</span>
                         <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits.completed.q2]]</span>
@@ -404,7 +406,7 @@
                   <div class="col-5 layout horizontal">
                     <div class="col-8 layout horizontal"> 
                       <span class="col-half buffer"></span>
-                      <span class="col-2 right-side vertical">X</span>
+                      <span class="col-2 right-side monetary vertical">$[[partner.hact_values.spot_checks.liquidations]]</span>
                       <div class="col-6 layout horizontal">
                         <span class="col-6 right-side vertical">
                           <span class="col-3">[[partner.hact_values.spot_checks.planned.q1]]</span>
@@ -424,9 +426,9 @@
                       <span class="col-half buffer"></span>
                     </div>
                     <div class="col-4 layout horizontal">
-                      <span class="col-4 right-side vertical">[[partner.hact_values.audits.minimum_requirements]]</span>
-                      <span class="col-4 right-side vertical">[[partner.hact_values.audits.completed]]</span>
-                      <span class="col-4 right-side vertical">[[partner.hact_values.audits.outstanding_findings]]</span>
+                      <span class="col-4 right-side centered vertical">[[partner.hact_values.audits.minimum_requirements]]</span>
+                      <span class="col-4 right-side centered vertical">[[partner.hact_values.audits.completed]]</span>
+                      <span class="col-4 right-side monetary vertical">$[[partner.hact_values.audits.outstanding_findings]]</span>
                     </div>
                   </div>
                 </div>
@@ -435,9 +437,6 @@
           </div>  
         </div>
       </div>
-      <data-table-footer page-size="[[pageSize]]" page-number="[[pageNumber]]" visible-range="{{visibleRange}}" filtered-total-results="[[filteredTotalResults]]"
-        on-page-size-changed="pageSizeChanged" on-page-number-changed="pageNumberChanged">
-      </data-table-footer>
     </paper-material>
   </template>
 
