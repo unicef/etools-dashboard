@@ -119,6 +119,7 @@
               'hact_values',
               'total_ct_cy',
               'hact_min_requirements',
+              'outstanding_findings'
             ]).value();
             _.assign(picked, _.pick(picked.hact_values, [
                   'planned_cash_transfer',
@@ -193,7 +194,7 @@
                   audits_completed: picked.hact_values.audits.completed
                 },
                 {
-                  outstanding_findings: picked.hact_values.audits.outstanding_findings
+                  outstanding_findings: picked.outstanding_findings
                 },
                 {
                   mr_spot_checks: picked.hact_min_requirements.spot_checks
