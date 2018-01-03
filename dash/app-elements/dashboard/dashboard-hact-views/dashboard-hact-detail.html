@@ -72,12 +72,14 @@
         text-align: center;
       }
 
-      /* .quarters {
-        width: 100%;
+      .quarters {
+        align-items: flex-end !important;
+      }
+
+      .quarter-heading {
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-      } */
+        align-items: flex-end;
+      }
 
       /* .quarter-border {
         border-left: 1px solid rgb(227, 227, 227);
@@ -236,20 +238,24 @@
                   </data-table-column>
                   <data-table-column class="col-3 vertical right-side quarters" id="hact_values.micro_assessment_needed">
                     Planned <br>
-                    <span class="col-3 quarter-item">Q1</span>
-                    <span class="col-3 quarter-item">Q2</span>
-                    <span class="col-3 quarter-item">Q3</span>
-                    <span class="col-3 quarter-item">Q4</span>
+                    <div class="quarter-heading">
+                      <span class="col-3">Q1</span>
+                      <span class="col-3 quarter-item">Q2</span>
+                      <span class="col-3 quarter-item">Q3</span>
+                      <span class="col-3 quarter-item">Q4</span>
+                    </div>
                   </data-table-column>
                   <data-table-column class="col-3 nowrap vertical right-side" id="rating">
                     Minimum <br> Required
                   </data-table-column>
                   <data-table-column class="col-3 vertical right-side quarters">
                     Completed <br>
-                    <span class="col-3 quarter-item">Q1</span>
-                    <span class="col-3 quarter-item">Q2</span>
-                    <span class="col-3 quarter-item">Q3</span>
-                    <span class="col-3 quarter-item">Q4</span>
+                    <div class="quarter-heading">
+                      <span class="col-3">Q1</span>
+                      <span class="col-3 quarter-item">Q2</span>
+                      <span class="col-3 quarter-item">Q3</span>
+                      <span class="col-3 quarter-item">Q4</span>
+                    </div>
                   </data-table-column>
                 </data-table-column>
               </div>
@@ -263,10 +269,12 @@
                   <div class="col-6 layout horizontal">
                     <data-table-column class="col-6 vertical right-side quarters">
                       Planned <br>
-                      <span class="col-3 quarter-item">Q1</span>
-                      <span class="col-3 quarter-item">Q2</span>
-                      <span class="col-3 quarter-item">Q3</span>
-                      <span class="col-3 quarter-item">Q4</span>
+                      <div class="quarter-heading">
+                        <span class="col-3">Q1</span>
+                        <span class="col-3 quarter-item">Q2</span>
+                        <span class="col-3 quarter-item">Q3</span>
+                        <span class="col-3 quarter-item">Q4</span>
+                      </div>
                     </data-table-column>
                     <data-table-column class="col-3 vertical right-side">
                       Minimum <br> Required
@@ -277,10 +285,12 @@
                   </div>
                   <data-table-column class="col-3 vertical right-side quarters">
                     Completed <br>
-                    <span class="col-3 quarter-item">Q1</span>
-                    <span class="col-3 quarter-item">Q2</span>
-                    <span class="col-3 quarter-item">Q3</span>
-                    <span class="col-3 quarter-item">Q4</span>
+                    <div class="quarter-heading">
+                      <span class="col-3">Q1</span>
+                      <span class="col-3 quarter-item">Q2</span>
+                      <span class="col-3 quarter-item">Q3</span>
+                      <span class="col-3 quarter-item">Q4</span>
+                    </div>
                   </data-table-column>
                   <data-table-column class="col-half buffer"></data-table-column>
                 </data-table-column>
