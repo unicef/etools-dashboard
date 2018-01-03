@@ -84,11 +84,9 @@
             self._setTotalResults(res.length);
           });
           this.db.transaction('r', this.db.partners, ()=> {
-            let queryResult = self.db.partners;
+            let queryResult = self.db.partners.orderBy('name');
             if (order === 'desc') {
               queryResult = queryResult.reverse();
-            } else {
-              queryResult = queryResult.toCollection();
             }
             if (!_.isEmpty(searchString)) {
               queryResult = queryResult.filter(function(partner) {
@@ -112,7 +110,6 @@
         _computeTotals: function(results) {
           this.resultsTotals = true;
           return _(results).reduce((sum, obj)=> {
-            console.log(obj)
             let picked = _(obj).pick([
               'shared_partner',
               'total_ct_cp',
@@ -213,6 +210,10 @@
             });
             return sum;
           }, {});
+        },
+
+        _sortItems: function() {
+
         },
       });
     }
