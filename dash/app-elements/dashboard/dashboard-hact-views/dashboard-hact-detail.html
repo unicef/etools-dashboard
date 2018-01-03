@@ -42,9 +42,17 @@
         min-width: 1850px;
       }
 
+      .narrow-col {
+        max-width: 20px;
+      }
+
       /* .buffer {
         background-color: rgb(248, 248, 248);
       } */
+
+      .border-box {
+        box-sizing: border-box;
+      }
 
       .hact-icon {
         --iron-icon-height: 12px;
@@ -53,10 +61,6 @@
 
       .nowrap {
         white-space: nowrap;
-      }
-
-      .padded {
-        padding-right: 2px;
       }
 
       .group {
@@ -162,6 +166,7 @@
       .monetary {
         text-align: right;
         justify-content: flex-end !important;
+        padding-right: 4px;
       }
 
       .partner-link {
@@ -224,13 +229,13 @@
                   <data-table-column class="col-2 vertical nowrap" id="hact_values.planned_cash_transfer">
                     Flags
                   </data-table-column>
-                  <data-table-column class="col-6 monetary vertical padded nowrap" id="total_ct_cy">
+                  <data-table-column class="col-6 monetary vertical border-box nowrap" id="total_ct_cy">
                     Cash Transfers <br>
                     1 JAN - 31 DEC
                   </data-table-column>
                 </data-table-column>
-                <data-table-column class="col-8 nowrap padded" group-heading="PROGRAMMATIC VISITS">
-                  <data-table-column class="col-3 layout vertical monetary horizontal right-side">
+                <data-table-column class="col-8 nowrap" group-heading="PROGRAMMATIC VISITS">
+                  <data-table-column class="col-3 vertical monetary horizontal right-side">
                     Cash Transfers <br>
                     1 OCT - 30 SEP
                   </data-table-column>
@@ -318,10 +323,10 @@
                   <div class="col-4 layout horizontal">
                     <div class="col-4 nowrap vertical"></div>
                     <div class="col-2 nowrap vertical"></div>
-                    <div class="col-6 padded monetary nowrap vertical">$0</div>
+                    <div class="col-6 monetary nowrap border-box vertical">$0</div>
                   </div>
                   <div class="col-8 layout horizontal">
-                    <div class="col-3 nowrap padded monetary vertical right-side">$[[currencyFormat(totals.total_ct_cy)]]</div>
+                    <div class="col-3 nowrap monetary vertical right-side">$[[currencyFormat(totals.total_ct_cy)]]</div>
                     <div class="col-3 vertical right-side quarters">
                       <span class="col-3">[[totals.programmatic_visits_planned_q1]]</span>
                       <span class="col-3 right-side">[[totals.programmatic_visits_planned_q2]]</span>
@@ -371,7 +376,7 @@
             <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
               <data-table-row no-collapse>
                 <div slot="row-data">
-                  <div class="col-2 sticky-col col-data padded">
+                  <div class="col-2 sticky-col col-data">
                     <span class="col-12 partner-link">
                       <a on-tap="_goToPage" id="[[partner.id]]">
                         [[partner.name]]
@@ -392,10 +397,10 @@
                           <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment or audit report has not been submitted through the Auditor Portal</paper-tooltip>
                         </div>
                       </span>
-                      <span class="col-6 right monetary padded nowrap vertical">$0</span>
+                      <span class="col-6 monetary nowrap border-box vertical">$0</span>
                     </div>
                     <div class="col-8 layout horizontalr">
-                      <span class="col-3 nowrap padded monetary right-side vertical">$[[currencyFormat(partner.total_ct_cy)]]</span>
+                      <span class="col-3 nowrap monetary right-side vertical">$[[currencyFormat(partner.total_ct_cy)]]</span>
                       <span class="col-3 nowrap vertical right-side">
                         <span class="col-3">[[partner.hact_values.programmatic_visits.planned.q1]]</span>
                         <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits.planned.q2]]</span>
