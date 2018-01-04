@@ -128,18 +128,17 @@
           active: true,
           loadingSource: 'country-change'
         });
-        let self = this;
         this.sendRequest({
           endpoint: this.getEndpoint('changeCountry'),
           method: 'POST',
           body: {country: countryId}
-        }).then(function(resp) {
-          self._handleResponse();
-        }).catch(function(error) {
-          self._handleError(error);
+        }).then(()=> {
+          this._handleResponse();
+        }).catch(err=> {
+          this._handleError(err);
         });
       },
-      _handleResponse: function(res) {
+      _handleResponse: function() {
         this.fire('global-loading', {message: 'Please wait while country is changing...', active: true});
         this.fire('update-main-path', {path: ''});
         this.refresh();
