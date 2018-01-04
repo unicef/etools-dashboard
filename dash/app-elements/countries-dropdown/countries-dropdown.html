@@ -3,7 +3,7 @@
 <link rel="import" href="../../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../../bower_components/etools-page-refresh/etools-refresh-behavior.html">
-<link rel="import" href="../../../bower_components/etools-ajax/etools-ajax.html">
+<link rel="import" href="../../../bower_components/etools-ajax/etools-ajax-request-behavior.html">
 <link rel="import" href="../../app-config/etools-app-config.html">
 
 <dom-module id="countries-dropdown">
@@ -68,10 +68,6 @@
       }
 
     </style>
-    <etools-ajax id="ajax"
-                 method="POST"
-                 on-success="_handleResponse"
-                 on-fail="_handleError"></etools-ajax>
 
     <template is="dom-if" if="[[countrySelectorVisible]]">
 
@@ -101,6 +97,7 @@
 
       behaviors: [
         etoolsAppConfig.globals,
+        EtoolsAjaxRequestBehavior,
         etoolsBehaviors.EtoolsRefreshBehavior
       ],
 
@@ -119,9 +116,28 @@
       _countrySelected: function(e) {
           if (e.detail.item.countryId !== this.current) {
             //send post request to change_coutry endpoint
-            this.$.ajax.body = {country: e.detail.item.countryId};
-            this.$.ajax.endpoint = this.getEndpoint('changeCountry');
+            let selectedCountryId = _.get(e,'detail.item.countryId','');
+            if(selectedCountryId){
+              this._triggerCountryChangeRequest(selectedCountryId);
+            }
           }
+      },
+      _triggerCountryChangeRequest: function(countryId) {
+        this.fire('global-loading', {
+          message: 'Please wait while country is changing...',
+          active: true,
+          loadingSource: 'country-change'
+        });
+        let self = this;
+        this.sendRequest({
+          endpoint: this.getEndpoint('changeCountry'),
+          method: 'POST',
+          body: {country: countryId}
+        }).then(function(resp) {
+          self._handleResponse();
+        }).catch(function(error) {
+          self._handleError(error);
+        });
       },
       _handleResponse: function(res) {
         this.fire('global-loading', {message: 'Please wait while country is changing...', active: true});
