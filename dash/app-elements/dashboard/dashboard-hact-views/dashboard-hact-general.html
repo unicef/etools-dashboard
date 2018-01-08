@@ -139,35 +139,30 @@
           </data-table-column>
         </data-table-column>
         <data-table-column class="col-4 layout horizontal" group-heading="blank" transparent>
-          <!-- <div class="col-4 layout horizontal"> -->
-            <!-- <data-table-column class="col-9 nowrap vertical padded fixed" id="name" sortable>
-              IP Name
-            </data-table-column> -->
-            <data-table-column class="col-1 nowrap vertical padded" id="partner_type">
+          <div class="col-6 layout horizontal">
+            <data-table-column class="col-2 nowrap vertical padded" id="partner_type">
               IP <br> Type
             </data-table-column>
-          <!-- </div> -->
-          <!-- <div class="col-4 layout horizontal"> -->
-            <data-table-column class="col-2 vertical nowrap" id="shared_partner">
+            <data-table-column class="col-3 vertical nowrap" id="shared_partner">
               Shared <br>
               IP
             </data-table-column>
-            <data-table-column class="col-3 vertical nowrap" id="assessment_type">
+            <data-table-column class="col-7 vertical nowrap padded" id="assessment_type">
               Assessment Type
             </data-table-column>
-          <!-- </div> -->
-          <!-- <div class="col-4 group layout horizontal"> -->
-            <data-table-column class="col-2 vertical nowrap padded" id="total_ct_cp">
+          </div>
+          <div class="col-6 layout horizontal">
+            <data-table-column class="col-4 vertical nowrap padded" id="total_ct_cp">
               Risk Rating
             </data-table-column>
-            <data-table-column class="col-1 vertical nowrap padded" id="hact_values.planned_cash_transfer">
+            <data-table-column class="col-2 vertical nowrap padded" id="hact_values.planned_cash_transfer">
               Flags
             </data-table-column>
-            <data-table-column class="col-3 right vertical padded nowrap" id="total_ct_cy">
+            <data-table-column class="col-6 right vertical padded nowrap" id="total_ct_cy">
               Cash Transfers <br>
               1 JAN - 31 DEC
             </data-table-column>
-          <!-- </div> -->
+          </div>
         </data-table-column>
         <div class="col-6 layout horizontal">
           <data-table-column class="col-4 layout horizontal" group-heading="PROGRAMMATIC VISITS">
@@ -214,21 +209,16 @@
             </span>
           </div>
           <div class="col-4 layout horizontal">
-            <!-- <div class="col-4 layout horizontal group"> -->
-              <!-- <span class="col-9 col-data partner-link padded vertical fixed">
-                Total of [[totalResults]] IPs
-              </span> -->
-              <span class="col-1 col-data vertical"></span>
-            <!-- </div> -->
-            <!-- <div class="col-4 layout horizontal group"> -->
-              <span class="col-2 col-data vertical">[[totals.shared_partner]]</span>
-              <span class="col-3 col-data vertical"></span>
-            <!-- </div> -->
-            <!-- <div class="col-4 layout horizontal group"> -->
-                <span class="col-2 col-data vertical"></span>
-                <span class="col-1 col-data vertical"></span>
-                <span class="col-3 col-data padded right">$0</span>
-            <!-- </div> -->
+            <span class="col-6 layout horizontal">
+              <span class="col-2 col-data vertical"></span>
+              <span class="col-3 col-data vertical">[[totals.shared_partner]]</span>
+              <span class="col-7 col-data vertical"></span>
+            </span>
+            <span class="col-6 layout horizontal">
+              <span class="col-4 col-data vertical"></span>
+              <span class="col-2 col-data vertical"></span>
+              <span class="col-6 col-data padded right">$0</span>
+            </span>
           </div>
           <div class="col-6 layout horizontal">
             <div class="col-4 layout horizontal group">
@@ -263,24 +253,16 @@
               </span>
             </div>
             <div class="col-4 layout horizontal">
-              <!-- <div class="col-4 layout horizontal"> -->
-                <!-- <span class="col-9 col-data partner-link name padded fixed">
-                  <a on-tap="_goToPage" id="[[partner.id]]">
-                    [[partner.name]]
-                    <paper-tooltip>[[partner.name]]</paper-tooltip>
-                  </a>
-                </span> -->
-                <span class="col-1 col-data">[[partner.partner_type_slug]]
+              <span class="col-6 layout horizontal">
+                <span class="col-2 col-data">[[partner.partner_type_slug]]
                   <paper-tooltip>[[partner.partner_type]]</paper-tooltip>
                 </span>
-              <!-- </div> -->
-              <!-- <div class="col-4 layout horizontal"> -->
-                <span class="col-2 col-data">[[partner.shared_partner]]</span>
-                <span class="col-3 col-data">[[partner.type_of_assessment]]</span>
-              <!-- </div> -->
-              <!-- <div class="col-4 group layout horizontal"> -->
-                <span class="col-2 col-data">[[partner.rating]]</span>
-                <span class="col-1 col-data">
+                <span class="col-3 col-data">[[partner.shared_partner]]</span>
+                <span class="col-7 col-data">[[partner.type_of_assessment]]</span>
+              </span>
+              <span class="col-6 layout horizontal">
+                <span class="col-4 col-data">[[partner.rating]]</span>
+                <span class="col-2 col-data">
                   <div>
                     <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
                     <paper-tooltip hidden="[[!partner.flags.expiring_assessment_flag]]">Micro assessment is expiring soon</paper-tooltip>
@@ -290,8 +272,8 @@
                     <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment or audit report has not been submitted through the Auditor Portal</paper-tooltip>
                   </div>
                 </span>
-                <span class="col-3 col-data right padded">$0</span>
-              <!-- </div> -->
+                <span class="col-6 col-data right padded">$0</span>
+              </span>
             </div>
             <div class="col-6 layout horizontal">
               <div class="col-4 layout horizontal group">

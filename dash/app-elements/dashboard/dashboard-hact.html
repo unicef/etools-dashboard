@@ -54,15 +54,11 @@
         font-weight: 500;
       }
 
-      .year-dropdown {
-        max-width: 150px;
-        padding-left: 20px;
-      }
-
-      .year-and-toggles {
+      .view-toggle {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
+        padding-bottom: 10px;
       }
 
       paper-button.curved-left {
@@ -101,20 +97,15 @@
     <partners-data id="partners" filtered-partners="{{filteredPartners}}" total-results="{{totalResults}}" totals="{{totals}}"
       filtered-total-results="{{filteredTotalResults}}" active="[[active]]" fire-data-loaded show-loading on-partners-loaded="_requiredDataHasBeenLoaded">
     </partners-data>
-    <div class="year-and-toggles">
-      <div class="year-dropdown">
-        <etools-dropdown label="Year" options="[[availableYears]]" dropdown-value="2017"></etools-dropdown>
-      </div>
-      <div>
-        <paper-button id="assurancePlan" on-tap="_toggleChartsView" noink class="curved-left">
-          <iron-icon class="dark" icon="list"></iron-icon>
-          ASSURANCE PLAN
-        </paper-button>
-        <paper-button id="dashboardCharts" on-tap="_toggleChartsView" noink class="curved-right">
-          <iron-icon class="dark" icon="assessment"></iron-icon>
-          DASHBOARD
-        </paper-button>
-      </div>
+    <div class="view-toggle">
+      <paper-button id="assurancePlan" on-tap="_toggleChartsView" noink class="curved-left">
+        <iron-icon class="dark" icon="list"></iron-icon>
+        ASSURANCE PLAN
+      </paper-button>
+      <paper-button id="dashboardCharts" on-tap="_toggleChartsView" noink class="curved-right">
+        <iron-icon class="dark" icon="assessment"></iron-icon>
+        DASHBOARD
+      </paper-button>
     </div>
     <iron-pages id="hactPages"
                 selected="[[name]]"
@@ -168,17 +159,17 @@
                               on-page-number-changed="pageNumberChanged">
             </dashboard-hact-detail>
           </div>
-        </iron-pages>
+          <paper-material>
+          </iron-pages>
+          <data-table-footer page-size="[[pageSize]]" page-number="[[pageNumber]]" visible-range="{{visibleRange}}" filtered-total-results="[[filteredTotalResults]]"
+            on-page-size-changed="pageSizeChanged" on-page-number-changed="pageNumberChanged">
+          </data-table-footer>
+        </paper-material>
       </div>
       <div name="hact-dashboard">
         <dashboard-hact-charts></dashboard-hact-charts>
       </div>
     </iron-pages>
-    <paper-material>
-      <data-table-footer page-size="[[pageSize]]" page-number="[[pageNumber]]" visible-range="{{visibleRange}}" filtered-total-results="[[filteredTotalResults]]"
-        on-page-size-changed="pageSizeChanged" on-page-number-changed="pageNumberChanged">
-      </data-table-footer>
-    </paper-material>
   </template>
   <script>
     (function () {

@@ -111,15 +111,12 @@
         _computeTotals: function(results) {
           let _flattenObject = (ob) => {
             let toReturn = {};
-            
             for (let i in ob) {
               if (!ob.hasOwnProperty(i)) continue;
-              
               if ((typeof ob[i]) == 'object') {
                 let flatObject = _flattenObject(ob[i]);
                 for (let x in flatObject) {
                   if (!flatObject.hasOwnProperty(x)) continue;
-                  
                   toReturn[i + '_' + x] = flatObject[x];
                 }
               } else {

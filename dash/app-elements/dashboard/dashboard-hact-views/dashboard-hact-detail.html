@@ -168,6 +168,13 @@
       .partner-link {
         cursor: pointer;
       }
+
+      .name {
+        white-space: normal !important; 
+        flex-wrap: wrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     </style>
 
     <paper-material id="detail-list" class="hact-list" elevation="1">
@@ -334,8 +341,8 @@
         <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
           <data-table-row no-collapse>
             <div slot="row-data">
-              <div class="col-2 sticky-col col-data">
-                <span class="col-12 partner-link">
+              <div class="col-2 sticky-col layout horizontal">
+                <span class="col-12 col-data partner-link name padded">
                   <a on-tap="_goToPage" id="[[partner.id]]">
                     [[partner.name]]
                     <paper-tooltip>[[partner.name]]</paper-tooltip>
