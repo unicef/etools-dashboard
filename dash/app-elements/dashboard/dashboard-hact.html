@@ -37,6 +37,14 @@
         min-width: 1150px;
       }
 
+      .detail-btn {
+        height: 20px;
+      }
+
+      paper-material.detail-btn {
+        padding-top: 0;
+      }
+
       .search-bar {
         padding-bottom: 8px;
         padding-top: 8px;
@@ -121,7 +129,7 @@
           </div>
         </paper-material>
 
-        <paper-material class="hact-list" elevation="1">
+        <paper-material class="hact-list detail-btn" elevation="1">
           <div id="center-toggle">
             <paper-button on-tap="_detailToggle" id="toggle" class="detailed-assurance" noink>
               <a>SHOW DETAILED ASSURANCE</a>
@@ -138,12 +146,7 @@
                               filtered-partners="[[filteredPartners]]" 
                               totals="[[totals]]" 
                               total-results="[[totalResults]]"
-                              page-size="[[pageSize]]"
-                              page-number="[[pageNumber]]"
-                              visible-range="{{visibleRange}}"
-                              filtered-total-results="[[filteredTotalResults]]"
-                              on-page-size-changed="pageSizeChanged"
-                              on-page-number-changed="pageNumberChanged">
+                              filtered-total-results="[[filteredTotalResults]]">
             </dashboard-hact-general>
           </div>
           <div sub-name="hact-detail">
@@ -151,12 +154,7 @@
                               filtered-partners="[[filteredPartners]]" 
                               totals="[[totals]]" 
                               total-results="[[totalResults]]"
-                              page-size="[[pageSize]]"
-                              page-number="[[pageNumber]]"
-                              visible-range="{{visibleRange}}"
-                              filtered-total-results="[[filteredTotalResults]]"
-                              on-page-size-changed="pageSizeChanged"
-                              on-page-number-changed="pageNumberChanged">
+                              filtered-total-results="[[filteredTotalResults]]">
             </dashboard-hact-detail>
           </div>
           <paper-material>

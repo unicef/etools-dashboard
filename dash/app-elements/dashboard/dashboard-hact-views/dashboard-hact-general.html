@@ -117,16 +117,11 @@
         align-items: center;
       }
 
-      .partner-link {
-        overflow: hidden;
-        cursor: pointer;
-      }
-
       .name {
-        white-space: normal !important; 
-        flex-wrap: wrap;
+        white-space: nowrap; 
+        cursor: pointer;
         overflow: hidden;
-        text-overflow: ellipsis;
+        text-overflow: ellipsis
       }
     </style>
 
@@ -204,7 +199,7 @@
       <data-table-row class="totals" no-collapse>
         <div slot="row-data">
           <div class="col-2 layout horizontal">
-            <span class="col-12 col-data partner-link padded vertical fixed">
+            <span class="col-12 col-data padded vertical fixed">
               Total of [[totalResults]] IPs
             </span>
           </div>
@@ -245,7 +240,7 @@
         <data-table-row no-collapse>
           <div slot="row-data">
             <div class="col-2 layout horizontal">
-              <span class="col-12 col-data partner-link name padded fixed">
+              <span class="col-12 col-data name padded fixed">
                 <a on-tap="_goToPage" id="[[partner.id]]">
                   [[partner.name]]
                   <paper-tooltip>[[partner.name]]</paper-tooltip>

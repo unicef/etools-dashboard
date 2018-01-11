@@ -42,7 +42,6 @@
       }
       etools-dropdown {
         max-width: 100px;
-        /* padding-left: 20px; */
       }
     </style>
 
@@ -62,7 +61,14 @@
             </h1>
             <div class="top-content-actions-wrapper">
               <div class="top-content-action">
-                <etools-dropdown id="exportYear" label="Year" options="[[availableYears]]" on-iron-select="_check" selected=" " hide-search hidden$="[[!_isActive(partnershipPage, 'hact')]]"></etools-dropdown>
+                <etools-dropdown 
+                            id="exportYear" 
+                            label="Export Year" 
+                            options="[[availableYears]]" 
+                            on-iron-select="_setExportYear"
+                            dropdown-value="/api/v2/partners/hact?&format=csv" 
+                            hide-search hidden$="[[!_isActive(partnershipPage, 'hact')]]">
+                </etools-dropdown>
               </div>
               <div class="top-content-action" hidden$="[[!hactActive]]">
                 <a target="_blank" href="[[exportUrl]]">
@@ -165,22 +171,13 @@
         pageTitle: {
           type: String
         },
-        csvUrl: {
-          type: String,
-          notify: true,
-          reflectToAttribute: true,
-          observer: "_updateCsvUrl"
-        },
         availableYears: {
           type: Array,
           value: [
             {label: '2017', value: '/api/v2/hact/history/?year=2017&format=csv'},
-            {label: '2018', value: ''}
+            {label: '2018', value: '/api/v2/partners/hact?&format=csv'}
           ]
         },
-        // exportUrl: {
-        //   type: String,
-        // }
       },
       behaviors: [
         etoolsAppConfig.globals,
@@ -202,17 +199,13 @@
           this.fire('update-main-path', {path: this.route.path}, {bubbles: false});
         }.bind(this), 50);
       },
-      _updateCsvUrl: function() {
-        debugger
-        this.availableYears[1].value = this.csvUrl
-      },
       _isActive: function(page, tab) {
         return _.isEqual(page, tab);
       },
       _goToAddTrip: function() {
         window.location.href = this.baseSite +'/t2f/edit-travel/-1';
       },
-      _check: function() {
+      _setExportYear: function() {
         this.exportUrl = event.target.dropdownValue
       },
     });

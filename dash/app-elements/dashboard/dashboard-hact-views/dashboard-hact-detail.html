@@ -39,7 +39,7 @@
       }
 
       .detail-list {
-        min-width: 1850px;
+        min-width: 1800px;
       }
 
       .narrow-col {
@@ -81,14 +81,7 @@
         align-items: flex-end;
       }
 
-      /* .quarter-border {
-        border-left: 1px solid rgb(227, 227, 227);
-        box-sizing: border-box;
-      } */
-
       .quarter-item {
-        /* align-items: center;
-        justify-content: center; */
         border-left: 1px solid rgba(0, 0, 0, 0.24);
         box-sizing: border-box;
       }
@@ -103,7 +96,6 @@
         @apply(--layout-horizontal);
         @apply(--layout-center);
       }
-
 
       data-table-row.totals {
         --primary-background-color: var(--medium-theme-background-color);
@@ -165,15 +157,11 @@
         padding-right: 4px;
       }
 
-      .partner-link {
-        cursor: pointer;
-      }
-
       .name {
-        white-space: normal !important; 
-        flex-wrap: wrap;
+        white-space: nowrap; 
         overflow: hidden;
         text-overflow: ellipsis;
+        cursor: pointer;
       }
     </style>
 
@@ -293,7 +281,7 @@
               <div class="col-8 layout horizontal">
                 <div class="col-3 nowrap monetary vertical right-side">$[[currencyFormat(totals.total_ct_cy)]]</div>
                 <div class="col-3 vertical right-side quarters">
-                  <span class="col-3">[[totals.hact_values_programmatic_visits_planned_q1]]</span>
+                  <span class="col-3">[[totals.hact_values_programmatic_visits_planned_total]]</span>
                   <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q2]]</span>
                   <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q3]]</span>
                   <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q4]]</span>
@@ -342,7 +330,7 @@
           <data-table-row no-collapse>
             <div slot="row-data">
               <div class="col-2 sticky-col layout horizontal">
-                <span class="col-12 col-data partner-link name padded">
+                <span class="col-12 col-data name padded">
                   <a on-tap="_goToPage" id="[[partner.id]]">
                     [[partner.name]]
                     <paper-tooltip>[[partner.name]]</paper-tooltip>
@@ -367,7 +355,7 @@
                 <div class="col-8 layout horizontalr">
                   <span class="col-3 nowrap monetary right-side vertical">$[[currencyFormat(partner.total_ct_cy)]]</span>
                   <span class="col-3 nowrap vertical right-side">
-                    <span class="col-3">[[partner.hact_values.programmatic_visits.planned.q1]]</span>
+                    <span class="col-3">[[partner.hact_values.programmatic_visits.planned.total]]</span>
                     <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits.planned.q2]]</span>
                     <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits.planned.q3]]</span>
                     <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits.planned.q4]]</span>
