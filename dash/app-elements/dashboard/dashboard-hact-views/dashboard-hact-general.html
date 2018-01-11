@@ -44,6 +44,10 @@
         padding-right: 4px;
       }
 
+      .padding-right-10 {
+        padding-right: 10px;
+      }
+
       .group {
         box-sizing: border-box;
       }
@@ -70,6 +74,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
+      }
+
+      .monetary {
+        text-align: right;
+        justify-content: flex-end !important;
       }
 
       .vertical {
@@ -121,7 +130,7 @@
         white-space: nowrap; 
         cursor: pointer;
         overflow: hidden;
-        text-overflow: ellipsis
+        text-overflow: ellipsis;
       }
     </style>
 
@@ -129,7 +138,7 @@
       <!-- row of table headers -->
       <data-table-header no-collapse>
         <data-table-column class="col-2 layout horizontal" group-heading="blank" transparent>
-          <data-table-column class="col-12 nowrap vertical padded fixed" id="name" sortable>
+          <data-table-column class="col-12 nowrap vertical padding-right-10 fixed" id="name" sortable>
             IP Name
           </data-table-column>
         </data-table-column>
@@ -153,7 +162,7 @@
             <data-table-column class="col-2 vertical nowrap padded" id="hact_values.planned_cash_transfer">
               Flags
             </data-table-column>
-            <data-table-column class="col-6 right vertical padded nowrap" id="total_ct_cy">
+            <data-table-column class="col-6 right vertical padding-right-10 nowrap" id="total_ct_cy">
               Cash Transfers <br>
               1 JAN - 31 DEC
             </data-table-column>
@@ -188,7 +197,7 @@
             <data-table-column class="col-4 vertical center right-side" id="hact_values.audits_done">
               Completed
             </data-table-column>
-            <data-table-column class="col-4 vertical right-side">
+            <data-table-column class="col-4 vertical monetary right-side">
               Outstanding <br> Findings
             </data-table-column>
           </data-table-column>
@@ -199,7 +208,7 @@
       <data-table-row class="totals" no-collapse>
         <div slot="row-data">
           <div class="col-2 layout horizontal">
-            <span class="col-12 col-data padded vertical fixed">
+            <span class="col-12 col-data padding-right-10 vertical fixed">
               Total of [[totalResults]] IPs
             </span>
           </div>
@@ -212,7 +221,7 @@
             <span class="col-6 layout horizontal">
               <span class="col-4 col-data vertical"></span>
               <span class="col-2 col-data vertical"></span>
-              <span class="col-6 col-data padded right">$0</span>
+              <span class="col-6 col-data padding-right-10 right">$0</span>
             </span>
           </div>
           <div class="col-6 layout horizontal">
@@ -230,7 +239,7 @@
             <div class="col-5 layout horizontal group">
               <span class="col-4 right-side">[[totals.hact_values_audits_minimum_requirements]]</span>
               <span class="col-4 right-side">[[totals.hact_values_audits_completed]]</span>
-              <span class="col-4 right-side">[[totals.outstanding_findings]]</span>
+              <span class="col-4 monetary right-side">$[[totals.outstanding_findings]]</span>
             </div>
           </div>
         </div>
@@ -240,7 +249,7 @@
         <data-table-row no-collapse>
           <div slot="row-data">
             <div class="col-2 layout horizontal">
-              <span class="col-12 col-data name padded fixed">
+              <span class="col-12 col-data name padding-right-10 fixed">
                 <a on-tap="_goToPage" id="[[partner.id]]">
                   [[partner.name]]
                   <paper-tooltip>[[partner.name]]</paper-tooltip>
@@ -267,7 +276,7 @@
                     <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment or audit report has not been submitted through the Auditor Portal</paper-tooltip>
                   </div>
                 </span>
-                <span class="col-6 col-data right padded">$0</span>
+                <span class="col-6 col-data right padding-right-10">$0</span>
               </span>
             </div>
             <div class="col-6 layout horizontal">
@@ -278,14 +287,14 @@
               </div>
               <div class="col-3 layout horizontal group">
                 <span class="col-half right-side buffer"></span>
-                <span class="col-5 col-data right-side">[[partner.hact_min_requirements.spot_checks]]</span>
+                <span class="col-5 col-data right-side">[[_convertBinaryToYes(partner.hact_min_requirements.spot_checks)]]</span>
                 <span class="col-6 col-data right-side">[[partner.hact_values.spot_checks.completed.total]]</span>
                 <span class="col-half right-side buffer"></span>
               </div>
               <div class="col-5 layout horizontal group">
                 <span class="col-4 col-data right-side">[[partner.hact_values.audits.minimum_requirements]]</span>
                 <span class="col-4 col-data right-side">[[partner.hact_values.audits.completed]]</span>
-                <span class="col-4 right right-side">[[partner.outstanding_findings]]</span>
+                <span class="col-4 monetary right-side">$[[partner.outstanding_findings]]</span>
               </div>
             </div>
           </div>
@@ -309,6 +318,10 @@
             type: Array,
             notify: true
           },
+        },
+
+        _convertBinaryToYes: function(value) {
+          return value === 1 ? "Yes" : "-"
         },
 
         _getGovernmentDisplay: function(partner, prop, toCurrency) {

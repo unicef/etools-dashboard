@@ -86,6 +86,10 @@
         box-sizing: border-box;
       }
 
+      .padding-right-10 {
+        padding-right: 10px;
+      }
+
       .right-side {
         text-align: center;
         border-left: 1px solid rgba(0, 0, 0, 0.24);
@@ -154,7 +158,6 @@
       .monetary {
         text-align: right;
         justify-content: flex-end !important;
-        padding-right: 4px;
       }
 
       .name {
@@ -169,8 +172,8 @@
       <div id="detail-table" class="detail-list">
         <!-- row of table headers -->
         <data-table-header no-collapse>
-          <data-table-column class="col-2 layout horizontal sticky-col" group-heading="blank" transparent>
-            <data-table-column class="col-12 layout horizontal" id="name" sortable>
+          <data-table-column class="col-2 layout horizontal" group-heading="blank" transparent>
+            <data-table-column class="col-12 layout padding-right-10 horizontal" id="name" sortable>
               IP Name
             </data-table-column>
           </data-table-column>
@@ -182,13 +185,13 @@
               <data-table-column class="col-2 vertical nowrap" id="hact_values.planned_cash_transfer">
                 Flags
               </data-table-column>
-              <data-table-column class="col-6 monetary vertical border-box nowrap" id="total_ct_cy">
+              <data-table-column class="col-6 monetary vertical padding-right-10 border-box nowrap" id="total_ct_cy">
                 Cash Transfers <br>
                 1 JAN - 31 DEC
               </data-table-column>
             </data-table-column>
             <data-table-column class="col-8 nowrap" group-heading="PROGRAMMATIC VISITS">
-              <data-table-column class="col-3 vertical monetary horizontal right-side">
+              <data-table-column class="col-3 vertical monetary padding-right-10 horizontal right-side">
                 Cash Transfers <br>
                 1 OCT - 30 SEP
               </data-table-column>
@@ -267,8 +270,8 @@
         <!--Row of Totals-->
         <data-table-row class="totals" no-collapse>
           <div slot="row-data">
-            <div class="col-2 sticky-col col-data layout horizontal">
-              <div class="col-12 vertical">
+            <div class="col-2 col-data layout horizontal">
+              <div class="col-12 vertical padding-right-10">
                 Total of [[totalResults]] IPs
               </div>
             </div>
@@ -276,10 +279,10 @@
               <div class="col-4 layout horizontal">
                 <div class="col-4 nowrap vertical"></div>
                 <div class="col-2 nowrap vertical"></div>
-                <div class="col-6 monetary nowrap border-box vertical">$0</div>
+                <div class="col-6 monetary padding-right-10 nowrap border-box vertical">$0</div>
               </div>
               <div class="col-8 layout horizontal">
-                <div class="col-3 nowrap monetary vertical right-side">$[[currencyFormat(totals.total_ct_cy)]]</div>
+                <div class="col-3 nowrap monetary vertical padding-right-10 right-side">$[[currencyFormat(totals.total_ct_cy)]]</div>
                 <div class="col-3 vertical right-side quarters">
                   <span class="col-3">[[totals.hact_values_programmatic_visits_planned_total]]</span>
                   <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q2]]</span>
@@ -298,7 +301,7 @@
             <div class="col-5 layout horizontal">
               <div class="col-8 layout horizontal">
                 <div class="col-half buffer"></div>
-                <div class="col-2 right-side right monetary vertical">$[[totals.liquidations]]</div>
+                <div class="col-2 right-side right padding-right-10 monetary vertical">$[[totals.liquidations]]</div>
                 <div class="col-6 layout horizontal">
                   <div class="col-6 right-side right vertical">
                     <span class="col-3">[[totals.hact_values_spot_checks_planned_q1]]</span>
@@ -329,8 +332,8 @@
         <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
           <data-table-row no-collapse>
             <div slot="row-data">
-              <div class="col-2 sticky-col layout horizontal">
-                <span class="col-12 col-data name padded">
+              <div class="col-2 layout horizontal">
+                <span class="col-12 padding-right-10 col-data name padded">
                   <a on-tap="_goToPage" id="[[partner.id]]">
                     [[partner.name]]
                     <paper-tooltip>[[partner.name]]</paper-tooltip>
@@ -350,10 +353,10 @@
                       <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment or audit report has not been submitted through the Auditor Portal</paper-tooltip>
                     </div>
                   </span>
-                  <span class="col-6 monetary nowrap border-box vertical">$0</span>
+                  <span class="col-6 monetary padding-right-10 nowrap border-box vertical">$0</span>
                 </div>
                 <div class="col-8 layout horizontalr">
-                  <span class="col-3 nowrap monetary right-side vertical">$[[currencyFormat(partner.total_ct_cy)]]</span>
+                  <span class="col-3 nowrap monetary padding-right-10 right-side vertical">$[[currencyFormat(partner.total_ct_cy)]]</span>
                   <span class="col-3 nowrap vertical right-side">
                     <span class="col-3">[[partner.hact_values.programmatic_visits.planned.total]]</span>
                     <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits.planned.q2]]</span>
@@ -372,7 +375,7 @@
               <div class="col-5 layout horizontal">
                 <div class="col-8 layout horizontal"> 
                   <span class="col-half buffer"></span>
-                  <span class="col-2 right-side monetary vertical">$[[partner.hact_values.spot_checks.liquidations]]</span>
+                  <span class="col-2 right-side padding-right-10 monetary vertical">$[[partner.hact_values.spot_checks.liquidations]]</span>
                   <div class="col-6 layout horizontal">
                     <span class="col-6 right-side vertical">
                       <span class="col-3">[[partner.hact_values.spot_checks.planned.q1]]</span>
@@ -380,7 +383,7 @@
                       <span class="col-3 quarter-border">[[partner.hact_values.spot_checks.planned.q3]]</span>
                       <span class="col-3 quarter-border">[[partner.hact_values.spot_checks.planned.q4]]</span>
                     </span>
-                    <span class="col-3 right-side vertical">[[partner.hact_min_requirements.spot_checks]]</span>
+                    <span class="col-3 right-side vertical">[[_convertBinaryToYes(partner.hact_min_requirements.spot_checks)]]</span>
                     <span class="col-3 right-side vertical">[[partner.hact_values.spot_checks.follow_up_required]]</span>
                   </div>
                   <span class="col-3 right-side vertical">
@@ -422,6 +425,10 @@
           totals: {
             type: Array,
           },
+        },
+
+        _convertBinaryToYes: function(value) {
+          return value === 1 ? "Yes" : "-"
         },
 
         _getGovernmentDisplay: function (partner, prop, toCurrency) {
