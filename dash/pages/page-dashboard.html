@@ -3,6 +3,9 @@
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
 
 <link rel="import" href="../app-elements/page-header/page-header.html">
 <link rel="import" href="../app-elements/page-footer/page-footer.html">
@@ -29,6 +32,17 @@
       :host {
         display: block;
       }
+      .top-content-actions-wrapper {
+        display: flex;
+        align-items: flex-end;
+        height: 32px;
+      }
+      .top-content-action paper-button {
+        padding-bottom: 4px
+      }
+      etools-dropdown {
+        max-width: 100px;
+      }
     </style>
 
     <app-route
@@ -46,19 +60,21 @@
               [[pageTitle]]
             </h1>
             <div class="top-content-actions-wrapper">
-              <div class="top-content-action" hidden$="[[exportHidden]]">
-                <a target="_blank" href="/api/v2/hact/history/?year=2017&format=csv">
-                    <paper-button>
-                      <iron-icon icon="file-download"></iron-icon>
-                      Export 2017 Data
-                    </paper-button>
-                </a>
+              <div class="top-content-action">
+                <etools-dropdown 
+                            id="exportYear" 
+                            label="Export Year" 
+                            options="[[availableYears]]" 
+                            on-iron-select="_setExportYear"
+                            dropdown-value="/api/v2/partners/hact?&format=csv" 
+                            hide-search hidden$="[[!_isActive(partnershipPage, 'hact')]]">
+                </etools-dropdown>
               </div>
               <div class="top-content-action" hidden$="[[!hactActive]]">
-                <a target="_blank" href="[[csvUrl]]">
+                <a target="_blank" href="[[exportUrl]]">
                   <paper-button>
                     <iron-icon icon="file-download"></iron-icon>
-                    Export Current
+                    Export
                   </paper-button>
                 </a>
               </div>
@@ -155,10 +171,13 @@
         pageTitle: {
           type: String
         },
-        exportHidden: {
-          type: Boolean,
-          value: false
-        }
+        availableYears: {
+          type: Array,
+          value: [
+            {label: '2017', value: '/api/v2/hact/history/?year=2017&format=csv'},
+            {label: '2018', value: '/api/v2/partners/hact?&format=csv'}
+          ]
+        },
       },
       behaviors: [
         etoolsAppConfig.globals,
@@ -171,7 +190,6 @@
       _pageChanged: function(dashTab) {
         this.set('partnershipPage', dashTab);
         dashTab === 'partnerships' ? this.set('pageTitle', 'CSO Dashboard') : this.set('pageTitle', 'Dashboard');
-        dashTab === 'hact' ? this.exportHidden = false : this.exportHidden = true
       },
       _updateUrlTab: function(tab) {
         if (!tab) {
@@ -186,8 +204,10 @@
       },
       _goToAddTrip: function() {
         window.location.href = this.baseSite +'/t2f/edit-travel/-1';
-      }
-
+      },
+      _setExportYear: function() {
+        this.exportUrl = event.target.dropdownValue
+      },
     });
 
   </script>

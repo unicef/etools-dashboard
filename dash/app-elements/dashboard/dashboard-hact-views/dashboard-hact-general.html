@@ -117,34 +117,36 @@
         align-items: center;
       }
 
-      .partner-link {
-        overflow: hidden;
+      .name {
+        white-space: nowrap; 
         cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis
       }
     </style>
 
     <paper-material id="list" class="hact-list" elevation="1">
       <!-- row of table headers -->
       <data-table-header no-collapse>
-        <data-table-column class="col-6 layout horizontal" group-heading="blank" transparent>
-          <div class="col-4 layout horizontal">
-            <data-table-column class="col-9 nowrap vertical padded fixed" id="name" sortable>
-              IP Name
+        <data-table-column class="col-2 layout horizontal" group-heading="blank" transparent>
+          <data-table-column class="col-12 nowrap vertical padded fixed" id="name" sortable>
+            IP Name
+          </data-table-column>
+        </data-table-column>
+        <data-table-column class="col-4 layout horizontal" group-heading="blank" transparent>
+          <div class="col-6 layout horizontal">
+            <data-table-column class="col-2 nowrap vertical padded" id="partner_type">
+              IP <br> Type
             </data-table-column>
-            <data-table-column class="col-3 nowrap vertical padded" id="partner_type">
-              IP Type
-            </data-table-column>
-          </div>
-          <div class="col-4 layout horizontal">
             <data-table-column class="col-3 vertical nowrap" id="shared_partner">
               Shared <br>
               IP
             </data-table-column>
-            <data-table-column class="col-9 vertical nowrap" id="assessment_type">
+            <data-table-column class="col-7 vertical nowrap padded" id="assessment_type">
               Assessment Type
             </data-table-column>
           </div>
-          <div class="col-4 group layout horizontal">
+          <div class="col-6 layout horizontal">
             <data-table-column class="col-4 vertical nowrap padded" id="total_ct_cp">
               Risk Rating
             </data-table-column>
@@ -153,7 +155,7 @@
             </data-table-column>
             <data-table-column class="col-6 right vertical padded nowrap" id="total_ct_cy">
               Cash Transfers <br>
-              1 Jan - 31 Dec
+              1 JAN - 31 DEC
             </data-table-column>
           </div>
         </data-table-column>
@@ -196,38 +198,38 @@
       <!--Row of Totals-->
       <data-table-row class="totals" no-collapse>
         <div slot="row-data">
-          <div class="col-6 layout horizontal">
-            <div class="col-4 layout horizontal group">
-              <span class="col-9 col-data partner-link padded vertical fixed">
-                Total of [[totalResults]] IPs
-              </span>
-              <span class="col-3 col-data vertical"></span>
-            </div>
-            <div class="col-4 layout horizontal group">
+          <div class="col-2 layout horizontal">
+            <span class="col-12 col-data padded vertical fixed">
+              Total of [[totalResults]] IPs
+            </span>
+          </div>
+          <div class="col-4 layout horizontal">
+            <span class="col-6 layout horizontal">
+              <span class="col-2 col-data vertical"></span>
               <span class="col-3 col-data vertical">[[totals.shared_partner]]</span>
-              <span class="col-9 col-data vertical"></span>
-            </div>
-            <div class="col-4 layout horizontal group">
-                <span class="col-4 col-data vertical"></span>
-                <span class="col-2 col-data vertical"></span>
-                <span class="col-6 col-data padded right">$0</span>
-            </div>
+              <span class="col-7 col-data vertical"></span>
+            </span>
+            <span class="col-6 layout horizontal">
+              <span class="col-4 col-data vertical"></span>
+              <span class="col-2 col-data vertical"></span>
+              <span class="col-6 col-data padded right">$0</span>
+            </span>
           </div>
           <div class="col-6 layout horizontal">
             <div class="col-4 layout horizontal group">
-              <span class="col-4 right-side">[[totals.programmatic_visits_planned_total]]</span>
-              <span class="col-4 right-side">[[totals.programme_visits]]</span>
-              <span class="col-4 right-side">[[totals.programmatic_visits_completed_total]]</span>
+              <span class="col-4 right-side">[[totals.hact_values_programmatic_visits_planned_total]]</span>
+              <span class="col-4 right-side">[[totals.hact_min_requirements_programme_visits]]</span>
+              <span class="col-4 right-side">[[totals.hact_values_programmatic_visits_completed_total]]</span>
             </div>
             <div class="col-3 layout horizontal group">
               <span class="col-half right-side"></span>
-              <span class="col-5 right-side">[[totals.mr_spot_checks]]</span>
-              <span class="col-6 right-side">[[totals.spot_checks_completed_total]]</span>
+              <span class="col-5 right-side">[[totals.hact_min_requirements_spot_checks]]</span>
+              <span class="col-6 right-side">[[totals.hact_values_spot_checks_completed_total]]</span>
               <span class="col-half right-side"></span>
             </div>
             <div class="col-5 layout horizontal group">
-              <span class="col-4 right-side">[[totals.audits_mr]]</span>
-              <span class="col-4 right-side">[[totals.audits_completed]]</span>
+              <span class="col-4 right-side">[[totals.hact_values_audits_minimum_requirements]]</span>
+              <span class="col-4 right-side">[[totals.hact_values_audits_completed]]</span>
               <span class="col-4 right-side">[[totals.outstanding_findings]]</span>
             </div>
           </div>
@@ -237,23 +239,23 @@
       <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
         <data-table-row no-collapse>
           <div slot="row-data">
-            <div class="col-6 layout horizontal">
-              <div class="col-4 layout horizontal">
-                <span class="col-9 col-data partner-link padded fixed">
-                  <a on-tap="_goToPage" id="[[partner.id]]">
-                    [[partner.name]]
-                    <paper-tooltip>[[partner.name]]</paper-tooltip>
-                  </a>
-                </span>
-                <span class="col-3 col-data">[[partner.partner_type_slug]]
+            <div class="col-2 layout horizontal">
+              <span class="col-12 col-data name padded fixed">
+                <a on-tap="_goToPage" id="[[partner.id]]">
+                  [[partner.name]]
+                  <paper-tooltip>[[partner.name]]</paper-tooltip>
+                </a>
+              </span>
+            </div>
+            <div class="col-4 layout horizontal">
+              <span class="col-6 layout horizontal">
+                <span class="col-2 col-data">[[partner.partner_type_slug]]
                   <paper-tooltip>[[partner.partner_type]]</paper-tooltip>
                 </span>
-              </div>
-              <div class="col-4 layout horizontal">
                 <span class="col-3 col-data">[[partner.shared_partner]]</span>
-                <span class="col-9 col-data">[[partner.type_of_assessment]]</span>
-              </div>
-              <div class="col-4 group layout horizontal">
+                <span class="col-7 col-data">[[partner.type_of_assessment]]</span>
+              </span>
+              <span class="col-6 layout horizontal">
                 <span class="col-4 col-data">[[partner.rating]]</span>
                 <span class="col-2 col-data">
                   <div>
@@ -266,7 +268,7 @@
                   </div>
                 </span>
                 <span class="col-6 col-data right padded">$0</span>
-              </div>
+              </span>
             </div>
             <div class="col-6 layout horizontal">
               <div class="col-4 layout horizontal group">
@@ -283,15 +285,12 @@
               <div class="col-5 layout horizontal group">
                 <span class="col-4 col-data right-side">[[partner.hact_values.audits.minimum_requirements]]</span>
                 <span class="col-4 col-data right-side">[[partner.hact_values.audits.completed]]</span>
-                <span class="col-4 right-side">[[partner.outstanding_findings]]</span>
+                <span class="col-4 right right-side">[[partner.outstanding_findings]]</span>
               </div>
             </div>
           </div>
         </data-table-row>
       </template>
-      <data-table-footer page-size="[[pageSize]]" page-number="[[pageNumber]]" visible-range="{{visibleRange}}" filtered-total-results="[[filteredTotalResults]]"
-        on-page-size-changed="pageSizeChanged" on-page-number-changed="pageNumberChanged">
-      </data-table-footer>
     </paper-material>
   </template>
 
