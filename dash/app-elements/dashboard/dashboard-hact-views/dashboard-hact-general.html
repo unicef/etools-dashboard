@@ -36,6 +36,10 @@
         border-left: 1px solid rgba(0, 0, 0, 0.24);
       }
 
+      .align-center {
+        align-items: center;
+      }
+
       .nowrap {
         white-space: nowrap;
       }
@@ -63,6 +67,10 @@
       .hact-icon {
         --iron-icon-height: 12px;
         --iron-icon-width: 12px;
+      }
+
+      .padding-left-10 {
+        padding-left: 10px;
       }
 
       .right-side {
@@ -127,65 +135,69 @@
       }
 
       .name {
-        white-space: nowrap; 
+        /* flex-wrap: wrap;  */
+        white-space: normal;
         cursor: pointer;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+
+      .attempt {
+        white-space: normal;
+        overflow: hidden;
       }
     </style>
 
     <paper-material id="list" class="hact-list" elevation="1">
       <!-- row of table headers -->
       <data-table-header no-collapse>
-        <data-table-column class="col-2 layout horizontal" group-heading="blank" transparent>
+        <data-table-column class="col-3 layout horizontal" group-heading="blank" transparent>
           <data-table-column class="col-12 nowrap vertical padding-right-10 fixed" id="name" sortable>
             IP Name
           </data-table-column>
         </data-table-column>
         <data-table-column class="col-4 layout horizontal" group-heading="blank" transparent>
-          <div class="col-6 layout horizontal">
-            <data-table-column class="col-2 nowrap vertical padded" id="partner_type">
-              IP <br> Type
+          <div class="col-5 layout horizontal">
+            <data-table-column class="col-3 nowrap vertical padded" id="partner_type">
+              IP<br>Type
             </data-table-column>
             <data-table-column class="col-3 vertical nowrap" id="shared_partner">
-              Shared <br>
-              IP
+              Shared<br>IP
             </data-table-column>
-            <data-table-column class="col-7 vertical nowrap padded" id="assessment_type">
-              Assessment Type
+            <data-table-column class="col-6 vertical nowrap padding-left-10" id="assessment_type">
+              Assessment<br>Type
             </data-table-column>
           </div>
-          <div class="col-6 layout horizontal">
-            <data-table-column class="col-4 vertical nowrap padded" id="total_ct_cp">
+          <div class="col-7 layout horizontal">
+            <data-table-column class="col-4 vertical nowrap padding-left-10" id="total_ct_cp">
               Risk Rating
             </data-table-column>
-            <data-table-column class="col-2 vertical nowrap padded" id="hact_values.planned_cash_transfer">
+            <data-table-column class="col-2 vertical nowrap center" id="hact_values.planned_cash_transfer">
               Flags
             </data-table-column>
             <data-table-column class="col-6 right vertical padding-right-10 nowrap" id="total_ct_cy">
-              Cash Transfers <br>
-              1 JAN - 31 DEC
+              Cash Transfers<br>1 JAN-31 DEC
             </data-table-column>
           </div>
         </data-table-column>
-        <div class="col-6 layout horizontal">
+        <div class="col-5 layout horizontal">
           <data-table-column class="col-4 layout horizontal" group-heading="PROGRAMMATIC VISITS">
             <data-table-column class="col-4 nowrap vertical center right-side" id="hact_values.micro_assessment_needed">
               Planned
             </data-table-column>
-            <data-table-column class="col-4 nowrap vertical center right-side" id="rating">
-              Minimum <br> Required
+            <data-table-column class="col-3 nowrap vertical center right-side" id="rating">
+              MR
             </data-table-column>
-            <data-table-column class="col-4 vertical center right-side">
+            <data-table-column class="col-5 vertical center right-side">
               Completed
             </data-table-column>
           </data-table-column>
           <data-table-column class="col-3 layout horizontal" group-heading="SPOT CHECKS">
             <data-table-column class="col-half vertical center buffer right-side"></data-table-column>
-            <data-table-column class="col-5 vertical center right-side">
-              Minimum <br> Required
+            <data-table-column class="col-4 vertical center right-side">
+              MR
             </data-table-column>
-            <data-table-column class="col-6 vertical center right-side">
+            <data-table-column class="col-7 vertical center right-side">
               Completed
             </data-table-column>
             <data-table-column class="col-half vertical center buffer right-side"></data-table-column>
@@ -198,7 +210,7 @@
               Completed
             </data-table-column>
             <data-table-column class="col-4 vertical monetary right-side">
-              Outstanding <br> Findings
+              Outstanding<br>Findings
             </data-table-column>
           </data-table-column>
         </div>
@@ -207,33 +219,33 @@
       <!--Row of Totals-->
       <data-table-row class="totals" no-collapse>
         <div slot="row-data">
-          <div class="col-2 layout horizontal">
+          <div class="col-3 layout horizontal">
             <span class="col-12 col-data padding-right-10 vertical fixed">
               Total of [[totalResults]] IPs
             </span>
           </div>
           <div class="col-4 layout horizontal">
-            <span class="col-6 layout horizontal">
-              <span class="col-2 col-data vertical"></span>
+            <span class="col-5 layout horizontal">
+              <span class="col-3 col-data vertical"></span>
               <span class="col-3 col-data vertical">[[totals.shared_partner]]</span>
-              <span class="col-7 col-data vertical"></span>
+              <span class="col-6 col-data vertical"></span>
             </span>
-            <span class="col-6 layout horizontal">
-              <span class="col-4 col-data vertical"></span>
+            <span class="col-7 layout horizontal">
+              <span class="col-4 col-data vertical padding-left-10"></span>
               <span class="col-2 col-data vertical"></span>
               <span class="col-6 col-data padding-right-10 right">$0</span>
             </span>
           </div>
-          <div class="col-6 layout horizontal">
+          <div class="col-5 layout horizontal">
             <div class="col-4 layout horizontal group">
               <span class="col-4 right-side">[[totals.hact_values_programmatic_visits_planned_total]]</span>
-              <span class="col-4 right-side">[[totals.hact_min_requirements_programme_visits]]</span>
-              <span class="col-4 right-side">[[totals.hact_values_programmatic_visits_completed_total]]</span>
+              <span class="col-3 right-side">[[totals.hact_min_requirements_programme_visits]]</span>
+              <span class="col-5 right-side">[[totals.hact_values_programmatic_visits_completed_total]]</span>
             </div>
             <div class="col-3 layout horizontal group">
               <span class="col-half right-side"></span>
-              <span class="col-5 right-side">[[totals.hact_min_requirements_spot_checks]]</span>
-              <span class="col-6 right-side">[[totals.hact_values_spot_checks_completed_total]]</span>
+              <span class="col-4 right-side">[[totals.hact_min_requirements_spot_checks]]</span>
+              <span class="col-7 right-side">[[totals.hact_values_spot_checks_completed_total]]</span>
               <span class="col-half right-side"></span>
             </div>
             <div class="col-5 layout horizontal group">
@@ -248,7 +260,7 @@
       <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
         <data-table-row no-collapse>
           <div slot="row-data">
-            <div class="col-2 layout horizontal">
+            <div class="col-3 layout horizontal">
               <span class="col-12 col-data name padding-right-10 fixed">
                 <a on-tap="_goToPage" id="[[partner.id]]">
                   [[partner.name]]
@@ -257,16 +269,16 @@
               </span>
             </div>
             <div class="col-4 layout horizontal">
-              <span class="col-6 layout horizontal">
-                <span class="col-2 col-data">[[partner.partner_type_slug]]
+              <span class="col-5 layout horizontal align-center">
+                <span class="col-3 col-data">[[partner.partner_type_slug]]
                   <paper-tooltip>[[partner.partner_type]]</paper-tooltip>
                 </span>
                 <span class="col-3 col-data">[[partner.shared_partner]]</span>
-                <span class="col-7 col-data">[[partner.type_of_assessment]]</span>
+                <span class="col-6 attempt col-data padding-left-10">[[partner.type_of_assessment]]</span>
               </span>
-              <span class="col-6 layout horizontal">
-                <span class="col-4 col-data">[[partner.rating]]</span>
-                <span class="col-2 col-data">
+              <span class="col-7 layout horizontal align-center">
+                <span class="col-4 col-data padding-left-10">[[partner.rating]]</span>
+                <span class="col-2 col-data center">
                   <div>
                     <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
                     <paper-tooltip hidden="[[!partner.flags.expiring_assessment_flag]]">Micro assessment is expiring soon</paper-tooltip>
@@ -279,16 +291,16 @@
                 <span class="col-6 col-data right padding-right-10">$0</span>
               </span>
             </div>
-            <div class="col-6 layout horizontal">
+            <div class="col-5 layout horizontal">
               <div class="col-4 layout horizontal group">
                 <span class="col-4 col-data right-side">[[_getGovernmentDisplay(partner,'hact_values.programmatic_visits.planned.total')]]</span>
-                <span class="col-4 col-data right-side">[[partner.hact_min_requirements.programme_visits]]</span>
-                <span class="col-4 col-data right-side">[[partner.hact_values.programmatic_visits.completed.total]]</span>
+                <span class="col-3 col-data right-side">[[partner.hact_min_requirements.programme_visits]]</span>
+                <span class="col-5 col-data right-side">[[partner.hact_values.programmatic_visits.completed.total]]</span>
               </div>
               <div class="col-3 layout horizontal group">
                 <span class="col-half right-side buffer"></span>
-                <span class="col-5 col-data right-side">[[_convertBinaryToYes(partner.hact_min_requirements.spot_checks)]]</span>
-                <span class="col-6 col-data right-side">[[partner.hact_values.spot_checks.completed.total]]</span>
+                <span class="col-4 col-data right-side">[[_convertBinaryToYes(partner.hact_min_requirements.spot_checks)]]</span>
+                <span class="col-7 col-data right-side">[[partner.hact_values.spot_checks.completed.total]]</span>
                 <span class="col-half right-side buffer"></span>
               </div>
               <div class="col-5 layout horizontal group">
