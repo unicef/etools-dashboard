@@ -131,8 +131,8 @@
 
         <paper-material class="hact-list detail-btn" elevation="1">
           <div id="center-toggle">
-            <paper-button on-tap="_detailToggle" id="toggle" class="detailed-assurance" noink>
-              <a>SHOW DETAILED ASSURANCE</a>
+            <paper-button on-tap="_detailToggle" id="toggle" noink>
+              <a class="detailed-assurance">SHOW DETAILED ASSURANCE</a>
             </paper-button>
           </div>
         </paper-material>
@@ -322,9 +322,9 @@
           pages[1].selectNext()
           let button = Polymer.dom(this.root).querySelector(".detailed-assurance")
           if (!this.displayDetail) {
-            button.style.background = "rgb(236, 236, 236)"
+            button.innerText = "HIDE DETAILED ASSURANCE"
           } else {
-            button.style.background = "rgb(255, 255, 255)"
+            button.innerText = "SHOW DETAILED ASSURANCE"
           }
           this.displayDetail = !this.displayDetail
         },
