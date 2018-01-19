@@ -116,7 +116,7 @@
       </paper-button>
     </div>
     <iron-pages id="hactPages"
-                selected="[[name]]"
+                selected="{{hactPage}}"
                 attr-for-selected="name"
                 fallback-selection="hact-assurance">
       <div name="hact-assurance">
@@ -143,16 +143,16 @@
                     fallback-selection="hact-general">
           <div sub-name="hact-general">
             <dashboard-hact-general
-                              filtered-partners="[[filteredPartners]]" 
-                              totals="[[totals]]" 
+                              filtered-partners="[[filteredPartners]]"
+                              totals="[[totals]]"
                               total-results="[[totalResults]]"
                               filtered-total-results="[[filteredTotalResults]]">
             </dashboard-hact-general>
           </div>
           <div sub-name="hact-detail">
-            <dashboard-hact-detail 
-                              filtered-partners="[[filteredPartners]]" 
-                              totals="[[totals]]" 
+            <dashboard-hact-detail
+                              filtered-partners="[[filteredPartners]]"
+                              totals="[[totals]]"
                               total-results="[[totalResults]]"
                               filtered-total-results="[[filteredTotalResults]]">
             </dashboard-hact-detail>
@@ -165,7 +165,7 @@
         </paper-material>
       </div>
       <div name="hact-dashboard">
-        <dashboard-hact-charts></dashboard-hact-charts>
+        <dashboard-hact-charts active="[[_isActive(hactPage,'hact-dashboard')]]"></dashboard-hact-charts>
       </div>
     </iron-pages>
   </template>
@@ -215,6 +215,14 @@
             value: false
           },
           showDash: {
+            type: Boolean,
+            value: false
+          },
+          hactPage: {
+            type: String,
+            notify: true
+          },
+          graphsActive: {
             type: Boolean,
             value: false
           }
@@ -318,7 +326,9 @@
             button.style.background = "rgb(255, 255, 255)"
           }
           this.displayDetail = !this.displayDetail
-        }
+        },
+        _isActive: (current,target)=>current===target
+
       });
     })();
 
