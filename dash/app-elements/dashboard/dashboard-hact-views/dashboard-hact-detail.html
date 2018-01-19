@@ -39,7 +39,26 @@
       }
 
       .detail-list {
-        min-width: 1800px;
+        /* min-width: 1500px;
+        overflow-x: scroll;
+        overflow-y: visible; */
+        /* width: 250px; */
+        /* margin-left: 300px;
+        position: relative; */
+      }
+
+      .tester {
+        min-width: 1150px;
+        overflow-x: scroll;
+        overflow-y: visible;
+        /* width: 250px; */
+        margin-left: 300px;
+        position: relative;
+      }
+
+      .fixed {
+        position: absolute;
+        left: -50px;
       }
 
       .hact-icon {
@@ -184,10 +203,11 @@
     </style>
 
     <paper-material id="detail-list" class="hact-list" elevation="1">
+      <div class="tester">
       <div id="detail-table" class="detail-list">
         <!-- row of table headers -->
         <data-table-header no-collapse>
-          <data-table-column class="col-2 layout horizontal" group-heading="blank" transparent>
+          <data-table-column class="col-2 layout horizontal fixed" group-heading="blank" transparent>
             <data-table-column class="col-12 layout padding-right-10 horizontal" id="name" sortable>
               IP Name
             </data-table-column>
@@ -219,6 +239,7 @@
               </data-table-column>
               <data-table-column class="col-40-px nowrap vertical right-side" id="rating">
                 MR
+                <paper-tooltip>Minumum Requirement</paper-tooltip>
               </data-table-column>
               <data-table-column class="col-160-px vertical right-side quarter-heading">
                 Completed<br>
@@ -250,6 +271,7 @@
                 <!-- <div class="col-4 layout horizontal"> -->
                   <data-table-column class="col-40-px vertical right-side">
                     MR
+                    <paper-tooltip>Minumum Requirement</paper-tooltip>
                   </data-table-column>
                   <data-table-column class="col-75-px vertical right-side">
                     Follow-up<br>Required
@@ -286,7 +308,7 @@
         <!--Row of Totals-->
         <data-table-row class="totals" no-collapse>
           <div slot="row-data">
-            <div class="col-2 col-data layout horizontal">
+            <div class="col-2 col-data layout horizontal fixed">
               <div class="col-12 vertical padding-right-10">
                 Total of [[totalResults]] IPs
               </div>
@@ -351,7 +373,7 @@
         <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
           <data-table-row no-collapse>
             <div slot="row-data">
-              <div class="col-2 layout horizontal">
+              <div class="col-2 layout horizontal fixed">
                 <span class="col-12 padding-right-10 col-data name padded">
                   <a on-tap="_goToPage" id="[[partner.id]]">
                     [[partner.name]]
@@ -423,6 +445,7 @@
           </data-table-row>
         </template>
       </div>
+    </div>
     </paper-material>
   </template>
 
