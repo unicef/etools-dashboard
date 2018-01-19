@@ -321,11 +321,7 @@
           let pages = Polymer.dom(this.root).querySelectorAll("iron-pages")
           pages[1].selectNext()
           let button = Polymer.dom(this.root).querySelector(".detailed-assurance")
-          if (!this.displayDetail) {
-            button.innerText = "HIDE DETAILED ASSURANCE"
-          } else {
-            button.innerText = "SHOW DETAILED ASSURANCE"
-          }
+          button.innerText = !this.displayDetail ? "HIDE DETAILED ASSURANCE" : "SHOW DETAILED ASSURANCE"
           this.displayDetail = !this.displayDetail
         },
         _isActive: (current,target)=>current===target
