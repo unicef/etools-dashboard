@@ -5,6 +5,8 @@
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../app-config/etools-app-config.html">
+<link rel="import" href="../../../app-elements/static-common-data/redux-bahaviors/common-static-data-redux-bahavior.html">
+
 
 <link rel="import" href="../../../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../../../../bower_components/google-chart/google-chart-loader.html">
@@ -187,7 +189,7 @@
 
       <div class="layout column">
 
-        <div class="layout horizontal  ">
+        <div class="layout horizontal">
 
           <div class="component flex-1 layout horizontal center border-right border-bottom tuck-left-top prog-visits ">
             <div class="col-3 assurance-color">
@@ -219,31 +221,29 @@
         </div>
 
         <div class="layout horizontal">
-
           <div class="component  flex-1 layout horizontal center border-right tuck-left-bottom micro ">
             <div class="col-3 assurance-color">
               Micro <br> Assessments
             </div>
             <div class="flex-1 layout horizontal">
               <div class="assurance-data">
-                <div class="completed">[[fakeData.microAssessments.completed]]</div>
+                <div class="completed">[[chartData.assurance_activities.micro_assessment]]</div>
                 <div class="subheading assurance-color">Completed</div>
               </div>
               <div class="assurance-data">
-                <div class="completed">[[fakeData.microAssessments.missing]]</div>
+                <div class="completed">[[chartData.assurance_activities.missing_micro_assessment]]</div>
                 <div class="subheading assurance-color">Missing</div>
               </div>
             </div>
-
-
           </div>
+
           <div class="component flex-1 layout horizontal center ">
             <div class="col-3 assurance-color">
               Scheduled <br> Audits
             </div>
             <div class="flex-1 layout horizontal">
               <div class="assurance-data">
-                <div class="completed">[[fakeData.scheduledAudits.completed]]</div>
+                <div class="completed">[[chartData.assurance_activities.scheduled_audit]]</div>
                 <div class="subheading assurance-color">Completed</div>
               </div>
             </div>
@@ -252,7 +252,7 @@
             </div>
             <div class="flex-1 layout horizontal">
               <div class="assurance-data">
-                <div class="completed">[[fakeData.specialAudits.completed]]</div>
+                <div class="completed">[[chartData.assurance_activities.special_audit]]</div>
                 <div class="subheading assurance-color">Completed</div>
               </div>
             </div>
@@ -270,7 +270,7 @@
       <div class="divider"></div>
       <div class="layout horizontal">
         <div class="financial-col label flex-1 layout column">
-          <template is="dom-repeat" items="[[fakeData.financialFindings]]">
+          <template is="dom-repeat" items="[[chartData.financial_findings]]">
             <div class$="layout horizontal justified [[isHighlighted(item.highlighted)]]">
               <div class="fin-title flex-1">[[item.name]]</div>
               <div class="fin-amount">[[item.value]]</div>
@@ -280,21 +280,21 @@
 
         <div class="financial-col label flex-1 layout column">
           <div class="layout horizontal justified">
-            <div class="fin-title flex-1">[[fakeData.findingsNumbers.0.name]]</div>
-            <div class="fin-amount">[[fakeData.findingsNumbers.0.value]]</div>
+            <div class="fin-title flex-1">[[chartData.financial_findings_numbers.0.name]]</div>
+            <div class="fin-amount">[[chartData.financial_findings_numbers.0.value]]</div>
           </div>
           <div class="layout horizontal justified">
-            <div class="fin-title flex-1">[[fakeData.findingsNumbers.1.name]]</div>
-            <div class="fin-amount">[[fakeData.findingsNumbers.1.value]]</div>
+            <div class="fin-title flex-1">[[chartData.financial_findings_numbers.1.name]]</div>
+            <div class="fin-amount">[[chartData.financial_findings_numbers.1.value]]</div>
           </div>
           <div class="layout horizontal justified">
-            <div class="fin-title flex-1">[[fakeData.findingsNumbers.2.name]]</div>
-            <div class="fin-amount">[[fakeData.findingsNumbers.2.value]]</div>
+            <div class="fin-title flex-1">[[chartData.financial_findings_numbers.2.name]]</div>
+            <div class="fin-amount">[[chartData.financial_findings_numbers.2.value]]</div>
           </div>
           <div class="layout horizontal justified audit-line">
-            <div class="fin-title flex-1">[[fakeData.findingsNumbers.3.name]]</div>
+            <div class="fin-title flex-1">[[chartData.financial_findings_numbers.3.name]]</div>
           </div>
-          <template is="dom-repeat" items="[[fakeData.findingsNumbers.3.value]]">
+          <template is="dom-repeat" items="[[chartData.financial_findings_numbers.3.value]]">
             <div class="layout horizontal justified audit-line">
               <div class="fin-title flex-1 sub-col">-[[item.name]]</div>
               <div class="fin-amount">[[item.value]]</div>
@@ -315,43 +315,46 @@
       <div class="layout horizontal">
         <div class="col-8 component">
           <google-chart
-              id="cashTransfersAmountsChart"
+              id="cash_transfers_amountsChart"
               class="viz-col"
               type="column">
           </google-chart>
         </div>
         <div class="col-3 component ratings-wrapper layout column">
-          <div class="risk-rating-title">Risk Ratings</div>
+          <div class="layout horizontal justified">
+            <div class="risk-rating-title">Risk Ratings</div>
+            <div class="risk-rating-title">Number of IPs</div>
+          </div>
           <div class="layout column risk-ratings label">
 
             <div class="layout horizontal">
               <div class="marker risk-not-required"></div>
               <div class="flex-1 sub-col">Not Required</div>
-              <div>[[fakeData.riskRatings.0]]</div>
+              <div>[[riskRatings.0]]</div>
             </div>
 
             <div class="layout horizontal">
               <div class="marker risk-low"></div>
               <div class="flex-1 sub-col">Low</div>
-              <div>[[fakeData.riskRatings.1]]</div>
+              <div>[[riskRatings.1]]</div>
             </div>
 
             <div class="layout horizontal">
               <div class="marker risk-medium"></div>
               <div class="flex-1 sub-col">Medium</div>
-              <div>[[fakeData.riskRatings.2]]</div>
+              <div>[[riskRatings.2]]</div>
             </div>
 
             <div class="layout horizontal">
               <div class="marker risk-significant"></div>
               <div class="flex-1 sub-col">Significant</div>
-              <div>[[fakeData.riskRatings.3]]</div>
+              <div>[[riskRatings.3]]</div>
             </div>
 
             <div class="layout horizontal">
               <div class="marker risk-high"></div>
               <div class="flex-1 sub-col">High</div>
-              <div>[[fakeData.riskRatings.4]]</div>
+              <div>[[riskRatings.4]]</div>
             </div>
 
           </div>
@@ -368,43 +371,46 @@
       <div class="layout horizontal">
         <div class="col-8 component">
           <google-chart
-              id="cashTransfersRiskRatingsChart"
+              id="cash_transfers_risk_ratingsChart"
               class="viz-col"
               type="column">
           </google-chart>
         </div>
         <div class="col-3 component ratings-wrapper layout column">
-          <div class="risk-rating-title">Risk Ratings</div>
+          <div class="layout horizontal justified">
+            <div class="risk-rating-title">Risk Ratings</div>
+            <div class="risk-rating-title">Number of IPs</div>
+          </div>
           <div class="layout column risk-ratings label">
 
             <div class="layout horizontal">
               <div class="marker risk-not-required"></div>
               <div class="flex-1 sub-col">Not Required</div>
-              <div>[[fakeData.riskRatings.0]]</div>
+              <div>[[riskRatings.0]]</div>
             </div>
 
             <div class="layout horizontal">
               <div class="marker risk-low"></div>
               <div class="flex-1 sub-col">Low</div>
-              <div>[[fakeData.riskRatings.1]]</div>
+              <div>[[riskRatings.1]]</div>
             </div>
 
             <div class="layout horizontal">
               <div class="marker risk-medium"></div>
               <div class="flex-1 sub-col">Medium</div>
-              <div>[[fakeData.riskRatings.2]]</div>
+              <div>[[riskRatings.2]]</div>
             </div>
 
             <div class="layout horizontal">
               <div class="marker risk-significant"></div>
               <div class="flex-1 sub-col">Significant</div>
-              <div>[[fakeData.riskRatings.3]]</div>
+              <div>[[riskRatings.3]]</div>
             </div>
 
             <div class="layout horizontal">
               <div class="marker risk-high"></div>
               <div class="flex-1 sub-col">High</div>
-              <div>[[fakeData.riskRatings.4]]</div>
+              <div>[[riskRatings.4]]</div>
             </div>
 
           </div>
@@ -423,7 +429,7 @@
         <div class="layout horizontal">
           <div class="flex-1 component">
             <google-chart
-                id="cashTransfersPartnerTypeChart"
+                id="cash_transfers_partner_typeChart"
                 class="viz-col"
                 type="column">
             </google-chart>
@@ -440,7 +446,7 @@
         <div class="layout horizontal component">
           <div class="col-40">
             <google-chart
-                id="spotChecksCompletedChart"
+                id="spot_checks_completedChart"
                 class="viz-col"
                 type="pie">
             </google-chart>
@@ -453,13 +459,13 @@
                 <div class="layout horizontal">
                   <div class="marker risk-low"></div>
                   <div class="flex-1 sub-col">Staff</div>
-                  <div>[[fakeData.charts.spotChecksCompleted.1.1]]</div>
+                  <div>[[chartData.charts.spot_checks_completed.1.1]]</div>
                 </div>
 
                 <div class="layout horizontal">
                   <div class="marker risk-medium"></div>
                   <div class="flex-1 sub-col">Service Providers</div>
-                  <div>[[fakeData.charts.spotChecksCompleted.2.1]]</div>
+                  <div>[[chartData.charts.spot_checks_completed.2.1]]</div>
                 </div>
 
 
@@ -469,7 +475,6 @@
         </div>
       </paper-material>
     </div>
-
   </template>
   <script>
     (function() {
@@ -477,6 +482,9 @@
       Polymer({
         is: 'dashboard-hact-charts',
         observers: ['_init(active)'],
+        behaviors: [
+          dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
+        ],
         properties: {
           assuranceChartOptions: {
             type: Object,
@@ -518,7 +526,7 @@
               },
             }
           },
-          cashTransfersAmountsOptions: {
+          cash_transfers_amountsOptions: {
             type: Object,
             value: {
               isStacked: true,
@@ -579,7 +587,7 @@
               }
             }
           },
-          cashTransfersRiskRatingsOptions: {
+          cash_transfers_risk_ratingsOptions: {
             type: Object,
             value: {
               legend: {position: 'none'},
@@ -636,7 +644,7 @@
               }
             }
           },
-          cashTransfersPartnerTypeOptions: {
+          cash_transfers_partner_typeOptions: {
             type: Object,
             value: {
               legend: {position: 'none'},
@@ -692,7 +700,7 @@
               }
             }
           },
-          spotChecksCompletedOptions: {
+          spot_checks_completedOptions: {
             type: Object,
             value: {
               legend: 'none',
@@ -703,130 +711,32 @@
               },
             }
           },
-          fakeData: {
+          chartData: {
             type: Object,
-            value: function() {
-              return {
-                progVisits: {
-                  completed: 38,
-                  minRequired: 32
-                },
-                spotChecks: {
-                  completed: 12,
-                  minRequired: 26
-                },
-                microAssessments: {
-                  completed: 24,
-                  missing: 8
-                },
-                scheduledAudits: {
-                  completed: 80,
-                },
-                specialAudits: {
-                  completed: 56
-                },
-                financialFindings: [
-                  {
-                    name: 'Total Audited Expenditure',
-                    value: 34345000,
-                    highlighted: false
-                  },
-                  {
-                    name: 'Total Financial Findings',
-                    value: 1239300,
-                    highlighted: true
-                  },
-                  {
-                    name: 'Refunds',
-                    value: 345000,
-                    highlighted: false
-                  },
-                  {
-                    name: 'Additional Supporting Documentation Received',
-                    value: 235678,
-                    highlighted: false
-                  },
-                  {
-                    name: 'Justification Provided and Accepted',
-                    value: 5540,
-                    highlighted: false
-                  },
-                  {
-                    name: 'Write-off Recorded',
-                    value: 89567,
-                    highlighted: false
-                  },
-                  {
-                    name: 'Outstanding(Requires Follow-up)',
-                    value: 900000,
-                    highlighted: true
-                  }],
-                findingsNumbers: [
-                  {
-                    name: 'Number of High Priority Findings',
-                    value: 20,
-                  },
-                  {
-                    name: 'Number of Medium Priority Findings',
-                    value: 30,
-                  },
-                  {
-                    name: 'Number of Low Priority Findings',
-                    value: 45,
-                  },
-                  {
-                    name: 'Audit Opinion',
-                    value: [
-                      {
-                        name: 'qualified', value: 34
-                      },
-                      {
-                        name: 'unqualified', value: 22
-                      },
-                      {name: 'denial', value: 10},
-                      {name: 'adverse', value: 40}
-                    ]
-                  }
-                ],
-                charts: {
-                  cashTransfersAmounts: [
-                    ['Risk Rating', 'Not Required', 'Low', 'Medium', 'Significant', 'High', 'Number of IPs'],
-                    ['$0-50,0000', 0, 200000, 100000, 30000, 0, 37],
-                    ['$50,001-100,0000', 410000, 0, 360000, 120000, 40000, 15],
-                    ['$100,001-350,0000', 225000, 515000, 400000, 0, 0, 15],
-                    ['$350,001-500,0000', 143000, 35000, 350000, 0, 100000, 5],
-                    ['>$500,000', 85000, 66000, 240000, 400000, 20000, 20],
-                  ],
-                  cashTransfersRiskRatings: [
-                    ['Risk Rating', 'Total Cash Transfers', {role: 'style'}, 'Number of IPs'],
-                    ['Not Required', 10000, '#D8D8D8', 5],
-                    ['Low', 35000, '#2BB0F2', 12],
-                    ['Medium', 55000, '#FECC02', 4],
-                    ['Significant', 15000, '#F05656', 6],
-                    ['High', 3500, '#751010', 4],
-                  ],
-                  cashTransfersPartnerType: [
-                    ['Partner Type', 'Total Cash Transfers', {role: 'style'}, 'Number of Partners'],
-                    ['CSO', 60000, '#FECC02', 15],
-                    ['GOV', 93000, '#F05656', 5],
-                  ],
-                  spotChecksCompleted: [
-                    ['Completed by', 'Count'],
-                    ['Staff', 18],
-                    ['Service Providers', 8]
-                  ]
-                },
-                riskRatings: [
-                  10, 20, 50, 2, 2
-                ],
-              }
-            }
+            statePath: 'hactGraphs',
+            observer: '_onChartDataChange'
+          },
+          riskRatings: {
+            type: Array,
+            value: []
           }
         },
 
         _init: function(active) {
           if (active) {
-            this.drawCharts();
+            if (_.isEmpty(this.chartData)){
+              this.fire('global-loading', {message:'Loading chart data...', active: true});
+            }else {
+              this.fire('global-loading');
+              this.drawCharts();
+            }
+          }
+        },
+        _onChartDataChange(data){
+          if (!_.isEmpty(data)){
+            const riskRatings = _.drop(data.charts.cash_transfers_risk_ratings).map(r=>_.last(r))
+            this.set('riskRatings', riskRatings);
+            this._init(this.active);
           }
         },
 
@@ -840,7 +750,7 @@
 
         drawCharts: function() {
           this.drawProgVisitsChart();
-          _.keys(this.fakeData.charts).map(chart => {
+          _.keys(this.chartData.charts).map(chart => {
             this.drawChart(chart);
           });
         },
@@ -849,21 +759,21 @@
           return [
             ['Data', 'Text', {role: 'annotation'}, 'Count', {role: 'style'}, {role: 'annotation'}],
             ['', 0, 'Completed', entity.completed,
-              entity.completed >= entity.minRequired ? '#1B9C5C' : '#F05454', entity.completed],
-            ['', 0, 'Minimum Required', entity.minRequired, '#A7A7A7', entity.minRequired],
+              entity.completed >= entity.min_required ? '#1B9C5C' : '#F05454', entity.completed],
+            ['', 0, 'Minimum Required', entity.min_required, '#A7A7A7', entity.min_required],
           ]
         },
 
         drawProgVisitsChart() {
-          const {progVisits, spotChecks} = this.fakeData;
+          const {programmatic_visits:progVisits, spot_checks:spotChecks} = this.chartData.assurance_activities;
           const progVisitsData = this.AssuranceActivitiesBars(progVisits);
           const spotChecksData = this.AssuranceActivitiesBars(spotChecks);
           this._formatChartData(progVisitsData, 'progVisitsChart', this.assuranceChartOptions);
           this._formatChartData(spotChecksData, 'spotChecksChart', this.assuranceChartOptions);
         },
 
-        drawChart (dataName) {
-          const data = this.fakeData.charts[dataName];
+        drawChart(dataName) {
+          const data = this.chartData.charts[dataName];
           this._formatChartData(data, `${dataName}Chart`, this[`${dataName}Options`]);
         },
 
