@@ -199,5 +199,14 @@ const Actions = [
     prepareData: function(data) {
       return data[0];
     }
+  },
+  {
+    actionType: 'hactGraphs',
+    propsArray: ['hactGraphs'],
+    endpointProps: {
+      name: 'hactGraphs',
+      templateProps: {}
+    },
+    prepareData: x=>x.partner_values
   }
 ];
