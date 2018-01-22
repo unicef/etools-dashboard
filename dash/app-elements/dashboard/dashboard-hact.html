@@ -38,6 +38,8 @@
       }
 
       .detail-btn {
+        display: flex;
+        justify-content: space-between;
         height: 20px;
       }
 
@@ -49,11 +51,6 @@
         padding-bottom: 8px;
         padding-top: 8px;
         box-sizing: border-box;
-      }
-
-      #center-toggle {
-        width: 100%;
-        text-align: center;
       }
 
       #toggle {
@@ -130,11 +127,12 @@
         </paper-material>
 
         <paper-material class="hact-list detail-btn" elevation="1">
-          <div id="center-toggle">
+            <paper-button id="toggle" noink>
+              <a>SOURCES</a>
+            </paper-button>
             <paper-button on-tap="_detailToggle" id="toggle" class="detailed-assurance" noink>
               <a>SHOW DETAILED ASSURANCE</a>
             </paper-button>
-          </div>
         </paper-material>
 
         <iron-pages id="hactAssurance"
