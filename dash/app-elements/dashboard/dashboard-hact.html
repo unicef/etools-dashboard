@@ -8,7 +8,10 @@
 <link rel="import" href="../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../bower_components/etools-dropdown/etools-dropdown.html">
+<link rel="import" href="../../../bower_components/etools-dialog/etools-dialog.html">
+<link rel="import" href="../../../bower_components/etools-dialog/dynamic-dialog-behavior.html">
 <link rel="import" href="../../app-config/etools-app-config.html">
+<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
 
 <link rel="import" href="dashboard-hact-views/dashboard-hact-detail.html">
 <link rel="import" href="dashboard-hact-views/dashboard-hact-charts.html">
@@ -39,12 +42,14 @@
 
       .detail-btn {
         display: flex;
-        justify-content: space-between;
-        height: 20px;
+        justify-content: center;
+        align-items: center;
+        height: 24px;
       }
 
       paper-material.detail-btn {
         padding-top: 0;
+        padding-bottom: 0;
       }
 
       .search-bar {
@@ -53,17 +58,19 @@
         box-sizing: border-box;
       }
 
-      #toggle {
+      .toggle {
         font-size: 12px;
         cursor: pointer;
         font-weight: 500;
+        top: 10px;
+        z-index: 1;
       }
 
       .view-toggle {
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        padding-bottom: 24px;
+        padding-bottom: 12px;
       }
 
       paper-button.curved-left {
@@ -92,10 +99,22 @@
         background: rgb(255, 255, 255) !important;
       }
 
+      .sources-button {
+        --iron-icon-fill-color: rgb(26, 155, 252);
+      }
+
       paper-button.detailed-assurance {
         border-radius: 50px;
         background: rgb(255, 255, 255);
         cursor: pointer;
+      }
+
+      #det-assurance {
+        right: 510px;
+      }
+
+      #sources-btn {
+        margin-right: auto;
       }
     </style>
 
@@ -127,13 +146,18 @@
         </paper-material>
 
         <paper-material class="hact-list detail-btn" elevation="1">
-            <paper-button id="toggle" noink>
+            <paper-button class="toggle" id="sources-btn" on-tap="_revealSources" noink>
+              <iron-icon icon="error" class="sources-button"></iron-icon>
               <a>SOURCES</a>
             </paper-button>
-            <paper-button on-tap="_detailToggle" id="toggle"noink>
+            <paper-button on-tap="_detailToggle" id="det-assurance" class="toggle" noink>
               <a class="detailed-assurance">SHOW DETAILED ASSURANCE</a>
             </paper-button>
         </paper-material>
+
+        <paper-dialog dialog-title="SOURCES" id="sources" allow-click-through>
+          <div>Sources image here</div>
+        </paper-dialog>
 
         <iron-pages id="hactAssurance"
                     selected="[[subName]]"
@@ -223,7 +247,7 @@
           graphsActive: {
             type: Boolean,
             value: false
-          }
+          },
         },
 
         observers: [
@@ -310,9 +334,11 @@
 
         _toggleChartsView: function({target}) {
           const name = target.getAttribute('data-name');
-          this.set('hactPage', name);
-          this.$.assurancePlan.toggleClass("light-button")
-          this.$.dashboardCharts.toggleClass("dark-button")
+          if (this.hactPage != name) {
+            this.set('hactPage', name);
+            this.$.assurancePlan.toggleClass("light-button")
+            this.$.dashboardCharts.toggleClass("dark-button")
+          }
         },
 
         _detailToggle: function() {
@@ -322,7 +348,11 @@
           button.innerText = !this.displayDetail ? "HIDE DETAILED ASSURANCE" : "SHOW DETAILED ASSURANCE"
           this.displayDetail = !this.displayDetail
         },
-        _isActive: (current,target)=>current===target
+        _isActive: (current,target)=>current===target,
+
+        _revealSources: function() {
+          this.$.sources.open()
+        }
 
       });
     })();
