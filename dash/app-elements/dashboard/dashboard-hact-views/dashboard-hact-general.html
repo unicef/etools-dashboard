@@ -215,7 +215,7 @@
           <div class="col-4 layout horizontal">
             <span class="col-6 layout horizontal">
               <span class="col-2 col-data vertical"></span>
-              <span class="col-3 col-data vertical">[[totals.shared_partner]]</span>
+              <span class="col-3 col-data vertical">[[totals.shared_with]]</span>
               <span class="col-7 col-data vertical"></span>
             </span>
             <span class="col-6 layout horizontal">
@@ -261,7 +261,7 @@
                 <span class="col-2 col-data">[[partner.partner_type_slug]]
                   <paper-tooltip>[[partner.partner_type]]</paper-tooltip>
                 </span>
-                <span class="col-3 col-data">[[partner.shared_partner]]</span>
+                <span class="col-3 col-data">[[_checkForValue(partner.shared_with)]]</span>
                 <span class="col-7 col-data">[[partner.type_of_assessment]]</span>
               </span>
               <span class="col-6 layout horizontal">
@@ -318,6 +318,10 @@
             type: Array,
             notify: true
           },
+        },
+
+        _checkForValue: function(val) {
+          return val ? "Yes" : "No"
         },
 
         _getGovernmentDisplay: function(partner, prop, toCurrency) {

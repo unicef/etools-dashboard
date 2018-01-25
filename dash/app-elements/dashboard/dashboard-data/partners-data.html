@@ -128,7 +128,7 @@
           this.resultsTotals = true;
           return _(results).reduce((sum, obj)=> {
             let picked = _(obj).pick([
-              'shared_partner',
+              'shared_with',
               'total_ct_cp',
               'hact_values',
               'total_ct_cy',
@@ -136,10 +136,11 @@
               'outstanding_findings'
             ]).value();
             picked = _flattenObject(picked)
+            picked['shared_with'] = obj['shared_with']
             _(picked).each((val, key)=> {
               let currValue = sum[key] ? sum[key] : 0;
-              if (key === 'shared_partner') {
-                sum[key] = currValue + (val === 'No' ? 0 : 1);
+              if (key === 'shared_with') {
+                sum[key] = currValue + (val === null ? 0 : 1);
               } else {
                 sum[key] = currValue + Number(val);
               }
