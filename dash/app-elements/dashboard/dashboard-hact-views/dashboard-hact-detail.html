@@ -383,7 +383,7 @@
                       <span class="col-3 quarter-border">[[partner.hact_values.spot_checks.planned.q3]]</span>
                       <span class="col-3 quarter-border">[[partner.hact_values.spot_checks.planned.q4]]</span>
                     </span>
-                    <span class="col-3 right-side vertical">[[_convertBinaryToYes(partner.hact_min_requirements.spot_checks)]]</span>
+                    <span class="col-3 right-side vertical">[[partner.hact_min_requirements.spot_checks]]</span>
                     <span class="col-3 right-side vertical">[[partner.hact_values.spot_checks.follow_up_required]]</span>
                   </div>
                   <span class="col-3 right-side vertical">
@@ -425,10 +425,6 @@
           totals: {
             type: Array,
           },
-        },
-
-        _convertBinaryToYes: function(value) {
-          return value === 1 ? "Yes" : "-"
         },
 
         _getGovernmentDisplay: function (partner, prop, toCurrency) {
