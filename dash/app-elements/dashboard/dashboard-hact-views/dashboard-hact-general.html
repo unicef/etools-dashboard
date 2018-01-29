@@ -166,8 +166,9 @@
           <div class="col-4 layout horizontal">
             <span class="col-5 layout horizontal">
               <span class="col-3 col-data vertical"></span>
-              <span class="col-3 col-data vertical">[[totals.shared_partner]]</span>
+              <span class="col-3 col-data vertical">[[totals.shared_with]]</span>
               <span class="col-6 col-data vertical"></span>
+
             </span>
             <span class="col-7 layout horizontal">
               <span class="col-4 col-data vertical padding-left-10"></span>
@@ -212,7 +213,7 @@
                 <span class="col-3 col-data">[[partner.partner_type_slug]]
                   <paper-tooltip>[[partner.partner_type]]</paper-tooltip>
                 </span>
-                <span class="col-3 col-data">[[partner.shared_partner]]</span>
+                <span class="col-3 col-data">[[_checkForValue(partner.shared_with)]]</span>
                 <span class="col-6 wrap-text col-data padding-left-10">[[partner.type_of_assessment]]</span>
               </span>
               <span class="col-7 layout horizontal align-center">
@@ -238,7 +239,7 @@
               </div>
               <div class="col-3 layout horizontal group">
                 <span class="col-half right-side buffer"></span>
-                <span class="col-4 col-data right-side">[[_convertBinaryToYes(partner.hact_min_requirements.spot_checks)]]</span>
+                <span class="col-4 col-data right-side">[[partner.hact_min_requirements.spot_checks]]</span>
                 <span class="col-7 col-data right-side">[[partner.hact_values.spot_checks.completed.total]]</span>
                 <span class="col-half right-side buffer"></span>
               </div>
@@ -271,8 +272,8 @@
           },
         },
 
-        _convertBinaryToYes: function(value) {
-          return value === 1 ? "Yes" : "-"
+        _checkForValue: function(val) {
+          return val ? "Yes" : "No"
         },
 
         _getGovernmentDisplay: function(partner, prop, toCurrency) {

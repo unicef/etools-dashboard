@@ -33,6 +33,12 @@
         overflow-y: visible;
       }
 
+      .no-overflow {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+      }
+
       .group {
         padding-right: 16px;
         box-sizing: border-box;
@@ -134,7 +140,7 @@
             </data-table-column>
           </data-table-column>
           <data-table-column class="col-215-px layout horizontal" group-heading="blank" transparent>
-            <data-table-column class="col-75-px vertical nowrap" id="total_ct_cp">
+            <data-table-column class="col-75-px vertical no-overflow nowrap" id="total_ct_cp">
               Risk Rating
             </data-table-column>
             <data-table-column class="col-40-px vertical nowrap" id="hact_values.planned_cash_transfer">
@@ -225,7 +231,7 @@
               </div>
             </div>
             <div class="col-215-px layout horizontal">
-              <div class="col-75-px nowrap vertical"></div>
+              <div class="col-75-px nowrap no-overflow vertical"></div>
               <div class="col-40-px nowrap vertical"></div>
               <div class="col-100-px monetary padding-right-10 nowrap vertical">$0</div>
             </div>
@@ -247,7 +253,7 @@
             </div>
             <div class="col-555-px layout horizontal">
                 <div class="col-10-px buffer"></div>
-              <div class="col-100-px right-side right padding-right-10 monetary vertical">$[[totals.liquidations]]</div>
+              <div class="col-100-px right-side right padding-right-10 monetary vertical">$[[currencyFormat(totals.liquidation)]]</div>
                 <div class="col-160-px right-side right vertical">
                   <span class="col-3">[[totals.hact_values_spot_checks_planned_q1]]</span>
                   <span class="col-3 right-side">[[totals.hact_values_spot_checks_planned_q2]]</span>
@@ -267,7 +273,7 @@
             <div class="col-225-px layout horizontal">
               <div class="col-75-px right-side center vertical">[[totals.hact_values_audits_minimum_requirements]]</div>
               <div class="col-75-px right-side center vertical">[[totals.hact_values_audits_completed]]</div>
-              <div class="col-75-px right-side monetary vertical">$[[totals.hact_values_audits_outstanding_findings]]</div>
+              <div class="col-75-px right-side monetary vertical">$[[totals.outstanding_findings]]</div>
             </div>
           </div>
         </data-table-row>
@@ -284,7 +290,7 @@
                 </span>
               </div>
               <div class="col-215-px layout horizontal">
-                <span class="col-75-px nowrap vertical">[[partner.rating]]</span>
+                <span class="col-75-px nowrap no-overflow vertical">[[partner.rating]]</span>
                 <span class="col-40-px nowrap vertical">
                   <div>
                     <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
@@ -315,14 +321,14 @@
               </div>
               <div class="col-555-px layout horizontal"> 
                   <span class="col-10-px buffer"></span>
-                <span class="col-100-px right-side padding-right-10 monetary vertical">$[[partner.hact_values.spot_checks.liquidations]]</span>
+                <span class="col-100-px right-side padding-right-10 monetary vertical">$[[currencyFormat(partner.liquidation)]]</span>
                   <span class="col-160-px right-side vertical">
                     <span class="col-3">[[partner.hact_values.spot_checks.planned.q1]]</span>
                     <span class="col-3 vertical quarter-border">[[partner.hact_values.spot_checks.planned.q2]]</span>
                     <span class="col-3 quarter-border">[[partner.hact_values.spot_checks.planned.q3]]</span>
                     <span class="col-3 quarter-border">[[partner.hact_values.spot_checks.planned.q4]]</span>
                   </span>
-                  <span class="col-40-px right-side center vertical">[[_convertBinaryToYes(partner.hact_min_requirements.spot_checks)]]</span>
+                  <span class="col-40-px right-side center vertical">[[partner.hact_min_requirements.spot_checks]]</span>
                   <span class="col-75-px right-side center vertical">[[partner.hact_values.spot_checks.follow_up_required]]</span>
                 <span class="col-160-px right-side vertical">
                   <span class="col-3">[[partner.hact_values.spot_checks.completed.q1]]</span>
@@ -335,7 +341,7 @@
               <div class="col-225-px layout horizontal">
                 <span class="col-75-px right-side center vertical">[[partner.hact_values.audits.minimum_requirements]]</span>
                 <span class="col-75-px right-side center vertical">[[partner.hact_values.audits.completed]]</span>
-                <span class="col-75-px right-side monetary vertical">$[[partner.hact_values.audits.outstanding_findings]]</span>
+                <span class="col-75-px right-side monetary vertical">$[[partner.outstanding_findings]]</span>
               </div>
             </div>
           </data-table-row>
@@ -362,10 +368,6 @@
           totals: {
             type: Array,
           },
-        },
-
-        _convertBinaryToYes: function(value) {
-          return value === 1 ? "Yes" : "-"
         },
 
         _getGovernmentDisplay: function (partner, prop, toCurrency) {
