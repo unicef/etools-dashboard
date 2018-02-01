@@ -109,10 +109,6 @@
         cursor: pointer;
       }
 
-      #det-assurance {
-        right: 510px;
-      }
-
       #sources-btn {
         margin-right: auto;
       }
@@ -146,11 +142,7 @@
         </paper-material>
 
         <paper-material class="hact-list detail-btn" elevation="1">
-            <paper-button class="toggle" id="sources-btn" on-tap="_revealSources" noink>
-              <iron-icon icon="error" class="sources-button"></iron-icon>
-              <a>SOURCES</a>
-            </paper-button>
-            <paper-button on-tap="_detailToggle" id="det-assurance" class="toggle" noink>
+            <paper-button on-tap="_detailToggle" class="toggle" noink>
               <a class="detailed-assurance">SHOW DETAILED ASSURANCE</a>
             </paper-button>
         </paper-material>
