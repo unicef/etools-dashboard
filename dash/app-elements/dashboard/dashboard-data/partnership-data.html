@@ -59,9 +59,9 @@
             value: function() {
               return {
                 searchString: (qs, partner)=> qs.length ? _.includes(partner.partner_name.toLowerCase(), qs.toLowerCase()): true,
-                sectors: (sectors, partner)=> sectors.length ? !!_.intersection(sectors, _.trim(partner.sectors)).length : true,
+                sectors: (sectors, partner)=> sectors.length ? !!_.intersection(sectors, [_.trim(partner.sectors)]).length : true,
                 offices: (offices, partner)=> offices.length ? !!_.intersection(offices, partner.offices_names.split(',')).length : true,
-                status: (status, partner)=> status.length ? (_.includes(status, partner.status) ? true: partner.status==='closed'? false:true):true,
+                status: (status, partner)=> status.length ? (_.includes(status, partner.status) ? true : false) : true,
                 startAfterDate: (date, partner)=> _.isEmpty(partner.start) ? true
                 : !_.isEmpty(date) ? this.prepareDate(partner.start) > this.prepareDate(date): true,
                 endBeforeDate: (date, partner)=> _.isEmpty(partner.end) ? true
