@@ -67,6 +67,20 @@
       .no-padding {
         --paper-material-padding: 0 24px 0 24px;
       }
+
+      /* support for IE */
+      @supports (-ms-ime-align:auto) {
+        data-table-header {
+          height: 74px;
+          padding-top: 20px;
+        }
+      }
+      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        data-table-header {
+          height: 74px;
+          padding-top: 20px;
+        }
+      }
     </style>
   </template>
 </dom-module>

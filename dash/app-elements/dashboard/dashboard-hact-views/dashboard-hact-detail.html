@@ -25,6 +25,7 @@
         overflow: scroll;
         padding: 0;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 5px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        -ms-overflow-style: none;
       }
 
       .detail-list {
@@ -53,9 +54,16 @@
         align-items: flex-end !important;
       }
 
+      .quarter-heading-item {
+        border-left: 1px solid rgba(0, 0, 0, 0.24);
+        box-sizing: border-box;
+      }
+
       .quarter-item {
         border-left: 1px solid rgba(0, 0, 0, 0.24);
         box-sizing: border-box;
+        height: 48px;
+        /* height: 40px; */
       }
 
       .right-side {
@@ -63,6 +71,8 @@
         border-left: 1px solid rgba(0, 0, 0, 0.24);
         box-sizing: border-box;
         min-height: 48px;
+        /* height: 48px; */
+        /* align-items: center; */
       }
 
       data-table-row.totals > div > div {
@@ -76,14 +86,20 @@
         min-height: 48px;
         align-items: center;
         justify-content: center;
+        /* height: 48px; */
       }
 
       data-table-row > div[slot="row-data"] > div > div > span > span:not(:first-child),
       data-table-row > div[slot="row-data"] > div > div > div > span > span:not(:first-child),
-      data-table-row > div[slot="row-data"] > div > span > span:not(:first-child)  {
+      data-table-row > div[slot="row-data"] > div > span > span:not(:first-child) {
         border-left: 1px solid rgb(227, 227, 227);
         box-sizing: border-box;
       }
+
+      /* data-table-row > div[slot="row-data"] > div > div {
+        display: flex;
+        align-items: center;
+      } */
 
       .col-75-px {
         flex: 0 0 75px;
@@ -129,14 +145,6 @@
         flex: 0 0 225px;
         max-width: 225px;
       }
-
-      /* @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-        data-table-header {
-          height: 75px;
-        }
-      } */
-
-      _:-ms-fullscreen, :root .ie11up { height: 75px; }
     </style>
 
     <paper-material id="detail-list" class="hact-list" elevation="1">
@@ -166,9 +174,9 @@
               Planned<br>
               <div class="quarter-heading">
                 <span class="col-3">Q1</span>
-                <span class="col-3 quarter-item">Q2</span>
-                <span class="col-3 quarter-item">Q3</span>
-                <span class="col-3 quarter-item">Q4</span>
+                <span class="col-3 quarter-heading-item">Q2</span>
+                <span class="col-3 quarter-heading-item">Q3</span>
+                <span class="col-3 quarter-heading-item">Q4</span>
               </div>
             </data-table-column>
             <data-table-column class="col-40-px nowrap vertical right-side" id="rating">
@@ -179,9 +187,9 @@
               Completed<br>
               <div class="quarter-heading">
                 <span class="col-3">Q1</span>
-                <span class="col-3 quarter-item">Q2</span>
-                <span class="col-3 quarter-item">Q3</span>
-                <span class="col-3 quarter-item">Q4</span>
+                <span class="col-3 quarter-heading-item">Q2</span>
+                <span class="col-3 quarter-heading-item">Q3</span>
+                <span class="col-3 quarter-heading-item">Q4</span>
               </div>
             </data-table-column>
           </data-table-column>
@@ -194,9 +202,9 @@
                 Planned <br>
                 <div class="quarter-heading">
                   <span class="col-3">Q1</span>
-                  <span class="col-3 quarter-item">Q2</span>
-                  <span class="col-3 quarter-item">Q3</span>
-                  <span class="col-3 quarter-item">Q4</span>
+                  <span class="col-3 quarter-heading-item">Q2</span>
+                  <span class="col-3 quarter-heading-item">Q3</span>
+                  <span class="col-3 quarter-heading-item">Q4</span>
                 </div>
               </data-table-column>
                 <data-table-column class="col-40-px vertical right-side">
@@ -210,9 +218,9 @@
                 Completed<br>
                 <div class="quarter-heading">
                   <span class="col-3">Q1</span>
-                  <span class="col-3 quarter-item">Q2</span>
-                  <span class="col-3 quarter-item">Q3</span>
-                  <span class="col-3 quarter-item">Q4</span>
+                  <span class="col-3 quarter-heading-item">Q2</span>
+                  <span class="col-3 quarter-heading-item">Q3</span>
+                  <span class="col-3 quarter-heading-item">Q4</span>
                 </div>
               </data-table-column>
             <data-table-column class="col-10-px buffer"></data-table-column>
@@ -245,14 +253,14 @@
             </div>
             <div class="col-460-px layout horizontal">
               <div class="col-100-px nowrap monetary vertical padding-right-10 right-side">$[[currencyFormat(totals.total_ct_cy)]]</div>
-              <div class="col-160-px vertical right-side quarter-heading">
+              <div class="col-160-px vertical right-side">
                 <span class="col-3">[[totals.hact_values_programmatic_visits_planned_total]]</span>
                 <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q2]]</span>
                 <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q3]]</span>
                 <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q4]]</span>
               </div>
               <div class="col-40-px nowrap vertical center right-side">[[totals.hact_min_requirements_programme_visits]]</div>
-              <div class="col-160-px quarter-heading vertical right-side">
+              <div class="col-160-px vertical right-side">
                 <span class="col-3">[[totals.hact_values_programmatic_visits_completed_q1]]</span>
                 <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_completed_q2]]</span>
                 <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_completed_q3]]</span>
@@ -260,7 +268,7 @@
               </div>
             </div>
             <div class="col-555-px layout horizontal">
-                <div class="col-10-px buffer"></div>
+              <div class="col-10-px buffer"></div>
               <div class="col-100-px right-side right padding-right-10 monetary vertical">$[[currencyFormat(totals.liquidation)]]</div>
                 <div class="col-160-px right-side right vertical">
                   <span class="col-3">[[totals.hact_values_spot_checks_planned_q1]]</span>
@@ -315,16 +323,16 @@
                 <span class="col-100-px nowrap monetary padding-right-10 right-side vertical">$[[currencyFormat(partner.total_ct_cy)]]</span>
                 <span class="col-160-px nowrap vertical right-side">
                   <span class="col-3">[[partner.hact_values.programmatic_visits.planned.total]]</span>
-                  <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits.planned.q2]]</span>
-                  <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits.planned.q3]]</span>
-                  <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits.planned.q4]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.planned.q2]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.planned.q3]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.planned.q4]]</span>
                 </span>
                 <span class="col-40-px nowrap right-side center vertical">[[partner.hact_min_requirements.programme_visits]]</span>
                 <span class="col-160-px right-side vertical">
                   <span class="col-3">[[partner.hact_values.programmatic_visits.completed.q1]]</span>
-                  <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits.completed.q2]]</span>
-                  <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits.completed.q3]]</span>
-                  <span class="col-3 quarter-border">[[partner.hact_values.programmatic_visits.completed.q4]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.completed.q2]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.completed.q3]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.completed.q4]]</span>
                 </span>
               </div>
               <div class="col-555-px layout horizontal"> 
@@ -332,17 +340,17 @@
                 <span class="col-100-px right-side padding-right-10 monetary vertical">$[[currencyFormat(partner.liquidation)]]</span>
                   <span class="col-160-px right-side vertical">
                     <span class="col-3">[[partner.hact_values.spot_checks.planned.q1]]</span>
-                    <span class="col-3 vertical quarter-border">[[partner.hact_values.spot_checks.planned.q2]]</span>
-                    <span class="col-3 quarter-border">[[partner.hact_values.spot_checks.planned.q3]]</span>
-                    <span class="col-3 quarter-border">[[partner.hact_values.spot_checks.planned.q4]]</span>
+                    <span class="col-3 vertical quarter-item">[[partner.hact_values.spot_checks.planned.q2]]</span>
+                    <span class="col-3 quarter-item">[[partner.hact_values.spot_checks.planned.q3]]</span>
+                    <span class="col-3 quarter-item">[[partner.hact_values.spot_checks.planned.q4]]</span>
                   </span>
                   <span class="col-40-px right-side center vertical">[[partner.hact_min_requirements.spot_checks]]</span>
                   <span class="col-75-px right-side center vertical">[[partner.hact_values.spot_checks.follow_up_required]]</span>
                 <span class="col-160-px right-side vertical">
                   <span class="col-3">[[partner.hact_values.spot_checks.completed.q1]]</span>
-                  <span class="col-3 quarter-border">[[partner.hact_values.spot_checks.completed.q2]]</span>
-                  <span class="col-3 quarter-border">[[partner.hact_values.spot_checks.completed.q3]]</span>
-                  <span class="col-3 quarter-border">[[partner.hact_values.spot_checks.completed.q4]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.spot_checks.completed.q2]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.spot_checks.completed.q3]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.spot_checks.completed.q4]]</span>
                 </span>
                 <span class="col-10-px buffer"></span>
               </div>
