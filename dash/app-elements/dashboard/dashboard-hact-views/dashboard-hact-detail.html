@@ -25,13 +25,14 @@
         overflow: scroll;
         padding: 0;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 5px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        -ms-overflow-style: none;
+        -ms-overflow-style: scrollbar;
       }
 
       .detail-list {
         min-width: 1800px;
         overflow-x: scroll;
         overflow-y: visible;
+        -ms-overflow-style: none;
       }
 
       .no-overflow {
@@ -75,23 +76,39 @@
         /* align-items: center; */
       }
 
-      data-table-row.totals > div > div {
+      .border-box {
+        box-sizing: border-box;
+      }
+
+      data-table-row.totals > div > div,
+      data-table-row.totals div div {
         font-weight: 500;
+      }
+
+      data-table-row.totals div div div span {
+        display: flex;
+        align-items: center;
       }
 
       data-table-row > div[slot="row-data"] > div > div > span,
       data-table-row > div[slot="row-data"] > div > span > span,
-      data-table-header > div > data-table-column > data-table-column {
+      data-table-header > div > data-table-column > data-table-column,
+      data-table-row div[slot="row-data"] div div span,
+      data-table-row div[slot="row-data"] div div,
+      data-table-row div[slot="row-data"] div span span:not(:first-child),
+      data-table-row div[slot="row-data"] div div span:not(:first-child) {
         display: flex;
+        justify-content: center;
         min-height: 48px;
         align-items: center;
-        justify-content: center;
-        /* height: 48px; */
+        height: 48px;
       }
 
       data-table-row > div[slot="row-data"] > div > div > span > span:not(:first-child),
       data-table-row > div[slot="row-data"] > div > div > div > span > span:not(:first-child),
-      data-table-row > div[slot="row-data"] > div > span > span:not(:first-child) {
+      data-table-row > div[slot="row-data"] > div > span > span:not(:first-child),
+      data-table-row div[slot="row-data"] div span span:not(:first-child),
+      data-table-row div[slot="row-data"] div div span:not(:first-child) {
         border-left: 1px solid rgb(227, 227, 227);
         box-sizing: border-box;
       }
@@ -103,47 +120,47 @@
 
       .col-75-px {
         flex: 0 0 75px;
-        max-width: 75px;
+        /* max-width: 75px; */
       }
 
       .col-555-px {
         flex: 0 0 555px;
-        max-width: 555px;
+        /* max-width: 555px; */
       }
 
       .col-10-px {
         flex: 0 0 10px;
-        max-width: 10px;
+        /* max-width: 10px; */
       }
 
       .col-40-px {
         flex: 0 0 40px;
-        max-width: 40px;
+        /* max-width: 40px; */
       }
 
       .col-100-px {
         flex: 0 0 100px;
-        max-width: 100px;
+        /* max-width: 100px; */
       }
 
       .col-215-px {
         flex: 0 0 215px;
-        max-width: 215px;
+        /* max-width: 215px; */
       }
 
       .col-160-px {
         flex: 0 0 160px;
-        max-width: 160px;
+        /* max-width: 160px; */
       }
 
       .col-460-px {
         flex: 0 0 460px;
-        max-width: 460px;
+        /* max-width: 460px; */
       }
 
       .col-225-px {
         flex: 0 0 225px;
-        max-width: 225px;
+        /* max-width: 225px; */
       }
     </style>
 
@@ -162,12 +179,12 @@
             <data-table-column class="col-40-px vertical nowrap" id="hact_values.planned_cash_transfer">
               Flags
             </data-table-column>
-            <data-table-column class="col-100-px monetary vertical padding-right-10 nowrap" id="total_ct_cy">
+            <data-table-column class="col-100-px monetary vertical padding-right-10 nowrap border-box" id="total_ct_cy">
               Cash Transfers<br>1 JAN-31 DEC
             </data-table-column>
           </data-table-column>
           <data-table-column class="col-460-px nowrap" group-heading="PROGRAMMATIC VISITS">
-            <data-table-column class="col-100-px vertical monetary padding-right-10 horizontal right-side">
+            <data-table-column class="col-100-px vertical monetary padding-right-10 horizontal right-side right">
               Cash Transfers<br>1 OCT-30 SEP
             </data-table-column>
             <data-table-column class="col-160-px vertical right-side quarter-heading" id="hact_values.micro_assessment_needed">
@@ -195,7 +212,7 @@
           </data-table-column>
           <data-table-column class="col-555-px layout horizontal" group-heading="SPOT CHECKS">
               <data-table-column class="col-10-px buffer"></data-table-column>
-            <data-table-column class="col-100-px vertical monetary right-side padding-right-10">
+            <data-table-column class="col-100-px vertical monetary right-side padding-right-10 right">
               Liquidations<br>1 OCT-30 SEP
             </data-table-column>
               <data-table-column class="col-160-px vertical right-side quarter-heading">
@@ -232,7 +249,7 @@
             <data-table-column class="col-75-px right-side" id="hact_values.audits_done">
               Completed
             </data-table-column>
-            <data-table-column class="col-75-px right-side monetary">
+            <data-table-column class="col-75-px right-side monetary right">
               Outstanding<br>Findings
             </data-table-column>
           </data-table-column>
