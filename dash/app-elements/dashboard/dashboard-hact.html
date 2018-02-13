@@ -6,6 +6,7 @@
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../../bower_components/paper-tabs/paper-tab.html>
 <link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../bower_components/etools-dropdown/etools-dropdown.html">
 <link rel="import" href="../../app-config/etools-app-config.html">
@@ -101,16 +102,25 @@
         cursor: pointer;
       }
     </style>
+    <app-route
+        route="{{route}}"
+        pattern="dashboard/hact/:hactTab"
+        data="{{routeData}}"
+        active="{{activeTab}}"
+        query-params="{{queryParams}}"></app-route>
 
-    <partners-data id="partners" filtered-partners="{{filteredPartners}}" total-results="{{totalResults}}" totals="{{totals}}"
-      filtered-total-results="{{filteredTotalResults}}" active="[[active]]" fire-data-loaded show-loading on-partners-loaded="_requiredDataHasBeenLoaded">
+    <partners-data id="partners" filtered-partners="{{filteredPartners}}" total-results="{{totalResults}}"
+                   totals="{{totals}}"
+                   filtered-total-results="{{filteredTotalResults}}" active="[[active]]" fire-data-loaded show-loading
+                   on-partners-loaded="_requiredDataHasBeenLoaded">
     </partners-data>
     <div class="view-toggle">
-      <paper-button id="assurancePlan" on-tap="_toggleChartsView" data-name="hactAssurance" noink class="curved-left">
+      <paper-button id="assurancePlan" on-tap="_toggleChartsView" name="assurance" noink class="curved-left">
         <iron-icon class="dark" icon="list"></iron-icon>
         ASSURANCE PLAN
       </paper-button>
-      <paper-button id="dashboardCharts" on-tap="_toggleChartsView" data-name="hactDashboard" noink class="curved-right">
+      <paper-button id="dashboardCharts" on-tap="_toggleChartsView"  name="charts" noink
+                    class="curved-right">
         <iron-icon class="dark" icon="assessment"></iron-icon>
         DASHBOARD
       </paper-button>
@@ -118,12 +128,13 @@
     <iron-pages id="hactPages"
                 selected="{{hactPage}}"
                 attr-for-selected="name"
-                fallback-selection="hactAssurance">
-      <div name="hactAssurance">
+                fallback-selection="assurance">
+      <div name="assurance">
         <paper-material class="list-panel search-bar hact-list" elevation="1">
           <div class="wrap-controls">
-            <paper-input id="query" type="search" autocomplete="off" value="[[queryString]]" on-keyup="setQuery" placeholder="Type and search"
-              label="Keywords" always-float-label on-search="setQuery">
+            <paper-input id="query" type="search" autocomplete="off" value="[[queryString]]" on-keyup="setQuery"
+                         placeholder="Type and search"
+                         label="Keywords" always-float-label on-search="setQuery">
               <iron-icon icon="search" prefix></iron-icon>
             </paper-input>
           </div>
@@ -137,40 +148,41 @@
           </div>
         </paper-material>
 
-        <iron-pages id="hactAssurance"
+        <iron-pages id="assurance"
                     selected="[[subName]]"
                     attr-for-selected="sub-name"
                     fallback-selection="hact-general">
           <div sub-name="hact-general">
             <dashboard-hact-general
-                              filtered-partners="[[filteredPartners]]"
-                              totals="[[totals]]"
-                              total-results="[[totalResults]]"
-                              filtered-total-results="[[filteredTotalResults]]">
+                filtered-partners="[[filteredPartners]]"
+                totals="[[totals]]"
+                total-results="[[totalResults]]"
+                filtered-total-results="[[filteredTotalResults]]">
             </dashboard-hact-general>
           </div>
           <div sub-name="hact-detail">
             <dashboard-hact-detail
-                              filtered-partners="[[filteredPartners]]"
-                              totals="[[totals]]"
-                              total-results="[[totalResults]]"
-                              filtered-total-results="[[filteredTotalResults]]">
+                filtered-partners="[[filteredPartners]]"
+                totals="[[totals]]"
+                total-results="[[totalResults]]"
+                filtered-total-results="[[filteredTotalResults]]">
             </dashboard-hact-detail>
           </div>
           <paper-material>
-          </iron-pages>
-          <data-table-footer page-size="[[pageSize]]" page-number="[[pageNumber]]" visible-range="{{visibleRange}}" filtered-total-results="[[filteredTotalResults]]"
-            on-page-size-changed="pageSizeChanged" on-page-number-changed="pageNumberChanged">
-          </data-table-footer>
+        </iron-pages>
+        <data-table-footer page-size="[[pageSize]]" page-number="[[pageNumber]]" visible-range="{{visibleRange}}"
+                           filtered-total-results="[[filteredTotalResults]]"
+                           on-page-size-changed="pageSizeChanged" on-page-number-changed="pageNumberChanged">
+        </data-table-footer>
         </paper-material>
       </div>
-      <div name="hactDashboard">
-        <dashboard-hact-charts active="[[_isActive(hactPage,'hactDashboard')]]"></dashboard-hact-charts>
+      <div name="charts">
+        <dashboard-hact-charts active="[[_isActive(hactPage,'charts')]]"></dashboard-hact-charts>
       </div>
     </iron-pages>
   </template>
   <script>
-    (function () {
+    (function() {
       'use strict';
       Polymer({
         is: 'dashboard-hact',
@@ -224,17 +236,33 @@
           },
           graphsActive: {
             type: Boolean,
-            value: false
-          }
+            value: false,
+          },
+          routeData: {
+            type: Object,
+            notify: true
+          },
         },
 
         observers: [
           '_updateUrl(queryString, pageNumber, pageSize,' +
-          'sortOrder, requiredDataLoaded, initComplete)'
+          'sortOrder, requiredDataLoaded, initComplete)',
+          '_tabChanged(routeData.hactTab)',
+          '_updateUrlTab(routeData.hactTab)',
+          '_init(active)'
         ],
 
-        _filterPartnersData: function () {
-          this.debounce('query', function () {
+        _init(active){
+          if (active){
+            this.set('route.path', 'dashboard/hact/assurance');
+          }
+        },
+        _tabChanged: function(hactTab) {
+          this.set('hactPage', hactTab);
+        },
+
+        _filterPartnersData: function() {
+          this.debounce('query', function() {
             this.$.partners.query(
               this.queryString,
               this.sortOrder,
@@ -243,20 +271,22 @@
           }, 50);
         },
 
-        _updateUrl: function () {
-          if (!this.initComplete) {
+        _updateUrl: function() {
+          if (!this.initComplete || !this.route) {
             return;
           }
+          this.set('route.path', 'dashboard/hact/assurance');
+
           this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
           const qs = this.buildQueryString();
           if (qs !== null) {
-            this.updateAppState('dashboard/hact', qs, true);
+            this.updateAppState(this.route.path, qs, true);
             if (this.requiredDataLoaded) {
               this._filterPartnersData();
             }
           } else {
             if (location.search === '') {
-              this.updateAppState('dashboard/hact', qs, false);
+              this.updateAppState(this.route.path, qs, false);
             }
             if (this.forceDataRefresh && this.requiredDataLoaded) {
               this._filterPartnersData();
@@ -264,30 +294,38 @@
             }
           }
         },
-
-        _buildCsvDownloadUrl: function () {
-          return this.queryString ?
-            this.getEndpoint('partners').url + '?' + 'search=' + this.queryString + '&format=csv' :
-            this.getEndpoint('partners').url + '?' + '&format=csv';
+        _updateUrlTab: function(tab) {
+          if (!tab) {
+            return;
+          }
+          this.debounce('debounce-url-tab-update', function() {
+            this.fire('update-main-path', {path: this.route.path}, {bubbles: false});
+          }.bind(this), 50);
         },
 
-        _getProp: function (obj, propStr) {
+        _buildCsvDownloadUrl: function() {
+          return this.queryString
+            ? this.getEndpoint('partners').url + '?' + 'search=' + this.queryString + '&format=csv'
+            : this.getEndpoint('partners').url + '?' + '&format=csv';
+        },
+
+        _getProp: function(obj, propStr) {
           if (propStr === 'partner_type') {
             return this._getAbbr(_.get(obj, propStr));
           }
           return _.get(obj, propStr);
         },
 
-        _getAbbr: function (str) {
-          return str.length > 12 ?
-            str
+        _getAbbr: function(str) {
+          return str.length > 12
+            ? str
               .split(' ')
-              .map(function (word) {
+              .map(function(word) {
                 return word[0].toUpperCase();
               }).join('') : str;
         },
 
-        _getGovernmentDisplay: function (partner, prop, toCurrency) {
+        _getGovernmentDisplay: function(partner, prop, toCurrency) {
           const partnerValue = _.get(partner, prop);
           if (partner.partner_type === 'Government') {
             return '-';
@@ -296,7 +334,7 @@
           }
         },
 
-        _requiredDataHasBeenLoaded: function (e) {
+        _requiredDataHasBeenLoaded: function(e) {
           e.stopImmediatePropagation();
           let filtered = _.get(this, 'filteredPartners', []);
           if (_.isEmpty(filtered)) {
@@ -306,25 +344,25 @@
           this.init(this.active);
         },
 
-        _goToPage: function (e) {
+        _goToPage: function(e) {
           window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
         },
 
         _toggleChartsView: function({target}) {
-          const name = target.getAttribute('data-name');
-          this.set('hactPage', name);
-          this.$.assurancePlan.toggleClass("light-button")
-          this.$.dashboardCharts.toggleClass("dark-button")
+          const name = target.getAttribute('name');
+          this.set('routeData.hactTab', name);
+          this.$.assurancePlan.toggleClass('light-button');
+          this.$.dashboardCharts.toggleClass('dark-button');
         },
 
         _detailToggle: function() {
-          let pages = Polymer.dom(this.root).querySelectorAll("iron-pages")
-          pages[1].selectNext()
-          let button = Polymer.dom(this.root).querySelector(".detailed-assurance")
-          button.innerText = !this.displayDetail ? "HIDE DETAILED ASSURANCE" : "SHOW DETAILED ASSURANCE"
-          this.displayDetail = !this.displayDetail
+          let pages = Polymer.dom(this.root).querySelectorAll('iron-pages');
+          pages[1].selectNext();
+          let button = Polymer.dom(this.root).querySelector('.detailed-assurance');
+          button.innerText = !this.displayDetail ? 'HIDE DETAILED ASSURANCE' : 'SHOW DETAILED ASSURANCE';
+          this.displayDetail = !this.displayDetail;
         },
-        _isActive: (current,target)=>current===target
+        _isActive: (current, target) => (current === target),
 
       });
     })();
