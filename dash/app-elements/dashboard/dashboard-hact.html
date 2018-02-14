@@ -6,7 +6,7 @@
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../bower_components/paper-tooltip/paper-tooltip.html">
-<link rel="import" href="../../../bower_components/paper-tabs/paper-tab.html>
+<link rel="import" href="../../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../bower_components/etools-dropdown/etools-dropdown.html">
 <link rel="import" href="../../app-config/etools-app-config.html">
@@ -126,7 +126,7 @@
       </paper-button>
     </div>
     <iron-pages id="hactPages"
-                selected="{{hactPage}}"
+                selected="{{routeData.hactTab}}"
                 attr-for-selected="name"
                 fallback-selection="assurance">
       <div name="assurance">
@@ -248,17 +248,17 @@
           '_updateUrl(queryString, pageNumber, pageSize,' +
           'sortOrder, requiredDataLoaded, initComplete)',
           '_tabChanged(routeData.hactTab)',
-          '_updateUrlTab(routeData.hactTab)',
-          '_init(active)'
         ],
 
-        _init(active){
-          if (active){
-            this.set('route.path', 'dashboard/hact/assurance');
-          }
-        },
         _tabChanged: function(hactTab) {
           this.set('hactPage', hactTab);
+          if (this.hactPage === 'charts') {
+            this.$.assurancePlan.classList.add('light-button');
+            this.$.dashboardCharts.classList.add('dark-button');
+          } else {
+            this.$.assurancePlan.classList.remove('light-button');
+            this.$.dashboardCharts.classList.remove('dark-button');
+          }
         },
 
         _filterPartnersData: function() {
@@ -275,8 +275,6 @@
           if (!this.initComplete || !this.route) {
             return;
           }
-          this.set('route.path', 'dashboard/hact/assurance');
-
           this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
           const qs = this.buildQueryString();
           if (qs !== null) {
@@ -293,14 +291,6 @@
               this.set('forceDataRefresh', false);
             }
           }
-        },
-        _updateUrlTab: function(tab) {
-          if (!tab) {
-            return;
-          }
-          this.debounce('debounce-url-tab-update', function() {
-            this.fire('update-main-path', {path: this.route.path}, {bubbles: false});
-          }.bind(this), 50);
         },
 
         _buildCsvDownloadUrl: function() {
@@ -349,10 +339,8 @@
         },
 
         _toggleChartsView: function({target}) {
-          const name = target.getAttribute('name');
-          this.set('routeData.hactTab', name);
-          this.$.assurancePlan.toggleClass('light-button');
-          this.$.dashboardCharts.toggleClass('dark-button');
+          let pages = Polymer.dom(this.root).querySelectorAll('iron-pages');
+          pages[0].selectNext();
         },
 
         _detailToggle: function() {
