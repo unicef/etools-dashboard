@@ -126,7 +126,7 @@
       return Number(val) ? val : '-';
     },
     commaSplit: function(str) {
-      return str.split(',');
+      return str ? str.split(',') : [];
     },
     strippedSpace: function(str) {
       return str.split(',')
