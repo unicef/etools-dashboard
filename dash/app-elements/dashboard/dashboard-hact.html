@@ -322,7 +322,9 @@
 
         _toggleChartsView: function({target}) {
           const name = target.getAttribute('data-name');
-          if (this.hactPage != name) {
+          if (this.hactPage === name) {
+            return
+          } else if (this.hactPage != name) {
             this.set('hactPage', name);
             this.$.assurancePlan.toggleClass("light-button")
             this.$.dashboardCharts.toggleClass("dark-button")
