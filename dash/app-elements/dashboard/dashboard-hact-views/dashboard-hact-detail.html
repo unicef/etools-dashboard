@@ -291,12 +291,12 @@
             <div class="col-215-px layout horizontal">
               <div class="col-75-px nowrap no-overflow vertical"></div>
               <div class="col-40-px nowrap vertical"></div>
-              <div class="col-100-px monetary padding-right-10 nowrap vertical">$0</div>
+              <div class="col-100-px monetary padding-right-10 nowrap vertical">$[[currencyFormat(totals.total_ct_ytd)]]</div>
             </div>
             <div class="col-460-px layout horizontal">
               <div class="col-100-px nowrap monetary vertical padding-right-10 right-side">$[[currencyFormat(totals.total_ct_cy)]]</div>
               <div class="col-160-px vertical right-side">
-                <span class="col-3">[[totals.hact_values_programmatic_visits_planned_total]]</span>
+                <span class="col-3">[[totals.hact_values_programmatic_visits_planned_q1]]</span>
                 <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q2]]</span>
                 <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q3]]</span>
                 <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q4]]</span>
@@ -311,12 +311,12 @@
             </div>
             <div class="col-555-px layout horizontal">
               <div class="col-10-px buffer"></div>
-              <div class="col-100-px right-side right padding-right-10 monetary vertical">$[[currencyFormat(totals.liquidation)]]</div>
+              <div class="col-100-px right-side right padding-right-10 monetary vertical">$[[currencyFormat(totals.reported_cy)]]</div>
                 <div class="col-160-px right-side right vertical">
-                  <span class="col-3">[[totals.hact_values_spot_checks_planned_q1]]</span>
-                  <span class="col-3 right-side">[[totals.hact_values_spot_checks_planned_q2]]</span>
-                  <span class="col-3 right-side">[[totals.hact_values_spot_checks_planned_q3]]</span>
-                  <span class="col-3 right-side">[[totals.hact_values_spot_checks_planned_q4]]</span>
+                  <span class="col-3">[[_sumSpotChecks(totals.planned_engagement_spot_check_mr_q1, totals.planned_engagement_spot_check_follow_up_q1)]]</span>
+                  <span class="col-3 right-side">[[_sumSpotChecks(totals.planned_engagement_spot_check_mr_q2, totals.planned_engagement_spot_check_follow_up_q2)]]</span>
+                  <span class="col-3 right-side">[[_sumSpotChecks(totals.planned_engagement_spot_check_mr_q3, totals.planned_engagement_spot_check_follow_up_q3)]]</span>
+                  <span class="col-3 right-side">[[_sumSpotChecks(totals.planned_engagement_spot_check_mr_q4, totals.planned_engagement_spot_check_follow_up_q4)]]</span>
                 </div>
                   <span class="col-40-px right-side center vertical">[[totals.hact_min_requirements_spot_checks]]</span>
                   <span class="col-75-px right-side center vertical">[[totals.hact_values_spot_checks_follow_up_required]]</span>
@@ -359,12 +359,12 @@
                     <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment or audit report has not been submitted through the Auditor Portal</paper-tooltip>
                   </div>
                 </span>
-                <span class="col-100-px monetary padding-right-10 nowrap vertical">$0</span>
+                <span class="col-100-px monetary padding-right-10 nowrap vertical">$[[currencyFormat(partner.total_ct_ytd)]]</span>
               </div>
               <div class="col-460-px layout horizontal">
                 <span class="col-100-px nowrap monetary padding-right-10 right-side vertical">$[[currencyFormat(partner.total_ct_cy)]]</span>
                 <span class="col-160-px nowrap vertical right-side">
-                  <span class="col-3">[[partner.hact_values.programmatic_visits.planned.total]]</span>
+                  <span class="col-3">[[partner.hact_values.programmatic_visits.planned.q1]]</span>
                   <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.planned.q2]]</span>
                   <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.planned.q3]]</span>
                   <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.planned.q4]]</span>
@@ -379,12 +379,12 @@
               </div>
               <div class="col-555-px layout horizontal"> 
                   <span class="col-10-px buffer"></span>
-                <span class="col-100-px right-side padding-right-10 monetary vertical">$[[currencyFormat(partner.liquidation)]]</span>
+                <span class="col-100-px right-side padding-right-10 monetary vertical">$[[currencyFormat(partner.reported_cy)]]</span>
                   <span class="col-160-px right-side vertical">
-                    <span class="col-3">[[partner.hact_values.spot_checks.planned.q1]]</span>
-                    <span class="col-3 vertical quarter-item">[[partner.hact_values.spot_checks.planned.q2]]</span>
-                    <span class="col-3 quarter-item">[[partner.hact_values.spot_checks.planned.q3]]</span>
-                    <span class="col-3 quarter-item">[[partner.hact_values.spot_checks.planned.q4]]</span>
+                    <span class="col-3">[[_sumSpotChecks(partner.planned_engagement.spot_check_mr.q1, partner.planned_engagement.spot_check_follow_up_q1)]]</span>
+                    <span class="col-3 vertical quarter-item">[[_sumSpotChecks(partner.planned_engagement.spot_check_mr.q2, partner.planned_engagement.spot_check_follow_up_q2)]]</span>
+                    <span class="col-3 quarter-item">[[_sumSpotChecks(partner.planned_engagement.spot_check_mr.q3, partner.planned_engagement.spot_check_follow_up_q3)]]</span>
+                    <span class="col-3 quarter-item">[[_sumSpotChecks(partner.planned_engagement.spot_check_mr.q4, partner.planned_engagement.spot_check_follow_up_q4)]]</span>
                   </span>
                   <span class="col-40-px right-side center vertical">[[partner.hact_min_requirements.spot_checks]]</span>
                   <span class="col-75-px right-side center vertical">[[partner.hact_values.spot_checks.follow_up_required]]</span>
@@ -435,6 +435,10 @@
           } else {
             return toCurrency ? this.currencyFormat(partnerValue) : partnerValue;
           }
+        },
+
+        _sumSpotChecks: function(mr, followUp) {
+          return mr + followUp
         },
       });
     })();

@@ -188,10 +188,10 @@
             </data-table-column>
           </div>
           <div class="col-6 layout horizontal">
-            <data-table-column class="col-3 vertical nowrap padded" id="total_ct_cp">
+            <data-table-column class="col-4 vertical nowrap padded" id="total_ct_cp">
               Risk<br>Rating
             </data-table-column>
-            <data-table-column class="col-3 vertical nowrap padded" id="hact_values.planned_cash_transfer">
+            <data-table-column class="col-2 vertical nowrap padded" id="hact_values.planned_cash_transfer">
               Flags
             </data-table-column>
             <data-table-column class="col-6 right vertical padding-right-10 nowrap" id="total_ct_cy">
@@ -252,9 +252,9 @@
               <span class="col-6 col-data vertical"></span>
             </span>
             <span class="col-6 layout horizontal">
-              <span class="col-3 col-data vertical"></span>
-              <span class="col-3 col-data vertical"></span>
-              <span class="col-6 col-data padding-right-10 right">$0</span>
+              <span class="col-4 col-data vertical"></span>
+              <span class="col-2 col-data vertical"></span>
+              <span class="col-6 col-data padding-right-10 right">$[[currencyFormat(totals.total_ct_ytd)]]</span>
             </span>
           </div>
           <div class="col-5 layout horizontal">
@@ -298,8 +298,8 @@
                 <span class="col-6 col-data padded name">[[partner.type_of_assessment]]</span>
               </span>
               <span class="col-6 layout horizontal">
-                <span class="col-3 ellipsis col-data">[[partner.rating]]</span>
-                <span class="col-3 col-data">
+                <span class="col-4 ellipsis col-data">[[partner.rating]]</span>
+                <span class="col-2 col-data">
                   <div>
                     <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
                     <paper-tooltip hidden="[[!partner.flags.expiring_assessment_flag]]">Micro assessment is expiring soon</paper-tooltip>
@@ -309,7 +309,7 @@
                     <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment or audit report has not been submitted through the Auditor Portal</paper-tooltip>
                   </div>
                 </span>
-                <span class="col-6 col-data right padding-right-10">$0</span>
+                <span class="col-6 col-data right padding-right-10">$[[currencyFormat(partner.total_ct_ytd)]]</span>
               </span>
             </div>
             <div class="col-5 layout horizontal">
