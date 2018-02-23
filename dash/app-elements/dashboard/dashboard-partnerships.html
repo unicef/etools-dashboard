@@ -5,6 +5,7 @@
 <link rel="import" href="../../../styles/page-layout-styles.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../../styles/grid-layout-styles.html">
+<link rel="import" href="../../../styles/custom-iconsets/dash-icons.html">
 
 <link rel="import" href="../../app-config/etools-app-config.html">
 
@@ -15,9 +16,11 @@
 
 <link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/iron-icons/editor-icons.html">
 <link rel="import"
       href="../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
 <link rel="import" href="../../../bower_components/etools-datepicker/etools-datepicker-button.html">
@@ -86,11 +89,17 @@
       }
 
       .blue-col {
-        background-color: rgb(222, 242, 254)
+        background-color: rgb(222, 242, 254);
+        max-width: 70px;
       }
 
       .green-col {
-        background-color: rgb(237, 247, 223)
+        background-color: rgb(237, 247, 223);
+        max-width: 70px;
+      }
+
+      .width-70 {
+        max-width: 70px;
       }
 
       .justify-end {
@@ -214,31 +223,36 @@
             Start Date<br>End Date
           </data-table-column>
         </data-table-column>
-        <data-table-column class="col-4" group-heading="PLANNED BUDGET">
-          <data-table-column class="flex right-align">
-            PD<br>Currency
+        <div class="col-5 layout horizontal">
+          <data-table-column class="col-6" group-heading="PLANNED BUDGET">
+            <data-table-column class="flex right-align">
+              PD<br>Currency
+            </data-table-column>
+            <!-- <data-table-column class="flex right-align">
+              CSO<br>Contrib.
+            </data-table-column> -->
+            <data-table-column class="flex right-align">
+              UNICEF<br>Supplies
+            </data-table-column>
+            <data-table-column class="flex right-align">
+              UNICEF<br>Cash
+            </data-table-column>
           </data-table-column>
-          <data-table-column class="flex right-align">
-            CSO<br>Contrib.
+          <data-table-column class="col-6" group-heading="FUNDS RESERVED & DISBURSED">
+            <data-table-column class="flex right-align">
+              FR<br>Currency
+            </data-table-column>
+            <data-table-column class="flex right-align">
+              FR<br>Amount
+            </data-table-column>
+            <data-table-column class="flex right-align">
+              Actual<br>Disbursm.
+            </data-table-column>
           </data-table-column>
-          <data-table-column class="flex right-align">
-            UNICEF<br>Supplies
-          </data-table-column>
-          <data-table-column class="flex right-align">
-            UNICEF<br>Cash
-          </data-table-column>
-        </data-table-column>
+        </div>
         <data-table-column class="flex" group-heading="blank" transparent>
           <data-table-column class="flex right-align">
             Disburs.<br>To Date
-          </data-table-column>
-        </data-table-column>
-        <data-table-column class="col-2" group-heading="FUNDS RESERVED & DISBURSED">
-          <data-table-column class="flex right-align">
-            FR<br>Currency
-          </data-table-column>
-          <data-table-column class="flex right-align">
-            FR<br>Amount
           </data-table-column>
           <data-table-column class="flex right-align">
             Days Since<br>Last PV
@@ -285,45 +299,58 @@
                 [[prettyDate(row.start)]] <br> [[prettyDate(row.end)]]
               </span>
             </div>
-            <div class="col-4 layout horizontal">
-              <span class="col-data flex right-align">
-                (dollas)
-              </span>
-              <span class="col-data flex right-align">
-                [[currencyFormat(row.cso_contribution)]]
-              </span>
-              <span class="col-data flex right-align">
-                [[currencyFormat(row.unicef_supplies)]]
-              </span>
-              <span class="col-data flex-1 right-align">
-                <etools-info-tooltip
-                  class="blue-col wrap-tooltip"
-                  icon="report"
-                  fit-to-visible-bounds
-                  icon-first
-                  right-aligned
-                  hide-tooltip="[[_isEqual(row.unicef_cash, row.frs_total_frs_amt)]]">
-                  <span slot="field">[[currencyFormat(row.unicef_cash)]]</span>
-                  <span slot="message">FR Amount does not equal Total UNICEF $ Cash</span>
-                </etools-info-tooltip>
-              </span>
+            <div class="col-5 layout horizontal">
+              <div class="col-6 layout horizontal">
+                <span class="col-data flex right-align">
+                  (dollas)
+                </span>
+                <!-- <span class="col-data flex right-align">
+                  [[currencyFormat(row.cso_contribution)]]
+                </span> -->
+                <span class="col-data flex right-align">
+                  [[currencyFormat(row.unicef_supplies)]]
+                </span>
+                <span class="col-data flex-1 right-align blue-col">
+                  <!-- <etools-info-tooltip
+                    class="blue-col wrap-tooltip"
+                    icon="report"
+                    fit-to-visible-bounds
+                    icon-first
+                    right-aligned
+                    hide-tooltip="[[_isEqual(row.unicef_cash, row.frs_total_frs_amt)]]">
+                    <span slot="field">[[currencyFormat(row.unicef_cash)]]</span>
+                    <span slot="message">FR Amount does not equal Total UNICEF $ Cash</span>
+                  </etools-info-tooltip> -->
+                  [[currencyFormat(row.unicef_cash)]]
+                </span>
+              </div>
+              <div class="col-6 layout horizontal">
+                <span class="col-data flex right-align">
+                  <!-- [[currencyFormat(row.total_budget)]] -->
+                  <iron-icon hidden="[[_isEqual(pdcurrency, frcurrency)]]" icon="editor:money-off"></iron-icon>
+                  <paper-tooltip hidden="[[_isEqual(pdcurrency, frcurrency)]]">
+                    FR currency does not match PD currency.<br>
+                    Disbursement to date % cannot calculate.
+                  </paper-tooltip>
+                </span>
+                <span class="col-data flex right-align">
+                  <iron-icon hidden="[[_isEqual(pdcurrency, frcurrency)]]" icon="dash-custom-icons:not-equal">
+                    [[_displayDisbursement(row.disbursement)]]
+                  </iron-icon>
+                  <paper-tooltip hidden="[[_isEqual(pdcurrency, frcurrency)]]">
+                    FR amount does not equal to planned UNICEF cash
+                  </paper-tooltip>
+                </span>
+                <span class="col-data flex right-align green-col">
+                  [[_displayDisbursement(row.disbursement)]]
+                </span>
+              </div>
             </div>
             <div class="flex layout horizontal justify-end">
               <span class="col-data flex right-align to-date">
-                [[_displayDisbursement(row.disbursement)]]
-                <br>
                 [[_getDisbPercent(row.disbursement_percent)]]
               </span>
-            </div>
-            <div class="col-2 layout horizontal">
-              <span class="col-data flex right-align">
-                <!-- [[currencyFormat(row.total_budget)]] -->
-                (curr)
-              </span>
-              <span class="col-data flex right-align">
-                (amt)
-              </span>
-              <span class="col-data flex right-align green-col">
+              <span class="col-data flex right-align width-70">
                 [[displayNonZero(row.days_last_pv)]]
               </span>
             </div>
@@ -707,8 +734,8 @@
         },
 
         _getDisbPercent: function(perc) {
-          return perc === '0.00' ? ''
-            : `(${Number(perc).toFixed(0)})`;
+          return perc === '0.00' ? '0'
+            : `${Number(perc).toFixed(0)}%`;
         },
         _filterChanged: function() {
           this.set('debounceTime', 200);
@@ -734,9 +761,9 @@
           let nonZero = this.displayNonZero(val);
           return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
         },
-        _isEqual: function(total, disbursed) {
-          // return disbursed === total
-          return true;
+        _isEqual: function(first, second) {
+          return first != second;
+          // return true;
         },
 
 
