@@ -387,7 +387,7 @@
                     <span class="col-3 quarter-item">[[_sumSpotChecks(partner.planned_engagement.spot_check_mr.q4, partner.planned_engagement.spot_check_follow_up_q4)]]</span>
                   </span>
                   <span class="col-40-px right-side center vertical">[[partner.hact_min_requirements.spot_checks]]</span>
-                  <span class="col-75-px right-side center vertical">[[partner.hact_values.spot_checks.follow_up_required]]</span>
+                  <span class="col-75-px right-side center vertical">[[_sumSpotCheckFollowUp(partner.planned_engagement)]]</span>
                 <span class="col-160-px right-side vertical">
                   <span class="col-3">[[partner.hact_values.spot_checks.completed.q1]]</span>
                   <span class="col-3 quarter-item">[[partner.hact_values.spot_checks.completed.q2]]</span>
@@ -397,7 +397,7 @@
                 <span class="col-10-px buffer"></span>
               </div>
               <div class="col-225-px layout horizontal">
-                <span class="col-75-px right-side center vertical">[[partner.hact_values.audits.minimum_requirements]]</span>
+                <span class="col-75-px right-side center vertical">[[partner.planned_engagement.required_audits]]</span>
                 <span class="col-75-px right-side center vertical">[[partner.hact_values.audits.completed]]</span>
                 <span class="col-75-px right-side monetary vertical">$[[partner.outstanding_findings]]</span>
               </div>
@@ -439,6 +439,15 @@
 
         _sumSpotChecks: function(mr, followUp) {
           return mr + followUp
+        },
+
+        _sumSpotCheckFollowUp: function(planned_engagement) {
+          return (
+            planned_engagement.spot_check_follow_up_q1
+            + planned_engagement.spot_check_follow_up_q2
+            + planned_engagement.spot_check_follow_up_q3
+            + planned_engagement.spot_check_follow_up_q4
+          )
         },
       });
     })();
