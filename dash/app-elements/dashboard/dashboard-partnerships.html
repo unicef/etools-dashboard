@@ -307,7 +307,7 @@
             <div class="col-7 layout horizontal">
               <div class="col-4 layout horizontal">
                 <span class="col-data col-3 right-align">
-                  USD
+                  [[row.budget_currency]]
                 </span>
                 <span class="col-data col-5 right-align">
                   [[currencyFormat(row.unicef_supplies)]]
@@ -318,18 +318,18 @@
               </div>
               <div class="col-5 layout horizontal">
                 <span class="col-data col-3 right-align">
-                  <iron-icon hidden="true" icon="dash-custom-icons:not-equal" class="blue-icon"></iron-icon>
-                  <paper-tooltip hidden="true">
+                  <iron-icon hidden="[[row.all_currencies_are_consistent]]" icon="dash-custom-icons:not-equal" class="blue-icon"></iron-icon>
+                  <paper-tooltip hidden="[[row.all_currencies_are_consistent]]">
                     FR currency does not match PD currency.<br>
                     Disbursement to date % cannot calculate.
                   </paper-tooltip>
-                  <iron-icon icon="dash-custom-icons:1+" class="blue-icon">
+                  <iron-icon hidden="[[_checkAllCurrenciesConsistent(row.all_currencies_are_consistent, row.fr_currencies_are_consistent)]]" icon="dash-custom-icons:1+" class="blue-icon">
                   </iron-icon>
-                  <paper-tooltip>
+                  <paper-tooltip hidden="[[row.fr_currencies_are_consistent]]">
                     More than 1 FR currency is available. FR Amount<br>
                     and Actual Disbursements cannot be displayed.
                   </paper-tooltip>
-                  USD
+                  [[row.fr_currency]]
                 </span>
                 <span class="col-data col-5 right-align">
                   <iron-icon hidden="[[_isEqual(row.unicef_cash, row.frs_total_frs_amt)]]" icon="dash-custom-icons:not-equal" class="red-icon">
@@ -341,9 +341,9 @@
                   [[currencyFormat(row.frs_total_frs_amt)]]
                 </span>
                 <span class="col-data col-4 right-align green-col">
-                  <iron-icon hidden="true" icon="dash-custom-icons:not-equal" class="blue-icon">
+                  <iron-icon hidden="[[row.fr_currencies_are_consistent]]" icon="dash-custom-icons:not-equal" class="blue-icon">
                   </iron-icon>
-                  <paper-tooltip hidden="true">
+                  <paper-tooltip hidden="[[row.fr_currencies_are_consistent]]">
                     Disbursement currency does not match FR currency
                   </paper-tooltip>
                   [[_displayDisbursement(row.disbursement)]]
@@ -768,6 +768,15 @@
         _isEqual: function(first, second) {
           return first === second;
           // return true;
+        },
+        _checkAllCurrenciesConsistent: function(all_currencies_are_consistent, fr_currencies_are_consistent) {
+          if (!fr_currencies_are_consistent && !all_currencies_are_consistent) {
+            return true
+          }
+          if (fr_currencies_are_consistent) {
+            return true
+          }
+          return false
         },
       });
     })();
