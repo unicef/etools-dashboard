@@ -72,6 +72,7 @@
       div.sections{
         height: 48px;
         white-space: normal !important;
+        overflow-y: scroll;
       }
 
       div.sections > span {
@@ -127,6 +128,7 @@
         padding-right: 8px;
       }
     </style>
+
     <partnership-data 
         id="partnerships"
         filtered-partnerships="{{filteredPartnerships}}"
@@ -262,7 +264,7 @@
               Disburs.<br>To Date
             </data-table-column>
             <data-table-column class="col-7 right-align">
-              Days Since<br>Last PV
+              Days<br>Since<br>Last PV
             </data-table-column>
           </data-table-column>
         </div>
