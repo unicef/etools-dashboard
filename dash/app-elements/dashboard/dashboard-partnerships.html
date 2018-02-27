@@ -34,15 +34,7 @@
 <dom-module id="dashboard-partnerships">
 
   <template>
-    <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors page-layout-styles">
-      /* .wrap-tooltip {
-        --paper-tooltip: {
-          width: 30px;
-          overflow: visible;
-          white-space: wrap;
-        }
-      } */
-      
+    <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors page-layout-styles">      
       .by-type {
         padding: 0;
         @apply(--layout-horizontal);
@@ -73,8 +65,8 @@
         text-align: right;
       }
 
-       data-table-row span:nth-child(3) {
-         overflow-y: auto;
+      data-table-row span:nth-child(3) {
+        overflow-y: auto;
       }
 
       div.sections{
@@ -114,6 +106,8 @@
         background-image: -webkit-linear-gradient(135deg, rgb(222, 242, 254) 50%, rgb(237, 247, 223) 50%);
         height: 48px;
         max-width: 48px;
+        justify-content: center !important;
+        padding-right: initial !important;
       }
       
       .red-icon {
@@ -122,6 +116,15 @@
 
       .blue-icon {
         fill: rgb(26, 154, 250);
+      }
+
+      .ip-pd {
+        display: initial !important;
+        padding-top: 4px;
+      }
+
+      .right-nudge {
+        padding-right: 8px;
       }
     </style>
     <partnership-data 
@@ -232,14 +235,14 @@
           </data-table-column>
         </data-table-column>
         <div class="col-7 layout horizontal">
-          <data-table-column class="col-4" group-heading="PLANNED BUDGET">
-            <data-table-column class="col-3 right-align">
+          <data-table-column class="col-5" group-heading="PLANNED BUDGET">
+            <data-table-column class="col-2 right-align">
               PD<br>Currency
             </data-table-column>
             <data-table-column class="col-5 right-align">
               UNICEF<br>Supplies
             </data-table-column>
-            <data-table-column class="col-4 right-align">
+            <data-table-column class="col-5 right-align">
               UNICEF<br>Cash
             </data-table-column>
           </data-table-column>
@@ -254,7 +257,7 @@
               Actual<br>Disbursm.
             </data-table-column>
           </data-table-column>
-          <data-table-column class="col-3" group-heading="blank" transparent>
+          <data-table-column class="col-2" group-heading="blank" transparent>
             <data-table-column class="col-5 right-align">
               Disburs.<br>To Date
             </data-table-column>
@@ -269,13 +272,14 @@
         <data-table-row no-collapse>
           <div slot="row-data">
             <div class="col-5 layout horizontal">
-              <span class="col-data col-4">
+              <span class="col-data col-4 ip-pd">
                 <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details" app-name="pmp"
                   page="partners" id="[[row.partner_id]]/details"
                   class="title">
                   [[row.partner_name]]
                   <paper-tooltip fit-to-visible-bounds>[[row.partner_name]]</paper-tooltip>
-                </a><br>
+                </a>
+                <br>
                 <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details" app-name="pmp"
                   page="interventions"
                   id="[[row.intervention_id]]/details" class="title">
@@ -305,18 +309,18 @@
               </span>
             </div>
             <div class="col-7 layout horizontal">
-              <div class="col-4 layout horizontal">
-                <span class="col-data col-3 right-align">
+              <div class="col-5 layout horizontal">
+                <span class="col-data col-2 right-align">
                   [[row.budget_currency]]
                 </span>
                 <span class="col-data col-5 right-align">
                   [[currencyFormat(row.unicef_supplies)]]
                 </span>
-                <span class="col-data col-4 right-align blue-col">
+                <span class="col-data col-5 right-align blue-col">
                   [[currencyFormat(row.unicef_cash)]]
                 </span>
               </div>
-              <div class="col-5 layout horizontal">
+              <div class="col-5 layout horizontal right-nudge">
                 <span class="col-data col-3 right-align">
                   <iron-icon hidden="[[row.all_currencies_are_consistent]]" icon="dash-custom-icons:not-equal" class="blue-icon"></iron-icon>
                   <paper-tooltip hidden="[[row.all_currencies_are_consistent]]">
@@ -349,7 +353,7 @@
                   [[_displayDisbursement(row.disbursement)]]
                 </span>
               </div>
-              <div class="col-3 layout horizontal justify-end">
+              <div class="col-2 layout horizontal justify-end">
                 <span class="col-data col-5 right-align to-date">
                   [[_getDisbPercent(row.disbursement_percent)]]
                 </span>
@@ -770,13 +774,13 @@
           // return true;
         },
         _checkAllCurrenciesConsistent: function(all_currencies_are_consistent, fr_currencies_are_consistent) {
-          if (!fr_currencies_are_consistent && !all_currencies_are_consistent) {
+          if (!all_currencies_are_consistent) {
             return true
           }
-          if (fr_currencies_are_consistent) {
-            return true
+          if (!fr_currencies_are_consistent) {
+            return false
           }
-          return false
+          return true
         },
       });
     })();
