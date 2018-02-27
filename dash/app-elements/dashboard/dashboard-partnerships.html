@@ -45,15 +45,20 @@
         font-weight: 500;
       }
 
-      data-table-header data-table-column:not(:first-child),
-      data-table-row span:not(:first-child) {
+      data-table-row span:not(:first-child),
+      data-table-header data-table-column:not(:first-child)
+      data-table-header data-table-column data-table-column,
+      data-table-header div data-table-column data-table-column {
         box-sizing: border-box;
-        padding-left: 8px;
+      }
+
+      data-table-row div[slot="row-data"] div span,
+      data-table-header div data-table-column data-table-column {
+        padding-right: 8px;
       }
 
       data-table-row div[slot="row-data"] div:not(:first-child) span,
       data-table-header div data-table-column data-table-column {
-        padding-right: 8px;
         justify-content: flex-end;
       }
 
@@ -63,10 +68,6 @@
 
       .right-align {
         text-align: right;
-      }
-
-      data-table-row span:nth-child(3) {
-        overflow-y: auto;
       }
 
       div.sections{
@@ -93,10 +94,6 @@
       .green-col {
         background-color: rgb(237, 247, 223);
         max-width: 100%;
-      }
-
-      .width-70 {
-        max-width: 70px;
       }
 
       .justify-end {
@@ -126,6 +123,15 @@
 
       .right-nudge {
         padding-right: 8px;
+        box-sizing: border-box;
+      }
+
+      .no-padding {
+        padding: 0;
+      }
+
+      .status {
+        padding-left: 8px;
       }
     </style>
 
@@ -229,7 +235,7 @@
           <data-table-column class="col-2">
             Field Office
           </data-table-column>
-          <data-table-column class="col-2">
+          <data-table-column class="col-2 status">
             Status
           </data-table-column>
           <data-table-column class="col-2">
@@ -239,7 +245,7 @@
         <div class="col-7 layout horizontal">
           <data-table-column class="col-5" group-heading="PLANNED BUDGET">
             <data-table-column class="col-2 right-align">
-              PD<br>Currency
+              PD Cur.
             </data-table-column>
             <data-table-column class="col-5 right-align">
               UNICEF<br>Supplies
@@ -248,9 +254,9 @@
               UNICEF<br>Cash
             </data-table-column>
           </data-table-column>
-          <data-table-column class="col-5" group-heading="FUNDS RESERVED & DISBURSED">
+          <data-table-column class="col-5 right-nudge" group-heading="FUNDS RESERVED & DISBURSED">
             <data-table-column class="col-3 right-align">
-              FR<br>Currency
+              FR Cur.
             </data-table-column>
             <data-table-column class="col-5 right-align">
               FR<br>Amount
@@ -260,7 +266,7 @@
             </data-table-column>
           </data-table-column>
           <data-table-column class="col-2" group-heading="blank" transparent>
-            <data-table-column class="col-5 right-align">
+            <data-table-column class="col-5 right-align no-padding">
               Disburs.<br>To Date
             </data-table-column>
             <data-table-column class="col-7 right-align">
@@ -303,7 +309,7 @@
                   [[item]]<br>
                 </template>
               </span>
-              <span class="col-data col-2">
+              <span class="col-data col-2 status">
                 [[capitalizeWord(row.status)]]
               </span>
               <span class="col-data col-2 date">
@@ -359,7 +365,7 @@
                 <span class="col-data col-5 right-align to-date">
                   [[_getDisbPercent(row.disbursement_percent)]]
                 </span>
-                <span class="col-data col-7 right-align width-70">
+                <span class="col-data col-7 right-align">
                   [[displayNonZero(row.days_last_pv)]]
                 </span>
               </div>
