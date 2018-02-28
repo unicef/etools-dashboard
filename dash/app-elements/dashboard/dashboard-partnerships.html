@@ -34,7 +34,11 @@
 <dom-module id="dashboard-partnerships">
 
   <template>
-    <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors page-layout-styles">      
+    <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors page-layout-styles">
+      .no-header-line {
+        --header-bottom-line: none;
+      }
+      
       .by-type {
         padding: 0;
         @apply(--layout-horizontal);
@@ -225,7 +229,7 @@
 
     <paper-material id="list" elevation="1">
       <data-table-header no-collapse>
-        <data-table-column class="col-5" group-heading="blank" transparent>
+        <data-table-column class="col-5 no-header-line" group-heading="blank" transparent>
           <data-table-column class="col-4" sortable>
             IP Name<br>PD/SSFA Ref #
           </data-table-column>
@@ -254,7 +258,7 @@
               UNICEF<br>Cash
             </data-table-column>
           </data-table-column>
-          <data-table-column class="col-5 right-nudge" group-heading="FUNDS RESERVED & DISBURSED">
+          <data-table-column class="col-5" group-heading="FUNDS RESERVED & DISBURSED">
             <data-table-column class="col-3 right-align">
               FR Cur.
             </data-table-column>
@@ -265,7 +269,7 @@
               Actual<br>Disbursm.
             </data-table-column>
           </data-table-column>
-          <data-table-column class="col-2" group-heading="blank" transparent>
+          <data-table-column class="col-2 no-header-line" group-heading="blank" transparent>
             <data-table-column class="col-5 right-align no-padding">
               Disburs.<br>To Date
             </data-table-column>
