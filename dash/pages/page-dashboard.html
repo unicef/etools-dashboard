@@ -70,8 +70,8 @@
                             hide-search hidden$="[[!_isActive(partnershipPage, 'hact')]]">
                 </etools-dropdown>
               </div>
-              <div class="top-content-action" hidden$="[[!hactActive]]">
-                <a target="_blank" href="[[exportUrl]]">
+              <div class="top-content-action" hidden$="[[hideExport]]">
+                <a target="_blank" href="[[csvUrl]]">
                   <paper-button>
                     <iron-icon icon="file-download"></iron-icon>
                     Export
@@ -194,6 +194,7 @@
         dashTab === 'partnerships' ? this.set('pageTitle', 'CSO Dashboard') : this.set('pageTitle', 'Dashboard');
       },
       _updateUrlTab: function(tab) {
+        this.hideExport = tab === 'hact' || tab === 'partnerships' ? false : true;
         if (!tab) {
           return;
         }
@@ -208,7 +209,7 @@
         window.location.href = this.baseSite +'/t2f/edit-travel/-1';
       },
       _setExportYear: function() {
-        this.exportUrl = event.target.dropdownValue;
+        this.csvUrl = event.target.dropdownValue;
       },
     });
 
