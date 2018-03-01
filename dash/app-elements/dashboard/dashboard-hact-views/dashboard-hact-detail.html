@@ -68,7 +68,6 @@
         border-left: 1px solid rgba(0, 0, 0, 0.24);
         box-sizing: border-box;
         height: 48px;
-        /* height: 40px; */
       }
 
       .right-side {
@@ -76,8 +75,6 @@
         border-left: 1px solid rgba(0, 0, 0, 0.24);
         box-sizing: border-box;
         min-height: 48px;
-        /* height: 48px; */
-        /* align-items: center; */
       }
 
       .left-align {
@@ -120,11 +117,6 @@
         border-left: 1px solid rgb(227, 227, 227);
         box-sizing: border-box;
       }
-
-      /* data-table-row > div[slot="row-data"] > div > div {
-        display: flex;
-        align-items: center;
-      } */
 
       .col-75-px {
         flex: 0 0 75px;
@@ -397,7 +389,7 @@
                 <span class="col-10-px buffer"></span>
               </div>
               <div class="col-225-px layout horizontal">
-                <span class="col-75-px right-side center vertical">[[partner.planned_engagement.required_audits]]</span>
+                <span class="col-75-px right-side center vertical">[[partner.planned_engagement.required_audit]]</span>
                 <span class="col-75-px right-side center vertical">[[partner.hact_values.audits.completed]]</span>
                 <span class="col-75-px right-side monetary vertical">$[[partner.outstanding_findings]]</span>
               </div>
