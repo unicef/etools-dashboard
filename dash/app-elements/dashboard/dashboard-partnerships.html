@@ -785,15 +785,8 @@
           return first === second;
         },
         _checkAllCurrenciesConsistent: function(all_currencies_are_consistent, fr_currencies_are_consistent) {
-          // return (!all_currencies_are_consistent) ? true :
-          //   (!fr_currencies_are_consistent) ? false : true
-          if (!all_currencies_are_consistent) {
-            return true
-          }
-          if (!fr_currencies_are_consistent) {
-            return false
-          }
-          return true
+          return (!all_currencies_are_consistent) ? true :
+            (!fr_currencies_are_consistent) ? false : true
         },
       });
     })();
