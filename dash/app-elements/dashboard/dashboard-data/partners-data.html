@@ -129,11 +129,13 @@
           return _(results).reduce((sum, obj)=> {
             let picked = _(obj).pick([
               'shared_with',
-              'total_ct_cp',
+              'total_ct_ytd',
               'hact_values',
               'total_ct_cy',
               'hact_min_requirements',
-              'outstanding_findings'
+              'outstanding_findings',
+              'reported_cy',
+              'planned_engagement'
             ]).value();
             picked = _flattenObject(picked)
             picked['shared_with'] = obj['shared_with']
