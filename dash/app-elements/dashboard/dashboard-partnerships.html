@@ -108,8 +108,7 @@
         background-image: -webkit-linear-gradient(135deg, rgb(222, 242, 254) 50%, rgb(237, 247, 223) 50%);
         height: 48px;
         max-width: 48px;
-        justify-content: center !important;
-        padding-right: initial !important;
+        /* padding-right: initial !important; */
       }
       
       .red-icon {
@@ -270,10 +269,10 @@
             </data-table-column>
           </data-table-column>
           <data-table-column class="col-2 no-header-line" group-heading="blank" transparent>
-            <data-table-column class="col-5 right-align no-padding">
+            <data-table-column class="col-6 right-align">
               Disburs.<br>To Date
             </data-table-column>
-            <data-table-column class="col-7 right-align">
+            <data-table-column class="col-6 right-align">
               Days<br>Since<br>Last PV
             </data-table-column>
           </data-table-column>
@@ -366,10 +365,10 @@
                 </span>
               </div>
               <div class="col-2 layout horizontal justify-end">
-                <span class="col-data col-5 right-align to-date">
+                <span class="col-data col-6 right-align to-date">
                   [[_getDisbPercent(row.disbursement_percent)]]
                 </span>
-                <span class="col-data col-7 right-align">
+                <span class="col-data col-6 right-align">
                   [[displayNonZero(row.days_last_pv)]]
                 </span>
               </div>
