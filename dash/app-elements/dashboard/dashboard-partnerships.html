@@ -5,6 +5,7 @@
 <link rel="import" href="../../../styles/page-layout-styles.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../../styles/grid-layout-styles.html">
+<link rel="import" href="../../../styles/custom-iconsets/dash-icons.html">
 
 <link rel="import" href="../../app-config/etools-app-config.html">
 
@@ -15,9 +16,11 @@
 
 <link rel="import" href="../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../bower_components/iron-icons/editor-icons.html">
 <link rel="import"
       href="../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
 <link rel="import" href="../../../bower_components/etools-datepicker/etools-datepicker-button.html">
@@ -32,6 +35,10 @@
 
   <template>
     <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors page-layout-styles">
+      .no-header-line {
+        --header-bottom-line: none;
+      }
+      
       .by-type {
         padding: 0;
         @apply(--layout-horizontal);
@@ -42,39 +49,104 @@
         font-weight: 500;
       }
 
-      data-table-header data-table-column:not(:first-child),
-      data-table-row span:not(:first-child) {
+      data-table-row span:not(:first-child),
+      data-table-header data-table-column:not(:first-child)
+      data-table-header data-table-column data-table-column,
+      data-table-header div data-table-column data-table-column {
         box-sizing: border-box;
-        padding-left: 8px;
+      }
 
+      data-table-row div[slot="row-data"] div span,
+      data-table-header div data-table-column data-table-column {
+        padding-right: 8px;
+      }
+
+      data-table-row div[slot="row-data"] div:not(:first-child) span,
+      data-table-header div data-table-column data-table-column {
+        justify-content: flex-end;
+      }
+
+      data-table-row div[slot="row-data"] div span {
+        display: flex;
       }
 
       .right-align {
         text-align: right;
       }
 
-       data-table-row span:nth-child(3) {
-         white-space:normal;
-         overflow-y: auto;
-      }
       div.sections{
         height: 48px;
-        line-height: 48px;
+        white-space: normal;
+        overflow-y: scroll;
       }
+
       div.sections > span {
-        display: inline-block;
         vertical-align: middle;
         line-height: normal
       }
+      
+      div div span {
+        height: 48px;
+        align-items: center;
+      }
 
+      .blue-col {
+        background-color: rgb(222, 242, 254);
+        max-width: 100%;
+      }
+
+      .green-col {
+        background-color: rgb(237, 247, 223);
+        max-width: 100%;
+      }
+
+      .justify-end {
+        justify-content: flex-end;
+      }
+
+      .to-date {
+        background-image: -webkit-linear-gradient(135deg, rgb(222, 242, 254) 50%, rgb(237, 247, 223) 50%);
+        height: 48px;
+        max-width: 48px;
+        /* padding-right: initial !important; */
+      }
+      
+      .red-icon {
+        fill: rgb(231, 66, 45);
+      }
+
+      .blue-icon {
+        fill: rgb(26, 154, 250);
+      }
+
+      .ip-pd {
+        display: initial !important;
+        padding-top: 4px;
+      }
+
+      .right-nudge {
+        padding-right: 8px;
+        box-sizing: border-box;
+      }
+
+      .no-padding {
+        padding: 0;
+      }
+
+      .status {
+        padding-left: 8px;
+      }
     </style>
-    <partnership-data id="partnerships"
-                      filtered-partnerships="{{filteredPartnerships}}"
-                      fire-data-loaded
-                      active="[[active]]"
-                      total-results="{{totalResults}}"
-                      on-partnerships-loaded="_requiredDataLoaded"
-                      list-data-path="filteredPartnerships"></partnership-data>
+
+    <partnership-data 
+        id="partnerships"
+        filtered-partnerships="{{filteredPartnerships}}"
+        fire-data-loaded
+        active="[[active]]"
+        total-results="{{totalResults}}"
+        on-partnerships-loaded="_requiredDataLoaded"
+        list-data-path="filteredPartnerships">
+    </partnership-data>
 
     <paper-material class="list-panel listControls" elevation="1">
 
@@ -99,35 +171,39 @@
                   on-etools-selected-items-changed="esmmValueChanged"
                   data-filter-path$="[[filter.path]]">
               </etools-multi-selection-menu>
-              <paper-icon-button suffix class="remove-field remove" icon="cancel"
-                                 on-tap="removeFilter"
-                                 data-filter-name$="[[filter.filterName]]"
-                                 data-reset-path$="[[filter.path]]">
+              <paper-icon-button 
+                  suffix class="remove-field remove" icon="cancel"
+                  on-tap="removeFilter"
+                  data-filter-name$="[[filter.filterName]]"
+                  data-reset-path$="[[filter.path]]">
               </paper-icon-button>
             </div>
           </template>
           <!-- date pickers -->
           <template is="dom-if" if="[[filterTypeIs('datepicker', filter.type)]]">
             <div class="filter">
-              <paper-input id$="datepicker_parent_[[filter.path]]"
-                           label="[[filter.filterName]]"
-                           value="[[prettyDate(filter.dateSelected)]]"
-                           on-down="openDatePicker"
-                           data-selector$="datepicker_[[filter.path]]">
-                <etools-datepicker-button prefix
-                                          id$="datepicker_[[filter.path]]"
-                                          date="[[prepareDate(filter.dateSelected)]]"
-                                          format="D MMM YYYY"
-                                          parent-id$="datepicker_parent_[[filter.path]]"
-                                          data-filter-path$="[[filter.path]]"
-                                          on-date-has-changed="_notifyDateChanged"
-                                          no-init show-clear-btn fire-date-has-changed>
+              <paper-input
+                  id$="datepicker_parent_[[filter.path]]"
+                  label="[[filter.filterName]]"
+                  value="[[prettyDate(filter.dateSelected)]]"
+                  on-down="openDatePicker"
+                  data-selector$="datepicker_[[filter.path]]">
+                <etools-datepicker-button 
+                    prefix
+                    id$="datepicker_[[filter.path]]"
+                    date="[[prepareDate(filter.dateSelected)]]"
+                    format="D MMM YYYY"
+                    parent-id$="datepicker_parent_[[filter.path]]"
+                    data-filter-path$="[[filter.path]]"
+                    on-date-has-changed="_notifyDateChanged"
+                    no-init show-clear-btn fire-date-has-changed>
                 </etools-datepicker-button>
               </paper-input>
-              <paper-icon-button suffix class="remove-field remove" icon="cancel"
-                                 on-tap="removeFilter"
-                                 data-filter-name$="[[filter.filterName]]"
-                                 data-reset-path$="[[filter.path]]">
+              <paper-icon-button
+                  suffix class="remove-field remove" icon="cancel"
+                  on-tap="removeFilter"
+                  data-filter-name$="[[filter.filterName]]"
+                  data-reset-path$="[[filter.path]]">
               </paper-icon-button>
             </div>
           </template>
@@ -151,108 +227,152 @@
     </paper-material>
 
     <paper-material id="list" elevation="1">
-      <data-table-header label="[[visibleRange.0]]-[[visibleRange.1]] of [[totalResults]] results to show" no-collapse>
-        <data-table-column class="flex-2" sortable>
-          IP Name
+      <data-table-header no-collapse>
+        <data-table-column class="col-5 no-header-line" group-heading="blank" transparent>
+          <data-table-column class="col-4" sortable>
+            IP Name<br>PD/SSFA Ref #
+          </data-table-column>
+          <data-table-column class="col-2">
+            Section
+          </data-table-column>
+          <data-table-column class="col-2">
+            Field Office
+          </data-table-column>
+          <data-table-column class="col-2 status">
+            Status
+          </data-table-column>
+          <data-table-column class="col-2">
+            Start Date<br>End Date
+          </data-table-column>
         </data-table-column>
-        <data-table-column class="flex-2">
-          PD/SSFA Ref #
-        </data-table-column>
-        <data-table-column class="flex-2">
-          Section
-        </data-table-column>
-        <data-table-column class="flex">
-          Field Office
-        </data-table-column>
-        <data-table-column class="flex">
-          Status
-        </data-table-column>
-        <data-table-column class="flex">
-          Start Date <br> End Date
-        </data-table-column>
-        <data-table-column class="flex-2 right-align">
-          Total UNICEF <br>Cash ($)
-        </data-table-column>
-        <data-table-column class="flex right-align">
-          Total UNICEF <br>Supplies ($)
-        </data-table-column>
-        <data-table-column class="flex right-align">
-          CSO <br>Contr. ($)
-        </data-table-column>
-        <data-table-column class="flex right-align">
-          Total <br> Budget ($)
-        </data-table-column>
-        <data-table-column class="flex right-align">
-          $ Disburs. <br>To Date (%)
-        </data-table-column>
-        <data-table-column class="flex right-align">
-          Days Since <br>Last PV
-        </data-table-column>
+        <div class="col-7 layout horizontal">
+          <data-table-column class="col-5" group-heading="PLANNED BUDGET">
+            <data-table-column class="col-2 right-align">
+              PD Cur.
+            </data-table-column>
+            <data-table-column class="col-5 right-align">
+              UNICEF<br>Supplies
+            </data-table-column>
+            <data-table-column class="col-5 right-align">
+              UNICEF<br>Cash
+            </data-table-column>
+          </data-table-column>
+          <data-table-column class="col-5 right-nudge" group-heading="FUNDS RESERVED & DISBURSED">
+            <data-table-column class="col-3 right-align">
+              FR Cur.
+            </data-table-column>
+            <data-table-column class="col-5 right-align">
+              FR<br>Amount
+            </data-table-column>
+            <data-table-column class="col-4 right-align">
+              Actual<br>Disbursm.
+            </data-table-column>
+          </data-table-column>
+          <data-table-column class="col-2 no-header-line" group-heading="blank" transparent>
+            <data-table-column class="col-6 right-align">
+              Disburs.<br>To Date
+            </data-table-column>
+            <data-table-column class="col-6 right-align">
+              Days<br>Since<br>Last PV
+            </data-table-column>
+          </data-table-column>
+        </div>
       </data-table-header>
+
       <template is="dom-repeat" items="[[filteredPartnerships]]" as="row">
         <data-table-row no-collapse>
           <div slot="row-data">
-            <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details" app-name="pmp"
-               page="partners" id="[[row.partner_id]]/details"
-               class="col-data flex-2 title">
-              [[row.partner_name]]
-              <paper-tooltip fit-to-visible-bounds>[[row.partner_name]]</paper-tooltip>
-            </a>
-            <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details" app-name="pmp"
-               page="interventions"
-               id="[[row.intervention_id]]/details" class="col-data flex-2 title">
-              [[row.number]]
-              <paper-tooltip fit-to-visible-bounds>[[row.number]]</paper-tooltip>
-            </a>
-            <span class="col-data flex-2">
-              <div class="sections">
-                <span >
-                  <template is="dom-repeat" items="{{commaSplit(row.sectors)}}">
-                    [[item]]<br>
-                  </template>
+            <div class="col-5 layout horizontal">
+              <span class="col-data col-4 ip-pd">
+                <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details" app-name="pmp"
+                  page="partners" id="[[row.partner_id]]/details"
+                  class="title">
+                  [[row.partner_name]]
+                  <paper-tooltip fit-to-visible-bounds>[[row.partner_name]]</paper-tooltip>
+                </a>
+                <br>
+                <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details" app-name="pmp"
+                  page="interventions"
+                  id="[[row.intervention_id]]/details" class="title">
+                  [[row.number]]
+                  <paper-tooltip fit-to-visible-bounds>[[row.number]]</paper-tooltip>
+                </a>
+              </span>
+              <span class="col-data col-2">
+                <div class="sections">
+                  <span >
+                    <template is="dom-repeat" items="{{commaSplit(row.sections)}}">
+                      [[item]]<br>
+                    </template>
+                  </span>
+                </div>
+              </span>
+              <span class="col-data col-2">
+                <template is="dom-repeat" items="{{commaSplit(row.offices_names)}}">
+                  [[item]]<br>
+                </template>
+              </span>
+              <span class="col-data col-2 status">
+                [[capitalizeWord(row.status)]]
+              </span>
+              <span class="col-data col-2 date">
+                [[prettyDate(row.start)]] <br> [[prettyDate(row.end)]]
+              </span>
+            </div>
+            <div class="col-7 layout horizontal">
+              <div class="col-5 layout horizontal">
+                <span class="col-data col-2 right-align">
+                  [[row.budget_currency]]
+                </span>
+                <span class="col-data col-5 right-align">
+                  [[currencyFormat(row.unicef_supplies)]]
+                </span>
+                <span class="col-data col-5 right-align blue-col">
+                  [[currencyFormat(row.unicef_cash)]]
                 </span>
               </div>
-
-            </span>
-            <span class="col-data flex">
-              <template is="dom-repeat" items="{{commaSplit(row.offices_names)}}">
-                [[item]]<br>
-              </template>
-            </span>
-            <span class="col-data flex">
-              [[capitalizeWord(row.status)]]
-            </span>
-            <span class="col-data flex">
-              [[prettyDate(row.start)]] <br> [[prettyDate(row.end)]]
-            </span>
-            <span class="col-data flex-2 right-align">
-              <etools-info-tooltip
-                icon="report"
-                fit-to-visible-bounds
-                icon-first
-                right-aligned
-                hide-tooltip="[[_isEqual(row.unicef_cash, row.frs_total_frs_amt)]]">
-                <span slot="field">[[currencyFormat(row.unicef_cash)]]</span>
-                <span slot="message">FR Amount does not equal Total UNICEF $ Cash</span>
-              </etools-info-tooltip>
-            </span>
-            <span class="col-data flex right-align">
-              [[currencyFormat(row.unicef_supplies)]]
-            </span>
-            <span class="col-data flex right-align">
-              [[currencyFormat(row.cso_contribution)]]
-            </span>
-            <span class="col-data flex right-align">
-              [[currencyFormat(row.total_budget)]]
-            </span>
-            <span class="col-data flex right-align">
-              [[_displayDisbursement(row.disbursement)]]
-              <br>
-              [[_getDisbPercent(row.disbursement_percent)]]
-            </span>
-            <span class="col-data flex right-align">
-              [[displayNonZero(row.days_last_pv)]]
-            </span>
+              <div class="col-5 layout horizontal right-nudge">
+                <span class="col-data col-3 right-align">
+                  <iron-icon hidden="[[row.all_currencies_are_consistent]]" icon="dash-custom-icons:not-equal" class="blue-icon"></iron-icon>
+                  <paper-tooltip hidden="[[row.all_currencies_are_consistent]]">
+                    FR currency does not match PD currency.<br>
+                    Disbursement to date % cannot calculate.
+                  </paper-tooltip>
+                  <iron-icon hidden="[[_checkAllCurrenciesConsistent(row.all_currencies_are_consistent, row.fr_currencies_are_consistent)]]" icon="dash-custom-icons:1+" class="blue-icon">
+                  </iron-icon>
+                  <paper-tooltip hidden="[[row.fr_currencies_are_consistent]]">
+                    More than 1 FR currency is available. FR Amount<br>
+                    and Actual Disbursements cannot be displayed.
+                  </paper-tooltip>
+                  [[row.fr_currency]]
+                </span>
+                <span class="col-data col-5 right-align">
+                  <iron-icon hidden="[[_isEqual(row.unicef_cash, row.frs_total_frs_amt)]]" icon="dash-custom-icons:not-equal" class="red-icon">
+                    [[_displayDisbursement(row.disbursement)]]
+                  </iron-icon>
+                  <paper-tooltip hidden="[[_isEqual(row.unicef_cash, row.frs_total_frs_amt)]]">
+                    FR amount does not equal to planned UNICEF cash
+                  </paper-tooltip>
+                  [[currencyFormat(row.frs_total_frs_amt)]]
+                </span>
+                <span class="col-data col-4 right-align green-col">
+                  <iron-icon hidden="[[row.fr_currencies_are_consistent]]" icon="dash-custom-icons:not-equal" class="blue-icon">
+                  </iron-icon>
+                  <paper-tooltip hidden="[[row.fr_currencies_are_consistent]]">
+                    Disbursement currency does not match FR currency
+                  </paper-tooltip>
+                  [[_displayDisbursement(row.disbursement)]]
+                </span>
+              </div>
+              <div class="col-2 layout horizontal justify-end">
+                <span class="col-data col-6 right-align to-date">
+                  [[_getDisbPercent(row.disbursement_percent)]]
+                </span>
+                <span class="col-data col-6 right-align">
+                  [[displayNonZero(row.days_last_pv)]]
+                </span>
+              </div>
+            </div>
           </div>
         </data-table-row>
       </template>
@@ -633,8 +753,8 @@
         },
 
         _getDisbPercent: function(perc) {
-          return perc === '0.00' ? ''
-            : `(${Number(perc).toFixed(0)})`;
+          return perc === '0.00' ? '0'
+            : `${Number(perc).toFixed(0)}%`;
         },
         _filterChanged: function() {
           this.set('debounceTime', 200);
@@ -660,12 +780,13 @@
           let nonZero = this.displayNonZero(val);
           return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
         },
-        _isEqual: function(total, disbursed) {
-          // return disbursed === total
-          return true;
+        _isEqual: function(first, second) {
+          return first === second;
         },
-
-
+        _checkAllCurrenciesConsistent: function(all_currencies_are_consistent, fr_currencies_are_consistent) {
+          return (!all_currencies_are_consistent) ? true :
+            (!fr_currencies_are_consistent) ? false : true
+        },
       });
     })();
   </script>

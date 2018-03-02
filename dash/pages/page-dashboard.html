@@ -43,6 +43,9 @@
       etools-dropdown {
         max-width: 100px;
       }
+      .page[name="hact"] {
+        padding-top: 12px;
+      }
     </style>
 
     <app-route
@@ -61,17 +64,17 @@
             </h1>
             <div class="top-content-actions-wrapper">
               <div class="top-content-action">
-                <etools-dropdown 
-                            id="exportYear" 
-                            label="Export Year" 
-                            options="[[availableYears]]" 
+                <etools-dropdown
+                            id="exportYear"
+                            label="Export Year"
+                            options="[[availableYears]]"
                             on-iron-select="_setExportYear"
-                            dropdown-value="/api/v2/partners/hact?&format=csv" 
+                            dropdown-value="/api/v2/partners/hact?&format=csv"
                             hide-search hidden$="[[!_isActive(partnershipPage, 'hact')]]">
                 </etools-dropdown>
               </div>
-              <div class="top-content-action" hidden$="[[!hactActive]]">
-                <a target="_blank" href="[[exportUrl]]">
+              <div class="top-content-action" hidden$="[[hideExport]]">
+                <a target="_blank" href="[[csvUrl]]">
                   <paper-button>
                     <iron-icon icon="file-download"></iron-icon>
                     Export
@@ -97,7 +100,7 @@
             <paper-tabs
                 selected="{{routeData.dashTab}}"
                 attr-for-selected="name"
-                fallback-selection="personalized" noink bottom-item>
+                 noink bottom-item>
 
               <paper-tab name="personalized" link>
                 <span class="tab-content">Personalized</span>
@@ -130,7 +133,9 @@
                   fallback-selection="personalized"
                   role="main">
         <div class="page" name="hact">
-          <dashboard-hact active="[[_isActive(partnershipPage,'hact')]]" url-params="[[queryParams]]"
+          <dashboard-hact active="[[_isActive(partnershipPage,'hact')]]"
+          route="{{route}}"
+          url-params="[[queryParams]]"
                           csv-download-url="{{csvUrl}}"></dashboard-hact>
         </div>
         <div class="page" name="personalized">
@@ -192,6 +197,7 @@
         dashTab === 'partnerships' ? this.set('pageTitle', 'CSO Dashboard') : this.set('pageTitle', 'Dashboard');
       },
       _updateUrlTab: function(tab) {
+        this.hideExport = tab === 'hact' || tab === 'partnerships' ? false : true;
         if (!tab) {
           return;
         }
@@ -206,7 +212,7 @@
         window.location.href = this.baseSite +'/t2f/edit-travel/-1';
       },
       _setExportYear: function() {
-        this.exportUrl = event.target.dropdownValue
+        this.csvUrl = event.target.dropdownValue;
       },
     });
 
