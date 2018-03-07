@@ -294,7 +294,7 @@
                 <span class="col-3 col-data">[[partner.partner_type_slug]]
                   <paper-tooltip>[[partner.partner_type]]</paper-tooltip>
                 </span>
-                <span class="col-3 col-data">[[_checkForValue(partner.shared_with)]]</span>
+                <span class="col-3 col-data">[[_checkForValueYesNo(partner.shared_with)]]</span>
                 <span class="col-6 col-data padded name">[[partner.type_of_assessment]]</span>
               </span>
               <span class="col-6 layout horizontal">
@@ -325,7 +325,7 @@
                 <span class="col-half right-side buffer"></span>
               </div>
               <div class="col-5 layout horizontal group">
-                <span class="col-4 col-data right-side">[[partner.hact_values.audits.minimum_requirements]]</span>
+                <span class="col-4 col-data right-side">[[_checkForValueYesBlank(partner.planned_engagement.required_audit)]]</span>
                 <span class="col-4 col-data right-side">[[partner.hact_values.audits.completed]]</span>
                 <span class="col-4 monetary right-side">$[[partner.outstanding_findings]]</span>
               </div>
@@ -353,8 +353,12 @@
           },
         },
 
-        _checkForValue: function(val) {
+        _checkForValueYesNo: function(val) {
           return val ? "Yes" : "No"
+        },
+
+        _checkForValueYesBlank: function(val) {
+          return val ? "Yes" : ""
         },
 
         _getGovernmentDisplay: function(partner, prop, toCurrency) {
