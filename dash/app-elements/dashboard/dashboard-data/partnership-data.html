@@ -92,7 +92,6 @@
           const predKeys = _.keys(this.predicates);
 
           this.db.transaction('r', this.db.cso_dashboard, function() {
-            self.fire('global-loading', {active: true, message: 'Loading data...'});
             let queryResult = self.db.cso_dashboard.orderBy('partner_name');
             if (order === 'desc') {
               queryResult = queryResult.reverse();
@@ -110,7 +109,6 @@
           }).then(function(countAndResult) {
             self._setTotalResults(countAndResult[0]);
             self._setFilteredPartnerships(countAndResult[1]);
-            self.fire('global-loading');
             self.fire('global-loading', {loadingSource: 'partner-data'});
           }).catch(function(error) {
             console.error('Error querying partnerships-dash: ', error);
