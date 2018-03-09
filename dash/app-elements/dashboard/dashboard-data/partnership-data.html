@@ -59,7 +59,7 @@
             value: function() {
               return {
                 searchString: (qs, partner)=> qs.length ? _.includes(partner.partner_name.toLowerCase(), qs.toLowerCase()): true,
-                sectors: (sectors, partner)=> sectors.length ? !!_.intersection(sectors, [_.trim(partner.sectors)]).length : true,
+                sectors: (sectors, partner)=> sectors.length ? !!_.intersection(sectors, [_.trim(partner.sections)]).length : true,
                 offices: (offices, partner)=> offices.length ? !!_.intersection(offices, partner.offices_names.split(',')).length : true,
                 status: (status, partner)=> status.length ? (_.includes(status, partner.status) ? true : false) : true,
                 startAfterDate: (date, partner)=> _.isEmpty(partner.start) ? true
