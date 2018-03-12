@@ -419,9 +419,15 @@
                   color: '#000000',
                   auraColor: 'transparent',
                 },
+                datum: {
+                  stem: {
+                    color: 'transparent'
+                  }
+                },
                 stem: {
                   color: 'none',
-                  display: 'none'
+                  display: 'none',
+                  length: 1
                 },
                 boxStyle: {
                   display: 'none'
@@ -649,7 +655,7 @@
         },
         _onChartDataChange(data){
           if (!_.isEmpty(data)){
-            const riskRatings = _.drop(data.charts.cash_transfers_risk_ratings).map(r=>_.last(r))
+            const riskRatings = _.drop(data.charts.cash_transfers_risk_ratings).map(r=>_.last(r));
             this.set('riskRatings', riskRatings);
             this._init(this.active);
           }
