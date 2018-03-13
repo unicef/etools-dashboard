@@ -333,32 +333,32 @@
               </div>
               <div class="col-5 layout horizontal right-nudge">
                 <span class="col-data col-3 right-align">
-                  <iron-icon hidden="[[row.all_currencies_are_consistent]]" icon="dash-custom-icons:not-equal" class="blue-icon"></iron-icon>
-                  <paper-tooltip hidden="[[row.all_currencies_are_consistent]]">
+                  <iron-icon hidden="[[_checkSigned(row.status, row.all_currencies_are_consistent)]]" icon="dash-custom-icons:not-equal" class="blue-icon"></iron-icon>
+                  <paper-tooltip hidden="[[_checkSigned(row.status, row.all_currencies_are_consistent)]]">
                     FR currency does not match PD currency.<br>
                     Disbursement to date % cannot calculate.
                   </paper-tooltip>
-                  <iron-icon hidden="[[_checkAllCurrenciesConsistent(row.all_currencies_are_consistent, row.fr_currencies_are_consistent)]]" icon="dash-custom-icons:1+" class="blue-icon">
+                  <iron-icon hidden="[[_checkAllCurrenciesConsistent(row.status, row.all_currencies_are_consistent, row.fr_currencies_are_consistent)]]" icon="dash-custom-icons:1+" class="blue-icon">
                   </iron-icon>
-                  <paper-tooltip hidden="[[row.fr_currencies_are_consistent]]">
+                  <paper-tooltip hidden="[[_checkSigned(row.status, row.fr_currencies_are_consistent)]]">
                     More than 1 FR currency is available. FR Amount<br>
                     and Actual Disbursements cannot be displayed.
                   </paper-tooltip>
                   [[row.fr_currency]]
                 </span>
                 <span class="col-data col-5 right-align">
-                  <iron-icon hidden="[[_isEqual(row.unicef_cash, row.frs_total_frs_amt)]]" icon="dash-custom-icons:not-equal" class="red-icon">
+                  <iron-icon hidden="[[_isEqual(row.status, row.unicef_cash, row.frs_total_frs_amt)]]" icon="dash-custom-icons:not-equal" class="red-icon">
                     [[_displayDisbursement(row.disbursement)]]
                   </iron-icon>
-                  <paper-tooltip hidden="[[_isEqual(row.unicef_cash, row.frs_total_frs_amt)]]">
+                  <paper-tooltip hidden="[[_isEqual(row.status, row.unicef_cash, row.frs_total_frs_amt)]]">
                     FR amount does not equal to planned UNICEF cash
                   </paper-tooltip>
                   [[currencyFormat(row.frs_total_frs_amt)]]
                 </span>
                 <span class="col-data col-4 right-align green-col">
-                  <iron-icon hidden="[[row.fr_currencies_are_consistent]]" icon="dash-custom-icons:not-equal" class="blue-icon">
+                  <iron-icon hidden="[[_checkSigned(row.status, row.fr_currencies_are_consistent)]]" icon="dash-custom-icons:not-equal" class="blue-icon">
                   </iron-icon>
-                  <paper-tooltip hidden="[[row.fr_currencies_are_consistent]]">
+                  <paper-tooltip hidden="[[_checkSigned(row.status, row.fr_currencies_are_consistent)]]">
                     Disbursement currency does not match FR currency
                   </paper-tooltip>
                   [[_displayDisbursement(row.disbursement)]]
@@ -754,6 +754,7 @@
 
         _getDisbPercent: function(perc) {
           return perc === '0.00' ? '0'
+            : perc === '!Error! (currencies do not match)' ? 'N/A'
             : `${Number(perc).toFixed(0)}%`;
         },
         _filterChanged: function() {
@@ -780,13 +781,17 @@
           let nonZero = this.displayNonZero(val);
           return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
         },
-        _isEqual: function(first, second) {
-          return first === second;
+        _isEqual: function(status, first, second) {
+          return status === 'signed' ? true : (first === second);
         },
-        _checkAllCurrenciesConsistent: function(all_currencies_are_consistent, fr_currencies_are_consistent) {
-          return (!all_currencies_are_consistent) ? true :
+        _checkAllCurrenciesConsistent: function(status, all_currencies_are_consistent, fr_currencies_are_consistent) {
+          return status === 'signed' ? true :
+            (!all_currencies_are_consistent) ? true :
             (!fr_currencies_are_consistent) ? false : true
         },
+        _checkSigned: function(status, value) {
+          return status === 'signed' ? true : value
+        }
       });
     })();
   </script>
