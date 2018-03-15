@@ -311,7 +311,7 @@
                   <span class="col-3 right-side">[[_sumSpotChecks(totals.planned_engagement_spot_check_mr_q4, totals.planned_engagement_spot_check_follow_up_q4)]]</span>
                 </div>
                   <span class="col-40-px right-side center vertical">[[totals.hact_min_requirements_spot_checks]]</span>
-                  <span class="col-75-px right-side center vertical">[[totals.hact_values_spot_checks_follow_up_required]]</span>
+                  <span class="col-75-px right-side center vertical">[[totals.planned_engagement_total_spot_check_follow_up_required]]</span>
                 <div class="col-160-px right-side vertical">
                   <span class="col-3">[[totals.hact_values_spot_checks_completed_q1]]</span>
                   <span class="col-3 right-side">[[totals.hact_values_spot_checks_completed_q2]]</span>
@@ -321,9 +321,9 @@
               <div class="col-10-px buffer"></div>
             </div>
             <div class="col-225-px layout horizontal">
-              <div class="col-75-px right-side center vertical">[[totals.hact_values_audits_minimum_requirements]]</div>
+              <div class="col-75-px right-side center vertical">[[totals.planned_engagement_required_audit]]</div>
               <div class="col-75-px right-side center vertical">[[totals.hact_values_audits_completed]]</div>
-              <div class="col-75-px right-side monetary vertical">$[[totals.outstanding_findings]]</div>
+              <div class="col-75-px right-side monetary vertical">$[[totals.hact_values_outstanding_findings]]</div>
             </div>
           </div>
         </data-table-row>
@@ -389,9 +389,9 @@
                 <span class="col-10-px buffer"></span>
               </div>
               <div class="col-225-px layout horizontal">
-                <span class="col-75-px right-side center vertical">[[partner.planned_engagement.required_audit]]</span>
+                <span class="col-75-px right-side center vertical">[[_checkForValueYesBlank(partner.planned_engagement.required_audit)]]</span>
                 <span class="col-75-px right-side center vertical">[[partner.hact_values.audits.completed]]</span>
-                <span class="col-75-px right-side monetary vertical">$[[partner.outstanding_findings]]</span>
+                <span class="col-75-px right-side monetary vertical">$[[partner.hact_values.outstanding_findings]]</span>
               </div>
             </div>
           </data-table-row>
@@ -427,6 +427,10 @@
           } else {
             return toCurrency ? this.currencyFormat(partnerValue) : partnerValue;
           }
+        },
+
+        _checkForValueYesBlank: function(val) {
+          return val ? "Yes" : ""
         },
 
         _sumSpotChecks: function(mr, followUp) {

@@ -172,8 +172,8 @@ const Actions = [
       data = data || [];
       return data.map(function(d) {
         return {
-          value: parseInt(d.user_id, 10),
-          label: d.full_name
+          value: parseInt(d.id, 10),
+          label: d.name
         };
       });
     }
