@@ -16,7 +16,6 @@
   </template>
 
   <script>
-
     (function() {
       'use strict';
       Polymer({
@@ -26,6 +25,7 @@
           dashBehaviors.DateBehavior,
           etoolsAppConfig.globals
         ],
+        observers: ['init(active)'],
         properties: {
           endpointName: {
             type: String,
@@ -49,8 +49,11 @@
             type: Object,
             value: function() {
               return {
-                searchString: (file, query) => _.includes(file.partner, query) || _.includes(file.intervention),
-                doucumentType: (file, type) => file.file_type === type,
+                searchString: ({partner, pd_ssfa_number}, query) => {
+                  partner = partner ? partner.toLowerCase() : '';
+                  pd_ssfa_number = pd_ssfa_number ? pd_ssfa_number.toLowerCase() : '';
+                 return _.includes(partner, query) || _.includes(pd_ssfa_number, query)},
+                attachmentType: (file, type) => file.file_type === type,
                 uploadedBefore: (file, date) => this.prepareDate(file.created) < this.prepareDate(date),
                 uploadedAfter: (file, date) => this.prepareDate(file.created) > this.prepareDate(date),
                 uploadedBy: (file, name) => _.includes(file.uploaded_by, name)
@@ -60,17 +63,33 @@
 
         },
 
+        init: function(active) {
+          if (active && _.isEmpty(this.filteredAttachments)) {
+            console.log('data active')
+            this.fire('global-loading', {
+              message: 'Loading documents list...',
+              active: true,
+              loadingSource: 'attachments-data'
+            });
+          }
+        },
+
         query: function(params) {
+          const self = this;
           const {pageNumber, pageSize, order} = params;
           this.db.transaction('r', this.db.attachments, () => {
-            let queryResult = this.db.attachments.toCollection();
-            queryResult.count().then(c=>console.log('count:', c))
-
+            let queryResult = this.db.attachments.orderBy('created');
             if (order === 'asc') {
               queryResult = queryResult.reverse();
             }
-            queryResult = queryResult.filter(file => _.keys(params).reduce(
-              (acc, next) => acc && this.predicates[next](file, params[next]), true));
+            const fieldsToFilter = _.without(_.keys(params), 'pageNumber', 'pageSize', 'order');
+            console.log('fields to filter', fieldsToFilter, params)
+            queryResult.count().then(c => console.log('count', c));
+            queryResult = queryResult.filter(file => !_.isEmpty(fieldsToFilter) ?
+              fieldsToFilter.reduce(
+                (acc, field) => acc && self.predicates[field](file, params[field]), true)
+              : !!file.partner
+            );
 
             return Dexie.Promise.all([
               queryResult.count(),
@@ -82,7 +101,7 @@
               .then(countAndResult => {
                 this._setFilteredTotal(countAndResult[0]);
                 this._setFilteredAttachments(countAndResult[1]);
-                this.fire('global-loading', {loadingSource: 'attachment-data'});
+                this.fire('global-loading', {loadingSource: 'attachments-data'});
               })
 
           });

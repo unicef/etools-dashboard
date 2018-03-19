@@ -3,6 +3,11 @@
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
 <link rel="import" href="../../../styles/grid-layout-styles.html">
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../data-table/data-table-column.html">
+<link rel="import" href="../data-table/data-table-header.html">
+<link rel="import" href="../data-table/data-table-row.html">
+<link rel="import" href="../data-table/data-table-footer.html">
 
 <link rel="import" href="../../app-behaviors/list-filters-behavior.html">
 <link rel="import" href="../../app-behaviors/dropdown-behavior.html">
@@ -21,13 +26,18 @@
 
 <dom-module id="dashboard-attachments-lib">
   <template>
-    <style include="shared-styles list-styles grid-layout-styles">
+    <style include="shared-styles list-styles grid-layout-styles iron-flex-factors">
       .wrap-controls paper-input {
         min-width: 280px;
+      }
+
+      .custom-width {
+        width: 176px;
       }
     </style>
     <attachments-data
         id="attachments"
+        active="[[active]]"
         filtered-total="{{filteredTotal}}"
         filtered-attachments="{{filteredAttachments}}"
         fire-data-loaded
@@ -110,6 +120,68 @@
         </paper-menu-button>
       </div>
     </paper-material>
+
+    <paper-material id="list" elevation="1">
+      <data-table-header no-collapse>
+        <data-table-column class="col-2 col">
+          Partner
+        </data-table-column>
+        <data-table-column class="col-1 col">
+          Vendor #
+        </data-table-column>
+        <data-table-column class="custom-width col">
+          Partner Type
+        </data-table-column>
+        <data-table-column class="custom-width col" sortable field="source">
+          Source
+        </data-table-column>
+        <data-table-column class="custom-width col" sortable field="file_type">
+          Document Type
+        </data-table-column>
+        <data-table-column class="col-3 col">
+          File Download
+        </data-table-column>
+        <data-table-column class="col-1 col" sortable field="created">
+          Date Uploaded
+        </data-table-column>
+      </data-table-header>
+
+      <template is="dom-repeat" items="[[filteredAttachments]]">
+        <data-table-row no-collapse>
+          <div slot="row-data">
+            <div class="col col-2">
+              <span class="col-data">[[item.partner]]</span>
+            </div>
+            <div class="col col-1">
+              <span class="col-data">[[item.vendor_number]]</span>
+            </div>
+            <div class="col custom-width">
+              <span class="col-data">[[item.partner_type]]</span>
+            </div>
+            <div class="col custom-width">
+              <span class="col-data">Partnership Management</span>
+            </div>
+            <div class="col custom-width">
+              <span class="col-data">[[item.file_type]]</span>
+            </div>
+            <div class="col-3 col">
+              <a class="col-data">[[item.filename]]</a>
+            </div>
+            <div class="col-1 col">
+              <span class="col-data">[[item.created]]</span>
+            </div>
+          </div>
+        </data-table-row>
+      </template>
+      <data-table-footer
+          page-size="[[pageSize]]"
+          page-number="[[pageNumber]]"
+          visible-range="{{visibleRange}}"
+          on-page-size-changed="pageSizeChanged"
+          filtered-total-results="[[filteredTotal]]"
+          on-page-number-changed="pageNumberChanged">
+      </data-table-footer>
+    </paper-material>
   </template>
   <script>
     (function() {
@@ -130,6 +202,9 @@
           '_initListFilters(unicefUsers)',
           '_init(active, unicefUsers)',
         ],
+        listeners: {
+          'sort-changed': '_handleSortChange',
+        },
         properties: {
           filteredAttachments: {
             type: Array,
@@ -141,11 +216,11 @@
           qs: {
             type: String
           },
-//          docTypes: {
-//            type: Array,
-//            statePath: 'static.fileTypes'
-//          },
-          selectedDocTypes: {
+          attachmentTypes: {
+            type: Array,
+            statePath: 'static.attachment_types'
+          },
+          selectedattachmentTypes: {
             type: Array,
             observer: 'filterChanged'
           },
@@ -179,22 +254,22 @@
                   xf: xs => xs
                 },
                 {
-                  qname: 'sort',
+                  qName: 'sort',
                   propName: 'sortOrder',
                   xf: xs => xs
                 },
                 {
-                  qname: 'uploadedAfter',
+                  qName: 'uploadedAfter',
                   propName: 'uploadedAfterDate',
                   xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
                 },
                 {
-                  qname: 'uploadedBefore',
+                  qName: 'uploadedBefore',
                   propName: 'uploadedBeforeDate',
                   xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
                 },
                 {
-                  qname: 'uploadedBy',
+                  qName: 'uploadedBy',
                   propName: 'selectedUnicefUsers',
                   xf: xs => _.map(xs, 'value').join('|')
                 }
@@ -202,10 +277,10 @@
             }
           }
         },
-
-        _init: function(active, unicefUsers /*,fileTypes*/) {
+        //unicefUsers required to ensure redux statePaths are loaded
+        _init: function(active, unicefUsers) {
           let params = this.urlParams;
-          if (!active || !params) {
+          if (!active || !params || !_.isEmpty(this.filteredAttachments)) {
             return;
           }
           this.set('initComplete', false);
@@ -216,7 +291,7 @@
           this.set('selectedUnicefUsers', params.uploadedBy ? this._setSelectedFromCollection(params.uploadedBy, this.unicefUsers) : []);
           this.set('uploadedAfterDate', params.uploadedAfter || '');
           this.set('uploadedBeforeDate', params.uploadedBefore || '');
-//          this.set('selectedDocTypes', params.docType ? this._setSelectedFromCollection(params.docType, this.docTypes) : []);
+          this.set('selectedattachmentTypes', params.docType ? this._setSelectedFromCollection(params.docType, this.attachmentTypes) : []);
           this.set('initComplete', true);
           this._updateSelectedFiltersValues();
         },
@@ -257,7 +332,7 @@
                 dateSelected: ''
               },
             ]);
-          },100)
+          }, 100)
         },
 
         _updateSelectedFiltersValues: function() {
@@ -277,20 +352,26 @@
               },
               {
                 filterName: 'Document Type',
-                selectedValue: this.selectedDocTypes
+                selectedValue: this.selectedattachmentTypes
               }
             ]
-          },200)
+          }, 200)
         },
 
         _filterDocuments: function() {
-          this.$.attachments.query({
+          const selectedParams = {
             searchString: this.qs,
-            documentType: _.map(this.selectedDocTypes, 'value'),
+            attachmentType: _.map(this.selectedattachmentTypes, 'value'),
             uploadedBy: _.map(this.selectedUnicefUsers, 'value'),
             uploadedBefore: this.uploadedBeforeDate,
             uploadedAfter: this.uploadedAfterDate
-          })
+          };
+          const query = _.assign({}, _.omitBy(selectedParams, _.isEmpty), {
+            pageNumber: this.pageNumber,
+            pageSize: this.pageSize,
+            order: this.sortOrder
+          });
+          this.$.attachments.query(query);
         },
 
         _updateUrl: function() {
@@ -298,16 +379,11 @@
             return;
           }
           const qs = this.buildQueryString();
-          if (!_.isEmpty(qs)) {
-            this.updateAppState('dashboard/attachments', qs, true);
-            if (this.requiredDataLoaded) {
-              this._filterDocuments();
-            }
-          } else {
-            if (location.search === '') {
-              this.updateAppState('dashboard/attachments', qs, false);
-            }
+          this.updateAppState('dashboard/attachments', qs, true);
+          if (this.requiredDataLoaded) {
+            this._filterDocuments();
           }
+
         },
 
         _setSelectedFromCollection: function(param, collection) {
@@ -317,6 +393,10 @@
           }
           return [];
         },
+
+        _handleSortChange: function({detail: {field, direction}}) {
+
+        }
 
       });
     })();

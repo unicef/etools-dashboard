@@ -25,6 +25,7 @@
       this.set('pageNumber', 1);
     },
     pageSizeChanged: function(e) {
+      console.log(e)
       this.set('debounceTime', 200);
       this.set('pageNumber', 1);
       this.set('pageSize', parseInt(e.detail.value));
@@ -39,6 +40,12 @@
     sortOrderChanged: function(e) {
       this.set('debounceTime', 150);
       this.set('sortOrder', e.detail.direction);
+    },
+    buildQueryString: function() {
+      return this.params.reduce((acc, {qName, propName, xf}) => {
+        return _.isEmpty(this[propName]) ? acc
+          : `${acc}&${qName}=${xf(this[propName])}`;
+      }, `page=${this.pageNumber}&size=${this.pageSize}`);
     },
   }
 </script>

@@ -314,6 +314,9 @@
         }
       },
       _staticDataLoaded: function() {
+        if(!this.active){
+          return;
+        }
         if (this.myTrips && this.tripsSupervised && this.actionPointsItems && this.actionPointsForMe) {
           this.fire('global-loading');
         } else {

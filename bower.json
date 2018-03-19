@@ -42,7 +42,7 @@
     "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.7",
     "paper-fab": "PolymerElements/paper-fab#^1.2.1",
     "etools-dialog": "^1.1.0",
-    "etools-loading": "236aff6",
+    "etools-loading": "^2.0.0",
     "etools-searchable-multiselection-menu": "^2.2.10",
     "etools-file": "^1.0.0",
     "paper-button": "PolymerElements/paper-button#^1.0.14",
@@ -77,7 +77,7 @@
     "webcomponentsjs": "^0.7.24",
     "etools-ajax": "^2.0.4",
     "neon-animation": "^2.0.1",
-    "etools-loading": "236aff6",
+    "etools-loading": "^2.0.0",
     "paper-tooltip": "^2.0.0",
     "lodash": "^4.17.4"
   }

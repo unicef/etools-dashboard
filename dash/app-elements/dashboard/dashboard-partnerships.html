@@ -537,7 +537,6 @@
               ];
             }
           }
-
         },
 
         _init: function(active, sectors, statuses, offices) {
@@ -546,7 +545,6 @@
           if (!active || !params || !staticLoaded) {
             return;
           }
-          console.log('initi about to start')
           this.set('initComplete', false);
           this.set('qs', params.qs ? params.qs : '');
           this.set('pageNumber', params.page ? parseInt(params.page) : 1);
@@ -662,7 +660,6 @@
           if (!this.initComplete || !this.requiredDataLoaded) {
             return;
           }
-          console.log('updateing url')
           this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
           const qs = this.buildQueryString();
           if (qs !== null) {

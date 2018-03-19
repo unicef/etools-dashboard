@@ -98,6 +98,7 @@
                   .limit(pageSize)
                   .toArray()]);
           }).then(function(countAndResult) {
+            self.fire('global-loading');
             self._setFilteredTotalResults(countAndResult[0]);
             self._setFilteredPartners(countAndResult[1]);
           }).catch(function(error) {
