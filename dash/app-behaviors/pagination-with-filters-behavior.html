@@ -1,0 +1,45 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<script>
+  window.dashBehaviors = window.dashBehaviors || {};
+  dashBehaviors.PaginationWithFiltersBehavior = {
+    properties: {
+      pageNumber: {
+        type: Number
+      },
+      pageSize: {
+        type: Number
+      },
+      sortOrder: {
+        type: String
+      },
+      qs: {
+        type: String
+      },
+      debounceTime: {
+        type: Number,
+        value: 100
+      }
+    },
+    filterChanged: function() {
+      this.set('debounceTime', 200);
+      this.set('pageNumber', 1);
+    },
+    pageSizeChanged: function(e) {
+      this.set('debounceTime', 200);
+      this.set('pageNumber', 1);
+      this.set('pageSize', parseInt(e.detail.value));
+    },
+    pageNumberChanged: function(e) {
+      this.set('debounceTime', 50);
+      this.set('pageNumber', e.detail.value);
+    },
+    dateChanged: function() {
+      this.set('pageNumber', 1);
+    },
+    sortOrderChanged: function(e) {
+      this.set('debounceTime', 150);
+      this.set('sortOrder', e.detail.direction);
+    },
+  }
+</script>
+

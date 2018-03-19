@@ -205,7 +205,15 @@
       if (filterUpdateData.hasOwnProperty('disabled') && filterPath !== '') {
         this.set(filterPath + '.disabled', filterUpdateData.disabled);
       }
-    }
+    },
+
+    buildQueryString: function() {
+      return this.params.reduce((acc, {qName, propName, xf}) => {
+        return _.isEmpty(this[propName]) ? acc
+          : `${acc}&${qName}=${xf(this[propName])}`;
+      }, `page=${this.pageNumber}&size=${this.pageSize}`);
+    },
+
 
   };
 </script>

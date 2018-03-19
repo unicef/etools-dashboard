@@ -10,7 +10,7 @@
   <template>
     <etools-ajax id="ajax" endpoint="[[endpoint]]" caching-storage="dexie" on-success="_handleResponse"></etools-ajax>
   </template>
-  <script src="../../../bower_components/moment/moment.js">  </script>  
+  <script src="../../../bower_components/moment/moment.js">  </script>
   <script src="../../../scripts/actions/actions.js"></script>
   <script>
     Polymer({
@@ -82,7 +82,6 @@
       _handleResponse: function(response) {
         let data = _.get(response, 'detail.data', response.detail);
         this.dispatch(this.nextAction.type, this.nextAction.prepareData(data));
-
         this._callNext();
       },
 
