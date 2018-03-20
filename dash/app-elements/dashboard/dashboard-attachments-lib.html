@@ -9,6 +9,8 @@
 <link rel="import" href="../data-table/data-table-row.html">
 <link rel="import" href="../data-table/data-table-footer.html">
 
+<link rel="import" href="../../app-config/etools-app-config.html">
+
 <link rel="import" href="../../app-behaviors/list-filters-behavior.html">
 <link rel="import" href="../../app-behaviors/dropdown-behavior.html">
 <link rel="import" href="../../app-behaviors/date-behavior.html">
@@ -144,7 +146,9 @@
               </span>
             </div>
             <div class="col-3 col">
-              <a class="col-data">[[item.filename]]</a>
+              <a  href$="[[_getDownloadUrl(item.file_link)]]"
+                  target="_blank"
+                  class="col-data">[[item.filename]]</a>
             </div>
             <div class="col-1 col">
               <span class="col-data">[[item.created]]</span>
@@ -174,6 +178,7 @@
           dashBehaviors.EtoolsStaticCommonDataReduxBehavior,
           dashBehaviors.PaginationWithFiltersBehavior,
           dashBehaviors.CommonGeneralBehavior,
+          etoolsAppConfig.globals
         ],
         observers: [
           '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, requiredDataLoaded)',
@@ -315,6 +320,9 @@
           }
           return [];
         },
+        _getDownloadUrl: function(link) {
+          return `${this.baseSite}${link}`
+        }
 
       });
     })();
