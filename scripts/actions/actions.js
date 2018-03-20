@@ -179,15 +179,13 @@ const Actions = [
     }
   },
   {
-    actionType: 'statuses',
-    propsArray: ['statuses'],
+    actionType: 'static',
+    propsArray: ['static'],
     endpointProps: {
       name: 'static',
       templateProps: {}
     },
-    prepareData: function(data) {
-      return _.get(data, 'intervention_status', []);
-    }
+    prepareData: data=>data
   },
   {
     actionType: 'userCountry',

@@ -15,9 +15,6 @@
   </template>
 
   <script>
-
-
-
     (function() {
       'use strict';
        Polymer( {
@@ -101,13 +98,14 @@
                   .limit(pageSize)
                   .toArray()]);
           }).then(function(countAndResult) {
+            self.fire('global-loading');
             self._setFilteredTotalResults(countAndResult[0]);
             self._setFilteredPartners(countAndResult[1]);
           }).catch(function(error) {
             console.error('Error querying partners: ', error);
           });
         },
-        
+
         _computeTotals: function(results) {
           let _flattenObject = (ob) => {
             let toReturn = {};
