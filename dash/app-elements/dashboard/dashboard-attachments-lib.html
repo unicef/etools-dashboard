@@ -200,7 +200,7 @@
           '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, selectedUnicefUsers,' +
           'uploadedAfterDate, uploadedBeforeDate, requiredDataLoaded)',
           '_initListFilters(unicefUsers)',
-          '_init(active, unicefUsers)',
+          '_init(active, attachmentTypes)',
         ],
         listeners: {
           'sort-changed': '_handleSortChange',
@@ -220,15 +220,7 @@
             type: Array,
             statePath: 'static.attachment_types'
           },
-          selectedattachmentTypes: {
-            type: Array,
-            observer: 'filterChanged'
-          },
-          unicefUsers: {
-            type: Array,
-            statePath: 'unicefUsersData'
-          },
-          selectedUnicefUsers: {
+          selectedAttachmentTypes: {
             type: Array,
             observer: 'filterChanged'
           },
@@ -251,34 +243,29 @@
                 {
                   qName: 'qs',
                   propName: 'qs',
-                  xf: xs => xs
+                  xf: _.identity
                 },
                 {
                   qName: 'sort',
                   propName: 'sortOrder',
-                  xf: xs => xs
+                  xf: _.identity
                 },
                 {
-                  qName: 'uploadedAfter',
-                  propName: 'uploadedAfterDate',
-                  xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
+                  qName: 'sortBy',
+                  propName: 'sortBy',
+                  xf: _.identity
                 },
                 {
-                  qName: 'uploadedBefore',
-                  propName: 'uploadedBeforeDate',
-                  xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
+                  qName: 'type',
+                  propName: 'docType',
+                  xf: _.identity
                 },
-                {
-                  qName: 'uploadedBy',
-                  propName: 'selectedUnicefUsers',
-                  xf: xs => _.map(xs, 'value').join('|')
-                }
               ]
             }
           }
         },
         //unicefUsers required to ensure redux statePaths are loaded
-        _init: function(active, unicefUsers) {
+        _init: function(active, attachmentTypes) {
           let params = this.urlParams;
           if (!active || !params || !_.isEmpty(this.filteredAttachments)) {
             return;
@@ -288,10 +275,8 @@
           this.set('pageNumber', params.page ? parseInt(params.page) : 1);
           this.set('pageSize', params.size ? parseInt(params.size) : 10);
           this.set('sortOrder', params.sort || 'desc');
-          this.set('selectedUnicefUsers', params.uploadedBy ? this._setSelectedFromCollection(params.uploadedBy, this.unicefUsers) : []);
-          this.set('uploadedAfterDate', params.uploadedAfter || '');
-          this.set('uploadedBeforeDate', params.uploadedBefore || '');
-          this.set('selectedattachmentTypes', params.docType ? this._setSelectedFromCollection(params.docType, this.attachmentTypes) : []);
+          this.set('sortBy', params.sortBy || '');
+          this.set('selectedAttachmentTypes', params.docType ? this._setSelectedFromCollection(params.docType, this.attachmentTypes) : []);
           this.set('initComplete', true);
           this._updateSelectedFiltersValues();
         },
@@ -352,7 +337,7 @@
               },
               {
                 filterName: 'Document Type',
-                selectedValue: this.selectedattachmentTypes
+                selectedValue: this.selectedAttachmentTypes
               }
             ]
           }, 200)
@@ -361,7 +346,7 @@
         _filterDocuments: function() {
           const selectedParams = {
             searchString: this.qs,
-            attachmentType: _.map(this.selectedattachmentTypes, 'value'),
+            attachmentType: _.map(this.selectedAttachmentTypes, 'value'),
             uploadedBy: _.map(this.selectedUnicefUsers, 'value'),
             uploadedBefore: this.uploadedBeforeDate,
             uploadedAfter: this.uploadedAfterDate

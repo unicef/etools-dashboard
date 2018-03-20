@@ -54,9 +54,6 @@
                   pd_ssfa_number = pd_ssfa_number ? pd_ssfa_number.toLowerCase() : '';
                  return _.includes(partner, query) || _.includes(pd_ssfa_number, query)},
                 attachmentType: (file, type) => file.file_type === type,
-                uploadedBefore: (file, date) => this.prepareDate(file.created) < this.prepareDate(date),
-                uploadedAfter: (file, date) => this.prepareDate(file.created) > this.prepareDate(date),
-                uploadedBy: (file, name) => _.includes(file.uploaded_by, name)
               }
             }
           }
