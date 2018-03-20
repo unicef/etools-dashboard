@@ -52,7 +52,7 @@
                 searchString: ({partner, vendor_number}, query) => {
                   partner = partner ? partner.toLowerCase() : '';
                   vendor_number = vendor_number ? vendor_number.toLowerCase() : '';
-                 return _.includes(partner, query) || _.includes(vendor_number, query)},
+                 return _.includes(partner, query.toLowerCase()) || _.includes(vendor_number, query.toLowerCase())},
                 attachmentType: ({file_type}, type) => _.includes(type, file_type),
               }
             }
