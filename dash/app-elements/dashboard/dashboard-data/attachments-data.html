@@ -82,7 +82,7 @@
             queryResult = queryResult.filter(file => !_.isEmpty(fieldsToFilter) ?
               fieldsToFilter.reduce(
                 (acc, field) => acc && self.predicates[field](file, params[field]), true)
-              : !!file.partner
+              : !!file.file_link && !!file.partner
             );
 
             return Dexie.Promise.all([
