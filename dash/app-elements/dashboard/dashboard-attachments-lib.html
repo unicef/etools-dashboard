@@ -203,6 +203,10 @@
             type: Array,
             statePath: 'static.attachment_types'
           },
+          static: {
+            type: Object,
+            statePath: 'static'
+          },
           selectedAttachmentTypes: {
             type: Array,
             observer: 'filterChanged'
@@ -270,7 +274,7 @@
                 optionValue: 'value',
                 optionLabel: 'label',
                 path: 'selectedAttachmentTypes',
-                selectionOptions: this.attachmentTypes.map(type => ({label: type, value: type})),
+                selectionOptions: _.union(this.attachmentTypes, this.static.partner_file_types).map(type => ({label: type, value: type})),
                 alreadySelected: []
               },
             ]);
