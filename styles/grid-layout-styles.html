@@ -6,6 +6,16 @@
 <dom-module id="grid-layout-styles">
   <template>
     <style>
+      .layout-horizontal,
+      .layout-vertical {
+        box-sizing: border-box;
+      }
+      .layout-horizontal {
+        @apply --layout-horizontal;
+      }
+      .layout-vertical {
+        @apply --layout-vertical;
+      }
       .row-h {
         @apply(--layout-horizontal);
       }
@@ -16,6 +26,9 @@
         /* flex container */
         @apply(--layout-flex);
       }
+      .row-h, .row-v {
+        padding: 16px 24px;
+      }
       .row-h + .row-h, .row-v + .row-v {
         margin-top: 20px;
       }
@@ -25,6 +38,11 @@
       .no-overflow {
         /* used to prevent flexbox to change it's size if content grows */
         overflow: hidden;
+      }
+      .center-align {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
       }
 
       .col {
