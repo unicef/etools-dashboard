@@ -21,6 +21,7 @@
 <link rel="import"
       href="../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
 <link rel="import" href="../../../bower_components/etools-datepicker/etools-datepicker-button.html">
+<link rel="import" href="../../../bower_components/paper-tooltip/paper-tooltip.html">
 
 <link rel="import" href="dashboard-data/attachments-data.html">
 
@@ -47,7 +48,7 @@
     <paper-material class="list-panel listControls" elevation="1">
       <div class="wrap-controls">
         <paper-input type="search" autocomplete="off" value="{{qs}}"
-                     placeholder="Search by Partner or PD/SSFA"
+                     placeholder="Search by Partner or Vendor #"
                      always-float-label>
           <iron-icon icon="search" prefix></iron-icon>
         </paper-input>
@@ -104,7 +105,7 @@
         <data-table-column class="custom-width col">
           Partner Type
         </data-table-column>
-        <data-table-column class="custom-width col" sortable field="source">
+        <data-table-column class="custom-width col" field="source">
           Source
         </data-table-column>
         <data-table-column class="custom-width col" sortable field="file_type">
@@ -122,7 +123,10 @@
         <data-table-row no-collapse>
           <div slot="row-data">
             <div class="col col-2">
-              <span class="col-data">[[item.partner]]</span>
+              <span class="col-data">
+                [[item.partner]]
+                <paper-tooltip fit-to-visible-bounds>[[item.partner]]</paper-tooltip>
+              </span>
             </div>
             <div class="col col-1">
               <span class="col-data">[[item.vendor_number]]</span>
@@ -134,7 +138,10 @@
               <span class="col-data">Partnership Management</span>
             </div>
             <div class="col custom-width">
-              <span class="col-data">[[item.file_type]]</span>
+              <span class="col-data">
+                [[item.file_type]]
+                <paper-tooltip fit-to-visible-bounds>[[item.file_type]]</paper-tooltip>
+              </span>
             </div>
             <div class="col-3 col">
               <a class="col-data">[[item.filename]]</a>
@@ -169,12 +176,12 @@
           dashBehaviors.CommonGeneralBehavior,
         ],
         observers: [
-          '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, sortBy, selectedAttachmentTypes, requiredDataLoaded)',
+          '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, requiredDataLoaded)',
           '_initListFilters(attachmentTypes)',
           '_init(active, attachmentTypes)',
         ],
         listeners: {
-          'sort-changed': '_handleSortChange',
+          'sort-changed': 'sortOrderChanged',
         },
         properties: {
           filteredAttachments: {
@@ -215,7 +222,7 @@
                 },
                 {
                   qName: 'sortBy',
-                  propName: 'sortBy',
+                  propName: 'orderBy',
                   xf: _.identity
                 },
                 {
@@ -238,7 +245,7 @@
           this.set('pageNumber', params.page ? parseInt(params.page) : 1);
           this.set('pageSize', params.size ? parseInt(params.size) : 10);
           this.set('sortOrder', params.sort || 'desc');
-          this.set('sortBy', params.sortBy || '');
+          this.set('orderBy', params.sortBy || '');
           this.set('selectedAttachmentTypes', params.docType ? this._setSelectedFromCollection(params.docType, this.attachmentTypes) : []);
           this.set('initComplete', true);
           this._updateSelectedFiltersValues();
@@ -258,7 +265,7 @@
                 optionValue: 'value',
                 optionLabel: 'label',
                 path: 'selectedAttachmentTypes',
-                selectionOptions: this.attachmentTypes.map(type=> ({label: type, value: type})),
+                selectionOptions: this.attachmentTypes.map(type => ({label: type, value: type})),
                 alreadySelected: []
               },
             ]);
@@ -280,17 +287,17 @@
           const selectedParams = {
             searchString: this.qs,
             attachmentType: _.map(this.selectedAttachmentTypes, 'value'),
+            orderBy: this.orderBy
           };
           const query = _.assign({}, _.omitBy(selectedParams, _.isEmpty), {
             pageNumber: this.pageNumber,
             pageSize: this.pageSize,
-            order: this.sortOrder
+            order: this.sortOrder,
           });
           this.$.attachments.query(query);
         },
 
         _updateUrl: function() {
-          console.log('update url')
           if (!this.initComplete || !this.requiredDataLoaded) {
             return;
           }
@@ -308,10 +315,6 @@
           }
           return [];
         },
-
-        _handleSortChange: function({detail: {field, direction}}) {
-
-        }
 
       });
     })();

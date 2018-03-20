@@ -49,10 +49,10 @@
             type: Object,
             value: function() {
               return {
-                searchString: ({partner, pd_ssfa_number}, query) => {
+                searchString: ({partner, vendor_number}, query) => {
                   partner = partner ? partner.toLowerCase() : '';
-                  pd_ssfa_number = pd_ssfa_number ? pd_ssfa_number.toLowerCase() : '';
-                 return _.includes(partner, query) || _.includes(pd_ssfa_number, query)},
+                  vendor_number = vendor_number ? vendor_number.toLowerCase() : '';
+                 return _.includes(partner, query) || _.includes(vendor_number, query)},
                 attachmentType: ({file_type}, type) => _.includes(type, file_type),
               }
             }
@@ -62,7 +62,6 @@
 
         init: function(active) {
           if (active && _.isEmpty(this.filteredAttachments)) {
-            console.log('data active')
             this.fire('global-loading', {
               message: 'Loading documents list...',
               active: true,
@@ -72,17 +71,14 @@
         },
 
         query: function(params) {
-          console.log('query')
           const self = this;
-          const {pageNumber, pageSize, order} = params;
+          const {pageNumber, pageSize, order, orderBy} = params;
           this.db.transaction('r', this.db.attachments, () => {
-            let queryResult = this.db.attachments.orderBy('created');
+            let queryResult = this.db.attachments.orderBy(orderBy || 'created');
             if (order === 'asc') {
               queryResult = queryResult.reverse();
             }
-            const fieldsToFilter = _.without(_.keys(params), 'pageNumber', 'pageSize', 'order');
-            console.log('fields to filter', fieldsToFilter, params)
-            queryResult.count().then(c => console.log('count', c));
+            const fieldsToFilter = _.without(_.keys(params), 'pageNumber', 'pageSize', 'order' , 'orderBy');
             queryResult = queryResult.filter(file => !_.isEmpty(fieldsToFilter) ?
               fieldsToFilter.reduce(
                 (acc, field) => acc && self.predicates[field](file, params[field]), true)

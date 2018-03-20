@@ -36,9 +36,12 @@
     dateChanged: function() {
       this.set('pageNumber', 1);
     },
-    sortOrderChanged: function(e) {
+    sortOrderChanged: function({detail: {direction, field}}) {
       this.set('debounceTime', 150);
-      this.set('sortOrder', e.detail.direction);
+      this.set('sortOrder', direction);
+      if (field) {
+        this.set('orderBy', field);
+      }
     },
     buildQueryString: function() {
       return this.params.reduce((acc, {qName, propName, xf}) => {
