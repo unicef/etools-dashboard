@@ -25,7 +25,6 @@
       this.set('pageNumber', 1);
     },
     pageSizeChanged: function(e) {
-      console.log(e)
       this.set('debounceTime', 200);
       this.set('pageNumber', 1);
       this.set('pageSize', parseInt(e.detail.value));

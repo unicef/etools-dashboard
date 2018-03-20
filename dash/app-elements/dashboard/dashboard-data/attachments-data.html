@@ -53,7 +53,7 @@
                   partner = partner ? partner.toLowerCase() : '';
                   pd_ssfa_number = pd_ssfa_number ? pd_ssfa_number.toLowerCase() : '';
                  return _.includes(partner, query) || _.includes(pd_ssfa_number, query)},
-                attachmentType: (file, type) => file.file_type === type,
+                attachmentType: ({file_type}, type) => _.includes(type, file_type),
               }
             }
           }
@@ -72,6 +72,7 @@
         },
 
         query: function(params) {
+          console.log('query')
           const self = this;
           const {pageNumber, pageSize, order} = params;
           this.db.transaction('r', this.db.attachments, () => {

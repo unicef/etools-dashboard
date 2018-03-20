@@ -75,34 +75,6 @@
               </paper-icon-button>
             </div>
           </template>
-          <!-- date pickers -->
-          <template is="dom-if" if="[[filterTypeIs('datepicker', filter.type)]]">
-            <div class="filter">
-              <paper-input
-                  id$="datepicker_parent_[[filter.path]]"
-                  label="[[filter.filterName]]"
-                  value="[[prettyDate(filter.dateSelected)]]"
-                  on-down="openDatePicker"
-                  data-selector$="datepicker_[[filter.path]]">
-                <etools-datepicker-button
-                    prefix
-                    id$="datepicker_[[filter.path]]"
-                    date="[[prepareDate(filter.dateSelected)]]"
-                    format="D MMM YYYY"
-                    parent-id$="datepicker_parent_[[filter.path]]"
-                    data-filter-path$="[[filter.path]]"
-                    on-date-has-changed="_notifyDateChanged"
-                    no-init show-clear-btn fire-date-has-changed>
-                </etools-datepicker-button>
-              </paper-input>
-              <paper-icon-button
-                  suffix class="remove-field remove" icon="cancel"
-                  on-tap="removeFilter"
-                  data-filter-name$="[[filter.filterName]]"
-                  data-reset-path$="[[filter.path]]">
-              </paper-icon-button>
-            </div>
-          </template>
         </template>
       </div>
       <div class="fixed-controls">
@@ -197,9 +169,8 @@
           dashBehaviors.CommonGeneralBehavior,
         ],
         observers: [
-          '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, selectedUnicefUsers,' +
-          'uploadedAfterDate, uploadedBeforeDate, requiredDataLoaded)',
-          '_initListFilters(unicefUsers)',
+          '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, sortBy, selectedAttachmentTypes, requiredDataLoaded)',
+          '_initListFilters(attachmentTypes)',
           '_init(active, attachmentTypes)',
         ],
         listeners: {
@@ -223,14 +194,6 @@
           selectedAttachmentTypes: {
             type: Array,
             observer: 'filterChanged'
-          },
-          uploadedAfterDate: {
-            type: String,
-            observer: 'dateChanged'
-          },
-          uploadedBeforeDate: {
-            type: String,
-            observer: 'dateChanged'
           },
           requiredDataLoaded: {
             type: Boolean,
@@ -286,35 +249,17 @@
           this.set('requiredDataLoaded', true);
         },
 
-        _initListFilters: function(unicefUsers) {
+        _initListFilters: function(attachmentTypes) {
           this.debounce('init-list-filters', () => {
             this.initListFiltersData([
               {
-                filterName: 'Uploaded By',
+                filterName: 'Document Type',
                 type: 'esmm',
                 optionValue: 'value',
                 optionLabel: 'label',
-                selectionOptions: this.unicefUsers,
-                alreadySelected: [],
-                path: 'selectedUnicefUsers'
-              },
-              {
-                filterName: 'Uploaded Before',
-                type: 'datepicker', // etools-datepicker
-                path: 'uploadBeforeDate',
-                dateSelected: ''
-              },
-              {
-                filterName: 'Uploaded After',
-                type: 'datepicker', // etools-datepicker
-                path: 'uploadedAfterDate',
-                dateSelected: ''
-              },
-              {
-                filterName: 'Document Type',
-                type: 'esmm', // etools-datepicker
-                path: 'uploadedAfterDate',
-                dateSelected: ''
+                path: 'selectedAttachmentTypes',
+                selectionOptions: this.attachmentTypes.map(type=> ({label: type, value: type})),
+                alreadySelected: []
               },
             ]);
           }, 100)
@@ -324,20 +269,8 @@
           this.debounce('updateShownFilters', () => {
             let filtersValues = [
               {
-                filterName: 'Uploaded By',
-                selectedValue: _.map(this.selectedUnicefUsers, 'value')
-              },
-              {
-                filterName: 'Uploaded Before',
-                selectedValue: this.uploadedBeforeDate
-              },
-              {
-                filterName: 'Uploaded After',
-                selectedValue: this.uploadedAfterDate
-              },
-              {
                 filterName: 'Document Type',
-                selectedValue: this.selectedAttachmentTypes
+                selectedValue: _.map(this.selectedAttachmentTypes, 'value')
               }
             ]
           }, 200)
@@ -347,9 +280,6 @@
           const selectedParams = {
             searchString: this.qs,
             attachmentType: _.map(this.selectedAttachmentTypes, 'value'),
-            uploadedBy: _.map(this.selectedUnicefUsers, 'value'),
-            uploadedBefore: this.uploadedBeforeDate,
-            uploadedAfter: this.uploadedAfterDate
           };
           const query = _.assign({}, _.omitBy(selectedParams, _.isEmpty), {
             pageNumber: this.pageNumber,
@@ -360,6 +290,7 @@
         },
 
         _updateUrl: function() {
+          console.log('update url')
           if (!this.initComplete || !this.requiredDataLoaded) {
             return;
           }
@@ -368,7 +299,6 @@
           if (this.requiredDataLoaded) {
             this._filterDocuments();
           }
-
         },
 
         _setSelectedFromCollection: function(param, collection) {
