@@ -201,7 +201,7 @@
         },
         statuses: {
           type: Array,
-          statePath: 'statuses'
+          statePath: 'static.intervention_status'
         },
         userCountry: {
           type: Object,
@@ -370,7 +370,7 @@
         });
       },
       // ensure redux items loaded before initializing the filters
-    
+
       _callLocations: function(locations) {
         this.$.locationsData.query(locations);
       },
