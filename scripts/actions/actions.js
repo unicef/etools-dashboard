@@ -21,7 +21,7 @@ const Actions = [
     actionType: 'countryProgrammes',
     propsArray: ['countryProgrammes'],
     endpointProps: {
-      name: 'countryProgrammes'
+      name: 'countryProgrammes',
     },
     prepareData: function(data) {
       data = data || [];
@@ -52,6 +52,7 @@ const Actions = [
       return ret;
     },
     prepareData: function(data) {
+      data = data || [];
       return data.length
         ? data.map(function(trip) {
             return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']);
@@ -67,6 +68,7 @@ const Actions = [
       return ret;
     },
     prepareData: function(data) {
+      data = data || [];
       return data.length
         ? data.map(trip=> {
             return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'traveler']);
@@ -82,6 +84,7 @@ const Actions = [
       return ret;
     },
     prepareData: function(data) {
+      data = data || [];
       return data.length
         ? data.map(function(actionPoint) {
             return _.pick(actionPoint, ['status', 'description', 'created_at', 'person_responsible_name', 'id', 'due_date']);
@@ -97,6 +100,7 @@ const Actions = [
       return ret;
     },
     prepareData: function(data) {
+      data = data || [];
       return data.length
         ? data.map(function(actionPoint) {
             return _.pick(actionPoint, ['status', 'description', 'created_at', 'assigned_by_name', 'id', 'due_date']);
@@ -112,6 +116,7 @@ const Actions = [
       templateProps: {}
     },
     prepareData: function(data) {
+      data = data || [];
       return data.length
         ? data.map(function(partnership) {
             return _.pick(partnership, ['id', 'title', 'number', 'total_unicef_budget']);
