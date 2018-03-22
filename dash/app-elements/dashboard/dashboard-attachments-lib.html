@@ -98,13 +98,13 @@
 
     <paper-material id="list" elevation="1">
       <data-table-header no-collapse>
-        <data-table-column class="col-2 col">
+        <data-table-column class="col-2 col" field="partner" sortable>
           Partner
         </data-table-column>
         <data-table-column class="col-1 col">
           Vendor #
         </data-table-column>
-        <data-table-column class="custom-width col">
+        <data-table-column class="custom-width col" field="partner_type" sortable>
           Partner Type
         </data-table-column>
         <data-table-column class="custom-width col" field="source">
@@ -146,9 +146,9 @@
               </span>
             </div>
             <div class="col-3 col">
-              <a  href$="[[_getDownloadUrl(item.file_link)]]"
-                  target="_blank"
-                  class="col-data">[[item.filename]]</a>
+              <a href$="[[_getDownloadUrl(item.file_link)]]"
+                 target="_blank"
+                 class="col-data">[[item.filename]]</a>
             </div>
             <div class="col-1 col">
               <span class="col-data">[[item.created]]</span>
@@ -183,7 +183,7 @@
         observers: [
           '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, requiredDataLoaded)',
           '_initListFilters(attachmentTypes)',
-          '_init(active, attachmentTypes)',
+          '_init(active, attachmentTypes, urlParams)',
         ],
         listeners: {
           'sort-changed': 'sortOrderChanged',
@@ -243,10 +243,10 @@
             }
           }
         },
-        //unicefUsers required to ensure redux statePaths are loaded
-        _init: function(active, attachmentTypes) {
+        //attachmentTypes required to ensure redux statePaths are loaded
+        _init: function() {
           let params = this.urlParams;
-          if (!active || !params || !_.isEmpty(this.filteredAttachments)) {
+          if (!this.active || !params || !_.isEmpty(this.filteredAttachments)) {
             return;
           }
           this.set('initComplete', false);
@@ -274,7 +274,10 @@
                 optionValue: 'value',
                 optionLabel: 'label',
                 path: 'selectedAttachmentTypes',
-                selectionOptions: _.union(this.attachmentTypes, this.static.partner_file_types).map(type => ({label: type, value: type})),
+                selectionOptions: _.union(this.attachmentTypes, this.static.partner_file_types).map(type => ({
+                  label: type,
+                  value: type
+                })),
                 alreadySelected: []
               },
             ]);
@@ -303,7 +306,6 @@
             pageSize: this.pageSize,
             order: this.sortOrder,
           });
-          console.log('query is ', query)
           this.$.attachments.query(query);
         },
 
@@ -325,6 +327,7 @@
           }
           return [];
         },
+
         _getDownloadUrl: function(link) {
           return `${this.baseSite}${link}`
         }
