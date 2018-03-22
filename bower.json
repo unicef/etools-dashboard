@@ -58,7 +58,7 @@
     "polymer-redux": "^0.4.0",
     "google-chart": "^1.1.1",
     "leaflet-map": "^1.2.0",
-    "etools-app-selector": "^1.0.9",
+    "etools-app-selector": "caedbce47bdf10985c403981c2e2ba3795381f71",
     "etools-profile-dropdown": "09904ed1",
     "etools-behaviors": "^1.0.1",
     "iron-label": "^2.0.0",
