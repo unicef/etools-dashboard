@@ -214,11 +214,10 @@
           </data-table-column>
           <data-table-column class="col-3 layout horizontal" group-heading="SPOT CHECKS">
             <data-table-column class="col-half vertical center buffer right-side"></data-table-column>
-            <data-table-column class="col-4 vertical center right-side">
-              MR
-              <paper-tooltip>Minimum Required</paper-tooltip>
+            <data-table-column class="col-5 vertical center right-side">
+              Required
             </data-table-column>
-            <data-table-column class="col-7 vertical center right-side">
+            <data-table-column class="col-6 vertical center right-side">
               Completed
             </data-table-column>
             <data-table-column class="col-half vertical center buffer right-side"></data-table-column>
@@ -265,14 +264,14 @@
             </div>
             <div class="col-3 layout horizontal group">
               <span class="col-half right-side"></span>
-              <span class="col-4 right-side">[[totals.hact_min_requirements_spot_checks]]</span>
-              <span class="col-7 right-side">[[totals.hact_values_spot_checks_completed_total]]</span>
+              <span class="col-5 right-side">[[_sumSpotCheckRequiredTotals(totals)]]</span>
+              <span class="col-6 right-side">[[totals.hact_values_spot_checks_completed_total]]</span>
               <span class="col-half right-side"></span>
             </div>
             <div class="col-5 layout horizontal group">
-              <span class="col-4 right-side">[[totals.hact_values_audits_minimum_requirements]]</span>
+              <span class="col-4 right-side">[[totals.planned_engagement_required_audit]]</span>
               <span class="col-4 right-side">[[totals.hact_values_audits_completed]]</span>
-              <span class="col-4 monetary right-side">$[[totals.outstanding_findings]]</span>
+              <span class="col-4 monetary right-side">$[[totals.hact_values_outstanding_findings]]</span>
             </div>
           </div>
         </div>
@@ -320,14 +319,14 @@
               </div>
               <div class="col-3 layout horizontal group">
                 <span class="col-half right-side buffer"></span>
-                <span class="col-4 col-data right-side">[[_sumSpotCheckRequired(partner)]]</span>
-                <span class="col-7 col-data right-side">[[partner.hact_values.spot_checks.completed.total]]</span>
+                <span class="col-5 col-data right-side">[[_sumSpotCheckRequiredPartner(partner)]]</span>
+                <span class="col-6 col-data right-side">[[partner.hact_values.spot_checks.completed.total]]</span>
                 <span class="col-half right-side buffer"></span>
               </div>
               <div class="col-5 layout horizontal group">
                 <span class="col-4 col-data right-side">[[_checkForValueYesBlank(partner.planned_engagement.required_audit)]]</span>
                 <span class="col-4 col-data right-side">[[partner.hact_values.audits.completed]]</span>
-                <span class="col-4 monetary right-side">$[[partner.outstanding_findings]]</span>
+                <span class="col-4 monetary right-side">$[[partner.hact_values.outstanding_findings]]</span>
               </div>
             </div>
           </div>
@@ -370,13 +369,27 @@
           }
         },
 
-        _sumSpotCheckRequired: function(partner) {
+        _sum: function(val1, val2) {
+          _.sum([val1, val2])
+        },
+
+        _sumSpotCheckRequiredPartner: function(partner) {
           return (
             partner.planned_engagement.spot_check_follow_up_q1
             + partner.planned_engagement.spot_check_follow_up_q2
             + partner.planned_engagement.spot_check_follow_up_q3
             + partner.planned_engagement.spot_check_follow_up_q4
             + partner.hact_min_requirements.spot_checks
+          )
+        },
+        
+        _sumSpotCheckRequiredTotals: function(totals) {
+          return (
+            totals.planned_engagement_spot_check_follow_up_q1
+            + totals.planned_engagement_spot_check_follow_up_q2
+            + totals.planned_engagement_spot_check_follow_up_q3
+            + totals.planned_engagement_spot_check_follow_up_q4
+            + totals.hact_min_requirements_spot_checks
           )
         },
       });

@@ -7,7 +7,7 @@
       endpoint: {
         type: Object,
       },
-      
+
       data: {
         type: Array,
         readOnly: true,
@@ -46,7 +46,6 @@
     },
 
     _handleResponse: function(res) {
-      this.fire('global-loading');
       this._setData(res.detail);
       if (this.fireDataLoaded) {
         if (!this.dataLoadedEventName) {

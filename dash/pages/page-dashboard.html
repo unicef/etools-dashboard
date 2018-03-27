@@ -15,6 +15,7 @@
 <link rel="import" href="../app-elements/dashboard/dashboard-hact.html">
 <link rel="import" href="../app-elements/dashboard/dashboard-trips.html">
 <link rel="import" href="../app-elements/dashboard/dashboard-map.html">
+<link rel="import" href="../app-elements/dashboard/dashboard-attachments-lib.html">
 
 
 
@@ -122,6 +123,10 @@
                 <span class="tab-content">Map</span>
               </paper-tab>
 
+              <paper-tab name="attachments" link>
+                <span class="tab-content">Document Library</span>
+              </paper-tab>
+
             </paper-tabs>
           </div>
         </div>
@@ -153,6 +158,13 @@
         <div class="page" name="map">
           <dashboard-map active="[[_isActive(partnershipPage,'map')]]"></dashboard-map>
         </div>
+
+        <div class="page" name="attachments">
+          <dashboard-attachments-lib
+              url-params="[[queryParams]]"
+              active="[[_isActive(partnershipPage,'attachments')]]"></dashboard-attachments-lib>
+        </div>
+
       </iron-pages>
 
     </app-header-layout>

@@ -108,7 +108,7 @@
 
           <div class="component flex-1 layout horizontal center border-right border-bottom tuck-left-top prog-visits ">
             <div class="col-3 assurance-color">
-              Programmatic <br>Visits
+              Programmatic<br>Visits
             </div>
             <div class="flex-1 layout column">
               <google-chart
@@ -122,7 +122,7 @@
 
           <div class="component flex-1 layout horizontal center border-bottom spot">
             <div class="col-3 assurance-color">
-              Spot <br> Checks
+              Spot<br>Checks
             </div>
             <div class="flex-1 layout column">
               <google-chart
@@ -147,7 +147,7 @@
               </div>
               <div class="assurance-data">
                 <div class="completed">[[chartData.assurance_activities.missing_micro_assessment]]</div>
-                <div class="subheading assurance-color">Missing</div>
+                <div class="subheading assurance-color">Expired</div>
               </div>
             </div>
           </div>
@@ -211,7 +211,7 @@
           </div>
           <template is="dom-repeat" items="[[chartData.financial_findings_numbers.3.value]]">
             <div class="layout horizontal justified audit-line">
-              <div class="fin-title flex-1 sub-col">-[[item.name]]</div>
+              <div class="fin-title flex-1 sub-col">[[_dashCapital(item.name)]]</div>
               <div class="fin-amount">[[item.value]]</div>
             </div>
           </template>
@@ -222,7 +222,7 @@
     </paper-material>
 
     <!--Cash Transfer Amounts-->
-    <paper-material class="list-panel hact-paper layout  center-center ">
+    <paper-material class="list-panel hact-paper layout center-center ">
       <div class="hact-title component">
         Total Cash Transfers by Cash Transfer Amounts
       </div>
@@ -406,7 +406,7 @@
             value: {
               legend: {position: 'none'},
               bars: 'horizontal',
-              bar: {groupWidth: '65%'},
+              bar: {groupWidth: '100%'},
               colors: ['transparent'],
               chartArea: {
                 top: '8',
@@ -414,19 +414,25 @@
                 left: '0',
                 width: '85%',
               },
-              isStacked: true,
               annotations: {
                 textStyle: {
-                  color: '#fff',
+                  color: '#000000',
                   auraColor: 'transparent',
+                },
+                datum: {
+                  stem: {
+                    color: 'transparent'
+                  }
                 },
                 stem: {
                   color: 'none',
-                  display: 'none'
+                  display: 'none',
+                  length: 1
                 },
                 boxStyle: {
                   display: 'none'
-                }
+                },
+                alwaysOutside: true,
               },
               hAxis: {
                 baselineColor: 'none',
@@ -649,7 +655,7 @@
         },
         _onChartDataChange(data){
           if (!_.isEmpty(data)){
-            const riskRatings = _.drop(data.charts.cash_transfers_risk_ratings).map(r=>_.last(r))
+            const riskRatings = _.drop(data.charts.cash_transfers_risk_ratings).map(r=>_.last(r));
             this.set('riskRatings', riskRatings);
             this._init(this.active);
           }
@@ -694,6 +700,10 @@
 
         isHighlighted: function(highlighted) {
           return highlighted ? 'financial-highlight' : '';
+        },
+
+        _dashCapital: function(string) {
+          return `- ${_.capitalize(string)}`
         }
 
       })

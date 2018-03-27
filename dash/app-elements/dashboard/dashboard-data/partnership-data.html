@@ -1,5 +1,4 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../../app-config/etools-app-config.html">
 
 <link rel="import" href="../../../../bower_components/etools-ajax/etools-ajax.html">
 <link rel="import" href="../../../app-behaviors/data-element-behavior.html">
@@ -25,7 +24,6 @@
 
         is: 'partnership-data',
         behaviors: [
-          etoolsAppConfig,
           dashBehaviors.DataElementBehavior,
           dashBehaviors.DateBehavior,
           dashBehaviors.CommonGeneralBehavior,
@@ -59,7 +57,7 @@
             value: function() {
               return {
                 searchString: (qs, partner)=> qs.length ? _.includes(partner.partner_name.toLowerCase(), qs.toLowerCase()): true,
-                sectors: (sectors, partner)=> sectors.length ? !!_.intersection(sectors, [_.trim(partner.sectors)]).length : true,
+                sectors: (sectors, partner)=> sectors.length ? !!_.intersection(sectors, [_.trim(partner.sections)]).length : true,
                 offices: (offices, partner)=> offices.length ? !!_.intersection(offices, partner.offices_names.split(',')).length : true,
                 status: (status, partner)=> status.length ? (_.includes(status, partner.status) ? true : false) : true,
                 startAfterDate: (date, partner)=> _.isEmpty(partner.start) ? true
@@ -92,7 +90,6 @@
           const predKeys = _.keys(this.predicates);
 
           this.db.transaction('r', this.db.cso_dashboard, function() {
-            self.fire('global-loading', {active: true, message: 'Loading data...'});
             let queryResult = self.db.cso_dashboard.orderBy('partner_name');
             if (order === 'desc') {
               queryResult = queryResult.reverse();
@@ -110,7 +107,6 @@
           }).then(function(countAndResult) {
             self._setTotalResults(countAndResult[0]);
             self._setFilteredPartnerships(countAndResult[1]);
-            self.fire('global-loading');
             self.fire('global-loading', {loadingSource: 'partner-data'});
           }).catch(function(error) {
             console.error('Error querying partnerships-dash: ', error);
