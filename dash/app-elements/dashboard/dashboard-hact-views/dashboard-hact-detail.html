@@ -429,6 +429,10 @@
           }
         },
 
+        _goToPage: function(e) {
+          window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
+        },
+
         _checkForValueYesBlank: function(val) {
           return val ? "Yes" : ""
         },
