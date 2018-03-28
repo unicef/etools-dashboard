@@ -84,6 +84,7 @@
                 (acc, field) => acc && self.predicates[field](file, params[field]), true)
               : !!file.file_link && !!file.partner
             );
+            queryResult = queryResult.filter(file => !_.isEmpty(file.filename))
 
             return Dexie.Promise.all([
               queryResult.count(),
