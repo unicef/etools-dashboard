@@ -2,6 +2,7 @@
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
 <link rel="import" href="../../../styles/grid-layout-styles.html">
+<link rel="import" href="../../../styles/app-theme.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
@@ -23,7 +24,7 @@
 
 <dom-module id="dashboard-hact">
   <template>
-    <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
+    <style include="shared-styles custom-style list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
       :host {
         --paper-input-container-label: {
           margin-left: 34px;
@@ -75,42 +76,46 @@
 
       paper-button.curved-left {
         border-radius: 50px 0 0 50px;
-        background: rgb(216, 216, 216);
+        background: rgb(255, 255, 255);
+        height: 36px;
         margin-right: 0;
         padding-right: 1em;
+        padding-left: 16px;
         cursor: pointer;
-        padding-bottom: 8px;
+        color: var(--secondary-text-color)
       }
 
       paper-button.curved-right {
         border-radius: 0 50px 50px 0;
-        background: rgb(255, 255, 255);
+        background: rgb(216, 216, 216);
+        height: 36px;
         margin-left: 0;
         padding-left: 1em;
+        padding-right: 16px;
         cursor: pointer;
-        padding-bottom: 8px;
+        color: var(--dark-disabled-text-color)
       }
 
       .dark-button {
         background: rgb(216, 216, 216) !important;
+        color: var(--dark-disabled-text-color) !important
+        
       }
 
       .light-button {
         background: rgb(255, 255, 255) !important;
+        color: var(--secondary-text-color) !important
       }
 
-      .sources-button {
-        --iron-icon-fill-color: rgb(26, 155, 252);
+      iron-icon[name="assurance"],
+      iron-icon[name="charts"] {
+        padding-right: 4px;
       }
 
       paper-button.detailed-assurance {
         border-radius: 50px;
         background: rgb(255, 255, 255);
         cursor: pointer;
-      }
-
-      #sources-btn {
-        margin-right: auto;
       }
     </style>
     <app-route
@@ -127,12 +132,12 @@
     </partners-data>
     <div class="view-toggle">
       <paper-button id="assurancePlan" on-tap="_toggleChartsView" name="assurance" noink class="curved-left">
-        <iron-icon class="dark" name="assurance" icon="list"></iron-icon>
+        <iron-icon id="assuranceIcon" name="assurance" icon="list"></iron-icon>
         ASSURANCE PLAN
       </paper-button>
       <paper-button id="dashboardCharts" on-tap="_toggleChartsView"  name="charts" noink
                     class="curved-right">
-        <iron-icon class="dark" name="charts" icon="assessment"></iron-icon>
+        <iron-icon id="chartsIcon" name="charts" icon="av:equalizer"></iron-icon>
         DASHBOARD
       </paper-button>
     </div>
@@ -262,11 +267,15 @@
         _tabChanged: function(hactTab) {
           this.set('hactPage', hactTab);
           if (this.hactPage === 'charts') {
-            this.$.assurancePlan.classList.add('light-button');
-            this.$.dashboardCharts.classList.add('dark-button');
+            this.$.assurancePlan.classList.add('dark-button');
+            this.$.assuranceIcon.classList.add('dark-button');
+            this.$.dashboardCharts.classList.add('light-button');
+            this.$.chartsIcon.classList.add('light-button');
           } else {
-            this.$.assurancePlan.classList.remove('light-button');
-            this.$.dashboardCharts.classList.remove('dark-button');
+            this.$.assurancePlan.classList.remove('dark-button');
+            this.$.assuranceIcon.classList.remove('dark-button');
+            this.$.dashboardCharts.classList.remove('light-button');
+            this.$.chartsIcon.classList.remove('light-button');
           }
         },
 
@@ -363,8 +372,8 @@
           button.innerText = !this.displayDetail ? 'HIDE DETAILED ASSURANCE' : 'SHOW DETAILED ASSURANCE';
           this.displayDetail = !this.displayDetail;
         },
-        _isActive: (current, target) => (current === target),
 
+        _isActive: (current, target) => (current === target),
       });
     })();
 
