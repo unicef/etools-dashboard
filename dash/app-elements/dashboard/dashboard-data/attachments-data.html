@@ -1,0 +1,109 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../app-config/etools-app-config.html">
+
+<link rel="import" href="../../../../bower_components/etools-ajax/etools-ajax.html">
+<link rel="import" href="../../../app-behaviors/data-element-behavior.html">
+<link rel="import" href="../../../app-behaviors/date-behavior.html">
+
+<dom-module id="attachments-data">
+  <template>
+    <etools-ajax id="ajax"
+                 endpoint="[[endpoint]]"
+                 caching-storage="custom"
+                 dexie-db-collection="attachments"
+                 on-success="_handleResponse">
+    </etools-ajax>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+      Polymer({
+        is: 'attachments-data',
+        behaviors: [
+          dashBehaviors.DataElementBehavior,
+          dashBehaviors.DateBehavior,
+          etoolsAppConfig.globals
+        ],
+        observers: ['init(active)'],
+        properties: {
+          endpointName: {
+            type: String,
+            value: 'attachments'
+          },
+          filteredTotal: {
+            type: Number,
+            readOnly: true,
+            notify: true
+          },
+          filteredAttachments: {
+            type: Array,
+            readOnly: true,
+            notify: true
+          },
+          dataLoadedEventName: {
+            type: String,
+            value: 'attachments-loaded'
+          },
+          predicates: {
+            type: Object,
+            value: function() {
+              return {
+                searchString: ({partner, vendor_number}, query) => {
+                  partner = partner ? partner.toLowerCase() : '';
+                  vendor_number = vendor_number ? vendor_number.toLowerCase() : '';
+                 return _.includes(partner, query.toLowerCase()) || _.includes(vendor_number, query.toLowerCase())},
+                attachmentType: ({file_type}, type) => _.includes(type, file_type),
+              }
+            }
+          }
+
+        },
+
+        init: function(active) {
+          if (active && _.isEmpty(this.filteredAttachments)) {
+            this.fire('global-loading', {
+              message: 'Loading documents list...',
+              active: true,
+              loadingSource: 'attachments-data'
+            });
+          }
+        },
+
+        query: function(params) {
+          const self = this;
+          const {pageNumber, pageSize, order, orderBy} = params;
+          this.db.transaction('r', this.db.attachments, () => {
+            let queryResult = this.db.attachments.orderBy(orderBy || 'created');
+            if (order === 'asc') {
+              queryResult = queryResult.reverse();
+            }
+            const fieldsToFilter = _.without(_.keys(params), 'pageNumber', 'pageSize', 'order' , 'orderBy');
+            queryResult = queryResult.filter(file => !_.isEmpty(fieldsToFilter) ?
+              fieldsToFilter.reduce(
+                (acc, field) => acc && self.predicates[field](file, params[field]), true)
+              : !!file.file_link && !!file.partner
+            );
+            queryResult = queryResult.filter(file => !_.isEmpty(file.filename))
+
+            return Dexie.Promise.all([
+              queryResult.count(),
+              // Use clone() as offset() and limit() otherwise mutates the same query that is counted
+              queryResult.clone()
+                .offset((pageNumber - 1) * pageSize)
+                .limit(pageSize)
+                .toArray()])
+              .then(countAndResult => {
+                this._setFilteredTotal(countAndResult[0]);
+                this._setFilteredAttachments(countAndResult[1]);
+                this.fire('global-loading', {loadingSource: 'attachments-data'});
+              })
+
+          });
+        }
+
+      });
+    })();
+
+  </script>
+</dom-module>
