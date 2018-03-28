@@ -33,7 +33,7 @@
       }
 
       .detail-list {
-        /* min-width: 1800px; */
+        min-width: 1800px;
         width: 100%;
         overflow-x: scroll;
         overflow-y: visible;
@@ -345,11 +345,11 @@
                 <span class="col-40-px nowrap vertical">
                   <div>
                     <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
-                    <paper-tooltip hidden="[[!partner.flags.expiring_assessment_flag]]">Micro assessment is expiring soon</paper-tooltip>
+                    <paper-tooltip hidden="[[!partner.flags.expiring_assessment_flag]]">Assessment is expiring this year</paper-tooltip>
                   </div>
                   <div>
                     <iron-icon id="threshold" class="hact-icon" icon="icons:report-problem" hidden="[[!partner.flags.approaching_threshold_flag]]"></iron-icon>
-                    <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment or audit report has not been submitted through the Auditor Portal</paper-tooltip>
+                    <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment will be required if more than $100,000</paper-tooltip>
                   </div>
                 </span>
                 <span class="col-100-px monetary padding-right-10 nowrap vertical">$[[currencyFormat(partner.total_ct_ytd)]]</span>
