@@ -98,7 +98,7 @@
     <!--Assurance Activities-->
     <paper-material class="list-panel hact-paper layout  center-center">
       <div class="hact-title component">
-        Assurance Activities
+        Assessment and Assurance Activities
       </div>
       <div class="divider"></div>
 
@@ -188,7 +188,7 @@
           <template is="dom-repeat" items="[[chartData.financial_findings]]">
             <div class$="layout horizontal justified [[isHighlighted(item.highlighted)]]">
               <div class="fin-title flex-1">[[item.name]]</div>
-              <div class="fin-amount">[[item.value]]</div>
+              <div class="fin-amount">[[_numWithCommas(item.value)]]</div>
             </div>
           </template>
         </div>
@@ -704,7 +704,12 @@
 
         _dashCapital: function(string) {
           return `- ${_.capitalize(string)}`
-        }
+        },
+
+        // _numWithCommas: function(number) {
+        //   debugger
+        //   return parseInt(number).toLocaleString('en')
+        // }
 
       })
       ;
