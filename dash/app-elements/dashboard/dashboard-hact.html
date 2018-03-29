@@ -293,7 +293,7 @@
           if (!this.initComplete || !this.route) {
             return;
           }
-           this.set('route.path', 'dashboard/hact/' + this.routeData.hactTab);
+          this.set('route.path', 'dashboard/hact/' + this.routeData.hactTab);
           this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
           const qs = this.buildQueryString();
           if (qs !== null) {

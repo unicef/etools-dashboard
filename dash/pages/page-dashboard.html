@@ -69,17 +69,6 @@
               [[pageTitle]]
             </h1>
             <div class="top-content-actions-wrapper">
-              
-              <!-- <div class="top-content-action">
-                <etools-dropdown
-                            id="exportYear"
-                            label="Export Year"
-                            options="[[availableYears]]"
-                            on-iron-select="_setExportYear"
-                            dropdown-value="/api/v2/partners/hact?&format=csv"
-                            hide-search hidden$="[[!_isActive(partnershipPage, 'hact')]]">
-                </etools-dropdown>
-              </div> -->
 
               <div class="top-content-action" hidden$="[[hidePartnershipExport]]">
                 <a target="_blank" href="[[csvUrl]]">
