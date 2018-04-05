@@ -24,6 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="app/styles/buttons-styles.html">
 <link rel="import" href="app/styles/page-layout-styles.html">
 <link rel="import" href="app/styles/shared-styles.html">
+<link rel="import" href="app/styles/app-theme.html">
 
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
@@ -67,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <app-drawer-layout force-narrow fullbleed>
       <!-- Drawer content -->
-      
+
 
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
@@ -140,8 +141,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
 
         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="personalized" role="main">
-          <dash-personalized name="personalized"></dash-personalized>
-          <dash-hact name="hact"></dash-hact>
+          <view-personalized name="personalized"></view-personalized>
+          <view-hact name="hact"></view-hact>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
@@ -178,13 +179,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // If no page was found in the route data, page will be an empty string.
         // Default to 'view1' in that case.
         this.page = page || 'personalized';
-
       }
 
       _pageChanged(page) {
         // Load page import on demand. Show 404 page if fails
-        const resolvedPageUrl = this.resolveUrl(`app/views/${page}/dash-${page}.html`);
-        console.log(resolvedPageUrl, 'zzz')
+        const resolvedPageUrl = this.resolveUrl(`app/views/${page}/view-${page}.html`);
         Polymer.importHref(
           resolvedPageUrl,
           null,

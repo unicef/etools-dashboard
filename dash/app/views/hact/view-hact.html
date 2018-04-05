@@ -1,6 +1,6 @@
-<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
 
-<dom-module id="dash-hact">
+<dom-module id="view-hact">
   <template>
     <style>
       :host {
@@ -21,12 +21,12 @@
      * @polymer
      * @extends {Polymer.Element}
      */
-    class DashboardHact extends Polymer.Element {
+    class ViewHact extends Polymer.Element {
       /**
        * String providing the tag name to register the element under.
        */
       static get is() {
-        return 'dash-hact';
+        return 'view-hact';
       }
 
       /**
@@ -60,6 +60,6 @@
 
     }
 
-    window.customElements.define(DashboardHact.is, DashboardHact);
+    window.customElements.define(ViewHact.is, ViewHact);
   </script>
 </dom-module>
