@@ -183,19 +183,19 @@
             <data-table-column class="col-3 vertical nowrap" id="shared_partner">
               Shared<br>IP
             </data-table-column>
-            <data-table-column class="col-6 vertical nowrap padded" id="assessment_type">
-              Assessment<br>Type
+            <data-table-column class="col-6 right vertical padding-right-10 nowrap" id="total_ct_cy">
+              Cash Transfers<br>1 JAN-31 DEC
             </data-table-column>
           </div>
           <div class="col-6 layout horizontal">
+            <data-table-column class="col-5 vertical nowrap padded" id="assessment_type">
+              Assessment<br>Type
+            </data-table-column>
             <data-table-column class="col-4 vertical nowrap padded" id="total_ct_cp">
               Risk<br>Rating
             </data-table-column>
-            <data-table-column class="col-2 vertical nowrap padded" id="hact_values.planned_cash_transfer">
+            <data-table-column class="col-3 vertical nowrap padded padding-right-10" id="hact_values.planned_cash_transfer">
               Flags
-            </data-table-column>
-            <data-table-column class="col-6 right vertical padding-right-10 nowrap" id="total_ct_cy">
-              Cash Transfers<br>1 JAN-31 DEC
             </data-table-column>
           </div>
         </data-table-column>
@@ -248,12 +248,12 @@
             <span class="col-6 layout horizontal">
               <span class="col-3 col-data vertical"></span>
               <span class="col-3 col-data vertical">[[totals.shared_with]]</span>
-              <span class="col-6 col-data vertical"></span>
+              <span class="col-6 col-data padding-right-10 right">$[[currencyFormat(totals.total_ct_ytd)]]</span>
             </span>
             <span class="col-6 layout horizontal">
+              <span class="col-5 col-data vertical"></span>
               <span class="col-4 col-data vertical"></span>
-              <span class="col-2 col-data vertical"></span>
-              <span class="col-6 col-data padding-right-10 right">$[[currencyFormat(totals.total_ct_ytd)]]</span>
+              <span class="col-3 col-data vertical padding-right-10"></span>
             </span>
           </div>
           <div class="col-5 layout horizontal">
@@ -294,21 +294,21 @@
                   <paper-tooltip>[[partner.partner_type]]</paper-tooltip>
                 </span>
                 <span class="col-3 col-data">[[_checkForValueYesNo(partner.shared_with)]]</span>
-                <span class="col-6 col-data padded name">[[partner.type_of_assessment]]</span>
+                <span class="col-6 col-data right padding-right-10">$[[currencyFormat(partner.total_ct_ytd)]]</span>
               </span>
               <span class="col-6 layout horizontal">
+                <span class="col-5 col-data padded name">[[partner.type_of_assessment]]</span>
                 <span class="col-4 ellipsis col-data">[[partner.rating]]</span>
-                <span class="col-2 col-data">
+                <span class="col-2 col-data padding-right-10">
                   <div>
                     <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
-                    <paper-tooltip hidden="[[!partner.flags.expiring_assessment_flag]]">Micro assessment is expiring soon</paper-tooltip>
+                    <paper-tooltip hidden="[[!partner.flags.expiring_assessment_flag]]">Assessment is expiring this year</paper-tooltip>
                   </div>
                   <div>
                     <iron-icon id="threshold" class="hact-icon" icon="icons:report-problem" hidden="[[!partner.flags.approaching_threshold_flag]]"></iron-icon>
-                    <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment or audit report has not been submitted through the Auditor Portal</paper-tooltip>
+                    <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment will be required if more than $100,000</paper-tooltip>
                   </div>
                 </span>
-                <span class="col-6 col-data right padding-right-10">$[[currencyFormat(partner.total_ct_ytd)]]</span>
               </span>
             </div>
             <div class="col-5 layout horizontal">

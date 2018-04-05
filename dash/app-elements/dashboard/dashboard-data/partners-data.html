@@ -87,7 +87,7 @@
             }
             if (!_.isEmpty(searchString)) {
               queryResult = queryResult.filter(function(partner) {
-                return _.includes(partner.name.toLowerCase(), searchString.toLowerCase());
+                return _.includes(partner.name.toLowerCase(), searchString.toLowerCase()) || _.includes(partner.vendor_number, searchString);
               });
             }
             return Dexie.Promise.all([
