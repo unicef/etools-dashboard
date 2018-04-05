@@ -1,16 +1,11 @@
 {
   "entrypoint": "index.html",
-  "shell": "src/my-app.html",
+  "shell": "dash/app-shell.html",
   "fragments": [
-    "src/my-view1.html",
-    "src/my-view2.html",
-    "src/my-view3.html",
-    "src/my-view404.html"
+    "dash/app/views/hact/hact.html",
+    "dash/app/views/personalized/personalized.html"
   ],
-  "sources": [
-    "images/**/*",
-    "src/**/*"
-  ],
+  "sources": ["images/**/*", "dash/**/*"],
   "extraDependencies": [
     "bower_components/webcomponentsjs/*.js",
     "!bower_components/webcomponentsjs/gulpfile.js",
