@@ -30,8 +30,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 
 <!-- lazy imports -->
-<link rel="lazy-import" href="app/views/hact/dash-hact.html">
-<link rel="lazy-import" href="app/views/personalized/dash-personalized.html">
+<link rel="lazy-import" href="app/views/hact/view-hact.html">
+<link rel="lazy-import" href="app/views/personalized/view-personalized.html">
+<link rel="lazy-import" href="app/views/partnerships/view-partnerships.html">
+<link rel="lazy-import" href="app/views/attachments/view-attachments.html">
+<link rel="lazy-import" href="app/views/trips/view-trips.html">
+<link rel="lazy-import" href="app/views/map/view-map.html">
 
 
 <dom-module id="app-shell">
@@ -112,7 +116,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="top-content-row">
               <paper-tabs selected="{{page}}"
                           attr-for-selected="name"
-                          on-iron-select="_handleTabSelect"
                           noink
                           bottom-item>
 
@@ -125,19 +128,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </paper-tab>
 
                 <paper-tab name="trips" link>
-                  <a href="[[rootPath]]trips" class="tab-content">Trips</a href="[[rootPath]]">
+                  <a href="[[rootPath]]trips" class="tab-content">Trips</a>
                 </paper-tab>
 
                 <paper-tab name="partnerships" link>
-                  <a href="[[rootPath]]partnerships" class="tab-content">Partnerships</a href="[[rootPath]]">
+                  <a href="[[rootPath]]partnerships" class="tab-content">Partnerships</a>
                 </paper-tab>
 
                 <paper-tab name="map" link>
-                  <a href="[[rootPath]]map" class="tab-content">Map</a href="[[rootPath]]">
+                  <a href="[[rootPath]]map" class="tab-content">Map</a>
                 </paper-tab>
 
                 <paper-tab name="attachments" link>
-                  <a href="[[rootPath]]attachments" class="tab-content">Document Library</a href="[[rootPath]]">
+                  <a href="[[rootPath]]attachments" class="tab-content">Document Library</a>
                 </paper-tab>
 
               </paper-tabs>
@@ -151,6 +154,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     role="main">
           <view-personalized name="personalized"></view-personalized>
           <view-hact name="hact"></view-hact>
+          <view-partnerships name="partnerships"></view-partnerships>
+          <view-trips name="trips"></view-trips>
+          <view-map name="map"></view-map>
+          <view-attachments name="attachments"></view-attachments>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
@@ -192,6 +199,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _pageChanged(page) {
         // Load page import on demand. Show 404 page if fails
         const resolvedPageUrl = this.resolveUrl(`app/views/${page}/view-${page}.html`);
+        console.log(resolvedPageUrl)
         Polymer.importHref(
           resolvedPageUrl,
           null,
@@ -201,10 +209,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _showPage404() {
         this.page = 'view404';
-      }
-
-      _handleTabSelect({target}) {
-        console.log(target.selected)
       }
     }
 

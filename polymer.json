@@ -3,7 +3,11 @@
   "shell": "dash/app-shell.html",
   "fragments": [
     "dash/app/views/hact/view-hact.html",
-    "dash/app/views/personalized/view-personalized.html"
+    "dash/app/views/personalized/view-personalized.html",
+    "dash/app/views/partnerships/view-partnerships.html",
+    "dash/app/views/map/view-map.html",
+    "dash/app/views/trips/view-trips.html",
+    "dash/app/views/attachments/view-attachments.html"
   ],
   "sources": ["images/**/*", "dash/**/*"],
   "extraDependencies": [
