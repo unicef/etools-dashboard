@@ -39,6 +39,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="page-layout-styles shared-styles buttons-styles">
       :host {
         display: block;
+        --paper-tab-content	:{
+          height: auto;
+        }
       }
 
       .top-content-actions-wrapper {
@@ -114,27 +117,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                           bottom-item>
 
                 <paper-tab name="personalized" link>
-                  <span class="tab-content">Personalized</span>
+                  <a href="[[rootPath]]personalized" class="tab-content">Personalized</a>
                 </paper-tab>
 
                 <paper-tab name="hact" link>
-                  <span class="tab-content">HACT</span>
+                  <a href="[[rootPath]]hact" class="tab-content">HACT</a>
                 </paper-tab>
 
                 <paper-tab name="trips" link>
-                  <span class="tab-content">Trips</span>
+                  <a href="[[rootPath]]trips" class="tab-content">Trips</a href="[[rootPath]]">
                 </paper-tab>
 
                 <paper-tab name="partnerships" link>
-                  <span class="tab-content">Partnerships</span>
+                  <a href="[[rootPath]]partnerships" class="tab-content">Partnerships</a href="[[rootPath]]">
                 </paper-tab>
 
                 <paper-tab name="map" link>
-                  <span class="tab-content">Map</span>
+                  <a href="[[rootPath]]map" class="tab-content">Map</a href="[[rootPath]]">
                 </paper-tab>
 
                 <paper-tab name="attachments" link>
-                  <span class="tab-content">Document Library</span>
+                  <a href="[[rootPath]]attachments" class="tab-content">Document Library</a href="[[rootPath]]">
                 </paper-tab>
 
               </paper-tabs>
