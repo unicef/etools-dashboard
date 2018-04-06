@@ -2,18 +2,26 @@
   "entrypoint": "index.html",
   "shell": "dash/app-shell.html",
   "fragments": [
-    "dash/pages/page-dashboard.html",
-    "dash/pages/page-not-found.html"
+    "dash/app/views/hact/view-hact.html",
+    "dash/app/views/personalized/view-personalized.html"
   ],
-  "sourceGlobs": [
-   "dash/**/*",
-   "images/**/*",
-   "styles/**/*",
-   "scripts/**/*",
-   "data/**/*",
-   "bower.json"
+  "sources": ["images/**/*", "dash/**/*"],
+  "extraDependencies": [
+    "bower_components/webcomponentsjs/*.js",
+    "manifest.json"
   ],
-  "includeDependencies": [
-    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  "lint": {
+    "rules": ["polymer-2"]
+  },
+  "builds": [
+    {
+      "preset": "es5-bundled"
+    },
+    {
+      "preset": "es6-bundled"
+    },
+    {
+      "preset": "es6-unbundled"
+    }
   ]
 }

@@ -1,41 +1,38 @@
 {
   "extends": ["eslint:recommended", "google"],
   "parserOptions": {
-    "ecmaVersion": 7,
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread" : true
-    },
-    "sourceType": "script"
+    "ecmaVersion": 6
   },
   "env": {
-    "browser": true,
-    "es6": true
+    "browser": true
   },
-  "plugins": ["html","lodash-fp"],
-  "settings": {
-    "html" : [".html"]
-  },
+  "plugins": [
+    "html"
+  ],
   "rules": {
+    "padded-blocks": "off",
     "brace-style": "off",
-    "new-cap": ["error", { "capIsNewExceptions": ["Polymer"] }],
-    "operator-linebreak": 1,
-    "no-trailing-spaces": 1,
-    "valid-jsdoc": 0,
-    "camelcase": 1,
-    "guard-for-in": 0,
-    "comma-dangle": 0,
-    "no-invalid-this":0,
-    "prefer-spread": 0,
-    "linebreak-style": 0,
-    "arrow-parens":["error","as-needed"],
+    "new-cap": ["error", { "capIsNewExceptions": ["Polymer"], "capIsNewExceptionPattern": "^Etools.." }],
+    "no-var": "off",
     "require-jsdoc": "off",
-    "max-len": ["error", 120, 4]
+    "valid-jsdoc": "off",
+    "comma-dangle": ["error", "never"],
+    "max-len": ["error", { "code": 120 }],
+    "camelcase": ["error", {"properties": "never"}]
   },
   "globals": {
-    "Polymer": true,
-    "_": true,
-    "fp":true,
     "moment": true,
-    "dashBehaviors": true
+    "Promise": true,
+    "Polymer": true,
+    "PolymerRedux": true,
+    "Dexie": true,
+    "EtoolsMixinFactory": true,
+    "EtoolsPmpApp": true,
+    "EtoolsRequestCacheDb": true,
+    "EtoolsAjaxRequestMixin": true,
+    "EtoolsMixins": true,
+    "EtoolsLogsMixin": true,
+    "_": true,
+    "ShadyCSS": true
   }
 }
