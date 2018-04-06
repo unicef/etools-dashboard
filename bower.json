@@ -1,7 +1,7 @@
 {
-  "name": "polymer-starter-kit",
+  "name": "etools-dash",
   "authors": [
-    "The Polymer Authors"
+    "The eTools Team"
   ],
   "license": "https://polymer.github.io/LICENSE.txt",
   "dependencies": {
@@ -20,7 +20,8 @@
     "paper-button": "^2.1.0",
     "paper-item": "^2.1.0",
     "paper-listbox": "^2.1.0",
-    "iron-icon": "^2.1.0"
+    "iron-icon": "^2.1.0",
+    "etools-ajax": "6e15107",
   },
   "resolutions": {
     "polymer": "^2.0.0"
