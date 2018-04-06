@@ -21,7 +21,7 @@
     "paper-item": "^2.1.0",
     "paper-listbox": "^2.1.0",
     "iron-icon": "^2.1.0",
-    "etools-ajax": "6e15107",
+    "etools-ajax": "6e15107"
   },
   "resolutions": {
     "polymer": "^2.0.0"
