@@ -24,7 +24,7 @@
       }
 
       endpointHasTemplate(ep) {
-        return ep.hasOwnProperty('template') && !_.isEmpty(ep.template)
+        return ep.hasOwnProperty('template') && !R.isEmpty(ep.template)
       }
 
       getAllPermissions() {
