@@ -60,16 +60,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
+    <app-location route="{{route}}"
+                  url-space-regex="^[[rootPath]]">
     </app-location>
 
     <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
     </app-route>
 
     <app-drawer-layout force-narrow fullbleed>
-      <!-- Drawer content -->
-
-
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
 
@@ -109,7 +107,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>
             </div>
             <div class="top-content-row">
-              <paper-tabs selected="{{page}}" attr-for-selected="name" noink bottom-item>
+              <paper-tabs selected="{{page}}"
+                          attr-for-selected="name"
+                          on-iron-select="_handleTabSelect"
+                          noink
+                          bottom-item>
 
                 <paper-tab name="personalized" link>
                   <span class="tab-content">Personalized</span>
@@ -140,7 +142,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
         </div>
 
-        <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="personalized" role="main">
+        <iron-pages selected="[[page]]"
+                    attr-for-selected="name"
+                    fallback-selection="personalized"
+                    role="main">
           <view-personalized name="personalized"></view-personalized>
           <view-hact name="hact"></view-hact>
         </iron-pages>
@@ -177,7 +182,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _routePageChanged(page) {
         // If no page was found in the route data, page will be an empty string.
-        // Default to 'view1' in that case.
+        // Default to 'personalized' in that case.
         this.page = page || 'personalized';
       }
 
@@ -193,6 +198,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _showPage404() {
         this.page = 'view404';
+      }
+
+      _handleTabSelect({target}) {
+        console.log(target.selected)
       }
     }
 
