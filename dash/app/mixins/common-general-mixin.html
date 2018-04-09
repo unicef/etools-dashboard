@@ -9,8 +9,8 @@
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
-  EtoolsDashboard.Mixins.commonGeneralMixin = Polymer.dedupingMixin(
-    (superClass) => class extends dateMixin(superClass) {
+  EtoolsDashboard.Mixins.CommonGeneralMixin = Polymer.dedupingMixin(
+    (superClass) => class extends EtoolsDashboard.Mixins.DateMixin(superClass) {
       constructor() {
         super()
       }
