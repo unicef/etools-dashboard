@@ -338,10 +338,10 @@
 
     const HactGeneralMixin = EtoolsMixinFactory.combineMixins(
       [
-        EtoolsDashboard.Mixins.CommonGeneralMixin,
-        EtoolsDashboard.Mixins.PaginationMixin,
+        EtoolsDashboard.Mixins.CommonGeneral,
+        EtoolsDashboard.Mixins.Pagination,
         // Comment back in when redux store is migrated
-        // EtoolsDashboard.Mixins.EndpointsMixin,
+        // EtoolsDashboard.Mixins.Endpoints,
       ], Polymer.Element);
 
     class DashboardHactGeneral extends Polymer.Element {

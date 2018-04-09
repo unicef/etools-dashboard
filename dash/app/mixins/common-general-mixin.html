@@ -4,13 +4,12 @@
 
 <script>
   'use strict';
-  const { isEmpty } = R;
 
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
   EtoolsDashboard.Mixins.CommonGeneral = Polymer.dedupingMixin(
-    (superClass) => class extends EtoolsDashboard.Mixins.DateMixin(superClass) {
+    (superClass) => class extends EtoolsDashboard.Mixins.Date(superClass) {
       constructor() {
         super()
       }
