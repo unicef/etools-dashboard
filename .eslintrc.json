@@ -27,7 +27,7 @@
     "PolymerRedux": true,
     "Dexie": true,
     "EtoolsMixinFactory": true,
-    "EtoolsPmpApp": true,
+    "EtoolsDashboard": true,
     "EtoolsRequestCacheDb": true,
     "EtoolsAjaxRequestMixin": true,
     "EtoolsMixins": true,

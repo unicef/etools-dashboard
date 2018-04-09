@@ -1,0 +1,32 @@
+<script>
+  'use strict';
+
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+  window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+
+  EtoolsDashboard.Mixins.dropdownMixin = (superClass) => class extends superClass {
+    constructor() {
+      super()
+    }
+    // Put a button with on-tap="clearDropdown" just before
+    // a paper-dropdown-menu to add a clear selection button
+    clearDropdown(e) {
+      var dropdown = Polymer.dom(e).localTarget.nextElementSibling;
+      if (dropdown) {
+        if (dropdown.is === 'paper-dropdown-menu') {
+          var menu = Polymer.dom(dropdown).firstElementChild;
+          if (menu && menu.selected) {
+            menu.set('selected', null);
+          }
+        }
+        else if (dropdown.is === 'etools-multi-selection-menu') {
+          var menu = Polymer.dom(dropdown);
+          if (dropdown.selectedValues) {
+            dropdown.clearValues()
+          }
+        }
+      }
+    }
+  }
+  </script>
+  

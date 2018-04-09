@@ -1,0 +1,27 @@
+<script>
+  'use strict';
+
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+  window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+
+  EtoolsDashboard.Mixins.pageUtilsMixin = (superClass) => class extends superClass {
+    constructor() {
+      super()
+    }
+
+    static get properties() {
+      return {
+        queryParams: {
+          type: Object,
+          observer: '_handleQueryParams'
+        }
+      }
+    }
+  
+    _handleQueryParams(params) {
+      if (!_.isEmpty(params)) {
+        this.set('listQueryParams', params);
+      }
+    }
+  };
+</script>    

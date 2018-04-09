@@ -1,0 +1,62 @@
+<link rel="import" href="../../bower_components/polymer-redux/polymer-redux.html">
+<script>
+  'use strict';
+
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+  window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+
+  EtoolsDashboard.Mixins.actionsMixin = (superClass) => class extends superClass {
+    constructor() {
+      super()
+    }
+
+    static get properties() {
+      actionsList: {
+        type: Array,
+        value: []
+      },
+      actionCreators: {
+        type: Array,
+        value: []
+      },
+    }
+
+    register(name) {
+      if (R.contains(this.actionsList, name)) {
+        throw new Error('Attempting to register existing action');
+      }
+      this.actionsList.push(name);
+      return name;
+    }
+
+    registerActionCreator(type, fields) {
+      fields = fields || [];
+      if (R.contains(this.actionCreators, type)) {
+        throw new Error('Attempting to register existing action creator');
+      }
+      this.actionCreators.push(type);
+      return this.createActionCreator(type, fields);
+    }
+
+    createActionCreator(type, fields) {
+      fields = fields || [];
+      return function() {
+        var args = [...arguments];
+        return this.createActionFromFields(type, fields, args);
+      }
+    }
+
+    createActionFromFields(type, fields, values) {
+      return this.createAction(type, fields.reduce(function(data, field, i) {
+        var fieldObj = {};
+        fieldObj[field] = values[i];
+        return Object.assign(data, fieldObj);
+      }, {}));
+    }
+
+    createAction(type, data) {
+      data = data || {};
+      return Object.assign({type: type}, data);
+    }
+  };
+</script>
