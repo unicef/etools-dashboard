@@ -1,6 +1,9 @@
-<link rel="import" href="../../bower_components/polymer-redux/polymer-redux.html">
+<!-- <link rel="import" href="../../bower_components/polymer-redux/polymer-redux.html"> -->
+<link rel="import" href="../scripts/ramda.html">
+
 <script>
   'use strict';
+  const { contains } = R;
 
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
@@ -22,7 +25,7 @@
     }
 
     register(name) {
-      if (R.contains(this.actionsList, name)) {
+      if (contains(this.actionsList, name)) {
         throw new Error('Attempting to register existing action');
       }
       this.actionsList.push(name);
@@ -31,7 +34,7 @@
 
     registerActionCreator(type, fields) {
       fields = fields || [];
-      if (R.contains(this.actionCreators, type)) {
+      if (contains(this.actionCreators, type)) {
         throw new Error('Attempting to register existing action creator');
       }
       this.actionCreators.push(type);
