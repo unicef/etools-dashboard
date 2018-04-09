@@ -1,8 +1,10 @@
 <!-- <link rel="import" href="../../bower_components/polymer/polymer.html"> -->
 <link rel="import" href="date-mixin.html">
+<link rel="import" href="../scripts/ramda.html">
 
 <script>
   'use strict';
+  const { isEmpty } = R;
 
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
@@ -128,7 +130,7 @@
       _allHaveValues(...args) {
         const self = this;
         return args.reduce(function(hasVal, prop) {
-          return !R.isEmpty(self[prop]) && hasVal;
+          return !isEmpty(self[prop]) && hasVal;
         }, true);
       }
 

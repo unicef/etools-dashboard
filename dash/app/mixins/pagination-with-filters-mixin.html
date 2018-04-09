@@ -1,6 +1,9 @@
 <!-- <link rel="import" href="../../bower_components/polymer/polymer.html"> -->
+<link rel="import" href="../scripts/ramda.html">
+
 <script>
   'use strict';
+  const { isEmpty } = R;
 
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
@@ -61,7 +64,7 @@
 
     buildQueryString() {
       return this.params.reduce((acc, {qName, propName, xf}) => {
-        return R.isEmpty(this[propName]) ? acc
+        return isEmpty(this[propName]) ? acc
           : `${acc}&${qName}=${xf(this[propName])}`;
       }, `page=${this.pageNumber}&size=${this.pageSize}`);
     }

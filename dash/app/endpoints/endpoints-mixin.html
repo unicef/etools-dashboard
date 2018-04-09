@@ -2,9 +2,11 @@
 <link rel="import" href="../config/config.html">
 <!-- <link rel="import" href="../redux/etools-data-redux-store.html"> -->
 <link rel="import" href="endpoints.html">
+<link rel="stylesheet" href="../scripts/lodash.html">
 
 <script>
   'use strict';
+  const { template } = _
 
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
@@ -15,8 +17,7 @@
       getEndpoint(endpointName, data) {
         let endpoint = JSON.parse(JSON.stringify(etoolsDashboard.endpoints[endpointName]));
         if (endpoint && this.endpointHasTemplate(endpoint)) {
-          // not sure exactly how to convert _.template to ramda
-          endpoint.url = window.location.origin + _.template(endpoint.template)(data);
+          endpoint.url = window.location.origin + template(endpoint.template)(data);
         } else {
           endpoint.url = this.baseSite + endpoint.url;
         }
