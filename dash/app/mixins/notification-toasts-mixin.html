@@ -1,4 +1,4 @@
-<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../../bower_components/paper-toast/paper-toast.html">
 
 <script>
   'use strict';
@@ -50,9 +50,7 @@
         } else {
           console.warn('app-drawer-layout element from app-shell must have id="layout"');
         }
-
       }
-
       if (!this._toastQueue.length) {
         this.push('_toastQueue', detail);
         let toastProperties = this._prepareToastAndGetShowProperties(detail);
@@ -79,7 +77,6 @@
       let closeToastBtn = Polymer.dom(this._toast).querySelector('paper-button');
       // clone detail obj
       let toastProperties = JSON.parse(JSON.stringify(detail));
-
       toastProperties.duration = 0;
       if (typeof detail === 'object' && typeof detail.showCloseBtn !== 'undefined') {
         if (detail.showCloseBtn === true) {
@@ -94,7 +91,6 @@
       } else {
         closeToastBtn.setAttribute('hidden', true);
       }
-
       return toastProperties;
     }
 
@@ -108,6 +104,5 @@
       this.set('currentToastMessage', toastProperties.text);
       this._toast.show(toastProperties);
     }
-
   };
 </script>
