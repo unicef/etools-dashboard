@@ -1,0 +1,148 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../scripts/ramda.html">
+
+<link rel="import" href="../mixins/actions-mixin.html">
+<link rel="import" href="../mixins/redux-store-mixin.html">
+<link rel="import" href="../endpoints/endpoints-mixin.html">
+<link rel="import" href="../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
+
+<link rel="import" href="../config/dexie-db-config.html">
+
+<link rel="import" href="actions.html">
+
+<dom-module id="common-data-loaders">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+
+    
+
+  </template>
+
+  <script>
+    const { compose,  curry } = R;
+    const { ReduxStore, Endpoints, Actions } = EtoolsDashboard.Mixins;
+    const requiredMixin = curry(compose(Endpoints,ReduxStore, Actions, EtoolsAjaxRequestMixin));
+    const CommonDataMixin = requiredMixin(Polymer.Element);
+      /**
+       * `common-data-loaders` Description
+       *
+       * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class CommonDataLoaders extends CommonDataMixin {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'common-data-loaders';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          nextAction: {
+            type: Object
+          },
+          _reduxActions: {
+            type: Object,
+            value: {}
+          },
+          toDispatch: {
+            type: Array,
+            value: []
+          },
+          user: {
+            type: Object,
+            value: {
+              id: 23356
+            }
+          }
+        };
+      }
+
+      /**
+       * Instance of the element is created/upgraded. Use: initializing state,
+       * set up event listeners, create shadow dom.
+       * @constructor
+       */
+      constructor() {
+        super();
+      }
+
+      /**
+       * Use for one-time configuration of your component after local DOM is initialized. 
+       */
+      ready() {
+        super.ready();
+
+        Polymer.RenderStatus.afterNextRender(this, function() {
+          this._init();
+        });
+      }
+      
+      _init() {
+        this.actionsToDispatch();
+        this._callNext();
+      }
+
+      actionsToDispatch() {
+        const { Actions } = EtoolsDashboard;
+        let mappedItems = Actions.map(a => {
+          let ACTION_CONST = this.register(a.actionType);
+          let endpoint = a.endpointProps;
+          if (typeof endpoint === 'function') {
+            endpoint = endpoint.bind(this)();
+          }
+          endpoint = isEmpty(endpoint) ? endpoint
+            : isEmpty(endpoint.templateProps) ? this.getEndpoint(endpoint.name)
+              : this.getEndpoint(endpoint.name, endpoint.templateProps);
+
+          let actionObj = {
+            type: a.actionType,
+            action: this.registerActionCreator(
+              ACTION_CONST,
+              a.propsArray
+            ),
+            endpoint: { endpoint },
+            prepareData: isEmpty(endpoint) ? a.prepareData.bind(this) : a.prepareData
+          };
+          return actionObj;
+        });
+        this.set('toDispatch', mappedItems);
+      }
+
+      _callNext() {
+        if (this.toDispatch.length) {
+          let next = this.shift('toDispatch');
+          let action = {};
+          action[next.type] = next.action;
+          this.set('nextAction', next);
+          this.set('_reduxActions', Object.assign({}, this._reduxActions, action));
+          if (isEmpty(next.endpoint.endpoint)) {
+            this.dispatch(next.type, next.prepareData());
+            this._callNext();
+          } else {
+            this.sendRequest(next.endpoint).then(res => this._handleResponse(res));
+          }
+        }
+      }
+
+      _handleResponse(response) {
+        const self = this;
+        this.dispatch(self.nextAction.type, this.nextAction.prepareData(response));
+        this._callNext();
+      }
+
+    }
+
+    window.customElements.define(CommonDataLoaders.is, CommonDataLoaders);
+  </script>
+</dom-module>

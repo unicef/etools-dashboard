@@ -7,7 +7,7 @@
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
-  EtoolsDashboard.Mixins.actionsMixin = (superClass) => class extends superClass {
+  EtoolsDashboard.Mixins.Actions = (superClass) => class extends superClass {
     constructor() {
       super()
     }
@@ -42,9 +42,8 @@
       return this.createActionCreator(type, fields);
     }
 
-    createActionCreator(type, fields) {
-      fields = fields || [];
-      return function () {
+    createActionCreator(type, fields=[]) {
+      return ()=> {
         var args = [...arguments];
         return this.createActionFromFields(type, fields, args);
       }

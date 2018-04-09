@@ -29,6 +29,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 
+<link rel="import" href="app/mixins/redux-store-mixin.html">
+
 <!-- lazy imports -->
 <link rel="lazy-import" href="app/views/hact/view-hact.html">
 <link rel="lazy-import" href="app/views/personalized/view-personalized.html">
@@ -36,6 +38,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="app/views/attachments/view-attachments.html">
 <link rel="lazy-import" href="app/views/trips/view-trips.html">
 <link rel="lazy-import" href="app/views/map/view-map.html">
+
+<link rel="import" href="app/components/common-data-loaders.html">
 
 
 <dom-module id="app-shell">
@@ -66,6 +70,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding-top: 12px;
       }
     </style>
+
+    <common-data-loaders></common-data-loaders>
 
     <app-location route="{{route}}"
                   url-space-regex="^[[rootPath]]">
@@ -164,7 +170,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-    class AppShell extends Polymer.Element {
+    const RequiredMixin = compose(EtoolsDashboard.Mixins.ReduxStore)(Polymer.Element);
+    class AppShell extends EtoolsDashboard.Mixins.ReduxStore(Polymer.Element) {
       static get is() {
         return 'app-shell';
       }
@@ -175,6 +182,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: String,
             reflectToAttribute: true,
             observer: '_pageChanged',
+          },
+          offices: {
+            type: Array,
+            statePath: 'offices'
+          },
+          statuses: {
+            type: Array,
+            statePath: 'static.intervention_statuses'
           },
           routeData: Object,
           subroute: Object,
