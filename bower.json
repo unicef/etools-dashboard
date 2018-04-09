@@ -21,11 +21,20 @@
     "paper-item": "^2.1.0",
     "paper-listbox": "^2.1.0",
     "iron-icon": "^2.1.0",
-    "etools-ajax": "6e15107"
+    "etools-ajax": "6e15107",
+    "etools-dropdown": "d5e239d",
+    "etools-dialog": "c943e5f",
+    "etools-loading": "6bdf1e7",
+    "etools-profile-dropdown": "6751167dbf",
+    "etools-app-selector": "48e0f97",
+    "etools-piwik-analytics": "fe937fc",
+    "etools-datepicker": "8d2f0c294d80bbea",
+    "etools-info-tooltip": "261b888"
   },
   "resolutions": {
     "polymer": "^2.0.0",
-    "webcomponentsjs": "^v1.1.0"
+    "webcomponentsjs": "^v1.1.0",
+    "lodash": "^4.17.4"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
