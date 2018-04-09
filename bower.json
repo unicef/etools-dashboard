@@ -28,7 +28,8 @@
   },
   "resolutions": {
     "polymer": "^2.0.0",
-    "moment-element": "^3.0.0"
+    "moment-element": "^3.0.0",
+    "webcomponentsjs": "^v1.1.0"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
