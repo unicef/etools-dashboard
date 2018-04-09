@@ -1,0 +1,202 @@
+<link rel="import" href="../../../bower_components/moment-element/moment-element.html">
+
+<script>
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+  const {head} = R;
+  EtoolsDashboard.Actions = [
+    {
+      actionType: 'COUNTRY_PROGRAMMES',
+      propsArray: ['countryProgrammes'],
+      endpointProps: {
+        name: 'countryProgrammes',
+      },
+      prepareData: function (data) {
+        data = data || [];
+        return data.map(function (cp) {
+          return _.pick(cp, ['id', 'name']);
+        });
+      }
+    },
+    {
+      actionType: 'offices',
+      propsArray: ['offices'],
+      endpointProps: {
+        name: 'offices',
+        templateProps: {}
+      },
+      prepareData: function (data) {
+        data = data || [];
+        return data.map(function (office) {
+          return _.pick(office, ['id', 'name']);
+        });
+      }
+    },
+    {
+      actionType: 'TRIPS',
+      propsArray: ['trips'],
+      endpointProps: function () {
+        let ret = { name: 'trips', templateProps: { id: this.user.id } };
+        return ret;
+      },
+      prepareData: function (data) {
+        data = data || [];
+        return data.length
+          ? data.map(function (trip) {
+            return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']);
+          })
+          : [];
+      }
+    },
+    {
+      actionType: 'TRIPS_SUPERVISED',
+      propsArray: ['tripsSupervised'],
+      endpointProps: function () {
+        let ret = { name: 'tripsSupervised', templateProps: { id: this.user.id } };
+        return ret;
+      },
+      prepareData: function (data) {
+        data = data || [];
+        return data.length
+          ? data.map(trip => {
+            return _.pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'traveler']);
+          })
+          : [];
+      }
+    },
+    {
+      actionType: 'ACTION_PTS_BY_ME',
+      propsArray: ['actionPointsByMe'],
+      endpointProps: function () {
+        let ret = { name: 'actionPointsByMe', templateProps: { id: this.user.id } };
+        return ret;
+      },
+      prepareData: function (data) {
+        data = data || [];
+        return data.length
+          ? data.map(function (actionPoint) {
+            return _.pick(actionPoint, ['status', 'description', 'created_at', 'person_responsible_name', 'id', 'due_date']);
+          })
+          : [];
+      }
+    },
+    {
+      actionType: 'ACTION_PTS_FOR_ME',
+      propsArray: ['actionPointsForMe'],
+      endpointProps: function () {
+        let ret = { name: 'actionPointsForMe', templateProps: { id: this.user.id } };
+        return ret;
+      },
+      prepareData: function (data) {
+        data = data || [];
+        return data.length
+          ? data.map(function (actionPoint) {
+            return _.pick(actionPoint, ['status', 'description', 'created_at', 'assigned_by_name', 'id', 'due_date']);
+          })
+          : [];
+      }
+    },
+    {
+      actionType: 'PARTNERSHIPS',
+      propsArray: ['partnerships'],
+      endpointProps: {
+        name: 'partnerships',
+        templateProps: {}
+      },
+      prepareData: function (data) {
+        data = data || [];
+        return data.length
+          ? data.map(function (partnership) {
+            return _.pick(partnership, ['id', 'title', 'number', 'total_unicef_budget']);
+          })
+          : null;
+      }
+    },
+    {
+      actionType: 'TRIPS_YEARS',
+      propsArray: ['tripsYears'],
+      endpointProps: {},
+      prepareData: function () {
+        return _.range(2015, moment().year() + 1);
+      }
+    },
+    {
+      actionType: 'SECTIONS',
+      propsArray: ['sections'],
+      endpointProps: {
+        name: 'sections',
+        templateProps: {}
+      },
+      prepareData: function (data) {
+        data = data || [];
+        return data.map(function (d) {
+          return {
+            value: parseInt(d.id, 10),
+            label: d.name
+          };
+        });
+      }
+    },
+    {
+      actionType: 'SECTORS',
+      propsArray: ['sectors'],
+      endpointProps: {
+        name: 'sectors',
+        templateProps: {}
+      },
+      prepareData: function (data) {
+        data = data || [];
+        return data.map(function (d) {
+          return {
+            value: d.id,
+            label: d.name
+          };
+        });
+      }
+    },
+    {
+      actionType: 'UNICEF_USERS_DATA',
+      propsArray: ['unicefUsersData'],
+      endpointProps: {
+        name: 'unicefUsers',
+        templateProps: {}
+      },
+      prepareData: function (data) {
+        data = data || [];
+        return data.map(function (d) {
+          return {
+            value: parseInt(d.id, 10),
+            label: d.name
+          };
+        });
+      }
+    },
+    {
+      actionType: 'static',
+      propsArray: ['static'],
+      endpointProps: {
+        name: 'static',
+        templateProps: {}
+      },
+      prepareData: data => data
+    },
+    {
+      actionType: 'USER_COUNTRY',
+      propsArray: ['userCountry'],
+      endpointProps: {
+        name: 'userCountry',
+        templateProps: {}
+      },
+      prepareData: data => head(data)
+    },
+    {
+      actionType: 'HACT_GRAPHS',
+      propsArray: ['hactGraphs'],
+      endpointProps: {
+        name: 'hactGraphs',
+        templateProps: {}
+      },
+      prepareData: x => x.partner_values
+    }
+  ];
+
+</script>

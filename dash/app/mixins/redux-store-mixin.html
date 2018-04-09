@@ -1,0 +1,41 @@
+<link rel="import" href="../scripts/redux.html">
+<link rel="import" href="../../../bower_components/polymer-redux/polymer-redux.html">
+
+<script>
+  'use strict';
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+  window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+
+  // shuts up the linting script
+  var Redux = Redux || {}; // eslint-disable-line
+  var PolymerRedux = PolymerRedux || {}; // eslint-disable-line
+
+  const defaultData = {
+    countryProgrammes: [],
+    offices: [],
+    countries: [],
+    sectors: [],
+    sections: [],
+    partnersDropdownData: [],
+    trips: null,
+    tripsSupervised: null,
+    actionPointsByMe: null,
+    actionPointsForMe: null,
+    partnerships: [],
+    tripsMonths: [],
+    tripsYears: [],
+    unicefUsersData: []
+  };
+
+  const commonDataStore = Redux.createStore((state, action) => {
+    if (!state) {
+      return defaultData;
+    }
+    return {
+      ...state,
+      [action['type']]: action[action.type]
+    };
+  });
+
+  EtoolsDashboard.Mixins.ReduxStore = Polymer.dedupingMixin(PolymerRedux(commonDataStore));
+</script>

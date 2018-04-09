@@ -35,12 +35,13 @@
     "etools-app-selector": "48e0f97",
     "etools-piwik-analytics": "fe937fc",
     "etools-datepicker": "8d2f0c294d80bbea",
-    "etools-info-tooltip": "261b888"
+    "etools-info-tooltip": "261b888",
+    "polymer-redux": "^1.0.5"
   },
   "resolutions": {
     "polymer": "^2.0.0",
     "webcomponentsjs": "^v1.1.0",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.5"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
