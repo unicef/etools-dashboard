@@ -1,4 +1,5 @@
-<link rel="import" href="../../bower_components/polymer-redux/polymer-redux.html">
+<link rel="import"
+      href="../../bower_components/polymer-redux/polymer-redux.html">
 <script>
   'use strict';
 
@@ -11,14 +12,16 @@
     }
 
     static get properties() {
-      actionsList: {
-        type: Array,
-        value: []
-      },
-      actionCreators: {
-        type: Array,
-        value: []
-      },
+      return {
+        actionsList: {
+          type: Array,
+          value: []
+        },
+        actionCreators: {
+          type: Array,
+          value: []
+        },
+      }
     }
 
     register(name) {
@@ -40,14 +43,14 @@
 
     createActionCreator(type, fields) {
       fields = fields || [];
-      return function() {
+      return function () {
         var args = [...arguments];
         return this.createActionFromFields(type, fields, args);
       }
     }
 
     createActionFromFields(type, fields, values) {
-      return this.createAction(type, fields.reduce(function(data, field, i) {
+      return this.createAction(type, fields.reduce(function (data, field, i) {
         var fieldObj = {};
         fieldObj[field] = values[i];
         return Object.assign(data, fieldObj);
@@ -56,7 +59,7 @@
 
     createAction(type, data) {
       data = data || {};
-      return Object.assign({type: type}, data);
+      return Object.assign({ type: type }, data);
     }
   };
 </script>
