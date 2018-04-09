@@ -1,3 +1,4 @@
+<!-- <link rel="import" href="../../../../bower_components/shadycss/apply-shim.html"> -->
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../styles/list-styles.html">
@@ -19,6 +20,8 @@
 <link rel="import" href="hact-charts.html">
 <link rel="import" href="hact-general.html">
 
+<link rel="import" href="../../../modules/data-table/data-table-footer.html">
+
 <!-- <link rel="import" href="dashboard-data/partners-data.html"> -->
 <link rel="import" href="../../mixins/common-general-mixin.html">
 <link rel="import" href="../../mixins/pagination-mixin.html">
@@ -28,6 +31,7 @@
   <template>
     <style include="shared-styles custom-style list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
       :host {
+        display: block;
         --paper-input-container-label: {
           margin-left: 34px;
         };
