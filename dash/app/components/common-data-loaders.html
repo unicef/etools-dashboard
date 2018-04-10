@@ -271,7 +271,6 @@
 
       _handleResponse(response) {
         this.dispatch(this.nextAction.handler, response);
-        console.log(this.nextAction.handler, response)
         this._callNext();
       }
 
