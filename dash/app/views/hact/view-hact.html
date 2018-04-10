@@ -16,6 +16,7 @@
 <link rel="import" href="../../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../scripts/lodash.html">
 
 <link rel="import" href="hact-detail.html">
@@ -24,7 +25,7 @@
 
 <link rel="import" href="../../../modules/data-table/data-table-footer.html">
 
-<!-- <link rel="import" href="dashboard-data/partners-data.html"> -->
+<link rel="import" href="../../../modules/partners-data.html">
 <link rel="import" href="../../mixins/common-general-mixin.html">
 <link rel="import" href="../../mixins/pagination-mixin.html">
 <link rel="import" href="../../endpoints/endpoints-mixin.html">
@@ -210,6 +211,9 @@
     'use strict';
     const { get } = _
 
+    const { CommonGeneral, Pagination } = EtoolsDashboard.Mixins;
+    const VHMixin = curry(compose(Endpoints, CommonGeneral, Pagination));
+    
     /**
      * @polymer
      * @mixinFunction
@@ -217,13 +221,7 @@
      * @appliesMixin EtoolsDashboard.Mixins.Pagination
      * @appliesMixin EtoolsDashboard.Mixins.Endpoints
      */
-    const ViewHactMixins = EtoolsMixinFactory.combineMixins(
-      [
-        EtoolsDashboard.Mixins.CommonGeneral,
-        EtoolsDashboard.Mixins.Pagination,
-        EtoolsDashboard.Mixins.Endpoints
-        ,
-      ], Polymer.Element);
+    const ViewHactMixins = VHMixin(Polymer.Element);
 
     /**
      * `hact` Description
@@ -311,9 +309,9 @@
        * set up event listeners, create shadow dom.
        * @constructor
        */
-      constructor() {
-        super();
-      }
+      // constructor() {
+      //   super();
+      // }
 
       /**
        * Use for one-time configuration of your component after local DOM is initialized. 

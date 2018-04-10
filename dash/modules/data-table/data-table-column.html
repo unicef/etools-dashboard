@@ -170,7 +170,7 @@
         } else {
           this.set('direction', this.direction === 'asc' ? 'desc' : 'asc');
         }
-        this.fire('sort-changed', {field: this.field, direction: this.direction});
+        this.dispatchEvent(new CustomEvent('sort-changed', {field: this.field, direction: this.direction}));
       }
 
       _changeHeadingAlign() {

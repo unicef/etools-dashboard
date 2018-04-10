@@ -1,12 +1,11 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
-
 <link rel="import" href="app-mixins.html">
 
 <dom-module id="buttons-styles">
   <template>
     <style>
-      :root {
+      :host > * {
         --primary-button-default: {
           color: #fff; /* TODO: replace with app-theme var */
           /*font-size: 14px;*/
@@ -24,10 +23,10 @@
         padding: 25px;
       }
       .buttons-section.horizontal {
-        @apply(--layout-horizontal);
+        @apply --layout-horizontal;
       }
       .buttons-section.vertical {
-        @apply(--layout-vertical);
+        @apply --layout-vertical;
       }
       a.text-button {
         color: var(--ecp-header-bg);
@@ -43,7 +42,7 @@
       .primary-btn {
         background-color: #3A94FF; /* TODO: replace with app-theme var */
         --paper-button: {
-          @apply(--primary-button-default);
+          @apply --primary-button-default;
         };
       }
       .primary-btn[disabled] {
@@ -64,8 +63,8 @@
 
       .primary-btn.with-prefix {
         --paper-button: {
-          @apply(--primary-button-default);
-          @apply(--primary-button-with-prefix);
+          @apply --primary-button-default;
+          @apply --primary-button-with-prefix;
         };
       }
 
@@ -78,13 +77,13 @@
       .secondary-btn-wrapper {
         width: 100%;
         --paper-input-container-input: {
-          @apply(--basic-btn-style);
+          @apply --basic-btn-style;
         };
       }
 
       .secondary-btn {
         --paper-button: {
-          @apply(--basic-btn-style);
+          @apply --basic-btn-style;
         };
       }
 

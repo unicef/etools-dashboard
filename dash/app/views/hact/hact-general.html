@@ -18,6 +18,7 @@
 
 <dom-module id="hact-general">
   <template>
+    <custom-style>
     <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
       :host {
         --paper-material-padding: 0 24px 0 24px;
@@ -163,6 +164,7 @@
         }
       }
     </style>
+    </custom-style>
 
     <paper-material id="list" class="hact-list" elevation="1">
       <!-- row of table headers -->
@@ -335,18 +337,19 @@
   <script>
     'use strict';
     const { sum } = _
-
+    
+    const HGMixins = curry(compose(
+      EtoolsDashboard.Mixins.CommonGeneral,
+        EtoolsDashboard.Mixins.Pagination,
+        EtoolsDashboard.Mixins.Endpoints
+    ))
     /**
      * @polymer
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
      * @appliesMixin EtoolsDashboard.Mixins.Pagination
      */
-    const HactGeneralMixins = EtoolsMixinFactory.combineMixins([
-        EtoolsDashboard.Mixins.CommonGeneral,
-        EtoolsDashboard.Mixins.Pagination,
-        // EtoolsDashboard.Mixins.Endpoints,
-      ], Polymer.Element);
+    const HactGeneralMixins = HGMixins(Polymer.Element);
 
     /**
      * @polymer

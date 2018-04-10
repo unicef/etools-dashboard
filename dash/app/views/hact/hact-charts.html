@@ -399,7 +399,7 @@
     * @customElement
     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
     */
-    class HactCharts extends EtoolsDashboard.Mixins.ReduxStore {
+    class HactCharts extends EtoolsDashboard.Mixins.ReduxStore(Polymer.Element) {
       static get is() { return 'hact-charts' }
 
       static get properties() {
@@ -655,9 +655,9 @@
       _init(active) {
         if (active) {
           if (_.isEmpty(this.chartData)){
-            this.fire('global-loading', {message:'Loading chart data...', active: true});
+            this.dispatchEvent(new CustomEvent('global-loading', {message:'Loading chart data...', active: true}));
           }else {
-            this.fire('global-loading');
+            this.dispatchEvent(new CustomEvent('global-loading'));
             this.drawCharts();
           }
         }

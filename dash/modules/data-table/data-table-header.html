@@ -4,42 +4,42 @@
 <dom-module id="data-table-header">
 
   <template>
+    <custom-style>
+      <style include="iron-flex iron-flex-factors">
 
-    <style is="custom-style" include="iron-flex iron-flex-factors">
+        :host {
+          display: block;
+          border-bottom: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
+        }
 
-      :host {
-        display: block;
-        border-bottom: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
-      }
+        paper-material {
+          padding: var(--paper-material-padding, 20px 24px 0 24px);
+          background-color: var(--primary-background-color, #FFFFFF);
+          @apply --data-table-header;
+        }
 
-      paper-material {
-        padding: var(--paper-material-padding, 20px 24px 0 24px);
-        background-color: var(--primary-background-color, #FFFFFF);
-        @apply --data-table-header;
-      }
+        #title {
+          width: 100%;
+          line-height: 64px;
+          font-size: 20px;
+          color: var(--primary-text-color, rgba(0, 0, 0, 0.87));
+          @apply --header-title;
+        }
 
-      #title {
-        width: 100%;
-        line-height: 64px;
-        font-size: 20px;
-        color: var(--primary-text-color, rgba(0, 0, 0, 0.87));
-        @apply --header-title;
-      }
+        #columns {
+          @apply --layout-horizontal;
+          @apply --layout-center;
+          margin-left: 48px;
+          height: 56px;
+          @apply --header-columns;
+          @apply --header-height;
+        }
 
-      #columns {
-        @apply --layout-horizontal;
-        @apply --layout-center;
-        margin-left: 48px;
-        height: 56px;
-        @apply --header-columns;
-        @apply --header-height;
-      }
-
-      #columns.end {
-        @apply --layout-end;
-      }
-
-    </style>
+        #columns.end {
+          @apply --layout-end;
+        }
+      </style>
+    </custom-style>
 
     <paper-material elevation="0">
       <div id="title">

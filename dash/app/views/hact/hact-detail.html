@@ -403,17 +403,15 @@
 
   <script>
     'use strict';
-
+    
+    const HDMixin = curry(compose(EtoolsDashboard.Mixins.CommonGeneral, EtoolsDashboard.Mixins.Pagination));
     /**
      * @polymer
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
      * @appliesMixin EtoolsDashboard.Mixins.Pagination
      */
-    const HactDetailMixins = EtoolsMixinFactory.combineMixins([
-        EtoolsDashboard.Mixins.CommonGeneral,
-        EtoolsDashboard.Mixins.Pagination
-      ], Polymer.Element);
+    const HactDetailMixins = HDMixin(Polymer.Element);
 
     /**
      * @polymer
