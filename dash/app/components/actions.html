@@ -6,14 +6,12 @@
   const { head } = R;
   EtoolsDashboard.Actions = [
     {
-      actionType: 'SET_COUNTRY_PROGRAMMES',
       propName: 'countryProgrammes',
       endpointProps: {
         name: 'countryProgrammes',
       }
     },
     {
-      actionType: 'OFFICES',
       propName: 'offices',
       endpointProps: {
         name: 'offices',
@@ -21,35 +19,30 @@
       }
     },
     {
-      actionType: 'TRIPS',
       propName: 'trips',
       endpointProps: function () {
         return { name: 'trips', templateProps: { id: this.user.id } };
       }
     },
     {
-      actionType: 'TRIPS_SUPERVISED',
       propName: 'tripsSupervised',
       endpointProps: function () {
         return { name: 'tripsSupervised', templateProps: { id: this.user.id } };
       }
     },
     {
-      actionType: 'ACTION_PTS_BY_ME',
       propName: 'actionPointsByMe',
       endpointProps: function () {
         return { name: 'actionPointsByMe', templateProps: { id: this.user.id } };
       }
     },
     {
-      actionType: 'ACTION_PTS_FOR_ME',
       propName: 'actionPointsForMe',
       endpointProps: function () {
         return { name: 'actionPointsForMe', templateProps: { id: this.user.id } };
       }
     },
     {
-      actionType: 'PARTNERSHIPS',
       propName: 'partnerships',
       endpointProps: {
         name: 'partnerships',
@@ -57,12 +50,10 @@
       }
     },
     {
-      actionType: 'TRIPS_YEARS',
       propName: 'tripsYears',
       endpointProps: {}
     },
     {
-      actionType: 'SECTIONS',
       propName: 'sections',
       endpointProps: {
         name: 'sections',
@@ -70,7 +61,6 @@
       }
     },
     {
-      actionType: 'SECTORS',
       propName: 'sectors',
       endpointProps: {
         name: 'sectors',
@@ -78,7 +68,6 @@
       }
     },
     {
-      actionType: 'UNICEF_USERS_DATA',
       propName: 'unicefUsers',
       endpointProps: {
         name: 'unicefUsers',
@@ -86,7 +75,6 @@
       }
     },
     {
-      actionType: 'static',
       propName: 'static',
       endpointProps: {
         name: 'static',
@@ -94,7 +82,6 @@
       }
     },
     {
-      actionType: 'USER_COUNTRY',
       propName: 'userCountry',
       endpointProps: {
         name: 'userCountry',
@@ -102,7 +89,6 @@
       }
     },
     {
-      actionType: 'HACT_GRAPHS',
       propName: 'hactGraphs',
       endpointProps: {
         name: 'hactGraphs',
