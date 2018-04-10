@@ -32,9 +32,11 @@
       over,
       lensIndex,
       toUpper } = R;
+    
     const { ReduxStore, Endpoints, Actions } = EtoolsDashboard.Mixins;
     const requiredMixin = curry(compose(Endpoints, ReduxStore, Actions, EtoolsAjaxRequestMixin));
     const CommonDataMixin = requiredMixin(Polymer.Element);
+    
     const capitalize = compose(
       join(''),
       over(lensIndex(0), toUpper)
