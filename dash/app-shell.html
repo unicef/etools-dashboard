@@ -170,21 +170,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-    'use strict';
-
-    /**
-     * @polymer
-     * @mixinFunction
-     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
-     */
-    const RequiredMixin = compose(EtoolsDashboard.Mixins.ReduxStore)(Polymer.Element);
-    
-    /**
-    * @polymer
-    * @customElement
-    * @appliesMixin RequiredMixin
-    */
-    class AppShell extends RequiredMixin {
+    class AppShell extends Polymer.Element {
       static get is() {
         return 'app-shell';
       }
@@ -195,14 +181,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: String,
             reflectToAttribute: true,
             observer: '_pageChanged',
-          },
-          offices: {
-            type: Array,
-            statePath: 'offices'
-          },
-          statuses: {
-            type: Array,
-            statePath: 'static.intervention_statuses'
           },
           routeData: Object,
           subroute: Object,

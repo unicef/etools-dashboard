@@ -1,8 +1,12 @@
-<link rel="import" href="../scripts/redux.html">
-<link rel="import" href="../../../bower_components/polymer-redux/polymer-redux.html">
-
+<link rel="import"
+      href="../../../bower_components/polymer-redux/polymer-redux.html">
+<link rel="import"
+      href="../scripts/ramda.html">
+<link rel="import"
+      href="../scripts/redux.html">
 <script>
   'use strict';
+  const { merge } = R;
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
@@ -10,36 +14,78 @@
   var Redux = Redux || {}; // eslint-disable-line
   var PolymerRedux = PolymerRedux || {}; // eslint-disable-line
 
-  const defaultData = {
+  const initial = {
     countryProgrammes: [],
     offices: [],
-    countries: [],
     sectors: [],
     sections: [],
-    partnersDropdownData: [],
     trips: null,
     tripsSupervised: null,
     actionPointsByMe: null,
     actionPointsForMe: null,
     partnerships: [],
-    tripsMonths: [],
     tripsYears: [],
-    unicefUsersData: []
+    unicefUsers: [],
+    static: null,
+    userCountry: null,
+    hactGraphs: []
   };
 
-  const commonDataStore = Redux.createStore((state, action) => {
-    if (!state) {
-      return defaultData;
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case 'SET_COUNTRY_PROGRAMMES':
+        return merge(state, { countryProgrammes: action.countryProgrammes });
+
+      case 'SET_OFFICES':
+        return merge(state, { offices: action.offices });
+
+      case 'SET_TRIPS':
+        return merge(state, { trips: action.trips });
+
+      case 'SET_TRIPS_SUPERVISED':
+        return merge(state, { tripsSupervised: action.tripsSupervised });
+
+      case 'SET_ACTION_PTS_BY_ME':
+        return merge(state, { actionPointsByMe: action.actionPointsByMe });
+
+      case 'SET_ACTION_PTS_FOR_ME':
+        return merge(state, { actionPointsForMe: action.actionPointsForMe });
+
+      case 'SET_PARTNERSHIPS':
+        return merge(state, { partnerships: action.partnerships });
+
+      case 'SET_TRIPS_YEARS':
+        return merge(state, { tripsYears: action.tripsYears });
+
+      case 'SET_SECTIONS':
+        return merge(state, { sections: action.sections });
+
+      case 'SET_SECTORS':
+        return merge(state, { sectors: action.sectors });
+
+      case 'SET_UNICEF_USERS':
+        return merge(state, { unicefUsers: action.unicefUsers });
+
+      case 'SET_STATIC_DATA':
+        return merge(state, { static: action.static });
+
+      case 'SET_USER_COUNTRY':
+        return merge(state, { userCountry: action.userCountry });
+
+      case 'SET_HACT_GRAPHS':
+        return merge(state, { hactGraphs: action.hactGraphs });
+
     }
-    return {
-      ...state,
-      [action['type']]: action[action.type]
-    };
-  });
-  
-  /**
-  * @polymer
-  * @mixinFunction
-  */
-  EtoolsDashboard.Mixins.ReduxStore = Polymer.dedupingMixin(PolymerRedux(commonDataStore));
+  }
+
+  const store = Redux.createStore(
+    reducer,
+    initial,
+    Redux.compose(
+      window.devToolsExtension
+        ? window.devToolsExtension()
+        : v => v
+    ));
+
+  EtoolsDashboard.Mixins.ReduxStore = Polymer.dedupingMixin(PolymerRedux(store));
 </script>
