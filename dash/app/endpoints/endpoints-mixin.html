@@ -12,8 +12,14 @@
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
+  /**
+  * @polymer
+  * @mixinFunction
+  * @appliesMixin EtoolsAjaxRequestMixin
+  // * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
+  */
   EtoolsDashboard.Mixins.Endpoints = Polymer.dedupingMixin(
-    (superClass) => class extends superClass {
+    (superClass) => class extends EtoolsAjaxRequestMixin(EtoolsDashboard.Mixins.ReduxStore(superClass)) {
 
       getEndpoint(endpointName, data) {
         let endpoint = JSON.parse(JSON.stringify(EtoolsDashboard.Endpoints[endpointName]));

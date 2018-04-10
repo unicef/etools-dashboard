@@ -56,6 +56,11 @@
   <script>
     'use strict';
 
+    /**
+    * @polymer
+    * @customElement
+    * @extends Polymer.Element
+    */
     class DataTableHeader extends Polymer.Element {
       static get is() { return 'data-table-header' }
 
@@ -117,23 +122,22 @@
       }
 
       _noTitle() {
-        this.customStyle = {
+        this.updateStyles({
           '--data-table-header': 'height: auto',
           '--header-title': 'display: none'
-        };
-        this.updateStyles();
+        });
       }
 
       _noCollapse() {
-        this.customStyle['--header-columns']='margin-left : 0; flex: 1';
-        this.updateStyles();
+        this.updateStyles({['--header-columns']: 'margin-left : 0; flex: 1'});
       }
 
       _noHeight() {
-        this.customStyle['--header-height'] = 'height: auto';
-        this.customStyle['--data-table-header'] = 'height: auto';
-        this.updateStyles();
+        this.updateStyles({['--header-height']: 'height: auto'});
+        this.updateStyles({['--data-table-header']: 'height: auto'});
       }
     }
+
+    window.customElements.define(DataTableHeader.is, DataTableHeader)
   </script>
 </dom-module>

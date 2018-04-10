@@ -14,6 +14,8 @@
 <link rel="import" href="../../../../bower_components/etools-dialog/dynamic-dialog-mixin.html">
 <link rel="import" href="../../../../bower_components/etools-behaviors/etools-mixin-factory.html">
 <link rel="import" href="../../../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../scripts/lodash.html">
 
 <link rel="import" href="hact-detail.html">
@@ -104,8 +106,7 @@
 
       .dark-button {
         background: rgb(216, 216, 216) !important;
-        color: var(--dark-disabled-text-color) !important
-        
+        color: var(--dark-disabled-text-color) !important 
       }
 
       .light-button {
@@ -176,20 +177,20 @@
                     attr-for-selected="sub-name"
                     fallback-selection="hact-general">
           <div sub-name="hact-general">
-            <dashboard-hact-general
+            <hact-general
                 filtered-partners="[[filteredPartners]]"
                 totals="[[totals]]"
                 total-results="[[totalResults]]"
                 filtered-total-results="[[filteredTotalResults]]">
-            </dashboard-hact-general>
+            </hact-general>
           </div>
           <div sub-name="hact-detail">
-            <dashboard-hact-detail
+            <hact-detail
                 filtered-partners="[[filteredPartners]]"
                 totals="[[totals]]"
                 total-results="[[totalResults]]"
                 filtered-total-results="[[filteredTotalResults]]">
-            </dashboard-hact-detail>
+            </hact-detail>
           </div>
         </iron-pages>
 
@@ -200,7 +201,7 @@
       </div>
 
       <div name="charts">
-        <dashboard-hact-charts active="[[_isActive(hactPage,'charts')]]"></dashboard-hact-charts>
+        <hact-charts active="[[_isActive(hactPage,'charts')]]"></hact-charts>
       </div>
     </iron-pages>
   </template>
@@ -209,12 +210,19 @@
     'use strict';
     const { get } = _
 
-    const ViewHactMixin = EtoolsMixinFactory.combineMixins(
+    /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
+     * @appliesMixin EtoolsDashboard.Mixins.Pagination
+     * @appliesMixin EtoolsDashboard.Mixins.Endpoints
+     */
+    const ViewHactMixins = EtoolsMixinFactory.combineMixins(
       [
         EtoolsDashboard.Mixins.CommonGeneral,
         EtoolsDashboard.Mixins.Pagination,
-        // Comment back in when redux store is migrated
-        // EtoolsDashboard.Mixins.Endpoints,
+        EtoolsDashboard.Mixins.Endpoints
+        ,
       ], Polymer.Element);
 
     /**
@@ -223,9 +231,9 @@
      * @summary ShortDescription.
      * @customElement
      * @polymer
-     * @extends {Polymer.Element}
+     * @appliesmixin ViewHactMixins
      */
-    class ViewHact extends Polymer.Element {
+    class ViewHact extends ViewHactMixins {
       /**
        * String providing the tag name to register the element under.
        */
@@ -293,8 +301,7 @@
 
       static get observers() {
         return [
-          '_updateUrl(queryString, pageNumber, pageSize,' +
-          'sortOrder, requiredDataLoaded, initComplete)',
+          '_updateUrl(queryString, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete)',
           '_tabChanged(routeData.hactTab)',
         ]
       }
@@ -433,7 +440,7 @@
           return current === target
         }
     }
-
+    
     window.customElements.define(ViewHact.is, ViewHact);
   </script>
 </dom-module>

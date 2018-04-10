@@ -16,7 +16,7 @@
 <link rel="import" href="../../mixins/pagination-mixin.html">
 <link rel="import" href="../../../../bower_components/etools-behaviors/etools-mixin-factory.html">
 
-<dom-module id="dashboard-hact-general">
+<dom-module id="hact-general">
   <template>
     <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
       :host {
@@ -336,16 +336,25 @@
     'use strict';
     const { sum } = _
 
-    const HactGeneralMixin = EtoolsMixinFactory.combineMixins(
-      [
+    /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
+     * @appliesMixin EtoolsDashboard.Mixins.Pagination
+     */
+    const HactGeneralMixins = EtoolsMixinFactory.combineMixins([
         EtoolsDashboard.Mixins.CommonGeneral,
         EtoolsDashboard.Mixins.Pagination,
-        // Comment back in when redux store is migrated
         // EtoolsDashboard.Mixins.Endpoints,
       ], Polymer.Element);
 
-    class DashboardHactGeneral extends Polymer.Element {
-      static get is() { return 'dashboard-hact-general'; }
+    /**
+     * @polymer
+     * @customElement
+     * @appliesMixin HactGeneralMixins
+     */
+    class HactGeneral extends HactGeneralMixins {
+      static get is() { return 'hact-general'; }
 
       static get properties() {
         return {
@@ -397,5 +406,7 @@
         )
       }
     }
+
+    window.customElements.define(HactGeneral.is, HactGeneral)
   </script>
 </dom-module>

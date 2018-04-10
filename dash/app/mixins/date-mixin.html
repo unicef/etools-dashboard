@@ -7,10 +7,11 @@
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
-  EtoolsDashboard.Mixins.Date = (superClass) => class extends superClass {
-    constructor() {
-      super()
-    }
+  /**
+   * @polymer
+   * @mixinFunction
+   */
+  EtoolsDashboard.Mixins.Date = Polymer.dedupingMixin((baseClass) => class extends baseClass {
 
     /**
      * Format date string to any format supported by momentjs
@@ -57,5 +58,5 @@
         }
       }
     }
-  };
+  });
 </script>

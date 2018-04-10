@@ -36,6 +36,10 @@
       [action['type']]: action[action.type]
     };
   });
-
+  
+  /**
+  * @polymer
+  * @mixinFunction
+  */
   EtoolsDashboard.Mixins.ReduxStore = Polymer.dedupingMixin(PolymerRedux(commonDataStore));
 </script>

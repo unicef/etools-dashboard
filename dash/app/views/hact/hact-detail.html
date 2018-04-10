@@ -1,0 +1,467 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../styles/shared-styles.html">
+<link rel="import" href="../../styles/list-styles.html">
+<link rel="import" href="../../styles/grid-layout-styles.html">
+<link rel="import" href="../../styles/hact-tables-styles.html">
+<link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../config/config.html">
+<link rel="stylesheet" href="../../../../bower_components/etools-behaviors/etools-mixin-factory.html">
+
+<link rel="import" href="../../../modules/data-table/data-table-header.html">
+<link rel="import" href="../../../modules/data-table/data-table-column.html">
+<link rel="import" href="../../../modules/data-table/data-table-row.html">
+
+<!-- <link rel="import" href="../dashboard-data/partners-data.html"> -->
+<link rel="import" href="../../mixins/common-general-mixin.html">
+<link rel="import" href="../../mixins/pagination-mixin.html">
+
+<dom-module id="dashboard-hact-detail">
+  <template>
+    <style include="shared-styles list-styles grid-layout-styles hact-tables-styles iron-flex iron-flex-factors iron-flex-alignment">
+      :host {
+        --paper-material-padding: 0 24px 0 24px;
+      }
+      
+      .hact-list {
+        min-width: 1150px;
+        overflow: scroll;
+        padding: 0;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 5px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        -ms-overflow-style: none;
+      }
+
+      .detail-list {
+        min-width: 1800px;
+        width: 100%;
+        overflow-x: scroll;
+        overflow-y: visible;
+        -ms-overflow-style: none;
+      }
+
+      .no-overflow {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+      }
+
+      .group {
+        padding-right: 16px;
+        box-sizing: border-box;
+      }
+
+      .center {
+        justify-content: center;
+      }
+
+      .quarter-heading {
+        display: flex;
+        align-items: flex-end !important;
+      }
+
+      .quarter-heading-item {
+        border-left: 1px solid rgba(0, 0, 0, 0.24);
+        box-sizing: border-box;
+      }
+
+      .quarter-item {
+        border-left: 1px solid rgba(0, 0, 0, 0.24);
+        box-sizing: border-box;
+        height: 48px;
+      }
+
+      .right-side {
+        text-align: center;
+        border-left: 1px solid rgba(0, 0, 0, 0.24);
+        box-sizing: border-box;
+        min-height: 48px;
+      }
+
+      .left-align {
+        justify-content: flex-start !important;
+      }
+
+      .border-box {
+        box-sizing: border-box;
+      }
+
+      data-table-row.totals > div > div,
+      data-table-row.totals div div {
+        font-weight: 500;
+      }
+
+      data-table-row.totals div div div span {
+        display: flex;
+        align-items: center;
+      }
+
+      data-table-row > div[slot="row-data"] > div > div > span,
+      data-table-row > div[slot="row-data"] > div > span > span,
+      data-table-header > div > data-table-column > data-table-column,
+      data-table-row div[slot="row-data"] div div span,
+      data-table-row div[slot="row-data"] div:not(:first-child) div,
+      data-table-row div[slot="row-data"] div span span:not(:first-child),
+      data-table-row div[slot="row-data"] div div span:not(:first-child) {
+        display: flex;
+        justify-content: center;
+        min-height: 48px;
+        align-items: center;
+        height: 48px;
+      }
+
+      data-table-row > div[slot="row-data"] > div > div > span > span:not(:first-child),
+      data-table-row > div[slot="row-data"] > div > div > div > span > span:not(:first-child),
+      data-table-row > div[slot="row-data"] > div > span > span:not(:first-child),
+      data-table-row div[slot="row-data"] div span span:not(:first-child),
+      data-table-row div[slot="row-data"] div div span:not(:first-child) {
+        border-left: 1px solid rgb(227, 227, 227);
+        box-sizing: border-box;
+      }
+
+      .col-75-px {
+        flex: 0 0 75px;
+        min-width: 75px;
+      }
+
+      .col-555-px {
+        flex: 0 0 555px;
+        min-width: 555px;
+      }
+
+      .col-10-px {
+        flex: 0 0 10px;
+        min-width: 10px;
+      }
+
+      .col-40-px {
+        flex: 0 0 40px;
+        min-width: 40px;
+      }
+
+      .col-100-px {
+        flex: 0 0 100px;
+        min-width: 100px;
+      }
+
+      .col-215-px {
+        flex: 0 0 215px;
+        min-width: 215px;
+      }
+
+      .col-160-px {
+        flex: 0 0 160px;
+        min-width: 160px;
+      }
+
+      .col-460-px {
+        flex: 0 0 460px;
+        min-width: 460px;
+      }
+
+      .col-225-px {
+        flex: 0 0 225px;
+        min-width: 225px;
+      }
+
+      @supports (-ms-ime-align:auto) {
+        :host {
+          --paper-material-padding: 12px 24px 0 24px;
+        }
+        .quarter-heading {
+          align-items: inherit !important;
+        }
+      }
+      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        :host {
+          --paper-material-padding: 12px 24px 0 24px;
+        }
+        .quarter-heading {
+          align-items: inherit !important;
+        }
+      }
+    </style>
+
+    <paper-material id="detail-list" class="hact-list" elevation="1">
+      <div id="detail-table" class="detail-list">
+        <data-table-header no-collapse>
+          <data-table-column class="col-2 left-align layout horizontal" group-heading="blank" transparent>
+            <data-table-column class="col-12 layout padding-right-10 horizontal" id="name" sortable>
+              IP Name
+            </data-table-column>
+          </data-table-column>
+          <data-table-column class="col-215-px layout horizontal" group-heading="blank" transparent>
+            <data-table-column class="col-75-px vertical no-overflow nowrap" id="total_ct_cp">
+              Risk Rating
+            </data-table-column>
+            <data-table-column class="col-40-px vertical nowrap" id="hact_values.planned_cash_transfer">
+              Flags
+            </data-table-column>
+            <data-table-column class="col-100-px monetary vertical padding-right-10 nowrap border-box" id="total_ct_cy">
+              Cash Transfers<br>1 JAN-31 DEC
+            </data-table-column>
+          </data-table-column>
+          <data-table-column class="col-460-px nowrap" group-heading="PROGRAMMATIC VISITS">
+            <data-table-column class="col-100-px vertical monetary padding-right-10 horizontal right-side right">
+              Cash Transfers<br>1 OCT-30 SEP
+            </data-table-column>
+            <data-table-column class="col-160-px vertical right-side quarter-heading" id="hact_values.micro_assessment_needed">
+              Planned<br>
+              <div class="quarter-heading">
+                <span class="col-3">Q1</span>
+                <span class="col-3 quarter-heading-item">Q2</span>
+                <span class="col-3 quarter-heading-item">Q3</span>
+                <span class="col-3 quarter-heading-item">Q4</span>
+              </div>
+            </data-table-column>
+            <data-table-column class="col-40-px nowrap vertical right-side" id="rating">
+              MR
+              <paper-tooltip>Minumum Requirement</paper-tooltip>
+            </data-table-column>
+            <data-table-column class="col-160-px vertical right-side quarter-heading">
+              Completed<br>
+              <div class="quarter-heading">
+                <span class="col-3">Q1</span>
+                <span class="col-3 quarter-heading-item">Q2</span>
+                <span class="col-3 quarter-heading-item">Q3</span>
+                <span class="col-3 quarter-heading-item">Q4</span>
+              </div>
+            </data-table-column>
+          </data-table-column>
+          <data-table-column class="col-555-px layout horizontal" group-heading="SPOT CHECKS">
+              <data-table-column class="col-10-px buffer"></data-table-column>
+            <data-table-column class="col-100-px vertical monetary right-side padding-right-10 right">
+              Liquidations<br>1 OCT-30 SEP
+            </data-table-column>
+              <data-table-column class="col-160-px vertical right-side quarter-heading">
+                Planned <br>
+                <div class="quarter-heading">
+                  <span class="col-3">Q1</span>
+                  <span class="col-3 quarter-heading-item">Q2</span>
+                  <span class="col-3 quarter-heading-item">Q3</span>
+                  <span class="col-3 quarter-heading-item">Q4</span>
+                </div>
+              </data-table-column>
+                <data-table-column class="col-40-px vertical right-side">
+                  MR
+                  <paper-tooltip>Minumum Requirement</paper-tooltip>
+                </data-table-column>
+                <data-table-column class="col-75-px vertical right-side">
+                  Follow-up<br>Required
+                </data-table-column>
+              <data-table-column class="col-160-px vertical right-side quarter-heading">
+                Completed<br>
+                <div class="quarter-heading">
+                  <span class="col-3">Q1</span>
+                  <span class="col-3 quarter-heading-item">Q2</span>
+                  <span class="col-3 quarter-heading-item">Q3</span>
+                  <span class="col-3 quarter-heading-item">Q4</span>
+                </div>
+              </data-table-column>
+            <data-table-column class="col-10-px buffer"></data-table-column>
+          </data-table-column>
+          <data-table-column class="col-225-px layout horizontal" group-heading="AUDITS">
+            <data-table-column class="col-75-px right-side" id="hact_values.audits_mr">
+              Required
+            </data-table-column>
+            <data-table-column class="col-75-px right-side" id="hact_values.audits_done">
+              Completed
+            </data-table-column>
+            <data-table-column class="col-75-px right-side monetary right">
+              Outstanding<br>Findings
+            </data-table-column>
+          </data-table-column>
+        </data-table-header>
+
+        <!--Row of Totals-->
+        <data-table-row class="totals" no-collapse>
+          <div slot="row-data">
+            <div class="col-2 col-data layout horizontal">
+              <div class="col-12 horizontal layout padding-right-10">
+                Total of [[totalResults]] IPs
+              </div>
+            </div>
+            <div class="col-215-px layout horizontal">
+              <div class="col-75-px nowrap no-overflow vertical"></div>
+              <div class="col-40-px nowrap vertical"></div>
+              <div class="col-100-px monetary padding-right-10 nowrap vertical">$[[currencyFormat(totals.total_ct_ytd)]]</div>
+            </div>
+            <div class="col-460-px layout horizontal">
+              <div class="col-100-px nowrap monetary vertical padding-right-10 right-side">$[[currencyFormat(totals.total_ct_cy)]]</div>
+              <div class="col-160-px vertical right-side">
+                <span class="col-3">[[totals.hact_values_programmatic_visits_planned_q1]]</span>
+                <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q2]]</span>
+                <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q3]]</span>
+                <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q4]]</span>
+              </div>
+              <div class="col-40-px nowrap vertical center right-side">[[totals.hact_min_requirements_programme_visits]]</div>
+              <div class="col-160-px vertical right-side">
+                <span class="col-3">[[totals.hact_values_programmatic_visits_completed_q1]]</span>
+                <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_completed_q2]]</span>
+                <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_completed_q3]]</span>
+                <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_completed_q4]]</span>
+              </div>
+            </div>
+            <div class="col-555-px layout horizontal">
+              <div class="col-10-px buffer"></div>
+              <div class="col-100-px right-side right padding-right-10 monetary vertical">$[[currencyFormat(totals.reported_cy)]]</div>
+                <div class="col-160-px right-side right vertical">
+                  <span class="col-3">[[_sumSpotChecks(totals.planned_engagement_spot_check_mr_q1, totals.planned_engagement_spot_check_follow_up_q1)]]</span>
+                  <span class="col-3 right-side">[[_sumSpotChecks(totals.planned_engagement_spot_check_mr_q2, totals.planned_engagement_spot_check_follow_up_q2)]]</span>
+                  <span class="col-3 right-side">[[_sumSpotChecks(totals.planned_engagement_spot_check_mr_q3, totals.planned_engagement_spot_check_follow_up_q3)]]</span>
+                  <span class="col-3 right-side">[[_sumSpotChecks(totals.planned_engagement_spot_check_mr_q4, totals.planned_engagement_spot_check_follow_up_q4)]]</span>
+                </div>
+                  <span class="col-40-px right-side center vertical">[[totals.hact_min_requirements_spot_checks]]</span>
+                  <span class="col-75-px right-side center vertical">[[totals.planned_engagement_total_spot_check_follow_up_required]]</span>
+                <div class="col-160-px right-side vertical">
+                  <span class="col-3">[[totals.hact_values_spot_checks_completed_q1]]</span>
+                  <span class="col-3 right-side">[[totals.hact_values_spot_checks_completed_q2]]</span>
+                  <span class="col-3 right-side">[[totals.hact_values_spot_checks_completed_q3]]</span>
+                  <span class="col-3 right-side">[[totals.hact_values_spot_checks_completed_q4]]</span>
+                </div>
+              <div class="col-10-px buffer"></div>
+            </div>
+            <div class="col-225-px layout horizontal">
+              <div class="col-75-px right-side center vertical">[[totals.planned_engagement_required_audit]]</div>
+              <div class="col-75-px right-side center vertical">[[totals.hact_values_audits_completed]]</div>
+              <div class="col-75-px right-side monetary vertical">$[[totals.hact_values_outstanding_findings]]</div>
+            </div>
+          </div>
+        </data-table-row>
+
+        <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
+          <data-table-row no-collapse>
+            <div slot="row-data">
+              <div class="col-2 layout horizontal">
+                <span class="col-12 padding-right-10 col-data name padded">
+                  <a on-tap="_goToPage" id="[[partner.id]]">
+                    [[partner.name]]
+                    <paper-tooltip>[[partner.name]]</paper-tooltip>
+                  </a>
+                </span>
+              </div>
+              <div class="col-215-px layout horizontal">
+                <span class="col-75-px nowrap no-overflow vertical">[[partner.rating]]</span>
+                <span class="col-40-px nowrap vertical">
+                  <div>
+                    <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
+                    <paper-tooltip hidden="[[!partner.flags.expiring_assessment_flag]]">Assessment is expiring this year</paper-tooltip>
+                  </div>
+                  <div>
+                    <iron-icon id="threshold" class="hact-icon" icon="icons:report-problem" hidden="[[!partner.flags.approaching_threshold_flag]]"></iron-icon>
+                    <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment will be required if more than $100,000</paper-tooltip>
+                  </div>
+                </span>
+                <span class="col-100-px monetary padding-right-10 nowrap vertical">$[[currencyFormat(partner.total_ct_ytd)]]</span>
+              </div>
+              <div class="col-460-px layout horizontal">
+                <span class="col-100-px nowrap monetary padding-right-10 right-side vertical">$[[currencyFormat(partner.total_ct_cy)]]</span>
+                <span class="col-160-px nowrap vertical right-side">
+                  <span class="col-3">[[partner.hact_values.programmatic_visits.planned.q1]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.planned.q2]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.planned.q3]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.planned.q4]]</span>
+                </span>
+                <span class="col-40-px nowrap right-side center vertical">[[partner.hact_min_requirements.programme_visits]]</span>
+                <span class="col-160-px right-side vertical">
+                  <span class="col-3">[[partner.hact_values.programmatic_visits.completed.q1]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.completed.q2]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.completed.q3]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.completed.q4]]</span>
+                </span>
+              </div>
+              <div class="col-555-px layout horizontal"> 
+                  <span class="col-10-px buffer"></span>
+                <span class="col-100-px right-side padding-right-10 monetary vertical">$[[currencyFormat(partner.reported_cy)]]</span>
+                  <span class="col-160-px right-side vertical">
+                    <span class="col-3">[[_sumSpotChecks(partner.planned_engagement.spot_check_mr.q1, partner.planned_engagement.spot_check_follow_up_q1)]]</span>
+                    <span class="col-3 vertical quarter-item">[[_sumSpotChecks(partner.planned_engagement.spot_check_mr.q2, partner.planned_engagement.spot_check_follow_up_q2)]]</span>
+                    <span class="col-3 quarter-item">[[_sumSpotChecks(partner.planned_engagement.spot_check_mr.q3, partner.planned_engagement.spot_check_follow_up_q3)]]</span>
+                    <span class="col-3 quarter-item">[[_sumSpotChecks(partner.planned_engagement.spot_check_mr.q4, partner.planned_engagement.spot_check_follow_up_q4)]]</span>
+                  </span>
+                  <span class="col-40-px right-side center vertical">[[partner.hact_min_requirements.spot_checks]]</span>
+                  <span class="col-75-px right-side center vertical">[[_sumSpotCheckFollowUp(partner.planned_engagement)]]</span>
+                <span class="col-160-px right-side vertical">
+                  <span class="col-3">[[partner.hact_values.spot_checks.completed.q1]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.spot_checks.completed.q2]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.spot_checks.completed.q3]]</span>
+                  <span class="col-3 quarter-item">[[partner.hact_values.spot_checks.completed.q4]]</span>
+                </span>
+                <span class="col-10-px buffer"></span>
+              </div>
+              <div class="col-225-px layout horizontal">
+                <span class="col-75-px right-side center vertical">[[_checkForValueYesBlank(partner.planned_engagement.required_audit)]]</span>
+                <span class="col-75-px right-side center vertical">[[partner.hact_values.audits.completed]]</span>
+                <span class="col-75-px right-side monetary vertical">$[[partner.hact_values.outstanding_findings]]</span>
+              </div>
+            </div>
+          </data-table-row>
+        </template>
+      </div>
+    </paper-material>
+  </template>
+
+  <script>
+    'use strict';
+
+    /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
+     * @appliesMixin EtoolsDashboard.Mixins.Pagination
+     */
+    const HactDetailMixins = EtoolsMixinFactory.combineMixins([
+        EtoolsDashboard.Mixins.CommonGeneral,
+        EtoolsDashboard.Mixins.Pagination
+      ], Polymer.Element);
+
+    /**
+     * @polymer
+     * @customElement
+     * @appliesMixin HactDetailMixins
+     */
+    class HactDetail extends HactDetailMixins {
+      static get is() { return 'hact-detail' }
+
+      static get properties() {
+        return {
+          filteredPartners: {
+            type: Array,
+            notify: true
+          },
+          totals: {
+            type: Array,
+          }
+        }
+      }
+
+      _getGovernmentDisplay(partner, prop, toCurrency) {
+        const partnerValue = _.get(partner, prop);
+        if (partner.partner_type === 'Government') {
+          return '-';
+        } else {
+          return toCurrency ? this.currencyFormat(partnerValue) : partnerValue;
+        }
+      }
+
+      _checkForValueYesBlank(val) {
+        return val ? "Yes" : ""
+      }
+
+      _sumSpotChecks(mr, followUp) {
+        return mr + followUp
+      }
+
+      _sumSpotCheckFollowUp(planned_engagement) {
+        return (
+          planned_engagement.spot_check_follow_up_q1
+          + planned_engagement.spot_check_follow_up_q2
+          + planned_engagement.spot_check_follow_up_q3
+          + planned_engagement.spot_check_follow_up_q4
+        )
+      }
+    }
+
+    window.customElements.define(HactDetail.is, HactDetail)
+  </script>
+</dom-module>

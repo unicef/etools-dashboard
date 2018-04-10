@@ -1,5 +1,8 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
 
 <dom-module id="data-table-row">
 
@@ -73,7 +76,12 @@
 
   <script>
     'use strict';
-
+    
+    /**
+    * @polymer
+    * @customElement
+    * @extends Polymer.Element
+    */
     class DataTableRow extends Polymer.Element {
       static get is() { return 'data-table-row'; }
 
@@ -99,9 +107,10 @@
         this.$.details.style.display = 'none';
         this.$.wrapper.style.padding = '0 24px';
         this.$.iconWrapper.style.display = 'none';
-        this.customStyle['--hover-setting'] = 'background : transparent';
-        this.updateStyles();
+        this.updateStyles({['--hover-setting']: 'background : transparent'});
       }
     }
+
+    window.customElements.define(DataTableRow.is, DataTableRow)
   </script>
 </dom-module>

@@ -103,7 +103,12 @@
 
   <script>
     'use strict';
-
+    
+    /**
+    * @polymer
+    * @customElement
+    * @extends Polymer.Element
+    */
     class DataTableColumn extends Polymer.Element {
       static get is() { return 'data-table-column'; }
 
@@ -151,8 +156,7 @@
       connectedCallback() {
         super.connectedCallback();
         if (!this.hasAttribute('sortable')) {
-          this.customStyle['--icon-display'] = 'display: none';
-          this.updateStyles();
+          this.updateStyles({['--icon-display']: 'display: none'});
         }
       }
 
@@ -171,16 +175,14 @@
 
       _changeHeadingAlign() {
         if (!_.isEmpty(this.groupHeading)) {
-          this.$.heading.customStyle['group-heading.text-align'] = this.headingAlign
-          Polymer.updateStyles();
+          this.$.heading.updateStyles({['group-heading.text-align']: this.headingAlign})
         }
       }
 
       _isGroup() {
         if (!_.isEmpty(this.groupHeading)) {
           this.$.label.classList.add('is-group');
-          this.customStyle['--column-height'] = 'height: auto';
-          this.updateStyles();
+          this.updateStyles({['--column-height']: 'height: auto'});
         }
       }
       
@@ -192,5 +194,7 @@
         }
       }      
     }
+
+    window.customElements.define(DataTableColumn.is, DataTableColumn)
   </script>
 </dom-module>

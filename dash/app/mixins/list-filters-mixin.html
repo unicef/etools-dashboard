@@ -8,6 +8,10 @@
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
+  /**
+  * @polymer
+  * @mixinFunction
+  */
   EtoolsDashboard.Mixins.ListFilters = (superClass) => class extends superClass {
     constructor() {
       super()
@@ -124,7 +128,7 @@
       let filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
       let filterVal = Polymer.dom(event).localTarget.selected;
       this.set(filterPath, filterVal);
-    },
+    }
 
     /**
      * Check filter type. Filter type can be:

@@ -75,8 +75,16 @@
   </template>
 
   <script>
+    'use strict';
+    
+    /**
+    * @polymer
+    * @customElement
+    * @extends Polymer.Element
+    */
     class DataTableFooter extends Polymer.Element {
       static get is() { return 'data-table-footer'; }
+
       static get properties() {
         return {
           pageSize: {
@@ -154,5 +162,7 @@
         return pageNumber === totalPages;
       }
     }
+
+    window.customElements.define(DataTableFooter.is, DataTableFooter)
   </script>
 </dom-module>

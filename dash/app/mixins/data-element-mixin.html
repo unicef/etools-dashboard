@@ -1,4 +1,4 @@
-<link rel="import" href="../../modules/config/config.html">
+<link rel="import" href="../../app/config/config.html">
 
 <script>
   'use strict';
@@ -6,6 +6,10 @@
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
+  /**
+   * @polymer
+   * @mixinFunction
+   */
   EtoolsDashboard.Mixins.DataElement = (superClass) => class extends superClass {
     constructor() {
       super()
