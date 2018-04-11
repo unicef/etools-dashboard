@@ -71,7 +71,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <common-data-loaders></common-data-loaders>
+    <!-- <common-data-loaders></common-data-loaders> -->
 
     <app-location route="{{route}}"
                   url-space-regex="^[[rootPath]]">
@@ -170,6 +170,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
+    /**
+   * @customElement
+   * @polymer
+   * @extends {Polymer.Element}
+   */
     class AppShell extends Polymer.Element {
       static get is() {
         return 'app-shell';
@@ -214,6 +219,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _showPage404() {
         this.page = 'view404';
+      }
+
+      _isActive(page, tab) {
+        return _.isEqual(page, tab);
       }
     }
 

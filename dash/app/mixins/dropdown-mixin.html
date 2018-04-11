@@ -4,7 +4,11 @@
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
-  EtoolsDashboard.Mixins.dropdownMixin = (superClass) => class extends superClass {
+  /**
+   * @polymer
+   * @mixinFunction
+   */
+  EtoolsDashboard.Mixins.Dropdown = (superClass) => class extends superClass {
     constructor() {
       super()
     }

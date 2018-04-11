@@ -1,4 +1,4 @@
-<link rel="import" href="../../modules/config/config.html">
+<link rel="import" href="../../app/config/config.html">
 
 <script>
   'use strict';
@@ -6,7 +6,11 @@
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
-  EtoolsDashboard.Mixins.dataElementMixin = (superClass) => class extends superClass {
+  /**
+   * @polymer
+   * @mixinFunction
+   */
+  EtoolsDashboard.Mixins.DataElement = (superClass) => class extends EtoolsDashboard.Mixins.Endpoints(superClass) {
     constructor() {
       super()
     }
@@ -26,7 +30,7 @@
         },
         db: {
           type: Object,
-          value: () => { etoolsAppConfig.db }
+          value: () => { EtoolsDashboard.dexieDb }
         },
         fireDataLoaded: {
           type: Boolean,
@@ -53,13 +57,13 @@
         if (!this.dataLoadedEventName) {
           console.warn('Please specify data loaded event name(dataLoadedEventName property)');
         } else {
-          this.fire(this.dataLoadedEventName);
+          this.dispatchEvent(new CustomEvent(this.dataLoadedEventName))
         }
       }
     }
 
     _handleErrorResponse(response) {
-      this.fire('global-loading', {active: false});
+      this.dispatchEvent(new CustomEvent('global-loading', {active: false}));
       var errors = response.detail.request.detail.request.response;
       if (this.ajaxEl.method === 'POST' || this.ajaxEl.method === 'PATCH') {
         // TODO: improve etools-ajax on-fail event data model (received errors)
@@ -89,7 +93,7 @@
             errorMessage = errorMessages.join('');
           }
         }
-        this.fire('toast', {text: errorMessage, showCloseBtn: true});
+        this.dispatchEvent(new CustomEvent('toast', {text: errorMessage, showClowBtn: true}));
       }
     }
   };

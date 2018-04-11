@@ -6,7 +6,11 @@
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
-  EtoolsDashboard.Mixins.notificationToastsMixin = (superClass) => class extends superClass {
+  /**
+  * @polymer
+  * @mixinFunction
+  */
+  EtoolsDashboard.Mixins.NotificationToasts = (superClass) => class extends superClass {
     constructor() {
       super()
     }

@@ -8,7 +8,11 @@
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
-  EtoolsDashboard.Mixins.paginationWithFiltersMixin = (superClass) => class extends superClass {
+  /**
+  * @polymer
+  * @mixinFunction
+  */
+  EtoolsDashboard.Mixins.PaginationWithFilters = (superClass) => class extends superClass {
     constructor() {
       super()
     }
