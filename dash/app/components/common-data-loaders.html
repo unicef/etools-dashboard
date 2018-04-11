@@ -8,7 +8,7 @@
 
 <link rel="import" href="../config/dexie-db-config.html">
 
-<link rel="import" href="actions.html">
+<link rel="import" href="reduxProps.html">
 <dom-module id="common-data-loaders">
   <template>
     <style>
@@ -235,8 +235,8 @@
       }
 
       actionsToDispatch() {
-        const { Actions } = EtoolsDashboard;
-        let mappedItems = Actions.map(a => {
+        const { ReduxProps } = EtoolsDashboard;
+        let mappedItems = ReduxProps.map(a => {
           let endpoint = a.endpointProps;
           if (typeof endpoint === 'function') {
             endpoint = endpoint.bind(this)();
