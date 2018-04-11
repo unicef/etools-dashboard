@@ -353,10 +353,6 @@
           this.init(this.active);
         },
 
-        _goToPage: function(e) {
-          window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
-        },
-
         _toggleChartsView: function({target}) {
           const name = target.getAttribute('name');
           let pages = Polymer.dom(this.root).querySelectorAll('iron-pages');
