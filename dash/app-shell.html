@@ -29,8 +29,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 
-<link rel="import" href="app/mixins/redux-store-mixin.html">
-
+<link rel="import" href="app/mixins/user-data-mixin.html">
+<link rel="import" href="app/config/dexie-db-config.html">
 <!-- lazy imports -->
 <link rel="lazy-import" href="app/views/hact/view-hact.html">
 <link rel="lazy-import" href="app/views/personalized/view-personalized.html">
@@ -40,6 +40,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="app/views/map/view-map.html">
 
 <link rel="import" href="app/components/common-data-loaders.html">
+<link rel="import" href="app/components/page-header.html">
 
 
 <dom-module id="app-shell">
@@ -72,7 +73,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <!-- <common-data-loaders></common-data-loaders> -->
-
+    
     <app-location route="{{route}}"
                   url-space-regex="^[[rootPath]]">
     </app-location>
@@ -85,10 +86,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-header-layout has-scrolling-region>
 
         <app-header slot="header" condenses reveals effects="waterfall">
-          <app-toolbar>
-            <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title>Dashboard</div>
-          </app-toolbar>
+            <page-header id="pageheader" title="eTools" user="[[user]]"></page-header>
         </app-header>
         <div class="page-top-content with-tabs">
           <div class="top-content">
@@ -153,29 +151,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
           </div>
         </div>
-
+        
         <iron-pages selected="[[page]]"
                     attr-for-selected="name"
                     fallback-selection="personalized"
                     role="main">
-          <view-personalized name="personalized"></view-personalized>
+          <view-personalized user="[[user]]"
+                             name="personalized"></view-personalized>
           <view-hact name="hact"></view-hact>
           <view-partnerships name="partnerships"></view-partnerships>
           <view-trips name="trips"></view-trips>
           <view-map name="map"></view-map>
           <view-attachments name="attachments"></view-attachments>
         </iron-pages>
-      </app-header-layout>
-    </app-drawer-layout>
-  </template>
+        </app-header-layout>
+        </app-drawer-layout>
+        </template>
 
   <script>
+    const { UserData} = EtoolsDashboard.Mixins;
     /**
    * @customElement
    * @polymer
    * @extends {Polymer.Element}
    */
-    class AppShell extends Polymer.Element {
+    class AppShell extends UserData(Polymer.Element) {
       static get is() {
         return 'app-shell';
       }

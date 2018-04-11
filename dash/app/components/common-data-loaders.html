@@ -20,9 +20,8 @@
   </template>
 
   <script>
-    const { compose,
+    const { 
       propOr,
-      curry,
       pick,
       map,
       range,
@@ -33,7 +32,7 @@
       lensIndex,
       toUpper } = R;
     
-    const { ReduxStore, Endpoints, Actions } = EtoolsDashboard.Mixins;
+    const { ReduxStore, Actions } = EtoolsDashboard.Mixins;
     const requiredMixin = curry(compose(Endpoints, ReduxStore, Actions, EtoolsAjaxRequestMixin));
     const CommonDataMixin = requiredMixin(Polymer.Element);
     
@@ -97,6 +96,8 @@
               offices: map(pick(['id', 'name']), data)
             }
           },
+
+          // next 4 actions destructure data due to corresponding format from backend
 
           setTrips({ data } = []) {
             return {

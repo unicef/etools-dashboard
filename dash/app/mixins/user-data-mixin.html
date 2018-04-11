@@ -1,0 +1,71 @@
+<link rel="import"
+      href="../mixins/data-element-mixin.html">
+<link rel="import"
+      href="../scripts/ramda.html">
+
+<script>
+  'use strict'
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+  window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+  const { DataElement } = EtoolsDashboard.Mixins;
+  /**
+   * `user-data` Description
+   *
+   * @summary ShortDescription.
+   * @customElement
+   * @polymer
+   * @extends {Polymer.Element}
+   */
+  EtoolsDashboard.Mixins.UserData = baseClass =>
+    class extends DataElement(baseClass) {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'user-data';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          endpointName: {
+            type: String,
+            value: 'user'
+          },
+
+          user: {
+            type: Object,
+            readOnly: true,
+            notify: true
+          },
+
+        };
+      }
+
+      /**
+       * Instance of the element is created/upgraded. Use: initializing state,
+       * set up event listeners, create shadow dom.
+       * @constructor
+       */
+      constructor() {
+        super();
+      }
+
+      /**
+       * Use for one-time configuration of your component after local DOM is initialized. 
+       */
+      ready() {
+        super.ready();
+      }
+
+      _handleMyResponse(user) {
+        if (!isEmpty(user)) {
+          this._setUser(user);
+        }
+      }
+
+    }
+
+</script>
