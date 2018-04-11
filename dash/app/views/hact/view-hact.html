@@ -5,7 +5,7 @@
 <link rel="import" href="../../styles/grid-layout-styles.html">
 <link rel="import" href="../../styles/app-theme.html">
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
 <link rel="import" href="../../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
@@ -23,16 +23,16 @@
 <link rel="import" href="hact-charts.html">
 <link rel="import" href="hact-general.html">
 
-<link rel="import" href="../../../modules/data-table/data-table-footer.html">
+<link rel="import" href="../../components/data-table/data-table-footer.html">
 
-<link rel="import" href="../../../modules/partners-data.html">
+<link rel="import" href="partners-data.html">
 <link rel="import" href="../../mixins/common-general-mixin.html">
 <link rel="import" href="../../mixins/pagination-mixin.html">
 <link rel="import" href="../../endpoints/endpoints-mixin.html">
 
 <dom-module id="view-hact">
   <template>
-    <style include="shared-styles custom-style list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment">
+    <style include="shared-styles custom-style list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment paper-material-styles">
       :host {
         display: block;
         --paper-input-container-label: {
@@ -57,7 +57,7 @@
         height: 36px;
       }
 
-      paper-material.detail-btn {
+      .paper-material.detail-btn {
         padding-top: 0;
         padding-bottom: 0;
       }
@@ -157,7 +157,7 @@
         fallback-selection="assurance">
 
       <div name="assurance">
-        <paper-material class="list-panel search-bar hact-list" elevation="1">
+        <div class="paper-material list-panel search-bar hact-list" elevation="1">
           <div class="wrap-controls">
             <paper-input id="query" type="search" autocomplete="off" value="[[queryString]]" on-keyup="setQuery"
                     placeholder="Type and search"
@@ -165,13 +165,13 @@
               <iron-icon icon="search" prefix></iron-icon>
             </paper-input>
           </div>
-        </paper-material>
+        </div>
         
-        <paper-material class="hact-list detail-btn" elevation="1">
+        <div class="paper-material hact-list detail-btn" elevation="1">
           <paper-button on-tap="_detailToggle" class="toggle" noink>
             <a class="detailed-assurance">SHOW DETAILED ASSURANCE</a>
           </paper-button>
-        </paper-material>
+        </div>
 
         <iron-pages id="assurance"
                     selected="[[subName]]"
@@ -412,10 +412,6 @@
           }
           this.set('requiredDataLoaded', true);
           this.init(this.active);
-        }
-
-        _goToPage(e) {
-          window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
         }
 
         _toggleChartsView({target}) {

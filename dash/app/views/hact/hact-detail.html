@@ -4,22 +4,22 @@
 <link rel="import" href="../../styles/grid-layout-styles.html">
 <link rel="import" href="../../styles/hact-tables-styles.html">
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
 <link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../config/config.html">
-<link rel="stylesheet" href="../../../../bower_components/etools-behaviors/etools-mixin-factory.html">
+<link rel="import" href="../../../../bower_components/etools-behaviors/etools-mixin-factory.html">
 
-<link rel="import" href="../../../modules/data-table/data-table-header.html">
-<link rel="import" href="../../../modules/data-table/data-table-column.html">
-<link rel="import" href="../../../modules/data-table/data-table-row.html">
+<link rel="import" href="../../components/data-table/data-table-header.html">
+<link rel="import" href="../../components/data-table/data-table-column.html">
+<link rel="import" href="../../components/data-table/data-table-row.html">
 
-<!-- <link rel="import" href="../dashboard-data/partners-data.html"> -->
+<link rel="import" href="partners-data.html">
 <link rel="import" href="../../mixins/common-general-mixin.html">
 <link rel="import" href="../../mixins/pagination-mixin.html">
 
 <dom-module id="dashboard-hact-detail">
   <template>
-    <style include="shared-styles list-styles grid-layout-styles hact-tables-styles iron-flex iron-flex-factors iron-flex-alignment">
+    <style include="shared-styles list-styles grid-layout-styles hact-tables-styles iron-flex iron-flex-factors iron-flex-alignment paper-material-styles">
       :host {
         --paper-material-padding: 0 24px 0 24px;
       }
@@ -182,8 +182,8 @@
       }
     </style>
 
-    <paper-material id="detail-list" class="hact-list" elevation="1">
-      <div id="detail-table" class="detail-list">
+    <div class="paper-material hact-list" id="detail-list" elevation="1">
+      <!-- <div id="detail-table" class="detail-list"> -->
         <data-table-header no-collapse>
           <data-table-column class="col-2 left-align layout horizontal" group-heading="blank" transparent>
             <data-table-column class="col-12 layout padding-right-10 horizontal" id="name" sortable>
@@ -397,8 +397,9 @@
             </div>
           </data-table-row>
         </template>
+        
       </div>
-    </paper-material>
+    </div>
   </template>
 
   <script>
@@ -457,6 +458,10 @@
           + planned_engagement.spot_check_follow_up_q3
           + planned_engagement.spot_check_follow_up_q4
         )
+      }
+
+      _goToPage(e) {
+        window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
       }
     }
 

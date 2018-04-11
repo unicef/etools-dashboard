@@ -1,14 +1,14 @@
-<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
-<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
+<link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../../bower_components/iron-collapse/iron-collapse.html">
 
 <dom-module id="data-table-row">
 
   <template>
 
-    <style>
+    <style include="paper-material-styles">
       *[hidden] {
         display: none !important;
       }
@@ -59,13 +59,13 @@
       }
     </style>
 
-    <paper-material id="wrapper" elevation="0">
+    <div class="paper-material" id="wrapper" elevation="0">
       <div id="iconWrapper">
         <iron-icon id="more" icon="expand-more" hidden$="[[detailsOpened]]" on-tap="_toggleRowDetails"></iron-icon>
         <iron-icon id="less" icon="expand-less" hidden$="[[!detailsOpened]]" on-tap="_toggleRowDetails"></iron-icon>
       </div>
       <slot name="row-data"></slot>
-    </paper-material>
+    </div>
 
     <iron-collapse id="details" opened="{{detailsOpened}}">
       <div id="collapse-wrapper">

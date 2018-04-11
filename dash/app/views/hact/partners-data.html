@@ -1,0 +1,6812 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../config/config.html">
+<link rel="import" href="../../../../bower_components/etools-ajax/etools-ajax.html">
+<link rel="import" href="../../mixins/data-element-mixin.html">
+
+<dom-module id="partners-data">
+  <template>
+    <etools-ajax id="ajax"
+                 endpoint="[[endpoint]]"
+                 caching-storage="custom"
+                 dexie-db-collection="partners"
+                 on-success="_handleResponse">
+    </etools-ajax>
+  </template>
+
+  <script>
+    
+
+    'use strict';
+    // const requiredMixin = curry(compose(EtoolsDashboard.Mixins.DataElement));
+    // const PartnersDataMixin = requiredMixin(Polymer.Element);
+    /**
+    * @polymer
+    * @customElement
+    * @appliesMixin EtoolsDashboard.Mixins.DataElement
+    // * @extends {EtoolsDashboard.Mixins.DataElement}
+    */
+    class PartnersData extends EtoolsDashboard.Mixins.DataElement(Polymer.Element) {
+      static get is() { return 'partners-data'; }
+
+      static get properties() {
+        return {
+          endpointName: {
+            type: String,
+            value: 'partners'
+          },
+          currentQuery: {
+            type: Object,
+            value: null
+          },
+          filteredPartners: {
+            type: Array,
+            readOnly: true,
+            notify: true
+          },
+          totalResults: {
+            type: Number,
+            readOnly: true,
+            notify: true
+          },
+          filteredTotalResults: {
+            type: Number,
+            readOnly: true,
+            notify: true
+          },
+          totals: {
+            type: Array,
+            notify: true,
+            readOnly: true
+          },
+          dataLoadedEventName: {
+            type: String,
+            value: 'partners-loaded'
+          },
+          loadedInitially: {
+            type: Boolean,
+            value: false
+          },
+          resultsTotals: {
+            type: Boolean,
+            value: false
+          }
+        }
+      }
+
+      static get observers() {
+        return [ 'init(active)' ]
+      }
+
+      init(active) {
+        if (active && !this.loadedInitially) {
+          this.dispatchEvent(new CustomEvent('global-loading', {message: 'Loading partners data...', active: true}));
+          this._elementReady();
+          this.set('loadedInitially', true);
+        }
+      }
+      
+      query(searchString, order, pageSize, pageNumber) {
+        let res = [
+  {
+    "id": 71,
+    "name": "ABAAD RESOURCE CENTER FOR GENDER",
+    "vendor_number": "2500225514",
+    "short_name": "abaad",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "1822512.19",
+    "total_ct_cy": "95292.46",
+    "net_ct_cy": "398949.79",
+    "reported_cy": "941892.12",
+    "total_ct_ytd": "139486.79",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 2,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 5,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 5,
+      "spot_check_required": 6,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 48,
+    "name": "ACTION CONTRA LA FAIM LIBAN",
+    "vendor_number": "2500229456",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "5014892.77",
+    "total_ct_cy": "2216206.77",
+    "net_ct_cy": "2573335.77",
+    "reported_cy": "2853883.72",
+    "total_ct_ytd": "988622.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 4,
+          "total": 4,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 6,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 204,
+    "name": "AKKAR NETWORK FOR DEVELOPMENT",
+    "vendor_number": "2500235879",
+    "short_name": "AND",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "1052699.10",
+    "total_ct_cy": "563318.61",
+    "net_ct_cy": "569858.57",
+    "reported_cy": "622412.48",
+    "total_ct_ytd": "183063.70",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 2,
+          "total": 2,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 4,
+          "q3": 0,
+          "q2": 0,
+          "q4": 4
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 8,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 1,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 83,
+    "name": "AL FAYHAE ASSOCIATION",
+    "vendor_number": "2500231513",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "1146814.61",
+    "total_ct_cy": "612637.28",
+    "net_ct_cy": "612637.28",
+    "reported_cy": "611120.68",
+    "total_ct_ytd": "182250.61",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 12,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 312,
+    "name": "AL MIDAN",
+    "vendor_number": "2500237970",
+    "short_name": "",
+    "type_of_assessment": "Simplified Checklist",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "42635.00",
+    "total_ct_cy": "42635.00",
+    "net_ct_cy": "42635.00",
+    "reported_cy": "39665.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 0
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 15,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 65,
+    "name": "ALPHA",
+    "vendor_number": "2500225516",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "2983617.94",
+    "total_ct_cy": "1873294.94",
+    "net_ct_cy": "1873294.94",
+    "reported_cy": "1290668.00",
+    "total_ct_ytd": "582626.94",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 17,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 94,
+    "name": "ALTCITY IMPACT",
+    "vendor_number": "2500234546",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "387250.00",
+    "total_ct_cy": "63780.00",
+    "net_ct_cy": "63780.00",
+    "reported_cy": "286430.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 19,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 22,
+    "name": "AMEL ASSOCIATION INTERNATIONAL",
+    "vendor_number": "2500206268",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "619077.00",
+    "total_ct_cy": "244317.00",
+    "net_ct_cy": "245757.00",
+    "reported_cy": "206718.00",
+    "total_ct_ytd": "161157.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 2,
+          "total": 2,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 20,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 260,
+    "name": "AMERICAN LEBANESE LANGUAGE CENTER",
+    "vendor_number": "2500235928",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "Academic Institution",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "4507430.37",
+    "total_ct_cy": "2026247.98",
+    "net_ct_cy": "2026302.76",
+    "reported_cy": "1512334.51",
+    "total_ct_ytd": "1249623.62",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 21,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 39,
+    "name": "AMERICAN NEAR EAST REFUGEE AID",
+    "vendor_number": "2500230107",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "7390340.88",
+    "total_ct_cy": "2876549.06",
+    "net_ct_cy": "3054198.88",
+    "reported_cy": "3477480.88",
+    "total_ct_ytd": "1135915.67",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 6,
+          "total": 5,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 23,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 66,
+    "name": "AMERICAN UNIVERSITY OF BEIRUT",
+    "vendor_number": "2500206237",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "Academic Institution",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "63800.00",
+    "total_ct_cy": "0.00",
+    "net_ct_cy": "0.00",
+    "reported_cy": "61328.64",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 2,
+          "total": 2,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 0,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 24,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 40,
+    "name": "ANA AQRA ASSOCIATION",
+    "vendor_number": "2500229521",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "5311172.00",
+    "total_ct_cy": "1996559.00",
+    "net_ct_cy": "1825415.00",
+    "reported_cy": "3416175.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 2,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 26,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 54,
+    "name": "ARAB RESOURCE CENTER FOR POPULAR ARTS",
+    "vendor_number": "2500229310",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "1661719.84",
+    "total_ct_cy": "444891.84",
+    "net_ct_cy": "444891.84",
+    "reported_cy": "747602.89",
+    "total_ct_ytd": "159842.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 6,
+          "total": 6,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 29,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 34,
+    "name": "ARC EN CIEL",
+    "vendor_number": "2500224141",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": [
+      
+    ],
+    "total_ct_cp": "161105.00",
+    "total_ct_cy": "73988.00",
+    "net_ct_cy": "161105.00",
+    "reported_cy": "161105.00",
+    "total_ct_ytd": "32221.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 31,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 265,
+    "name": "ASSOCIATION HIMAYA DAEEM WA AATAA",
+    "vendor_number": "2500236629",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "161230.00",
+    "total_ct_cy": "111230.00",
+    "net_ct_cy": "111230.00",
+    "reported_cy": "111230.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 2,
+          "total": 2,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 34,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 44,
+    "name": "ASSOCIATION LEBANESE RELIEF COUNCIL",
+    "vendor_number": "2500232618",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Medium",
+    "shared_with": null,
+    "total_ct_cp": "2252276.84",
+    "total_ct_cy": "914321.28",
+    "net_ct_cy": "914321.28",
+    "reported_cy": "1175940.95",
+    "total_ct_ytd": "521392.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 3,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 35,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 29,
+    "name": "ASSOCIAZIONE VOLONTARI PER IL SERVISIO INTERNAZIONALE",
+    "vendor_number": "2500225302",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "14107464.34",
+    "total_ct_cy": "5533243.44",
+    "net_ct_cy": "5825331.91",
+    "reported_cy": "5974153.32",
+    "total_ct_ytd": "1269025.76",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 6,
+          "total": 6,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 41,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 189,
+    "name": "BEAM OF THE ENVIRONMENT ASSOCIATION",
+    "vendor_number": "2500235461",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "135720.00",
+    "total_ct_cy": "51140.00",
+    "net_ct_cy": "51140.00",
+    "reported_cy": "135720.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 44,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 86,
+    "name": "BEIRUT DC",
+    "vendor_number": "2500231244",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Medium",
+    "shared_with": null,
+    "total_ct_cp": "133570.00",
+    "total_ct_cy": "39610.00",
+    "net_ct_cy": "39504.00",
+    "reported_cy": "133464.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 45,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 51,
+    "name": "BEYOND ASSOCIATION",
+    "vendor_number": "2500225025",
+    "short_name": "",
+    "type_of_assessment": "High Risk Assumed",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "High",
+    "shared_with": null,
+    "total_ct_cp": "407860.00",
+    "total_ct_cy": "0.00",
+    "net_ct_cy": "407860.00",
+    "reported_cy": "407860.00",
+    "total_ct_ytd": "107640.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 3,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 47,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 93,
+    "name": "BRITISH COUNCIL LB",
+    "vendor_number": "2500234006",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Medium",
+    "shared_with": null,
+    "total_ct_cp": "238000.56",
+    "total_ct_cy": "130005.50",
+    "net_ct_cy": "133924.77",
+    "reported_cy": "112051.58",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 50,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 16,
+    "name": "CARITAS LIBAN",
+    "vendor_number": "2500224316",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "16460980.24",
+    "total_ct_cy": "7097970.32",
+    "net_ct_cy": "7785672.00",
+    "reported_cy": "4307704.11",
+    "total_ct_ytd": "396652.80",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 4,
+          "total": 4,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": true
+    },
+    "planned_engagement": {
+      "id": 52,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 139,
+    "name": "CERD",
+    "vendor_number": "2500226480",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Government",
+    "partner_type_slug": "Gov",
+    "cso_type": null,
+    "rating": "Significant",
+    "shared_with": null,
+    "total_ct_cp": "1360122.00",
+    "total_ct_cy": "115250.00",
+    "net_ct_cy": "115250.00",
+    "reported_cy": "517795.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 3,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 55,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 182,
+    "name": "COMITATO INTERNAZIONALE PER LO SVIL UPPO DEI POPOLI",
+    "vendor_number": "2500233835",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "1099898.16",
+    "total_ct_cy": "320972.33",
+    "net_ct_cy": "389455.33",
+    "reported_cy": "722936.16",
+    "total_ct_ytd": "68619.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 2,
+          "total": 2,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 58,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 36,
+    "name": "CONCERN WORLDWIDE",
+    "vendor_number": "2500227804",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "1941560.57",
+    "total_ct_cy": "630792.00",
+    "net_ct_cy": "783784.00",
+    "reported_cy": "1282525.00",
+    "total_ct_ytd": "106495.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 61,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 80,
+    "name": "DANISH RED CROSS",
+    "vendor_number": "2500231031",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "480942.00",
+    "total_ct_cy": "186866.00",
+    "net_ct_cy": "305547.00",
+    "reported_cy": "351899.48",
+    "total_ct_ytd": "118681.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 66,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 135,
+    "name": "DANISH REFUGEE COUNCIL",
+    "vendor_number": "2500233993",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "3019051.80",
+    "total_ct_cy": "223736.00",
+    "net_ct_cy": "1401555.80",
+    "reported_cy": "1453682.10",
+    "total_ct_ytd": "828651.80",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 67,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 304,
+    "name": "DEVELOPMENTAL ACTION WITHOUT BORDERS NABAA",
+    "vendor_number": "2500206265",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "428941.00",
+    "total_ct_cy": "215371.00",
+    "net_ct_cy": "210846.00",
+    "reported_cy": "424416.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 69,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 188,
+    "name": "DEVELOPMENT FOR PEOPLE AND NATURE ASSOCIATION",
+    "vendor_number": "2500235427",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "264002.00",
+    "total_ct_cy": "200253.00",
+    "net_ct_cy": "200253.00",
+    "reported_cy": "163199.00",
+    "total_ct_ytd": "37054.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 71,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 214,
+    "name": "DIGITAL OPPORTUNITY TRUST LEBANON",
+    "vendor_number": "2500235986",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "2061763.00",
+    "total_ct_cy": "1230972.00",
+    "net_ct_cy": "1230972.00",
+    "reported_cy": "761581.00",
+    "total_ct_ytd": "496230.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 73,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 309,
+    "name": "FIRST STEP TOGETHER FISTA ASSOCIATION",
+    "vendor_number": "2500237601",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "107589.00",
+    "total_ct_cy": "107611.94",
+    "net_ct_cy": "107611.94",
+    "reported_cy": "71100.00",
+    "total_ct_ytd": "36489.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 2,
+          "total": 2,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 10,
+          "q3": 0,
+          "q2": 0,
+          "q4": 10
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 76,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 190,
+    "name": "GLOBAL SMILE FOUNDATION MENA",
+    "vendor_number": "2500235462",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Medium",
+    "shared_with": null,
+    "total_ct_cp": "300000.00",
+    "total_ct_cy": "150000.00",
+    "net_ct_cy": "150000.00",
+    "reported_cy": "150000.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 86,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 262,
+    "name": "HANDICAP INTERNATIONAL",
+    "vendor_number": "2500236112",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "138487.00",
+    "total_ct_cy": "42935.00",
+    "net_ct_cy": "47088.00",
+    "reported_cy": "99168.00",
+    "total_ct_ytd": "4153.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 88,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 64,
+    "name": "HIMAYA",
+    "vendor_number": "2500230990",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "3379864.00",
+    "total_ct_cy": "920856.00",
+    "net_ct_cy": "1040856.00",
+    "reported_cy": "998867.63",
+    "total_ct_ytd": "741225.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 92,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 49,
+    "name": "HOOPS",
+    "vendor_number": "2500227784",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "2476212.00",
+    "total_ct_cy": "923222.00",
+    "net_ct_cy": "918122.00",
+    "reported_cy": "769020.00",
+    "total_ct_ytd": "390512.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 2,
+          "total": 2,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 94,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 207,
+    "name": "INJAZ LEBANON",
+    "vendor_number": "2500235837",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Medium",
+    "shared_with": null,
+    "total_ct_cp": "1534003.34",
+    "total_ct_cy": "97676.20",
+    "net_ct_cy": "97676.20",
+    "reported_cy": "1008296.46",
+    "total_ct_ytd": "97676.20",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 3,
+          "total": 3,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 100,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 90,
+    "name": "INTERNATIONAL MEDICAL CORPS LEBANON",
+    "vendor_number": "2500229400",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "597628.05",
+    "total_ct_cy": "277555.64",
+    "net_ct_cy": "308788.20",
+    "reported_cy": "596670.14",
+    "total_ct_ytd": "144859.59",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 102,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 31,
+    "name": "INTERNATIONAL ORTHODOX CHRISTIAN CHARITIES IOCC",
+    "vendor_number": "2500224587",
+    "short_name": "IOCC",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "950593.18",
+    "total_ct_cy": "724343.00",
+    "net_ct_cy": "732165.18",
+    "reported_cy": "586150.18",
+    "total_ct_ytd": "294183.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 6,
+          "total": 6,
+          "q3": 0,
+          "q2": 0,
+          "q4": 2
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 104,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 24,
+    "name": "INTERNATIONAL RESCUE COMMITTEE",
+    "vendor_number": "2500224869",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "3417078.00",
+    "total_ct_cy": "0.00",
+    "net_ct_cy": "1322388.00",
+    "reported_cy": "2065101.70",
+    "total_ct_ytd": "854143.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 105,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 161,
+    "name": "INTERSOS",
+    "vendor_number": "2500233846",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "2517101.26",
+    "total_ct_cy": "311981.17",
+    "net_ct_cy": "1005029.26",
+    "reported_cy": "1005029.26",
+    "total_ct_ytd": "426334.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 106,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 225,
+    "name": "JAMIYAT SANABEL AL JANOUB",
+    "vendor_number": "2500235227",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Medium",
+    "shared_with": null,
+    "total_ct_cp": "90422.00",
+    "total_ct_cy": "14770.00",
+    "net_ct_cy": "14770.00",
+    "reported_cy": "24510.00",
+    "total_ct_ytd": "14770.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 0
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 110,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 41,
+    "name": "KAFA ENOUGH VIOLENCE AND EXPLOITATION",
+    "vendor_number": "2500206272",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "1669437.79",
+    "total_ct_cy": "214686.00",
+    "net_ct_cy": "965943.79",
+    "reported_cy": "1119498.79",
+    "total_ct_ytd": "526239.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 112,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 307,
+    "name": "KAYANY FOUNDATION",
+    "vendor_number": "2500237616",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "267265.00",
+    "total_ct_cy": "267265.00",
+    "net_ct_cy": "223930.00",
+    "reported_cy": "223930.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 2,
+          "total": 2,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 113,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 13,
+    "name": "LEBANESE ASSOCIATION FOR DEVELOPMENT AL MAJMOUA",
+    "vendor_number": "2500222180",
+    "short_name": "LLWB",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "1314765.00",
+    "total_ct_cy": "575145.00",
+    "net_ct_cy": "575145.00",
+    "reported_cy": "1237956.00",
+    "total_ct_ytd": "114200.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 114,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 176,
+    "name": "LEBANESE ASSOCIATION FOR EARLY CHILDHOOD DEVELOPMENT",
+    "vendor_number": "2500235214",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "476846.00",
+    "total_ct_cy": "308858.00",
+    "net_ct_cy": "308858.00",
+    "reported_cy": "137988.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 117,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 222,
+    "name": "LEBANESE LEAGUE FOR WOMEN IN BUSINESS",
+    "vendor_number": "2500236033",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "432134.00",
+    "total_ct_cy": "270436.00",
+    "net_ct_cy": "270436.00",
+    "reported_cy": "262371.00",
+    "total_ct_ytd": "132236.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 118,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 187,
+    "name": "MAKHZOUMI FOUNDATION",
+    "vendor_number": "2500235284",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "167924.00",
+    "total_ct_cy": "123932.00",
+    "net_ct_cy": "123932.00",
+    "reported_cy": "116488.00",
+    "total_ct_ytd": "26781.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 2,
+          "total": 2,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 126,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 82,
+    "name": "MASAR",
+    "vendor_number": "2500215905",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Medium",
+    "shared_with": null,
+    "total_ct_cp": "593962.00",
+    "total_ct_cy": "151493.00",
+    "net_ct_cy": "151493.00",
+    "reported_cy": "174605.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 6,
+          "total": 6,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 128,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 198,
+    "name": "MEDAIR",
+    "vendor_number": "2500235647",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "48545.00",
+    "total_ct_cy": "48545.00",
+    "net_ct_cy": "48545.00",
+    "reported_cy": "36337.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 0
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 130,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 63,
+    "name": "MEDICAL AID FOR PALESTINIANS",
+    "vendor_number": "2500228120",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "1488466.40",
+    "total_ct_cy": "644907.00",
+    "net_ct_cy": "747500.83",
+    "reported_cy": "892715.36",
+    "total_ct_ytd": "288201.83",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 6,
+          "total": 6,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 131,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 305,
+    "name": "MENTOR ARABIA",
+    "vendor_number": "2500237583",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "176672.00",
+    "total_ct_cy": "172181.00",
+    "net_ct_cy": "176672.00",
+    "reported_cy": "68646.00",
+    "total_ct_ytd": "4491.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 7,
+          "total": 7,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 132,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 43,
+    "name": "MERCY CORPS INTERNATIONAL",
+    "vendor_number": "2500222948",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "4190923.64",
+    "total_ct_cy": "2005472.87",
+    "net_ct_cy": "2917334.48",
+    "reported_cy": "2442465.97",
+    "total_ct_ytd": "1057605.05",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 2,
+          "total": 2,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 133,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 123,
+    "name": "MINISTRY OF EDUCATION AND HIGHER EDUCATION",
+    "vendor_number": "2500217807",
+    "short_name": "MEHE",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Government",
+    "partner_type_slug": "Gov",
+    "cso_type": null,
+    "rating": "Significant",
+    "shared_with": null,
+    "total_ct_cp": "170839855.00",
+    "total_ct_cy": "104712729.00",
+    "net_ct_cy": "104806929.00",
+    "reported_cy": "12495832.83",
+    "total_ct_ytd": "95214490.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 9,
+          "total": 9,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 4,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 135,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 122,
+    "name": "MINISTRY OF SOCIAL AFFAIRS",
+    "vendor_number": "2500225251",
+    "short_name": "MoSA",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Government",
+    "partner_type_slug": "Gov",
+    "cso_type": null,
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "2305485.00",
+    "total_ct_cy": "2305485.00",
+    "net_ct_cy": "2295085.00",
+    "reported_cy": "869526.00",
+    "total_ct_ytd": "1202082.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 140,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 23,
+    "name": "MOUVEMENT SOCIAL",
+    "vendor_number": "2500206242",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "4930654.68",
+    "total_ct_cy": "2522046.68",
+    "net_ct_cy": "2522046.68",
+    "reported_cy": "2286962.24",
+    "total_ct_ytd": "1054642.68",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 6,
+          "total": 6,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 141,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 313,
+    "name": "NATIONAL REHABILITATION AND DEVELOPMENT",
+    "vendor_number": "2500237959",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Medium",
+    "shared_with": null,
+    "total_ct_cp": "56175.00",
+    "total_ct_cy": "56175.00",
+    "net_ct_cy": "56175.00",
+    "reported_cy": "0.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 9,
+          "total": 9,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 0
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 149,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 269,
+    "name": "RAHMA MEDICAL CENTER",
+    "vendor_number": "2500236872",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Medium",
+    "shared_with": null,
+    "total_ct_cp": "225539.00",
+    "total_ct_cy": "75180.00",
+    "net_ct_cy": "150360.00",
+    "reported_cy": "225539.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 166,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 267,
+    "name": "REDR AUSTRALIA",
+    "vendor_number": "2500236476",
+    "short_name": "",
+    "type_of_assessment": "High Risk Assumed",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "High",
+    "shared_with": null,
+    "total_ct_cp": "96943.00",
+    "total_ct_cy": "0.00",
+    "net_ct_cy": "23896.00",
+    "reported_cy": "90418.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 169,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 310,
+    "name": "RELIEF AND HUMANITARIAN AID ORGANIZATION",
+    "vendor_number": "2500237657",
+    "short_name": "",
+    "type_of_assessment": "Simplified Checklist",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "8250.00",
+    "total_ct_cy": "8250.00",
+    "net_ct_cy": "8250.00",
+    "reported_cy": "0.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 0
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 170,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 263,
+    "name": "RENE MOAWAD FOUNDATION",
+    "vendor_number": "2500236489",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "972253.00",
+    "total_ct_cy": "458112.00",
+    "net_ct_cy": "383179.00",
+    "reported_cy": "377138.00",
+    "total_ct_ytd": "195182.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 173,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 308,
+    "name": "SAFADI FOUNDATION",
+    "vendor_number": "2500237556",
+    "short_name": "",
+    "type_of_assessment": "High Risk Assumed",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "High",
+    "shared_with": null,
+    "total_ct_cp": "185526.00",
+    "total_ct_cy": "185526.00",
+    "net_ct_cy": "185526.00",
+    "reported_cy": "65110.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 3,
+          "total": 3,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 3,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 174,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 17,
+    "name": "SAVE THE CHILDREN INTERNATIONAL",
+    "vendor_number": "2500206264",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "2044163.00",
+    "total_ct_cy": "160384.00",
+    "net_ct_cy": "1401516.00",
+    "reported_cy": "1790764.00",
+    "total_ct_ytd": "940770.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 2,
+          "total": 2,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 175,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 306,
+    "name": "SIDON ORPHAN WELFARE SOCIETY",
+    "vendor_number": "2500237596",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Medium",
+    "shared_with": null,
+    "total_ct_cp": "112119.00",
+    "total_ct_cy": "112119.00",
+    "net_ct_cy": "112119.00",
+    "reported_cy": "75213.00",
+    "total_ct_ytd": "37374.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 7,
+          "total": 7,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 177,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 92,
+    "name": "SOINS INFIMIERS ET DEVELOPPMENT COMMUNAUTAIRE",
+    "vendor_number": "2500234290",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "73740.00",
+    "total_ct_cy": "73740.00",
+    "net_ct_cy": "73740.00",
+    "reported_cy": "33233.00",
+    "total_ct_ytd": "23795.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 3,
+          "total": 3,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 0
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 178,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 166,
+    "name": "SOLIDARITES INTERNATIONAL",
+    "vendor_number": "2500233858",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "10271859.00",
+    "total_ct_cy": "1679387.00",
+    "net_ct_cy": "2018381.00",
+    "reported_cy": "7254353.00",
+    "total_ct_ytd": "1232473.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 180,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 32,
+    "name": "TERRE DES HOMES LAUSANNE FOUNDATION",
+    "vendor_number": "2500206261",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "1685188.55",
+    "total_ct_cy": "103640.92",
+    "net_ct_cy": "705705.12",
+    "reported_cy": "789104.72",
+    "total_ct_ytd": "406661.79",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": true
+    },
+    "planned_engagement": {
+      "id": 186,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 53,
+    "name": "TERRE DES HOMMES ITALIA",
+    "vendor_number": "2500229542",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "4388021.03",
+    "total_ct_cy": "974535.66",
+    "net_ct_cy": "1978029.03",
+    "reported_cy": "2594753.78",
+    "total_ct_ytd": "781577.90",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 4,
+          "total": 4,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 188,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 181,
+    "name": "THE INTERNATIONAL NETWORK FOR AID RELIEF AND ASSISTANCE INC",
+    "vendor_number": "2500235261",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Medium",
+    "shared_with": null,
+    "total_ct_cp": "529284.00",
+    "total_ct_cy": "165125.00",
+    "net_ct_cy": "165125.00",
+    "reported_cy": "70868.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 193,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 264,
+    "name": "THE LEBANESE COUNCIL TO RESIST VIOLENCE AGAINST WOMEN",
+    "vendor_number": "2500236592",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Medium",
+    "shared_with": null,
+    "total_ct_cp": "524160.00",
+    "total_ct_cy": "199377.00",
+    "net_ct_cy": "198479.00",
+    "reported_cy": "315528.00",
+    "total_ct_ytd": "55193.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 194,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 56,
+    "name": "THE LEBANESE ORGANIZATION OF STUDIES AND TRAINING",
+    "vendor_number": "2500228933",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "9763860.00",
+    "total_ct_cy": "4027399.36",
+    "net_ct_cy": "4067179.36",
+    "reported_cy": "4657345.36",
+    "total_ct_ytd": "2113416.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 2,
+          "total": 2,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 195,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 270,
+    "name": "THE LEBANESE WOMEN DEMOCRATIC GATHERING",
+    "vendor_number": "2500236945",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "338119.50",
+    "total_ct_cy": "142613.00",
+    "net_ct_cy": "276691.50",
+    "reported_cy": "338119.50",
+    "total_ct_ytd": "51436.50",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 196,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 149,
+    "name": "THE NAWAYA NETWORK",
+    "vendor_number": "2500234582",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Medium",
+    "shared_with": null,
+    "total_ct_cp": "2343835.00",
+    "total_ct_cy": "522018.00",
+    "net_ct_cy": "522018.00",
+    "reported_cy": "1380258.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 3,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 199,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 62,
+    "name": "THE YOUNG MENS CHRISTIAN ASSOCIATION OF LEBANON",
+    "vendor_number": "2500222321",
+    "short_name": "",
+    "type_of_assessment": "Simplified Checklist",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "3600.00",
+    "total_ct_cy": "0.00",
+    "net_ct_cy": "3600.00",
+    "reported_cy": "3600.00",
+    "total_ct_ytd": "3600.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 0
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 200,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 1,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 59,
+    "name": "UNIVERSITE SAINT JOSEPH",
+    "vendor_number": "2500206256",
+    "short_name": "USJ",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "Academic Institution",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "344926.21",
+    "total_ct_cy": "185110.00",
+    "net_ct_cy": "240902.21",
+    "reported_cy": "327512.21",
+    "total_ct_ytd": "54670.40",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 205,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 61,
+    "name": "UNIVERSITY OF BALAMAND",
+    "vendor_number": "2500224425",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "Academic Institution",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "276100.00",
+    "total_ct_cy": "177700.00",
+    "net_ct_cy": "177700.00",
+    "reported_cy": "185300.00",
+    "total_ct_ytd": "90800.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 1,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 207,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 60,
+    "name": "WAR CHILD HOLLAND LEBANON STICHTING WAR CHILD",
+    "vendor_number": "2500229312",
+    "short_name": "WCH",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "2171312.00",
+    "total_ct_cy": "140279.00",
+    "net_ct_cy": "632028.00",
+    "reported_cy": "997727.00",
+    "total_ct_ytd": "96725.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 210,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 191,
+    "name": "WELFARE ASSOCIATION",
+    "vendor_number": "2500235510",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "1958837.60",
+    "total_ct_cy": "673038.88",
+    "net_ct_cy": "673038.88",
+    "reported_cy": "993210.04",
+    "total_ct_ytd": "211283.50",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 6,
+          "total": 6,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 211,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 311,
+    "name": "WOMEN S REFUGEE COMMISSION INC",
+    "vendor_number": "2500233932",
+    "short_name": "",
+    "type_of_assessment": "High Risk Assumed",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "High",
+    "shared_with": null,
+    "total_ct_cp": "343380.00",
+    "total_ct_cy": "303818.00",
+    "net_ct_cy": "343380.00",
+    "reported_cy": "130572.00",
+    "total_ct_ytd": "0.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 3,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 216,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 70,
+    "name": "WORLD VISION INTERNATIONAL LEBANON",
+    "vendor_number": "2500226192",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "International",
+    "rating": "Low",
+    "shared_with": null,
+    "total_ct_cp": "5489864.00",
+    "total_ct_cy": "1823057.00",
+    "net_ct_cy": "2650893.00",
+    "reported_cy": "3264515.00",
+    "total_ct_ytd": "935803.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 217,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  },
+  {
+    "id": 266,
+    "name": "YOUTH NETWORK FOR CIVIC ACTIVISM",
+    "vendor_number": "2500236676",
+    "short_name": "",
+    "type_of_assessment": "Micro Assessment",
+    "partner_type": "Civil Society Organization",
+    "partner_type_slug": "CSO",
+    "cso_type": "National",
+    "rating": "Medium",
+    "shared_with": null,
+    "total_ct_cp": "224606.00",
+    "total_ct_cy": "147897.00",
+    "net_ct_cy": "147897.00",
+    "reported_cy": "163555.00",
+    "total_ct_ytd": "61051.00",
+    "hact_values": {
+      "outstanding_findings": 0,
+      "audits": {
+        "completed": 0,
+        "minimum_requirements": 0
+      },
+      "programmatic_visits": {
+        "completed": {
+          "q1": 1,
+          "total": 1,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        }
+      },
+      "spot_checks": {
+        "completed": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "planned": {
+          "q1": 0,
+          "total": 0,
+          "q3": 0,
+          "q2": 0,
+          "q4": 0
+        },
+        "follow_up_required": 0
+      }
+    },
+    "hact_min_requirements": {
+      "programme_visits": 2,
+      "spot_checks": 1
+    },
+    "flags": {
+      "approaching_threshold_flag": false,
+      "expiring_assessment_flag": false
+    },
+    "planned_engagement": {
+      "id": 219,
+      "spot_check_mr": {
+        "q1": 0,
+        "q3": 0,
+        "q2": 0,
+        "q4": 0
+      },
+      "spot_check_follow_up_q1": 0,
+      "spot_check_follow_up_q2": 0,
+      "spot_check_follow_up_q3": 0,
+      "spot_check_follow_up_q4": 0,
+      "scheduled_audit": false,
+      "special_audit": false,
+      "total_spot_check_follow_up_required": 0,
+      "spot_check_required": 0,
+      "required_audit": 0
+    }
+  }
+]
+        let self = this;
+        // this.db.partners.toArray().then(res=> {
+          debugger
+          res = JSON.parse(res)
+          self._setTotals(self._computeTotals(res));
+          self._setTotalResults(res.length);
+        // });
+        this.db.transaction('r', this.db.partners, ()=> {
+          let queryResult = self.db.partners.orderBy('name');
+          if (order === 'desc') {
+            queryResult = queryResult.reverse();
+          }
+          if (!_.isEmpty(searchString)) {
+            queryResult = queryResult.filter(function(partner) {
+              return _.includes(partner.name.toLowerCase(), searchString.toLowerCase()) || _.includes(partner.vendor_number, searchString);
+            });
+          }
+          return Dexie.Promise.all([
+            queryResult.count(),
+            // Use clone() as offset() and limit() otherwise mutates the same query that is counted
+            queryResult.clone()
+                .offset((pageNumber - 1) * pageSize)
+                .limit(pageSize)
+                .toArray()]);
+        }).then(function(countAndResult) {
+          self.fire('global-loading');
+          self._setFilteredTotalResults(countAndResult[0]);
+          self._setFilteredPartners(countAndResult[1]);
+        }).catch(function(error) {
+          console.error('Error querying partners: ', error);
+        });
+      }
+
+      _computeTotals(results) {
+        let _flattenObject = (ob) => {
+          let toReturn = {};
+          for (let i in ob) {
+            if (!ob.hasOwnProperty(i)) continue;
+            if ((typeof ob[i]) == 'object') {
+              let flatObject = _flattenObject(ob[i]);
+              for (let x in flatObject) {
+                if (!flatObject.hasOwnProperty(x)) continue;
+                toReturn[i + '_' + x] = flatObject[x];
+              }
+            } else {
+              toReturn[i] = ob[i];
+            }
+          }
+          return toReturn;
+        }
+        this.resultsTotals = true;
+        return _(results).reduce((sum, obj)=> {
+          let picked = _(obj).pick([
+            'shared_with',
+            'total_ct_ytd',
+            'hact_values',
+            'total_ct_cy',
+            'hact_min_requirements',
+            'outstanding_findings',
+            'reported_cy',
+            'planned_engagement'
+          ]).value();
+          picked = _flattenObject(picked)
+          picked['shared_with'] = obj['shared_with']
+          _(picked).each((val, key)=> {
+            let currValue = sum[key] ? sum[key] : 0;
+            if (key === 'shared_with') {
+              sum[key] = currValue + (val === null ? 0 : 1);
+            } else {
+              sum[key] = currValue + Number(val);
+            }
+          });
+          return sum;
+        }, {});
+      }
+    }
+
+    window.customElements.define(PartnersData.is, PartnersData);
+  </script>
+</dom-module>
