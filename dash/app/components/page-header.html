@@ -209,11 +209,6 @@
         this.fireEvent('drawer');
       }
 
-      _refreshPage(e) {
-        e.stopImmediatePropagation();
-        this.refresh();
-      }
-
       _getFlagIconClass(id) {
         let flagIdMap = {
           '0': 'us',
