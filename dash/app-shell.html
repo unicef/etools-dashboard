@@ -20,6 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/etools-dropdown/etools-dropdown.html">
 
 <link rel="import" href="app/styles/buttons-styles.html">
 <link rel="import" href="app/styles/page-layout-styles.html">
@@ -31,6 +32,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="app/mixins/user-data-mixin.html">
 <link rel="import" href="app/config/dexie-db-config.html">
+
+<link rel="import" href="app/scripts/ramda.html">
 <!-- lazy imports -->
 <link rel="lazy-import" href="app/views/hact/view-hact.html">
 <link rel="lazy-import" href="app/views/personalized/view-personalized.html">
@@ -96,9 +99,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </h1>
               <div class="top-content-actions-wrapper">
                 <div class="top-content-action">
-                  <!-- <etools-dropdown id="exportYear" label="Export Year" options="[[availableYears]]" on-iron-select="_setExportYear" dropdown-value="/api/v2/partners/hact?&format=csv"
-                    hide-search hidden$="[[!_isActive(partnershipPage, 'hact')]]">
-                  </etools-dropdown> -->
+                  <etools-dropdown id="exportYear" label="Export Year" options="[[availableYears]]" on-iron-select="_setExportYear" dropdown-value="/api/v2/partners/hact?&format=csv"
+                    hide-search hidden$="[[!_isActive(page, 'hact')]]">
+                  </etools-dropdown>
                 </div>
                 <div class="top-content-action" hidden$="[[hideExport]]">
                   <a target="_blank" href="[[csvUrl]]">
@@ -108,7 +111,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </paper-button>
                   </a>
                 </div>
-                <div class="top-content-action" hidden$="[[!_isActive(partnershipPage,'trips')]]">
+                <div class="top-content-action" hidden$="[[!_isActive(page,'trips')]]">
                   <paper-button class="primary-btn with-prefix" on-tap="_goToAddTrip">
                     <iron-icon icon="add"></iron-icon>
                     Add New Trip
@@ -169,7 +172,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </template>
 
   <script>
-    const { UserData} = EtoolsDashboard.Mixins;
+    const { UserData } = EtoolsDashboard.Mixins;
+    const { equals } = R;
     /**
    * @customElement
    * @polymer
@@ -192,6 +196,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,
+          
+          hideExport: Boolean
         };
       }
 
@@ -222,7 +228,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _isActive(page, tab) {
-        return _.isEqual(page, tab);
+        return equals(page, tab);
+      }
+
+      _updateUrlTab(tab) {
+        if (!tab) { return }
+        this.set('hideExport', !(tab === 'hact' || tab === 'partnerships'))
       }
     }
 
