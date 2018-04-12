@@ -1,5 +1,5 @@
 <link rel="import"
-      href="../mixins/data-element-mixin.html">
+      href="data-element-mixin.html">
 <link rel="import"
       href="../scripts/ramda.html">
 
@@ -18,13 +18,6 @@
    */
   EtoolsDashboard.Mixins.UserData = baseClass =>
     class extends DataElement(baseClass) {
-      /**
-       * String providing the tag name to register the element under.
-       */
-      static get is() {
-        return 'user-data';
-      }
-
       /**
        * Object describing property-related metadata used by Polymer features
        */

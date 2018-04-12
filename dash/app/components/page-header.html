@@ -9,6 +9,7 @@
 
 <link rel="import" href="../mixins/event-helper-mixin.html">
 <link rel="import" href="../mixins/redux-store-mixin.html">
+<link rel="import" href="../mixins/user-profile-data-mixin.html">
 <link rel="import" href="../../../bower_components/etools-behaviors/etools-page-refresh-mixin.html">
 
 
@@ -99,9 +100,7 @@
       }
     </style>
     
-    <user-profile-data id="userProfileData"
-                       user-profile="{{profile}}"></user-profile-data>
-    
+   
     <app-toolbar sticky
                  class="content-align">
       <paper-icon-button id="menuButton"
@@ -136,7 +135,10 @@
 
   <script>
 
-    const RequiredMixins = curry(compose(EtoolsPageRefreshMixin, ReduxStore));
+    const RequiredMixins = compose(
+      EtoolsPageRefreshMixin,
+      EtoolsDashboard.Mixins.UserProfileData,
+      EtoolsDashboard.Mixins.ReduxStore);
     /**
      * `page-header` Description
      *
@@ -175,7 +177,7 @@
           },
           allSections: {
             type: Array,
-            statePath: 'sections'
+            statePath: 'sectors'
           },
           allUsers: {
             type: Array,
@@ -246,7 +248,7 @@
 
       _saveProfile(e) {
         this.set('profile', e.detail.profile);
-        this.$.userProfileData.saveProfile(this.profile);
+        this.saveProfile(this.profile);
       }
       _signOut() {
         this._clearDexieDbs();

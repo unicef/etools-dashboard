@@ -121,12 +121,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     body {
       margin: 0;
       font-family: 'Roboto', 'Noto', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
       line-height: 1.5;
       min-height: 100vh;
+      /* we can not use app-theme color variables here, IE11 can not apply them */
       background-color: #eeeeee;
+      color: rgba(0, 0, 0, 0.87);
+    }
+  
+    * {
+      outline: none;
     }
   </style>
-</head>
+  </head>
 
 <body>
   <app-shell></app-shell>

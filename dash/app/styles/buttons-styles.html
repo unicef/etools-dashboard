@@ -7,14 +7,13 @@
     <style>
       :host > * {
         --primary-button-default: {
-          color: #fff; /* TODO: replace with app-theme var */
-          /*font-size: 14px;*/
+          color: var(--light-primary-text-color, #fff);
           font-weight: bold;
           padding: 5px 10px;
         };
 
-        --primary-button-with-prefix: {
-          padding-right: 15px;
+         --primary-button-with-prefix: {
+          padding: 5px 10px 5px 16px;
         };
       }
 
@@ -43,7 +42,7 @@
       }
 
       .primary-btn {
-        background-color: #3A94FF; /* TODO: replace with app-theme var */
+        background-color: var(--primary-color, #0099ff);
         --paper-button: {
           @apply --primary-button-default;
         };
