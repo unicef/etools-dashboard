@@ -19,168 +19,170 @@
 
 <dom-module id="hact-detail">
   <template>
-    <style include="shared-styles list-styles grid-layout-styles hact-tables-styles iron-flex iron-flex-factors iron-flex-alignment paper-material-styles">
-      :host {
-        --paper-material-padding: 0 24px 0 24px;
-      }
-      
-      .hact-list {
-        min-width: 1150px;
-        overflow: scroll;
-        padding: 0;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 5px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        -ms-overflow-style: none;
-      }
-
-      .detail-list {
-        min-width: 1800px;
-        width: 100%;
-        overflow-x: scroll;
-        overflow-y: visible;
-        -ms-overflow-style: none;
-      }
-
-      .no-overflow {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: normal;
-      }
-
-      .group {
-        padding-right: 16px;
-        box-sizing: border-box;
-      }
-
-      .center {
-        justify-content: center;
-      }
-
-      .quarter-heading {
-        display: flex;
-        align-items: flex-end !important;
-      }
-
-      .quarter-heading-item {
-        border-left: 1px solid rgba(0, 0, 0, 0.24);
-        box-sizing: border-box;
-      }
-
-      .quarter-item {
-        border-left: 1px solid rgba(0, 0, 0, 0.24);
-        box-sizing: border-box;
-        height: 48px;
-      }
-
-      .right-side {
-        text-align: center;
-        border-left: 1px solid rgba(0, 0, 0, 0.24);
-        box-sizing: border-box;
-        min-height: 48px;
-      }
-
-      .left-align {
-        justify-content: flex-start !important;
-      }
-
-      .border-box {
-        box-sizing: border-box;
-      }
-
-      data-table-row.totals > div > div,
-      data-table-row.totals div div {
-        font-weight: 500;
-      }
-
-      data-table-row.totals div div div span {
-        display: flex;
-        align-items: center;
-      }
-
-      data-table-row > div[slot="row-data"] > div > div > span,
-      data-table-row > div[slot="row-data"] > div > span > span,
-      data-table-header > div > data-table-column > data-table-column,
-      data-table-row div[slot="row-data"] div div span,
-      data-table-row div[slot="row-data"] div:not(:first-child) div,
-      data-table-row div[slot="row-data"] div span span:not(:first-child),
-      data-table-row div[slot="row-data"] div div span:not(:first-child) {
-        display: flex;
-        justify-content: center;
-        min-height: 48px;
-        align-items: center;
-        height: 48px;
-      }
-
-      data-table-row > div[slot="row-data"] > div > div > span > span:not(:first-child),
-      data-table-row > div[slot="row-data"] > div > div > div > span > span:not(:first-child),
-      data-table-row > div[slot="row-data"] > div > span > span:not(:first-child),
-      data-table-row div[slot="row-data"] div span span:not(:first-child),
-      data-table-row div[slot="row-data"] div div span:not(:first-child) {
-        border-left: 1px solid rgb(227, 227, 227);
-        box-sizing: border-box;
-      }
-
-      .col-75-px {
-        flex: 0 0 75px;
-        min-width: 75px;
-      }
-
-      .col-555-px {
-        flex: 0 0 555px;
-        min-width: 555px;
-      }
-
-      .col-10-px {
-        flex: 0 0 10px;
-        min-width: 10px;
-      }
-
-      .col-40-px {
-        flex: 0 0 40px;
-        min-width: 40px;
-      }
-
-      .col-100-px {
-        flex: 0 0 100px;
-        min-width: 100px;
-      }
-
-      .col-215-px {
-        flex: 0 0 215px;
-        min-width: 215px;
-      }
-
-      .col-160-px {
-        flex: 0 0 160px;
-        min-width: 160px;
-      }
-
-      .col-460-px {
-        flex: 0 0 460px;
-        min-width: 460px;
-      }
-
-      .col-225-px {
-        flex: 0 0 225px;
-        min-width: 225px;
-      }
-
-      @supports (-ms-ime-align:auto) {
+    <custom-style>
+      <style include="shared-styles list-styles grid-layout-styles hact-tables-styles iron-flex iron-flex-factors iron-flex-alignment paper-material-styles">
         :host {
-          --paper-material-padding: 12px 24px 0 24px;
+          --paper-material-padding: 0 24px 0 24px;
         }
+        
+        .hact-list {
+          min-width: 1150px;
+          overflow: scroll;
+          padding: 0;
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 5px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+          -ms-overflow-style: none;
+        }
+
+        .detail-list {
+          min-width: 1800px;
+          width: 100%;
+          overflow-x: scroll;
+          overflow-y: visible;
+          -ms-overflow-style: none;
+        }
+
+        .no-overflow {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: normal;
+        }
+
+        .group {
+          padding-right: 16px;
+          box-sizing: border-box;
+        }
+
+        .center {
+          justify-content: center;
+        }
+
         .quarter-heading {
-          align-items: inherit !important;
+          display: flex;
+          align-items: flex-end !important;
         }
-      }
-      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-        :host {
-          --paper-material-padding: 12px 24px 0 24px;
+
+        .quarter-heading-item {
+          border-left: 1px solid rgba(0, 0, 0, 0.24);
+          box-sizing: border-box;
         }
-        .quarter-heading {
-          align-items: inherit !important;
+
+        .quarter-item {
+          border-left: 1px solid rgba(0, 0, 0, 0.24);
+          box-sizing: border-box;
+          height: 48px;
         }
-      }
-    </style>
+
+        .right-side {
+          text-align: center;
+          border-left: 1px solid rgba(0, 0, 0, 0.24);
+          box-sizing: border-box;
+          min-height: 48px;
+        }
+
+        .left-align {
+          justify-content: flex-start !important;
+        }
+
+        .border-box {
+          box-sizing: border-box;
+        }
+
+        data-table-row.totals > div > div,
+        data-table-row.totals div div {
+          font-weight: 500;
+        }
+
+        data-table-row.totals div div div span {
+          display: flex;
+          align-items: center;
+        }
+
+        data-table-row > div[slot="row-data"] > div > div > span,
+        data-table-row > div[slot="row-data"] > div > span > span,
+        data-table-header > div > data-table-column > data-table-column,
+        data-table-row div[slot="row-data"] div div span,
+        data-table-row div[slot="row-data"] div:not(:first-child) div,
+        data-table-row div[slot="row-data"] div span span:not(:first-child),
+        data-table-row div[slot="row-data"] div div span:not(:first-child) {
+          display: flex;
+          justify-content: center;
+          min-height: 48px;
+          align-items: center;
+          height: 48px;
+        }
+
+        data-table-row > div[slot="row-data"] > div > div > span > span:not(:first-child),
+        data-table-row > div[slot="row-data"] > div > div > div > span > span:not(:first-child),
+        data-table-row > div[slot="row-data"] > div > span > span:not(:first-child),
+        data-table-row div[slot="row-data"] div span span:not(:first-child),
+        data-table-row div[slot="row-data"] div div span:not(:first-child) {
+          border-left: 1px solid rgb(227, 227, 227);
+          box-sizing: border-box;
+        }
+
+        .col-75-px {
+          flex: 0 0 75px;
+          min-width: 75px;
+        }
+
+        .col-555-px {
+          flex: 0 0 555px;
+          min-width: 555px;
+        }
+
+        .col-10-px {
+          flex: 0 0 10px;
+          min-width: 10px;
+        }
+
+        .col-40-px {
+          flex: 0 0 40px;
+          min-width: 40px;
+        }
+
+        .col-100-px {
+          flex: 0 0 100px;
+          min-width: 100px;
+        }
+
+        .col-215-px {
+          flex: 0 0 215px;
+          min-width: 215px;
+        }
+
+        .col-160-px {
+          flex: 0 0 160px;
+          min-width: 160px;
+        }
+
+        .col-460-px {
+          flex: 0 0 460px;
+          min-width: 460px;
+        }
+
+        .col-225-px {
+          flex: 0 0 225px;
+          min-width: 225px;
+        }
+
+        @supports (-ms-ime-align:auto) {
+          :host {
+            --paper-material-padding: 12px 24px 0 24px;
+          }
+          .quarter-heading {
+            align-items: inherit !important;
+          }
+        }
+        @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+          :host {
+            --paper-material-padding: 12px 24px 0 24px;
+          }
+          .quarter-heading {
+            align-items: inherit !important;
+          }
+        }
+      </style>
+    </custom-style>
 
     <div class="paper-material hact-list" id="detail-list" elevation="1">
       <div id="detail-table" class="detail-list">

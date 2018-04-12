@@ -95,7 +95,7 @@
         </span>
     </div>
 
-    <div id="icon-wrapper">
+    <div id="iconWrapper" class="icon-wrapper">
       <iron-icon id="up" icon="arrow-upward"></iron-icon>
       <iron-icon id="down" icon="arrow-downward"></iron-icon>
     </div>
@@ -146,6 +146,10 @@
             observer: '_makeTransparent'
           }
         }
+      }
+
+      constructor() {
+        super();
       }
 
       ready() {
