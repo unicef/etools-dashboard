@@ -22,11 +22,11 @@
     <custom-style>
       <style include="shared-styles list-styles grid-layout-styles hact-tables-styles iron-flex iron-flex-factors iron-flex-alignment paper-material-styles">
         :host {
-          --paper-material-padding: 0 24px 0 24px;
+          /* --paper-material-padding: 0 24px 0 24px; */
         }
         
         .hact-list {
-          min-width: 1150px;
+          width: calc(100vw - 48px);
           overflow: scroll;
           padding: 0;
           box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 5px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
@@ -95,6 +95,10 @@
         data-table-row.totals div div div span {
           display: flex;
           align-items: center;
+        }
+
+        data-table-header {
+          height: 95px;
         }
 
         data-table-row > div[slot="row-data"] > div > div > span,

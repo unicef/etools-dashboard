@@ -27,7 +27,7 @@
         }
 
         .hact-list {
-          min-width: 1150px;
+          width: calc(100vw - 48px);
           box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 5px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);  
         }
 
@@ -276,7 +276,7 @@
         </div>
       </data-table-row>
 
-      <!-- <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
+      <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
         <data-table-row no-collapse>
           <div slot="row-data">
             <div class="col-3 layout horizontal">
@@ -330,61 +330,7 @@
             </div>
           </div>
         </data-table-row>
-      </template> -->
-          <data-table-row no-collapse>
-            <div slot="row-data">
-              <div class="col-3 layout horizontal">
-                <span class="col-12 col-data name padding-right-10">
-                  <a on-tap="_goToPage" id="[[partner.id]]">
-                    THIS
-                    <paper-tooltip>TIPP</paper-tooltip>
-                  </a>
-                </span>
-              </div>
-              <div class="col-4 layout horizontal">
-                <span class="col-6 layout horizontal">
-                  <span class="col-3 col-data">THING
-                    <paper-tooltip>THAT</paper-tooltip>
-                  </span>
-                  <span class="col-3 col-data">SHARED</span>
-                  <span class="col-6 col-data right padding-right-10">$MONEY</span>
-                </span>
-                <span class="col-6 layout horizontal">
-                  <span class="col-5 col-data padded name">ETC</span>
-                  <span class="col-4 ellipsis col-data">YES</span>
-                  <span class="col-2 col-data padding-right-10">
-                    <div>
-                      <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
-                      <paper-tooltip hidden="[[!partner.flags.expiring_assessment_flag]]">Assessment is expiring this year</paper-tooltip>
-                    </div>
-                    <div>
-                      <iron-icon id="threshold" class="hact-icon" icon="icons:report-problem" hidden="[[!partner.flags.approaching_threshold_flag]]"></iron-icon>
-                      <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment will be required if more than $100,000</paper-tooltip>
-                    </div>
-                  </span>
-                </span>
-              </div>
-              <div class="col-5 layout horizontal">
-                <div class="col-4 layout horizontal group">
-                  <span class="col-4 col-data right-side">STIFF</span>
-                  <span class="col-3 col-data right-side">ALLTHEM</span>
-                  <span class="col-5 col-data right-side">ALLTHEM</span>
-                </div>
-                <div class="col-3 layout horizontal group">
-                  <span class="col-half right-side buffer"></span>
-                  <span class="col-5 col-data right-side">ALLTHEM</span>
-                  <span class="col-6 col-data right-side">ALLTHEM</span>
-                  <span class="col-half right-side buffer"></span>
-                </div>
-                <div class="col-5 layout horizontal group">
-                  <span class="col-4 col-data right-side">ALLTHEM</span>
-                  <span class="col-4 col-data right-side">ALLTHEM</span>
-                  <span class="col-4 monetary right-side">$ALLTHEM</span>
-                </div>
-              </div>
-            </div>
-          </data-table-row>
-
+      </template>
     </div>
   </template>
 
