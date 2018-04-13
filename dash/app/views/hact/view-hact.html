@@ -214,9 +214,6 @@
   <script>
     'use strict';
 
-    const { CommonGeneral, Pagination } = EtoolsDashboard.Mixins;
-    const VHMixin = compose(Endpoints, CommonGeneral, Pagination);
-    
     /**
      * @polymer
      * @mixinFunction
@@ -224,7 +221,11 @@
      * @appliesMixin EtoolsDashboard.Mixins.Pagination
      * @appliesMixin EtoolsDashboard.Mixins.Endpoints
      */
-    const ViewHactMixins = VHMixin(Polymer.Element);
+    const ViewHactMixins = compose(
+      EtoolsDashboard.Mixins.Endpoints,
+      EtoolsDashboard.Mixins.CommonGeneral,
+      EtoolsDashboard.Mixins.Pagination
+    )(Polymer.Element);
 
     /**
      * `hact` Description

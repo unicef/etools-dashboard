@@ -404,8 +404,6 @@
   <script>
     'use strict';
 
-    const { CommonGeneral, Dropdown, ListFilters, PaginationWithFilters } = EtoolsDashboard.Mixins;
-    const VPMixin = compose(CommonGeneral, Dropdown, ReduxStore, ListFilters, PaginationWithFilters);
     /**
      * @polymer
      * @mixinFunction
@@ -415,7 +413,14 @@
      * @appliesMixin EtoolsDashboard.Mixins.ListFilters
      * @appliesMixin EtoolsDashboard.Mixins.PaginationWithFilters
      */
-    const ViewPartnershipsMixin = VPMixin(Polymer.Element)
+    const ViewPartnershipsMixin = compose(
+      EtoolsDashboard.Mixins.CommonGeneral,
+      EtoolsDashboard.Mixins.Dropdown,
+      EtoolsDashboard.Mixins.ReduxStore,
+      EtoolsDashboard.Mixins.ListFilters,
+      EtoolsDashboard.Mixins.PaginationWithFilters
+      )(Polymer.Element);
+    
     /**
      * `view-partnerships` Description
      *
