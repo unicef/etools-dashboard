@@ -1,4 +1,5 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../bower_components/polymer/lib/utils/debounce.html">
 
 <link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../styles/list-styles.html">
@@ -38,10 +39,6 @@
 <dom-module id="view-partnerships">
   <template>
     <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors page-layout-styles paper-material-styles">
-      :host {
-        display: block
-      }
-
       .no-header-line {
         --header-bottom-line: none;
       }
@@ -54,6 +51,10 @@
       span.title {
         color: var(--accent-color);
         font-weight: 500;
+      }
+
+      .paper-material {
+        width: calc(100vw - 48px);
       }
 
       data-table-row span:not(:first-child),
@@ -404,7 +405,7 @@
     'use strict';
 
     const { CommonGeneral, Dropdown, ListFilters, PaginationWithFilters } = EtoolsDashboard.Mixins;
-    const VPMixin = curry(compose(CommonGeneral, Dropdown, ReduxStore, ListFilters, PaginationWithFilters));
+    const VPMixin = compose(CommonGeneral, Dropdown, ReduxStore, ListFilters, PaginationWithFilters);
     /**
      * @polymer
      * @mixinFunction
@@ -558,7 +559,7 @@
         return [
           '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate)',
           '_initListFilters(sectors, statuses, offices)',
-          '_init(active,sectors,statuses,offices)'
+          '_init(active, sectors, statuses, offices)'
         ]
       }
 
@@ -594,8 +595,9 @@
       }
 
       _initListFilters(sectors, statuses, offices) {
-        this.debounce('init-list-filters', function() {
-          this.initListFiltersData([
+        let self = this
+        Polymer.Debouncer.debounce(this._initListFilters, Polymer.Async.timeOut.after(100), function() {
+          self.initListFiltersData([
             {
               filterName: 'Section/Cluster',
               type: 'esmm',
@@ -619,7 +621,8 @@
               type: 'esmm',
               optionValue: 'value',
               optionLabel: 'label',
-              selectionOptions: this.statuses.slice(1),
+              // comment this back in when data hooked up
+              // selectionOptions: this.statuses.slice(1),
               alreadySelected: [],
               path: 'selectedStatuses'
             },
@@ -649,11 +652,13 @@
             }
 
           ]);
-        }.bind(this), 100);
+
+        })
       }
 
       _updateSelectedFiltersValues() {
-        this.debounce('updateShownFilters', () => {
+        let self = this
+        Polymer.Debouncer.debounce(this._updateSelectedFiltersValues, Polymer.Async.timeOut.after(200), function() {
           let filtersValues = [
             {
               filterName: 'Section/Cluster',
@@ -685,7 +690,7 @@
             }
           ];
           this.updateShownFilters(filtersValues);
-        }, 200);
+        })
       }
 
       _updateUrl() {
