@@ -1,22 +1,28 @@
-<link rel="import" href="ramda.html">
+<link rel="import"
+      href="ramda.html">
 
 <script>
-  const { 
-      equals,
-      propOr,
-      pick,
-      map,
-      compose,
-      range,
-      applySpec,
-      merge,
-      concat,
-      prop,
-      join,
-      head,
-      isEmpty,
-      over,
-      lensIndex,
-      sum,
-      toUpper } = R;
+  const {
+    equals,
+    propOr,
+    pick,
+    map,
+    compose,
+    range,
+    applySpec,
+    merge,
+    concat,
+    prop,
+    join,
+    head,
+    isEmpty,
+    over,
+    lensIndex,
+    sum,
+    toUpper } = R;
+    
+  function log(...args) {
+    console.log(...args);
+    return args[0];
+  }
 </script>

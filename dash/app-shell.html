@@ -161,12 +161,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     role="main">
           <view-personalized user="[[user]]"
                              class="page"
-                             name="personalized"></view-personalized>
-          <view-hact class="page" name="hact"></view-hact>
-          <view-partnerships class="page" name="partnerships"></view-partnerships>
-          <view-trips class="page" name="trips"></view-trips>
-          <view-map class="page" name="map"></view-map>
-          <view-attachments class="page" name="attachments"></view-attachments>
+                             name="personalized"
+                             route="{{route}}"></view-personalized>
+          <view-hact route="{{route}}"
+                     class="page"
+                     name="hact"></view-hact>
+          <view-partnerships route="{{route}}"
+                             class="page"
+                             name="partnerships"></view-partnerships>
+          <view-trips route="{{route}}"
+                      class="page"
+                      name="trips"></view-trips>
+          <view-map route="{{route}}"
+                    class="page"
+                    name="map"></view-map>
+          <view-attachments route="{{route}}"
+                            class="page"
+                            name="attachments"></view-attachments>
         </iron-pages>
         </app-header-layout>
         </app-drawer-layout>

@@ -1,5 +1,6 @@
 <!-- <link rel="import" href="../../../../bower_components/shadycss/apply-shim.html"> -->
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../bower_components/polymer/lib/utils/debounce.html">
 <link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../styles/list-styles.html">
 <link rel="import" href="../../styles/grid-layout-styles.html">
@@ -321,10 +322,6 @@
        */
       ready() {
         super.ready();
-
-        Polymer.RenderStatus.afterNextRender(this, function() {
-          
-        });
       }
 
       _tabChanged(hactTab) {
@@ -344,17 +341,21 @@
       }
 
         _filterPartnersData() {
-          this.debounce('query', function() {
-            this.$.partners.query(
-              this.queryString,
-              this.sortOrder,
-              this.pageSize,
-              this.pageNumber);
-          }, 50);
-        }
+          log('filterepartnersdata')
+        Polymer.Debouncer.debounce('query',
+          Polymer.Async.timeOut.after(50),
+          () => this.$.partners.query(
+            this.queryString,
+            this.sortOrder,
+            this.pageSize,
+            this.pageNumber)
+        );
+        
+      }
 
         _updateUrl() {
           if (!this.initComplete || !this.route) {
+            log('no init comple')
             return;
           }
           this.set('route.path', 'dashboard/hact/' + this.routeData.hactTab);
