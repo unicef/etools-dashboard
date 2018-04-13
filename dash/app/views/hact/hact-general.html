@@ -6,7 +6,7 @@
 <link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
 <link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../scripts/lodash.html">
+<link rel="import" href="../../scripts/ramda.html">
 
 <link rel="import" href="../../components/data-table/data-table-header.html">
 <link rel="import" href="../../components/data-table/data-table-column.html">
@@ -336,13 +336,12 @@
 
   <script>
     'use strict';
-    const { sum } = _
     
-    const HGMixins = curry(compose(
+    const HGMixins = compose(
       EtoolsDashboard.Mixins.CommonGeneral,
         EtoolsDashboard.Mixins.Pagination,
         EtoolsDashboard.Mixins.Endpoints
-    ))
+    );
     /**
      * @polymer
      * @mixinFunction

@@ -18,7 +18,8 @@
 <link rel="import" href="../../../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../scripts/lodash.html">
+
+<link rel="import" href="../../scripts/ramda.html">
 
 <link rel="import" href="hact-detail.html">
 <link rel="import" href="hact-charts.html">
@@ -212,10 +213,9 @@
 
   <script>
     'use strict';
-    const { get } = _
 
     const { CommonGeneral, Pagination } = EtoolsDashboard.Mixins;
-    const VHMixin = curry(compose(Endpoints, CommonGeneral, Pagination));
+    const VHMixin = compose(Endpoints, CommonGeneral, Pagination);
     
     /**
      * @polymer
@@ -386,7 +386,7 @@
           if (propStr === 'partner_type') {
             return this._getAbbr(get(obj, propStr));
           }
-          return get(obj, propStr);
+          return prop(propStr, obj);
         }
 
         _getAbbr(str) {
@@ -409,7 +409,7 @@
 
         _requiredDataHasBeenLoaded(e) {
           e.stopImmediatePropagation();
-          let filtered = get(this, 'filteredPartners', []);
+          let filtered = propOr([], 'filteredPartners', this );
           if (isEmpty(filtered)) {
             this.set('forceDataRefresh', true);
           }
