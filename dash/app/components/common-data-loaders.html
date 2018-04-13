@@ -20,20 +20,9 @@
   </template>
 
   <script>
-    const { 
-      propOr,
-      pick,
-      map,
-      range,
-      applySpec,
-      concat,
-      join,
-      over,
-      lensIndex,
-      toUpper } = R;
-    
+   
     const { ReduxStore, Actions } = EtoolsDashboard.Mixins;
-    const requiredMixin = curry(compose(Endpoints, ReduxStore, Actions, EtoolsAjaxRequestMixin));
+    const requiredMixin = compose(Endpoints, ReduxStore, Actions, EtoolsAjaxRequestMixin);
     const CommonDataMixin = requiredMixin(Polymer.Element);
     
     const capitalize = compose(

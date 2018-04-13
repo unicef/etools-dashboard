@@ -1,29 +1,26 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../config/config.html">
-<link rel="import" href="../../../../bower_components/etools-ajax/etools-ajax.html">
 <link rel="import" href="../../mixins/data-element-mixin.html">
+<link rel="import" href="../../mixins/event-helper-mixin.html">
+
+<link rel="import" href="../../config/dexie-db-config.html">
+
+<link rel="import" href="../../scripts/lodash.html">
 
 <dom-module id="partners-data">
-  <template>
-    <etools-ajax id="ajax"
-                 endpoint="[[endpoint]]"
-                 caching-storage="custom"
-                 dexie-db-collection="partners"
-                 on-success="_handleResponse">
-    </etools-ajax>
-  </template>
-
   <script>
     'use strict';
-    // const requiredMixin = curry(compose(EtoolsDashboard.Mixins.DataElement));
-    // const PartnersDataMixin = requiredMixin(Polymer.Element);
+    const PartnersDataMixin = compose(
+      EtoolsDashboard.Mixins.DataElement,
+      EtoolsDashboard.Mixins.EventHelper
+    );
     /**
     * @polymer
     * @customElement
     * @appliesMixin EtoolsDashboard.Mixins.DataElement
-    // * @extends {EtoolsDashboard.Mixins.DataElement}
+    * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+    // * @extends {EtoolsDashboard.Mixins.PartnersDataMixin}
     */
-    class PartnersData extends EtoolsDashboard.Mixins.DataElement(Polymer.Element) {
+    class PartnersData extends PartnersDataMixin(Polymer.Element) {
       static get is() { return 'partners-data'; }
 
       static get properties() {
@@ -77,26 +74,26 @@
 
       init(active) {
         if (active && !this.loadedInitially) {
-          this.dispatchEvent(new CustomEvent('global-loading', {message: 'Loading partners data...', active: true}));
+          this.fireEvent('global-loading', {message: 'Loading partners data...', active: true});
           this._elementReady();
           this.set('loadedInitially', true);
         }
       }
       
       query(searchString, order, pageSize, pageNumber) {
-        let self = this;
-        this.db.partners.toArray().then(res=> {
-          self._setTotals(self._computeTotals(res));
-          self._setTotalResults(res.length);
+        EtoolsDashboard.DexieDb.partners.toArray().then(res=> {
+          this._setTotals(this._computeTotals(res));
+          this._setTotalResults(res.length);
         });
-        this.db.transaction('r', this.db.partners, ()=> {
-          let queryResult = self.db.partners.orderBy('name');
+        EtoolsDashboard.DexieDb.transaction('r', this.db.partners, ()=> {
+          let queryResult = EtoolsDashboard.DexieDb.partners.orderBy('name');
           if (order === 'desc') {
             queryResult = queryResult.reverse();
           }
-          if (!_.isEmpty(searchString)) {
-            queryResult = queryResult.filter(function(partner) {
-              return _.includes(partner.name.toLowerCase(), searchString.toLowerCase()) || _.includes(partner.vendor_number, searchString);
+          if (!isEmpty(searchString)) {
+            queryResult = queryResult.filter(function (partner) {
+              return contains(searchString.toLowerCase(), partner.name.toLowerCase()) ||
+                contains(searchString, partner.vendor_number);
             });
           }
           return Dexie.Promise.all([
@@ -106,11 +103,11 @@
                 .offset((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()]);
-        }).then(function(countAndResult) {
-          self.fire('global-loading');
-          self._setFilteredTotalResults(countAndResult[0]);
-          self._setFilteredPartners(countAndResult[1]);
-        }).catch(function(error) {
+        }).then((countAndResult)=> {
+          this.fireEvent('global-loading');
+          this._setFilteredTotalResults(countAndResult[0]);
+          this._setFilteredPartners(countAndResult[1]);
+        }).catch((error)=> {
           console.error('Error querying partners: ', error);
         });
       }

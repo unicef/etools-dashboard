@@ -108,12 +108,12 @@
     'use-strict';
 
 
-    const CountriesMixin = curry(compose(
+    const CountriesMixin = compose(
       EtoolsDashboard.Mixins.Endpoints,
       EtoolsDashboard.Mixins.EventHelper,
       EtoolsPageRefreshMixin,
       EtoolsAjaxRequestMixin
-    ));
+    );
     /**
      * `countries-dropdown` Description
      *
