@@ -4,185 +4,191 @@
 <link rel="import" href="../../styles/grid-layout-styles.html">
 <link rel="import" href="../../styles/hact-tables-styles.html">
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
 <link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../config/config.html">
-<link rel="stylesheet" href="../../../../bower_components/etools-behaviors/etools-mixin-factory.html">
+<link rel="import" href="../../../../bower_components/etools-behaviors/etools-mixin-factory.html">
 
-<link rel="import" href="../../../modules/data-table/data-table-header.html">
-<link rel="import" href="../../../modules/data-table/data-table-column.html">
-<link rel="import" href="../../../modules/data-table/data-table-row.html">
+<link rel="import" href="../../components/data-table/data-table-header.html">
+<link rel="import" href="../../components/data-table/data-table-column.html">
+<link rel="import" href="../../components/data-table/data-table-row.html">
 
-<!-- <link rel="import" href="../dashboard-data/partners-data.html"> -->
+<link rel="import" href="partners-data.html">
 <link rel="import" href="../../mixins/common-general-mixin.html">
 <link rel="import" href="../../mixins/pagination-mixin.html">
 
-<dom-module id="dashboard-hact-detail">
+<dom-module id="hact-detail">
   <template>
-    <style include="shared-styles list-styles grid-layout-styles hact-tables-styles iron-flex iron-flex-factors iron-flex-alignment">
-      :host {
-        --paper-material-padding: 0 24px 0 24px;
-      }
-      
-      .hact-list {
-        min-width: 1150px;
-        overflow: scroll;
-        padding: 0;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 5px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        -ms-overflow-style: none;
-      }
-
-      .detail-list {
-        min-width: 1800px;
-        width: 100%;
-        overflow-x: scroll;
-        overflow-y: visible;
-        -ms-overflow-style: none;
-      }
-
-      .no-overflow {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: normal;
-      }
-
-      .group {
-        padding-right: 16px;
-        box-sizing: border-box;
-      }
-
-      .center {
-        justify-content: center;
-      }
-
-      .quarter-heading {
-        display: flex;
-        align-items: flex-end !important;
-      }
-
-      .quarter-heading-item {
-        border-left: 1px solid rgba(0, 0, 0, 0.24);
-        box-sizing: border-box;
-      }
-
-      .quarter-item {
-        border-left: 1px solid rgba(0, 0, 0, 0.24);
-        box-sizing: border-box;
-        height: 48px;
-      }
-
-      .right-side {
-        text-align: center;
-        border-left: 1px solid rgba(0, 0, 0, 0.24);
-        box-sizing: border-box;
-        min-height: 48px;
-      }
-
-      .left-align {
-        justify-content: flex-start !important;
-      }
-
-      .border-box {
-        box-sizing: border-box;
-      }
-
-      data-table-row.totals > div > div,
-      data-table-row.totals div div {
-        font-weight: 500;
-      }
-
-      data-table-row.totals div div div span {
-        display: flex;
-        align-items: center;
-      }
-
-      data-table-row > div[slot="row-data"] > div > div > span,
-      data-table-row > div[slot="row-data"] > div > span > span,
-      data-table-header > div > data-table-column > data-table-column,
-      data-table-row div[slot="row-data"] div div span,
-      data-table-row div[slot="row-data"] div:not(:first-child) div,
-      data-table-row div[slot="row-data"] div span span:not(:first-child),
-      data-table-row div[slot="row-data"] div div span:not(:first-child) {
-        display: flex;
-        justify-content: center;
-        min-height: 48px;
-        align-items: center;
-        height: 48px;
-      }
-
-      data-table-row > div[slot="row-data"] > div > div > span > span:not(:first-child),
-      data-table-row > div[slot="row-data"] > div > div > div > span > span:not(:first-child),
-      data-table-row > div[slot="row-data"] > div > span > span:not(:first-child),
-      data-table-row div[slot="row-data"] div span span:not(:first-child),
-      data-table-row div[slot="row-data"] div div span:not(:first-child) {
-        border-left: 1px solid rgb(227, 227, 227);
-        box-sizing: border-box;
-      }
-
-      .col-75-px {
-        flex: 0 0 75px;
-        min-width: 75px;
-      }
-
-      .col-555-px {
-        flex: 0 0 555px;
-        min-width: 555px;
-      }
-
-      .col-10-px {
-        flex: 0 0 10px;
-        min-width: 10px;
-      }
-
-      .col-40-px {
-        flex: 0 0 40px;
-        min-width: 40px;
-      }
-
-      .col-100-px {
-        flex: 0 0 100px;
-        min-width: 100px;
-      }
-
-      .col-215-px {
-        flex: 0 0 215px;
-        min-width: 215px;
-      }
-
-      .col-160-px {
-        flex: 0 0 160px;
-        min-width: 160px;
-      }
-
-      .col-460-px {
-        flex: 0 0 460px;
-        min-width: 460px;
-      }
-
-      .col-225-px {
-        flex: 0 0 225px;
-        min-width: 225px;
-      }
-
-      @supports (-ms-ime-align:auto) {
+    <custom-style>
+      <style include="shared-styles list-styles grid-layout-styles hact-tables-styles iron-flex iron-flex-factors iron-flex-alignment paper-material-styles">
         :host {
-          --paper-material-padding: 12px 24px 0 24px;
+          /* --paper-material-padding: 0 24px 0 24px; */
         }
-        .quarter-heading {
-          align-items: inherit !important;
+        
+        .hact-list {
+          width: calc(100vw - 48px);
+          overflow: scroll;
+          padding: 0;
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 5px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+          -ms-overflow-style: none;
         }
-      }
-      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-        :host {
-          --paper-material-padding: 12px 24px 0 24px;
-        }
-        .quarter-heading {
-          align-items: inherit !important;
-        }
-      }
-    </style>
 
-    <paper-material id="detail-list" class="hact-list" elevation="1">
+        .detail-list {
+          min-width: 1800px;
+          width: 100%;
+          overflow-x: scroll;
+          overflow-y: visible;
+          -ms-overflow-style: none;
+        }
+
+        .no-overflow {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: normal;
+        }
+
+        .group {
+          padding-right: 16px;
+          box-sizing: border-box;
+        }
+
+        .center {
+          justify-content: center;
+        }
+
+        .quarter-heading {
+          display: flex;
+          align-items: flex-end !important;
+        }
+
+        .quarter-heading-item {
+          border-left: 1px solid rgba(0, 0, 0, 0.24);
+          box-sizing: border-box;
+        }
+
+        .quarter-item {
+          border-left: 1px solid rgba(0, 0, 0, 0.24);
+          box-sizing: border-box;
+          height: 48px;
+        }
+
+        .right-side {
+          text-align: center;
+          border-left: 1px solid rgba(0, 0, 0, 0.24);
+          box-sizing: border-box;
+          min-height: 48px;
+        }
+
+        .left-align {
+          justify-content: flex-start !important;
+        }
+
+        .border-box {
+          box-sizing: border-box;
+        }
+
+        data-table-row.totals > div > div,
+        data-table-row.totals div div {
+          font-weight: 500;
+        }
+
+        data-table-row.totals div div div span {
+          display: flex;
+          align-items: center;
+        }
+
+        data-table-header {
+          height: 95px;
+        }
+
+        data-table-row > div[slot="row-data"] > div > div > span,
+        data-table-row > div[slot="row-data"] > div > span > span,
+        data-table-header > div > data-table-column > data-table-column,
+        data-table-row div[slot="row-data"] div div span,
+        data-table-row div[slot="row-data"] div:not(:first-child) div,
+        data-table-row div[slot="row-data"] div span span:not(:first-child),
+        data-table-row div[slot="row-data"] div div span:not(:first-child) {
+          display: flex;
+          justify-content: center;
+          min-height: 48px;
+          align-items: center;
+          height: 48px;
+        }
+
+        data-table-row > div[slot="row-data"] > div > div > span > span:not(:first-child),
+        data-table-row > div[slot="row-data"] > div > div > div > span > span:not(:first-child),
+        data-table-row > div[slot="row-data"] > div > span > span:not(:first-child),
+        data-table-row div[slot="row-data"] div span span:not(:first-child),
+        data-table-row div[slot="row-data"] div div span:not(:first-child) {
+          border-left: 1px solid rgb(227, 227, 227);
+          box-sizing: border-box;
+        }
+
+        .col-75-px {
+          flex: 0 0 75px;
+          min-width: 75px;
+        }
+
+        .col-555-px {
+          flex: 0 0 555px;
+          min-width: 555px;
+        }
+
+        .col-10-px {
+          flex: 0 0 10px;
+          min-width: 10px;
+        }
+
+        .col-40-px {
+          flex: 0 0 40px;
+          min-width: 40px;
+        }
+
+        .col-100-px {
+          flex: 0 0 100px;
+          min-width: 100px;
+        }
+
+        .col-215-px {
+          flex: 0 0 215px;
+          min-width: 215px;
+        }
+
+        .col-160-px {
+          flex: 0 0 160px;
+          min-width: 160px;
+        }
+
+        .col-460-px {
+          flex: 0 0 460px;
+          min-width: 460px;
+        }
+
+        .col-225-px {
+          flex: 0 0 225px;
+          min-width: 225px;
+        }
+
+        @supports (-ms-ime-align:auto) {
+          :host {
+            --paper-material-padding: 12px 24px 0 24px;
+          }
+          .quarter-heading {
+            align-items: inherit !important;
+          }
+        }
+        @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+          :host {
+            --paper-material-padding: 12px 24px 0 24px;
+          }
+          .quarter-heading {
+            align-items: inherit !important;
+          }
+        }
+      </style>
+    </custom-style>
+
+    <div class="paper-material hact-list" id="detail-list" elevation="1">
       <div id="detail-table" class="detail-list">
         <data-table-header no-collapse>
           <data-table-column class="col-2 left-align layout horizontal" group-heading="blank" transparent>
@@ -287,7 +293,7 @@
               <div class="col-100-px monetary padding-right-10 nowrap vertical">$[[currencyFormat(totals.total_ct_ytd)]]</div>
             </div>
             <div class="col-460-px layout horizontal">
-              <div class="col-100-px nowrap monetary vertical padding-right-10 right-side">$[[currencyFormat(totals.total_ct_cy)]]</div>
+              <div class="col-100-px nowrap monetary vertical padding-right-10 right-side">$[[currencyFormat(totals.net_ct_cy)]]</div>
               <div class="col-160-px vertical right-side">
                 <span class="col-3">[[totals.hact_values_programmatic_visits_planned_q1]]</span>
                 <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q2]]</span>
@@ -355,7 +361,7 @@
                 <span class="col-100-px monetary padding-right-10 nowrap vertical">$[[currencyFormat(partner.total_ct_ytd)]]</span>
               </div>
               <div class="col-460-px layout horizontal">
-                <span class="col-100-px nowrap monetary padding-right-10 right-side vertical">$[[currencyFormat(partner.total_ct_cy)]]</span>
+                <span class="col-100-px nowrap monetary padding-right-10 right-side vertical">$[[currencyFormat(partner.net_ct_cy)]]</span>
                 <span class="col-160-px nowrap vertical right-side">
                   <span class="col-3">[[partner.hact_values.programmatic_visits.planned.q1]]</span>
                   <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.planned.q2]]</span>
@@ -397,8 +403,9 @@
             </div>
           </data-table-row>
         </template>
+        
       </div>
-    </paper-material>
+    </div>
   </template>
 
   <script>
@@ -457,6 +464,10 @@
           + planned_engagement.spot_check_follow_up_q3
           + planned_engagement.spot_check_follow_up_q4
         )
+      }
+
+      _goToPage(e) {
+        window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
       }
     }
 

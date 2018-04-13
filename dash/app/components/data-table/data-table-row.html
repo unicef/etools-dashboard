@@ -1,14 +1,14 @@
-<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
-<link rel="import" href="../../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
+<link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../../bower_components/iron-collapse/iron-collapse.html">
 
 <dom-module id="data-table-row">
 
   <template>
 
-    <style>
+    <style include="paper-material-styles">
       *[hidden] {
         display: none !important;
       }
@@ -18,13 +18,13 @@
         border-bottom: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
       }
 
-      :host(:hover) paper-material {
+      :host(:hover) .paper-material {
         background-color: var(--medium-theme-background-color);
         @apply --hover-setting;
         @apply --custom-style;
       }
 
-      paper-material {
+      .paper-material {
         @apply --layout-horizontal;
         @apply --layout-center;
         @apply --custom-style;
@@ -35,7 +35,7 @@
         background-color: var(--primary-background-color, #FFFFFF);
       }
 
-      paper-material ::slotted(*) {
+      .paper-material ::slotted(*) {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -59,13 +59,13 @@
       }
     </style>
 
-    <paper-material id="wrapper" elevation="0">
+    <div class="paper-material" id="wrapper" elevation="0">
       <div id="iconWrapper">
         <iron-icon id="more" icon="expand-more" hidden$="[[detailsOpened]]" on-tap="_toggleRowDetails"></iron-icon>
         <iron-icon id="less" icon="expand-less" hidden$="[[!detailsOpened]]" on-tap="_toggleRowDetails"></iron-icon>
       </div>
       <slot name="row-data"></slot>
-    </paper-material>
+    </div>
 
     <iron-collapse id="details" opened="{{detailsOpened}}">
       <div id="collapse-wrapper">

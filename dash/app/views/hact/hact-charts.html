@@ -4,15 +4,15 @@
 <link rel="import" href="../../styles/grid-layout-styles.html">
 <link rel="import" href="../../styles/hact-graphs-styles.html">
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
 <link rel="import" href="../../config/config.html">
 <link rel="import" href="../../mixins/redux-store-mixin.html">
 <link rel="import" href="../../../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../../../../bower_components/google-chart/google-chart-loader.html">
 
-<dom-module id="dashboard-hact-charts">
+<dom-module id="hact-charts">
   <template>
-    <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment hact-graph-styles">
+    <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment hact-graph-styles paper-material-styles">
       :host {
         --divider-light-color: #E0E0E0;
         --assuranceChart: {
@@ -96,7 +96,7 @@
     <google-chart-loader id="google"></google-chart-loader>
 
     <!--Assurance Activities-->
-    <paper-material class="list-panel hact-paper layout  center-center">
+    <div class="paper-material list-panel hact-paper layout  center-center" elevation="1">
       <div class="hact-title component">
         Assessment and Assurance Activities
       </div>
@@ -175,10 +175,10 @@
         </div>
 
       </div>
-    </paper-material>
+    </div>
 
     <!--Financial Findings -->
-    <paper-material class="list-panel hact-paper layout  center-center ">
+    <div class="paper-material list-panel hact-paper layout center-center" elevation="1">
       <div class="hact-title component">
         Financial Findings
       </div>
@@ -215,14 +215,12 @@
               <div class="fin-amount">[[item.value]]</div>
             </div>
           </template>
-
-
         </div>
       </div>
-    </paper-material>
+    </div>
 
     <!--Cash Transfer Amounts-->
-    <paper-material class="list-panel hact-paper layout center-center ">
+    <div class="paper-material list-panel hact-paper layout center-center" elevation="1">
       <div class="hact-title component">
         Total Cash Transfer by Cash Transfer Ranges
       </div>
@@ -275,10 +273,10 @@
           </div>
         </div>
       </div>
-    </paper-material>
+    </div>
 
     <!--IP Risk Rating-->
-    <paper-material class="list-panel hact-paper layout center-center ">
+    <div class="paper-material list-panel hact-paper layout center-center" elevation="1">
       <div class="hact-title component">
         Total Cash Transfers by IP Risk Rating
       </div>
@@ -331,12 +329,12 @@
           </div>
         </div>
       </div>
-    </paper-material>
+    </div>
 
     <!--PARTNER TYPE / SPOT CHECKS COMPLETED-->
     <div class="layout horizontal flex-1">
 
-      <paper-material class="list-panel hact-paper half-paper layout center-center">
+      <div class="paper-material list-panel hact-paper layout center-center" elevation="1">
         <div class="hact-title component">
           Cash Transfers by Partner Type
         </div>
@@ -351,9 +349,9 @@
           </div>
 
         </div>
-      </paper-material>
+      </div>
 
-      <paper-material class="list-panel hact-paper half-paper layout center-center">
+      <div class="paper-material hact-paper layout center-center" elevation="1">
         <div class="hact-title component">
           Spot Checks Completed
         </div>
@@ -382,13 +380,12 @@
                   <div class="flex-1 sub-col">Service Providers</div>
                   <div>[[chartData.charts.spot_checks_completed.2.1]]</div>
                 </div>
-
-
+                
               </div>
             </div>
           </div>
         </div>
-      </paper-material>
+      </div>
     </div>
   </template>
   <script>

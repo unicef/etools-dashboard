@@ -1,21 +1,22 @@
-<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
 
 <dom-module id="data-table-header">
 
   <template>
     <custom-style>
-      <style include="iron-flex iron-flex-factors">
+      <style include="iron-flex iron-flex-factors paper-material-styles">
 
         :host {
           display: block;
           border-bottom: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
         }
 
-        paper-material {
+        .paper-material {
           padding: var(--paper-material-padding, 20px 24px 0 24px);
           background-color: var(--primary-background-color, #FFFFFF);
           @apply --data-table-header;
+          height: 95px;
         }
 
         #title {
@@ -29,8 +30,8 @@
         #columns {
           @apply --layout-horizontal;
           @apply --layout-center;
-          margin-left: 48px;
-          height: 56px;
+          /* margin-left: 48px; */
+          /* height: 56px; */
           @apply --header-columns;
           @apply --header-height;
         }
@@ -41,7 +42,7 @@
       </style>
     </custom-style>
 
-    <paper-material elevation="0">
+    <div class="paper-material" elevation="0">
       <div id="title">
         <span>[[label]]</span>
       </div>
@@ -50,7 +51,7 @@
         <slot></slot>
       </div>
 
-    </paper-material>
+    </div>
   </template>
 
   <script>
