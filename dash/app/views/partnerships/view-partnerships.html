@@ -29,10 +29,10 @@
 <link rel="import" href="../../../../bower_components/etools-info-tooltip/etools-info-tooltip.html">
 
 <link rel="import" href="../../mixins/dropdown-mixin.html">
+<link rel="import" href="../../mixins/date-mixin.html">
 <link rel="import" href="../../mixins/common-general-mixin.html">
 <link rel="import" href="../../mixins/list-filters-mixin.html">
 <link rel="import" href="../../mixins/pagination-with-filters-mixin.html">
-
 <link rel="import" href="../../mixins/redux-store-mixin.html">
 <!-- <link rel="import" href="dashboard-data/partnership-data.html"> -->
 
@@ -412,13 +412,15 @@
      * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
      * @appliesMixin EtoolsDashboard.Mixins.ListFilters
      * @appliesMixin EtoolsDashboard.Mixins.PaginationWithFilters
+     * @appliesMixin EtoolsDashboard.Mixins.Date
      */
-    const ViewPartnershipsMixin = compose(
+    const ViewPartnershipsMixins = compose(
       EtoolsDashboard.Mixins.CommonGeneral,
       EtoolsDashboard.Mixins.Dropdown,
       EtoolsDashboard.Mixins.ReduxStore,
       EtoolsDashboard.Mixins.ListFilters,
-      EtoolsDashboard.Mixins.PaginationWithFilters
+      EtoolsDashboard.Mixins.PaginationWithFilters,
+      EtoolsDashboard.Mixins.Date
       )(Polymer.Element);
     
     /**
@@ -427,15 +429,9 @@
      * @summary ShortDescription.
      * @customElement
      * @polymer
-     * @extends {Polymer.Element}
      */
-    class ViewPartnerships extends ViewPartnershipsMixin {
-      /**
-       * String providing the tag name to register the element under.
-       */ 
-      static get is() {
-        return 'view-partnerships';
-      }
+    class ViewPartnerships extends ViewPartnershipsMixins {
+      static get is() { return 'view-partnerships'; }
 
       /**
        * Object describing property-related metadata used by Polymer features

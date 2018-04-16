@@ -4,8 +4,6 @@
 
 <link rel="import" href="../../config/dexie-db-config.html">
 
-<link rel="import" href="../../scripts/lodash.html">
-
 <dom-module id="partners-data">
   <script>
     'use strict';
@@ -76,13 +74,21 @@
         return [ 'init(active)' ]
       }
 
+      constructor() {
+        super();
+      }
+
       ready() {
-        if (!this.loadedInitially) {
-          log('nofire')
-          this.fireEvent('global-loading', {message: 'Loading partners data...', active: true});
-          this._elementReady();
-          this.set('loadedInitially', true);
-        }
+        super.ready()
+
+        Polymer.RenderStatus.afterNextRender(this, function() {
+          if (!this.loadedInitially) {
+            log('nofire')
+            this.fireEvent('global-loading', {message: 'Loading partners data...', active: true});
+            this._elementReady();
+            this.set('loadedInitially', true);
+          }
+        })
       }
       
       query(searchString, order, pageSize, pageNumber) {
