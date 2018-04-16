@@ -31,6 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 
 <link rel="import" href="app/mixins/user-data-mixin.html">
+<link rel="import" href="app/mixins/event-helper-mixin.html">
 <link rel="import" href="app/config/dexie-db-config.html">
 
 <link rel="import" href="app/scripts/ramda.html">
@@ -51,7 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style include="page-layout-styles shared-styles buttons-styles">
       :host {
         display: block;
-        --paper-tab-content	:{
+        --paper-tab-content: {
           height: auto;
         }
       }
@@ -82,12 +83,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <common-data-loaders></common-data-loaders>
-    
+
     <app-location route="{{route}}"
                   url-space-regex="^[[rootPath]]">
     </app-location>
 
-    <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
+    <app-route route="{{route}}"
+               pattern="[[rootPath]]:page"
+               data="{{routeData}}"
+               tail="{{subroute}}">
     </app-route>
 
     <app-drawer-layout force-narrow fullbleed>
@@ -137,7 +141,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </paper-tab>
 
                 <paper-tab name="hact" link>
-                  <a href="[[rootPath]]hact" class="tab-content">HACT</a>
+                  <a href="[[rootPath]]hact/assurance" class="tab-content">HACT</a>
                 </paper-tab>
 
                 <paper-tab name="trips" link>
@@ -168,17 +172,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <view-personalized user="[[user]]"
                              class="page"
                              name="personalized"
-                             route="{{route}}"></view-personalized>
-          <view-hact route="{{route}}"
+                             route="{{subroute}}"></view-personalized>
+          <view-hact route="{{subroute}}"
                      class="page"
                      name="hact"></view-hact>
-          <view-partnerships route="{{route}}"
+          <view-partnerships route="{{subroute}}"
                              class="page"
                              name="partnerships"></view-partnerships>
-          <view-trips route="{{route}}"
+          <view-trips route="{{subroute}}"
                       class="page"
                       name="trips"></view-trips>
-          <view-map route="{{route}}"
+          <view-map route="{{subroute}}"
                     class="page"
                     name="map"></view-map>
           <view-attachments route="{{route}}"
@@ -190,13 +194,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </template>
 
   <script>
-    const { UserData } = EtoolsDashboard.Mixins;
+    const ShellMixin = compose(
+      EtoolsDashboard.Mixins.EventHelper,
+      EtoolsDashboard.Mixins.UserData)
     /**
    * @customElement
    * @polymer
    * @extends {Polymer.Element}
    */
-    class AppShell extends UserData(Polymer.Element) {
+    class AppShell extends ShellMixin(Polymer.Element) {
       static get is() {
         return 'app-shell';
       }
@@ -224,10 +230,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ];
       }
 
+      ready(){
+        super.ready();
+      }
+
       _routePageChanged(page) {
         // If no page was found in the route data, page will be an empty string.
         // Default to 'personalized' in that case.
-        this.page = page || 'personalized';
+        this.set('page', page || 'personalized');
       }
 
       _pageChanged(page) {
@@ -235,9 +245,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         const resolvedPageUrl = this.resolveUrl(`app/views/${page}/view-${page}.html`);
         Polymer.importHref(
           resolvedPageUrl,
-          null,
+          this._onPageLoad(page).bind(this),
           this._showPage404.bind(this),
           true);
+      }
+
+      _onPageLoad(page){
+        return ()=> {
+          this.fireEvent('page-changed-hact',{page})}
       }
 
       _showPage404() {
