@@ -40,7 +40,8 @@
         display: block;
         --paper-input-container-label: {
           margin-left: 34px;
-        };
+        }
+        ;
         --paper-tooltip-opacity: 1;
         width: 100%;
       }
@@ -112,7 +113,7 @@
 
       .dark-button {
         background: rgb(216, 216, 216) !important;
-        color: var(--dark-disabled-text-color) !important 
+        color: var(--dark-disabled-text-color) !important
       }
 
       .light-button {
@@ -132,17 +133,20 @@
       }
     </style>
 
-    <app-route
-        route="{{route}}"
-        pattern="dashboard/hact/:hactTab"
-        data="{{routeData}}"
-        active="{{activeTab}}"
-        query-params="{{queryParams}}"></app-route>
+    <app-route route="{{route}}"
+               pattern="/:hactTab"
+               data="{{routeData}}"
+               active="{{hactActive}}"
+               query-params="{{queryParams}}"></app-route>
 
-    <partners-data id="partners" filtered-partners="{{filteredPartners}}" total-results="{{totalResults}}"
-              totals="{{totals}}"
-              filtered-total-results="{{filteredTotalResults}}" active="[[active]]" fire-data-loaded show-loading
-              on-partners-loaded="_requiredDataHasBeenLoaded">
+    <partners-data id="partners"
+                   filtered-partners="{{filteredPartners}}"
+                   total-results="{{totalResults}}"
+                   totals="{{totals}}"
+                   filtered-total-results="{{filteredTotalResults}}"
+                   fire-data-loaded
+                   show-loading
+                   on-partners-loaded="_requiredDataHasBeenLoaded">
     </partners-data>
 
     <div class="view-toggle">
@@ -305,13 +309,31 @@
       static get observers() {
         return [
           '_updateUrl(queryString, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete)',
-          '_tabChanged(routeData.hactTab)',
+          '_tabChanged(routeData.hactTab, hactActive)',
         ]
       }
 
-      _tabChanged(hactTab) {
-        if (!hactTab) { return }
-        this.set('hactPage', hactTab);
+      /**
+       * Instance of the element is created/upgraded. Use: initializing state,
+       * set up event listeners, create shadow dom.
+       * @constructor
+       */
+      // constructor() {
+      //   super();
+      // }
+
+      /**
+       * Use for one-time configuration of your component after local DOM is initialized. 
+       */
+      ready() {
+        super.ready();
+      }
+
+      _tabChanged(tab, hactActive) {
+        this.set('active', hactActive)
+        log('hact tab routedata', tab, hactActive)
+        if (!tab || !hactActive) { return }
+        this.set('hactPage', tab);
         if (this.hactPage === 'charts') {
           this.$.assurancePlan.classList.add('dark-button');
           this.$.assuranceIcon.classList.add('dark-button');
@@ -325,8 +347,9 @@
         }
       }
 
+   
+
         _filterPartnersData() {
-          log('filterepartnersdata')
         Polymer.Debouncer.debounce('query',
           Polymer.Async.timeOut.after(50),
           () => this.$.partners.query(
@@ -335,25 +358,24 @@
             this.pageSize,
             this.pageNumber)
         );
-        
+
       }
 
-        _updateUrl() {
-          if (!this.initComplete || !this.route) {
-            log('no init comple')
+        _updateUrl(queryString, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete) {
+          if (!this.initComplete || !this.hactActive) {
             return;
           }
-          this.set('route.path', 'dashboard/hact/' + this.routeData.hactTab);
           this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
           const qs = this.buildQueryString();
+          const currentRoute = this.route.prefix+this.route.path;
           if (qs !== null) {
-            this.updateAppState(this.route.path, qs, true);
+            this.updateAppState(currentRoute, qs, true);
             if (this.requiredDataLoaded) {
               this._filterPartnersData();
             }
           } else {
             if (location.search === '') {
-              this.updateAppState(this.route.path, qs, false);
+              this.updateAppState(currentRoute, qs, false);
             }
             if (this.forceDataRefresh && this.requiredDataLoaded) {
               this._filterPartnersData();
@@ -422,6 +444,8 @@
         _isActive(current, target) {
           return current === target
         }
+
+
     }
     
     window.customElements.define(ViewHact.is, ViewHact);
