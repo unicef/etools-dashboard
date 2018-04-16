@@ -278,9 +278,7 @@
             type: Number,
             value: 50
           },
-          urlParams: {
-            type: Object,
-          },
+  
           totals: {
             type: Array,
           },
@@ -332,8 +330,10 @@
 
       _tabChanged(tab, hactActive) {
         this.set('active', hactActive)
-        log('hact tab routedata', tab, hactActive)
         if (!tab || !hactActive) { return }
+        if (tab === 'charts') {
+          this.updateAppState(this.route.prefix+this.route.path);
+        }
         this.set('hactPage', tab);
         if (this.hactPage === 'charts') {
           this.$.assurancePlan.classList.add('dark-button');
