@@ -7,9 +7,11 @@
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
-  const { Endpoints, AjaxServerErrors } = EtoolsDashboard.Mixins;
-
-  const RequiredMixin = compose(Endpoints, AjaxServerErrors, EtoolsAjaxRequestMixin);
+  const RequiredMixin = compose(
+    EtoolsDashboard.Mixins.Endpoints,
+    EtoolsDashboard.Mixins.AjaxServerErrors,
+    EtoolsAjaxRequestMixin
+  );
   /**
    * @polymer
    * @mixinFunction

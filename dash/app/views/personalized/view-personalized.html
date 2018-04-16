@@ -1,27 +1,290 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
 
+<link rel="import" href="../../styles/shared-styles.html">
+<link rel="import" href="../../styles/list-styles.html">
+<link rel="import" href="../../styles/page-layout-styles.html">
+<link rel="import" href="../../styles/grid-layout-styles.html">
+<link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<link rel="import" href="../../../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../../../../bower_components/paper-tabs/paper-tabs.html">
+
+<link rel="import" href="../../components/data-table/data-table-header.html">
+<link rel="import" href="../../components/data-table/data-table-column.html">
+<link rel="import" href="../../components/data-table/data-table-row.html">
+
+<link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
+<link rel="import" href="../../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../../../../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../../../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../../bower_components/moment-element/moment-import.html">
+
+<link rel="import" href="../../mixins/common-general-mixin.html">
+<link rel="import" href="../../mixins/redux-store-mixin.html">
+<link rel="import" href="../../endpoints/endpoints-mixin.html">
+<link rel="import" href="../../config/config.html">
+<link rel="import" href="../../../../bower_components/etools-loading/etools-loading.html">
+
+
 <dom-module id="view-personalized">
   <template>
-    <style>
-      :host {
-        display: block
-      }
-    </style>
+    <custom-style>
+      <style include="shared-styles grid-layout-styles list-styles iron-flex iron-flex-factors paper-material-styles">
+        :host {
+          width: 100%;
+        }
 
-    <h1>Personalized Page</h1>
+        .paper-material,
+        div.double {
+          width: calc(100vw - 48px);
+        }
 
+        .greeting {
+          padding: 0 24px;
+          font-size: 24px;
+          color: var(--secondary-text-color);
+          margin: 5px 0 30px 0;
+        }
+
+        .management-toolbar {
+          position: relative;
+          min-height: 54px;
+          box-sizing: border-box;
+          padding: 0 24px 0 0;
+        }
+
+        .toolbar-icon-container {
+          width: 54px;
+          height: 54px;
+          color: var(--light-primary-text-color);
+          @apply --layout;
+          @apply --layout-center-justified;
+          @apply --layout-center;
+        }
+
+        .trip-management {
+          background: rgba(0, 97, 233, 1.0); /* Temporary until design confirmed */
+        }
+
+        .partnership-management {
+          background: rgba(0, 153, 255, 1.0); /* Temporary until design confirmed */
+        }
+
+        .toolbar-icon {
+          width: 42px;
+          height: 42px;
+        }
+
+        .toolbar-title {
+          font-size: 16px;
+          text-transform: uppercase;
+          color: var(--dark-primary-text-color);
+        }
+
+        .toolbar-item {
+          margin-left: 24px;
+        }
+
+        .list-title {
+          font-size: 20px;
+          font-weight: 500;
+          min-height: 64px;
+        }
+
+        data-table-row.wrapper {
+          padding-left: 0;
+        }
+      </style>
+    </custom-style>
+
+    <h1 class="greeting">Welcome, [[user.first_name]]</h1>
+    <div class="paper-material list-panel management-toolbar layout horizontal center" elevation="1">
+      <div class="toolbar-icon-container trip-management">
+        <iron-icon class="toolbar-icon" icon="language"></iron-icon>
+      </div>
+      <div class="toolbar-title toolbar-item flex-2">
+        Trip management
+      </div>
+      <paper-button class="button toolbar-item">
+        <a href="[[baseSite]]/t2f/travel-list/" on-tap="goToPage" app-name="t2f" page="travel-list">
+          <iron-icon icon="maps:transfer-within-a-station"></iron-icon>
+          Travel 2 Field
+        </a>
+
+      </paper-button>
+      <paper-button on-tap="goToPage" app-name="t2f" page="action-points-list" class="button toolbar-item">
+        <iron-icon icon="list"></iron-icon>
+        Action Points
+      </paper-button>
+    </div>
+    <div class="layout horizontal double">
+      <!-- TRIPS -------------------------->
+      <div class="paper-material list-panel half-paper clear-pad" elevation="1">
+        <data-table-header class="list-title layout horizontal center" no-title no-collapse>
+          <div>Trips</div>
+        </data-table-header>
+        <div class="top-content-row tabs-header">
+          <paper-tabs selected="{{tripsTab}}"
+                      attr-for-selected="name"
+                      fallback-selection="myTrips" noink bottom-item>
+            <paper-tab name="myTrips" link>
+              <span class="tab-content">My Trips</span>
+            </paper-tab>
+            <paper-tab name="tripsSupervised" link>
+              <span class="tab-content">Supervised</span>
+            </paper-tab>
+          </paper-tabs>
+        </div>
+        <div class="list-content">
+          <template is="dom-repeat" items="[[tripsItems]]" as="trip">
+            <data-table-row no-collapse>
+              <div slot="row-data">
+                <a on-tap="goToPage" href="[[baseSite]]/t2f/edit-travel/[[trip.id]]" app-name="t2f" page="edit-travel"
+                  id="[[trip.id]]" class="col-data col">
+                  [[trip.reference_number]]
+                </a>
+                <span class="description description-size col-data flex-2">
+                [[trip.purpose]]
+              </span>
+                <div class="layout vertical start col-data col-2 ">
+                  <span class="col-data">[[_dateFormatted(trip.start_date)]]</span>
+                  <span class="suppData">[[_getDisplayName('trips',trip)]]</span>
+                </div>
+              </div>
+            </data-table-row>
+          </template>
+        </div>
+      </div>
+
+      <!-- ACTION POINTS -------------------------->
+      <div class="paper-material list-panel half-paper clear-pad" elevation="1">
+        <data-table-header class="list-title layout horizontal center" no-title no-collapse>
+          <span>Action Points</span>
+        </data-table-header>
+        <div class="top-content-row tabs-header">
+          <paper-tabs selected="{{actionsTab}}"
+                      attr-for-selected="name"
+                      fallback-selection="actionPointsForMe" noink bottom-item>
+            <paper-tab name="actionPointsForMe" link>
+              <span class="tab-content">Assigned To Me</span>
+            </paper-tab>
+            <paper-tab name="actionPointsByMe" link>
+              <span class="tab-content">Assigned By Me</span>
+            </paper-tab>
+          </paper-tabs>
+        </div>
+        <div class="list-content">
+          <template is="dom-repeat" items="[[actionPointsItems]]" as="action">
+            <data-table-row no-collapse>
+              <div slot="row-data">
+                <div class="layout vertical col-10">
+                  <span class="col-data description">
+                    <a on-tap="_goToActionPoint" href="[[baseSite]]/t2f/action-point/[[action.id]]">[[action.description]]</a>
+                  </span>
+                  <span class="suppData">[[capitalizeWord(action.status)]]</span>
+                </div>
+                <div class="layout vertical start col-data col-2 ">
+                  <span class="col-data">[[_dateFormatted(action.due_date)]]</span>
+                  <span class="suppData">[[_getDisplayName('actions',action)]]</span>
+                </div>
+              </div>
+            </data-table-row>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <!-- PARTNERSHIP MANAGEMENT TOOLBAR-->
+    <div class="paper-material list-panel management-toolbar layout horizontal center" elevation="1">
+      <div class="toolbar-icon-container partnership-management">
+        <iron-icon class="toolbar-icon" icon="social:group"></iron-icon> <!-- Placeholder icon -->
+      </div>
+      <div class="toolbar-title toolbar-item flex-2">
+        Partnership management
+      </div>
+      <paper-button class="button toolbar-item">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/list" app-name="pmp" page="partners">
+          <iron-icon icon="social:people"></iron-icon>
+          Partners
+        </a>
+      </paper-button>
+      <paper-button class="button toolbar-item">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/agreements" app-name="pmp" page="agreements">
+          <iron-icon icon="av:playlist-add-check"></iron-icon>
+          Agreements
+        </a>
+      </paper-button>
+      <paper-button class="button toolbar-item">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions" app-name="pmp"
+          page="interventions">
+          <iron-icon icon="verified-user"></iron-icon>
+          PD/SSFA TOR
+        </a>
+      </paper-button>
+      <paper-button class="button toolbar-item">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/government-partners" app-name="pmp" page="governments">
+          <iron-icon icon="account-balance"></iron-icon>
+          Goverment-in-simple
+        </a>
+      </paper-button>
+    </div>
+
+    <!--MY PARTNERSHIPS-->
+    <div class="paper-material list-panel clear-pad" elevation="1">
+      <data-table-header no-title no-collapse class="list-title layout horizontal center">
+        <span>My Partnerships</span>
+      </data-table-header>
+      <template is="dom-if" if="[[!partnershipsLoaded]]">
+        <etools-loading active></etools-loading>
+      </template>
+      <div class="list-content">
+        <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden="[[!partnershipsLoaded]]">
+          <data-table-row no-collapse>
+            <div slot="row-data">
+              <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[partnership.id]]/details" app-name="pmp"
+                page="interventions" id="[[partnership.id]]/details"
+                class="col-data col-2">
+                [[partnership.number]]
+              </a>
+              <span class="description description-size flex-3 col-data">
+                [[partnership.title]]
+              </span>
+              <span class="col-data col-2 layout horizontal end-justified">$[[currencyFormat(partnership.total_unicef_budget)]] (Total Budget)</span>
+            </div>
+          </data-table-row>
+        </template>
+      </div>
+
+    </div>
   </template>
 
   <script>
+    /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
+     * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
+     * @appliesMixin EtoolsDashboard.Mixins.Endpoints
+     */
+    const ViewPersonalizedMixins = compose(
+      EtoolsDashboard.Mixins.ReduxStore,
+      EtoolsDashboard.Mixins.CommonGeneral,
+      EtoolsDashboard.Mixins.Endpoints
+    )(Polymer.Element)
+
     /**
      * `personalized` Description
      *
      * @summary ShortDescription.
      * @customElement
      * @polymer
-     * @extends {Polymer.Element}
+     * @appliesMixin ViewPersonalizedMixins
      */
-    class ViewPersonalized extends Polymer.Element {
+    class ViewPersonalized extends ViewPersonalizedMixins {
       /**
        * String providing the tag name to register the element under.
        */
@@ -34,8 +297,47 @@
        */
       static get properties() {
         return {
-          
+          tripsItems: {
+            type: Array,
+            notify: true
+          },
+          myTrips: {
+            type: Array,
+            statePath: 'trips',
+          },
+          tripsSupervised: {
+            statePath: 'tripsSupervised'
+          },
+          actionPointsItems: {
+            type: Array,
+            notify: true
+          },
+          actionPointsByMe: {
+            type: Array,
+            statePath: 'actionPointsByMe'
+          },
+          actionPointsForMe: {
+            type: Array,
+            statePath: 'actionPointsForMe'
+          },
+          partnerships: {
+            statePath: 'partnerships',
+            observer: '_checkPartnershipsData',
+          },
+          partnershipsLoaded: {
+            type: Boolean,
+            value: false
+          },
         };
+      }
+
+      static get observers() {
+        return [
+          '_updateUrl(active)',
+          '_updateTrips(tripsTab,myTrips)',
+          '_updateActionPoints(actionsTab,actionPointsForMe)',
+          '_staticDataLoaded(myTrips,tripsSupervised, actionPointsItems, actionPointsForMe)'
+        ]
       }
 
       /**
@@ -47,17 +349,65 @@
         super();
       }
 
-      /**
-       * Use for one-time configuration of your component after local DOM is initialized. 
-       */
-      ready() {
-        super.ready();
-
-        Polymer.RenderStatus.afterNextRender(this, function() {
-          
-        });
+      _updateTrips() {
+        this._setItems(this.tripsTab, 'tripsItems');
       }
 
+      _updateActionPoints() {
+        this._setItems(this.actionsTab, 'actionPointsItems');
+      }
+
+      _checkPartnershipsData(data) {
+        if ((data && data.length) || !data) {
+          this.set('partnershipsLoaded', true);
+        }
+      }
+
+      _staticDataLoaded() {
+        if(!this.active){
+          return;
+        }
+        if (this.myTrips && this.tripsSupervised && this.actionPointsItems && this.actionPointsForMe) {
+          this.fire('global-loading');
+        } else {
+          this.fire('global-loading', {
+            message: 'Loading data...',
+            active: true
+          });
+        }
+      }
+
+      _setItems(tab, itemsProp) {
+        const items = _.get(this, tab, []);
+        this.set(itemsProp, items);
+      }
+
+      _getDisplayName(type, item) {
+        if (type === 'trips') {
+          return item.supervisor_name || item.traveler;
+        } else {
+          if (this.actionsTab === 'actionPointsByMe') {
+            return item.person_responsible_name;
+          }
+          return item.assigned_by_name;
+        }
+      }
+
+      _dateFormatted(str) {
+        return str ? moment(str).format('DD MMM YYYY') : '';
+      }
+
+      _updateUrl(active) {
+        if (active) {
+          this.updateAppState('dashboard/personalized', [], true);
+        }
+      }
+
+      _goToActionPoint(e) {
+        var origin = window.location.origin;
+        const path = origin + '/t2f/action-point/' + e.model.action.id;
+        this.manageClickEvent(e, path);
+      }
     }
 
     window.customElements.define(ViewPersonalized.is, ViewPersonalized);

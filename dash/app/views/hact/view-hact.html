@@ -35,7 +35,7 @@
 
 <dom-module id="view-hact">
   <template>
-    <style include="shared-styles custom-style list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment paper-material-styles">
+    <style include="shared-styles list-styles paper-material-styles">
       :host {
         display: block;
         --paper-input-container-label: {
@@ -219,11 +219,6 @@
   <script>
     'use strict';
 
-    const VHMixin = compose(
-      EtoolsDashboard.Mixins.Endpoints, 
-      EtoolsDashboard.Mixins.CommonGeneral, 
-      EtoolsDashboard.Mixins.Pagination);
-    
     /**
      * @polymer
      * @mixinFunction
@@ -231,7 +226,11 @@
      * @appliesMixin EtoolsDashboard.Mixins.Pagination
      * @appliesMixin EtoolsDashboard.Mixins.Endpoints
      */
-    const ViewHactMixins = VHMixin(Polymer.Element);
+    const ViewHactMixins = compose(
+      EtoolsDashboard.Mixins.Endpoints,
+      EtoolsDashboard.Mixins.CommonGeneral,
+      EtoolsDashboard.Mixins.Pagination
+    )(Polymer.Element);
 
     /**
      * `hact` Description
