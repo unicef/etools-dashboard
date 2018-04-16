@@ -76,8 +76,9 @@
         return [ 'init(active)' ]
       }
 
-      init(active) {
-        if (active && !this.loadedInitially) {
+      ready() {
+        if (!this.loadedInitially) {
+          log('nofire')
           this.fireEvent('global-loading', {message: 'Loading partners data...', active: true});
           this._elementReady();
           this.set('loadedInitially', true);
@@ -85,6 +86,7 @@
       }
       
       query(searchString, order, pageSize, pageNumber) {
+        log('querying')
         EtoolsDashboard.DexieDb.partners.toArray().then(res=> {
           this._setTotals(this._computeTotals(res));
           this._setTotalResults(res.length);
