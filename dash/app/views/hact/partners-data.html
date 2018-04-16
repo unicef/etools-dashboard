@@ -4,23 +4,25 @@
 
 <link rel="import" href="../../config/dexie-db-config.html">
 
-<link rel="import" href="../../scripts/lodash.html">
-
 <dom-module id="partners-data">
   <script>
     'use strict';
+    /**
+    * @polymer
+    * @mixinFunction
+    * @appliesMixin EtoolsDashboard.Mixins.DataElement
+    * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+    */
     const PartnersDataMixin = compose(
       EtoolsDashboard.Mixins.DataElement,
       EtoolsDashboard.Mixins.EventHelper
-    );
+    )(Polymer.Element);
     /**
     * @polymer
     * @customElement
-    * @appliesMixin EtoolsDashboard.Mixins.DataElement
-    * @appliesMixin EtoolsDashboard.Mixins.EventHelper
-    // * @extends {EtoolsDashboard.Mixins.PartnersDataMixin}
+    * @appliesmixin PartnersDataMixin
     */
-    class PartnersData extends PartnersDataMixin(Polymer.Element) {
+    class PartnersData extends PartnersDataMixin {
       static get is() { return 'partners-data'; }
 
       static get properties() {
@@ -70,7 +72,12 @@
 
 
 
+      constructor() {
+        super();
+      }
+
       ready() {
+
         super.ready();
         if (!this.loadedInitially) {
           this.fireEvent('global-loading', {message: 'Loading partners data...', active: true});

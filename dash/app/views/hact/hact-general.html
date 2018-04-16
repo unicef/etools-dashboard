@@ -337,24 +337,23 @@
   <script>
     'use strict';
     
-    const HGMixins = compose(
-      EtoolsDashboard.Mixins.CommonGeneral,
-        EtoolsDashboard.Mixins.Pagination,
-        EtoolsDashboard.Mixins.Endpoints
-    );
     /**
-     * @polymer
-     * @mixinFunction
-     * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
-     * @appliesMixin EtoolsDashboard.Mixins.Pagination
-     */
-    const HactGeneralMixins = HGMixins(Polymer.Element);
+    * @polymer
+    * @mixinFunction
+    * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
+    * @appliesMixin EtoolsDashboard.Mixins.Pagination
+    */
+    const HactGeneralMixins = compose(
+      EtoolsDashboard.Mixins.CommonGeneral,
+      EtoolsDashboard.Mixins.Pagination,
+      EtoolsDashboard.Mixins.Endpoints
+    )(Polymer.Element);
 
     /**
-     * @polymer
-     * @customElement
-     * @appliesMixin HactGeneralMixins
-     */
+    * @polymer
+    * @customElement
+    * @appliesMixin HactGeneralMixins
+    */
     class HactGeneral extends HactGeneralMixins {
       static get is() { return 'hact-general'; }
 

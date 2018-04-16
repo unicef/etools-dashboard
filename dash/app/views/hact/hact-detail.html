@@ -411,14 +411,16 @@
   <script>
     'use strict';
     
-    const HDMixin = compose(EtoolsDashboard.Mixins.CommonGeneral, EtoolsDashboard.Mixins.Pagination);
     /**
      * @polymer
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
      * @appliesMixin EtoolsDashboard.Mixins.Pagination
      */
-    const HactDetailMixins = HDMixin(Polymer.Element);
+    const HactDetailMixins = compose(
+      EtoolsDashboard.Mixins.CommonGeneral,
+      EtoolsDashboard.Mixins.Pagination
+    )(Polymer.Element);
 
     /**
      * @polymer
