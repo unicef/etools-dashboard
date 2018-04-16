@@ -68,13 +68,10 @@
         }
       }
 
-      static get observers() {
-        return [ 'init(active)' ]
-      }
+
 
       ready() {
         if (!this.loadedInitially) {
-          log('nofire')
           this.fireEvent('global-loading', {message: 'Loading partners data...', active: true});
           this._elementReady();
           this.set('loadedInitially', true);
@@ -82,12 +79,11 @@
       }
       
       query(searchString, order, pageSize, pageNumber) {
-        log('querying')
         EtoolsDashboard.DexieDb.partners.toArray().then(res=> {
           this._setTotals(this._computeTotals(res));
           this._setTotalResults(res.length);
         });
-        EtoolsDashboard.DexieDb.transaction('r', this.db.partners, ()=> {
+        EtoolsDashboard.DexieDb.transaction('r', EtoolsDashboard.DexieDb.partners, ()=> {
           let queryResult = EtoolsDashboard.DexieDb.partners.orderBy('name');
           if (order === 'desc') {
             queryResult = queryResult.reverse();
