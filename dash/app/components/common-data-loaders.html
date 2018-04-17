@@ -21,14 +21,13 @@
 
   <script>
    
-    const { ReduxStore, Actions } = EtoolsDashboard.Mixins;
-    const requiredMixin = compose(Endpoints, ReduxStore, Actions, EtoolsAjaxRequestMixin);
-    const CommonDataMixin = requiredMixin(Polymer.Element);
+    const CommonDataMixin = compose(
+      EtoolsDashboard.Mixins.Endpoints, 
+      EtoolsDashboard.Mixins.ReduxStore, 
+      EtoolsDashboard.Mixins.Actions, 
+      EtoolsAjaxRequestMixin);
     
-    const capitalize = compose(
-      join(''),
-      over(lensIndex(0), toUpper)
-    );
+    
     /**
      * `common-data-loaders` Description
      *
@@ -37,7 +36,7 @@
    * @polymer
    * @extends {Polymer.Element}
    */
-    class CommonDataLoaders extends CommonDataMixin {
+    class CommonDataLoaders extends CommonDataMixin(Polymer.Element) {
       /**
        * String providing the tag name to register the element under.
        */
