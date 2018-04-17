@@ -21,6 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/etools-dropdown/etools-dropdown.html">
+<link rel="import" href="../bower_components/etools-piwik-analytics/etools-piwik-analytics.html">
 
 <link rel="import" href="app/styles/buttons-styles.html">
 <link rel="import" href="app/styles/page-layout-styles.html">
@@ -75,6 +76,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding-top: 12px;
       }
     </style>
+
+    <etools-piwik-analytics page="[[subroute.path]]"
+                            user="[[user]]"
+                            toast="[[currentToastMessage]]"></etools-piwik-analytics>
 
     <common-data-loaders></common-data-loaders>
 

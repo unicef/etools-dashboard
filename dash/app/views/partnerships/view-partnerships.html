@@ -34,7 +34,7 @@
 <link rel="import" href="../../mixins/list-filters-mixin.html">
 <link rel="import" href="../../mixins/pagination-with-filters-mixin.html">
 <link rel="import" href="../../mixins/redux-store-mixin.html">
-<!-- <link rel="import" href="dashboard-data/partnership-data.html"> -->
+<link rel="import" href="data/partnership-data.html">
 
 <dom-module id="view-partnerships">
   <template>
@@ -141,7 +141,7 @@
       }
     </style>
 
-    <!-- <partnership-data
+    <partnership-data
                   id="partnerships"
                   filtered-partnerships="{{filteredPartnerships}}"
                   fire-data-loaded
@@ -149,7 +149,7 @@
                   total-results="{{totalResults}}"
                   on-partnerships-loaded="_requiredDataLoaded"
                   list-data-path="filteredPartnerships">
-                  </partnership-data> -->
+                  </partnership-data>
 
     <div class="paper-material list-panel listControls" elevation="1">
       <div class="wrap-controls">
