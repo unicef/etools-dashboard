@@ -41,7 +41,8 @@
     "etools-searchable-multiselection-menu": "^2.2.18",
     "etools-datepicker": "8d2f0c294d80bbea",
     "etools-info-tooltip": "261b888",
-    "polymer-redux": "^1.0.5"
+    "polymer-redux": "^1.0.5",
+    "leaflet-map": "^1.2.0"
   },
   "resolutions": {
     "polymer": "^2.0.0",
