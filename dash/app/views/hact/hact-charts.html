@@ -1,14 +1,20 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+
 <link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../styles/list-styles.html">
 <link rel="import" href="../../styles/grid-layout-styles.html">
 <link rel="import" href="../../styles/hact-graphs-styles.html">
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
-<link rel="import" href="../../config/config.html">
-<link rel="import" href="../../mixins/redux-store-mixin.html">
+
 <link rel="import" href="../../../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../../../../bower_components/google-chart/google-chart-loader.html">
+
+<link rel="import" href="../../config/config.html">
+
+<link rel="import" href="../../mixins/redux-store-mixin.html">
+<link rel="import" href="../../mixins/event-helper-mixin.html">
+
 
 <dom-module id="hact-charts">
   <template>
@@ -390,13 +396,15 @@
   </template>
   <script>
     'use strict';
-
+  const ChartsMixin = compose(
+    EtoolsDashboard.Mixins.ReduxStore,
+    EtoolsDashboard.Mixins.EventHelper)
     /**
     * @polymer
     * @customElement
     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
     */
-    class HactCharts extends EtoolsDashboard.Mixins.ReduxStore(Polymer.Element) {
+    class HactCharts extends ChartsMixin(Polymer.Element) {
       static get is() { return 'hact-charts' }
 
       static get properties() {
@@ -651,18 +659,18 @@
 
       _init(active) {
         if (active) {
-          if (_.isEmpty(this.chartData)){
-            this.dispatchEvent(new CustomEvent('global-loading', {message:'Loading chart data...', active: true}));
+          if (isEmpty(this.chartData)){
+            this.fireEvent('global-loading', {message:'Loading chart data...', active: true});
           }else {
-            this.dispatchEvent(new CustomEvent('global-loading'));
+            this.fireEvent('global-loading');
             this.drawCharts();
           }
         }
       }
 
-      _onChartDataChange(data){
-        if (!_.isEmpty(data)){
-          const riskRatings = _.drop(data.charts.cash_transfers_risk_ratings).map(r=>_.last(r));
+      _onChartDataChange(data) {
+        if (!isEmpty(data)) {
+          const riskRatings = tail(data.charts.cash_transfers_risk_ratings).map(r => last(r));
           this.set('riskRatings', riskRatings);
           this._init(this.active);
         }
@@ -670,15 +678,15 @@
 
       _formatChartData(data, chartName, options) {
         this.$.google.dataTable(data).then(dt => {
-          this.$$('#' + chartName).options = options;
-          this.$$('#' + chartName).data = dt;
+          this.shadowRoot.querySelector('#' + chartName).options = options;
+          this.shadowRoot.querySelector('#' + chartName).data = dt;
           this.updateStyles();
         });
       }
 
       drawCharts() {
         this.drawProgVisitsChart();
-        _.keys(this.chartData.charts).map(chart => {
+        keys(this.chartData.charts).map(chart => {
           this.drawChart(chart);
         });
       }
@@ -693,7 +701,7 @@
       }
 
       drawProgVisitsChart() {
-        const {programmatic_visits:progVisits, spot_checks:spotChecks} = this.chartData.assurance_activities;
+        const { programmatic_visits: progVisits, spot_checks: spotChecks } = this.chartData.assurance_activities;
         const progVisitsData = this.AssuranceActivitiesBars(progVisits);
         const spotChecksData = this.AssuranceActivitiesBars(spotChecks);
         this._formatChartData(progVisitsData, 'progVisitsChart', this.assuranceChartOptions);
@@ -710,7 +718,7 @@
       }
 
       _dashCapital(string) {
-        return `- ${_.capitalize(string)}`
+        return `- ${capitalize(string)}`
       }
 
       _numWithCommas(number) {

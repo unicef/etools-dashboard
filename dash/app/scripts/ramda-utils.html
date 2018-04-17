@@ -9,12 +9,15 @@
     map,
     compose,
     range,
+    keys,
     applySpec,
     merge,
     concat,
     prop,
     join,
     head,
+    tail,
+    last,
     isEmpty,
     over,
     lensIndex,
@@ -25,4 +28,9 @@
     console.log(...args);
     return args[0];
   }
+
+  const capitalize = compose(
+      join(''),
+      over(lensIndex(0), toUpper)
+    );
 </script>
