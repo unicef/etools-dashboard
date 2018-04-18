@@ -28,162 +28,162 @@
 
 <dom-module id="view-trips">
   <template>
-      <style include="list-styles iron-flex-factors shared-styles page-layout-styles buttons-styles iron-flex-alignment paper-material-styles">
-        
-        .by-type {
-          padding: 0;
-          @apply --layout-horizontal;
-        }
-  
-        .viz {
-          width: 100%;
-          @apply --tripsChart;
-        }
-  
-        .viz-actions {
-          width: 100%;
-          @apply --actionPointsChart;
-        }
-  
-        .chart-title {
-          font-size: 16px;
-          margin: 0;
-          line-height: 48px;
-          font-weight: 500;
-        }
-  
-        .wrap-controls paper-dropdown-menu.sm-dropdown {
-          min-width: 88px;
-        }
-      </style>
+    <style include="list-styles iron-flex-factors shared-styles page-layout-styles buttons-styles iron-flex-alignment paper-material-styles">
+      
+      .by-type {
+        padding: 0;
+        @apply --layout-horizontal;
+      }
 
-      <!-- <trips-dashboard-data trips-data="{{tripsData}}" filter="[[tripsFilter]]"></trips-dashboard-data> -->
-      <!-- <action-pts-by-section-data action-points-data="{{actionPointsData}}"
-                                  filter="[[actionPtsFilter]]"></action-pts-by-section-data> -->
-      <google-chart-loader id="google"></google-chart-loader>
+      .viz {
+        width: 100%;
+        @apply --tripsChart;
+      }
 
-      <div class="paper-material list-panel listControls" elevation="1">
-        <div class="controls-wrapper flex">
-          <div class="title-row">
-            <h1 sub-title>Trips</h1>
-          </div>
-          <div class="filters-divider"></div>
-          <div class="wrap-controls flex">
-            <div class="dropdown-with-clear-btn">
-              <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-              <paper-dropdown-menu label="Year"
-                                  id="tripsYear"
-                                  class="sm-dropdown"
-                                  placeholder="Select from list"
-                                  error-message="Must select a year"
-                                  noink>
-                <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{year}}">
-                  <template is="dom-repeat" items="[[years]]" as="year">
-                    <paper-item id="[[year]]">[[year]]</paper-item>
-                  </template>
-                </paper-menu>
-              </paper-dropdown-menu>
-            </div>
-            <div class="dropdown-with-clear-btn">
-              <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-              <etools-multi-selection-menu label="Month"
-                                          id="tripsMonth"
-                                          placeholder="Select from list"
-                                          error-message="Must select at least one month"
-                                          selected-values="{{month}}"
-                                          trigger-value-change-event
-                                          options="[[months]]"></etools-multi-selection-menu>
-            </div>
-            <div class="dropdown-with-clear-btn">
-              <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-              <paper-dropdown-menu label="Office"
-                                  id="tripsOffice"
-                                  placeholder="Select from list" noink>
-                <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{tripsOffice}}">
-                  <template is="dom-repeat" items="[[offices]]" as="office">
-                    <paper-item id="[[office.id]]">[[office.name]]</paper-item>
-                  </template>
-                </paper-menu>
-              </paper-dropdown-menu>
-            </div>
-          </div>
-          <paper-button class="primary-btn" on-tap="_setFilter" disabled="[[fetchDisabled]]">
-            Get Chart
-          </paper-button>
+      .viz-actions {
+        width: 100%;
+        @apply --actionPointsChart;
+      }
+
+      .chart-title {
+        font-size: 16px;
+        margin: 0;
+        line-height: 48px;
+        font-weight: 500;
+      }
+
+      .wrap-controls paper-dropdown-menu.sm-dropdown {
+        min-width: 88px;
+      }
+    </style>
+
+    <!-- <trips-dashboard-data trips-data="{{tripsData}}" filter="[[tripsFilter]]"></trips-dashboard-data> -->
+    <!-- <action-pts-by-section-data action-points-data="{{actionPointsData}}"
+                                filter="[[actionPtsFilter]]"></action-pts-by-section-data> -->
+    <google-chart-loader id="google"></google-chart-loader>
+
+    <div class="paper-material list-panel listControls" elevation="1">
+      <div class="controls-wrapper flex">
+        <div class="title-row">
+          <h1 sub-title>Trips</h1>
         </div>
-      </div>
-
-      <div class="paper-material list-panel by-type" elevation="1">
-        <div class="trip title-row flex-2">
-          <h2 sub-title>Trips in country programme</h2>
-        </div>
-        <div class="trips flex-3">
-          <div class="trip trip-type-one flex-c">
-            <h1>Planned</h1>
-            [[tripsData.planned]]
+        <div class="filters-divider"></div>
+        <div class="wrap-controls flex">
+          <div class="dropdown-with-clear-btn">
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <paper-dropdown-menu label="Year"
+                                id="tripsYear"
+                                class="sm-dropdown"
+                                placeholder="Select from list"
+                                error-message="Must select a year"
+                                noink>
+              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{year}}">
+                <template is="dom-repeat" items="[[years]]" as="year">
+                  <paper-item id="[[year]]">[[year]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
           </div>
-          <div class="trip trip-type-two flex-c">
-            <h1>Approved</h1>
-            [[tripsData.approved]]
+          <div class="dropdown-with-clear-btn">
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <etools-multi-selection-menu label="Month"
+                                        id="tripsMonth"
+                                        placeholder="Select from list"
+                                        error-message="Must select at least one month"
+                                        selected-values="{{month}}"
+                                        trigger-value-change-event
+                                        options="[[months]]"></etools-multi-selection-menu>
           </div>
-          <div class="trip trip-type-three flex-c">
-            <h1>Completed</h1>
-            [[tripsData.completed]]
+          <div class="dropdown-with-clear-btn">
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <paper-dropdown-menu label="Office"
+                                id="tripsOffice"
+                                placeholder="Select from list" noink>
+              <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{tripsOffice}}">
+                <template is="dom-repeat" items="[[offices]]" as="office">
+                  <paper-item id="[[office.id]]">[[office.name]]</paper-item>
+                </template>
+              </paper-menu>
+            </paper-dropdown-menu>
           </div>
         </div>
+        <paper-button class="primary-btn" on-tap="_setFilter" disabled="[[fetchDisabled]]">
+          Get Chart
+        </paper-button>
       </div>
+    </div>
 
-      <div class="paper-material list-panel" elevation="1">
-        <h2 class="chart-title">Trips by section</h2>
-        <google-chart
-            id="tripsChart"
-            class="viz"
-            type="bar">
-        </google-chart>
+    <div class="paper-material list-panel by-type" elevation="1">
+      <div class="trip title-row flex-2">
+        <h2 sub-title>Trips in country programme</h2>
       </div>
+      <div class="trips flex-3">
+        <div class="trip trip-type-one flex-c">
+          <h1>Planned</h1>
+          [[tripsData.planned]]
+        </div>
+        <div class="trip trip-type-two flex-c">
+          <h1>Approved</h1>
+          [[tripsData.approved]]
+        </div>
+        <div class="trip trip-type-three flex-c">
+          <h1>Completed</h1>
+          [[tripsData.completed]]
+        </div>
+      </div>
+    </div>
 
-      <!--ACTION POINTS-->
+    <div class="paper-material list-panel" elevation="1">
+      <h2 class="chart-title">Trips by section</h2>
+      <google-chart
+          id="tripsChart"
+          class="viz"
+          type="bar">
+      </google-chart>
+    </div>
 
-      <div class="paper-material list-panel listControls" elevation="1">
-        <div class="controls-wrapper">
-          <div class="title-row">
-            <h1 sub-title>Action Points</h1>
-          </div>
-          <div class="filters-divider"></div>
-          <div class="wrap-controls">
-            <div class="dropdown-with-clear-btn">
-              <!--<paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>-->
-              <!--<paper-dropdown-menu label="Office" placeholder="Select from list" noink>-->
-              <!--<paper-menu class="dropdown-content" attr-for-selected="name" selected="{{apOffice}}">-->
-              <!--<template is="dom-repeat" items="[[offices]]" as="office">-->
-              <!--<paper-item name="[[office.name]]">[[office.name]]</paper-item>-->
-              <!--</template>-->
-              <!--</paper-menu>-->
-              <!--</paper-dropdown-menu>-->
-              <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-              <etools-multi-selection-menu label="Office"
-                                          id="actionPtsOffice"
-                                          placeholder="Select from list"
-                                          error-message="Must select at least one office"
-                                          selected-values="{{apOffice}}"
-                                          option-label="name"
-                                          option-value="id"
-                                          trigger-value-change-event
-                                          on-paper-dropdown-close="_apOfficeChanged"
-                                          options="[[offices]]"></etools-multi-selection-menu>
-            </div>
+    <!--ACTION POINTS-->
+
+    <div class="paper-material list-panel listControls" elevation="1">
+      <div class="controls-wrapper">
+        <div class="title-row">
+          <h1 sub-title>Action Points</h1>
+        </div>
+        <div class="filters-divider"></div>
+        <div class="wrap-controls">
+          <div class="dropdown-with-clear-btn">
+            <!--<paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>-->
+            <!--<paper-dropdown-menu label="Office" placeholder="Select from list" noink>-->
+            <!--<paper-menu class="dropdown-content" attr-for-selected="name" selected="{{apOffice}}">-->
+            <!--<template is="dom-repeat" items="[[offices]]" as="office">-->
+            <!--<paper-item name="[[office.name]]">[[office.name]]</paper-item>-->
+            <!--</template>-->
+            <!--</paper-menu>-->
+            <!--</paper-dropdown-menu>-->
+            <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
+            <etools-multi-selection-menu label="Office"
+                                        id="actionPtsOffice"
+                                        placeholder="Select from list"
+                                        error-message="Must select at least one office"
+                                        selected-values="{{apOffice}}"
+                                        option-label="name"
+                                        option-value="id"
+                                        trigger-value-change-event
+                                        on-paper-dropdown-close="_apOfficeChanged"
+                                        options="[[offices]]"></etools-multi-selection-menu>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="paper-material list-panel" elevation="1">
-        <h2 class="chart-title">Action points by section</h2>
-        <google-chart
-            id="actionPointsChart"
-            class="viz-actions"
-            type="bar">
-        </google-chart>
-      </div>
+    <div class="paper-material list-panel" elevation="1">
+      <h2 class="chart-title">Action points by section</h2>
+      <google-chart
+          id="actionPointsChart"
+          class="viz-actions"
+          type="bar">
+      </google-chart>
+    </div>
 
   </template>
 

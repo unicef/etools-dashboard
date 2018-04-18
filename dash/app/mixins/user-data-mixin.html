@@ -1,23 +1,35 @@
 <link rel="import"
-      href="data-element-mixin.html">
-<link rel="import"
       href="../scripts/ramda.html">
+<link rel="import" href="../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
 
 <script>
   'use strict'
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
-  const { DataElement } = EtoolsDashboard.Mixins;
+
+  // const UserDataMixins = compose(
+  //   EtoolsDashboard.Mixins.DataElement,
+  //   EtoolsDashboard.Mixins.UserPermissions,
+  //   EtoolsDashboard.Mixins.Endpoints
+  // )
+
+  const UserDataMixins = (superClass) => EtoolsDashboard.Mixins.DataElement(
+    EtoolsDashboard.Mixins.Endpoints(superClass)
+      // EtoolsDashboard.Mixins.UserPermissions(superclass)
+    
+  )
+
   /**
    * `user-data` Description
-   *
-   * @summary ShortDescription.
-   * @customElement
    * @polymer
-   * @extends {Polymer.Element}
+   * @mixinFunction
+  //  * @appliesMixin EtoolsAjaxRequestMixin
+  //  * @appliesMixin EtoolsPmpApp.Mixins.UserPermissions
+  //  * @appliesMixin EtoolsPmpApp.Mixins.DataElement
+  //  * @appliesMixin EtoolsPmpApp.Mixins.Endpoints
    */
-  EtoolsDashboard.Mixins.UserData = baseClass =>
-    class extends DataElement(baseClass) {
+  EtoolsDashboard.Mixins.UserData = Polymer.dedupingMixin(
+    base => class extends UserDataMixins(Polymer.Element) {
       /**
        * Object describing property-related metadata used by Polymer features
        */
@@ -25,15 +37,18 @@
         return {
           endpointName: {
             type: String,
-            value: 'user'
+            value: 'myProfile'
           },
-
           user: {
             type: Object,
             readOnly: true,
             notify: true
           },
-
+          permissions: {
+            type: Object,
+            readOnly: true,
+            notify: true,
+          }
         };
       }
 
@@ -51,14 +66,76 @@
        */
       ready() {
         super.ready();
+        this._elementReady();
       }
 
-      _handleMyResponse(user) {
-        if (!isEmpty(user)) {
-          this._setUser(user);
+      requestUserData() {
+        debugger
+        this.sendRequest({
+          endpoint: this.getEndpoint(this.endpointName)
+        }).then((res) => {
+          debugger
+          // TODO: check response to make sure it contains a valid user
+          this._setUserData(res);
+          this.dispatch('setCurrentUser', res);
+          this.checkDexieCountryIsUserCountry(res);
+        }).catch((error) => {
+          debugger
+          this._resetUserAndPermissions();
+          this.logError('Error occurred on logged user data request', 'user request', error);
+          if (error.status === 403) {
+            this.fireEvent('forbidden', {bubbles: true, composed: true});
+          }
+        });
+      }
+
+      _handleResponse(res) {
+        // TODO: check response to make sure it contains a valid user
+        this._setUserData(res.detail);
+      }
+
+      _handleError(rsp, err) {
+        this._setUser(null);
+        this._setPermissions(null);
+      }
+
+      _setUserData(data) {
+        var _user = data;
+        var _permissions = {};
+
+        var permissionsList = this.getAllPermissions();
+
+        if (!_.isEmpty(data)) {
+          permissionsList.defaultPermissions.forEach(function(perm) {
+            _permissions[perm] = true;
+          });
+          if (!_user.is_staff) {
+            permissionsList.partnerOnlyPermissions.forEach(function(perm) {
+              _permissions[perm] = true;
+            });
+          } else {
+            // user is not partner but staff:
+            permissionsList.managementPermissions.forEach(function(perm) {
+              _permissions[perm] = true;
+            });
+
+            if (_user.profile.partner_staff_member) {
+              // staff that has faked partnership by setting partner_staff_member on their profile
+              permissionsList.partnerPermissions.forEach(function(perm) {
+                _permissions[perm] = true;
+              });
+            }
+          }
+        } else {
+          //for testing
+          permissionsList.superPermissions.forEach(function(perm) {
+            _permissions[perm] = true;
+          });
         }
+        this._setUser(_user);
+        this._setPermissions(_permissions);
       }
-
     }
+  )
 
 </script>

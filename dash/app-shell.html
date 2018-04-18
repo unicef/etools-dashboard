@@ -21,7 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/etools-dropdown/etools-dropdown.html">
-<link rel="import" href="../bower_components/etools-piwik-analytics/etools-piwik-analytics.html">
+<!-- <link rel="import" href="../bower_components/etools-piwik-analytics/etools-piwik-analytics.html"> -->
 
 <link rel="import" href="app/styles/buttons-styles.html">
 <link rel="import" href="app/styles/page-layout-styles.html">
@@ -77,9 +77,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <etools-piwik-analytics page="[[subroute.path]]"
+    <!-- <etools-piwik-analytics page="[[subroute.path]]"
                             user="[[user]]"
-                            toast="[[currentToastMessage]]"></etools-piwik-analytics>
+                            toast="[[currentToastMessage]]"></etools-piwik-analytics> -->
 
     <common-data-loaders></common-data-loaders>
 
@@ -193,15 +193,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </template>
 
   <script>
+
+  /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.UserData
+     * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+     */
     const ShellMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
-      EtoolsDashboard.Mixins.UserData)
+      EtoolsDashboard.Mixins.UserData
+    )(Polymer.Element)
+
     /**
    * @customElement
    * @polymer
+   * @extends ShellMixin
    * @extends {Polymer.Element}
    */
-    class AppShell extends ShellMixin(Polymer.Element) {
+    class AppShell extends ShellMixin {
       static get is() {
         return 'app-shell';
       }
@@ -231,6 +241,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       ready(){
         super.ready();
+
+        this.requestUserData();
       }
 
       _routePageChanged(page) {
