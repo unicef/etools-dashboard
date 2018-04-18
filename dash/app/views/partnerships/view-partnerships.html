@@ -44,7 +44,7 @@
 
 <dom-module id="view-partnerships">
   <template>
-    <style include="shared-styles grid-layout-styles iron-flex iron-flex-factors page-layout-styles paper-material-styles list-styles">
+    <style include="shared-styles grid-layout-styles iron-flex page-layout-styles paper-material-styles list-styles">
       .no-header-line {
         --header-bottom-line: none;
       }
@@ -58,11 +58,7 @@
         color: var(--accent-color);
         font-weight: 500;
       }
-  
-      .paper-material {
-        width: calc(100vw - 48px);
-      }
-  
+    
       data-table-row span:not(:first-child),
       data-table-header data-table-column:not(:first-child) data-table-header data-table-column data-table-column,
       data-table-header div data-table-column data-table-column {
@@ -558,12 +554,12 @@
                 {
                   qName: 'qs',
                   propName: 'qs',
-                  xf: xs => xs
+                  xf: identity
                 },
                 {
                   qName: 'sort',
                   propName: 'sortOrder',
-                  xf: xs => xs
+                  xf: identity
                 },
                 {
                   qName: 'sectors',
@@ -614,15 +610,6 @@
         ]
       }
 
-      /**
-       * Instance of the element is created/upgraded. Use: initializing state,
-       * set up event listeners, create shadow dom.
-       * @constructor
-       */
-      constructor() {
-        super();
-      }
-
       _init(active, sectors, statuses, offices) {
         let params = this.queryParams;
         let staticLoaded = this._allHaveValues('sectors', 'statuses', 'offices');
@@ -643,10 +630,6 @@
         this.set('endAfterDate', params.endAfter ? params.endAfter : '');
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
-      }
-
-      testfunc(){
-        log('test')
       }
 
       _initListFilters(sectors, statuses, offices) {
@@ -716,15 +699,15 @@
           let filtersValues = [
             {
               filterName: 'Section/Cluster',
-              selectedValue: _.map(this.selectedSectors, 'value')
+              selectedValue: map(prop('value'), this.selectedSectors)
             },
             {
               filterName: 'Field Office',
-              selectedValue: _.map(this.selectedOffices, 'id')
+              selectedValue: map(prop('id'), this.selectedOffices)
             },
             {
               filterName: 'Status',
-              selectedValue: _.map(this.selectedStatuses, 'value')
+              selectedValue: map(prop('value'), this.selectedStatuses)
             },
             {
               filterName: 'Starts After',
@@ -754,6 +737,7 @@
         }
         this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
         const qs = this.buildQueryString();
+        debugger
         const currentRoute = this.route.prefix + this.route.path;
 
         if (qs !== null) {
@@ -779,9 +763,9 @@
       _filterPartnershipsData() {
         this.$.partnerships.query({
           searchString: this.qs,
-          sectors: _.map(this.selectedSectors, 'label'),
-          offices: _.map(this.selectedOffices, 'name'),
-          status: _.map(this.selectedStatuses, 'value'),
+          sectors: map(prop('label'), this.selectedSectors),
+          offices: map(prop('name'), this.selectedOffices),
+          status: map(prop('value'), this.selectedStatuses),
           startAfterDate: this.startAfterDate,
           endBeforeDate: this.endBeforeDate,
           startBeforeDate: this.startBeforeDate,
@@ -813,7 +797,7 @@
 
       _setSelectedOffices(officesStr) {
         let officesIdsArr = officesStr.split('|');
-        if (!_.isEmpty(officesIdsArr)) {
+        if (!isEmpty(officesIdsArr)) {
           officesIdsArr = officesIdsArr.map(n => parseInt(n, 10));
           return this.offices.filter(o => officesIdsArr.includes(parseInt(o.id, 10)));
         }
@@ -822,7 +806,7 @@
 
       _setSelectedSectors(sectorsStr) {
         const sectorsArr = sectorsStr.split('|');
-        if (!_.isEmpty(sectorsArr)) {
+        if (!isEmpty(sectorsArr)) {
           const selectedSectors = this.sectors.filter(function(s) {
             return sectorsArr.indexOf(s.value) > -1;
           });
@@ -833,7 +817,7 @@
 
       _setSelectedStatuses(statuses) {
         const statusesStrArr = statuses.split('|');
-        if (_.isEmpty(this.statuses)) {
+        if (isEmpty(this.statuses)) {
           return [];
         }
         return this.statuses.filter(function(status) {

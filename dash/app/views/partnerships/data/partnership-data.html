@@ -6,16 +6,6 @@
 
 
 <dom-module id="partnership-data">
-  <template>
-    <style>
-      :host {
-        display: block
-      }
-    </style>
-
-    
-
-  </template>
 
   <script>
     const PartnershipDataMixin = compose(
@@ -86,22 +76,6 @@
             }
           },
         };
-      }
-
-      /**
-       * Instance of the element is created/upgraded. Use: initializing state,
-       * set up event listeners, create shadow dom.
-       * @constructor
-       */
-      constructor() {
-        super();
-      }
-
-      /**
-       * Use for one-time configuration of your component after local DOM is initialized. 
-       */
-      ready() {
-        super.ready();
       }
 
       query(params) {

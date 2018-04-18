@@ -48,7 +48,6 @@
         // Using replace state to change the URL here ensures the browser's
         // back button doesn't take you through every query
         var currentState = window.history.state;
-        log('is qs empty', qs, isEmpty(qs))
         window.history.replaceState(currentState, null,
           routePath + (qs && !isEmpty(qs) ? '?' + qs : ''));
 
