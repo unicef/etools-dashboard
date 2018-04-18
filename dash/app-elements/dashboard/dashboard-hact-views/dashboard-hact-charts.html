@@ -98,7 +98,7 @@
     <!--Assurance Activities-->
     <paper-material class="list-panel hact-paper layout  center-center">
       <div class="hact-title component">
-        Assurance Activities
+        Assessment and Assurance Activities
       </div>
       <div class="divider"></div>
 
@@ -147,7 +147,7 @@
               </div>
               <div class="assurance-data">
                 <div class="completed">[[chartData.assurance_activities.missing_micro_assessment]]</div>
-                <div class="subheading assurance-color">Expired</div>
+                <div class="subheading assurance-color">Expiring</div>
               </div>
             </div>
           </div>
@@ -188,7 +188,7 @@
           <template is="dom-repeat" items="[[chartData.financial_findings]]">
             <div class$="layout horizontal justified [[isHighlighted(item.highlighted)]]">
               <div class="fin-title flex-1">[[item.name]]</div>
-              <div class="fin-amount">[[item.value]]</div>
+              <div class="fin-amount">[[_numWithCommas(item.value)]]</div>
             </div>
           </template>
         </div>
@@ -224,7 +224,7 @@
     <!--Cash Transfer Amounts-->
     <paper-material class="list-panel hact-paper layout center-center ">
       <div class="hact-title component">
-        Total Cash Transfers by Cash Transfer Amounts
+        Total Cash Transfer by Cash Transfer Ranges
       </div>
       <div class="divider"></div>
       <div class="layout horizontal">
@@ -409,7 +409,7 @@
               bar: {groupWidth: '100%'},
               colors: ['transparent'],
               chartArea: {
-                top: '8',
+                top: '0',
                 bottom: '0',
                 left: '0',
                 width: '85%',
@@ -418,6 +418,7 @@
                 textStyle: {
                   color: '#000000',
                   auraColor: 'transparent',
+                  opacity: '0.54',
                 },
                 datum: {
                   stem: {
@@ -462,7 +463,7 @@
               },
               colors: ['#D8D8D8', '#2BB0F2', '#FECC02', '#F05656', '#751010', "#000000"],
               hAxis: {
-                title: 'Cash Transfer Amounts',
+                title: 'Cash Transfer Ranges',
                 format: 'currency',
                 slantedText: true,
                 slantedTextAngle: 315,
@@ -704,6 +705,10 @@
 
         _dashCapital: function(string) {
           return `- ${_.capitalize(string)}`
+        },
+
+        _numWithCommas: function(number) {
+          return parseInt(number).toLocaleString('en')
         }
 
       })
