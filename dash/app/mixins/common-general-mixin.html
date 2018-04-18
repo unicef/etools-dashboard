@@ -135,7 +135,7 @@
       _allHaveValues(...args) {
         const self = this;
         return args.reduce(function(hasVal, prop) {
-          return !isEmpty(self[prop]) && hasVal;
+          return !isEmpty(self[prop]) && !!self[prop] && hasVal;
         }, true);
       }
 
