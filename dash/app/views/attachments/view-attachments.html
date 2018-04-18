@@ -1,4 +1,34 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../bower_components/app-route/app-route.html">
+
+<link rel="import" href="../../styles/shared-styles.html">
+<link rel="import" href="../../styles/list-styles.html">
+<link rel="import" href="../../styles/grid-layout-styles.html">
+<link rel="import" href="../../styles/page-layout-styles.html">
+<link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
+
+<link rel="import" href="../../mixins/list-filters-mixin.html">
+<link rel="import" href="../../mixins/date-mixin.html">
+<link rel="import" href="../../mixins/common-general-mixin.html">
+<link rel="import" href="../../mixins/pagination-with-filters-mixin.html">
+<link rel="import" href="../../mixins/redux-store-mixin.html">
+
+<link rel="import" href="../../components/data-table/data-table-column.html">
+<link rel="import" href="../../components/data-table/data-table-header.html">
+<link rel="import" href="../../components/data-table/data-table-row.html">
+<link rel="import" href="../../components/data-table/data-table-footer.html">
+
+<link rel="import" href="../../config/config.html">
+
+<link rel="import" href="../../../../bower_components/etools-dropdown/etools-dropdown-multi.html">
+<link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="data/attachments-data.html">
 
 <link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../styles/list-styles.html">
@@ -29,52 +59,62 @@
 
 <dom-module id="view-attachments">
   <template>
-    <style include="shared-styles list-styles grid-layout-styles iron-flex-factors paper-material-styles">
+    <style include="shared-styles grid-layout-styles page-layout-styles paper-material-styles list-styles">
       .wrap-controls paper-input {
         min-width: 280px;
       }
-
+  
       .custom-width {
         width: 176px;
       }
     </style>
-    <!-- <attachments-data
-        id="attachments"
-        active="[[active]]"
-        filtered-total="{{filteredTotal}}"
-        filtered-attachments="{{filteredAttachments}}"
-        fire-data-loaded
-        on-attachments-loaded="_attachmentsLoaded"
-    ></attachments-data> -->
-
-    <div class="paper-material list-panel listControls" elevation="1">
+  
+    <app-route route="{{route}}"
+               pattern="/dash/attachments"
+               active="{{active}}"
+               query-params="{{queryParams}}"></app-route>
+  
+    <attachments-data id="attachments"
+                        filtered-total="{{filteredTotal}}"
+                        filtered-attachments="{{filteredAttachments}}"
+                        fire-data-loaded
+                        on-attachments-loaded="_attachmentsLoaded"></attachments-data>
+  
+    <div class="paper-material list-panel listControls"
+         elevation="1">
       <div class="wrap-controls">
-        <paper-input type="search" autocomplete="off" value="{{qs}}"
+        <paper-input type="search"
+                     autocomplete="off"
+                     value="{{qs}}"
                      placeholder="Search by Partner or Vendor #"
                      always-float-label>
-          <iron-icon icon="search" prefix></iron-icon>
+          <iron-icon icon="search"
+                     prefix></iron-icon>
         </paper-input>
-        <template is="dom-repeat" items="[[selectedFilters]]" as="filter">
+        <template is="dom-repeat"
+                  items="[[selectedFilters]]"
+                  as="filter">
           <!-- dropdown filters  -->
-          <template is="dom-if" if="[[filterTypeIs('esmm', filter.type)]]">
+          <template is="dom-if"
+                    if="[[filterTypeIs('esmm', filter.type)]]">
             <div class="filter esmm">
-              <etools-multi-selection-menu
-                  label="[[filter.filterName]]"
-                  placeholder="&#8212;"
-                  disabled$="[[!filter.selectionOptions.length]]"
-                  options="[[filter.selectionOptions]]"
-                  option-value="[[filter.optionValue]]"
-                  option-label="[[filter.optionLabel]]"
-                  selected-values="[[filter.alreadySelected]]"
-                  trigger-value-change-event
-                  on-etools-selected-items-changed="esmmValueChanged"
-                  data-filter-path$="[[filter.path]]">
-              </etools-multi-selection-menu>
-              <paper-icon-button
-                  suffix class="remove-field remove" icon="cancel"
-                  on-tap="removeFilter"
-                  data-filter-name$="[[filter.filterName]]"
-                  data-reset-path$="[[filter.path]]">
+              <etools-dropdown-multi label="[[filter.filterName]]"
+                                     placeholder="&#8212;"
+                                     disabled$="[[!filter.selectionOptions.length]"
+                                     options="[[filter.selectionOptions]]"
+                                     option-value="[[filter.optionValue]]"
+                                     option-label="[[filter.optionLabel]]"
+                                     selected-values="[[filter.alreadySelected]]"
+                                     trigger-value-change-event
+                                     on-etools-selected-items-changed="esmmValueChanged"
+                                     data-filter-path$="[[filter.path]]">
+              </etools-dropdown-multi>
+              <paper-icon-button suffix
+                                 class="remove-field remove"
+                                 icon="cancel"
+                                 on-tap="removeFilter"
+                                 data-filter-name$="[[filter.filterName]]"
+                                 data-reset-path$="[[filter.path]]">
               </paper-icon-button>
             </div>
           </template>
@@ -82,46 +122,61 @@
       </div>
       <div class="fixed-controls">
         <div class="filters-divider"></div>
-        <paper-menu-button id="filterMenu" dynamic-align>
-          <paper-button class="button dropdown-trigger">
+        <paper-menu-button id="filterMenu"
+                           dynamic-align>
+          <paper-button class="button"
+                        slot="dropdown-trigger">
             <iron-icon icon="filter-list"></iron-icon>
             add filter
           </paper-button>
-          <paper-listbox class="dropdown-content">
-            <template is="dom-repeat" items="[[availableListFilterOptions]]">
+          <paper-listbox slot="dropdown-content">
+            <template is="dom-repeat"
+                      items="[[availableListFilterOptions]]">
               <paper-item on-tap="selectFilter">[[item.filterName]]</paper-item>
             </template>
           </paper-listbox>
         </paper-menu-button>
       </div>
     </div>
-
-    <div id="list" class="paper-material" elevation="1">
+  
+    <div class="paper-material"
+         id="list"
+         elevation="1">
       <data-table-header no-collapse>
-        <data-table-column class="col-2 col" field="partner" sortable>
+        <data-table-column class="col-2 col"
+                           field="partner"
+                           sortable>
           Partner
         </data-table-column>
         <data-table-column class="col-1 col">
           Vendor #
         </data-table-column>
-        <data-table-column class="custom-width col" field="partner_type" sortable>
+        <data-table-column class="custom-width col"
+                           field="partner_type"
+                           sortable>
           Partner Type
         </data-table-column>
-        <data-table-column class="custom-width col" field="source">
+        <data-table-column class="custom-width col"
+                           field="source">
           Source
         </data-table-column>
-        <data-table-column class="custom-width col" sortable field="file_type">
+        <data-table-column class="custom-width col"
+                           sortable
+                           field="file_type">
           Document Type
         </data-table-column>
         <data-table-column class="col-3 col">
           File Download
         </data-table-column>
-        <data-table-column class="col-1 col" sortable field="created">
+        <data-table-column class="col-1 col"
+                           sortable
+                           field="created">
           Date Uploaded
         </data-table-column>
       </data-table-header>
-
-      <template is="dom-repeat" items="[[filteredAttachments]]">
+  
+      <template is="dom-repeat"
+                items="[[filteredAttachments]]">
         <data-table-row no-collapse>
           <div slot="row-data">
             <div class="col col-2">
@@ -156,39 +211,24 @@
           </div>
         </data-table-row>
       </template>
-      <data-table-footer
-          page-size="[[pageSize]]"
-          page-number="[[pageNumber]]"
-          visible-range="{{visibleRange}}"
-          on-page-size-changed="pageSizeChanged"
-          filtered-total-results="[[filteredTotal]]"
-          on-page-number-changed="pageNumberChanged">
+      <data-table-footer page-size="[[pageSize]]"
+                         page-number="[[pageNumber]]"
+                         visible-range="{{visibleRange}}"
+                         on-page-size-changed="pageSizeChanged"
+                         filtered-total-results="[[filteredTotal]]"
+                         on-page-number-changed="pageNumberChanged">
       </data-table-footer>
     </div>
   </template>
-
+  
   <script>
-    'use strict';
-
-    /**
-    * @polymer
-    * @mixinFunction
-    * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
-    * @appliesMixin EtoolsDashboard.Mixins.Dropdown
-    * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
-    * @appliesMixin EtoolsDashboard.Mixins.ListFilters
-    * @appliesMixin EtoolsDashboard.Mixins.PaginationWithFilters
-    * @appliesMixin EtoolsDashboard.Mixins.Date
-    */
-    const ViewAttachmentsMixins = compose(
-      EtoolsDashboard.Mixins.CommonGeneral,
+    const AttachmentsMixin = compose(
       EtoolsDashboard.Mixins.ListFilters,
       EtoolsDashboard.Mixins.Date,
-      EtoolsDashboard.Mixins.Dropdown,
-      EtoolsDashboard.Mixins.ReduxStore,
+      EtoolsDashboard.Mixins.CommonGeneral,
       EtoolsDashboard.Mixins.PaginationWithFilters,
+      EtoolsDashboard.Mixins.ReduxStore
     )(Polymer.Element)
-
     /**
      * `view-attachments` Description
      *
@@ -197,12 +237,20 @@
      * @polymer
      * @appliesMixin ViewAttachmentsMixins
      */
-    class ViewAttachments extends ViewAttachmentsMixins {
+    class ViewAttachments extends AttachmentsMixin {
       /**
        * String providing the tag name to register the element under.
        */
       static get is() {
         return 'view-attachments';
+      }
+      
+      static get observers() {
+        return [
+          '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, requiredDataLoaded)',
+          '_initListFilters(attachmentTypes)',
+          '_init(active, attachmentTypes)',
+        ];
       }
 
       /**
@@ -236,6 +284,10 @@
             type: Boolean,
             value: false
           },
+          formattedTypes: {
+            type: Array,
+            value: []
+          },
           params: {
             type: Array,
             value: function() {
@@ -243,22 +295,22 @@
                 {
                   qName: 'qs',
                   propName: 'qs',
-                  xf: _.identity
+                  xf: identity
                 },
                 {
                   qName: 'sort',
                   propName: 'sortOrder',
-                  xf: _.identity
+                  xf: identity
                 },
                 {
                   qName: 'sortBy',
                   propName: 'orderBy',
-                  xf: _.identity
+                  xf: identity
                 },
                 {
                   qName: 'type',
-                  propName: 'docType',
-                  xf: _.identity
+                  propName: 'selectedAttachmentTypes',
+                  xf:  compose(join('|'), map(prop('value'))) 
                 },
               ]
             }
@@ -266,90 +318,76 @@
         };
       }
 
-      static get observers() {
-        return [
-          '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, requiredDataLoaded)',
-          '_initListFilters(attachmentTypes)',
-          '_init(active, attachmentTypes, urlParams)',
-        ]
+      _init(active, attachmentTypes){
+        let params = this.queryParams;
+          if (!active || isEmpty(attachmentTypes) || !attachmentTypes) {
+            return;
+          }
+          if (isEmpty(this.formattedTypes)) {
+            this._formatAttachmentTypes(attachmentTypes);
+          }
+          this.set('initComplete', false);
+          this.set('qs', params.qs || '');
+          this.set('pageNumber', params.page ? parseInt(params.page) : 1);
+          this.set('pageSize', params.size ? parseInt(params.size) : 10);
+          this.set('sortOrder', params.sort || 'desc');
+          this.set('orderBy', params.sortBy || '');
+          this.set('selectedAttachmentTypes', params.type ? this._setSelectedFromCollection(params.type, this.formattedTypes) : []);
+          this.set('initComplete', true);
+          this._updateSelectedFiltersValues();
       }
 
-      /**
-       * Instance of the element is created/upgraded. Use: initializing state,
-       * set up event listeners, create shadow dom.
-       * @constructor
-       */
-      constructor() {
-        super();
-      }
-
-      /**
-       * Use for one-time configuration of your component after local DOM is initialized. 
-       */
-      ready() {
-        this.addEventListener('sort-changed', this.sortOrderChanged)
-        super.ready();
-      }
-
-      //attachmentTypes required to ensure redux statePaths are loaded
-      _init() {
-        let params = this.urlParams;
-        if (!this.active || !params || !_.isEmpty(this.filteredAttachments)) {
-          return;
-        }
-        this.set('initComplete', false);
-        this.set('qs', params.qs || '');
-        this.set('pageNumber', params.page ? parseInt(params.page) : 1);
-        this.set('pageSize', params.size ? parseInt(params.size) : 10);
-        this.set('sortOrder', params.sort || 'desc');
-        this.set('orderBy', params.sortBy || '');
-        this.set('selectedAttachmentTypes', params.docType ? this._setSelectedFromCollection(params.docType, this.attachmentTypes) : []);
-        this.set('initComplete', true);
-        this._updateSelectedFiltersValues();
+      _formatAttachmentTypes(list) {
+        const formattedTypes = union(this.attachmentTypes, this.static.partner_file_types).map(type => ({
+          label: type,
+          value: type
+        }));
+        this.set('formattedTypes', formattedTypes);
       }
 
       _attachmentsLoaded(e) {
         e.stopImmediatePropagation();
-        this.set('requiredDataLoaded', true);
+          this.set('requiredDataLoaded', true);
       }
 
       _initListFilters(attachmentTypes) {
-        this.debounce('init-list-filters', () => {
-          this.initListFiltersData([
-            {
-              filterName: 'Document Type',
-              type: 'esmm',
-              optionValue: 'value',
-              optionLabel: 'label',
-              path: 'selectedAttachmentTypes',
-              selectionOptions: _.union(this.attachmentTypes, this.static.partner_file_types).map(type => ({
-                label: type,
-                value: type
-              })),
-              alreadySelected: []
-            },
-          ]);
-        }, 100)
+        this.initListFiltersData([
+              {
+                filterName: 'Document Type',
+                type: 'esmm',
+                optionValue: 'value',
+                optionLabel: 'label',
+                path: 'selectedAttachmentTypes',
+                selectionOptions: _.union(this.attachmentTypes, this.static.partner_file_types).map(type => ({
+                  label: type,
+                  value: type
+                })),
+                alreadySelected: []
+              },
+            ]);
       }
 
       _updateSelectedFiltersValues() {
-        this.debounce('updateShownFilters', () => {
-          let filtersValues = [
+        this.updateFiltersDebouncer = Polymer.Debouncer.debounce(
+          this.updateFiltersDebouncer,
+          Polymer.Async.timeOut.after(20), () => {
+            let filtersValues = [
             {
-              filterName: 'Document Type',
-              selectedValue: _.map(this.selectedAttachmentTypes, 'value')
-            }
-          ]
-        }, 200)
+                filterName: 'Document Type',
+                selectedValue: map(prop('value'), this.selectedAttachmentTypes)
+              }
+            ];
+            this.updateShownFilters(filtersValues);
+          })
       }
 
       _filterDocuments() {
         const selectedParams = {
           searchString: this.qs,
-          attachmentType: _.map(this.selectedAttachmentTypes, 'value'),
+          attachmentType: map(prop('value'), this.selectedAttachmentTypes),
           orderBy: this.orderBy
         };
-        const query = _.assign({}, _.omitBy(selectedParams, _.isEmpty), {
+        const query = merge(reject(isEmpty, selectedParams), {
           pageNumber: this.pageNumber,
           pageSize: this.pageSize,
           order: this.sortOrder,
@@ -357,15 +395,30 @@
         this.$.attachments.query(query);
       }
 
-      _updateUrl() {
+      _updateUrl(query, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, requiredDataLoaded) {
         if (!this.initComplete || !this.requiredDataLoaded) {
           return;
         }
+        const currentRoute = this.route.prefix + this.route.path;
+
         const qs = this.buildQueryString();
-        this.updateAppState('dashboard/attachments', qs, true);
+        this.updateAppState(currentRoute, qs, true);
         if (this.requiredDataLoaded) {
           this._filterDocuments();
         }
+      }
+
+      _setSelectedFromCollection(param, collection) {
+        const itemsFromParam = param.split('|');
+        if (!isEmpty(itemsFromParam)) {
+          const res = collection.filter(u => itemsFromParam.indexOf(u.value) > -1);
+          return res;
+        }
+        return [];
+      }
+
+      _getDownloadUrl(link) {
+        return `${this.baseSite}${link}`
       }
 
       _setSelectedFromCollection(param, collection) {

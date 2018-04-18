@@ -1,0 +1,105 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../mixins/data-element-mixin.html">
+<link rel="import" href="../../../mixins/date-mixin.html">
+<link rel="import" href="../../../mixins/event-helper-mixin.html">
+<link rel="import" href="../../../config/dexie-db-config.html">
+
+
+<dom-module id="attachments-data">
+
+  <script>
+    const AttachmentsDataMixin = compose(
+      EtoolsDashboard.Mixins.DataElement,
+      EtoolsDashboard.Mixins.Date,
+      EtoolsDashboard.Mixins.EventHelper
+    )(Polymer.Element);
+    /**
+     * `attachments-data` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class AttachmentsData extends AttachmentsDataMixin {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'attachments-data';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          endpointName: {
+            type: String,
+            value: 'attachments'
+          },
+          filteredTotal: {
+            type: Number,
+            readOnly: true,
+            notify: true
+          },
+          filteredAttachments: {
+            type: Array,
+            readOnly: true,
+            notify: true
+          },
+          dataLoadedEventName: {
+            type: String,
+            value: 'attachments-loaded'
+          },
+          predicates: {
+            type: Object,
+            value: function () {
+              return {
+                searchString: ({ partner, vendor_number }, query) => {
+                  partner = partner ? partner.toLowerCase() : '';
+                  vendor_number = vendor_number ? vendor_number.toLowerCase() : '';
+                  return contains(query.toLowerCase(), partner) || contains(query.toLowerCase(),vendor_number)
+                },
+                attachmentType: ({ file_type }, type) => contains(file_type, type),
+              }
+            }
+          }
+        };
+      }
+
+      query(params) {
+        const { pageNumber, pageSize, order, orderBy } = params;
+        EtoolsDashboard.DexieDb.transaction('r', EtoolsDashboard.DexieDb.attachments, () => {
+          let queryResult = EtoolsDashboard.DexieDb.attachments.orderBy(orderBy || 'created');
+          if (order === 'asc') {
+            queryResult = queryResult.reverse();
+          }
+          const fieldsToFilter = without(['pageNumber', 'pageSize', 'order', 'orderBy'],keys(params));
+          queryResult = queryResult.filter(file => !isEmpty(fieldsToFilter) ?
+            fieldsToFilter.reduce(
+              (acc, field) => acc && this.predicates[field](file, params[field]), true)
+            : !!file.file_link && !!file.partner
+          );
+          queryResult = queryResult.filter(file => !isEmpty(file.filename))
+
+          return Dexie.Promise.all([
+            queryResult.count(),
+            // Use clone() as offset() and limit() otherwise mutates the same query that is counted
+            queryResult.clone()
+              .offset((pageNumber - 1) * pageSize)
+              .limit(pageSize)
+              .toArray()])
+            .then(countAndResult => {
+              this._setFilteredTotal(countAndResult[0]);
+              this._setFilteredAttachments(countAndResult[1]);
+              this.fireEvent('global-loading', { loadingSource: 'attachments-data' });
+            })
+
+        });
+      }
+    }
+
+    window.customElements.define(AttachmentsData.is, AttachmentsData);
+  </script>
+</dom-module>

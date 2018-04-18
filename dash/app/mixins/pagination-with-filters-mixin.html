@@ -14,6 +14,7 @@
     constructor() {
       super()
     }
+    
 
     static get properties() {
       return {
@@ -34,6 +35,11 @@
           value: 100
         }
       }
+    }
+
+    ready() {
+      this.addEventListener('sort-changed', this.sortOrderChanged);
+      super.ready();
     }
     
     filterChanged() {
