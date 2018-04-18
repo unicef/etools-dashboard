@@ -257,7 +257,10 @@
             type: Boolean,
             value: false
           },
-
+          formattedTypes: {
+            type: Array,
+            value: []
+          },
           params: {
             type: Array,
             value: function() {
@@ -293,15 +296,26 @@
           if (!active || isEmpty(attachmentTypes) || !attachmentTypes) {
             return;
           }
+          if (isEmpty(this.formattedTypes)) {
+            this._formatAttachmentTypes(attachmentTypes);
+          }
           this.set('initComplete', false);
           this.set('qs', params.qs || '');
           this.set('pageNumber', params.page ? parseInt(params.page) : 1);
           this.set('pageSize', params.size ? parseInt(params.size) : 10);
           this.set('sortOrder', params.sort || 'desc');
           this.set('orderBy', params.sortBy || '');
-          this.set('selectedAttachmentTypes', params.type ? this._setSelectedFromCollection(params.type, attachmentTypes) : []);
+          this.set('selectedAttachmentTypes', params.type ? this._setSelectedFromCollection(params.type, this.formattedTypes) : []);
           this.set('initComplete', true);
           this._updateSelectedFiltersValues();
+      }
+
+      _formatAttachmentTypes(list) {
+        const formattedTypes = union(this.attachmentTypes, this.static.partner_file_types).map(type => ({
+          label: type,
+          value: type
+        }));
+        this.set('formattedTypes', formattedTypes);
       }
 
       _attachmentsLoaded(e) {
@@ -370,7 +384,8 @@
       _setSelectedFromCollection(param, collection) {
         const itemsFromParam = param.split('|');
         if (!isEmpty(itemsFromParam)) {
-          return collection.filter(u => itemsFromParam.indexOf(u.value) > -1)
+          const res = collection.filter(u => itemsFromParam.indexOf(u.value) > -1);
+          return res;
         }
         return [];
       }
