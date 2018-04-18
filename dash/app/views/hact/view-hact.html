@@ -4,11 +4,13 @@
 <link rel="import" href="../../styles/list-styles.html">
 <link rel="import" href="../../styles/grid-layout-styles.html">
 <link rel="import" href="../../styles/app-theme.html">
+<link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
 <link rel="import" href="../../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../../bower_components/iron-icons/av-icons.html">
 <link rel="import" href="../../../../bower_components/iron-meta/iron-meta.html">
 <link rel="import" href="../../../../bower_components/etools-dropdown/etools-dropdown.html">
 <link rel="import" href="../../../../bower_components/etools-dialog/etools-dialog.html">
@@ -34,7 +36,7 @@
 
 <dom-module id="view-hact">
   <template>
-    <style include="shared-styles list-styles paper-material-styles">
+    <style include="shared-styles list-styles page-layout-styles paper-material-styles">
       :host {
         /* display: block; */
         --paper-input-container-label: {
@@ -49,6 +51,10 @@
 
       .hact-list {
         min-width: 1150px;
+      }
+
+      data-table-footer {
+        width: calc(100vw - 48px);
       }
 
       .detail-btn {
@@ -66,6 +72,7 @@
       .search-bar {
         padding-bottom: 8px;
         padding-top: 8px;
+        padding-left: 24px;
         box-sizing: border-box;
       }
 
@@ -79,7 +86,7 @@
 
       .view-toggle {
         display: flex;
-        width: 100%;
+        width: calc(100vw - 48px);
         padding-right: 42px;
         justify-content: flex-end;
         align-items: center;
@@ -168,7 +175,7 @@
             <paper-input id="query" type="search" autocomplete="off" value="[[queryString]]" on-keyup="setQuery"
                     placeholder="Type and search"
                     label="Keywords" always-float-label on-search="setQuery">
-              <iron-icon icon="search" prefix></iron-icon>
+              <iron-icon icon="search" slot="prefix"></iron-icon>
             </paper-input>
           </div>
         </div>
@@ -274,7 +281,6 @@
             type: Number,
             value: 50
           },
-  
           totals: {
             type: Array,
           },
@@ -313,9 +319,9 @@
        * set up event listeners, create shadow dom.
        * @constructor
        */
-      // constructor() {
-      //   super();
-      // }
+      constructor() {
+        super();
+      }
 
       /**
        * Use for one-time configuration of your component after local DOM is initialized. 
@@ -344,8 +350,6 @@
         }
       }
 
-   
-
         _filterPartnersData() {
         Polymer.Debouncer.debounce('query',
           Polymer.Async.timeOut.after(50),
@@ -355,7 +359,6 @@
             this.pageSize,
             this.pageNumber)
         );
-
       }
 
         _updateUrl(queryString, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete) {
@@ -441,8 +444,6 @@
         _isActive(current, target) {
           return current === target
         }
-
-
     }
     
     window.customElements.define(ViewHact.is, ViewHact);
