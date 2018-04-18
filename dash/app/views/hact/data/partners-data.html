@@ -79,7 +79,6 @@
         
         if (!this.loadedInitially) {
           this.fireEvent('global-loading', {message: 'Loading partners data...', active: true});
-          this._elementReady();
           this.set('loadedInitially', true);
         }
       }

@@ -1,4 +1,9 @@
 <link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../mixins/data-element-mixin.html">
+<link rel="import" href="../../../mixins/date-mixin.html">
+<link rel="import" href="../../../mixins/event-helper-mixin.html">
+<link rel="import" href="../../../config/dexie-db-config.html">
+
 
 <dom-module id="partnership-data">
   <template>
@@ -13,6 +18,11 @@
   </template>
 
   <script>
+    const PartnershipDataMixin = compose(
+      EtoolsDashboard.Mixins.DataElement,
+      EtoolsDashboard.Mixins.Date,
+      EtoolsDashboard.Mixins.EventHelper
+    )(Polymer.Element);
     /**
      * `partnership-data` Description
      *
@@ -21,7 +31,7 @@
      * @polymer
      * @extends {Polymer.Element}
      */
-    class PartnershipData extends Polymer.Element {
+    class PartnershipData extends PartnershipDataMixin {
       /**
        * String providing the tag name to register the element under.
        */
@@ -34,7 +44,47 @@
        */
       static get properties() {
         return {
-          
+          endpointName: {
+            type: String,
+            value: 'cso_dashboard'
+          },
+          currentQuery: {
+            type: Object,
+            value: null
+          },
+          filteredPartnerships: {
+            type: Array,
+            readOnly: true,
+            notify: true
+          },
+          totalResults: {
+            type: Number,
+            readOnly: true,
+            notify: true
+          },
+          dataLoadedEventName: {
+            type: String,
+            value: 'partnerships-loaded'
+          },
+          predicates: {
+            type: Object,
+            value: function() {
+              return {
+                searchString: (qs, partner)=> qs.length ? _.includes(partner.partner_name.toLowerCase(), qs.toLowerCase()): true,
+                sectors: (sectors, partner)=> sectors.length ? !!_.intersection(sectors, [_.trim(partner.sections)]).length : true,
+                offices: (offices, partner)=> offices.length ? !!_.intersection(offices, partner.offices_names.split(',')).length : true,
+                status: (status, partner)=> status.length ? (_.includes(status, partner.status) ? true : false) : true,
+                startAfterDate: (date, partner)=> _.isEmpty(partner.start) ? true
+                : !_.isEmpty(date) ? this.prepareDate(partner.start) > this.prepareDate(date): true,
+                endBeforeDate: (date, partner)=> _.isEmpty(partner.end) ? true
+                  : !_.isEmpty(date) ? this.prepareDate(partner.end) < this.prepareDate(date) : true,
+                startBeforeDate: (date, partner)=> _.isEmpty(partner.start) ? true
+                  : !_.isEmpty(date) ? this.prepareDate(partner.start) < this.prepareDate(date) : true,
+                endAfterDate: (date, partner)=> _.isEmpty(partner.end) ? true
+                  : !_.isEmpty(date) ? this.prepareDate(partner.end) > this.prepareDate(date) : true
+              };
+            }
+          },
         };
       }
 
@@ -52,10 +102,34 @@
        */
       ready() {
         super.ready();
+      }
 
-        Polymer.RenderStatus.afterNextRender(this, function() {
-          
-        });
+      query(params) {
+        const {pageNumber, pageSize, order} = params;
+        const predKeys = keys(this.predicates);
+        EtoolsDashboard.DexieDb.transaction(
+          'r', 
+          EtoolsDashboard.DexieDb.cso_dashboard,
+          ()=> {
+            let queryResult = EtoolsDashboard.DexieDb.cso_dashboard.orderBy('partner_name');
+            if (order === 'desc'){
+              queryResult = queryResult.reverse();
+            }
+            const callPred = (pred, partner)=> this.predicates[pred](params[pred], partner);
+            queryResult = queryResult.filter(
+              partner => predKeys.reduce((acc, pred)=> acc && callPred(pred, partner), true)
+            );
+            return Dexie.Promise.all([
+              queryResult.count(),
+              queryResult.clone()
+              .offset((pageNumber - 1) * pageSize)
+                .limit(pageSize)
+                .toArray()]);
+          }).then(countAndResult=>{
+            this._setTotalResults(countAndResult[0]);
+            this._setFilteredPartnerships(countAndResult[1]);
+            this.fireEvent('global-loading', {loadingSource: 'partner-data'});
+          }).catch(err=>console.error('Error querying partnerships-dash: ', err))
       }
 
     }

@@ -118,7 +118,8 @@
         // remove filter
         this.splice('selectedFilters', selectedFilterIndex, 1);
         this._updateAvailableFilterOptions();
-        this.set(path, null);
+        const resetValue = Array.isArray(this[path]) ? []: null;
+        this.set(path, resetValue);
       }
     }
 
