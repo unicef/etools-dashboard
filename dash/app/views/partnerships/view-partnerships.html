@@ -457,7 +457,6 @@
      * @polymer
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
-     * @appliesMixin EtoolsDashboard.Mixins.Dropdown
      * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
      * @appliesMixin EtoolsDashboard.Mixins.ListFilters
      * @appliesMixin EtoolsDashboard.Mixins.PaginationWithFilters
@@ -489,7 +488,7 @@
         return {
           filteredPartnerships: {
             type: Array,
-            notify: true,
+            notify: true
           },
           forceDataRefresh: {
             type: Boolean,
@@ -501,14 +500,14 @@
           },
           initComplete: {
             type: Boolean,
-            value: false,
+            value: false
           },
           csvDownloadUrl: {
             type: String,
             notify: true
           },
           urlParams: {
-            type: Object,
+            type: Object
           },
           sectors: {
             type: Array,
@@ -567,38 +566,38 @@
                 {
                   qName: 'sectors',
                   propName: 'selectedSectors',
-                  xf:  compose(join('|'), map(prop('value'))) 
+                  xf: compose(join('|'), map(prop('value')))
                 },
                 {
                   qName: 'offices',
                   propName: 'selectedOffices',
-                  xf: compose(join('|'), map(prop('name'))) 
+                  xf: compose(join('|'), map(prop('name')))
                 },
                 {
                   qName: 'status',
                   propName: 'selectedStatuses',
-                  xf: compose(join('|'), map(prop('value'))) 
+                  xf: compose(join('|'), map(prop('value')))
                 },
                 {
                   qName: 'startAfter',
                   propName: 'startAfterDate',
-                  xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
+                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
                 },
                 {
                   qName: 'endBefore',
                   propName: 'endBeforeDate',
-                  xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
+                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
                 },
                 {
                   qName: 'startBefore',
                   propName: 'startBeforeDate',
-                  xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
+                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
                 },
                 {
                   qName: 'endAfter',
                   propName: 'endAfterDate',
-                  xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
-                },
+                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
+                }
               ];
             }
           }
@@ -610,7 +609,7 @@
           '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate)',
           '_initListFilters(sectors, statuses, offices)',
           '_init(active, sectors, statuses, offices)'
-        ]
+        ];
       }
 
       _init(active, sectors, statuses, offices) {
@@ -697,7 +696,7 @@
 
       _updateSelectedFiltersValues() {
         this.updateFiltersDebouncer = Polymer.Debouncer.debounce(
-          this.updateFiltersDebouncer, 
+          this.updateFiltersDebouncer,
           Polymer.Async.timeOut.after(20), ()=> {
           let filtersValues = [
             {
@@ -730,7 +729,7 @@
             }
           ];
           this.updateShownFilters(filtersValues);
-        })
+        });
       }
 
       _updateUrl(query, pageNumber, pageSize, sortOrder, requiredDataLoaded,
@@ -800,8 +799,8 @@
       _setSelectedOffices(officesStr) {
         let officesIdsArr = officesStr.split('|');
         if (!isEmpty(officesIdsArr)) {
-          officesIdsArr = officesIdsArr.map(n => parseInt(n, 10));
-          return this.offices.filter(o => officesIdsArr.includes(parseInt(o.id, 10)));
+          officesIdsArr = officesIdsArr.map((n) => parseInt(n, 10));
+          return this.offices.filter((o) => officesIdsArr.includes(parseInt(o.id, 10)));
         }
         return [];
       }
@@ -846,11 +845,11 @@
       _checkAllCurrenciesConsistent(status, all_currencies_are_consistent, fr_currencies_are_consistent) {
         return status === 'signed' ? true :
           (!all_currencies_are_consistent) ? true :
-            (!fr_currencies_are_consistent) ? false : true
+            (!fr_currencies_are_consistent) ? false : true;
       }
 
       _checkSigned(status, value) {
-        return status === 'signed' ? true : value
+        return status === 'signed' ? true : value;
       }
     }
 

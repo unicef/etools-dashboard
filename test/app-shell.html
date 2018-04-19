@@ -14,18 +14,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>Tests</title>
+    <title>App Shell</title>
 
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../bower_components/web-component-tester/browser.js"></script>
+
+    <!-- Import the element to test -->
+    <link rel="import" href="../dash/app-shell.html">
   </head>
   <body>
+    <test-fixture id="AppShell">
+      <template>
+        <app-shell></app-shell>
+      </template>
+    </test-fixture>
+
     <script>
-        WCT.loadSuites([
-        // Load 'app-shell.html' test suite, using native shadow dom
-        'app-shell.html?dom=shadow',
-        // Load 'app-shell.html' test suite, using shadydom
-        'app-shell.html?wc-shadydom=true'
-      ]);
+      suite('app-shell tests', function() {
+        test('Number in circle should be 1', function() {
+          // just a dummy test
+          var appShell = fixture('AppShell');
+          var contentId = appShell.shadowRoot.querySelector('#layout').id;
+          assert.equal(contentId, 'layout');
+        });
+      });
     </script>
   </body>
 </html>

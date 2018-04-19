@@ -52,6 +52,10 @@
             type: String,
             value: 'attachments-loaded'
           },
+          loadedInitially: {
+            type: Boolean,
+            value: false
+          },
           predicates: {
             type: Object,
             value: function () {
@@ -66,6 +70,14 @@
             }
           }
         };
+      }
+
+      ready(){
+        super.ready();
+        if (!this.loadedInitially) {
+          this.fireEvent('global-loading', {message: 'Loading documents...', active: true});
+          this.set('loadedInitially', true);
+        }
       }
 
       query(params) {
