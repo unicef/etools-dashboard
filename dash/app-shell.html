@@ -144,7 +144,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     Add New Trip
                   </paper-button>
                 </div>
-                
+
               </div>
             </div>
             <div class="top-content-row">
@@ -257,6 +257,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               {name: '2018', endpoint: '/api/v2/partners/hact?&format=csv'}
             ]
           },
+          pageTitle: {
+            type: String,
+            default: 'Dashboard'
+          }
         };
       }
 
@@ -276,6 +280,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // If no page was found in the route data, page will be an empty string.
         // Default to 'personalized' in that case.
         this.set('page', page || 'personalized');
+        this.pageTitle = page === 'partnerships' ? 'CSO Dashboard' : 'Dashboard'
       }
 
       _pageChanged(page) {
