@@ -9,6 +9,7 @@
   "scripts": {
     "lint": "npm run lint:javascript && polymer lint",
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
+    "build": "polymer build",
     "test": "polymer test",
     "test:integration": "polymer build # test that psk builds without error with the CLI"
   },

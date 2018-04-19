@@ -33,6 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="app/mixins/user-data-mixin.html">
 <link rel="import" href="app/mixins/event-helper-mixin.html">
 <link rel="import" href="app/config/dexie-db-config.html">
+<link rel="import" href="../bower_components/etools-loading/etools-loading-mixin.html">
 
 <link rel="import" href="app/scripts/ramda.html">
 <!-- lazy imports -->
@@ -190,6 +191,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     const ShellMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
+      EtoolsMixins.LoadingMixin,
       EtoolsDashboard.Mixins.UserData)
     /**
    * @customElement
