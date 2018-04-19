@@ -1,25 +1,6 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../../bower_components/app-route/app-route.html">
 
-<link rel="import" href="../../styles/shared-styles.html">
-<link rel="import" href="../../styles/list-styles.html">
-<link rel="import" href="../../styles/grid-layout-styles.html">
-<link rel="import" href="../../styles/page-layout-styles.html">
-<link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
-
-<link rel="import" href="../../mixins/list-filters-mixin.html">
-<link rel="import" href="../../mixins/date-mixin.html">
-<link rel="import" href="../../mixins/common-general-mixin.html">
-<link rel="import" href="../../mixins/pagination-with-filters-mixin.html">
-<link rel="import" href="../../mixins/redux-store-mixin.html">
-
-<link rel="import" href="../../components/data-table/data-table-column.html">
-<link rel="import" href="../../components/data-table/data-table-header.html">
-<link rel="import" href="../../components/data-table/data-table-row.html">
-<link rel="import" href="../../components/data-table/data-table-footer.html">
-
-<link rel="import" href="../../config/config.html">
-
 <link rel="import" href="../../../../bower_components/etools-dropdown/etools-dropdown-multi.html">
 <link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../../../bower_components/paper-input/paper-input.html">
@@ -49,7 +30,6 @@
 <link rel="import" href="../../mixins/pagination-with-filters-mixin.html">
 <link rel="import" href="../../mixins/redux-store-mixin.html">
 
-
 <link rel="import"
       href="../../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
 <link rel="import" href="../../../../bower_components/etools-datepicker/etools-datepicker-button.html">
@@ -66,6 +46,10 @@
   
       .custom-width {
         width: 176px;
+      }
+      
+      .wrap-controls {
+        padding-left: 24px;
       }
     </style>
   
@@ -89,7 +73,7 @@
                      placeholder="Search by Partner or Vendor #"
                      always-float-label>
           <iron-icon icon="search"
-                     prefix></iron-icon>
+                     slot="prefix"></iron-icon>
         </paper-input>
         <template is="dom-repeat"
                   items="[[selectedFilters]]"
@@ -222,12 +206,23 @@
   </template>
   
   <script>
+    /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
+     * @appliesMixin EtoolsDashboard.Mixins.Dropdown
+     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
+     * @appliesMixin EtoolsDashboard.Mixins.ListFilters
+     * @appliesMixin EtoolsDashboard.Mixins.PaginationWithFilters
+     * @appliesMixin EtoolsDashboard.Mixins.Date
+     */
     const AttachmentsMixin = compose(
       EtoolsDashboard.Mixins.ListFilters,
       EtoolsDashboard.Mixins.Date,
       EtoolsDashboard.Mixins.CommonGeneral,
       EtoolsDashboard.Mixins.PaginationWithFilters,
-      EtoolsDashboard.Mixins.ReduxStore
+      EtoolsDashboard.Mixins.ReduxStore,
+      EtoolsDashboard.Mixins.Dropdown
     )(Polymer.Element)
     /**
      * `view-attachments` Description
@@ -235,7 +230,7 @@
      * @summary ShortDescription.
      * @customElement
      * @polymer
-     * @appliesMixin ViewAttachmentsMixins
+     * @appliesMixin AttachmentsMixin
      */
     class ViewAttachments extends AttachmentsMixin {
       /**
@@ -352,19 +347,19 @@
 
       _initListFilters(attachmentTypes) {
         this.initListFiltersData([
-              {
-                filterName: 'Document Type',
-                type: 'esmm',
-                optionValue: 'value',
-                optionLabel: 'label',
-                path: 'selectedAttachmentTypes',
-                selectionOptions: _.union(this.attachmentTypes, this.static.partner_file_types).map(type => ({
-                  label: type,
-                  value: type
-                })),
-                alreadySelected: []
-              },
-            ]);
+          {
+            filterName: 'Document Type',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            path: 'selectedAttachmentTypes',
+            selectionOptions: _.union(this.attachmentTypes, this.static.partner_file_types).map(type => ({
+              label: type,
+              value: type
+            })),
+            alreadySelected: []
+          },
+        ]);
       }
 
       _updateSelectedFiltersValues() {
@@ -372,7 +367,7 @@
           this.updateFiltersDebouncer,
           Polymer.Async.timeOut.after(20), () => {
             let filtersValues = [
-            {
+              {
                 filterName: 'Document Type',
                 selectedValue: map(prop('value'), this.selectedAttachmentTypes)
               }
