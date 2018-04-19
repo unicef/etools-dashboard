@@ -89,7 +89,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                tail="{{subroute}}">
     </app-route>
 
-    <app-drawer-layout force-narrow fullbleed>
+    <app-drawer-layout id="layout" force-narrow fullbleed>
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
 
@@ -192,7 +192,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     const ShellMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
       EtoolsMixins.LoadingMixin,
-      EtoolsDashboard.Mixins.UserData)
+      EtoolsDashboard.Mixins.UserData);
     /**
    * @customElement
    * @polymer
@@ -208,25 +208,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           page: {
             type: String,
             reflectToAttribute: true,
-            observer: '_pageChanged',
+            observer: '_pageChanged'
           },
           routeData: Object,
           subroute: Object,
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,
-          
+    
           hideExport: Boolean
         };
       }
 
       static get observers() {
         return [
-          '_routePageChanged(routeData.page)',
+          '_routePageChanged(routeData.page)'
         ];
       }
 
-      ready(){
+      ready() {
         super.ready();
       }
 
@@ -246,9 +246,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           true);
       }
 
-      _onPageLoad(page){
+      _onPageLoad(page) {
         return ()=> {
-          this.fireEvent('page-changed-hact',{page})}
+          this.fireEvent('page-changed-hact', {page});};
       }
 
       _showPage404() {
@@ -260,8 +260,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _updateUrlTab(tab) {
-        if (!tab) { return }
-        this.set('hideExport', !(tab === 'hact' || tab === 'partnerships'))
+        if (!tab) { return; }
+        this.set('hideExport', !(tab === 'hact' || tab === 'partnerships'));
       }
     }
 
