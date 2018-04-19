@@ -9,7 +9,7 @@
     "dash/app/views/trips/view-trips.html",
     "dash/app/views/attachments/view-attachments.html"
   ],
-  "sources": ["images/**/*", "dash/**/*", "bower.josn"],
+  "sources": ["images/**/*", "dash/**/*", "bower.json"],
   "extraDependencies": [
     "bower_components/webcomponentsjs/*.js",
     "manifest.json"
