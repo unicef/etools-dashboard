@@ -34,10 +34,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 
-<link rel="stylesheet" href="app/components/toast/toast-mixin.html">
-<link rel="stylesheet" href="app/components/toast/toast-style.html">
+<link rel="import" href="app/components/toast/toast-notifications-mixin.html">
 
-<link rel="import" href="app/mixins/user-data-mixin.html">
+<!-- <link rel="import" href="app/mixins/user-data-mixin.html"> -->
 <link rel="import" href="app/mixins/event-helper-mixin.html">
 <link rel="import" href="app/config/dexie-db-config.html">
 <link rel="import" href="../bower_components/etools-loading/etools-loading-mixin.html">
@@ -220,14 +219,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   /**
      * @polymer
      * @mixinFunction
-     * @appliesMixin EtoolsDashboard.Mixins.UserData
+    //  * @appliesMixin EtoolsDashboard.Mixins.UserData
      * @appliesMixin EtoolsDashboard.Mixins.EventHelper
      * @appliesMixin EtoolsDashboard.Mixins.ToastNotifications
+     * @appliesMixin EtoolsMixins.LoadingMixin
      */
     const ShellMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
       EtoolsMixins.LoadingMixin,
-      EtoolsDashboard.Mixins.UserData,
+      // EtoolsDashboard.Mixins.UserData,
       EtoolsDashboard.Mixins.ToastNotifications
     )(Polymer.Element);
     /**
@@ -307,6 +307,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _showPage404() {
         this.page = 'view404'; 
+        this.fireEvent('toast', {text: 'Oops you hit a 404!', showCloseBtn: true});
       }
 
       _isActive(page, tab) {
