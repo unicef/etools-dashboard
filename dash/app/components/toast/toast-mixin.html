@@ -1,0 +1,163 @@
+<link rel="import" href="../../../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../../../bower_components/etools-behaviors/etools-logs-mixin.html">
+
+<script>
+  'use strict';
+
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+  window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+
+  /**
+   * Toast notifications functionality mixin
+   * @polymer
+   * @mixinFunction
+   * @appliesMixin EtoolsLogsMixin
+   */
+  EtoolsDashboard.Mixins.ToastNotifications = Polymer.dedupingMixin(
+      (superClass) => class extends EtoolsLogsMixin(superClass) {
+        static get properties() {
+          return {
+            _toast: {
+              type: Object,
+              value: null
+            },
+            _toastQueue: {
+              type: Array,
+              value: function() {
+                return [];
+              }
+            },
+            currentToastMessage: {
+              type: String,
+              value: ''
+            }
+          };
+        }
+
+        ready() {
+          super.ready();
+          this.addEventListener('toast', this.queueToast);
+        }
+
+        queueToast(e) {
+          e.stopPropagation();
+          let detail = e.detail;
+          if (!this._toast) {
+            this._createToastElement();
+          }
+
+          if (!this._toastQueue.length) {
+            this.push('_toastQueue', detail);
+            let toastProperties = this._prepareToastAndGetShowProperties(detail);
+            this._showToast(toastProperties);
+          } else {
+            let alreadyInQueue = this._toastQueue.filter(function(toastDetail) {
+              return JSON.stringify(toastDetail) === JSON.stringify(detail);
+            });
+            if (alreadyInQueue.length === 0) {
+              this.push('_toastQueue', detail);
+            } // else already in the queue
+          }
+        }
+
+        _createToastElement() {
+          this._toast = document.createElement('paper-toast');
+          this._toast.set('fitInto', this.$.appHeadLayout);
+          this._toast.classList.add('toast-general-style');
+          this._toast.appendChild(this._getCloseToastBtn());
+          // this.$.layout is app-drawer-layout element from app-shell.html
+          let layout = this.$.layout;
+          if (layout) {
+            layout.appendChild(this._toast);
+          } else {
+            this.logWarn('app-drawer-layout element from app-shell must have id="layout"', 'toast-notification-mixin');
+          }
+          this._toastAfterRenderSetup();
+        }
+        
+        _getCloseToastBtn() {
+          let btn = document.createElement('paper-button');
+          btn.innerHTML = 'Ok';
+          btn.classList.add('toast-dismiss-btn-general-style');
+          btn.addEventListener('tap', this._toggleToast.bind(this, this._toast));
+          return btn;
+        }
+
+        _toastAfterRenderSetup() {
+          Polymer.RenderStatus.afterNextRender(this._toast, () => {
+            // alter message wrapper css
+            let messageWrapper = this._toast.$.label;
+            if (messageWrapper) {
+              messageWrapper.style.whiteSpace = 'pre-wrap';
+            }
+            // add close listener
+            this._toast.addEventListener('iron-overlay-closed', this.dequeueToast.bind(this));
+          });
+        }
+
+        _isMultiLine(message) {
+          if (!message) {
+            return false;
+          }
+          return message.toString().length > 80;
+        }
+
+        dequeueToast() {
+          this.shift('_toastQueue');
+          if (this._toastQueue.length) {
+            let toastProperties = this._prepareToastAndGetShowProperties(this._toastQueue[0]);
+            this._showToast(toastProperties);
+          }
+        }
+
+        _prepareToastAndGetShowProperties(detail) {
+          let closeToastBtn = this._toast.querySelector('paper-button');
+
+          if (this._isMultiLine(detail.text)) {
+            this._toast.classList.remove('toast');
+            this._toast.classList.add('toast-multi-line');
+
+            closeToastBtn.classList.remove('toast-dismiss-btn');
+            closeToastBtn.classList.add('toast-dismiss-btn-multi-line');
+          } else {
+            this._toast.classList.remove('toast-multi-line');
+            this._toast.classList.add('toast');
+
+            closeToastBtn.classList.remove('toast-dismiss-btn-multi-line');
+            closeToastBtn.classList.add('toast-dismiss-btn');
+          }
+          closeToastBtn.updateStyles();
+
+          // clone detail obj
+          let toastProperties = JSON.parse(JSON.stringify(detail));
+
+          toastProperties.duration = 0;
+          if (typeof detail === 'object' && typeof detail.showCloseBtn !== 'undefined') {
+            if (detail.showCloseBtn === true) {
+              closeToastBtn.removeAttribute('hidden');
+            } else {
+              closeToastBtn.setAttribute('hidden', true);
+              if (!detail.duration) {
+                toastProperties.duration = 5000;
+              }
+            }
+            delete toastProperties.showCloseBtn;
+          } else {
+            closeToastBtn.setAttribute('hidden', true);
+          }
+
+          return toastProperties;
+        }
+
+        _toggleToast(toast) {
+          if (toast) {
+            toast.toggle();
+          }
+        }
+
+        _showToast(toastProperties) {
+          this.set('currentToastMessage', toastProperties.text);
+          this._toast.show(toastProperties);
+        }
+      });
+</script>
