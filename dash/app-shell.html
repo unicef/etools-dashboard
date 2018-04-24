@@ -21,10 +21,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/etools-dropdown/etools-dropdown.html">
+<<<<<<< HEAD
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <!-- <link rel="import" href="../bower_components/etools-piwik-analytics/etools-piwik-analytics.html"> -->
+=======
+<link rel="import" href="../bower_components/etools-piwik-analytics/etools-piwik-analytics.html">
+>>>>>>> parent of 6f69b19... Creates permissions mixin
 
 <link rel="import" href="app/styles/buttons-styles.html">
 <link rel="import" href="app/styles/page-layout-styles.html">
@@ -87,9 +91,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <!-- <etools-piwik-analytics page="[[subroute.path]]"
+    <etools-piwik-analytics page="[[subroute.path]]"
                             user="[[user]]"
-                            toast="[[currentToastMessage]]"></etools-piwik-analytics> -->
+                            toast="[[currentToastMessage]]"></etools-piwik-analytics>
 
     <common-data-loaders></common-data-loaders>
 
@@ -215,6 +219,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
+<<<<<<< HEAD
 
   /**
      * @polymer
@@ -230,13 +235,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // EtoolsDashboard.Mixins.UserData,
       EtoolsDashboard.Mixins.ToastNotifications
     )(Polymer.Element);
+=======
+    const ShellMixin = compose(
+      EtoolsDashboard.Mixins.EventHelper,
+      EtoolsDashboard.Mixins.UserData)
+>>>>>>> parent of 6f69b19... Creates permissions mixin
     /**
    * @customElement
    * @polymer
-   * @extends ShellMixin
    * @extends {Polymer.Element}
    */
-    class AppShell extends ShellMixin {
+    class AppShell extends ShellMixin(Polymer.Element) {
       static get is() {
         return 'app-shell';
       }
@@ -280,8 +289,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       ready() {
         super.ready();
+<<<<<<< HEAD
 
         // this.requestUserData();
+=======
+>>>>>>> parent of 6f69b19... Creates permissions mixin
       }
 
       _routePageChanged(page) {
