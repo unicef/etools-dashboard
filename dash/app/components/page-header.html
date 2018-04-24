@@ -12,10 +12,10 @@
 <link rel="import" href="../mixins/user-profile-data-mixin.html">
 <link rel="import" href="../../../bower_components/etools-behaviors/etools-page-refresh-mixin.html">
 
-
 <link rel="import" href="../config/dexie-db-config.html">
 
 <link rel="import" href="../styles/shared-styles.html">
+
 <dom-module id="page-header">
   <template>
     <style include="shared-styles">
@@ -58,8 +58,8 @@
       }
 
       .right-side {
-        @apply(--layout-horizontal);
-        @apply(--layout-center);
+        @apply --layout-horizontal;
+        @apply --layout-center;
       }
 
       etools-page-refresh {
@@ -79,8 +79,8 @@
       }
 
       .content-align {
-        @apply(--layout-horizontal);
-        @apply(--layout-center);
+        @apply --layout-horizontal;
+        @apply --layout-center;
         height: 60px;
       }
 
