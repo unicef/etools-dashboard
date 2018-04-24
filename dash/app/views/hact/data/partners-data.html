@@ -107,7 +107,7 @@
                 .limit(pageSize)
                 .toArray()]);
         }).then((countAndResult)=> {
-          this.fireEvent('global-loading');
+          this.fireEvent('global-loading', { loadingSource: 'partners-data' });
           this._setFilteredTotalResults(countAndResult[0]);
           this._setFilteredPartners(countAndResult[1]);
         }).catch((error)=> {

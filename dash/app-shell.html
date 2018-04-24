@@ -34,9 +34,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 
-<link rel="import" href="app/mixins/user-data-mixin.html">
+<link rel="import" href="app/components/toast/toast-notifications-mixin.html">
+
+<!-- <link rel="import" href="app/mixins/user-data-mixin.html"> -->
 <link rel="import" href="app/mixins/event-helper-mixin.html">
 <link rel="import" href="app/config/dexie-db-config.html">
+<link rel="import" href="../bower_components/etools-loading/etools-loading-mixin.html">
 
 <link rel="import" href="app/scripts/ramda.html">
 <!-- lazy imports -->
@@ -100,7 +103,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                tail="{{subroute}}">
     </app-route>
 
-    <app-drawer-layout force-narrow fullbleed>
+    <app-drawer-layout id="layout" force-narrow fullbleed>
       <!-- Main content -->
       <app-header-layout has-scrolling-region>
 
@@ -216,14 +219,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   /**
      * @polymer
      * @mixinFunction
-     * @appliesMixin EtoolsDashboard.Mixins.UserData
+    //  * @appliesMixin EtoolsDashboard.Mixins.UserData
      * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+     * @appliesMixin EtoolsDashboard.Mixins.ToastNotifications
+     * @appliesMixin EtoolsMixins.LoadingMixin
      */
     const ShellMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
-      EtoolsDashboard.Mixins.UserData
-    )(Polymer.Element)
-
+      EtoolsMixins.LoadingMixin,
+      // EtoolsDashboard.Mixins.UserData,
+      EtoolsDashboard.Mixins.ToastNotifications
+    )(Polymer.Element);
     /**
    * @customElement
    * @polymer
@@ -240,7 +246,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           page: {
             type: String,
             reflectToAttribute: true,
-            observer: '_pageChanged',
+            observer: '_pageChanged'
           },
           routeData: Object,
           subroute: Object,
@@ -260,17 +266,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           pageTitle: {
             type: String,
             default: 'Dashboard'
-          }
+          },
+          hideExport: Boolean
         };
       }
 
       static get observers() {
         return [
-          '_routePageChanged(routeData.page)',
+          '_routePageChanged(routeData.page)'
         ];
       }
 
-      ready(){
+      ready() {
         super.ready();
 
         // this.requestUserData();
@@ -293,13 +300,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           true);
       }
 
-      _onPageLoad(page){
+      _onPageLoad(page) {
         return ()=> {
-          this.fireEvent('page-changed-hact',{page})}
+          this.fireEvent('page-changed-hact', {page});};
       }
 
       _showPage404() {
-        this.page = 'view404';
+        this.page = 'view404'; 
+        this.fireEvent('toast', {text: 'Oops you hit a 404!', showCloseBtn: true});
       }
 
       _isActive(page, tab) {

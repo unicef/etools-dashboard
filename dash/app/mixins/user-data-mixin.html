@@ -1,5 +1,4 @@
-<link rel="import"
-      href="../scripts/ramda.html">
+<link rel="import" href="../scripts/ramda.html">
 <link rel="import" href="../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
 
 <script>
@@ -13,23 +12,26 @@
   //   EtoolsDashboard.Mixins.Endpoints
   // )
 
-  const UserDataMixins = (superClass) => EtoolsDashboard.Mixins.DataElement(
-    EtoolsDashboard.Mixins.Endpoints(superClass)
-      // EtoolsDashboard.Mixins.UserPermissions(superclass)
-    
-  )
+  // const UserDataMixins = EtoolsDashboard.Mixins.DataElement(
+  //   EtoolsDashboard.Mixins.Endpoints(
+  //     EtoolsDashboard.Mixins.UserPermissions
+  //   )
+  // )
 
   /**
    * `user-data` Description
    * @polymer
    * @mixinFunction
-  //  * @appliesMixin EtoolsAjaxRequestMixin
   //  * @appliesMixin EtoolsPmpApp.Mixins.UserPermissions
   //  * @appliesMixin EtoolsPmpApp.Mixins.DataElement
   //  * @appliesMixin EtoolsPmpApp.Mixins.Endpoints
    */
-  EtoolsDashboard.Mixins.UserData = Polymer.dedupingMixin(
-    base => class extends UserDataMixins(Polymer.Element) {
+  EtoolsDashboard.Mixins.UserData = (baseClass) =>
+    class extends EtoolsDashboard.Mixins.DataElement(
+      EtoolsDashboard.Mixins.Endpoints(
+        EtoolsDashboard.Mixins.UserPermissions(baseClass)
+      )
+    ){
       /**
        * Object describing property-related metadata used by Polymer features
        */
@@ -37,7 +39,7 @@
         return {
           endpointName: {
             type: String,
-            value: 'myProfile'
+            value: 'user'
           },
           user: {
             type: Object,
@@ -136,6 +138,5 @@
         this._setPermissions(_permissions);
       }
     }
-  )
 
 </script>

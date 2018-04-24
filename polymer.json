@@ -9,7 +9,7 @@
     "dash/app/views/trips/view-trips.html",
     "dash/app/views/attachments/view-attachments.html"
   ],
-  "sources": ["images/**/*", "dash/**/*"],
+  "sources": ["images/**/*", "dash/**/*", "bower.json"],
   "extraDependencies": [
     "bower_components/webcomponentsjs/*.js",
     "manifest.json"
@@ -19,13 +19,13 @@
   },
   "builds": [
     {
-      "preset": "es5-bundled"
+      "preset": "es5-bundled",
+      "name": "dash/es5-bundled"
     },
     {
-      "preset": "es6-bundled"
-    },
-    {
-      "preset": "es6-unbundled"
+      "preset": "es6-bundled",
+      "name": "dash/es6-bundled",
+      "browserCapabilities": ["es2015"]
     }
   ]
 }

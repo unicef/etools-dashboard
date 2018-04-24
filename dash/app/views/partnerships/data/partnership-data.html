@@ -56,6 +56,10 @@
             type: String,
             value: 'partnerships-loaded'
           },
+          loadedInitially: {
+            type: Boolean,
+            value: false
+          },
           predicates: {
             type: Object,
             value: function() {
@@ -76,6 +80,14 @@
             }
           },
         };
+      }
+
+      ready(){
+        super.ready();
+        if (!this.loadedInitially) {
+          this.fireEvent('global-loading', {message: 'Loading partnerships data...', active: true});
+          this.set('loadedInitially', true);
+        }
       }
 
       query(params) {
@@ -102,7 +114,7 @@
           }).then(countAndResult=>{
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
-            this.fireEvent('global-loading', {loadingSource: 'partner-data'});
+            this.fireEvent('global-loading', {loadingSource: 'partnership-data'});
           }).catch(err=>console.error('Error querying partnerships-dash: ', err))
       }
 
