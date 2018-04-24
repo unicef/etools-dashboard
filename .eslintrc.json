@@ -14,12 +14,14 @@
     "brace-style": "off",
     "new-cap": ["error", { "capIsNewExceptions": ["Polymer"], "capIsNewExceptionPattern": "^Etools.." }],
     "no-var": "off",
+    "no-debugger": "off",
     "no-undef": "warn",
     "require-jsdoc": "off",
     "valid-jsdoc": "off",
     "comma-dangle": ["error", "never"],
     "max-len": ["error", { "code": 120 }],
-    "camelcase": ["error", {"properties": "never"}]
+    "camelcase": ["error", {"properties": "never"}],
+    "object-curly-spacing": ["warn", "always"]
   },
   "globals": {
     "moment": true,

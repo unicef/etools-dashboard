@@ -1,18 +1,81 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
 
+<link rel="import" href="../../mixins/common-general-mixin.html">
+<link rel="import" href="../../mixins/list-filters-mixin.html">
+<link rel="import" href="../../mixins/redux-store-mixin.html">
+<link rel="import" href="data/partners-dropdown-data-mixin.html">
+
+<link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../../../bower_components/leaflet-map/leaflet-map.html">
+<link rel="import" href="../../../../bower_components/etools-dropdown/etools-dropdown-multi.html">
+
+<link rel="import" href="elements/marker-dialog.html">
+
+<link rel="import" href="../../styles/shared-styles.html">
+<link rel="import" href="../../styles/list-styles.html">
+<link rel="import" href="../../styles/page-layout-styles.html">
+<link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
+
 <dom-module id="view-map">
   <template>
-    <style>
-      :host {
-        display: block
+    <style include="shared-styles paper-material-styles list-styles page-layout-styles">
+      /* :host {
+        --paper-toggle-button-checked-bar-color: #88D4F7; /* TODO: replace with app-theme var */
+        --paper-toggle-button-checked-button-color: #3baaee; /* TODO: replace with app-theme var */
+      } */
+
+      leaflet-map {
+        height: 650px;
+      }
+
+      paper-menu {
+        max-width: 266px;
+      }
+
+      etools-searchable-multiselection-menu {
+        width: 366px;
+      }
+
+      .toggler {
+        display: flex;
+        bottom: 8px;
+        margin-bottom: 20px;
+        padding-left: 24px;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      paper-toggle-button {
+        margin-left: 16px;
+      }
+
+      .error {
+        color: var(--error-color);
+        left: 24px;
+        top: 60px;
+        position: absolute;
       }
     </style>
 
     <h1>Map</h1>
-
+    <app-route route="{{route}}"
+               pattern="/dash/map"
+               active="{{active}}"
+               query-params="{{queryParams}}"></app-route>
   </template>
 
+  <h1>HIMAP</h1>
   <script>
+    const EtoolsMapMixin = compose(
+      EtoolsDashboard.Mixins.PartnersDropdownData
+    )(Polymer.Element);
     /**
      * `view-map` Description
      *
@@ -21,7 +84,7 @@
      * @polymer
      * @extends {Polymer.Element}
      */
-    class ViewMap extends Polymer.Element {
+    class ViewMap extends EtoolsMapMixin {
       /**
        * String providing the tag name to register the element under.
        */
@@ -34,7 +97,7 @@
        */
       static get properties() {
         return {
-          
+    
         };
       }
 
@@ -48,13 +111,13 @@
       }
 
       /**
-       * Use for one-time configuration of your component after local DOM is initialized. 
+       * Use for one-time configuration of your component after local DOM is initialized.
        */
       ready() {
         super.ready();
 
         Polymer.RenderStatus.afterNextRender(this, function() {
-          
+    
         });
       }
 

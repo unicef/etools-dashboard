@@ -31,12 +31,9 @@
       }
 
       endpointHasTemplate(ep) {
-        return ep.hasOwnProperty('template') && !isEmpty(ep.template)
+        return ep.hasOwnProperty('template') && !isEmpty(ep.template);
       }
 
-      getAllPermissions() {
-        return etoolsAppConfig.permissions;
-      }
     }
   );
 </script>

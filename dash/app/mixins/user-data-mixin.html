@@ -1,10 +1,9 @@
 <link rel="import"
       href="data-element-mixin.html">
-<link rel="import"
-      href="../scripts/ramda.html">
+
 
 <script>
-  'use strict'
+  'use strict';
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
   const { DataElement } = EtoolsDashboard.Mixins;
@@ -16,7 +15,7 @@
    * @polymer
    * @extends {Polymer.Element}
    */
-  EtoolsDashboard.Mixins.UserData = baseClass =>
+  EtoolsDashboard.Mixins.UserData = (baseClass) =>
     class extends DataElement(baseClass) {
       /**
        * Object describing property-related metadata used by Polymer features
@@ -32,7 +31,7 @@
             type: Object,
             readOnly: true,
             notify: true
-          },
+          }
 
         };
       }
@@ -47,7 +46,7 @@
       }
 
       /**
-       * Use for one-time configuration of your component after local DOM is initialized. 
+       * Use for one-time configuration of your component after local DOM is initialized.
        */
       ready() {
         super.ready();
@@ -59,6 +58,6 @@
         }
       }
 
-    }
+    };
 
 </script>

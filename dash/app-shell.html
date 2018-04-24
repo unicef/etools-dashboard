@@ -30,6 +30,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 
+<link rel="import" href="../bower_components/shadycss/apply-shim.html">
+
+
 <link rel="import" href="app/mixins/user-data-mixin.html">
 <link rel="import" href="app/mixins/event-helper-mixin.html">
 <link rel="import" href="app/config/dexie-db-config.html">
@@ -177,7 +180,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <view-trips route="{{subroute}}"
                       class="page"
                       name="trips"></view-trips>
-          <view-map route="{{subroute}}"
+          <view-map route="{{route}}"
                     class="page"
                     name="map"></view-map>
           <view-attachments route="{{route}}"
@@ -189,7 +192,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </template>
 
   <script>
-    const ShellMixin = compose(
+    const EtoolsShellMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
       EtoolsMixins.LoadingMixin,
       EtoolsDashboard.Mixins.UserData);
@@ -198,7 +201,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
    * @polymer
    * @extends {Polymer.Element}
    */
-    class AppShell extends ShellMixin(Polymer.Element) {
+    class AppShell extends EtoolsShellMixin(Polymer.Element) {
       static get is() {
         return 'app-shell';
       }
@@ -218,6 +221,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     
           hideExport: Boolean
         };
+      }
+
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
       }
 
       static get observers() {
