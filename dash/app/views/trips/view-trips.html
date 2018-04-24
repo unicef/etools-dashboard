@@ -28,40 +28,6 @@
 
 <dom-module id="view-trips">
   <template>
-<<<<<<< HEAD
-    <style include="list-styles iron-flex-factors shared-styles page-layout-styles buttons-styles iron-flex-alignment paper-material-styles">
-      
-      .by-type {
-        padding: 0;
-        @apply --layout-horizontal;
-      }
-
-      .viz {
-        width: 100%;
-        @apply --tripsChart;
-      }
-
-      .viz-actions {
-        width: 100%;
-        @apply --actionPointsChart;
-      }
-
-      .chart-title {
-        font-size: 16px;
-        margin: 0;
-        line-height: 48px;
-        font-weight: 500;
-      }
-
-      .wrap-controls paper-dropdown-menu.sm-dropdown {
-        min-width: 88px;
-      }
-
-      div.paper-material:not(.by-type) {
-        padding: 24px;
-      }
-    </style>
-=======
       <style include="list-styles iron-flex-factors shared-styles page-layout-styles buttons-styles iron-flex-alignment paper-material-styles">
         
         .by-type {
@@ -90,7 +56,6 @@
           min-width: 88px;
         }
       </style>
->>>>>>> parent of 6f69b19... Creates permissions mixin
 
       <!-- <trips-dashboard-data trips-data="{{tripsData}}" filter="[[tripsFilter]]"></trips-dashboard-data> -->
       <!-- <action-pts-by-section-data action-points-data="{{actionPointsData}}"
@@ -168,16 +133,6 @@
         </div>
       </div>
 
-<<<<<<< HEAD
-    <div class="paper-material list-panel section-panel" elevation="1">
-      <h2 class="chart-title">Trips by section</h2>
-      <google-chart
-          id="tripsChart"
-          class="viz"
-          type="bar">
-      </google-chart>
-    </div>
-=======
       <div class="paper-material list-panel" elevation="1">
         <h2 class="chart-title">Trips by section</h2>
         <google-chart
@@ -186,7 +141,6 @@
             type="bar">
         </google-chart>
       </div>
->>>>>>> parent of 6f69b19... Creates permissions mixin
 
       <!--ACTION POINTS-->
 
