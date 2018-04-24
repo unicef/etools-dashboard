@@ -9,31 +9,34 @@
    * @polymer
    * @mixinFunction
    */
-  EtoolsDashboard.Mixins.UserPermissions = 
-    Polymer.dedupingMixin((superClass) => class extends superClass {
-      getAllPermissions() {
-        return {
-          defaultPermissions: [
-            'loggedInDefault',
-            'userInfoMenu',
-            'viewPartnerDetails'
-          ],
-          partnerOnlyPermissions: ['interventionsMenu'],
-          partnerPermissions: ['interventionsMenu'],
-          managementPermissions: [
-            'statsMenu',
-            'editPartnerDetails'
-          ],
-          superPermissions: [
-            'loggedInDefault',
-            'userInfoMenu',
-            'interventionsMenu',
-            'statsMenu',
-            'viewPartnerDetails',
-            'editPartnerDetails'
-          ]
-        };
-      }
-    });
+  EtoolsDashboard.Mixins.UserPermissions = (superClass) => class extends superClass {
+    constructor() {
+      super()
+    }
+    
+    getAllPermissions() {
+      return {
+        defaultPermissions: [
+          'loggedInDefault',
+          'userInfoMenu',
+          'viewPartnerDetails'
+        ],
+        partnerOnlyPermissions: ['interventionsMenu'],
+        partnerPermissions: ['interventionsMenu'],
+        managementPermissions: [
+          'statsMenu',
+          'editPartnerDetails'
+        ],
+        superPermissions: [
+          'loggedInDefault',
+          'userInfoMenu',
+          'interventionsMenu',
+          'statsMenu',
+          'viewPartnerDetails',
+          'editPartnerDetails'
+        ]
+      };
+    }
+  };
 
 </script>
