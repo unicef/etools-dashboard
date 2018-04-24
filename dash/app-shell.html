@@ -235,7 +235,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
    * @polymer
    * @extends {Polymer.Element}
    */
-    class AppShell extends EtoolsShellMixin(Polymer.Element) {
+    class AppShell extends EtoolsShellMixin {
       static get is() {
         return 'app-shell';
       }
@@ -266,7 +266,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: String,
             default: 'Dashboard'
           },
-    
           hideExport: Boolean
         };
       }
