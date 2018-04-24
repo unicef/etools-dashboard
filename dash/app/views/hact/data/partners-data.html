@@ -70,14 +70,13 @@
         }
       }
 
-
-
       constructor() {
         super();
       }
 
       ready() {
         super.ready();
+        
         if (!this.loadedInitially) {
           this.fireEvent('global-loading', {message: 'Loading partners data...', active: true});
           this.set('loadedInitially', true);

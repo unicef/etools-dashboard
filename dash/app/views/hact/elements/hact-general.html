@@ -2,6 +2,7 @@
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
 <link rel="import" href="../../../styles/grid-layout-styles.html">
+<link rel="import" href="../../../styles/page-layout-styles.html">
 <link rel="import" href="../../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
 <link rel="import" href="../../../../../bower_components/paper-tooltip/paper-tooltip.html">
@@ -17,7 +18,7 @@
 <dom-module id="hact-general">
   <template>
     <custom-style>
-      <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment paper-material-styles">
+      <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment page-layout-styles paper-material-styles">
         :host {
           --paper-material-padding: 0 24px 0 24px;
           --paper-tooltip-opacity: 1;
@@ -25,7 +26,6 @@
         }
 
         .hact-list {
-          width: calc(100vw - 48px);
           box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 5px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);  
         }
 

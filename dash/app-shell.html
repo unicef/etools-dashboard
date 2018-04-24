@@ -21,6 +21,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/etools-dropdown/etools-dropdown.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<!-- <link rel="import" href="../bower_components/etools-piwik-analytics/etools-piwik-analytics.html"> -->
 
 <link rel="import" href="app/styles/buttons-styles.html">
 <link rel="import" href="app/styles/page-layout-styles.html">
@@ -30,8 +34,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 
-<link rel="import" href="../bower_components/shadycss/apply-shim.html">
+<link rel="import" href="app/components/toast/toast-notifications-mixin.html">
 
+<link rel="import" href="../bower_components/shadycss/apply-shim.html">
 
 <link rel="import" href="app/mixins/user-data-mixin.html">
 <link rel="import" href="app/mixins/event-helper-mixin.html">
@@ -78,7 +83,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       .page[name="hact"] {
         padding-top: 12px;
       }
+
+      iron-pages {
+        display: flex;
+      }
     </style>
+
+    <etools-piwik-analytics page="[[subroute.path]]"
+                            user="[[user]]"
+                            toast="[[currentToastMessage]]"></etools-piwik-analytics>
 
     <common-data-loaders></common-data-loaders>
 
@@ -105,13 +118,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <h1 main-title>
                 [[pageTitle]]
               </h1>
+
               <div class="top-content-actions-wrapper">
-                <div class="top-content-action">
-                  <etools-dropdown id="exportYear" label="Export Year" options="[[availableYears]]" on-iron-select="_setExportYear" dropdown-value="/api/v2/partners/hact?&format=csv"
-                    hide-search hidden$="[[!_isActive(page, 'hact')]]">
-                  </etools-dropdown>
-                </div>
-                <div class="top-content-action" hidden$="[[hideExport]]">
+                <div class="top-content-action" hidden$="[[!_isActive(page,'partnerships')]]">
                   <a target="_blank" href="[[csvUrl]]">
                     <paper-button>
                       <iron-icon icon="file-download"></iron-icon>
@@ -119,6 +128,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </paper-button>
                   </a>
                 </div>
+
+                <div class="top-content-action" hidden$="[[!_isActive(page,'hact')]]">
+                  <paper-menu-button>
+                    <paper-button icon="file-download" slot="dropdown-trigger">
+                      <iron-icon class="dark" icon="file-download"></iron-icon>
+                      Export
+                    </paper-button>
+                    <paper-listbox slot="dropdown-content">
+                      <template is="dom-repeat" items="[[availableYears]]">
+                        <paper-item on-tap="_export">{{item.name}}</paper-item>
+                      </template>
+                    </paper-listbox>
+                  </paper-menu-button>
+                </div>
+
                 <div class="top-content-action" hidden$="[[!_isActive(page,'trips')]]">
                   <paper-button class="primary-btn with-prefix" on-tap="_goToAddTrip">
                     <iron-icon icon="add"></iron-icon>
@@ -176,7 +200,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                      name="hact"></view-hact>
           <view-partnerships route="{{route}}"
                              class="page"
-                             name="partnerships"></view-partnerships>
+                             name="partnerships"
+                             csv-download-url="{{csvUrl}}"></view-partnerships>
           <view-trips route="{{subroute}}"
                       class="page"
                       name="trips"></view-trips>
@@ -187,21 +212,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             class="page"
                             name="attachments"></view-attachments>
         </iron-pages>
-        </app-header-layout>
-        </app-drawer-layout>
-        </template>
+      </app-header-layout>
+    </app-drawer-layout>
+  </template>
 
   <script>
+
+  /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+     * @appliesMixin EtoolsDashboard.Mixins.ToastNotifications
+     * @appliesMixin EtoolsMixins.LoadingMixin
+     */
     const EtoolsShellMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
       EtoolsMixins.LoadingMixin,
-      EtoolsDashboard.Mixins.UserData);
+      EtoolsDashboard.Mixins.ToastNotifications
+    )(Polymer.Element);
     /**
    * @customElement
    * @polymer
    * @extends {Polymer.Element}
    */
-    class AppShell extends EtoolsShellMixin(Polymer.Element) {
+    class AppShell extends EtoolsShellMixin {
       static get is() {
         return 'app-shell';
       }
@@ -218,7 +252,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,
-    
+          
+          hideExport: Boolean,
+
+          availableYears: {
+            type: Array,
+            value: [
+              {name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv'},
+              {name: '2018', endpoint: '/api/v2/partners/hact?&format=csv'}
+            ]
+          },
+          pageTitle: {
+            type: String,
+            default: 'Dashboard'
+          },
           hideExport: Boolean
         };
       }
@@ -245,6 +292,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // If no page was found in the route data, page will be an empty string.
         // Default to 'personalized' in that case.
         this.set('page', page || 'personalized');
+        this.pageTitle = page === 'partnerships' ? 'CSO Dashboard' : 'Dashboard'
       }
 
       _pageChanged(page) {
@@ -263,7 +311,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _showPage404() {
-        this.page = 'view404';
+        this.page = 'view404'; 
+        this.fireEvent('toast', {text: 'Oops you hit a 404!', showCloseBtn: true});
       }
 
       _isActive(page, tab) {
@@ -271,8 +320,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _updateUrlTab(tab) {
-        if (!tab) { return; }
-        this.set('hideExport', !(tab === 'hact' || tab === 'partnerships'));
+        this.hideHactExport = tab === 'hact' ? false : true;
+        this.hidePartnershipExport = tab === 'partnerships' ? false : true;
+        if (!tab) { return }
+        this.set('hideExport', !(tab === 'hact' || tab === 'partnerships'))
+      }
+
+      _export(event) {
+        var endpoint = event.model.item.endpoint;
+        window.open(
+          `${endpoint}`,
+          '_blank'
+        )
       }
     }
 

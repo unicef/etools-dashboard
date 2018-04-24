@@ -21,22 +21,30 @@
 
   <script>
    
+   /**
+    * @polymer
+    * @mixinFunction
+    * @appliesMixin EtoolsDashboard.Mixins.Endpoints
+    * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
+    * @appliesMixin EtoolsDashboard.Mixins.Actions
+    * @appliesMixin EtoolsAjaxRequestMixin
+    */
     const CommonDataMixin = compose(
-      EtoolsDashboard.Mixins.Endpoints, 
-      EtoolsDashboard.Mixins.ReduxStore, 
-      EtoolsDashboard.Mixins.Actions, 
-      EtoolsAjaxRequestMixin);
-    
+      EtoolsDashboard.Mixins.Endpoints,
+      EtoolsDashboard.Mixins.ReduxStore,
+      EtoolsDashboard.Mixins.Actions,
+      EtoolsAjaxRequestMixin
+    )(Polymer.Element);
     
     /**
      * `common-data-loaders` Description
      *
      * @summary ShortDescription.
-   * @customElement
-   * @polymer
-   * @extends {Polymer.Element}
-   */
-    class CommonDataLoaders extends CommonDataMixin(Polymer.Element) {
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class CommonDataLoaders extends CommonDataMixin {
       /**
        * String providing the tag name to register the element under.
        */

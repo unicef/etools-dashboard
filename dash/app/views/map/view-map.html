@@ -63,26 +63,37 @@
         position: absolute;
       }
     </style>
-
-    <h1>Map</h1>
-    <app-route route="{{route}}"
-               pattern="/dash/map"
-               active="{{active}}"
-               query-params="{{queryParams}}"></app-route>
   </template>
-
-  <h1>HIMAP</h1>
+  <app-route route="{{route}}"
+             pattern="/dash/map"
+             active="{{active}}"
+             query-params="{{queryParams}}"></app-route>
+  
   <script>
     const EtoolsMapMixin = compose(
       EtoolsDashboard.Mixins.PartnersDropdownData
     )(Polymer.Element);
+    /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
+     * @appliesMixin EtoolsDashboard.Mixins.Dropdown
+     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
+     * @appliesMixin EtoolsDashboard.Mixins.ListFilters
+     */
+    const ViewMapMixins = compose(
+      EtoolsDashboard.Mixins.ReduxStore,
+      EtoolsDashboard.Mixins.ListFilters,
+      EtoolsDashboard.Mixins.Dropdown,
+      EtoolsDashboard.Mixins.CommonGeneral
+    )(Polymer.Element)
+
     /**
      * `view-map` Description
      *
      * @summary ShortDescription.
      * @customElement
      * @polymer
-     * @extends {Polymer.Element}
      */
     class ViewMap extends EtoolsMapMixin {
       /**
@@ -99,6 +110,12 @@
         return {
     
         };
+      }
+
+      static get observers() {
+        return [
+          '_init(countryProgrammes,sectors,statuses,partners,userCountry)'
+        ]
       }
 
       /**
@@ -121,6 +138,153 @@
         });
       }
 
+      _openModal(e) {
+        let model = e.model.marker;
+        let interventions = _.values(this.intLocMap[model.id].interventions);
+        let data = {
+          name: model.name,
+          interventions: interventions,
+          type: model.location_type
+        };
+        this.markerDialog.data = data;
+        this.markerDialog.opened = true;
+      }
+
+      _init() {
+        if (!this.active) {
+          return;
+        }
+        if (_.isEmpty(this.intLocMap)) {
+          // initialize the intLocMap object
+          this.set('mapFilter', '');
+          this.fire('global-loading', {
+            message: 'Loading page data...',
+            active: true
+          });
+        }
+
+        if (!this._allHaveValues('countryProgrammes', 'sectors', 'statuses', 'partners', 'userCountry')) {
+          return;
+        }else {
+          this.set('staticDataLoaded', true);
+          this._validateUserCountry();
+          this.fire('global-loading');
+        }
+//         first render of map only when tab is active, otherwise map tiles don't show
+        if (_.isEmpty(this.availableListFilterOptions)) {
+          this.initListFiltersData([
+            {
+              filterName: 'Country Programme',
+              type: 'dropdown',
+              alreadySelected: null,
+              selectionOptions: _.map(this.countryProgrammes, function(cp) {
+                return {
+                  name: cp.name,
+                  id: cp.id
+                };
+              }),
+              path: 'country_programme'
+            },
+            {
+              filterName: 'Sectors',
+              type: 'dropdown',
+              alreadySelected: null,
+              selectionOptions: _.map(this.sectors, function(o) {
+                return {
+                  name: o.label,
+                  id: o.value
+                };
+              }),
+              path: 'sector'
+            },
+            {
+              filterName: 'Status',
+              type: 'dropdown',
+              alreadySelected: null,
+              selectionOptions: _.map(this.statuses, function(o) {
+                return {
+                  name: o.label,
+                  id: o.value
+                };
+              }),
+              path: 'status'
+            },
+            {
+              filterName: 'Partners',
+              type: 'dropdown',
+              alreadySelected: null,
+              selectionOptions: _.map(this.partners, function(o) {
+                return {
+                  name: o.label,
+                  id: o.value
+                };
+              }),
+              path: 'partner'
+            },
+          ]);
+        }
+      }
+
+      _filterChanged(filt) {
+        let self = this;
+        let newFilter = {};
+        ['country_programme', 'status', 'sector', 'partner'].map(function(f) {
+          if (self[f]) {
+            newFilter[f] = self[f];
+          }
+        });
+        if (_.isEqual(this.mapFilter, newFilter)) {
+          return;
+        }
+        if (_.isEmpty(newFilter)) {
+          this.set('markers', []);
+          this.set('showActive', false);
+          return;
+        }
+        this.set('hasResult', true);
+        this.set('mapFilter', newFilter);
+        this.fire('global-loading', {
+          message: 'Loading interventions...',
+          active: true
+        });
+      }
+
+      // ensure redux items loaded before initializing the filters
+      _callLocations(locations) {
+        this.$.locationsData.query(locations);
+      }
+
+      _plotMarkers(locations) {
+        if (!locations.length) {
+          this.set('hasResult', false);
+        }
+        this.set('markers', locations);
+        this.fire('global-loading');
+      }
+
+      _partnerFilter(filter) {
+        return filter.filterName === 'Partners';
+      }
+
+      _partnerChanged(val) {
+        let id = _.get(val, 'detail.selectedValues.id');
+        this.set('partner', id);
+      }
+
+      _validateUserCountry(userCountry) {
+        if (userCountry) {
+          if (!userCountry.longitude || !userCountry.latitude) {
+            this.set('country', {
+              latitude: '40',
+              longitude: '38',
+              initial_zoom: 2
+            });
+            console.warn('The current user country does not provide map coordinates');
+          } else {
+            this.set('country', userCountry);
+          }
+        }
+      }
     }
 
     window.customElements.define(ViewMap.is, ViewMap);
