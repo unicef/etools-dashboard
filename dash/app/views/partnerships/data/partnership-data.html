@@ -78,11 +78,11 @@
                   : !_.isEmpty(date) ? this.prepareDate(partner.end) > this.prepareDate(date) : true
               };
             }
-          },
+          }
         };
       }
 
-      ready(){
+      ready() {
         super.ready();
         if (!this.loadedInitially) {
           this.fireEvent('global-loading', {message: 'Loading partnerships data...', active: true});
@@ -94,16 +94,16 @@
         const {pageNumber, pageSize, order} = params;
         const predKeys = keys(this.predicates);
         EtoolsDashboard.DexieDb.transaction(
-          'r', 
+          'r',
           EtoolsDashboard.DexieDb.cso_dashboard,
           ()=> {
             let queryResult = EtoolsDashboard.DexieDb.cso_dashboard.orderBy('partner_name');
-            if (order === 'desc'){
+            if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
             const callPred = (pred, partner)=> this.predicates[pred](params[pred], partner);
             queryResult = queryResult.filter(
-              partner => predKeys.reduce((acc, pred)=> acc && callPred(pred, partner), true)
+              (partner) => predKeys.reduce((acc, pred)=> acc && callPred(pred, partner), true)
             );
             return Dexie.Promise.all([
               queryResult.count(),
@@ -111,11 +111,11 @@
               .offset((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()]);
-          }).then(countAndResult=>{
+          }).then((countAndResult)=>{
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
             this.fireEvent('global-loading', {loadingSource: 'partnership-data'});
-          }).catch(err=>console.error('Error querying partnerships-dash: ', err))
+          }).catch((err)=>console.error('Error querying partnerships-dash: ', err));
       }
 
     }
