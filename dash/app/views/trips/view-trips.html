@@ -19,6 +19,7 @@
 <link rel="import" href="../../mixins/dropdown-mixin.html">
 <link rel="import" href="../../mixins/common-general-mixin.html">
 <link rel="import" href="../../mixins/redux-store-mixin.html">
+<link rel="import" href="data/trips-data-mixin.html">
 <link rel="import" href="../../../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../../../../bower_components/google-chart/google-chart-loader.html">
 <link rel="import" href="../../../../bower_components/moment-element/moment-import.html">
@@ -193,11 +194,13 @@
     * @mixinFunction
     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
     * @appliesMixin EtoolsDashboard.Mixins.Dropdown
+    // * @appliesMixin EtoolsDashboard.Mixins.TripsData
     */
     const ViewTripsMixins = compose(
       EtoolsDashboard.Mixins.ReduxStore,
-      EtoolsDashboard.Mixins.Dropdown
-    )(Polymer.Element)
+      EtoolsDashboard.Mixins.Dropdown,
+      EtoolsDashboard.Mixins.TripsData
+    )
     
     /**
      * `view-trips` Description
@@ -207,7 +210,7 @@
      * @polymer
      * @extends ViewTripsMixins
      */
-    class ViewTrips extends ViewTripsMixins {
+    class ViewTrips extends ViewTripsMixins(Polymer.Element) {
       /**
        * String providing the tag name to register the element under.
        */
@@ -398,6 +401,11 @@
           '_init(active)',
           '_alertStaticDataLoaded(offices,months,years)',
         ]
+      }
+
+      ready() {
+        super.ready()
+        this.getTripsData()
       }
 
       _init(active) {

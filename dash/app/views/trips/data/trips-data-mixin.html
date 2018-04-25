@@ -1,0 +1,95 @@
+<link rel="import" href="../../../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
+<link rel="import" href="../../../endpoints/endpoints-mixin.html">
+<link rel="import" href="../../../mixins/redux-store-mixin.html">
+
+<dom-module id="trips-data">
+
+	<!-- <template>
+		<etools-ajax id="ajax"
+								 endpoint="[[endpoint]]"
+								 caching-storage="dexie"
+								 on-success="_handleResponse"></etools-ajax>
+	</template> -->
+
+	<script>
+    'use strict';
+
+    /**
+    * @polymer
+    * @mixinFunction
+    * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
+    * @appliesMixin EtoolsDashboard.Mixins.Endpoints
+    * @appliesMixin EtoolsAjaxRequestMixin
+    */
+    const TripsDataMixins = compose(
+      EtoolsDashboard.Mixins.ReduxStore,
+      EtoolsDashboard.Mixins.Endpoints,
+      EtoolsAjaxRequestMixin
+    )
+
+    /**
+   * `trips-data` Description
+   *
+   * @customElement
+   * @polymer
+   * @extends {Polymer.Element}
+   */
+    // class TripsData extends TripsDataMixins {
+    EtoolsDashboard.Mixins.TripsData = baseClass => class extends TripsDataMixins(baseClass) {
+      // static get is() {
+      //   return 'trips-data';
+      // }
+
+      static get properties() {
+        return {
+          endpoint: {
+						type: Object
+					},
+          user: {
+            type: Object,
+            observer: '_setEndpoint'
+          },
+        }
+      }
+
+      static get actions() {
+        return {
+          setTripsData(trips) {
+						return {
+							type: 'SET_TRIPS_DATA',
+							trips: trips
+						};
+					}
+        }
+      }
+
+      _setEndpoint() {
+        this.set('endpoint', this.getEndpoint('trips', {id: this.user.id}));
+      }
+
+      getTripsData() {
+        let self = this
+        debugger
+        this.sendRequest({
+          endpoint: this.endpoint
+        }).then(response => {
+          debugger
+          self._handleResponse(response)
+        }).catch(console.log('failure'))
+      }
+
+      _handleResponse(response) {
+        var data = _.get(response, 'detail.data', []);
+        if (data.length) {
+          this.dispatch('setTripsData', this._prepareTripsData(data));
+        }
+      }
+
+      _prepareTripsData(data) {
+        return data.map(function (trip) {
+          return _.pick(trip, ['id','start_date','purpose','reference_number','supervisor_name']);
+        });
+      }
+    }
+	</script>
+</dom-module>

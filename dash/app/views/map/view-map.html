@@ -77,7 +77,7 @@
      * @polymer
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
-     * @appliesMixin EtoolsDashboard.Mixins.Dropdown
+    //  * @appliesMixin EtoolsDashboard.Mixins.Dropdown
      * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
      * @appliesMixin EtoolsDashboard.Mixins.ListFilters
      */
@@ -95,7 +95,7 @@
      * @customElement
      * @polymer
      */
-    class ViewMap extends EtoolsMapMixin {
+    class ViewMap extends ViewMapMixins {
       /**
        * String providing the tag name to register the element under.
        */
