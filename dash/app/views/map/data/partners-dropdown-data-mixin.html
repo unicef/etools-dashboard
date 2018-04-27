@@ -3,7 +3,7 @@
 <script>
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
-  
+
   const EtoolsPartnersDropdownMixin = compose(
     EtoolsDashboard.Mixins.EventHelper,
     EtoolsDashboard.Mixins.DataElement
@@ -37,19 +37,19 @@
       ready() {
         super.ready();
         if (!this.loadedInitially) {
-          this.fireEvent('global-loading', {message: 'Loading partners data...', active: true});
+          this.fireEvent('global-loading', { message: 'Loading partners data...', active: true });
           this.set('loadedInitially', true);
         }
       }
 
       _handleMyResponse(data) {
-          this._setPartners(data.map((p) => {
+        this._setPartners(data.map((p) => {
           return {
             value: parseInt(p.id),
             label: p.name
           };
         }));
-        this.fireEvent('global-loading', {active: false});
+        this.fireEvent('global-loading', { active: false });
       }
 
     };

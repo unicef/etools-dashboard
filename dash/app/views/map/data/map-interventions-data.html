@@ -1,0 +1,109 @@
+<link rel="import" href<link rel="import" href="../../../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
+<link rel="import" href="../../../endpoints/endpoints-mixin.html">">
+<link rel="import" href="../../../mixins/event-helper-mixin.html">
+<link rel="import" href="../../../mixins/ajax-server-errors-mixin.html">
+<script>
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+  window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+
+  const EtoolsMapDataMixin = compose(
+    EtoolsDashboard.Mixins.EventHelper,
+    EtoolsDashboard.Mixins.Endpoints,
+    EtoolsDashboard.Mixins.AjaxServerErrors,
+    EtoolsAjaxRequestMixin
+  );
+  /**
+   *
+   * @polymerMixin
+   * @mixinFunction
+   */
+  EtoolsDashboard.Mixins.MapInterventionsData = (superclass) =>
+    class extends EtoolsMapDataMixin(superclass) {
+      static get properties() {
+        return {
+          reqOptions: {
+            type: Object,
+            value: {
+              endpoint: null,
+              csrf: true
+            }
+          },
+          filteredInterventions: {
+            type: Array,
+            readOnly: true,
+            notify: true
+          },
+          intLocMap: {
+            type: Object,
+            readOnly: true,
+            notify: true
+          },
+          mapFilter: {
+            type: Object,
+            observer: 'query',
+            notify: true
+          }
+
+        };
+      }
+
+      ready() {
+        super.ready();
+      }
+  
+      queryMapInterventions(filter) {
+        if (!this.intLocMap && !isEmpty(filter)) {
+          return;
+        }
+        let filterStr = '';
+        if (!isEmpty(filter)) {
+          let params = [];
+          keys(filter).forEach(function(k) {
+            params.push(k + '=' + filter[k]);
+          });
+          filterStr += '?' + params.join('&');
+        }
+        let newEp = this.getEndpoint('mapInterventions', { filter: filterStr });
+        if (equals(this.endpoint, newEp)) {
+          return;
+        }
+        this.set('reqOptions.endpoint', newEp);
+        this._requestMapData();
+      }
+
+      _requestMapData() {
+        this.sendRequest(this.reqOptions)
+          .then((resp) => {
+            this._formatInterventions(resp);
+          }).catch((err) => {
+            this.handleErrorResponse(error);
+          });
+      }
+
+      _formatInterventions(data) {
+        const addParsedPoint = (p)=> assoc('point', this.parseMapPoint(p.geo_point), p);
+        const hasGeoPoint = (g)=> !isEmpty(prop('geo_point', g));
+        let locations = compose(
+          map(addParsedPoint),
+          filter(hasGeoPoint),
+          uniq,
+          flatten,
+          map(prop('locations'))
+        )(data);
+        this._setFilteredInterventions(locations);
+      }
+
+      parseMapPoint(point) {
+        if (point) {
+          var pt = point.split('(').pop().slice(0, -1).split(' ');
+          return {
+            latitude: parseFloat(pt[1]),
+            longitude: parseFloat(pt[0])
+          };
+        } else {
+          return null;
+        }
+      }
+    };
+
+</script>

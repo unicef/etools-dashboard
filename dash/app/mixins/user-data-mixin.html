@@ -6,7 +6,6 @@
   'use strict';
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
-  const { DataElement } = EtoolsDashboard.Mixins;
   /**
    * `user-data` Description
    *
@@ -16,7 +15,7 @@
    * @extends {Polymer.Element}
    */
   EtoolsDashboard.Mixins.UserData = (baseClass) =>
-    class extends DataElement(baseClass) {
+    class extends EtoolsDashboard.Mixins.DataElement(baseClass) {
       /**
        * Object describing property-related metadata used by Polymer features
        */
@@ -34,22 +33,6 @@
           }
 
         };
-      }
-
-      /**
-       * Instance of the element is created/upgraded. Use: initializing state,
-       * set up event listeners, create shadow dom.
-       * @constructor
-       */
-      constructor() {
-        super();
-      }
-
-      /**
-       * Use for one-time configuration of your component after local DOM is initialized.
-       */
-      ready() {
-        super.ready();
       }
 
       _handleMyResponse(user) {

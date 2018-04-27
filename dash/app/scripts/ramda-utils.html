@@ -2,7 +2,8 @@
       href="ramda.html">
 
 <script>
-  const {
+/* eslint-disable no-unused-vars, no-console, no-undef */
+const {
     equals,
     propOr,
     pick,
@@ -17,20 +18,25 @@
     prop,
     identity,
     join,
+    filter,
     head,
     tail,
     values,
+    flatten,
     union,
     mergeAll,
+    assoc,
+    uniq,
     without,
     last,
     isEmpty,
     reject,
     over,
     lensIndex,
+    lensProp,
     sum,
-    toUpper} = R;
-  
+    toUpper } = R;
+
   function log(...args) {
     console.log(...args);
     return args[0];

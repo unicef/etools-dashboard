@@ -228,6 +228,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     const EtoolsShellMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
       EtoolsMixins.LoadingMixin,
+      EtoolsDashboard.Mixins.UserData,
       EtoolsDashboard.Mixins.ToastNotifications
     )(Polymer.Element);
     /**
@@ -252,14 +253,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,
-          
+  
           hideExport: Boolean,
 
           availableYears: {
             type: Array,
             value: [
-              {name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv'},
-              {name: '2018', endpoint: '/api/v2/partners/hact?&format=csv'}
+              { name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv' },
+              { name: '2018', endpoint: '/api/v2/partners/hact?&format=csv' }
             ]
           },
           pageTitle: {
@@ -292,7 +293,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // If no page was found in the route data, page will be an empty string.
         // Default to 'personalized' in that case.
         this.set('page', page || 'personalized');
-        this.pageTitle = page === 'partnerships' ? 'CSO Dashboard' : 'Dashboard'
+        this.pageTitle = page === 'partnerships' ? 'CSO Dashboard' : 'Dashboard';
       }
 
       _pageChanged(page) {
@@ -307,12 +308,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _onPageLoad(page) {
         return ()=> {
-          this.fireEvent('page-changed-hact', {page});};
+          this.fireEvent('page-changed-hact', { page });};
       }
 
       _showPage404() {
-        this.page = 'view404'; 
-        this.fireEvent('toast', {text: 'Oops you hit a 404!', showCloseBtn: true});
+        this.page = 'view404';
+        this.fireEvent('toast', { text: 'Oops you hit a 404!', showCloseBtn: true });
       }
 
       _isActive(page, tab) {
@@ -322,8 +323,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _updateUrlTab(tab) {
         this.hideHactExport = tab === 'hact' ? false : true;
         this.hidePartnershipExport = tab === 'partnerships' ? false : true;
-        if (!tab) { return }
-        this.set('hideExport', !(tab === 'hact' || tab === 'partnerships'))
+        if (!tab) { return; }
+        this.set('hideExport', !(tab === 'hact' || tab === 'partnerships'));
       }
 
       _export(event) {
@@ -331,7 +332,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         window.open(
           `${endpoint}`,
           '_blank'
-        )
+        );
       }
     }
 

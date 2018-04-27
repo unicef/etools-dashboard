@@ -164,7 +164,7 @@
             type: Array
           },
           user: {
-            type: Object,
+            type: Object
           },
           allOffices: {
             type: Object,
@@ -173,7 +173,7 @@
           },
           offices: {
             type: Array,
-            statePath: 'offices',
+            statePath: 'offices'
           },
           allSections: {
             type: Array,
@@ -183,12 +183,12 @@
             type: Array,
             statePath: 'unicefUsers'
           },
-          userProfileDialog: Object,
+          userProfileDialog: Object
         };
       }
 
       static get observers() {
-        return ['_updateCountriesList(user.profile.countries_available)']
+        return ['_updateCountriesList(user.profile.countries_available)'];
       }
 
       /**
@@ -201,7 +201,7 @@
       }
 
       /**
-       * Use for one-time configuration of your component after local DOM is initialized. 
+       * Use for one-time configuration of your component after local DOM is initialized.
        */
       ready() {
         super.ready();
@@ -227,21 +227,21 @@
         if (!countries) {
           return;
         }
-        let arrayObj = countries.map(function (arrayItem) {
+        let arrayObj = countries.map(function(arrayItem) {
           return {
             id: arrayItem.id,
             name: arrayItem.name,
             imgClass: this._getFlagIconClass(arrayItem.business_area_code)
           };
         }.bind(this));
-        arrayObj = _.sortBy(arrayObj, function (c) {
+        arrayObj = _.sortBy(arrayObj, function(c) {
           return c.name;
         });
         this.set('countries', arrayObj);
       }
 
       _convertCollection(data) {
-        return data.map(function (item) {
+        return data.map(function(item) {
           return { label: item.name, value: item.id };
         });
       }

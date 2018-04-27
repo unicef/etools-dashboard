@@ -5,7 +5,7 @@
     <link rel="import" href="../mixins/data-element-mixin.html">
 
 <script>
-  'use strict'
+  'use strict';
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
   // const ProfileMixin = compose(
@@ -20,7 +20,7 @@
    * @polymer
    * @extends {Polymer.Element}
    */
-  EtoolsDashboard.Mixins.UserProfileData = baseClass =>
+  EtoolsDashboard.Mixins.UserProfileData = (baseClass) =>
     class extends EtoolsDashboard.Mixins.DataElement(baseClass) {
 
       /**
@@ -73,9 +73,9 @@
           body: profile
         };
 
-        this.sendRequest(config).then(resp=> {
+        this.sendRequest(config).then((resp)=> {
           this._handleResponse(resp);
-        }).catch(err=> {
+        }).catch((err)=> {
           this.parseRequestErrorsAndShowAsToastMsgs(error);
           this._hideProfileSaveLoadingMsg();
         });
@@ -86,7 +86,7 @@
         this._hideProfileSaveLoadingMsg();
       }
 
-      //called after profile get request on initial load
+      // called after profile get request on initial load
       _handleMyResponse(resp) {
         this._handleResponse(resp);
       }
@@ -100,6 +100,6 @@
           this.set('_saveActionInProgress', false);
         }
       }
-    }
+    };
 
 </script>

@@ -19,7 +19,7 @@
   EtoolsDashboard.Mixins.DataElement = (superClass) =>
     class extends RequiredMixin(superClass) {
       constructor() {
-        super()
+        super();
       }
 
       static get properties() {
@@ -48,7 +48,7 @@
             type: Object,
             value: null
           }
-        }
+        };
       }
 
       static get observers() {
@@ -77,12 +77,11 @@
       }
 
       _requestData() {
-        let self = this;
         this.sendRequest(this.options)
-          .then(resp => {
+          .then((resp) => {
             this._handleMyResponse(resp);
-          }).catch(err => {
-            this.handleErrorResponse(error);
+          }).catch((err) => {
+            this.handleErrorResponse(err);
           });
       }
 
@@ -115,7 +114,7 @@
       }
 
       _setAutomaticDataRefreshLoop(newEndpoint) {
-        this._refreshInterval = setInterval(function () {
+        this._refreshInterval = setInterval(function() {
           this._requestData();
         }.bind(this), newEndpoint.exp);
       }

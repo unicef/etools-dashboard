@@ -30,8 +30,7 @@
 <link rel="import" href="../../mixins/pagination-with-filters-mixin.html">
 <link rel="import" href="../../mixins/redux-store-mixin.html">
 
-<link rel="import"
-      href="../../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
+
 <link rel="import" href="../../../../bower_components/etools-datepicker/etools-datepicker-button.html">
 <link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
 
@@ -223,7 +222,7 @@
       EtoolsDashboard.Mixins.PaginationWithFilters,
       EtoolsDashboard.Mixins.ReduxStore,
       EtoolsDashboard.Mixins.Dropdown
-    )(Polymer.Element)
+    )(Polymer.Element);
     /**
      * `view-attachments` Description
      *
@@ -239,12 +238,12 @@
       static get is() {
         return 'view-attachments';
       }
-      
+    
       static get observers() {
         return [
           '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, requiredDataLoaded)',
           '_initListFilters(attachmentTypes)',
-          '_init(active, attachmentTypes)',
+          '_init(active, attachmentTypes)'
         ];
       }
 
@@ -258,7 +257,7 @@
             value: []
           },
           filteredTotal: {
-            type: Number,
+            type: Number
           },
           qs: {
             type: String
@@ -305,15 +304,15 @@
                 {
                   qName: 'type',
                   propName: 'selectedAttachmentTypes',
-                  xf:  compose(join('|'), map(prop('value'))) 
-                },
-              ]
+                  xf: compose(join('|'), map(prop('value')))
+                }
+              ];
             }
           }
         };
       }
 
-      _init(active, attachmentTypes){
+      _init(active, attachmentTypes) {
         let params = this.queryParams;
           if (!active || isEmpty(attachmentTypes) || !attachmentTypes) {
             return;
@@ -333,7 +332,7 @@
       }
 
       _formatAttachmentTypes(list) {
-        const formattedTypes = union(this.attachmentTypes, this.static.partner_file_types).map(type => ({
+        const formattedTypes = union(this.attachmentTypes, this.static.partner_file_types).map((type) => ({
           label: type,
           value: type
         }));
@@ -353,12 +352,12 @@
             optionValue: 'value',
             optionLabel: 'label',
             path: 'selectedAttachmentTypes',
-            selectionOptions: _.union(this.attachmentTypes, this.static.partner_file_types).map(type => ({
+            selectionOptions: _.union(this.attachmentTypes, this.static.partner_file_types).map((type) => ({
               label: type,
               value: type
             })),
             alreadySelected: []
-          },
+          }
         ]);
       }
 
@@ -373,7 +372,7 @@
               }
             ];
             this.updateShownFilters(filtersValues);
-          })
+          });
       }
 
       _filterDocuments() {
@@ -385,7 +384,7 @@
         const query = merge(reject(isEmpty, selectedParams), {
           pageNumber: this.pageNumber,
           pageSize: this.pageSize,
-          order: this.sortOrder,
+          order: this.sortOrder
         });
         this.$.attachments.query(query);
       }
@@ -406,26 +405,26 @@
       _setSelectedFromCollection(param, collection) {
         const itemsFromParam = param.split('|');
         if (!isEmpty(itemsFromParam)) {
-          const res = collection.filter(u => itemsFromParam.indexOf(u.value) > -1);
+          const res = collection.filter((u) => itemsFromParam.indexOf(u.value) > -1);
           return res;
         }
         return [];
       }
 
       _getDownloadUrl(link) {
-        return `${this.baseSite}${link}`
+        return `${this.baseSite}${link}`;
       }
 
       _setSelectedFromCollection(param, collection) {
         const itemsFromParam = param.split('|');
         if (!isEmpty(itemsFromParam)) {
-          return collection.filter(u => itemsFromParam.indexOf(u.value) > -1)
+          return collection.filter((u) => itemsFromParam.indexOf(u.value) > -1);
         }
         return [];
       }
 
       _getDownloadUrl(link) {
-        return `${this.baseSite}${link}`
+        return `${this.baseSite}${link}`;
       }
     }
 

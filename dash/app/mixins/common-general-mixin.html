@@ -16,7 +16,7 @@
   EtoolsDashboard.Mixins.CommonGeneral = Polymer.dedupingMixin(
     (superClass) => class extends EtoolsDashboard.Mixins.Date(superClass) {
       constructor() {
-        super()
+        super();
       }
 
       /**
@@ -133,9 +133,10 @@
 
       _allHaveValues(...args) {
         const self = this;
-        return args.reduce(function(hasVal, prop) {
+        const result = args.reduce(function(hasVal, prop) {
           return !isEmpty(self[prop]) && !!self[prop] && hasVal;
         }, true);
+        return result;
       }
 
       displayNonZero(val) {

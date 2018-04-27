@@ -67,7 +67,7 @@
             type: Boolean,
             value: false
           }
-        }
+        };
       }
 
       constructor() {
@@ -76,15 +76,15 @@
 
       ready() {
         super.ready();
-        
+    
         if (!this.loadedInitially) {
-          this.fireEvent('global-loading', {message: 'Loading partners data...', active: true});
+          this.fireEvent('global-loading', { message: 'Loading partners data...', active: true });
           this.set('loadedInitially', true);
         }
       }
-      
+    
       query(searchString, order, pageSize, pageNumber) {
-        EtoolsDashboard.DexieDb.partners.toArray().then(res=> {
+        EtoolsDashboard.DexieDb.partners.toArray().then((res)=> {
           this._setTotals(this._computeTotals(res));
           this._setTotalResults(res.length);
         });
@@ -94,7 +94,7 @@
             queryResult = queryResult.reverse();
           }
           if (!isEmpty(searchString)) {
-            queryResult = queryResult.filter(function (partner) {
+            queryResult = queryResult.filter(function(partner) {
               return contains(searchString.toLowerCase(), partner.name.toLowerCase()) ||
                 contains(searchString, partner.vendor_number);
             });
@@ -131,7 +131,7 @@
             }
           }
           return toReturn;
-        }
+        };
         this.resultsTotals = true;
         return _(results).reduce((sum, obj)=> {
           let picked = _(obj).pick([
@@ -144,8 +144,8 @@
             'reported_cy',
             'planned_engagement'
           ]).value();
-          picked = _flattenObject(picked)
-          picked['shared_with'] = obj['shared_with']
+          picked = _flattenObject(picked);
+          picked['shared_with'] = obj['shared_with'];
           _(picked).each((val, key)=> {
             let currValue = sum[key] ? sum[key] : 0;
             if (key === 'shared_with') {
