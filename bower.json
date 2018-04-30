@@ -44,9 +44,8 @@
     "etools-dialog": "c943e5f",
     "etools-loading": "6bdf1e7",
     "etools-profile-dropdown": "a21e546",
-    "etools-searchable-multiselection-menu": "^2.2.18",
     "polymer-redux": "^1.0.5",
-    "leaflet-map": "^1.2.0"
+    "leaflet-map": "unicef-polymer/etools-leaflet-map#^2.0.0"
   },
   "resolutions": {
     "polymer": "^2.0.0",

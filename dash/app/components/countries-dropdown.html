@@ -157,14 +157,14 @@
       }
 
       /**
-       * Use for one-time configuration of your component after local DOM is initialized. 
+       * Use for one-time configuration of your component after local DOM is initialized.
        */
 
       _countrySelected(e) {
           if (e.detail.item.countryId !== this.current) {
-            //send post request to change_coutry endpoint
-            let selectedCountryId = _.get(e,'detail.item.countryId','');
-            if(selectedCountryId){
+            // send post request to change_coutry endpoint
+            let selectedCountryId = _.get(e, 'detail.item.countryId', '');
+            if(selectedCountryId) {
               this._triggerCountryChangeRequest(selectedCountryId);
             }
           }
@@ -179,16 +179,16 @@
         this.sendRequest({
           endpoint: this.getEndpoint('changeCountry'),
           method: 'POST',
-          body: {country: countryId}
+          body: { country: countryId }
         }).then(()=> {
           this._handleResponse();
-        }).catch(err=> {
+        }).catch((err)=> {
           this._handleError(err);
         });
       }
 
       _handleResponse() {
-        this.fireEvent('update-main-path', {path: ''});
+        this.fireEvent('update-main-path', { path: '' });
         this.refresh();
       }
 

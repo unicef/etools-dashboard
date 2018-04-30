@@ -5,7 +5,7 @@
     unicefUsers: {
       url: '/api/v3/users/',
       exp: 60 * 60 * 1000, // 1h
-      cachingKey: 'unicefUsers',
+      cachingKey: 'unicefUsers'
     },
     user: {
       url: '/users/api/profile/',
@@ -108,12 +108,12 @@
       template: '/api/t2f/action_points/dashboard/?office_id=<%=office%>'
     },
     myProfile: {
-      template: '/api/v3/users/profile/',
+      template: '/api/v3/users/profile/'
     },
     hactGraphs: {
       template: '/api/v2/hact/graph/2018/',
       exp: 6 * 60 * 60 * 1000,
-      cachingKey: 'hactGraphs',
+      cachingKey: 'hactGraphs'
     },
     attachments: {
       template: '/api/v2/attachments/',

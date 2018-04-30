@@ -5,6 +5,8 @@
 <link rel="import" href="../../mixins/redux-store-mixin.html">
 <link rel="import" href="data/partners-dropdown-data-mixin.html">
 
+<link rel="import" href="data/map-interventions-data.html">
+
 <link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
@@ -21,24 +23,32 @@
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
 
+
 <dom-module id="view-map">
   <template>
     <style include="shared-styles paper-material-styles list-styles page-layout-styles">
-      /* :host {
+       :host {
         --paper-toggle-button-checked-bar-color: #88D4F7; /* TODO: replace with app-theme var */
-        --paper-toggle-button-checked-button-color: #3baaee; /* TODO: replace with app-theme var */
-      } */
 
-      leaflet-map {
-        height: 650px;
+      --paper-toggle-button-checked-button-color: #3baaee;
+      /* TODO: replace with app-theme var */
+
+      }
+
+       leaflet-map {
+        height: 630px;
       }
 
       paper-menu {
         max-width: 266px;
       }
 
-      etools-searchable-multiselection-menu {
+      etools-dropdown-multi {
         width: 366px;
+      }
+
+      .map {
+        display: block;
       }
 
       .toggler {
@@ -63,30 +73,133 @@
         position: absolute;
       }
     </style>
+    <app-route route="{{route}}"
+               pattern="/dash/map"
+               active="{{active}}"
+               query-params="{{queryParams}}"></app-route>
+    <div class="paper-material list-panel listControls"
+         elevation="1">
+      <div class="wrap-controls">
+        <div class="title-row">
+          <h1 sub-title>Partnerships</h1>
+        </div>
+        <p hidden$="[[hasResult]]"
+           class="error">No results for this query</p>
+
+      </div>
+      <div class="filters-divider"></div>
+      <div class="wrap-controls">
+        <template is="dom-repeat"
+                  items="[[selectedFilters]]"
+                  as="filter">
+          <div class="dropdown-with-clear-btn">
+            <template is="dom-if"
+                      if="[[_partnerFilter(filter)]]">
+              <etools-dropdown-multi label="[[filter.filterName]]"
+                                     placeholder="&#8212;"
+                                     disabled$="[[!filter.selectionOptions.length]]"
+                                     options="[[filter.selectionOptions]]"
+                                     value="[[filter.alreadySelected]]"
+                                     option-value="[[filter.optionValue]]"
+                                     option-label="[[filter.optionLabel]]"
+                                     trigger-value-change-event
+                                     on-etools-selected-items-changed="esmmValueChanged"
+                                     data-filter-path$="[[filter.path]]">
+              </etools-dropdown-multi>
+              <paper-icon-button class="remove"
+                                 icon="cancel"
+                                 on-tap="removeFilter"
+                                 data-filter-name$="[[filter.filterName]]"
+                                 data-reset-path$="[[filter.path]]">
+              </paper-icon-button>
+            </template>
+            <template is="dom-if"
+                      if="[[!_partnerFilter(filter)]]">
+              <paper-icon-button class="clear dark"
+                                 icon="close"
+                                 on-tap="clearDropdown"></paper-icon-button>
+              <paper-dropdown-menu label$="[[filter.filterName]]"
+                                   noink>
+                <paper-menu class="dropdown-content"
+                            attr-for-selected="id"
+                            on-iron-select="filterValueChanged"
+                            on-iron-deselect="filterValueChanged"
+                            data-filter-path$="[[filter.path]]"
+                            selected=[[filter.alreadySelected]]>
+                  <template is="dom-repeat"
+                            items="[[filter.selectionOptions]]"
+                            as="filterOption">
+                    <paper-item id="[[filterOption.id]]">[[filterOption.name]]</paper-item>
+                  </template>
+                </paper-menu>
+              </paper-dropdown-menu>
+              <paper-icon-button class="remove"
+                                 icon="cancel"
+                                 on-tap="removeFilter"
+                                 data-filter-name$="[[filter.filterName]]"
+                                 data-reset-path$="[[filter.path]]">
+              </paper-icon-button>
+            </template>
+          </div>
+        </template>
+      </div>
+      <div class="fixed-controls">
+        <div class="filters-divider"></div>
+        <paper-menu-button id="filterMenu">
+          <paper-button class="button"
+                        slot="dropdown-trigger">
+            <iron-icon icon="filter-list"></iron-icon>
+            add filter
+          </paper-button>
+          <paper-listbox slot="dropdown-content">
+            <template is="dom-repeat"
+                      items="[[availableListFilterOptions]]">
+              <paper-item on-tap="selectFilter">[[item.filterName]]</paper-item>
+            </template>
+          </paper-listbox>
+        </paper-menu-button>
+      </div>
+    </div>
+    <div class="paper-material map" elevation="1">
+      <!-- <template is="dom-if"
+                if="[[staticDataLoaded]]"> -->
+        <leaflet-map fit-to-markers
+                   zoom="[[country.initial_zoom]]"
+                   longitude="[[country.longitude]]"
+                   latitude="[[country.latitude]]">
+        <leaflet-tilelayer url="[[leafletUrl]]">
+        </leaflet-tilelayer>
+        <template is="dom-repeat"
+                  items="[[markers]]"
+                  as="marker">
+          <leaflet-marker id="[[marker.id]]"
+                          latitude="[[marker.point.latitude]]"
+                          longitude="[[marker.point.longitude]]"
+                          on-click="_openModal"></leaflet-marker>
+        </template>
+      </leaflet-map>
+      <!-- </template> -->
+    </div>
   </template>
-  <app-route route="{{route}}"
-             pattern="/dash/map"
-             active="{{active}}"
-             query-params="{{queryParams}}"></app-route>
-  
+
   <script>
-    const EtoolsMapMixin = compose(
-      EtoolsDashboard.Mixins.PartnersDropdownData
-    )(Polymer.Element);
+
     /**
      * @polymer
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
-    //  * @appliesMixin EtoolsDashboard.Mixins.Dropdown
+     * @appliesMixin EtoolsDashboard.Mixins.PartnersDropdownData
      * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
+     * @appliesMixin EtoolsDashboard.Mixins.MapInterventionsData
      * @appliesMixin EtoolsDashboard.Mixins.ListFilters
      */
-    const ViewMapMixins = compose(
+    const EtoolsMapMixin = compose(
       EtoolsDashboard.Mixins.ReduxStore,
+      EtoolsDashboard.Mixins.PartnersDropdownData,
+      EtoolsDashboard.Mixins.MapInterventionsData,
       EtoolsDashboard.Mixins.ListFilters,
-      EtoolsDashboard.Mixins.Dropdown,
       EtoolsDashboard.Mixins.CommonGeneral
-    )(Polymer.Element)
+    )(Polymer.Element);
 
     /**
      * `view-map` Description
@@ -108,14 +221,82 @@
        */
       static get properties() {
         return {
-    
+          hasResult: {
+            type: Boolean,
+            value: true
+          },
+          countryProgrammes: {
+            type: Array,
+            statePath: 'countryProgrammes'
+          },
+          country_programme: {
+            type: String,
+            observer: '_filterChanged'
+          },
+          sectors: {
+            type: Array,
+            statePath: 'sectors'
+          },
+          sector: {
+            type: String,
+            observer: '_filterChanged'
+          },
+          statuses: {
+            type: Array,
+            statePath: 'static.intervention_status'
+          },
+          userCountry: {
+            type: Object,
+            statePath: 'userCountry'
+          },
+          country: {
+            type: Object
+          },
+          status: {
+            type: String,
+            observer: '_filterChanged'
+          },
+          selectedFilters: {
+            type: Array
+          },
+          dashMap: {
+            type: Object
+          },
+          mapFilter: {
+            type: Object
+          },
+          filteredInterventions: {
+            type: Array,
+            observer: '_plotMarkers'
+          },
+          partner: {
+            type: String,
+            observer: '_filterChanged'
+          },
+          partners: {
+            type: Array,
+            value: []
+          },
+          availableListFilterOptions: {
+            type: Array,
+            value: []
+          },
+          staticDataLoaded: {
+            type: Boolean,
+            value: false
+          },
+          markerDialog: Object,
+          leafletUrl: {
+            type: String,
+            value: 'https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZXRvb2xzIiwiYSI6ImNqMGw4N3NtejAyMDIzMnBocHBsYjBsbXoifQ.VA-gzjqtTu-vr-8Ex9oEpA'
+          }
         };
       }
 
       static get observers() {
         return [
-          '_init(countryProgrammes,sectors,statuses,partners,userCountry)'
-        ]
+          '_init(countryProgrammes,sectors,statuses,userCountry,partners)'
+        ];
       }
 
       /**
@@ -132,15 +313,16 @@
        */
       ready() {
         super.ready();
-
-        Polymer.RenderStatus.afterNextRender(this, function() {
-    
-        });
+        L.Icon.Default.imagePath = '../../../dash/images';
+        let markerEl = document.createElement('marker-dialog');
+        markerEl.setAttribute('id', 'markerDialog');
+        Polymer.dom(document.querySelector('body')).appendChild(markerEl);
+        this.markerDialog = document.querySelector('#markerDialog');
       }
 
       _openModal(e) {
         let model = e.model.marker;
-        let interventions = _.values(this.intLocMap[model.id].interventions);
+        let interventions = values(this.intLocMap[model.id].interventions);
         let data = {
           name: model.name,
           interventions: interventions,
@@ -150,27 +332,26 @@
         this.markerDialog.opened = true;
       }
 
-      _init() {
-        if (!this.active) {
+      _init(countryProgrammes, sectors, statuses, userCountry, partners) {
+        if (!countryProgrammes || !sectors || !statuses || !partners || !userCountry) {
           return;
         }
-        if (_.isEmpty(this.intLocMap)) {
+    
+    
+        if (!this.intLocMap && !this.staticDataLoaded) {
           // initialize the intLocMap object
-          this.set('mapFilter', '');
-          this.fire('global-loading', {
-            message: 'Loading page data...',
-            active: true
-          });
+          this.queryMapInterventions('');
+          log('should init');
+          this._validateUserCountry(userCountry);
+    
+          // this.fire('global-loading', {
+          //   message: 'Loading page data...',
+          //   active: true
+          // });
         }
+        this.set('staticDataLoaded', true);
+        // this.fire('global-loading');
 
-        if (!this._allHaveValues('countryProgrammes', 'sectors', 'statuses', 'partners', 'userCountry')) {
-          return;
-        }else {
-          this.set('staticDataLoaded', true);
-          this._validateUserCountry();
-          this.fire('global-loading');
-        }
-//         first render of map only when tab is active, otherwise map tiles don't show
         if (_.isEmpty(this.availableListFilterOptions)) {
           this.initListFiltersData([
             {
@@ -220,38 +401,37 @@
                 };
               }),
               path: 'partner'
-            },
+            }
           ]);
         }
       }
 
       _filterChanged(filt) {
-        let self = this;
         let newFilter = {};
-        ['country_programme', 'status', 'sector', 'partner'].map(function(f) {
-          if (self[f]) {
-            newFilter[f] = self[f];
+        ['country_programme', 'status', 'sector', 'partner'].map((f)=> {
+          if (this[f]) {
+            newFilter[f] = this[f];
           }
         });
-        if (_.isEqual(this.mapFilter, newFilter)) {
+        if (equals(this.mapFilter, newFilter)) {
           return;
         }
-        if (_.isEmpty(newFilter)) {
+        if (isEmpty(newFilter)) {
           this.set('markers', []);
           this.set('showActive', false);
           return;
         }
         this.set('hasResult', true);
         this.set('mapFilter', newFilter);
-        this.fire('global-loading', {
-          message: 'Loading interventions...',
-          active: true
-        });
+        // this.fire('global-loading', {
+        //   message: 'Loading interventions...',
+        //   active: true
+        // });
       }
 
       // ensure redux items loaded before initializing the filters
       _callLocations(locations) {
-        this.$.locationsData.query(locations);
+        this.queryMapLocations(locations);
       }
 
       _plotMarkers(locations) {
@@ -259,7 +439,7 @@
           this.set('hasResult', false);
         }
         this.set('markers', locations);
-        this.fire('global-loading');
+        // this.fire('global-loading');
       }
 
       _partnerFilter(filter) {

@@ -117,25 +117,25 @@
 
   <script>
     class MarkerDialog extends Polymer.Element {
-      static get is() { return 'marker-dialog' }
+      static get is() { return 'marker-dialog'; }
 
       static get properties() {
         return {
           data: {
-            type: Object,
+            type: Object
           },
           interventions: {
             type: Array
           },
           opened: {
             type: Boolean,
-            value: false,
-          },
-        }
+            value: false
+          }
+        };
       }
-     
+    
       _values(obj) {
-        return _.values(obj)
+        return _.values(obj);
       }
 
       _close(e) {
