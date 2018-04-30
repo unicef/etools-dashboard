@@ -29,5 +29,31 @@
     //   let location = window.location.href;
     //   return location.indexOf(this.productionDomain) > -1;
     // }
+
+    permissions: {
+      defaultPermissions: [
+        'loggedInDefault',
+        'userInfoMenu',
+        'viewPartnerDetails'
+      ],
+      partnerOnlyPermissions: ['interventionsMenu'],
+      partnerPermissions: ['interventionsMenu'],
+      managementPermissions: [
+        'statsMenu',
+        'editPartnerDetails'
+      ],
+      superPermissions: [
+        'loggedInDefault',
+        'userInfoMenu',
+        'interventionsMenu',
+        'statsMenu',
+        'viewPartnerDetails',
+        'editPartnerDetails'
+      ]
+    }
+
+    // getAllPermissions: () => {
+    //   return EtoolsDashboard.Config.permissions;
+    // }
   };
 </script>

@@ -1,7 +1,6 @@
 <link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../mixins/data-element-mixin.html">
 <link rel="import" href="../../../mixins/event-helper-mixin.html">
-
 <link rel="import" href="../../../config/dexie-db-config.html">
 
 <dom-module id="partners-data">
@@ -78,7 +77,7 @@
         super.ready();
         
         if (!this.loadedInitially) {
-          this.fireEvent('global-loading', {message: 'Loading partners data...', active: true});
+          this.fireEvent('global-loading', { message: 'Loading partners data...', active: true });
           this.set('loadedInitially', true);
         }
       }

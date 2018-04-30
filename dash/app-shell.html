@@ -24,7 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
-<!-- <link rel="import" href="../bower_components/etools-piwik-analytics/etools-piwik-analytics.html"> -->
+<link rel="import" href="../bower_components/etools-piwik-analytics/etools-piwik-analytics.html">
 
 <link rel="import" href="app/styles/buttons-styles.html">
 <link rel="import" href="app/styles/page-layout-styles.html">
@@ -202,9 +202,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                              class="page"
                              name="partnerships"
                              csv-download-url="{{csvUrl}}"></view-partnerships>
-          <view-trips route="{{subroute}}"
+          <view-trips route="{{route}}"
                       class="page"
-                      name="trips"></view-trips>
+                      name="trips"
+                      user="[[user]]"></view-trips>
           <view-map route="{{route}}"
                     class="page"
                     name="map"></view-map>
@@ -224,11 +225,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @appliesMixin EtoolsDashboard.Mixins.EventHelper
      * @appliesMixin EtoolsDashboard.Mixins.ToastNotifications
      * @appliesMixin EtoolsMixins.LoadingMixin
+     * @appliesMixin EtoolsDashboard.Mixins.UserData
      */
     const EtoolsShellMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
       EtoolsMixins.LoadingMixin,
-      EtoolsDashboard.Mixins.ToastNotifications
+      EtoolsDashboard.Mixins.ToastNotifications,
+      EtoolsDashboard.Mixins.UserData
     )(Polymer.Element);
     /**
    * @customElement
@@ -286,6 +289,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       ready() {
         super.ready();
+
       }
 
       _routePageChanged(page) {

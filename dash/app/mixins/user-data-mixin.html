@@ -1,5 +1,6 @@
 <link rel="import"
       href="data-element-mixin.html">
+<link rel="import" href="../config/config.html">
 
 
 <script>
@@ -26,11 +27,15 @@
             type: String,
             value: 'user'
           },
-
           user: {
             type: Object,
             readOnly: true,
             notify: true
+          },
+          permissions: {
+            type: Object,
+            readOnly: true,
+            notify: true,
           }
 
         };
@@ -50,14 +55,54 @@
        */
       ready() {
         super.ready();
+        this._elementReady()
       }
 
       _handleMyResponse(user) {
         if (!isEmpty(user)) {
-          this._setUser(user);
+          this._setUserData(user);
         }
       }
 
-    };
+      _setUserData(data) {
+        var _user = data;
+        var _permissions = {};
+        var permissionsList = EtoolsDashboard.Config.permissions;
 
+        if (!_.isEmpty(data)) {
+          permissionsList.defaultPermissions.forEach(function(perm) {
+            _permissions[perm] = true;
+          });
+          if (!_user.is_staff) {
+            permissionsList.partnerOnlyPermissions.forEach(function(perm) {
+              _permissions[perm] = true;
+            });
+          } else {
+            // user is not partner but staff:
+            permissionsList.managementPermissions.forEach(function(perm) {
+              _permissions[perm] = true;
+            });
+
+            if (_user.profile.partner_staff_member) {
+              // staff that has faked partnership by setting partner_staff_member on their profile
+              permissionsList.partnerPermissions.forEach(function(perm) {
+                _permissions[perm] = true;
+              });
+            }
+          }
+        } else {
+          //for testing
+          permissionsList.superPermissions.forEach(function(perm) {
+            _permissions[perm] = true;
+          });
+        }
+        this._setUser(_user);
+        this._setPermissions(_permissions);
+      }
+
+      _handleError(rsp, err) {
+        this._setUser(null);
+        this._setPermissions(null);
+      }
+    };
 </script>
