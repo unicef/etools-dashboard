@@ -136,7 +136,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       Export
                     </paper-button>
                     <paper-listbox slot="dropdown-content">
-                      <template id="hactExport" is="dom-repeat" items="[[availableDetailYears]]">
+                      <template is="dom-repeat" items="[[availableYears]]">
                         <paper-item on-tap="_export">{{item.name}}</paper-item>
                       </template>
                     </paper-listbox>
@@ -197,8 +197,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                              route="{{subroute}}"></view-personalized>
           <view-hact route="{{subroute}}"
                      class="page"
-                     name="hact"
-                     display-detail="{{displayDetail}}"></view-hact>
+                     name="hact"></view-hact>
           <view-partnerships route="{{route}}"
                              class="page"
                              name="partnerships"
@@ -258,23 +257,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   
           hideExport: Boolean,
 
-          availableDetailYears: {
+          availableYears: {
             type: Array,
             value: [
               { name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv' },
               { name: '2018', endpoint: '/api/v2/partners/hact?&format=csv' }
             ]
-          },
-          availableGeneralYears: {
-            type: Array,
-            value: [
-              { name: '2018', endpoint: '/api/v2/partners/hact/simple/' }
-            ]
-          },
-          displayDetail: {
-            type: Boolean,
-            value: false,
-            observer: '_assuranceSelected'
           },
           pageTitle: {
             type: String,
@@ -346,11 +334,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           `${endpoint}`,
           '_blank'
         );
-      }
-      
-      // sets export endpoints based on assurance view (detailed/general)
-      _assuranceSelected() {
-        this.$.hactExport.items = this.displayDetail ? this.availableDetailYears : this.availableGeneralYears
       }
     }
 
