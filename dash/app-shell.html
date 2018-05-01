@@ -38,7 +38,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/shadycss/apply-shim.html">
 
-<link rel="import" href="app/mixins/user-data-mixin.html">
 <link rel="import" href="app/mixins/event-helper-mixin.html">
 <link rel="import" href="app/config/dexie-db-config.html">
 <link rel="import" href="../bower_components/etools-loading/etools-loading-mixin.html">
@@ -225,13 +224,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @appliesMixin EtoolsDashboard.Mixins.EventHelper
      * @appliesMixin EtoolsDashboard.Mixins.ToastNotifications
      * @appliesMixin EtoolsMixins.LoadingMixin
-     * @appliesMixin EtoolsDashboard.Mixins.UserData
      */
     const EtoolsShellMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
       EtoolsMixins.LoadingMixin,
-      EtoolsDashboard.Mixins.ToastNotifications,
-      EtoolsDashboard.Mixins.UserData
+      EtoolsDashboard.Mixins.ToastNotifications
     )(Polymer.Element);
     /**
    * @customElement
@@ -289,7 +286,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       ready() {
         super.ready();
-
       }
 
       _routePageChanged(page) {
