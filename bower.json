@@ -50,7 +50,6 @@
   "resolutions": {
     "polymer": "^2.0.0",
     "lodash": "^4.17.5",
-    "moment-element": "^3.0.0",
     "webcomponentsjs": "^1.0.0"
   },
   "devDependencies": {
