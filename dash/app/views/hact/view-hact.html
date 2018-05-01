@@ -177,7 +177,7 @@
         
         <div class="paper-material hact-list detail-btn" elevation="1">
           <paper-button on-tap="_detailToggle" class="toggle" noink>
-            <a class="detailed-assurance">SHOW DETAILED ASSURANCE</a>
+            <a id="detailedAssurance" class="detailed-assurance">SHOW DETAILED ASSURANCE</a>
           </paper-button>
         </div>
 
@@ -281,7 +281,7 @@
           },
           displayDetail: {
             type: Boolean,
-            value: false
+            notify: true,
           },
           showDash: {
             type: Boolean,
@@ -429,9 +429,8 @@
       }
 
       _detailToggle() {
-        let pages = Polymer.dom(this.root).querySelectorAll('iron-pages');
-        pages[1].selectNext();
-        let button = Polymer.dom(this.root).querySelector('.detailed-assurance');
+        this.$.assurance.selectNext();
+        let button = this.$.detailedAssurance;
         button.innerText = !this.displayDetail ? 'HIDE DETAILED ASSURANCE' : 'SHOW DETAILED ASSURANCE';
         this.displayDetail = !this.displayDetail;
       }
