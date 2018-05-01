@@ -6,6 +6,7 @@
 <link rel="import" href="data/partners-dropdown-data-mixin.html">
 
 <link rel="import" href="data/map-interventions-data.html">
+<link rel="import" href="data/sector-locations-data.html">
 
 <link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../../bower_components/paper-listbox/paper-listbox.html">
@@ -23,19 +24,17 @@
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
 
-
 <dom-module id="view-map">
   <template>
     <style include="shared-styles paper-material-styles list-styles page-layout-styles">
-       :host {
-        --paper-toggle-button-checked-bar-color: #88D4F7; /* TODO: replace with app-theme var */
-
-      --paper-toggle-button-checked-button-color: #3baaee;
-      /* TODO: replace with app-theme var */
-
+      :host {
+        --paper-toggle-button-checked-bar-color: #88D4F7;
+        /* TODO: replace with app-theme var */
+        --paper-toggle-button-checked-button-color: #3baaee;
+        /* TODO: replace with app-theme var */
       }
 
-       leaflet-map {
+      leaflet-map {
         height: 630px;
       }
 
@@ -43,9 +42,6 @@
         max-width: 266px;
       }
 
-      etools-dropdown-multi {
-        width: 366px;
-      }
 
       .map {
         display: block;
@@ -92,9 +88,11 @@
         <template is="dom-repeat"
                   items="[[selectedFilters]]"
                   as="filter">
-          <div class="dropdown-with-clear-btn">
-            <template is="dom-if"
-                      if="[[_partnerFilter(filter)]]">
+
+          <template is="dom-if"
+                    if="[[filterTypeIs('esmm', filter.type)]]">
+            <div class="filter esmm">
+
               <etools-dropdown-multi label="[[filter.filterName]]"
                                      placeholder="&#8212;"
                                      disabled$="[[!filter.selectionOptions.length]]"
@@ -102,45 +100,21 @@
                                      value="[[filter.alreadySelected]]"
                                      option-value="[[filter.optionValue]]"
                                      option-label="[[filter.optionLabel]]"
+                                     selected-values="[[filter.alreadySelected]]"
                                      trigger-value-change-event
                                      on-etools-selected-items-changed="esmmValueChanged"
                                      data-filter-path$="[[filter.path]]">
               </etools-dropdown-multi>
-              <paper-icon-button class="remove"
+              <paper-icon-button class="remove-field remove"
                                  icon="cancel"
+                                 suffix
                                  on-tap="removeFilter"
                                  data-filter-name$="[[filter.filterName]]"
                                  data-reset-path$="[[filter.path]]">
               </paper-icon-button>
-            </template>
-            <template is="dom-if"
-                      if="[[!_partnerFilter(filter)]]">
-              <paper-icon-button class="clear dark"
-                                 icon="close"
-                                 on-tap="clearDropdown"></paper-icon-button>
-              <paper-dropdown-menu label$="[[filter.filterName]]"
-                                   noink>
-                <paper-menu class="dropdown-content"
-                            attr-for-selected="id"
-                            on-iron-select="filterValueChanged"
-                            on-iron-deselect="filterValueChanged"
-                            data-filter-path$="[[filter.path]]"
-                            selected=[[filter.alreadySelected]]>
-                  <template is="dom-repeat"
-                            items="[[filter.selectionOptions]]"
-                            as="filterOption">
-                    <paper-item id="[[filterOption.id]]">[[filterOption.name]]</paper-item>
-                  </template>
-                </paper-menu>
-              </paper-dropdown-menu>
-              <paper-icon-button class="remove"
-                                 icon="cancel"
-                                 on-tap="removeFilter"
-                                 data-filter-name$="[[filter.filterName]]"
-                                 data-reset-path$="[[filter.path]]">
-              </paper-icon-button>
-            </template>
-          </div>
+            </div>
+
+          </template>
         </template>
       </div>
       <div class="fixed-controls">
@@ -160,10 +134,11 @@
         </paper-menu-button>
       </div>
     </div>
-    <div class="paper-material map" elevation="1">
+    <div class="paper-material map"
+         elevation="1">
       <!-- <template is="dom-if"
                 if="[[staticDataLoaded]]"> -->
-        <leaflet-map fit-to-markers
+      <leaflet-map fit-to-markers
                    zoom="[[country.initial_zoom]]"
                    longitude="[[country.longitude]]"
                    latitude="[[country.latitude]]">
@@ -196,6 +171,7 @@
     const EtoolsMapMixin = compose(
       EtoolsDashboard.Mixins.ReduxStore,
       EtoolsDashboard.Mixins.PartnersDropdownData,
+      EtoolsDashboard.Mixins.EtoolsSectorLocations,
       EtoolsDashboard.Mixins.MapInterventionsData,
       EtoolsDashboard.Mixins.ListFilters,
       EtoolsDashboard.Mixins.CommonGeneral
@@ -322,28 +298,28 @@
 
       _openModal(e) {
         let model = e.model.marker;
-        let interventions = values(this.intLocMap[model.id].interventions);
-        let data = {
-          name: model.name,
-          interventions: interventions,
-          type: model.location_type
-        };
-        this.markerDialog.data = data;
-        this.markerDialog.opened = true;
+        this.querySectorLocations();
+        // let interventions = values(this.intLocMap[model.id].interventions);
+        // let data = {
+        //   name: model.name,
+        //   interventions: interventions,
+        //   type: model.location_type
+        // };
+        // this.markerDialog.data = data;
+        // this.markerDialog.opened = true;
       }
 
       _init(countryProgrammes, sectors, statuses, userCountry, partners) {
         if (!countryProgrammes || !sectors || !statuses || !partners || !userCountry) {
           return;
         }
-    
-    
-        if (!this.intLocMap && !this.staticDataLoaded) {
+
+
+        if (!this.staticDataLoaded) {
           // initialize the intLocMap object
           this.queryMapInterventions('');
-          log('should init');
           this._validateUserCountry(userCountry);
-    
+
           // this.fire('global-loading', {
           //   message: 'Loading page data...',
           //   active: true
@@ -351,55 +327,42 @@
         }
         this.set('staticDataLoaded', true);
         // this.fire('global-loading');
-
         if (_.isEmpty(this.availableListFilterOptions)) {
           this.initListFiltersData([
             {
               filterName: 'Country Programme',
-              type: 'dropdown',
+              type: 'esmm',
+              optionValue: 'value',
+              optionLabel: 'label',
               alreadySelected: null,
-              selectionOptions: _.map(this.countryProgrammes, function(cp) {
-                return {
-                  name: cp.name,
-                  id: cp.id
-                };
-              }),
+              selectionOptions: map(({ name, id }) => ({ label: name, value: id }), countryProgrammes),
               path: 'country_programme'
             },
             {
               filterName: 'Sectors',
-              type: 'dropdown',
+              type: 'esmm',
+              optionValue: 'value',
+              optionLabel: 'label',
               alreadySelected: null,
-              selectionOptions: _.map(this.sectors, function(o) {
-                return {
-                  name: o.label,
-                  id: o.value
-                };
-              }),
+              selectionOptions: this.sectors,
               path: 'sector'
             },
             {
               filterName: 'Status',
-              type: 'dropdown',
+              type: 'esmm',
+              optionValue: 'value',
+              optionLabel: 'label',
               alreadySelected: null,
-              selectionOptions: _.map(this.statuses, function(o) {
-                return {
-                  name: o.label,
-                  id: o.value
-                };
-              }),
+              selectionOptions: this.statuses,
               path: 'status'
             },
             {
               filterName: 'Partners',
-              type: 'dropdown',
+              type: 'esmm',
+              optionValue: 'value',
+              optionLabel: 'label',
               alreadySelected: null,
-              selectionOptions: _.map(this.partners, function(o) {
-                return {
-                  name: o.label,
-                  id: o.value
-                };
-              }),
+              selectionOptions: this.partners,
               path: 'partner'
             }
           ]);
@@ -408,7 +371,7 @@
 
       _filterChanged(filt) {
         let newFilter = {};
-        ['country_programme', 'status', 'sector', 'partner'].map((f)=> {
+        ['country_programme', 'status', 'sector', 'partner'].map((f) => {
           if (this[f]) {
             newFilter[f] = this[f];
           }

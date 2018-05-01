@@ -43,12 +43,19 @@
       }
 
       _handleMyResponse(data) {
-        this._setPartners(data.map((p) => {
-          return {
-            value: parseInt(p.id),
-            label: p.name
-          };
-        }));
+        const filteredPartners = data.reduce(
+          (filtered, partner)=> {
+            if(!partner.name) {
+              return filtered;
+            }
+            filtered.push({
+              value: parseInt(partner.id),
+              label: partner.name
+            });
+            return filtered;
+          }, []
+        );
+        this._setPartners(filteredPartners);
         this.fireEvent('global-loading', { active: false });
       }
 

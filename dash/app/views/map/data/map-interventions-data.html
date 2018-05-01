@@ -33,11 +33,6 @@
             readOnly: true,
             notify: true
           },
-          intLocMap: {
-            type: Object,
-            readOnly: true,
-            notify: true
-          },
           mapFilter: {
             type: Object,
             observer: 'query',
@@ -50,7 +45,7 @@
       ready() {
         super.ready();
       }
-  
+
       queryMapInterventions(filter) {
         if (!this.intLocMap && !isEmpty(filter)) {
           return;
@@ -72,6 +67,7 @@
       }
 
       _requestMapData() {
+        this.fireEvent('global-loading', { active: true, message: 'Loading map locations...' });
         this.sendRequest(this.reqOptions)
           .then((resp) => {
             this._formatInterventions(resp);
@@ -91,6 +87,7 @@
           map(prop('locations'))
         )(data);
         this._setFilteredInterventions(locations);
+        this.fireEvent('global-loading', {});
       }
 
       parseMapPoint(point) {

@@ -7,7 +7,7 @@
     {
       propName: 'countryProgrammes',
       endpointProps: {
-        name: 'countryProgrammes',
+        name: 'countryProgrammes'
       }
     },
     {
@@ -19,25 +19,25 @@
     },
     {
       propName: 'trips',
-      endpointProps: function () {
+      endpointProps: function() {
         return { name: 'trips', templateProps: { id: this.user.id } };
       }
     },
     {
       propName: 'tripsSupervised',
-      endpointProps: function () {
+      endpointProps: function() {
         return { name: 'tripsSupervised', templateProps: { id: this.user.id } };
       }
     },
     {
       propName: 'actionPointsByMe',
-      endpointProps: function () {
+      endpointProps: function() {
         return { name: 'actionPointsByMe', templateProps: { id: this.user.id } };
       }
     },
     {
       propName: 'actionPointsForMe',
-      endpointProps: function () {
+      endpointProps: function() {
         return { name: 'actionPointsForMe', templateProps: { id: this.user.id } };
       }
     },
@@ -92,7 +92,7 @@
       endpointProps: {
         name: 'hactGraphs',
         templateProps: {}
-      },
+      }
     }
   ];
 
