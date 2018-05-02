@@ -51,7 +51,7 @@
       }
       
       _filterChanged(filter) {
-        if (_.isEmpty(filter)) {
+        if (isEmpty(filter)) {
           this.fireEvent('global-loading', {message: 'Loading chart data...', active: true});
           this.set('reqOptions.endpoint', this.getEndpoint('actionPointsBySection'));
         } else {

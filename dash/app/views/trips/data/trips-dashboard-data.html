@@ -51,8 +51,8 @@
       }
 
       _filterChanged(filter) {
-        if (!_.isEmpty(filter)) {
-          var endpointParams = _.keys(filter).filter(key => {
+        if (!isEmpty(filter)) {
+          var endpointParams = keys(filter).filter(key => {
             return filter[key];
           }).
           map(k => {
@@ -61,7 +61,7 @@
           join('&');
           var endpoint = this.getEndpoint('tripsDashboard');
           endpoint.url += endpointParams;
-          if (!_.isEqual(endpoint, this.endpoint)){
+          if (!equals(endpoint, this.endpoint)){
             this.fireEvent('global-loading', {message: 'Loading trips chart data...', active: true});
             this.set('reqOptions.endpoint', endpoint);
           }

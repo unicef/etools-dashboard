@@ -76,7 +76,7 @@
 
       _prepareTripsData(data) {
         return data.map(trip => {
-          return _.pick(trip, ['id','start_date','purpose','reference_number','supervisor_name']);
+          return pick(trip, ['id','start_date','purpose','reference_number','supervisor_name']);
         });
       }
     }

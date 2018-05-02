@@ -460,10 +460,9 @@
         }
       }
 
-      _alertStaticDataLoaded() {
-        var args = _.toArray(arguments);
+      _alertStaticDataLoaded(...args) {
         var allHaveValues = args.reduce((allHaveValues, item) => {
-          return !_.isEmpty(item) && allHaveValues;
+          return !isEmpty(item) && allHaveValues;
         }, true);
         if (allHaveValues) {
           this.set('staticDataLoaded', true);
@@ -488,7 +487,8 @@
             id: 'tripsOffice'
           }
         ];
-        _.remove(fields, {id: field});
+        debugger
+        fields = without(fields, {id: field});
         var invalid = fields.reduce((isValid, _field) => {
           return this[_field.name] || isValid;
         }, false);
@@ -511,7 +511,7 @@
       }
 
       _tripsDataChanged(data) {
-        if (!_.isEmpty(data)) {
+        if (!isEmpty(data)) {
           var travels = prop('travels_by_section', data);
           if (!travels.length && this.active) {
             this.fireEvent('global-loading', {active: false});
@@ -549,7 +549,7 @@
       }
       
       _actionPointsDataChanged(data) {
-        if (!_.isEmpty(data)) {
+        if (!isEmpty(data)) {
           var actionPoints = prop('action_points_by_section', data).filter(ap => {
             return prop('total_action_points', ap);
           });
