@@ -487,7 +487,6 @@
             id: 'tripsOffice'
           }
         ];
-        debugger
         fields = without(fields, {id: field});
         var invalid = fields.reduce((isValid, _field) => {
           return this[_field.name] || isValid;
