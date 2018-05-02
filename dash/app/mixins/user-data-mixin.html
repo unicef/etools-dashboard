@@ -25,22 +25,17 @@
             type: String,
             value: 'user'
           },
-
           user: {
             type: Object,
             readOnly: true,
             notify: true
           }
-
         };
       }
-
       _handleMyResponse(user) {
         if (!isEmpty(user)) {
           this._setUser(user);
         }
       }
-
     };
-
 </script>

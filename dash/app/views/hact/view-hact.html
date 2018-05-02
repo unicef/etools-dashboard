@@ -36,7 +36,7 @@
 
 <dom-module id="view-hact">
   <template>
-    <style include="shared-styles list-styles page-layout-styles paper-material-styles">
+    <style include="shared-styles list-styles paper-material-styles">
       :host {
         --paper-input-container-label: {
           margin-left: 34px;
@@ -50,10 +50,6 @@
 
       .hact-list {
         min-width: 1150px;
-      }
-
-      data-table-footer {
-        width: calc(100vw - 48px);
       }
 
       .detail-btn {
@@ -349,7 +345,7 @@
         }
       }
 
-        _filterPartnersData() {
+      _filterPartnersData() {
         Polymer.Debouncer.debounce('query',
           Polymer.Async.timeOut.after(50),
           () => this.$.partners.query(
@@ -360,89 +356,89 @@
         );
       }
 
-        _updateUrl(queryString, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete) {
-          if (!this.initComplete || !this.hactActive) {
-            return;
+      _updateUrl(queryString, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete) {
+        if (!this.initComplete || !this.hactActive) {
+          return;
+        }
+        this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
+        const qs = this.buildQueryString();
+        const currentRoute = this.route.prefix+this.route.path;
+        if (qs !== null) {
+          this.updateAppState(currentRoute, qs, true);
+          if (this.requiredDataLoaded) {
+            this._filterPartnersData();
           }
-          this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
-          const qs = this.buildQueryString();
-          const currentRoute = this.route.prefix+this.route.path;
-          if (qs !== null) {
-            this.updateAppState(currentRoute, qs, true);
-            if (this.requiredDataLoaded) {
-              this._filterPartnersData();
-            }
-          } else {
-            if (location.search === '') {
-              this.updateAppState(currentRoute, qs, false);
-            }
-            if (this.forceDataRefresh && this.requiredDataLoaded) {
-              this._filterPartnersData();
-              this.set('forceDataRefresh', false);
-            }
+        } else {
+          if (location.search === '') {
+            this.updateAppState(currentRoute, qs, false);
           }
-        }
-
-        _buildCsvDownloadUrl() {
-          return this.queryString
-            ? this.getEndpoint('partners').url + '?' + 'search=' + this.queryString + '&format=csv'
-            : this.getEndpoint('partners').url + '?' + '&format=csv';
-        }
-
-        _getProp(obj, propStr) {
-          if (propStr === 'partner_type') {
-            return this._getAbbr(get(obj, propStr));
-          }
-          return prop(propStr, obj);
-        }
-
-        _getAbbr(str) {
-          return str.length > 12
-            ? str
-              .split(' ')
-              .map(function(word) {
-                return word[0].toUpperCase();
-              }).join('') : str;
-        }
-
-        _getGovernmentDisplay(partner, prop, toCurrency) {
-          const partnerValue = get(partner, prop);
-          if (partner.partner_type === 'Government') {
-            return '-';
-          } else {
-            return toCurrency ? this.currencyFormat(partnerValue) : partnerValue;
+          if (this.forceDataRefresh && this.requiredDataLoaded) {
+            this._filterPartnersData();
+            this.set('forceDataRefresh', false);
           }
         }
+      }
 
-        _requiredDataHasBeenLoaded(e) {
-          e.stopImmediatePropagation();
-          let filtered = propOr([], 'filteredPartners', this );
-          if (isEmpty(filtered)) {
-            this.set('forceDataRefresh', true);
-          }
-          this.set('requiredDataLoaded', true);
-          this.init(this.active);
-        }
+      _buildCsvDownloadUrl() {
+        return this.queryString
+          ? this.getEndpoint('partners').url + '?' + 'search=' + this.queryString + '&format=csv'
+          : this.getEndpoint('partners').url + '?' + '&format=csv';
+      }
 
-        _toggleChartsView({target}) {
-          const name = target.getAttribute('name');
-          let pages = Polymer.dom(this.root).querySelectorAll('iron-pages');
-          if (name != this.hactPage) {
-            pages[0].selectNext();
-          }
+      _getProp(obj, propStr) {
+        if (propStr === 'partner_type') {
+          return this._getAbbr(get(obj, propStr));
         }
+        return prop(propStr, obj);
+      }
 
-        _detailToggle() {
-          let pages = Polymer.dom(this.root).querySelectorAll('iron-pages');
-          pages[1].selectNext();
-          let button = Polymer.dom(this.root).querySelector('.detailed-assurance');
-          button.innerText = !this.displayDetail ? 'HIDE DETAILED ASSURANCE' : 'SHOW DETAILED ASSURANCE';
-          this.displayDetail = !this.displayDetail;
-        }
+      _getAbbr(str) {
+        return str.length > 12
+          ? str
+            .split(' ')
+            .map(function(word) {
+              return word[0].toUpperCase();
+            }).join('') : str;
+      }
 
-        _isActive(current, target) {
-          return current === target
+      _getGovernmentDisplay(partner, prop, toCurrency) {
+        const partnerValue = get(partner, prop);
+        if (partner.partner_type === 'Government') {
+          return '-';
+        } else {
+          return toCurrency ? this.currencyFormat(partnerValue) : partnerValue;
         }
+      }
+
+      _requiredDataHasBeenLoaded(e) {
+        e.stopImmediatePropagation();
+        let filtered = propOr([], 'filteredPartners', this );
+        if (isEmpty(filtered)) {
+          this.set('forceDataRefresh', true);
+        }
+        this.set('requiredDataLoaded', true);
+        this.init(this.active);
+      }
+
+      _toggleChartsView({target}) {
+        const name = target.getAttribute('name');
+        let pages = this.shadowRoot.querySelectorAll('iron-pages');
+        if (name != this.hactPage) {
+          pages[0].selectNext();
+        }
+      }
+
+      _detailToggle() {
+        let pages = this.shadowRoot.querySelectorAll('iron-pages');
+        pages[1].selectNext();
+        let button = this.shadowRoot.querySelector('.detailed-assurance');
+        button.innerText = !this.displayDetail ? 'HIDE DETAILED ASSURANCE' : 'SHOW DETAILED ASSURANCE';
+        this.displayDetail = !this.displayDetail;
+      }
+
+      _isActive(current, target) {
+        return current === target
+      }
     }
     
     window.customElements.define(ViewHact.is, ViewHact);

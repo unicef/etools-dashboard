@@ -1,4 +1,5 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../bower_components/app-route/app-route.html">
 
 <link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../styles/list-styles.html">
@@ -11,23 +12,25 @@
 <link rel="import" href="../../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
-<link rel="import"
-      href="../../../../bower_components/etools-searchable-multiselection-menu/etools-multi-selection-menu.html">
-
-<link rel="import" href="../../mixins/dropdown-mixin.html">
-<link rel="import" href="../../mixins/common-general-mixin.html">
-<link rel="import" href="../../mixins/redux-store-mixin.html">
+<link rel="import" href="../../../../bower_components/etools-dropdown/etools-dropdown-multi.html">
 <link rel="import" href="../../../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../../../../bower_components/google-chart/google-chart-loader.html">
 <link rel="import" href="../../../../bower_components/moment-element/moment-import.html">
 
-<!-- <link rel="import" href="dashboard-data/trips-dashboard-data.html"> -->
-<!-- <link rel="import" href="dashboard-data/action-pts-by-section-data.html"> -->
+<link rel="import" href="../../mixins/dropdown-mixin.html">
+<link rel="import" href="../../mixins/redux-store-mixin.html">
+<link rel="import" href="../../mixins/event-helper-mixin.html">
+
+<link rel="import" href="data/trips-data.html">
+<link rel="import" href="data/trips-dashboard-data.html">
+<link rel="import" href="data/action-pts-by-section-data.html">
 
 <dom-module id="view-trips">
   <template>
+    <custom-style>
       <style include="list-styles iron-flex-factors shared-styles page-layout-styles buttons-styles iron-flex-alignment paper-material-styles">
         
         .by-type {
@@ -56,10 +59,16 @@
           min-width: 88px;
         }
       </style>
+    </custom-style>
 
-      <!-- <trips-dashboard-data trips-data="{{tripsData}}" filter="[[tripsFilter]]"></trips-dashboard-data> -->
-      <!-- <action-pts-by-section-data action-points-data="{{actionPointsData}}"
-                                  filter="[[actionPtsFilter]]"></action-pts-by-section-data> -->
+      <app-route route="{{route}}"
+                 pattern="/dash/trips"
+                 active="{{active}}"
+                 query-params="{{queryParams}}"></app-route>
+      <trips-dashboard-data trips-data="{{tripsData}}" active="[[active]]" filter="[[tripsFilter]]"></trips-dashboard-data>
+      <trips-data user="[[user]]"></trips-data>
+      <action-pts-by-section-data action-points-data="{{actionPointsData}}"
+                                  filter="[[actionPtsFilter]]"></action-pts-by-section-data>
       <google-chart-loader id="google"></google-chart-loader>
 
       <div class="paper-material list-panel listControls" elevation="1">
@@ -77,33 +86,33 @@
                                   placeholder="Select from list"
                                   error-message="Must select a year"
                                   noink>
-                <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{year}}">
+                <paper-listbox slot="dropdown-content" attr-for-selected="id" selected="{{year}}">
                   <template is="dom-repeat" items="[[years]]" as="year">
                     <paper-item id="[[year]]">[[year]]</paper-item>
                   </template>
-                </paper-menu>
+                </paper-listbox>
               </paper-dropdown-menu>
             </div>
             <div class="dropdown-with-clear-btn">
               <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-              <etools-multi-selection-menu label="Month"
+              <etools-dropdown-multi label="Month"
                                           id="tripsMonth"
                                           placeholder="Select from list"
                                           error-message="Must select at least one month"
                                           selected-values="{{month}}"
                                           trigger-value-change-event
-                                          options="[[months]]"></etools-multi-selection-menu>
+                                          options="[[months]]"></etools-dropdown-multi>
             </div>
             <div class="dropdown-with-clear-btn">
               <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
               <paper-dropdown-menu label="Office"
                                   id="tripsOffice"
                                   placeholder="Select from list" noink>
-                <paper-menu class="dropdown-content" attr-for-selected="id" selected="{{tripsOffice}}">
+                <paper-listbox slot="dropdown-content" attr-for-selected="id" selected="{{tripsOffice}}">
                   <template is="dom-repeat" items="[[offices]]" as="office">
                     <paper-item id="[[office.id]]">[[office.name]]</paper-item>
                   </template>
-                </paper-menu>
+                </paper-listbox>
               </paper-dropdown-menu>
             </div>
           </div>
@@ -152,25 +161,17 @@
           <div class="filters-divider"></div>
           <div class="wrap-controls">
             <div class="dropdown-with-clear-btn">
-              <!--<paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>-->
-              <!--<paper-dropdown-menu label="Office" placeholder="Select from list" noink>-->
-              <!--<paper-menu class="dropdown-content" attr-for-selected="name" selected="{{apOffice}}">-->
-              <!--<template is="dom-repeat" items="[[offices]]" as="office">-->
-              <!--<paper-item name="[[office.name]]">[[office.name]]</paper-item>-->
-              <!--</template>-->
-              <!--</paper-menu>-->
-              <!--</paper-dropdown-menu>-->
               <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button>
-              <etools-multi-selection-menu label="Office"
-                                          id="actionPtsOffice"
-                                          placeholder="Select from list"
-                                          error-message="Must select at least one office"
-                                          selected-values="{{apOffice}}"
-                                          option-label="name"
-                                          option-value="id"
-                                          trigger-value-change-event
-                                          on-paper-dropdown-close="_apOfficeChanged"
-                                          options="[[offices]]"></etools-multi-selection-menu>
+              <etools-dropdown-multi label="Office"
+                                     id="actionPtsOffice"
+                                     placeholder="Select from list"
+                                     error-message="Must select at least one office"
+                                     selected-values="{{apOffice}}"
+                                     option-label="name"
+                                     option-value="id"
+                                     trigger-value-change-event
+                                     on-paper-dropdown-close="_apOfficeChanged"
+                                     options="[[offices]]"></etools-dropdown-multi>
             </div>
           </div>
         </div>
@@ -193,11 +194,13 @@
     * @mixinFunction
     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
     * @appliesMixin EtoolsDashboard.Mixins.Dropdown
+    * @appliesMixin EtoolsDashboard.Mixins.EventHelper
     */
     const ViewTripsMixins = compose(
       EtoolsDashboard.Mixins.ReduxStore,
-      EtoolsDashboard.Mixins.Dropdown
-    )(Polymer.Element)
+      EtoolsDashboard.Mixins.Dropdown,
+      EtoolsDashboard.Mixins.EventHelper
+    )
     
     /**
      * `view-trips` Description
@@ -207,7 +210,7 @@
      * @polymer
      * @extends ViewTripsMixins
      */
-    class ViewTrips extends ViewTripsMixins {
+    class ViewTrips extends ViewTripsMixins(Polymer.Element) {
       /**
        * String providing the tag name to register the element under.
        */
@@ -332,7 +335,7 @@
                 minValue: 0,
                 gridlineColor: '#E8E8E8',
                 format: 'percent',
-                ticks: _.range(0.1, 1.1, 0.1)
+                ticks: range(0.1, 1.1, 0.1)
               },
               vAxis: {
                 minValue: 0,
@@ -403,7 +406,7 @@
       _init(active) {
         if (active) {
           if (!this.staticDataLoaded) {
-            this.fire('global-loading', {message: 'Loading page data...', active: true});
+            this.fireEvent('global-loading', {message: 'Loading page data...', active: true});
           }
           this._initTripsChart();
           if (!this.actionPtsFilter) {
@@ -414,13 +417,13 @@
 
       _initTripsChart() {
         this.set('year', moment().year());
-        this.set('months', moment.months().map(function(month, i) {
+        this.set('months', moment.months().map((month, i) => {
           return {
             label: month,
             value: ('0' + (i + 1)).slice(-2),
           };
         }));
-        var monthsToDate = _.range(1, moment().month() + 2).map(function(month) {
+        var monthsToDate = range(1, moment().month() + 2).map(month => {
           return ('0' + (month)).slice(-2)
         });
         this.set('month', monthsToDate);
@@ -457,19 +460,17 @@
         }
       }
 
-      _alertStaticDataLoaded() {
-        var args = _.toArray(arguments);
-        var allHaveValues = args.reduce(function(allHaveValues, item) {
-          return !_.isEmpty(item) && allHaveValues;
+      _alertStaticDataLoaded(...args) {
+        var allHaveValues = args.reduce((allHaveValues, item) => {
+          return !isEmpty(item) && allHaveValues;
         }, true);
         if (allHaveValues) {
           this.set('staticDataLoaded', true);
-          this.fire('global-loading');
+          this.fireEvent('global-loading', {});
         }
       }
 
       _setInvalid(field) {
-        var _this = this;
         this.set('tripsFilter', {});
         this.set('tripsData', {});
         var fields = [
@@ -486,42 +487,39 @@
             id: 'tripsOffice'
           }
         ];
-        _.remove(fields, {id: field});
-        var invalid = fields.reduce(function(isValid, _field) {
-          return _this[_field.name] || isValid;
+        fields = without(fields, {id: field});
+        var invalid = fields.reduce((isValid, _field) => {
+          return this[_field.name] || isValid;
         }, false);
         if (invalid && field !== 'tripsOffice') {
-          this.$$('#' + field).invalid = true;
+          this.shadowRoot.querySelector('#' + field).invalid = true;
         } else {
-          fields.forEach(function(f) {
-            _this.$$('#' + f.id).invalid = false;
+          fields.forEach(f => {
+            this.shadowRoot.querySelector('#' + f.id).invalid = false;
           });
         }
       }
 
       _formatChartData(formatted, chartName) {
-        var _this = this;
-        this.$.google.dataTable(formatted).then(function(dt) {
+        this.$.google.dataTable(formatted).then(dt => {
           //magic ratio number 32.71
-          _this.customStyle['--' + chartName] = 'height:' + Math.round(dt.getNumberOfRows() * 32.71) +
-              'px; min-height: 300px';
-          _this.$$('#' + chartName).options = _this[chartName + 'Options'];
-          _this.$$('#' + chartName).data = dt;
-          _this.updateStyles();
+          this.shadowRoot.querySelector('#' + chartName).style = `height: ${Math.round(dt.getNumberOfRows() * 32.71)}px; min-height: 300px`
+          this.shadowRoot.querySelector('#' + chartName).options = this[chartName + 'Options'];
+          this.shadowRoot.querySelector('#' + chartName).data = dt;
         });
       }
 
       _tripsDataChanged(data) {
-        if (!_.isEmpty(data)) {
-          var travels = _.get(data, 'travels_by_section', []);
+        if (!isEmpty(data)) {
+          var travels = prop('travels_by_section', data);
           if (!travels.length && this.active) {
-            this.fire('global-loading', {active: false});
+            this.fireEvent('global-loading', {active: false});
             this._setNoData('tripsChart');
           } else {
             var formatted = [
               ['Trips', 'Planned', 'Approved', 'Completed']
             ];
-            travels.map(function(section) {
+            travels.map(section => {
               formatted.push([section.section_name,
                 section.planned_travels,
                 section.approved_travels,
@@ -550,15 +548,15 @@
       }
       
       _actionPointsDataChanged(data) {
-        if (!_.isEmpty(data)) {
-          var actionPoints = _.get(data, 'action_points_by_section', []).filter(function(ap) {
-            return _.get(ap, 'total_action_points');
+        if (!isEmpty(data)) {
+          var actionPoints = prop('action_points_by_section', data).filter(ap => {
+            return prop('total_action_points', ap);
           });
           if (!actionPoints.length && this.active) {
             this._setNoData('actionPointsChart');
           } else {
             var formatted = [['Action Points', 'Closed', 'Total']];
-            actionPoints.forEach(function(ap) {
+            actionPoints.forEach(ap => {
               formatted.push([ap.section_name,
                 ap.completed_action_points,
                 ap.total_action_points
@@ -570,13 +568,11 @@
       }
 
       _setNoData(chartName) {
-        var _this = this;
-        this.$.google.dataTable(this.noDataMessage).then(function(dt) {
-          _this.customStyle['--' + chartName] = 'height: 300px';
-          _this.$$('#' + chartName).options = _this.noDataOptions;
-          _this.$$('#' + chartName).data = dt;
-          _this.updateStyles();
-          _this.$$('#' + chartName).redraw();
+        this.$.google.dataTable(this.noDataMessage).then(dt => {
+          this.shadowRoot.querySelector('#' + chartName).style = 'height: 300px';
+          this.shadowRoot.querySelector('#' + chartName).options = this.noDataOptions;
+          this.shadowRoot.querySelector('#' + chartName).data = dt;
+          this.shadowRoot.querySelector('#' + chartName).redraw();
         });
       }
     }

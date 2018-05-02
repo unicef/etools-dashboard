@@ -1,0 +1,86 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
+<link rel="import" href="../../../endpoints/endpoints-mixin.html">
+<link rel="import" href="../../../mixins/redux-store-mixin.html">
+
+<dom-module id="trips-data">
+	<script>
+    'use strict';
+
+    /**
+    * @polymer
+    * @mixinFunction
+    * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
+    * @appliesMixin EtoolsDashboard.Mixins.Endpoints
+    * @appliesMixin EtoolsAjaxRequestMixin
+    */
+    const TripsDataMixins = compose(
+      EtoolsDashboard.Mixins.ReduxStore,
+      EtoolsDashboard.Mixins.Endpoints,
+      EtoolsAjaxRequestMixin
+    )(Polymer.Element)
+
+    /**
+   * `trips-data` Description
+   *
+   * @customElement
+   * @polymer
+   * @extends TripsDataMixins
+   */
+    class TripsData extends TripsDataMixins {
+      static get is() {
+        return 'trips-data';
+      }
+
+      static get properties() {
+        return {
+          reqOptions: {
+            type: Object,
+            value: {
+              endpoint: null,
+              csrf: null
+            }
+          },
+          endpoint: {
+						type: Object
+					},
+          user: {
+            type: Object,
+            observer: '_setEndpoint'
+          },
+        }
+      }
+
+      static get actions() {
+        return {
+          setTripsData(trips) {
+						return {
+							type: 'SET_TRIPS_DATA',
+							trips: trips
+						};
+					}
+        }
+      }
+
+      _setEndpoint() {
+        this.set('reqOptions.endpoint', this.getEndpoint('trips', {id: this.user.id}));
+        this.sendRequest(this.reqOptions).then(response => this._handleResponse(response))
+      }
+
+      _handleResponse(response) {
+        var data = prop('data', response);
+        if (data.length) {
+          this.dispatch('setTripsData', this._prepareTripsData(data));
+        }
+      }
+
+      _prepareTripsData(data) {
+        return data.map(trip => {
+          return pick(trip, ['id','start_date','purpose','reference_number','supervisor_name']);
+        });
+      }
+    }
+
+    window.customElements.define(TripsData.is, TripsData);
+	</script>
+</dom-module>
