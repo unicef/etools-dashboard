@@ -1,19 +1,10 @@
 <link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../../../../bower_components/etools-ajax/etools-ajax.html">
+<link rel="import" href="../../../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
 <link rel="import" href="../../../endpoints/endpoints-mixin.html">
 <link rel="import" href="../../../mixins/event-helper-mixin.html">
 <link rel="import" href="../../../../../bower_components/polymer/lib/utils/async.html">
 
 <dom-module id="trips-dashboard-data">
-
-  <template>
-    <etools-ajax id="ajax"
-                 endpoint="[[endpoint]]"
-                 on-success="_handleResponse"
-                 dexie-db-collection="trips"
-                 on-fail="_handleErrorResponse"></etools-ajax>
-  </template>
-
   <script>
     'use strict';
     
@@ -22,9 +13,11 @@
     * @mixinFunction
     * @appliesMixin EtoolsDashboard.Mixins.EventHelper
     * @appliesMixin EtoolsDashboard.Mixins.Endpoints
+    * @appliesMixin EtoolsAjaxRequestMixin
     */
     const TripsDashboardDataMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
+      EtoolsAjaxRequestMixin,
       EtoolsDashboard.Mixins.Endpoints
     )(Polymer.Element)
 
@@ -38,6 +31,13 @@
 
       static get properties() {
         return {
+          reqOptions: {
+            type: Object,
+            value: {
+              endpoint: null,
+              csrf: null
+            }
+          },
           tripsData: {
             type: Object,
             readOnly: true,
@@ -50,38 +50,29 @@
         }
       }
 
-      connectedCallback() {
-        super.connectedCallback()
-        this.ajaxEl = this.$.ajax;
-        this.ajaxEl.set('method', 'GET');
-      }
-
       _filterChanged(filter) {
         if (!_.isEmpty(filter)) {
-          Polymer.Async.microTask.run(() => {
-            var endpointParams = _.keys(filter).filter(function(key){
-              return filter[key];
-            }).
-            map(function(k){
-              return k + '=' + filter[k];
-            }).
-            join('&');
-            var endpoint = this.getEndpoint('tripsDashboard');
-            endpoint.url += endpointParams;
-            if (!_.isEqual(endpoint, this.endpoint)){
-              this.fireEvent('global-loading', {message: 'Loading trips chart data...', active: true});
-              this.set('endpoint', endpoint);
-            }
-          })
-
+          var endpointParams = _.keys(filter).filter(key => {
+            return filter[key];
+          }).
+          map(k => {
+            return k + '=' + filter[k];
+          }).
+          join('&');
+          var endpoint = this.getEndpoint('tripsDashboard');
+          endpoint.url += endpointParams;
+          if (!_.isEqual(endpoint, this.endpoint)){
+            this.fireEvent('global-loading', {message: 'Loading trips chart data...', active: true});
+            this.set('reqOptions.endpoint', endpoint);
+          }
         } else {
-          this.ajaxEl.set('url', null);
+          this.reqOptions.endpoint.url = null;
         }
+        this.sendRequest(this.reqOptions).then(response => this._handleResponse(response))
       }
 
       _handleResponse(response) {
-        var data = _.get(response, 'detail', []);
-        this._setTripsData(data);
+        this._setTripsData(response);
         this.fireEvent('global-loading', { loadingSource: 'trips-dashboard-data' });
       }
     }
