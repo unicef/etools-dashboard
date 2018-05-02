@@ -422,16 +422,16 @@
 
       _toggleChartsView({target}) {
         const name = target.getAttribute('name');
-        let pages = Polymer.dom(this.root).querySelectorAll('iron-pages');
+        let pages = this.shadowRoot.querySelectorAll('iron-pages');
         if (name != this.hactPage) {
           pages[0].selectNext();
         }
       }
 
       _detailToggle() {
-        let pages = Polymer.dom(this.root).querySelectorAll('iron-pages');
+        let pages = this.shadowRoot.querySelectorAll('iron-pages');
         pages[1].selectNext();
-        let button = Polymer.dom(this.root).querySelector('.detailed-assurance');
+        let button = this.shadowRoot.querySelector('.detailed-assurance');
         button.innerText = !this.displayDetail ? 'HIDE DETAILED ASSURANCE' : 'SHOW DETAILED ASSURANCE';
         this.displayDetail = !this.displayDetail;
       }
