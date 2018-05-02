@@ -34,6 +34,7 @@
 
       .detail-list {
         min-width: 1800px;
+        width: 100%;
         overflow-x: scroll;
         overflow-y: visible;
         -ms-overflow-style: none;
@@ -120,47 +121,47 @@
 
       .col-75-px {
         flex: 0 0 75px;
-        max-width: 75px;
+        min-width: 75px;
       }
 
       .col-555-px {
         flex: 0 0 555px;
-        max-width: 555px;
+        min-width: 555px;
       }
 
       .col-10-px {
         flex: 0 0 10px;
-        max-width: 10px;
+        min-width: 10px;
       }
 
       .col-40-px {
         flex: 0 0 40px;
-        max-width: 40px;
+        min-width: 40px;
       }
 
       .col-100-px {
         flex: 0 0 100px;
-        max-width: 100px;
+        min-width: 100px;
       }
 
       .col-215-px {
         flex: 0 0 215px;
-        max-width: 215px;
+        min-width: 215px;
       }
 
       .col-160-px {
         flex: 0 0 160px;
-        max-width: 160px;
+        min-width: 160px;
       }
 
       .col-460-px {
         flex: 0 0 460px;
-        max-width: 460px;
+        min-width: 460px;
       }
 
       .col-225-px {
         flex: 0 0 225px;
-        max-width: 225px;
+        min-width: 225px;
       }
 
       @supports (-ms-ime-align:auto) {
@@ -286,7 +287,7 @@
               <div class="col-100-px monetary padding-right-10 nowrap vertical">$[[currencyFormat(totals.total_ct_ytd)]]</div>
             </div>
             <div class="col-460-px layout horizontal">
-              <div class="col-100-px nowrap monetary vertical padding-right-10 right-side">$[[currencyFormat(totals.total_ct_cy)]]</div>
+              <div class="col-100-px nowrap monetary vertical padding-right-10 right-side">$[[currencyFormat(totals.net_ct_cy)]]</div>
               <div class="col-160-px vertical right-side">
                 <span class="col-3">[[totals.hact_values_programmatic_visits_planned_q1]]</span>
                 <span class="col-3 right-side">[[totals.hact_values_programmatic_visits_planned_q2]]</span>
@@ -344,17 +345,17 @@
                 <span class="col-40-px nowrap vertical">
                   <div>
                     <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
-                    <paper-tooltip hidden="[[!partner.flags.expiring_assessment_flag]]">Micro assessment is expiring soon</paper-tooltip>
+                    <paper-tooltip hidden="[[!partner.flags.expiring_assessment_flag]]">Assessment is expiring this year</paper-tooltip>
                   </div>
                   <div>
                     <iron-icon id="threshold" class="hact-icon" icon="icons:report-problem" hidden="[[!partner.flags.approaching_threshold_flag]]"></iron-icon>
-                    <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment or audit report has not been submitted through the Auditor Portal</paper-tooltip>
+                    <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment will be required if more than $100,000</paper-tooltip>
                   </div>
                 </span>
                 <span class="col-100-px monetary padding-right-10 nowrap vertical">$[[currencyFormat(partner.total_ct_ytd)]]</span>
               </div>
               <div class="col-460-px layout horizontal">
-                <span class="col-100-px nowrap monetary padding-right-10 right-side vertical">$[[currencyFormat(partner.total_ct_cy)]]</span>
+                <span class="col-100-px nowrap monetary padding-right-10 right-side vertical">$[[currencyFormat(partner.net_ct_cy)]]</span>
                 <span class="col-160-px nowrap vertical right-side">
                   <span class="col-3">[[partner.hact_values.programmatic_visits.planned.q1]]</span>
                   <span class="col-3 quarter-item">[[partner.hact_values.programmatic_visits.planned.q2]]</span>
@@ -427,6 +428,10 @@
           } else {
             return toCurrency ? this.currencyFormat(partnerValue) : partnerValue;
           }
+        },
+
+        _goToPage: function(e) {
+          window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
         },
 
         _checkForValueYesBlank: function(val) {

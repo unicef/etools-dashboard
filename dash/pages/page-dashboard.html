@@ -6,6 +6,8 @@
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
 
 <link rel="import" href="../app-elements/page-header/page-header.html">
 <link rel="import" href="../app-elements/page-footer/page-footer.html">
@@ -47,6 +49,9 @@
       .page[name="hact"] {
         padding-top: 12px;
       }
+      paper-menu-button {
+        padding: var(--paper-menu-button, 0)
+      }
     </style>
 
     <app-route
@@ -64,17 +69,8 @@
               [[pageTitle]]
             </h1>
             <div class="top-content-actions-wrapper">
-              <div class="top-content-action">
-                <etools-dropdown
-                            id="exportYear"
-                            label="Export Year"
-                            options="[[availableYears]]"
-                            on-iron-select="_setExportYear"
-                            dropdown-value="/api/v2/partners/hact?&format=csv"
-                            hide-search hidden$="[[!_isActive(partnershipPage, 'hact')]]">
-                </etools-dropdown>
-              </div>
-              <div class="top-content-action" hidden$="[[hideExport]]">
+
+              <div class="top-content-action" hidden$="[[hidePartnershipExport]]">
                 <a target="_blank" href="[[csvUrl]]">
                   <paper-button>
                     <iron-icon icon="file-download"></iron-icon>
@@ -82,6 +78,19 @@
                   </paper-button>
                 </a>
               </div>
+
+              <paper-menu-button class="top-content-action" hidden$="[[hideHactExport]]" >
+                <paper-button class="dropdown-trigger">
+                  <iron-icon class="dark" icon="file-download"></iron-icon>
+                  Export
+                </paper-button>
+                <paper-menu class="dropdown-content">
+                  <template is="dom-repeat" items="[[availableYears]]">
+                    <paper-item on-tap="_export">{{item.name}}</paper-item>
+                  </template>
+                </paper-menu>
+              </paper-menu-button>
+
               <div class="top-content-action" hidden$="[[!_isActive(partnershipPage,'trips')]]">
                 <paper-button class="primary-btn with-prefix" on-tap="_goToAddTrip" >
                   <iron-icon icon="add"></iron-icon>
@@ -191,8 +200,8 @@
         availableYears: {
           type: Array,
           value: [
-            {label: '2017', value: '/api/v2/hact/history/?year=2017&format=csv'},
-            {label: '2018', value: '/api/v2/partners/hact?&format=csv'}
+            {name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv'},
+            {name: '2018', endpoint: '/api/v2/partners/hact?&format=csv'}
           ]
         },
       },
@@ -209,7 +218,8 @@
         dashTab === 'partnerships' ? this.set('pageTitle', 'CSO Dashboard') : this.set('pageTitle', 'Dashboard');
       },
       _updateUrlTab: function(tab) {
-        this.hideExport = tab === 'hact' || tab === 'partnerships' ? false : true;
+        this.hideHactExport = tab === 'hact' ? false : true;
+        this.hidePartnershipExport = tab === 'partnerships' ? false : true;
         if (!tab) {
           return;
         }
@@ -225,6 +235,14 @@
       },
       _setExportYear: function() {
         this.csvUrl = event.target.dropdownValue;
+      },
+      _export: function(event) {
+        var endpoint = event.model.item.endpoint;
+        window.open(
+          `${endpoint}`,
+          '_blank'
+        )
+        // this.set('csvEndpoint', endpoint);
       },
     });
 

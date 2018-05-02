@@ -87,7 +87,7 @@
             }
             if (!_.isEmpty(searchString)) {
               queryResult = queryResult.filter(function(partner) {
-                return _.includes(partner.name.toLowerCase(), searchString.toLowerCase());
+                return _.includes(partner.name.toLowerCase(), searchString.toLowerCase()) || _.includes(partner.vendor_number, searchString);
               });
             }
             return Dexie.Promise.all([
@@ -129,7 +129,7 @@
               'shared_with',
               'total_ct_ytd',
               'hact_values',
-              'total_ct_cy',
+              'net_ct_cy',
               'hact_min_requirements',
               'outstanding_findings',
               'reported_cy',
