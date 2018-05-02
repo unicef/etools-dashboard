@@ -398,13 +398,14 @@
     'use strict';
   const ChartsMixin = compose(
     EtoolsDashboard.Mixins.ReduxStore,
-    EtoolsDashboard.Mixins.EventHelper)
+    EtoolsDashboard.Mixins.EventHelper
+    )(Polymer.Element)
     /**
     * @polymer
     * @customElement
     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
     */
-    class HactCharts extends ChartsMixin(Polymer.Element) {
+    class HactCharts extends ChartsMixin {
       static get is() { return 'hact-charts' }
 
       static get properties() {

@@ -52,11 +52,11 @@
       }
 
       if (typeof errors === 'object' && errors.errors && Array.isArray(errors.errors)) {
-        errors.errors.forEach(function(err) {
+        errors.errors.forEach(err => {
           if (typeof err === 'object') {
             let errKeys = Object.keys(err);
             if (errKeys.length > 0) {
-              errKeys.forEach(function(k) {
+              errKeys.forEach(k => {
                 errorsArray.push(err[k]); // will work only for strings
               });
             }
@@ -114,7 +114,7 @@
     }
 
     _markNestedErrors(errs) {
-      return errs.map((er) => ' ' + er);
+      return errs.map(er => ' ' + er);
     }
 
     _isArrayOfStrings(arr) {

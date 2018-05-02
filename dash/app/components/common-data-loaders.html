@@ -26,7 +26,7 @@
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.Endpoints
      * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
-     * @appliesMixin EtoolsDashboard.Mixins.Actions
+     * @appliesMixin EtoolsDashboard.Mixins.AjaxServerErrors
      * @appliesMixin EtoolsAjaxRequestMixin
      */
     const CommonDataMixin = compose(
@@ -222,7 +222,7 @@
       ready() {
         super.ready();
 
-        Polymer.RenderStatus.afterNextRender(this, function() {
+        Polymer.RenderStatus.afterNextRender(this, () => {
           this._init();
         });
       }
@@ -234,7 +234,7 @@
 
       actionsToDispatch() {
         const { ReduxProps } = EtoolsDashboard;
-        let mappedItems = ReduxProps.map((a) => {
+        let mappedItems = ReduxProps.map(a => {
           let endpoint = a.endpointProps;
           if (typeof endpoint === 'function') {
             endpoint = endpoint.bind(this)();
@@ -264,8 +264,8 @@
             this.dispatch(next.handler, null);
             this._callNext();
           } else {
-            this.sendRequest(next.endpoint).then((res) => this._handleResponse(res))
-              .catch((err) => this.handleErrorResponse(err));
+            this.sendRequest(next.endpoint).then(res => this._handleResponse(res))
+              .catch(err => this.handleErrorResponse(err));
           }
         }
       }

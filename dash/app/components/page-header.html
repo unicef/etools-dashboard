@@ -138,7 +138,7 @@
     const RequiredMixins = compose(
       EtoolsPageRefreshMixin,
       EtoolsDashboard.Mixins.UserProfileData,
-      EtoolsDashboard.Mixins.ReduxStore);
+      EtoolsDashboard.Mixins.ReduxStore)(Polymer.Element);
     /**
      * `page-header` Description
      *
@@ -147,7 +147,7 @@
      * @polymer
      * @extends {Polymer.Element}
      */
-    class PageHeader extends RequiredMixins(Polymer.Element) {
+    class PageHeader extends RequiredMixins {
       /**
        * String providing the tag name to register the element under.
        */
@@ -227,21 +227,19 @@
         if (!countries) {
           return;
         }
-        let arrayObj = countries.map(function(arrayItem) {
+        let arrayObj = countries.map(arrayItem => {
           return {
             id: arrayItem.id,
             name: arrayItem.name,
             imgClass: this._getFlagIconClass(arrayItem.business_area_code)
           };
-        }.bind(this));
-        arrayObj = _.sortBy(arrayObj, function(c) {
-          return c.name;
         });
+        arrayObj = sortBy(c => { c.name; })(arrayObj);
         this.set('countries', arrayObj);
       }
 
       _convertCollection(data) {
-        return data.map(function(item) {
+        return data.map(item => {
           return { label: item.name, value: item.id };
         });
       }

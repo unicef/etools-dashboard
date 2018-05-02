@@ -373,7 +373,7 @@
       }
 
       _getGovernmentDisplay(partner, prop, toCurrency) {
-        const partnerValue = _.get(partner, prop);
+        const partnerValue = path(prop.split('.'), partner);
         if (partner.partner_type === 'Government') {
           return '-';
         } else {

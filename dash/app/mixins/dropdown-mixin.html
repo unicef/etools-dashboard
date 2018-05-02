@@ -15,16 +15,16 @@
     // Put a button with on-tap="clearDropdown" just before
     // a paper-dropdown-menu to add a clear selection button
     clearDropdown(e) {
-      var dropdown = Polymer.dom(e).localTarget.nextElementSibling;
+      let dropdown = e.target.nextElementSibling;
       if (dropdown) {
         if (dropdown.is === 'paper-dropdown-menu') {
-          var menu = Polymer.dom(dropdown).firstElementChild;
+          let menu = dropdown.firstElementChild;
           if (menu && menu.selected) {
             menu.set('selected', null);
           }
         }
         else if (dropdown.is === 'etools-multi-selection-menu') {
-          var menu = Polymer.dom(dropdown);
+          let menu = dropdown;
           if (dropdown.selectedValues) {
             dropdown.clearValues()
           }

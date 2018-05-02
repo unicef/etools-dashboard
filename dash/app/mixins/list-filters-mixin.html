@@ -91,19 +91,19 @@
       if (!(this.listFilterOptions instanceof Array && this.listFilterOptions.length > 0)) {
         return;
       }
-      let availableOptions = this.listFilterOptions.filter(function(option) {
-        let selectedOpt = this.selectedFilters.filter(function(selectedFilter) {
+      let availableOptions = this.listFilterOptions.filter(option => {
+        let selectedOpt = this.selectedFilters.filter(selectedFilter => {
           return selectedFilter.filterName === option.filterName;
         })[0];
         return !selectedOpt;
-      }.bind(this));
+      });
       this.set('availableListFilterOptions', availableOptions);
     }
 
     // remove already selected filter, also reset filter path value
     removeFilter(event) {
-      let filterName = Polymer.dom(event).localTarget.getAttribute('data-filter-name');
-      let path = Polymer.dom(event).localTarget.getAttribute('data-reset-path');
+      let filterName = event.target.getAttribute('data-filter-name');
+      let path = event.target.getAttribute('data-reset-path');
 
       let selectedFilterIndex = -1;
       for (let i = 0; i < this.selectedFilters.length; i++) {
@@ -125,8 +125,8 @@
 
     // filter value changed, update filter path with the new value
     filterValueChanged(event) {
-      let filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
-      let filterVal = Polymer.dom(event).localTarget.selected;
+      let filterPath = event.target.getAttribute('data-filter-path');
+      let filterVal = event.target.selected;
       this.set(filterPath, filterVal);
     }
 
@@ -163,7 +163,7 @@
       let i;
       filters = isEmpty(filters) ? [] : filters;
       if (filters.length) {
-        filters.forEach(filter=> {
+        filters.forEach(filter => {
           // check available filters
           if (this._validateFilterSelectedValue(filter.selectedValue)) {
             let foundInAvailable = false;

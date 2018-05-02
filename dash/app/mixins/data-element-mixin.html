@@ -78,7 +78,7 @@
 
       _requestData() {
         this.sendRequest(this.options)
-          .then((resp) => {
+          .then(resp => {
             this._handleMyResponse(resp);
           }).catch(err => {
             this.handleErrorResponse(err);
@@ -114,9 +114,9 @@
       }
 
       _setAutomaticDataRefreshLoop(newEndpoint) {
-        this._refreshInterval = setInterval(function() {
+        this._refreshInterval = setInterval(() => {
           this._requestData();
-        }.bind(this), newEndpoint.exp);
+        }, newEndpoint.exp);
       }
     };
 </script>
