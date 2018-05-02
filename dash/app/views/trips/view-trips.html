@@ -335,7 +335,7 @@
                 minValue: 0,
                 gridlineColor: '#E8E8E8',
                 format: 'percent',
-                ticks: _.range(0.1, 1.1, 0.1)
+                ticks: range(0.1, 1.1, 0.1)
               },
               vAxis: {
                 minValue: 0,
@@ -423,7 +423,7 @@
             value: ('0' + (i + 1)).slice(-2),
           };
         }));
-        var monthsToDate = _.range(1, moment().month() + 2).map(month => {
+        var monthsToDate = range(1, moment().month() + 2).map(month => {
           return ('0' + (month)).slice(-2)
         });
         this.set('month', monthsToDate);
