@@ -372,7 +372,7 @@
       }
 
       _setItems(tab, itemsProp) {
-        const items = _.get(this, tab, []);
+        const items = prop(tab, this);
         this.set(itemsProp, items);
       }
 

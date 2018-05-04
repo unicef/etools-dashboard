@@ -581,22 +581,22 @@
                 {
                   qName: 'startAfter',
                   propName: 'startAfterDate',
-                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
+                  xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
                 },
                 {
                   qName: 'endBefore',
                   propName: 'endBeforeDate',
-                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
+                  xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
                 },
                 {
                   qName: 'startBefore',
                   propName: 'startBeforeDate',
-                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
+                  xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
                 },
                 {
                   qName: 'endAfter',
                   propName: 'endAfterDate',
-                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
+                  xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
                 }
               ];
             }
@@ -697,7 +697,7 @@
       _updateSelectedFiltersValues() {
         this.updateFiltersDebouncer = Polymer.Debouncer.debounce(
           this.updateFiltersDebouncer,
-          Polymer.Async.timeOut.after(20), ()=> {
+          Polymer.Async.timeOut.after(20), () => {
           let filtersValues = [
             {
               filterName: 'Section/Cluster',
@@ -784,7 +784,7 @@
 
       _requiredDataLoaded(event) {
         event.stopImmediatePropagation();
-        const listDataPath = Polymer.dom(event).localTarget.getAttribute('list-data-path');
+        const listDataPath = event.target.getAttribute('list-data-path');
         const list = this.get(listDataPath);
 
         if (typeof list === 'undefined' ||
@@ -799,8 +799,8 @@
       _setSelectedOffices(officesStr) {
         let officesIdsArr = officesStr.split('|');
         if (!isEmpty(officesIdsArr)) {
-          officesIdsArr = officesIdsArr.map((n) => parseInt(n, 10));
-          return this.offices.filter((o) => officesIdsArr.includes(parseInt(o.id, 10)));
+          officesIdsArr = officesIdsArr.map(n => parseInt(n, 10));
+          return this.offices.filter(o => officesIdsArr.includes(parseInt(o.id, 10)));
         }
         return [];
       }
@@ -808,7 +808,7 @@
       _setSelectedSectors(sectorsStr) {
         const sectorsArr = sectorsStr.split('|');
         if (!isEmpty(sectorsArr)) {
-          const selectedSectors = this.sectors.filter(function(s) {
+          const selectedSectors = this.sectors.filter(s => {
             return sectorsArr.indexOf(s.value) > -1;
           });
           return selectedSectors;
@@ -821,7 +821,7 @@
         if (isEmpty(this.statuses)) {
           return [];
         }
-        return this.statuses.filter(function(status) {
+        return this.statuses.filter(status => {
           return statusesStrArr.indexOf(status.value) > -1;
         });
       }

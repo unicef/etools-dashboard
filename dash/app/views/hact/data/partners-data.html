@@ -83,17 +83,17 @@
       }
     
       query(searchString, order, pageSize, pageNumber) {
-        EtoolsDashboard.DexieDb.partners.toArray().then((res)=> {
+        EtoolsDashboard.DexieDb.partners.toArray().then(res => {
           this._setTotals(this._computeTotals(res));
           this._setTotalResults(res.length);
         });
-        EtoolsDashboard.DexieDb.transaction('r', EtoolsDashboard.DexieDb.partners, ()=> {
+        EtoolsDashboard.DexieDb.transaction('r', EtoolsDashboard.DexieDb.partners, () => {
           let queryResult = EtoolsDashboard.DexieDb.partners.orderBy('name');
           if (order === 'desc') {
             queryResult = queryResult.reverse();
           }
           if (!isEmpty(searchString)) {
-            queryResult = queryResult.filter(function(partner) {
+            queryResult = queryResult.filter(partner => {
               return contains(searchString.toLowerCase(), partner.name.toLowerCase()) ||
                 contains(searchString, partner.vendor_number);
             });
@@ -105,17 +105,17 @@
                 .offset((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()]);
-        }).then((countAndResult)=> {
+        }).then(countAndResult => {
           this.fireEvent('global-loading', { loadingSource: 'partners-data' });
           this._setFilteredTotalResults(countAndResult[0]);
           this._setFilteredPartners(countAndResult[1]);
-        }).catch((error)=> {
+        }).catch(error => {
           console.error('Error querying partners: ', error);
         });
       }
 
       _computeTotals(results) {
-        let _flattenObject = (ob) => {
+        let _flattenObject = ob => {
           let toReturn = {};
           for (let i in ob) {
             if (!ob.hasOwnProperty(i)) continue;

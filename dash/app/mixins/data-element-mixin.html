@@ -1,6 +1,8 @@
 <link rel="import" href="../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
 <link rel="import" href="../../app/endpoints/endpoints-mixin.html">
 <link rel="import" href="../mixins/ajax-server-errors-mixin.html">
+<link rel="import" href="../scripts/ramda-utils.html">
+
 <script>
   'use strict';
 
@@ -78,7 +80,7 @@
 
       _requestData() {
         this.sendRequest(this.options)
-          .then((resp) => {
+          .then(resp => {
             this._handleMyResponse(resp);
           }).catch(err => {
             this.handleErrorResponse(err);
@@ -114,9 +116,9 @@
       }
 
       _setAutomaticDataRefreshLoop(newEndpoint) {
-        this._refreshInterval = setInterval(function() {
+        this._refreshInterval = setInterval(() => {
           this._requestData();
-        }.bind(this), newEndpoint.exp);
+        }, newEndpoint.exp);
       }
     };
 </script>

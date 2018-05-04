@@ -45,7 +45,7 @@
           let toastProperties = this._toast.prepareToastAndGetShowProperties(detail);
           this._showToast(toastProperties);
         } else {
-          let alreadyInQueue = this._toastQueue.filter(function(toastDetail) {
+          let alreadyInQueue = this._toastQueue.filter(toastDetail => {
             return JSON.stringify(toastDetail) === JSON.stringify(detail);
           });
           if (alreadyInQueue.length === 0) {

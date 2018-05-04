@@ -149,7 +149,7 @@
 
       strippedSpace(str) {
         return str.split(',')
-          .map(function(item) {
+          .map(item => {
             return item[0]===' '? item.slice(1) : item;
           });
       }

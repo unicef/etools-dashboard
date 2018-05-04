@@ -36,8 +36,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="app/components/toast/toast-notifications-mixin.html">
 
-<link rel="import" href="../bower_components/shadycss/apply-shim.html">
-
 <link rel="import" href="app/mixins/event-helper-mixin.html">
 <link rel="import" href="app/mixins/user-data-mixin.html">
 <link rel="import" href="app/config/dexie-db-config.html">
@@ -89,7 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <etools-piwik-analytics page="[[subroute.path]]"
+    <etools-piwik-analytics page="[[subroute.prefix]]"
                             user="[[user]]"
                             toast="[[currentToastMessage]]"></etools-piwik-analytics>
 
@@ -224,6 +222,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.EventHelper
      * @appliesMixin EtoolsDashboard.Mixins.ToastNotifications
+     * @appliesMixin EtoolsDashboard.Mixins.UserData
      * @appliesMixin EtoolsMixins.LoadingMixin
      */
     const EtoolsShellMixin = compose(

@@ -113,7 +113,7 @@
       EtoolsDashboard.Mixins.EventHelper,
       EtoolsPageRefreshMixin,
       EtoolsAjaxRequestMixin
-    );
+    )(Polymer.Element);
     /**
      * `countries-dropdown` Description
      *
@@ -122,7 +122,7 @@
      * @polymer
      * @extends {Polymer.Element}
      */
-    class CountriesDropdown extends CountriesMixin(Polymer.Element) {
+    class CountriesDropdown extends CountriesMixin {
       /**
        * String providing the tag name to register the element under.
        */
@@ -163,7 +163,7 @@
       _countrySelected(e) {
           if (e.detail.item.countryId !== this.current) {
             // send post request to change_coutry endpoint
-            let selectedCountryId = _.get(e, 'detail.item.countryId', '');
+            let selectedCountryId = path(['detail', 'item', 'countryId'], e)
             if(selectedCountryId) {
               this._triggerCountryChangeRequest(selectedCountryId);
             }
@@ -180,9 +180,9 @@
           endpoint: this.getEndpoint('changeCountry'),
           method: 'POST',
           body: { country: countryId }
-        }).then(()=> {
+        }).then(() => {
           this._handleResponse();
-        }).catch((err)=> {
+        }).catch(err => {
           this._handleError(err);
         });
       }

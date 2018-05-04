@@ -62,7 +62,7 @@
           },
           predicates: {
             type: Object,
-            value: function() {
+            value: () => {
               return {
                 searchString: (qs, partner)=> qs.length ? _.includes(partner.partner_name.toLowerCase(), qs.toLowerCase()): true,
                 sectors: (sectors, partner)=> sectors.length ? !!_.intersection(sectors, [_.trim(partner.sections)]).length : true,
@@ -101,9 +101,9 @@
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
-            const callPred = (pred, partner)=> this.predicates[pred](params[pred], partner);
+            const callPred = (pred, partner) => this.predicates[pred](params[pred], partner);
             queryResult = queryResult.filter(
-              (partner) => predKeys.reduce((acc, pred)=> acc && callPred(pred, partner), true)
+              (partner) => predKeys.reduce((acc, pred) => acc && callPred(pred, partner), true)
             );
             return Dexie.Promise.all([
               queryResult.count(),
@@ -111,11 +111,11 @@
               .offset((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()]);
-          }).then((countAndResult)=>{
+          }).then(countAndResult => {
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
             this.fireEvent('global-loading', {loadingSource: 'partnership-data'});
-          }).catch((err)=>console.error('Error querying partnerships-dash: ', err));
+          }).catch(err => console.error('Error querying partnerships-dash: ', err));
       }
 
     }

@@ -408,7 +408,7 @@
       }
 
       _partnerChanged(val) {
-        let id = _.get(val, 'detail.selectedValues.id');
+        let id = path(['detail', 'selectedValues', 'id'], val);
         this.set('partner', id);
       }
 
