@@ -80,9 +80,9 @@
 
       _requestData() {
         this.sendRequest(this.options)
-          .then(resp => {
+          .then((resp) => {
             this._handleMyResponse(resp);
-          }).catch(err => {
+          }).catch((err) => {
             this.handleErrorResponse(err);
           });
       }
