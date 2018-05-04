@@ -36,14 +36,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="app/components/toast/toast-notifications-mixin.html">
 
-<link rel="import" href="../bower_components/shadycss/apply-shim.html">
-
 <link rel="import" href="app/mixins/event-helper-mixin.html">
 <link rel="import" href="app/mixins/user-data-mixin.html">
 <link rel="import" href="app/config/dexie-db-config.html">
 <link rel="import" href="../bower_components/etools-loading/etools-loading-mixin.html">
 
-<link rel="import" href="app/scripts/ramda.html">
+<link rel="import" href="app/scripts/ramda-utils.html">
 <!-- lazy imports -->
 <link rel="lazy-import" href="app/views/hact/view-hact.html">
 <link rel="lazy-import" href="app/views/personalized/view-personalized.html">
@@ -89,7 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <etools-piwik-analytics page="[[subroute.path]]"
+    <etools-piwik-analytics page="[[subroute.prefix]]"
                             user="[[user]]"
                             toast="[[currentToastMessage]]"></etools-piwik-analytics>
 
