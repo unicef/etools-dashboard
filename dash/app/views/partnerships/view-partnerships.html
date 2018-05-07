@@ -425,7 +425,7 @@
                   <paper-tooltip hidden="[[_checkSigned(row.status, row.fr_currencies_are_consistent)]]">
                     Disbursement currency does not match FR currency
                   </paper-tooltip>
-                  [[_displayDisbursement(row.disbursement)]]
+                  <span hidden="[[!_checkSigned(row.status, row.fr_currencies_are_consistent)]]">[[_displayDisbursement(row.disbursement)]]</span>
                 </span>
               </div>
               <div class="col-2 layout horizontal justify-end">
