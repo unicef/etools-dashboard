@@ -485,7 +485,7 @@
             id: 'tripsOffice'
           }
         ];
-        fields = without(fields, {id: field});
+        fields = without({id: field}, fields);
         var invalid = fields.reduce((isValid, _field) => {
           return this[_field.name] || isValid;
         }, false);
@@ -508,7 +508,7 @@
       }
 
       _tripsDataChanged(data) {
-        if (!isEmpty(data)) {
+        if (!isEmpty(data) && data != null) {
           var travels = prop('travels_by_section', data);
           if (!travels.length && this.active) {
             this.fireEvent('global-loading', {active: false});
