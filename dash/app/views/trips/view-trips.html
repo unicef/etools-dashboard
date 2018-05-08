@@ -168,7 +168,7 @@
                                      option-label="name"
                                      option-value="id"
                                      trigger-value-change-event
-                                     on-paper-dropdown-close="_apOfficeChanged"
+                                     on-etools-selected-items-changed="_apOfficeChanged"
                                      options="[[offices]]"></etools-dropdown-multi>
             </div>
           </div>
@@ -535,9 +535,6 @@
       }
 
       _apOfficeChanged() {
-        if (this.$.actionPtsOffice.$.dropdownMenu.opened){
-          return;
-        }
         var filter = {};
         if (this.apOffice && this.apOffice.length) {
           filter.office = this.apOffice
