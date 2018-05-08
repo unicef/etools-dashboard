@@ -4,13 +4,13 @@
 <link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
 
 <dom-module id="data-table-footer">
   <template>
-    <style >
+    <style include="paper-material-styles">
       :host {
         display: block;
-
         font-size: 12px;
         color: var(--secondary-text-color, rgba(0, 0, 0, 0.54));
       }
@@ -48,7 +48,7 @@
       }
     </style>
 
-    <div id="table-footer">
+    <div id="table-footer" class="paper-material" elevation="1">
       <span id="rows">Rows per page:</span>
 
       <paper-dropdown-menu horizontal-align="left" noink>

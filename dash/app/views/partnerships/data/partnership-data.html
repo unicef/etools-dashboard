@@ -85,7 +85,7 @@
       ready() {
         super.ready();
         if (!this.loadedInitially) {
-          this.fireEvent('global-loading', {message: 'Loading partnerships data...', active: true});
+          this.fireEvent('global-loading', {message: 'Loading partnerships data...', active: true, loadingSource: 'partnership-data'});
           this.set('loadedInitially', true);
         }
       }
