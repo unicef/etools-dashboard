@@ -686,10 +686,12 @@
       }
 
       drawCharts() {
-        this.drawProgVisitsChart();
-        keys(this.chartData.charts).map(chart => {
-          this.drawChart(chart);
-        });
+        if (this.chartData) {
+          this.drawProgVisitsChart();
+          keys(this.chartData.charts).map(chart => {
+            this.drawChart(chart);
+          });
+        }
       }
 
       AssuranceActivitiesBars(entity){
@@ -702,11 +704,11 @@
       }
 
       drawProgVisitsChart() {
-        const { programmatic_visits: progVisits, spot_checks: spotChecks } = this.chartData.assurance_activities;
-        const progVisitsData = this.AssuranceActivitiesBars(progVisits);
-        const spotChecksData = this.AssuranceActivitiesBars(spotChecks);
-        this._formatChartData(progVisitsData, 'progVisitsChart', this.assuranceChartOptions);
-        this._formatChartData(spotChecksData, 'spotChecksChart', this.assuranceChartOptions);
+          const { programmatic_visits: progVisits, spot_checks: spotChecks } = this.chartData.assurance_activities;
+          const progVisitsData = this.AssuranceActivitiesBars(progVisits);
+          const spotChecksData = this.AssuranceActivitiesBars(spotChecks);
+          this._formatChartData(progVisitsData, 'progVisitsChart', this.assuranceChartOptions);
+          this._formatChartData(spotChecksData, 'spotChecksChart', this.assuranceChartOptions);
       }
 
       drawChart(dataName) {

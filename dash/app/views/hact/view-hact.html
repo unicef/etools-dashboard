@@ -329,7 +329,7 @@
         if (tab === 'charts') {
           this.updateAppState(this.route.prefix+this.route.path);
         }
-        this.set('hactPage', tab);
+        this.hactPage = tab;
         if (this.hactPage === 'charts') {
           this.$.assurancePlan.classList.add('dark-button');
           this.$.assuranceIcon.classList.add('dark-button');
@@ -410,16 +410,13 @@
       }
 
       _toggleChartsView({target}) {
-        const name = target.getAttribute('name');
-        let pages = this.shadowRoot.querySelectorAll('iron-pages');
-        if (name != this.hactPage) {
-          pages[0].selectNext();
-        }
+        let pages = this.$.hactPages;
+        pages.selectNext();
       }
 
       _detailToggle() {
-        let pages = this.shadowRoot.querySelectorAll('iron-pages');
-        pages[1].selectNext();
+        let pages = this.$.assurance;
+        pages.selectNext();
         let button = this.shadowRoot.querySelector('.detailed-assurance');
         button.innerText = !this.displayDetail ? 'HIDE DETAILED ASSURANCE' : 'SHOW DETAILED ASSURANCE';
         this.displayDetail = !this.displayDetail;
