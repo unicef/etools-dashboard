@@ -92,18 +92,17 @@
                     if="[[filterTypeIs('esmm', filter.type)]]">
             <div class="filter esmm">
 
-              <etools-dropdown-multi label="[[filter.filterName]]"
+              <etools-dropdown label="[[filter.filterName]]"
                                      placeholder="&#8212;"
                                      disabled$="[[!filter.selectionOptions.length]]"
                                      options="[[filter.selectionOptions]]"
-                                     value="[[filter.alreadySelected]]"
                                      option-value="[[filter.optionValue]]"
                                      option-label="[[filter.optionLabel]]"
-                                     selected-values="[[filter.alreadySelected]]"
+                                     on-selected-changed="_handleSelect"
                                      trigger-value-change-event
                                      on-etools-selected-items-changed="esmmValueChanged"
-                                     data-filter-path$="[[filter.path]]">
-              </etools-dropdown-multi>
+                                     >
+              </etools-dropdown>
               <paper-icon-button class="remove-field remove"
                                  icon="cancel"
                                  suffix
@@ -204,16 +203,14 @@
             statePath: 'countryProgrammes'
           },
           country_programme: {
-            type: String,
-            observer: '_filterChanged'
+            type: Object
           },
           sectors: {
             type: Array,
             statePath: 'sectors'
           },
           sector: {
-            type: String,
-            observer: '_filterChanged'
+            type: String
           },
           statuses: {
             type: Array,
@@ -227,8 +224,7 @@
             type: Object
           },
           status: {
-            type: String,
-            observer: '_filterChanged'
+            type: String
           },
           selectedFilters: {
             type: Array
@@ -244,8 +240,7 @@
             observer: '_plotMarkers'
           },
           partner: {
-            type: String,
-            observer: '_filterChanged'
+            type: String
           },
           partners: {
             type: Array,
@@ -267,9 +262,16 @@
         };
       }
 
+      _handleSelect(e) {
+        const { filter } = e.model;
+        const { value } = e.detail;
+        this.set(filter.path, value);
+      }
+
       static get observers() {
         return [
-          '_init(countryProgrammes,sectors,statuses,userCountry,partners)'
+          '_init(countryProgrammes,sectors,statuses,userCountry,partners)',
+          '_filterChanged(country_programme, sector, status, partner)'
         ];
       }
 
@@ -295,16 +297,11 @@
       }
 
       _openModal(e) {
-        let model = e.model.marker;
-        this.querySectorLocations();
-        // let interventions = values(this.intLocMap[model.id].interventions);
-        // let data = {
-        //   name: model.name,
-        //   interventions: interventions,
-        //   type: model.location_type
-        // };
-        // this.markerDialog.data = data;
-        // this.markerDialog.opened = true;
+        let { id } = e.model.marker;
+        let data = clone(this.locationsDict[id]);
+        data.sections = data.sections.map((s)=> this.sectors.find((se)=>se.value === Number(s)).label );
+        this.markerDialog.data = data;
+        this.markerDialog.opened = true;
       }
 
       _init(countryProgrammes, sectors, statuses, userCountry, partners) {
@@ -367,13 +364,21 @@
         }
       }
 
-      _filterChanged(filt) {
+      _filterChanged(country_programme, sector, status, partner) {
         let newFilter = {};
-        ['country_programme', 'status', 'sector', 'partner'].map((f) => {
-          if (this[f]) {
-            newFilter[f] = this[f];
-          }
-        });
+        if(country_programme && !isEmpty(country_programme)) {
+          newFilter['country_programme'] = country_programme;
+        }
+        if(sector) {
+          newFilter['sector'] = sector;
+        }
+        if(status) {
+          newFilter['status'] = status;
+        }
+        if(partner) {
+          newFilter['partner'] = partner;
+        }
+    
         if (equals(this.mapFilter, newFilter)) {
           return;
         }
@@ -383,11 +388,8 @@
           return;
         }
         this.set('hasResult', true);
+        debugger;
         this.set('mapFilter', newFilter);
-        // this.fire('global-loading', {
-        //   message: 'Loading interventions...',
-        //   active: true
-        // });
       }
 
       // ensure redux items loaded before initializing the filters

@@ -13,7 +13,7 @@
   */
   EtoolsDashboard.Mixins.ListFilters = (superClass) => class extends superClass {
     constructor() {
-      super()
+      super();
     }
 
     static get properties() {
@@ -26,8 +26,8 @@
         },
         selectedFilters: {
           type: Array
-        },
-      }
+        }
+      };
     }
 
     /**
@@ -91,8 +91,8 @@
       if (!(this.listFilterOptions instanceof Array && this.listFilterOptions.length > 0)) {
         return;
       }
-      let availableOptions = this.listFilterOptions.filter(option => {
-        let selectedOpt = this.selectedFilters.filter(selectedFilter => {
+      let availableOptions = this.listFilterOptions.filter((option) => {
+        let selectedOpt = this.selectedFilters.filter((selectedFilter) => {
           return selectedFilter.filterName === option.filterName;
         })[0];
         return !selectedOpt;
@@ -163,7 +163,7 @@
       let i;
       filters = isEmpty(filters) ? [] : filters;
       if (filters.length) {
-        filters.forEach(filter => {
+        filters.forEach((filter) => {
           // check available filters
           if (this._validateFilterSelectedValue(filter.selectedValue)) {
             let foundInAvailable = false;
