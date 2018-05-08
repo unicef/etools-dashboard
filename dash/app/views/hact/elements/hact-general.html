@@ -136,6 +136,10 @@
           align-items: center;
         }
 
+        data-table-header {
+          height: 95px;
+        }
+
         .name {
           white-space: normal; 
           cursor: pointer;
@@ -271,7 +275,7 @@
           <div slot="row-data">
             <div class="col-3 layout horizontal">
               <span class="col-12 col-data name padding-right-10">
-                <a on-tap="_goToPage" id="[[partner.id]]">
+                <a href="[[baseSite]]/pmp/partners/[[partner.id]]/details" id="[[partner.id]]">
                   [[partner.name]]
                   <paper-tooltip>[[partner.name]]</paper-tooltip>
                 </a>
@@ -391,10 +395,6 @@
           + totals.planned_engagement_spot_check_follow_up_q4
           + totals.hact_min_requirements_spot_checks
         )
-      }
-
-      _goToPage(e) {
-        window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
       }
     }
 

@@ -79,6 +79,10 @@
         display: flex;
       }
 
+      data-table-header {
+        height: 95px;
+      }
+
       #query {
         padding-left: 24px;
       }
@@ -328,8 +332,7 @@
           <div slot="row-data">
             <div class="col-5 layout horizontal">
               <span class="col-data col-4 ip-pd">
-                <a on-tap="goToPage"
-                   href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details"
+                <a href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details"
                    app-name="pmp"
                    page="partners"
                    id="[[row.partner_id]]/details"
@@ -338,8 +341,7 @@
                     <paper-tooltip fit-to-visible-bounds>[[row.partner_name]]</paper-tooltip>
                   </a>
                 <br>
-                <a on-tap="goToPage"
-                   href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details"
+                <a href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details"
                    app-name="pmp"
                    page="interventions"
                    id="[[row.intervention_id]]/details"
