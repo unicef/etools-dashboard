@@ -220,7 +220,7 @@
         </a>
       </paper-button>
       <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/government-partners" app-name="pmp" page="governments">
+        <a on-tap="goToPage" href="[[baseSite]]/pmp/government-partners" app-name="pmp" page="government-partners">
           <iron-icon icon="account-balance"></iron-icon>
           Goverment-in-simple
         </a>
@@ -268,7 +268,7 @@
       EtoolsDashboard.Mixins.ReduxStore,
       EtoolsDashboard.Mixins.CommonGeneral,
       EtoolsDashboard.Mixins.Endpoints
-    )(Polymer.Element)
+    )(Polymer.Element);
 
     /**
      * `personalized` Description
@@ -297,7 +297,7 @@
           },
           myTrips: {
             type: Array,
-            statePath: 'trips',
+            statePath: 'trips'
           },
           tripsSupervised: {
             statePath: 'tripsSupervised'
@@ -316,12 +316,12 @@
           },
           partnerships: {
             statePath: 'partnerships',
-            observer: '_checkPartnershipsData',
+            observer: '_checkPartnershipsData'
           },
           partnershipsLoaded: {
             type: Boolean,
             value: false
-          },
+          }
         };
       }
 
@@ -331,7 +331,7 @@
           '_updateTrips(tripsTab,myTrips)',
           '_updateActionPoints(actionsTab,actionPointsForMe)',
           '_staticDataLoaded(myTrips,tripsSupervised, actionPointsItems, actionPointsForMe)'
-        ]
+        ];
       }
 
       /**
@@ -358,7 +358,7 @@
       }
 
       _staticDataLoaded() {
-        if(!this.active){
+        if(!this.active) {
           return;
         }
         if (this.myTrips && this.tripsSupervised && this.actionPointsItems && this.actionPointsForMe) {
@@ -372,7 +372,7 @@
       }
 
       _setItems(tab, itemsProp) {
-        const items = _.get(this, tab, []);
+        const items = prop(tab, this);
         this.set(itemsProp, items);
       }
 

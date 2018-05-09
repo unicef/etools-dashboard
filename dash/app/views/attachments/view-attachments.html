@@ -332,7 +332,7 @@
       }
 
       _formatAttachmentTypes(list) {
-        const formattedTypes = union(this.attachmentTypes, this.static.partner_file_types).map((type) => ({
+        const formattedTypes = union(this.attachmentTypes, this.static.partner_file_types).map(type => ({
           label: type,
           value: type
         }));
@@ -352,7 +352,7 @@
             optionValue: 'value',
             optionLabel: 'label',
             path: 'selectedAttachmentTypes',
-            selectionOptions: _.union(this.attachmentTypes, this.static.partner_file_types).map((type) => ({
+            selectionOptions: union(this.attachmentTypes, this.static.partner_file_types).map(type => ({
               label: type,
               value: type
             })),
@@ -405,7 +405,7 @@
       _setSelectedFromCollection(param, collection) {
         const itemsFromParam = param.split('|');
         if (!isEmpty(itemsFromParam)) {
-          const res = collection.filter((u) => itemsFromParam.indexOf(u.value) > -1);
+          const res = collection.filter(u => itemsFromParam.indexOf(u.value) > -1);
           return res;
         }
         return [];
@@ -418,7 +418,7 @@
       _setSelectedFromCollection(param, collection) {
         const itemsFromParam = param.split('|');
         if (!isEmpty(itemsFromParam)) {
-          return collection.filter((u) => itemsFromParam.indexOf(u.value) > -1);
+          return collection.filter(u => itemsFromParam.indexOf(u.value) > -1);
         }
         return [];
       }

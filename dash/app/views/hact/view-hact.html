@@ -21,8 +21,6 @@
 <link rel="import" href="../../../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../../../bower_components/paper-button/paper-button.html">
 
-<link rel="import" href="../../scripts/ramda.html">
-
 <link rel="import" href="elements/hact-detail.html">
 <link rel="import" href="elements/hact-charts.html">
 <link rel="import" href="elements/hact-general.html">
@@ -129,6 +127,10 @@
         border-radius: 50px;
         background: rgb(255, 255, 255);
         cursor: pointer;
+      }
+
+      .wrap-controls {
+        padding-left: 24px;
       }
     </style>
 
@@ -331,7 +333,7 @@
         if (tab === 'charts') {
           this.updateAppState(this.route.prefix+this.route.path);
         }
-        this.set('hactPage', tab);
+        this.hactPage = tab;
         if (this.hactPage === 'charts') {
           this.$.assurancePlan.classList.add('dark-button');
           this.$.assuranceIcon.classList.add('dark-button');
@@ -401,15 +403,6 @@
             }).join('') : str;
       }
 
-      _getGovernmentDisplay(partner, prop, toCurrency) {
-        const partnerValue = get(partner, prop);
-        if (partner.partner_type === 'Government') {
-          return '-';
-        } else {
-          return toCurrency ? this.currencyFormat(partnerValue) : partnerValue;
-        }
-      }
-
       _requiredDataHasBeenLoaded(e) {
         e.stopImmediatePropagation();
         let filtered = propOr([], 'filteredPartners', this );
@@ -421,11 +414,8 @@
       }
 
       _toggleChartsView({target}) {
-        const name = target.getAttribute('name');
-        let pages = Polymer.dom(this.root).querySelectorAll('iron-pages');
-        if (name != this.hactPage) {
-          pages[0].selectNext();
-        }
+        let pages = this.$.hactPages;
+        pages.selectNext();
       }
 
       _detailToggle() {

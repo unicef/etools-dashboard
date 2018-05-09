@@ -36,13 +36,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="app/components/toast/toast-notifications-mixin.html">
 
-<link rel="import" href="../bower_components/shadycss/apply-shim.html">
-
 <link rel="import" href="app/mixins/event-helper-mixin.html">
+<link rel="import" href="app/mixins/user-data-mixin.html">
 <link rel="import" href="app/config/dexie-db-config.html">
 <link rel="import" href="../bower_components/etools-loading/etools-loading-mixin.html">
 
-<link rel="import" href="app/scripts/ramda.html">
+<link rel="import" href="app/scripts/ramda-utils.html">
 <!-- lazy imports -->
 <link rel="lazy-import" href="app/views/hact/view-hact.html">
 <link rel="lazy-import" href="app/views/personalized/view-personalized.html">
@@ -86,9 +85,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       iron-pages {
         display: flex;
       }
+
+      paper-menu-button {
+        padding: 0;
+      }
     </style>
 
-    <etools-piwik-analytics page="[[subroute.path]]"
+    <etools-piwik-analytics page="[[subroute.prefix]]"
                             user="[[user]]"
                             toast="[[currentToastMessage]]"></etools-piwik-analytics>
 
@@ -122,7 +125,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div class="top-content-action" hidden$="[[!_isActive(page,'partnerships')]]">
                   <a target="_blank" href="[[csvUrl]]">
                     <paper-button>
-                      <iron-icon icon="file-download"></iron-icon>
+                      <iron-icon class="dark" icon="file-download"></iron-icon>
                       Export
                     </paper-button>
                   </a>
@@ -224,11 +227,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.EventHelper
      * @appliesMixin EtoolsDashboard.Mixins.ToastNotifications
+     * @appliesMixin EtoolsDashboard.Mixins.UserData
      * @appliesMixin EtoolsMixins.LoadingMixin
      */
     const EtoolsShellMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
       EtoolsMixins.LoadingMixin,
+      EtoolsDashboard.Mixins.UserData,
       EtoolsDashboard.Mixins.ToastNotifications
     )(Polymer.Element);
     /**

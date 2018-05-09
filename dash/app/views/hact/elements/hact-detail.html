@@ -127,47 +127,38 @@
         }
 
         .col-75-px {
-          flex: 0 0 75px;
           min-width: 75px;
         }
 
         .col-555-px {
-          flex: 0 0 555px;
           min-width: 555px;
         }
 
         .col-10-px {
-          flex: 0 0 10px;
           min-width: 10px;
         }
 
         .col-40-px {
-          flex: 0 0 40px;
           min-width: 40px;
         }
 
         .col-100-px {
-          flex: 0 0 100px;
           min-width: 100px;
         }
 
         .col-215-px {
-          flex: 0 0 215px;
           min-width: 215px;
         }
 
         .col-160-px {
-          flex: 0 0 160px;
           min-width: 160px;
         }
 
         .col-460-px {
-          flex: 0 0 460px;
           min-width: 460px;
         }
 
         .col-225-px {
-          flex: 0 0 225px;
           min-width: 225px;
         }
 
@@ -342,7 +333,7 @@
             <div slot="row-data">
               <div class="col-2 layout horizontal">
                 <span class="col-12 padding-right-10 col-data name padded">
-                  <a on-tap="_goToPage" id="[[partner.id]]">
+                  <a href="[[baseSite]]/pmp/partners/[[partner.id]]/details" id="[[partner.id]]">
                     [[partner.name]]
                     <paper-tooltip>[[partner.name]]</paper-tooltip>
                   </a>
@@ -444,15 +435,6 @@
         }
       }
 
-      _getGovernmentDisplay(partner, prop, toCurrency) {
-        const partnerValue = _.get(partner, prop);
-        if (partner.partner_type === 'Government') {
-          return '-';
-        } else {
-          return toCurrency ? this.currencyFormat(partnerValue) : partnerValue;
-        }
-      }
-
       _checkForValueYesBlank(val) {
         return val ? "Yes" : ""
       }
@@ -468,10 +450,6 @@
           + planned_engagement.spot_check_follow_up_q3
           + planned_engagement.spot_check_follow_up_q4
         )
-      }
-
-      _goToPage(e) {
-        window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
       }
     }
 

@@ -13,12 +13,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-
+    
     <title>App Shell</title>
-
+    
     <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../bower_components/web-component-tester/browser.js"></script>
-
+    
     <!-- Import the element to test -->
     <link rel="import" href="../dash/app-shell.html">
   </head>
@@ -30,11 +30,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </test-fixture>
 
     <script>
-      suite('app-shell tests', function() {
-        test('Number in circle should be 1', function() {
+      debugger
+      suite('app-shell tests', () => {
+        test('Number in circle should be 1', () => {
           // just a dummy test
-          var appShell = fixture('AppShell');
-          var contentId = appShell.shadowRoot.querySelector('#layout').id;
+          let appShell = fixture('AppShell')
+          let contentId = appShell.shadowRoot.querySelector('#layout').id;
           assert.equal(contentId, 'layout');
         });
       });

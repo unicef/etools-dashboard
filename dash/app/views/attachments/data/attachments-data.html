@@ -75,7 +75,7 @@
       ready(){
         super.ready();
         if (!this.loadedInitially) {
-          this.fireEvent('global-loading', {message: 'Loading documents...', active: true});
+          this.fireEvent('global-loading', {message: 'Loading documents...', active: true, loadingSource: 'attachments-data'});
           this.set('loadedInitially', true);
         }
       }

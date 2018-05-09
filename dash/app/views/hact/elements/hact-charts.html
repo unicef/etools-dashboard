@@ -398,35 +398,36 @@
     'use strict';
   const ChartsMixin = compose(
     EtoolsDashboard.Mixins.ReduxStore,
-    EtoolsDashboard.Mixins.EventHelper)
+    EtoolsDashboard.Mixins.EventHelper
+    )(Polymer.Element);
     /**
     * @polymer
     * @customElement
     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
     */
-    class HactCharts extends ChartsMixin(Polymer.Element) {
-      static get is() { return 'hact-charts' }
+    class HactCharts extends ChartsMixin {
+      static get is() { return 'hact-charts'; }
 
       static get properties() {
         return {
           assuranceChartOptions: {
             type: Object,
             value: {
-              legend: {position: 'none'},
+              legend: { position: 'none' },
               bars: 'horizontal',
-              bar: {groupWidth: '100%'},
+              bar: { groupWidth: '100%' },
               colors: ['transparent'],
               chartArea: {
                 top: '0',
                 bottom: '0',
                 left: '0',
-                width: '85%',
+                width: '85%'
               },
               annotations: {
                 textStyle: {
                   color: '#000000',
                   auraColor: 'transparent',
-                  opacity: '0.54',
+                  opacity: '0.54'
                 },
                 datum: {
                   stem: {
@@ -441,7 +442,7 @@
                 boxStyle: {
                   display: 'none'
                 },
-                alwaysOutside: true,
+                alwaysOutside: true
               },
               hAxis: {
                 baselineColor: 'none',
@@ -453,23 +454,23 @@
                 ticks: [],
                 display: 'none',
                 textPosition: 'none'
-              },
+              }
             }
           },
           cash_transfers_amountsOptions: {
             type: Object,
             value: {
               isStacked: true,
-              legend: {position: 'none'},
-              bar: {groupWidth: '35%'},
+              legend: { position: 'none' },
+              bar: { groupWidth: '35%' },
               chartArea: {
                 top: '32',
                 bottom: '150',
                 right: '88',
                 width: '65%',
-                height: '55%',
+                height: '55%'
               },
-              colors: ['#D8D8D8', '#2BB0F2', '#FECC02', '#F05656', '#751010', "#000000"],
+              colors: ['#D8D8D8', '#2BB0F2', '#FECC02', '#F05656', '#751010', '#000000'],
               hAxis: {
                 title: 'Cash Transfer Ranges',
                 format: 'currency',
@@ -506,7 +507,7 @@
                   title: 'Number of IPs (All Risk Ratings)',
                   titleTextStyle: {
                     italic: false
-                  },
+                  }
                 }
               },
               series: {
@@ -520,14 +521,14 @@
           cash_transfers_risk_ratingsOptions: {
             type: Object,
             value: {
-              legend: {position: 'none'},
-              bar: {groupWidth: '35%'},
+              legend: { position: 'none' },
+              bar: { groupWidth: '35%' },
               chartArea: {
                 top: '32',
                 bottom: '150',
                 right: '88',
                 width: '65%',
-                height: '55%',
+                height: '55%'
               },
               hAxis: {
                 title: 'Risk Rating',
@@ -562,14 +563,14 @@
                   title: 'Number of IPs (All Risk Ratings)',
                   titleTextStyle: {
                     italic: false
-                  },
+                  }
                 }
               },
               series: {
                 1: {
                   targetAxisIndex: 1,
                   type: 'line',
-                  color: '#000000',
+                  color: '#000000'
                 }
               }
             }
@@ -577,14 +578,14 @@
           cash_transfers_partner_typeOptions: {
             type: Object,
             value: {
-              legend: {position: 'none'},
-              bar: {groupWidth: '35%'},
+              legend: { position: 'none' },
+              bar: { groupWidth: '35%' },
               chartArea: {
                 top: '32',
                 bottom: '150',
                 right: '88',
                 width: '65%',
-                height: '55%',
+                height: '55%'
               },
               hAxis: {
                 textStyle: {
@@ -618,14 +619,14 @@
                   title: 'Number of Partners',
                   titleTextStyle: {
                     italic: false
-                  },
+                  }
                 }
               },
               series: {
                 1: {
                   targetAxisIndex: 1,
                   type: 'line',
-                  color: '#000000',
+                  color: '#000000'
                 }
               }
             }
@@ -634,11 +635,11 @@
             type: Object,
             value: {
               legend: 'none',
-              slices: [{color: "#2BB0F2"}, {color: "#FECC02"}],
+              slices: [{ color: '#2BB0F2' }, { color: '#FECC02' }],
               chartArea: {
                 top: '64',
-                height: '55%',
-              },
+                height: '55%'
+              }
             }
           },
           chartData: {
@@ -650,19 +651,19 @@
             type: Array,
             value: []
           }
-        }
+        };
       }
 
       static get observers() {
-        return ['_init(active)']
+        return ['_init(active)'];
       }
 
       _init(active) {
         if (active) {
-          if (isEmpty(this.chartData)){
-            this.fireEvent('global-loading', {message:'Loading chart data...', active: true});
+          if (isEmpty(this.chartData)) {
+            this.fireEvent('global-loading', { message: 'Loading chart data...', active: true });
           }else {
-            this.fireEvent('global-loading');
+            this.fireEvent('global-loading', { loadingSource: 'hact-charts' });
             this.drawCharts();
           }
         }
@@ -670,14 +671,14 @@
 
       _onChartDataChange(data) {
         if (!isEmpty(data)) {
-          const riskRatings = tail(data.charts.cash_transfers_risk_ratings).map(r => last(r));
+          const riskRatings = tail(data.charts.cash_transfers_risk_ratings).map((r) => last(r));
           this.set('riskRatings', riskRatings);
           this._init(this.active);
         }
       }
 
       _formatChartData(data, chartName, options) {
-        this.$.google.dataTable(data).then(dt => {
+        this.$.google.dataTable(data).then((dt) => {
           this.shadowRoot.querySelector('#' + chartName).options = options;
           this.shadowRoot.querySelector('#' + chartName).data = dt;
           this.updateStyles();
@@ -685,27 +686,29 @@
       }
 
       drawCharts() {
-        this.drawProgVisitsChart();
-        keys(this.chartData.charts).map(chart => {
-          this.drawChart(chart);
-        });
+        if (this.chartData) {
+          this.drawProgVisitsChart();
+          keys(this.chartData.charts).map((chart) => {
+            this.drawChart(chart);
+          });
+        }
       }
 
-      AssuranceActivitiesBars(entity){
+      AssuranceActivitiesBars(entity) {
         return [
-          ['Data', 'Text', {role: 'annotation'}, 'Count', {role: 'style'}, {role: 'annotation'}],
+          ['Data', 'Text', { role: 'annotation' }, 'Count', { role: 'style' }, { role: 'annotation' }],
           ['', 0, 'Completed', entity.completed,
             entity.completed >= entity.min_required ? '#1B9C5C' : '#F05454', entity.completed],
-          ['', 0, 'Minimum Required', entity.min_required, '#A7A7A7', entity.min_required],
-        ]
+          ['', 0, 'Minimum Required', entity.min_required, '#A7A7A7', entity.min_required]
+        ];
       }
 
       drawProgVisitsChart() {
-        const { programmatic_visits: progVisits, spot_checks: spotChecks } = this.chartData.assurance_activities;
-        const progVisitsData = this.AssuranceActivitiesBars(progVisits);
-        const spotChecksData = this.AssuranceActivitiesBars(spotChecks);
-        this._formatChartData(progVisitsData, 'progVisitsChart', this.assuranceChartOptions);
-        this._formatChartData(spotChecksData, 'spotChecksChart', this.assuranceChartOptions);
+          const { programmatic_visits: progVisits, spot_checks: spotChecks } = this.chartData.assurance_activities;
+          const progVisitsData = this.AssuranceActivitiesBars(progVisits);
+          const spotChecksData = this.AssuranceActivitiesBars(spotChecks);
+          this._formatChartData(progVisitsData, 'progVisitsChart', this.assuranceChartOptions);
+          this._formatChartData(spotChecksData, 'spotChecksChart', this.assuranceChartOptions);
       }
 
       drawChart(dataName) {
@@ -718,14 +721,14 @@
       }
 
       _dashCapital(string) {
-        return `- ${capitalize(string)}`
+        return `- ${capitalize(string)}`;
       }
 
       _numWithCommas(number) {
-        return parseInt(number).toLocaleString('en')
+        return parseInt(number).toLocaleString('en');
       }
     }
 
-    window.customElements.define(HactCharts.is, HactCharts)
+    window.customElements.define(HactCharts.is, HactCharts);
   </script>
 </dom-module>

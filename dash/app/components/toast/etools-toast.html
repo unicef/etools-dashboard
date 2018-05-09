@@ -1,5 +1,6 @@
 <link rel="import" href="../../../../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../mixins/event-helper-mixin.html">
 
 <dom-module id="etools-toast">
   <template>
@@ -57,8 +58,9 @@
     /**
      * @polymer
      * @customElement
+     * @appliesMixin EtoolsDashboard.Mixins.EventHelper
      */
-    class EtoolsToast extends Polymer.Element {
+    class EtoolsToast extends EtoolsDashboard.Mixins.EventHelper(Polymer.Element) {
 
       static get is() {
         return 'etools-toast';
@@ -81,17 +83,17 @@
       }
 
       confirmToast() {
-        this.dispatchEvent(new CustomEvent('toast-confirm', {
+        this.fireEvent('toast-confirm', {
           bubbles: true,
           composed: true
-        }));
+        });
       }
 
       toastClosed() {
-        this.dispatchEvent(new CustomEvent('toast-closed', {
+        this.fireEvent('toast-closed', {
           bubbles: true,
           composed: true
-        }));
+        });
       }
 
       getMessageWrapper() {

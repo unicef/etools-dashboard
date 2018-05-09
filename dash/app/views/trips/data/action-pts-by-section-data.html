@@ -1,15 +1,9 @@
 <link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../../../../bower_components/etools-ajax/etools-ajax.html">
+<link rel="import" href="../../../../../bower_components/etools-ajax/etools-ajax-request-mixin.html"> 
 <link rel="import" href="../../../mixins/event-helper-mixin.html">
 <link rel="import" href="../../../endpoints/endpoints-mixin.html">
 
 <dom-module id="action-pts-by-section-data">
-  <template>
-    <etools-ajax id="ajax"
-                 endpoint="[[endpoint]]"
-                 on-success="_handleResponse"
-                 on-fail="_handleErrorResponse"></etools-ajax>
-  </template>
   <script>
     'use strict';
 
@@ -18,9 +12,11 @@
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.EventHelper
      * @appliesMixin EtoolsDashboard.Mixins.Endpoints
+     * @appliesMixin EtoolsAjaxRequestMixin
      */
     const ActionPtsBySectionMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
+      EtoolsAjaxRequestMixin,
       EtoolsDashboard.Mixins.Endpoints
     )(Polymer.Element)
 
@@ -34,6 +30,13 @@
 
       static get properties() {
         return {
+          reqOptions: {
+            type: Object,
+            value: {
+              endpoint: null,
+              csrf: null
+            }
+          },
           actionPointsData: {
             type: Object,
             readOnly: true,
@@ -46,31 +49,24 @@
           }
         }
       }
-
-      connectedCallback() {
-        super.connectedCallback()
-        this.ajaxEl = this.$.ajax;
-        this.ajaxEl.set('method', 'GET');
-      }
       
       _filterChanged(filter) {
-        if (_.isEmpty(filter)) {
+        if (isEmpty(filter)) {
           this.fireEvent('global-loading', {message: 'Loading chart data...', active: true});
-          this.set('endpoint', this.getEndpoint('actionPointsBySection'));
+          this.set('reqOptions.endpoint', this.getEndpoint('actionPointsBySection'));
         } else {
           this.fireEvent('global-loading', {message: 'Loading chart data...', active: true});
-
-          this.set('endpoint', this.getEndpoint('actionPointsBySectionOffice',
+          this.set('reqOptions.endpoint', this.getEndpoint('actionPointsBySectionOffice',
               {
                 office: filter.office.join(',')
               }
           ));
         }
+        this.sendRequest(this.reqOptions).then(response => this._handleResponse(response))
       }
 
       _handleResponse(response) {
-        var data = _.get(response, 'detail', []);
-        this._setActionPointsData(data);
+        this._setActionPointsData(response);
         this.fireEvent('global-loading', { loadingSource: 'action-pts-by-section-data' });
       }
     }

@@ -1,4 +1,4 @@
-<link rel="import" href<link rel="import" href="../../../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
+<link rel="import" href="../../../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
 <link rel="import" href="../../../endpoints/endpoints-mixin.html">">
 <link rel="import" href="../../../mixins/event-helper-mixin.html">
 <link rel="import" href="../../../mixins/ajax-server-errors-mixin.html">
@@ -35,7 +35,16 @@
           },
           mapFilter: {
             type: Object,
-            observer: 'query',
+            observer: 'queryMapInterventions',
+            notify: true
+          },
+          locationsDictCreated: {
+            type: Boolean,
+            value: false
+          },
+          locationsDict: {
+            type: Object,
+            readOnly: true,
             notify: true
           }
 
@@ -47,47 +56,41 @@
       }
 
       queryMapInterventions(filter) {
-        if (!this.intLocMap && !isEmpty(filter)) {
-          return;
-        }
-        let filterStr = '';
-        if (!isEmpty(filter)) {
-          let params = [];
-          keys(filter).forEach(function(k) {
-            params.push(k + '=' + filter[k]);
-          });
-          filterStr += '?' + params.join('&');
-        }
-        let newEp = this.getEndpoint('mapInterventions', { filter: filterStr });
+        let newEp = this.getEndpoint('mapInterventions');
         if (equals(this.endpoint, newEp)) {
           return;
         }
         this.set('reqOptions.endpoint', newEp);
+        this.set('reqOptions.params', filter);
         this._requestMapData();
       }
 
       _requestMapData() {
-        this.fireEvent('global-loading', { active: true, message: 'Loading map locations...' });
+        this.fireEvent('global-loading', { active: true, message: 'Loading map locations...', loadingSource: 'map-data' });
         this.sendRequest(this.reqOptions)
           .then((resp) => {
             this._formatInterventions(resp);
           }).catch((err) => {
-            this.handleErrorResponse(error);
+            this.handleErrorResponse(err);
           });
       }
 
       _formatInterventions(data) {
+        if (!this.locationsDictCreated) {
+          this._mapLocationsToInterventions(data);
+          this.set('loadedInitially', true);
+        }
         const addParsedPoint = (p)=> assoc('point', this.parseMapPoint(p.geo_point), p);
         const hasGeoPoint = (g)=> !isEmpty(prop('geo_point', g));
         let locations = compose(
-          map(addParsedPoint),
+          map(compose(addParsedPoint, pick(['id', 'geo_point']))),
           filter(hasGeoPoint),
           uniq,
           flatten,
           map(prop('locations'))
         )(data);
         this._setFilteredInterventions(locations);
-        this.fireEvent('global-loading', {});
+        this.fireEvent('global-loading', { loadingSource: 'map-data' });
       }
 
       parseMapPoint(point) {
@@ -100,6 +103,33 @@
         } else {
           return null;
         }
+      }
+
+      _mapLocationsToInterventions(data) {
+        const hasLocationsAndGeopoint = (x)=> !isEmpty(prop('locations', x)) && !isEmpty(prop('geo_point', x));
+        const addDataToDict = (acc, inter)=> {
+          inter.locations.map((location)=>{
+            const locationObj = acc[location.id] || {
+              interventions: [],
+              sections: [],
+              name: location.name,
+              type: location.location_type
+            };
+            locationObj.interventions = uniq([
+              pick(['partner_name', 'number', 'title'], inter),
+              ...locationObj.interventions
+            ]);
+            locationObj.sections = uniq([...inter.sections, ...locationObj.sections]);
+            acc = merge(acc, { [location.id]: locationObj });
+          });
+          return acc;
+        };
+        const getInterventionsFromLocations = compose(
+          reduce(addDataToDict, {}),
+          filter(hasLocationsAndGeopoint)
+        );
+        const locationsDict = getInterventionsFromLocations(data);
+        this._setLocationsDict(locationsDict);
       }
     };
 

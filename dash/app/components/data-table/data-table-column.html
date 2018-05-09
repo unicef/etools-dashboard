@@ -1,5 +1,6 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../mixins/event-helper-mixin.html">
 
 <dom-module id="data-table-column">
   <template>
@@ -108,8 +109,9 @@
     * @polymer
     * @customElement
     * @extends Polymer.Element
+    * @appliesMixin EtoolsDashboard.Mixins.EventHelper
     */
-    class DataTableColumn extends Polymer.Element {
+    class DataTableColumn extends EtoolsDashboard.Mixins.EventHelper(Polymer.Element) {
       static get is() { return 'data-table-column'; }
 
       static get properties() {
@@ -174,7 +176,7 @@
         } else {
           this.set('direction', this.direction === 'asc' ? 'desc' : 'asc');
         }
-        this.dispatchEvent(new CustomEvent('sort-changed', {field: this.field, direction: this.direction}));
+        this.fireEvent('sort-changed', {field: this.field, direction: this.direction});
       }
 
       _changeHeadingAlign() {

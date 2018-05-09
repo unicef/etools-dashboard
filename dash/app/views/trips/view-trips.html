@@ -9,9 +9,7 @@
 
 <link rel="import" href="../../../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
-<link rel="import" href="../../../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../../../bower_components/paper-menu/paper-menu.html">
 <link rel="import" href="../../../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
@@ -170,7 +168,7 @@
                                      option-label="name"
                                      option-value="id"
                                      trigger-value-change-event
-                                     on-paper-dropdown-close="_apOfficeChanged"
+                                     on-etools-selected-items-changed="_apOfficeChanged"
                                      options="[[offices]]"></etools-dropdown-multi>
             </div>
           </div>
@@ -200,7 +198,7 @@
       EtoolsDashboard.Mixins.ReduxStore,
       EtoolsDashboard.Mixins.Dropdown,
       EtoolsDashboard.Mixins.EventHelper
-    )
+    )(Polymer.Element)
     
     /**
      * `view-trips` Description
@@ -210,7 +208,7 @@
      * @polymer
      * @extends ViewTripsMixins
      */
-    class ViewTrips extends ViewTripsMixins(Polymer.Element) {
+    class ViewTrips extends ViewTripsMixins {
       /**
        * String providing the tag name to register the element under.
        */
@@ -335,7 +333,7 @@
                 minValue: 0,
                 gridlineColor: '#E8E8E8',
                 format: 'percent',
-                ticks: _.range(0.1, 1.1, 0.1)
+                ticks: range(0.1, 1.1, 0.1)
               },
               vAxis: {
                 minValue: 0,
@@ -417,13 +415,13 @@
 
       _initTripsChart() {
         this.set('year', moment().year());
-        this.set('months', moment.months().map(function(month, i) {
+        this.set('months', moment.months().map((month, i) => {
           return {
             label: month,
             value: ('0' + (i + 1)).slice(-2),
           };
         }));
-        var monthsToDate = _.range(1, moment().month() + 2).map(function(month) {
+        var monthsToDate = range(1, moment().month() + 2).map(month => {
           return ('0' + (month)).slice(-2)
         });
         this.set('month', monthsToDate);
@@ -460,10 +458,9 @@
         }
       }
 
-      _alertStaticDataLoaded() {
-        var args = _.toArray(arguments);
-        var allHaveValues = args.reduce(function(allHaveValues, item) {
-          return !_.isEmpty(item) && allHaveValues;
+      _alertStaticDataLoaded(...args) {
+        var allHaveValues = args.reduce((allHaveValues, item) => {
+          return !isEmpty(item) && allHaveValues;
         }, true);
         if (allHaveValues) {
           this.set('staticDataLoaded', true);
@@ -472,7 +469,6 @@
       }
 
       _setInvalid(field) {
-        var _this = this;
         this.set('tripsFilter', {});
         this.set('tripsData', {});
         var fields = [
@@ -489,32 +485,31 @@
             id: 'tripsOffice'
           }
         ];
-        _.remove(fields, {id: field});
-        var invalid = fields.reduce(function(isValid, _field) {
-          return _this[_field.name] || isValid;
+        fields = without({id: field}, fields);
+        var invalid = fields.reduce((isValid, _field) => {
+          return this[_field.name] || isValid;
         }, false);
         if (invalid && field !== 'tripsOffice') {
           this.shadowRoot.querySelector('#' + field).invalid = true;
         } else {
-          fields.forEach(function(f) {
-            _this.shadowRoot.querySelector('#' + f.id).invalid = false;
+          fields.forEach(f => {
+            this.shadowRoot.querySelector('#' + f.id).invalid = false;
           });
         }
       }
 
       _formatChartData(formatted, chartName) {
-        var _this = this;
-        this.$.google.dataTable(formatted).then(function(dt) {
+        this.$.google.dataTable(formatted).then(dt => {
           //magic ratio number 32.71
-          _this.shadowRoot.querySelector('#' + chartName).style = `height: ${Math.round(dt.getNumberOfRows() * 32.71)}px; min-height: 300px`
-          _this.shadowRoot.querySelector('#' + chartName).options = _this[chartName + 'Options'];
-          _this.shadowRoot.querySelector('#' + chartName).data = dt;
+          this.shadowRoot.querySelector('#' + chartName).style = `height: ${Math.round(dt.getNumberOfRows() * 32.71)}px; min-height: 300px`
+          this.shadowRoot.querySelector('#' + chartName).options = this[chartName + 'Options'];
+          this.shadowRoot.querySelector('#' + chartName).data = dt;
         });
       }
 
       _tripsDataChanged(data) {
-        if (!_.isEmpty(data)) {
-          var travels = _.get(data, 'travels_by_section', []);
+        if (!isEmpty(data) && data != null) {
+          var travels = prop('travels_by_section', data);
           if (!travels.length && this.active) {
             this.fireEvent('global-loading', {active: false});
             this._setNoData('tripsChart');
@@ -522,7 +517,7 @@
             var formatted = [
               ['Trips', 'Planned', 'Approved', 'Completed']
             ];
-            travels.map(function(section) {
+            travels.map(section => {
               formatted.push([section.section_name,
                 section.planned_travels,
                 section.approved_travels,
@@ -540,9 +535,6 @@
       }
 
       _apOfficeChanged() {
-        if (this.$.actionPtsOffice.$.dropdownMenu.opened){
-          return;
-        }
         var filter = {};
         if (this.apOffice && this.apOffice.length) {
           filter.office = this.apOffice
@@ -551,15 +543,15 @@
       }
       
       _actionPointsDataChanged(data) {
-        if (!_.isEmpty(data)) {
-          var actionPoints = _.get(data, 'action_points_by_section', []).filter(function(ap) {
-            return _.get(ap, 'total_action_points');
+        if (!isEmpty(data)) {
+          var actionPoints = prop('action_points_by_section', data).filter(ap => {
+            return prop('total_action_points', ap);
           });
           if (!actionPoints.length && this.active) {
             this._setNoData('actionPointsChart');
           } else {
             var formatted = [['Action Points', 'Closed', 'Total']];
-            actionPoints.forEach(function(ap) {
+            actionPoints.forEach(ap => {
               formatted.push([ap.section_name,
                 ap.completed_action_points,
                 ap.total_action_points
@@ -571,12 +563,11 @@
       }
 
       _setNoData(chartName) {
-        var _this = this;
-        this.$.google.dataTable(this.noDataMessage).then(function(dt) {
-          _this.shadowRoot.querySelector('#' + chartName).style = 'height: 300px';
-          _this.shadowRoot.querySelector('#' + chartName).options = _this.noDataOptions;
-          _this.shadowRoot.querySelector('#' + chartName).data = dt;
-          _this.shadowRoot.querySelector('#' + chartName).redraw();
+        this.$.google.dataTable(this.noDataMessage).then(dt => {
+          this.shadowRoot.querySelector('#' + chartName).style = 'height: 300px';
+          this.shadowRoot.querySelector('#' + chartName).options = this.noDataOptions;
+          this.shadowRoot.querySelector('#' + chartName).data = dt;
+          this.shadowRoot.querySelector('#' + chartName).redraw();
         });
       }
     }

@@ -136,6 +136,10 @@
           align-items: center;
         }
 
+        data-table-header {
+          height: 95px;
+        }
+
         .name {
           white-space: normal; 
           cursor: pointer;
@@ -144,19 +148,11 @@
         }
 
         @supports (-ms-ime-align:auto) {
-          data-table-header {
-            height: 74px;
-            padding-bottom: 0;
-          }
           :host {
             --paper-material-padding: 12px 24px 0 24px;
           }
         }
         @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-          data-table-header {
-            height: 74px;
-            padding-bottom: 0;
-          }
           :host {
             --paper-material-padding: 12px 24px 0 24px;
           }
@@ -279,7 +275,7 @@
           <div slot="row-data">
             <div class="col-3 layout horizontal">
               <span class="col-12 col-data name padding-right-10">
-                <a on-tap="_goToPage" id="[[partner.id]]">
+                <a href="[[baseSite]]/pmp/partners/[[partner.id]]/details" id="[[partner.id]]">
                   [[partner.name]]
                   <paper-tooltip>[[partner.name]]</paper-tooltip>
                 </a>
@@ -373,7 +369,7 @@
       }
 
       _getGovernmentDisplay(partner, prop, toCurrency) {
-        const partnerValue = _.get(partner, prop);
+        const partnerValue = path(prop.split('.'), partner);
         if (partner.partner_type === 'Government') {
           return '-';
         } else {
@@ -399,10 +395,6 @@
           + totals.planned_engagement_spot_check_follow_up_q4
           + totals.hact_min_requirements_spot_checks
         )
-      }
-
-      _goToPage(e) {
-        window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
       }
     }
 

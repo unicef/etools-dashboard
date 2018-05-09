@@ -16,7 +16,6 @@
           padding: var(--paper-material-padding, 20px 24px 0 24px);
           background-color: var(--primary-background-color, #FFFFFF);
           @apply --data-table-header;
-          height: 95px;
         }
 
         #title {
@@ -91,18 +90,17 @@
 
       connectedCallback() {
         super.connectedCallback();
-        var _this = this;
         //detect if any column is a group of columns with heading
-        Array.prototype.slice.call(this.children).map(function(col) {
+        Array.prototype.slice.call(this.children).map(col => {
           if (col.attributes.getNamedItem('group-heading')) {
-               _this._noHeight();
-                _this.$.columns.classList.add('end');
-            }
+            this._noHeight();
+            this.$.columns.classList.add('end');
+          }
         });
       }
 
       _handleSortChanged(e) {
-        var column = Polymer.dom(e).localTarget;
+        var column = e.target;
         this._clearSelected(column);
         this.set('sortOrder.field', e.detail.field);
         this.set('sortOrder.direction', e.detail.field);
