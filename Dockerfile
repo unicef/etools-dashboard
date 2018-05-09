@@ -1,7 +1,8 @@
-FROM mhart/alpine-node:8
+FROM mhart/alpine-node:7
 RUN apk update
 
 RUN apk add --update bash
+
 RUN apk add git
 RUN npm install -g bower polymer-cli 
 
