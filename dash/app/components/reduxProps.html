@@ -1,0 +1,99 @@
+<link rel="import"
+      href="../../../bower_components/moment-element/moment-element.html">
+
+<script>
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+  EtoolsDashboard.ReduxProps = [
+    {
+      propName: 'countryProgrammes',
+      endpointProps: {
+        name: 'countryProgrammes'
+      }
+    },
+    {
+      propName: 'offices',
+      endpointProps: {
+        name: 'offices',
+        templateProps: {}
+      }
+    },
+    {
+      propName: 'trips',
+      endpointProps: function() {
+        return { name: 'trips', templateProps: { id: this.user.id } };
+      }
+    },
+    {
+      propName: 'tripsSupervised',
+      endpointProps: function() {
+        return { name: 'tripsSupervised', templateProps: { id: this.user.id } };
+      }
+    },
+    {
+      propName: 'actionPointsByMe',
+      endpointProps: function() {
+        return { name: 'actionPointsByMe', templateProps: { id: this.user.id } };
+      }
+    },
+    {
+      propName: 'actionPointsForMe',
+      endpointProps: function() {
+        return { name: 'actionPointsForMe', templateProps: { id: this.user.id } };
+      }
+    },
+    {
+      propName: 'partnerships',
+      endpointProps: {
+        name: 'partnerships',
+        templateProps: {}
+      }
+    },
+    {
+      propName: 'tripsYears',
+      endpointProps: {}
+    },
+    {
+      propName: 'sections',
+      endpointProps: {
+        name: 'sections',
+        templateProps: {}
+      }
+    },
+    {
+      propName: 'sectors',
+      endpointProps: {
+        name: 'sectors',
+        templateProps: {}
+      }
+    },
+    {
+      propName: 'unicefUsers',
+      endpointProps: {
+        name: 'unicefUsers',
+        templateProps: {}
+      }
+    },
+    {
+      propName: 'static',
+      endpointProps: {
+        name: 'static',
+        templateProps: {}
+      }
+    },
+    {
+      propName: 'userCountry',
+      endpointProps: {
+        name: 'userCountry',
+        templateProps: {}
+      }
+    },
+    {
+      propName: 'hactGraphs',
+      endpointProps: {
+        name: 'hactGraphs',
+        templateProps: {}
+      }
+    }
+  ];
+
+</script>

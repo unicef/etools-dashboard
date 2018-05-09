@@ -1,0 +1,282 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../scripts/ramda.html">
+
+<link rel="import" href="../mixins/redux-store-mixin.html">
+<link rel="import" href="../mixins/ajax-server-errors-mixin.html">
+<link rel="import" href="../endpoints/endpoints-mixin.html">
+<link rel="import" href="../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
+
+<link rel="import" href="../config/dexie-db-config.html">
+
+<link rel="import" href="reduxProps.html">
+<dom-module id="common-data-loaders">
+  <template>
+    <style>
+      :host {
+        display: block
+      }
+    </style>
+
+  </template>
+
+  <script>
+
+    /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.Endpoints
+     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
+     * @appliesMixin EtoolsDashboard.Mixins.AjaxServerErrors
+     * @appliesMixin EtoolsAjaxRequestMixin
+     */
+    const CommonDataMixin = compose(
+      EtoolsDashboard.Mixins.Endpoints,
+      EtoolsDashboard.Mixins.ReduxStore,
+      EtoolsDashboard.Mixins.AjaxServerErrors,
+      EtoolsAjaxRequestMixin
+    )(Polymer.Element);
+
+    /**
+     * `common-data-loaders` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class CommonDataLoaders extends CommonDataMixin {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'common-data-loaders';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          nextAction: {
+            type: Object
+          },
+          _reduxActions: {
+            type: Object,
+            value: {}
+          },
+          toDispatch: {
+            type: Array,
+            value: []
+          },
+          user: {
+            type: Object,
+            value: {
+              id: 23356
+            }
+          }
+        };
+      }
+
+      static get actions() {
+        return {
+
+          setCountryProgrammes(data = []) {
+            return {
+              type: 'SET_COUNTRY_PROGRAMMES',
+              countryProgrammes: map(pick(['id', 'name']), data)
+            };
+          },
+
+          setOffices(data = []) {
+            return {
+              type: 'SET_OFFICES',
+              offices: map(pick(['id', 'name']), data)
+            };
+          },
+
+          // next 4 actions destructure data due to corresponding format from backend
+
+          setTrips({ data } = []) {
+            return {
+              type: 'SET_TRIPS',
+              trips: map(
+                pick(['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']),
+                data
+              )
+            };
+          },
+
+          setTripsSupervised({ data } = []) {
+            return {
+              type: 'SET_TRIPS_SUPERVISED',
+              tripsSupervised: map(
+                pick(['id', 'start_date', 'purpose', 'reference_number', 'traveler']),
+                data
+              )
+            };
+          },
+
+          setActionPointsByMe({ data } = []) {
+            return {
+              type: 'SET_ACTION_PTS_BY_ME',
+              actionPointsByMe: map(
+                pick(['status', 'description', 'created_at', 'person_responsible_name', 'id', 'due_date']),
+                data
+              )
+            };
+          },
+
+          setActionPointsForMe({ data } = []) {
+            return {
+              type: 'SET_ACTION_PTS_FOR_ME',
+              actionPointsForMe: map(
+                pick(['status', 'description', 'created_at', 'assigned_by_name', 'id', 'due_date']),
+                data
+              )
+            };
+          },
+
+          setPartnerships(data = []) {
+            return {
+              type: 'SET_PARTNERSHIPS',
+              partnerships: map(
+                pick(['id', 'title', 'number', 'total_unicef_budget']),
+                data
+              )
+            };
+          },
+
+          setTripsYears() {
+            return {
+              type: 'SET_TRIPS_YEARS',
+              tripsYears: range(2015, moment().year() + 1)
+            };
+          },
+
+          setSections(data = []) {
+            return {
+              type: 'SET_SECTIONS',
+              sections: map(
+                (s) => ({ value: parseInt(s.id), label: s.name }),
+                data
+              )
+            };
+          },
+
+          setSectors(data = []) {
+            return {
+              type: 'SET_SECTORS',
+              sectors: map(
+                (s) => ({ value: parseInt(s.id), label: s.name }),
+                data
+              )
+            };
+          },
+
+          setUnicefUsers(data = []) {
+            return {
+              type: 'SET_UNICEF_USERS',
+              unicefUsers: map(
+                (s) => ({ value: parseInt(s.id), label: s.name }),
+                data
+              )
+            };
+          },
+
+          setStatic(data = []) {
+            return {
+              type: 'SET_STATIC_DATA',
+              static: data
+            };
+          },
+
+          setUserCountry(data = []) {
+            return {
+              type: 'SET_USER_COUNTRY',
+              userCountry: head(data)
+            };
+          },
+
+          setHactGraphs(data = {}) {
+            return {
+              type: 'SET_HACT_GRAPHS',
+              hactGraphs: propOr([], 'partner_values', data)
+            };
+          }
+
+        };
+      }
+
+      /**
+       * Instance of the element is created/upgraded. Use: initializing state,
+       * set up event listeners, create shadow dom.
+       * @constructor
+       */
+      constructor() {
+        super();
+      }
+
+      /**
+       * Use for one-time configuration of your component after local DOM is initialized.
+       */
+      ready() {
+        super.ready();
+
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this._init();
+        });
+      }
+
+      _init() {
+        this.actionsToDispatch();
+        this._callNext();
+      }
+
+      actionsToDispatch() {
+        const { ReduxProps } = EtoolsDashboard;
+        let mappedItems = ReduxProps.map(a => {
+          let endpoint = a.endpointProps;
+          if (typeof endpoint === 'function') {
+            endpoint = endpoint.bind(this)();
+          }
+          endpoint = isEmpty(endpoint) ? endpoint
+            : isEmpty(endpoint.templateProps) ? this.getEndpoint(endpoint.name)
+              : this.getEndpoint(endpoint.name, endpoint.templateProps);
+
+          let actionObj = {
+            handler: concat('set', capitalize(a.propName)),
+            endpoint: { endpoint }
+          };
+          return actionObj;
+        });
+        this.set('toDispatch', mappedItems);
+      }
+
+      _callNext() {
+        if (this.toDispatch.length) {
+          let next = this.shift('toDispatch');
+          let action = {};
+          action[next.type] = next.action;
+          this.set('nextAction', next);
+          this.set('_reduxActions', Object.assign({}, this._reduxActions, action));
+          if (isEmpty(next.endpoint.endpoint)) {
+            // for items without api calls
+            this.dispatch(next.handler, null);
+            this._callNext();
+          } else {
+            this.sendRequest(next.endpoint).then(res => this._handleResponse(res))
+              .catch(err => this.handleErrorResponse(err));
+          }
+        }
+      }
+
+      _handleResponse(response) {
+        this.dispatch(this.nextAction.handler, response);
+        this._callNext();
+      }
+
+    }
+
+    window.customElements.define(CommonDataLoaders.is, CommonDataLoaders);
+  </script>
+</dom-module>

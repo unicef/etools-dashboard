@@ -7,311 +7,339 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/app-route/app-location.html">
-<link rel="import" href="../bower_components/app-route/app-route.html">
-<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/paper-material/paper-material.html">
-<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
-<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../bower_components/iron-icons/social-icons.html">
-
-<link rel="import" href="../scripts/polyfils/es6-polyfils.html">
-
-<link rel="import" href="app-config/etools-app-config.html">
-<link rel="import" href="app-elements/static-common-data/common-data-loaders.html">
-<link rel="import" href="../bower_components/etools-loading/etools-loading-behavior.html">
-<link rel="import" href="app-behaviors/notification-toasts-behavior.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/etools-dropdown/etools-dropdown.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/etools-piwik-analytics/etools-piwik-analytics.html">
 
-<link rel="import" href="app-elements/user-data/user-data.html">
-<link rel="import" href="app-elements/side-bar-item/side-bar-item.html">
-<link rel="import" href="app-elements/page-header/page-header.html">
-<link rel="import" href="app-elements/page-footer/page-footer.html">
+<link rel="import" href="app/styles/buttons-styles.html">
+<link rel="import" href="app/styles/page-layout-styles.html">
+<link rel="import" href="app/styles/shared-styles.html">
+<link rel="import" href="app/styles/app-theme.html">
 
-<link rel="import" href="../styles/shared-styles.html">
-<link rel="import" href="../styles/page-layout-styles.html">
-<link rel="import" href="../styles/app-theme.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+
+<link rel="import" href="app/components/toast/toast-notifications-mixin.html">
+
+<link rel="import" href="app/mixins/event-helper-mixin.html">
+<link rel="import" href="app/mixins/user-data-mixin.html">
+<link rel="import" href="app/config/dexie-db-config.html">
+<link rel="import" href="../bower_components/etools-loading/etools-loading-mixin.html">
+
+<link rel="import" href="app/scripts/ramda-utils.html">
+<!-- lazy imports -->
+<link rel="lazy-import" href="app/views/hact/view-hact.html">
+<link rel="lazy-import" href="app/views/personalized/view-personalized.html">
+<link rel="lazy-import" href="app/views/partnerships/view-partnerships.html">
+<link rel="lazy-import" href="app/views/attachments/view-attachments.html">
+<link rel="lazy-import" href="app/views/trips/view-trips.html">
+<link rel="lazy-import" href="app/views/map/view-map.html">
+
+<link rel="import" href="app/components/common-data-loaders.html">
+<link rel="import" href="app/components/page-header.html">
+
 
 <dom-module id="app-shell">
-
   <template>
-    <style include="page-layout-styles iron-flex iron-flex-alignment shared-styles">
-
+    <style include="page-layout-styles shared-styles buttons-styles">
       :host {
         display: block;
+        --paper-tab-content: {
+          height: auto;
+        }
       }
 
-      app-drawer {
-        z-index: 100;
-        --app-drawer-width: 220px;
-        --app-drawer-content-container: {
-            background-color: var(--light-theme-content-color);
-        };
+      .top-content-actions-wrapper {
+        display: flex;
+        align-items: flex-end;
+        height: 32px;
       }
 
-      app-toolbar {
-        background-color: var(--dashboards-toolbar-color);
-        color: white;--dashboards-toolbar-color
-        --app-toolbar-font-size: 16px;
-        text-transform: uppercase;
+      .top-content-action paper-button {
+        padding-bottom: 4px
       }
 
-      .side-nav-wrapper {
-        @apply(--layout-vertical);
-
-        height: 100%;
-        overflow-y: var(--side-bar-scrolling);
-        overflow-x: hidden;
-        border-right: 1px solid var(--dark-divider-color);
+      etools-dropdown {
+        max-width: 100px;
       }
 
-      .side-nav-wrapper .header {
-        min-height: 60px;
-        border-bottom: 1px solid var(--dark-divider-color);
+      .page[name="hact"] {
+        padding-top: 12px;
       }
 
-      #etools-logo {
-        height: 50%;
-        width: 60%;
+      iron-pages {
+        display: flex;
       }
 
-      #unicef-logo {
-        height: 100%;
-        width: 60%;
+      paper-menu-button {
+        padding: 0;
       }
-
-      #app-select {
-        margin-left: auto;
-        width: 47px;
-        height: 47px;
-      }
-
-      .side-nav-wrapper .nav-menu {
-        padding: 8px 0;
-      }
-      .nav-menu, .flexy {
-        @apply(--layout-flex);
-      }
-      .secondary-header {
-        color: var(--gray-dark);
-        height: 60px;
-        line-height: 60px;
-        text-align: center;
-        font-size: 12px;
-        border-top: 1px solid var(--gray-lighter);
-      }
-
-      .side-nav-wrapper .divider {
-        margin: 8px 0;
-        border-bottom: 1px solid var(--dark-divider-color);
-      }
-
-      .warning-toast-dismiss-btn {
-        text-transform: none;
-        color: #eeff41; /* TODO: replace with a var from above */
-      }
-      .lighter-item {
-        --dark-icon-color: var(--gray-light);
-        --dark-primary-text-color: var(--gray-light);
-      }
-
     </style>
-    <etools-piwik-analytics page="[[subroute.path]]"
+
+    <etools-piwik-analytics page="[[subroute.prefix]]"
                             user="[[user]]"
                             toast="[[currentToastMessage]]"></etools-piwik-analytics>
-    <common-data-loaders user="[[user]]"></common-data-loaders>
-    <user-data user="{{user}}" permissions="{{permissions}}"></user-data>
 
-    <app-location route="{{route}}"></app-location>
+    <common-data-loaders></common-data-loaders>
 
-    <app-route
-        route="{{route}}"
-        pattern$="[[baseUrl]]:page"
-        data="{{routeData}}"></app-route>
+    <app-location route="{{route}}"
+                  url-space-regex="^[[rootPath]]">
+    </app-location>
 
-    <app-drawer-layout id="layout" responsive-width="850px" narrow="{{narrow}}" fullbleed force-narrow>
+    <app-route route="{{route}}"
+               pattern="[[rootPath]]:page"
+               data="{{routeData}}"
+               tail="{{subroute}}">
+    </app-route>
 
-      <!-- Drawer content -->
-      <app-drawer id="drawer" transition-duration="350">
+    <app-drawer-layout id="layout" force-narrow fullbleed>
+      <!-- Main content -->
+      <app-header-layout has-scrolling-region>
 
-        <div class="side-nav-wrapper">
+        <app-header slot="header" condenses reveals effects="waterfall">
+            <page-header id="pageheader" title="eTools" user="[[user]]"></page-header>
+        </app-header>
+        <div class="page-top-content with-tabs">
+          <div class="top-content">
+            <div class="top-content-row title-row">
+              <h1 main-title>
+                [[pageTitle]]
+              </h1>
 
-          <app-toolbar class="header uppercase">
-            Dashboards
-          </app-toolbar>
+              <div class="top-content-actions-wrapper">
+                <div class="top-content-action" hidden$="[[!_isActive(page,'partnerships')]]">
+                  <a target="_blank" href="[[csvUrl]]">
+                    <paper-button>
+                      <iron-icon class="dark" icon="file-download"></iron-icon>
+                      Export
+                    </paper-button>
+                  </a>
+                </div>
 
-          <div class="nav-menu layout vertical">
+                <div class="top-content-action" hidden$="[[!_isActive(page,'hact')]]">
+                  <paper-menu-button>
+                    <paper-button icon="file-download" slot="dropdown-trigger">
+                      <iron-icon class="dark" icon="file-download"></iron-icon>
+                      Export
+                    </paper-button>
+                    <paper-listbox slot="dropdown-content">
+                      <template is="dom-repeat" items="[[availableYears]]">
+                        <paper-item on-tap="_export">{{item.name}}</paper-item>
+                      </template>
+                    </paper-listbox>
+                  </paper-menu-button>
+                </div>
 
-            <div class="flexy"></div>
+                <div class="top-content-action" hidden$="[[!_isActive(page,'trips')]]">
+                  <paper-button class="primary-btn with-prefix" on-tap="_goToAddTrip">
+                    <iron-icon icon="add"></iron-icon>
+                    Add New Trip
+                  </paper-button>
+                </div>
 
-            <div class="secondary-header">eTools Community Channels</div>
-            <side-bar-item name="Knowledge base" class="lighter-item" icon="maps:local-library" href="https://etools.uservoice.com"></side-bar-item>
-            <side-bar-item name="Discussion" class="lighter-item" icon="icons:question-answer" href="https://www.yammer.com/unicef.org/#/threads/inGroup?type=in_group&feedId=5782560"></side-bar-item>
-            <side-bar-item name="Information" class="lighter-item last-one" icon="icons:info" href="http://etools.unicefresults.org"></side-bar-item>
+              </div>
+            </div>
+            <div class="top-content-row">
+              <paper-tabs selected="{{page}}"
+                          attr-for-selected="name"
+                          noink
+                          bottom-item>
+
+                <paper-tab name="personalized" link>
+                  <a href="[[rootPath]]personalized" class="tab-content">Personalized</a>
+                </paper-tab>
+
+                <paper-tab name="hact" link>
+                  <a href="[[rootPath]]hact/assurance" class="tab-content">HACT</a>
+                </paper-tab>
+
+                <paper-tab name="trips" link>
+                  <a href="[[rootPath]]trips" class="tab-content">Trips</a>
+                </paper-tab>
+
+                <paper-tab name="partnerships" link>
+                  <a href="[[rootPath]]partnerships" class="tab-content">Partnerships</a>
+                </paper-tab>
+
+                <paper-tab name="map" link>
+                  <a href="[[rootPath]]map" class="tab-content">Map</a>
+                </paper-tab>
+
+                <paper-tab name="attachments" link>
+                  <a href="[[rootPath]]attachments" class="tab-content">Document Library</a>
+                </paper-tab>
+
+              </paper-tabs>
+            </div>
           </div>
         </div>
-
-      </app-drawer>
-
-      <!-- Main content -->
-      <app-header-layout fullbleed has-scrolling-region>
-          <app-header  fixed shadow>
-             <page-header id="pageheader" title="eTools" user="[[user]]"></page-header>
-          </app-header>
-          <iron-pages id="pages"
-                      selected="[[page]]"
-                      attr-for-selected="name"
-                      fallback-selection="dashboard"
-                      role="main">
-
-              <template  is="dom-if" id="privatePages" on-dom-change="_pagesStamped" if="[[permissions.loggedInDefault]]">
-                  <page-dashboard name="dashboard" route="[[subroute]]" user="[[user]]"></page-dashboard>
-              </template>
-              <page-not-found name="not-found"></page-not-found>
-          </iron-pages>
-          <page-footer></page-footer>
+        
+        <iron-pages selected="[[page]]"
+                    attr-for-selected="name"
+                    fallback-selection="personalized"
+                    role="main">
+          <view-personalized user="[[user]]"
+                             class="page"
+                             name="personalized"
+                             route="{{subroute}}"></view-personalized>
+          <view-hact route="{{subroute}}"
+                     class="page"
+                     name="hact"></view-hact>
+          <view-partnerships route="{{route}}"
+                             class="page"
+                             name="partnerships"
+                             csv-download-url="{{csvUrl}}"></view-partnerships>
+          <view-trips route="{{route}}"
+                      class="page"
+                      name="trips"
+                      user="[[user]]"></view-trips>
+          <view-map route="{{route}}"
+                    class="page"
+                    name="map"></view-map>
+          <view-attachments route="{{route}}"
+                            class="page"
+                            name="attachments"></view-attachments>
+        </iron-pages>
       </app-header-layout>
-
-
     </app-drawer-layout>
-
   </template>
 
   <script>
 
-    Polymer({
+  /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+     * @appliesMixin EtoolsDashboard.Mixins.ToastNotifications
+     * @appliesMixin EtoolsDashboard.Mixins.UserData
+     * @appliesMixin EtoolsMixins.LoadingMixin
+     */
+    const EtoolsShellMixin = compose(
+      EtoolsDashboard.Mixins.EventHelper,
+      EtoolsMixins.LoadingMixin,
+      EtoolsDashboard.Mixins.UserData,
+      EtoolsDashboard.Mixins.ToastNotifications
+    )(Polymer.Element);
+    /**
+   * @customElement
+   * @polymer
+   * @extends {Polymer.Element}
+   */
+    class AppShell extends EtoolsShellMixin {
+      static get is() {
+        return 'app-shell';
+      }
 
-      is: 'app-shell',
+      static get properties() {
+        return {
+          page: {
+            type: String,
+            reflectToAttribute: true,
+            observer: '_pageChanged'
+          },
+          routeData: Object,
+          subroute: Object,
+          // This shouldn't be neccessary, but the Analyzer isn't picking up
+          // Polymer.Element#rootPath
+          rootPath: String,
+  
+          hideExport: Boolean,
 
-      properties: {
+          availableYears: {
+            type: Array,
+            value: [
+              { name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv' },
+              { name: '2018', endpoint: '/api/v2/partners/hact?&format=csv' }
+            ]
+          },
+          pageTitle: {
+            type: String,
+            default: 'Dashboard'
+          },
+          hideExport: Boolean
+        };
+      }
 
-        page: {
-          type: String,
-          reflectToAttribute: true,
-          observer: '_pageChanged'
-        },
-        route: {
-          type: Object
-        },
-        _pagesAvailable: {
-          type: Boolean,
-          value: false
-        },
-        narrow: {
-          type: Boolean,
-          reflectToAttribute: true
-        },
-        baseUrl: String,
-        initialLoad: {
-            type: Boolean,
-            value: true
-        },
-        permissions: {
-            type: Object,
-            value: null
-        },
-        subroute: {
-          type: Object
-        }
-      },
+      constructor() {
+        super();
+      }
 
-      behaviors: [
-        etoolsAppConfig.globals,
-        dashBehaviors.NotificationToastsBehavior,
-        etoolsBehaviors.LoadingBehavior
-      ],
+      connectedCallback() {
+        super.connectedCallback();
+      }
 
-      observers: [
-        '_routePageChanged(routeData.page)',
-        '_permissionsPagesStamped(permissions, _pagesAvailable)'
-      ],
+      static get observers() {
+        return [
+          '_routePageChanged(routeData.page)'
+        ];
+      }
 
-      listeners: {
-        'drawer': 'toggleDrawer',
-        '404': '_pageNotFound',
-        'update-main-path': '_updateMainPath',
-        'iron-select': 'updateAppSelector',
-        'forbidden': '_onForbidden'
-      },
+      ready() {
+        super.ready();
+      }
 
-      attached: function(){
-        // for some reason the "$=" will make basePath undefined, we need to use a local property
-        this.baseUrl = this.basePath;
-        //if (this.route.path === this.baseUrl) {
-        //  this.set('route.path', this.baseUrl + 'partners/list');
-        //}
-      },
-      updateAppSelector: function() {
-          this.$.pageheader.fire('toggle-menu');
-      },
-      _onForbidden: function(event){
-        window.location.href = this.loginPath;
-      },
-      _updateMainPath: function(event){
-        this.set('route.path', this.baseUrl + event.detail.path);
-        event.stopPropagation();
-      },
-      _permissionsPagesStamped: function(permissions, _pagesAvailable){
-        if(!permissions || !_pagesAvailable) {
-            return;
-        }
-        if((this.route.path === this.baseUrl || this.route.path === '/') &&
-            permissions.loggedInDefault) {
-          // setting the default path
-          this.set('route.path', this.baseUrl + 'dashboard/personalized');
-        } else if(this.initialLoad){
-          // reseting the page as the pages might not have been stamped
-          this._routePageChanged(this.routeData.page);
-        }
+      _routePageChanged(page) {
+        // If no page was found in the route data, page will be an empty string.
+        // Default to 'personalized' in that case.
+        this.set('page', page || 'personalized');
+        this.pageTitle = page === 'partnerships' ? 'CSO Dashboard' : 'Dashboard';
+      }
 
-        this.initialLoad = false;
-      },
-      toggleDrawer: function() {
-        this.$.drawer.toggle();
-      },
+      _pageChanged(page) {
+        // Load page import on demand. Show 404 page if fails
+        const resolvedPageUrl = this.resolveUrl(`app/views/${page}/view-${page}.html`);
+        Polymer.importHref(
+          resolvedPageUrl,
+          this._onPageLoad(page).bind(this),
+          this._showPage404.bind(this),
+          true);
+      }
 
-      _routePageChanged: function(page) {
-        if ((this.route) && (this.baseUrl)) {
-          var subroute = JSON.parse(JSON.stringify(this.route));
-          subroute.path =
-              this.route.path.substring(subroute.path.indexOf(this.baseUrl) + this.baseUrl.length);
-          this.set('subroute', subroute);
-        }
+      _onPageLoad(page) {
+        return ()=> {
+          this.fireEvent('page-changed-hact', { page });};
+      }
 
-        if (this._pagesAvailable || (['settings', 'etc'].indexOf(page) !== -1)) {
-          this.set('page', (page || 'dashboard'));
-        } else {
-          //console.log('No permissions yet or page hasn\'t stampped', page);
-        }
-      },
+      _showPage404() {
+        this.page = 'view404';
+        this.fireEvent('toast', { text: 'Oops you hit a 404!', showCloseBtn: true });
+      }
 
-      _pageChanged: function(page) {
-        var resolvedPageUrl = this.resolveUrl('pages/page-' + page + '.html');
-        this.importHref(resolvedPageUrl, null, this._pageNotFound, true);
-      },
+      _isActive(page, tab) {
+        return equals(page, tab);
+      }
 
-      _pageNotFound: function() {
-        this.page = 'not-found';
-        this.fire('toast', {text: 'Oops you hit a 404!'});
-      },
+      _updateUrlTab(tab) {
+        this.hideHactExport = tab === 'hact' ? false : true;
+        this.hidePartnershipExport = tab === 'partnerships' ? false : true;
+        if (!tab) { return; }
+        this.set('hideExport', !(tab === 'hact' || tab === 'partnerships'));
+      }
 
-      _pagesStamped: function() {
-        if (!this._pagesAvailable) {
-          this.$.privatePages.render();
-          this._pagesAvailable = true;
-        }
-      },
-    });
+      _export(event) {
+        var endpoint = event.model.item.endpoint;
+        window.open(
+          `${endpoint}`,
+          '_blank'
+        );
+      }
+    }
 
+    window.customElements.define(AppShell.is, AppShell);
   </script>
-
 </dom-module>

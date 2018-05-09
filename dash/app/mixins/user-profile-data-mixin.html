@@ -1,0 +1,101 @@
+<link rel="import"
+      href="../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
+<link rel="import"
+      href="../scripts/ramda.html">
+    <link rel="import" href="../mixins/data-element-mixin.html">
+
+<script>
+  'use strict';
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+  window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+  /**
+   * `user-data` Description
+   *
+   * @summary ShortDescription.
+   * @customElement
+   * @polymer
+   * @extends {Polymer.Element}
+   */
+  EtoolsDashboard.Mixins.UserProfileData = (baseClass) =>
+    class extends EtoolsDashboard.Mixins.DataElement(baseClass) {
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          endpointName: {
+            type: String,
+            value: 'myProfile'
+          },
+
+          profile: {
+            type: Object,
+            notify: true
+          },
+
+           _saveActionInProgress: Boolean,
+
+          profileSaveLoadingMsgSource: {
+            type: String,
+            value: 'profile-modal'
+          }
+
+        };
+      }
+
+      saveProfile(profile) {
+        if (isEmpty(profile)) {
+          // empty profile means no changes found
+          this.fireEvent('toast', {
+            text: 'There is nothing to save. No change detected on your profile.',
+            showCloseBtn: true
+          });
+          return;
+        }
+        this.fireEvent('global-loading', {
+          message: 'Saving profile data...',
+          active: true,
+          loadingSource: this.profileSaveLoadingMsgSource
+        });
+        this.set('_saveActionInProgress', true);
+        this._dispatchSaveProfileRequest(profile);
+      }
+
+      _dispatchSaveProfileRequest(profile) {
+        let config = {
+          endpoint: this.getEndpoint(this.endpointName),
+          method: 'PATCH',
+          body: profile
+        };
+
+        this.sendRequest(config).then(resp => {
+          this._handleResponse(resp);
+        }).catch(err => {
+          this.parseRequestErrorsAndShowAsToastMsgs(error);
+          this._hideProfileSaveLoadingMsg();
+        });
+      }
+
+      _handleResponse(response) {
+        this.set('profile', response);
+        this._hideProfileSaveLoadingMsg();
+      }
+
+      // called after profile get request on initial load
+      _handleMyResponse(resp) {
+        this._handleResponse(resp);
+      }
+
+      _hideProfileSaveLoadingMsg() {
+        if (this._saveActionInProgress) {
+          this.fireEvent('global-loading', {
+            active: false,
+            loadingSource: this.profileSaveLoadingMsgSource
+          });
+          this.set('_saveActionInProgress', false);
+        }
+      }
+    };
+
+</script>
