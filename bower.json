@@ -38,6 +38,7 @@
     "paper-toast": "PolymerElements/paper-toast#^2.0.0",
     "polymer": "Polymer/polymer#^2.0.0",
     "paper-tabs": "^2.1.0",
+    "paper-progress": "^2.1.1",
     "paper-button": "PolymerElements/paper-button#^2.0.0",
     "paper-dropdown-menu": "^2.1.0",
     "paper-item": "^2.1.0",
