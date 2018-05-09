@@ -333,7 +333,7 @@
             <div slot="row-data">
               <div class="col-2 layout horizontal">
                 <span class="col-12 padding-right-10 col-data name padded">
-                  <a on-tap="_goToPage" id="[[partner.id]]">
+                  <a href="[[baseSite]]/pmp/partners/[[partner.id]]/details" id="[[partner.id]]">
                     [[partner.name]]
                     <paper-tooltip>[[partner.name]]</paper-tooltip>
                   </a>
@@ -450,10 +450,6 @@
           + planned_engagement.spot_check_follow_up_q3
           + planned_engagement.spot_check_follow_up_q4
         )
-      }
-
-      _goToPage(e) {
-        window.location.href = this.baseSite + '/pmp/partners/' + e.target.id + '/details';
       }
     }
 
