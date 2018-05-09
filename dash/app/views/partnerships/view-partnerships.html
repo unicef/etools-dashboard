@@ -760,7 +760,12 @@
       }
 
       _buildCsvDownloadUrl() {
-        return `${this.getEndpoint('cso_dashboard').url}?format=csv`;
+        let query = this.params.reduce((acc, {qName, propName, xf}) => {
+          return isEmpty(this[propName]) ? acc
+            : `${acc}${qName}=${xf(this[propName])}&`;
+        }, "");
+        query = query.split('|').join(',')
+        return `${this.getEndpoint('cso_dashboard').url}/?${query}format=csv`;
       }
 
       _filterPartnershipsData() {
