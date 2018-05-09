@@ -66,17 +66,16 @@
       }
 
       _requestMapData() {
-        this.fireEvent('global-loading', { active: true, message: 'Loading map locations...' });
+        this.fireEvent('global-loading', { active: true, message: 'Loading map locations...', loadingSource: 'map-data' });
         this.sendRequest(this.reqOptions)
           .then((resp) => {
             this._formatInterventions(resp);
           }).catch((err) => {
-            this.handleErrorResponse(error);
+            this.handleErrorResponse(err);
           });
       }
 
       _formatInterventions(data) {
-        debugger;
         if (!this.locationsDictCreated) {
           this._mapLocationsToInterventions(data);
           this.set('loadedInitially', true);
@@ -91,7 +90,7 @@
           map(prop('locations'))
         )(data);
         this._setFilteredInterventions(locations);
-        this.fireEvent('global-loading', {});
+        this.fireEvent('global-loading', { loadingSource: 'map-data' });
       }
 
       parseMapPoint(point) {
