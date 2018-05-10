@@ -78,6 +78,20 @@
                   : !_.isEmpty(date) ? this.prepareDate(partner.end) > this.prepareDate(date) : true
               };
             }
+          },
+          presetFilters: {
+            type: Array,
+            notify: true,
+            value: [
+              {total: '##', title: 'PD/SSFA with passed start date and no FR was added'},
+              {total: '##', title: 'PD/SSFA with planned amount not equal to FR amount'},
+              {total: '##', title: 'PD with no recent programmatic visit'},
+              {total: '##', title: 'PD/SSFA expiring in the next 30 days'},
+              {total: '##', title: 'ended PD/SSFA with disbursement amount less than FR planned amount'},
+              {total: '##', title: 'ended PD/SSFA with missing Final Partnership Review'},
+              {total: '##', title: 'IPs requiring new PCA in the coming CP'},
+              {total: '##', title: 'IPs with active PD without a signed PCA'}
+            ]
           }
         };
       }
@@ -88,6 +102,7 @@
           this.fireEvent('global-loading', {message: 'Loading partnerships data...', active: true, loadingSource: 'partnership-data'});
           this.set('loadedInitially', true);
         }
+        log(this.presetFilters)
       }
 
       query(params) {

@@ -152,6 +152,22 @@
       .status {
         padding-left: 8px;
       }
+
+      .divider {
+        background-color: rgba(0, 0, 0, 0.3);
+        height: 1px;
+      }
+
+      .alert-row {
+        height: 30px;
+      }
+
+      .alerts-panel {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        height: 130px;
+      }
     </style>
     <app-route route="{{route}}"
                pattern="/dash/partnerships"
@@ -164,9 +180,27 @@
                       active="[[active]]"
                       total-results="{{totalResults}}"
                       on-partnerships-loaded="_requiredDataLoaded"
-                      list-data-path="filteredPartnerships">
+                      list-data-path="filteredPartnerships"
+                      preset-filters="{{presetFilters}}">
     </partnership-data>
   
+    <div class="paper-material list-panel" elevation="1">
+      Alerts
+      <div class="divider"></div>
+      <div class="alerts-panel">
+        <template is="dom-repeat"
+                  items="[[presetFilters]]"
+                  as="presets">
+          <data-table-row class="alert-row" no-collapse>
+            <div slot="row-data">
+              <data-table-column class="col-1">[[presets.total]]</data-table-column>
+              <data-table-column class="col-5">[[presets.title]]</data-table-column>
+            </div>
+          </data-table-row>
+        </template>
+      </div>
+    </div>
+
     <div class="paper-material list-panel listControls" elevation="1">
       <div class="wrap-controls">
         <paper-input id="query"
