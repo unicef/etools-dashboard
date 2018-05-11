@@ -83,14 +83,14 @@
             type: Array,
             notify: true,
             value: [
-              {total: '##', title: 'PD/SSFA with passed start date and no FR was added'},
-              {total: '##', title: 'PD/SSFA with planned amount not equal to FR amount'},
-              {total: '##', title: 'PD with no recent programmatic visit'},
-              {total: '##', title: 'PD/SSFA expiring in the next 30 days'},
-              {total: '##', title: 'ended PD/SSFA with disbursement amount less than FR planned amount'},
-              {total: '##', title: 'ended PD/SSFA with missing Final Partnership Review'},
-              {total: '##', title: 'IPs requiring new PCA in the coming CP'},
-              {total: '##', title: 'IPs with active PD without a signed PCA'}
+              {total: 0, title: 'PD/SSFA with passed start date and no FR was added', filteredPartnerships: []},
+              {total: 0, title: 'PD/SSFA with planned amount not equal to FR amount', filteredPartnerships: []},
+              {total: 0, title: 'PD with no recent programmatic visit', filteredPartnerships: []},
+              {total: 0, title: 'PD/SSFA expiring in the next 30 days', filteredPartnerships: []},
+              {total: 0, title: 'ended PD/SSFA with disbursement amount less than FR planned amount', filteredPartnerships: []},
+              {total: 0, title: 'ended PD/SSFA with missing Final Partnership Review', filteredPartnerships: []},
+              {total: 0, title: 'IPs requiring new PCA in the coming CP', filteredPartnerships: []},
+              {total: 0, title: 'IPs with active PD without a signed PCA', filteredPartnerships: []}
             ]
           }
         };
@@ -102,7 +102,22 @@
           this.fireEvent('global-loading', {message: 'Loading partnerships data...', active: true, loadingSource: 'partnership-data'});
           this.set('loadedInitially', true);
         }
-        log(this.presetFilters)
+      }
+
+      createPresetFilters(results, params) {
+        const {pageNumber, pageSize, order} = params;
+        let preset1 = results.filter(item => Date.parse(item.start) < new Date().getTime())
+        for (let i in this.presetFilters) {
+          Dexie.Promise.all([
+            preset1.count(),
+            preset1.offset((pageNumber - 1) * pageSize)
+                   .limit(pageSize)
+                   .toArray()
+          ]).then(countAndResult => {
+            this.set(`presetFilters.${i-1}.total`, countAndResult[0])
+            this.presetFilters[i-1].filteredPartnerships = countAndResult[1]
+          })
+        }
       }
 
       query(params) {
@@ -111,11 +126,12 @@
         EtoolsDashboard.DexieDb.transaction(
           'r',
           EtoolsDashboard.DexieDb.cso_dashboard,
-          ()=> {
+          () => {
             let queryResult = EtoolsDashboard.DexieDb.cso_dashboard.orderBy('partner_name');
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
+            this.createPresetFilters(queryResult, params)
             const callPred = (pred, partner) => this.predicates[pred](params[pred], partner);
             queryResult = queryResult.filter(
               (partner) => predKeys.reduce((acc, pred) => acc && callPred(pred, partner), true)

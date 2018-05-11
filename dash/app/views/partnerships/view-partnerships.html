@@ -158,15 +158,21 @@
         height: 1px;
       }
 
-      .alert-row {
+      data-table-row.alert-row,
+      .alert-row div[slot="row-data"],
+      .alert-row div[slot="row-data"] data-table-column {
         height: 30px;
       }
+
+      /* data-table-row.alert-row:hover {
+        background: transparent;
+      } */
 
       .alerts-panel {
         display: flex;
         flex-wrap: wrap;
         flex-direction: column;
-        height: 130px;
+        height: 124px;
       }
     </style>
     <app-route route="{{route}}"
@@ -194,7 +200,9 @@
           <data-table-row class="alert-row" no-collapse>
             <div slot="row-data">
               <data-table-column class="col-1">[[presets.total]]</data-table-column>
-              <data-table-column class="col-5">[[presets.title]]</data-table-column>
+              <data-table-column class="col-5">
+                <a on-tap="[[_showPresetFilter(presets.filteredPartnerships)]]">[[presets.title]]</a>
+              </data-table-column>
             </div>
           </data-table-row>
         </template>
@@ -886,6 +894,10 @@
 
       _checkSigned(status, value) {
         return status === 'signed' ? true : value;
+      }
+
+      _showPresetFilter(data) {
+        this.set('filteredPartnerships', data)
       }
     }
 
