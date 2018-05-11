@@ -201,7 +201,7 @@
             <div slot="row-data">
               <data-table-column class="col-1">[[presets.total]]</data-table-column>
               <data-table-column class="col-5">
-                <a on-tap="[[_showPresetFilter(presets.filteredPartnerships)]]">[[presets.title]]</a>
+                <a on-tap="_showPresetFilter">[[presets.title]]</a>
               </data-table-column>
             </div>
           </data-table-row>
@@ -897,6 +897,7 @@
       }
 
       _showPresetFilter(data) {
+        debugger
         this.set('filteredPartnerships', data)
       }
     }
