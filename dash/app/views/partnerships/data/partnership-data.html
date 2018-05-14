@@ -107,23 +107,30 @@
       createPresetFilters(results) {
         return [
           results.clone().filter(
-            partner => (partner.status === "signed" || partner.status === "draft") && (Date.parse(partner.start) < new Date().getTime()) && !partner.frs_total_frs_amt
+            partner => (partner.status === "signed" || partner.status === "draft") 
+              && (Date.parse(partner.start) < new Date().getTime())
+              && !partner.frs_total_frs_amt
           ),
           results.clone().filter(
-            partner => (partner.status === "active" || partner.status === "ended" || partner.status === "signed") && (partner.unicef_cash === partner.frs_total_frs_amt) 
+            partner => (partner.status === "active" || partner.status === "ended" || partner.status === "suspended")
+              && (partner.unicef_cash === partner.frs_total_frs_amt) 
           ),
           results.clone().filter(
-            partner => (partner.status === "active" || partner.status === "ended") && (parseInt(partner.days_last_pd) < 180)
+            partner => (partner.status === "active" || partner.status === "ended")
+              && (parseInt(partner.days_last_pd) < 180)
           ),
           results.clone().filter(
-            partner => (partner.status === "active" || partner.status === "suspended") && (Date.parse(partner.end) < (new Date().getTime() + 2592000000))
+            partner => (partner.status === "active" || partner.status === "suspended")
+              && (Date.parse(partner.end) < (new Date().getTime() + 2592000000))
           ),
           results.clone().filter(
-            partner => (partner.status === "ended") && (partner.disbursement < partner.frs_total_frs_amt)
+            partner => (partner.status === "ended")
+              && (partner.disbursement < partner.frs_total_frs_amt)
           ),
-          // the following filters will be updated when specs are finalized
           results.clone().filter(partner => partner.status === "ended"),
-          results.clone().filter(partner => partner.status === "ended")
+          // the following filters will be updated when specs are finalized
+          results.clone().filter(partner => true),
+          results.clone().filter(partner => true)
         ]
       }
 
