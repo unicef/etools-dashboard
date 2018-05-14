@@ -79,14 +79,6 @@
               };
             }
           },
-          // presetFiltersFunctions: {
-          //   type: Object,
-          //   value: () => {
-          //     return {
-
-          //     }
-          //   }
-          // },
           presetFilters: {
             type: Array,
             notify: true,
@@ -114,33 +106,24 @@
 
       createPresetFilters(results) {
         return [
-          results.filter(item => {
-            (item.status === "signed" || "draft")
-            && (Date.parse(item.start) < new Date().getTime())
-            && !item.frs_total_frs_amt
-          }),
-          results.filter(item => {
-            (item.status === "active" || "ended" || "signed")
-            && (item.unicef_cash === item.frs_total_frs_amt) 
-          }),
-          results.filter(item => {
-            (item.status === "active" || "ended")
-            && (parseInt(item.days_last_pd) < 180)
-          }),
-          results.filter(item => {
-            (item.status === "active" || "suspended")
-            && (Date.parse(item.end) < (new Date().getTime() + 2592000000))
-          }),
-          results.filter(item => {
-            (item.status === "ended")
-            && (item.disbursement < item.frs_total_frs_amt)
-          }),
-          results.filter(item => {
-            (item.status === "ended")
-          }),
-          results.filter(item => {
-            (item.status === "ended")
-          })
+          results.clone().filter(
+            partner => (partner.status === "signed" || partner.status === "draft") && (Date.parse(partner.start) < new Date().getTime()) && !partner.frs_total_frs_amt
+          ),
+          results.clone().filter(
+            partner => (partner.status === "active" || partner.status === "ended" || partner.status === "signed") && (partner.unicef_cash === partner.frs_total_frs_amt) 
+          ),
+          results.clone().filter(
+            partner => (partner.status === "active" || partner.status === "ended") && (parseInt(partner.days_last_pd) < 180)
+          ),
+          results.clone().filter(
+            partner => (partner.status === "active" || partner.status === "suspended") && (Date.parse(partner.end) < (new Date().getTime() + 2592000000))
+          ),
+          results.clone().filter(
+            partner => (partner.status === "ended") && (partner.disbursement < partner.frs_total_frs_amt)
+          ),
+          // the following filters will be updated when specs are finalized
+          results.clone().filter(partner => partner.status === "ended"),
+          results.clone().filter(partner => partner.status === "ended")
         ]
       }
 
@@ -168,15 +151,16 @@
                 .limit(pageSize)
                 .toArray(),
               ...presetFilteredResults.map(
-                res => res.offset((pageNumber - 1) * pageSize)
-                          .limit(pageSize)
-                          .toArray()
+                res => res.offset((pageNumber - 1) * pageSize).limit(pageSize).toArray()
               )
             ]);
           }).then(countAndResult => {
-            log(countAndResult)
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
+            for (let i = 2; i < countAndResult.length; i++) {
+              this.presetFilters[i-2].filteredPartnerships = countAndResult[i]
+            }
+            log(this.presetFilters)
             this.fireEvent('global-loading', {loadingSource: 'partnership-data'});
           }).catch(err => console.error('Error querying partnerships-dash: ', err));
       }
