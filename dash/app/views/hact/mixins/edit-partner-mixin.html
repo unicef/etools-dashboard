@@ -1,5 +1,6 @@
 
 <link rel="import" href="../../../mixins/event-helper-mixin.html">
+<link rel="import" href="../../../mixins/user-permissions-mixin.html">
 <script>
 
   window.EtoolsDashboard = window.EtoolsDashboard || {};
@@ -9,16 +10,32 @@
    * @polymerMixin
    * @mixinFunction
    */
+  
+  const EtoolsEditPartnerBaseMixin = compose(
+    EtoolsDashboard.Mixins.EventHelper,
+    EtoolsDashboard.Mixins.UserPermissions
+  );
+  
   EtoolsDashboard.Mixins.HactEditPartner = Polymer.dedupingMixin((base) =>
 
-    class extends EtoolsDashboard.Mixins.EventHelper(base) {
+    class extends EtoolsEditPartnerBaseMixin(base) {
       constructor() {
         super();
+      }
+
+      static get properties() {
+        return {
+          canEditPartner: {
+            type: Boolean,
+            computed: 'hasPermission(\'editPartner\',user)'
+          }
+        };
       }
 
       dispatchEditRequest({ model }) {
         this.fireEvent('edit-partner', model.partner);
       }
+  
   
     });
 

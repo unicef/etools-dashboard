@@ -191,6 +191,7 @@
             <hact-general
                 filtered-partners="[[filteredPartners]]"
                 totals="[[totals]]"
+                user="[[user]]"
                 total-results="[[totalResults]]"
                 filtered-total-results="[[filteredTotalResults]]">
             </hact-general>
@@ -199,6 +200,7 @@
             <hact-detail
                 filtered-partners="[[filteredPartners]]"
                 totals="[[totals]]"
+                user="[[user]]"
                 total-results="[[totalResults]]"
                 filtered-total-results="[[filteredTotalResults]]">
             </hact-detail>
@@ -230,7 +232,7 @@
     const ViewHactMixins = compose(
       EtoolsDashboard.Mixins.Endpoints,
       EtoolsDashboard.Mixins.CommonGeneral,
-      EtoolsDashboard.Mixins.Pagination
+      EtoolsDashboard.Mixins.Pagination,
     )(Polymer.Element);
 
     /**

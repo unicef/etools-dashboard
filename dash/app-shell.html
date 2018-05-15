@@ -37,7 +37,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="app/components/toast/toast-notifications-mixin.html">
 
 <link rel="import" href="app/mixins/event-helper-mixin.html">
-<link rel="import" href="app/mixins/user-data-mixin.html">
+<link rel="import" href="app/mixins/user-profile-data-mixin.html">
 <link rel="import" href="app/config/dexie-db-config.html">
 <link rel="import" href="../bower_components/etools-loading/etools-loading-mixin.html">
 
@@ -199,6 +199,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                              route="{{subroute}}"></view-personalized>
           <view-hact route="{{subroute}}"
                      class="page"
+                     user="[[user]]"
                      name="hact"></view-hact>
           <view-partnerships route="{{route}}"
                              class="page"
@@ -232,7 +233,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     const EtoolsShellMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
       EtoolsMixins.LoadingMixin,
-      EtoolsDashboard.Mixins.UserData,
+      EtoolsDashboard.Mixins.UserProfileData,
       EtoolsDashboard.Mixins.ToastNotifications
     )(Polymer.Element);
     /**
@@ -270,8 +271,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           pageTitle: {
             type: String,
             default: 'Dashboard'
-          },
-          hideExport: Boolean
+          }
         };
       }
 

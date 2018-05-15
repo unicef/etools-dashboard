@@ -300,7 +300,10 @@
                 <span class="col-data right-side flex-1">[[_checkForValueYesBlank(partner.planned_engagement.required_audit)]]</span>
                 <span class="col-data right-side flex-1">[[partner.hact_values.audits.completed]]</span>
                 <span class="monetary right-side flex-1 padding-right-10 last-col">$[[partner.hact_values.outstanding_findings]]</span>
-                <iron-icon on-click="dispatchEditRequest" class="edit-icon" icon="editor:mode-edit"></iron-icon>
+                <iron-icon on-click="dispatchEditRequest"
+                           class="edit-icon"
+                           hidden$="[[!canEditPartner]]"
+                           icon="editor:mode-edit"></iron-icon>
               </div>
             </div>
           </div>
@@ -322,7 +325,7 @@
       EtoolsDashboard.Mixins.CommonGeneral,
       EtoolsDashboard.Mixins.Pagination,
       EtoolsDashboard.Mixins.Endpoints,
-      EtoolsDashboard.Mixins.HactEditPartner
+      EtoolsDashboard.Mixins.HactEditPartner,
     )(Polymer.Element);
 
     /**
