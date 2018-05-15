@@ -83,14 +83,14 @@
             type: Array,
             notify: true,
             value: [
-              {total: 0, title: 'PD/SSFA with passed start date and no FR was added', filteredPartnerships: []},
-              {total: 0, title: 'PD/SSFA with planned amount not equal to FR amount', filteredPartnerships: []},
-              {total: 0, title: 'PD with no recent programmatic visit', filteredPartnerships: []},
-              {total: 0, title: 'PD/SSFA expiring in the next 30 days', filteredPartnerships: []},
-              {total: 0, title: 'ended PD/SSFA with disbursement amount less than FR planned amount', filteredPartnerships: []},
-              {total: 0, title: 'ended PD/SSFA with missing Final Partnership Review', filteredPartnerships: []},
-              {total: 0, title: 'IPs requiring new PCA in the coming CP', filteredPartnerships: []},
-              {total: 0, title: 'IPs with active PD without a signed PCA', filteredPartnerships: []}
+              {total: 0, id: '1', title: 'PD/SSFA with passed start date and no FR was added', filteredPartnerships: []},
+              {total: 0, id: '2', title: 'PD/SSFA with planned amount not equal to FR amount', filteredPartnerships: []},
+              {total: 0, id: '3', title: 'PD with no recent programmatic visit', filteredPartnerships: []},
+              {total: 0, id: '4', title: 'PD/SSFA expiring in the next 30 days', filteredPartnerships: []},
+              {total: 0, id: '5', title: 'ended PD/SSFA with disbursement amount less than FR planned amount', filteredPartnerships: []},
+              {total: 0, id: '6', title: 'ended PD/SSFA with missing Final Partnership Review', filteredPartnerships: []},
+              {total: 0, id: '7', title: 'IPs requiring new PCA in the coming CP', filteredPartnerships: []},
+              {total: 0, id: '8', title: 'IPs with active PD without a signed PCA', filteredPartnerships: []}
             ]
           }
         };
@@ -157,17 +157,19 @@
               .offset((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray(),
+              ...presetFilteredResults.map(res => res.count()),
               ...presetFilteredResults.map(
-                res => res.offset((pageNumber - 1) * pageSize).limit(pageSize).toArray()
+                res => res.toArray()
               )
             ]);
           }).then(countAndResult => {
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
-            for (let i = 2; i < countAndResult.length; i++) {
-              this.presetFilters[i-2].filteredPartnerships = countAndResult[i]
+            for (let i = 2; i < 10; i++) {
+              this.set(`presetFilters.${i-2}.total`, countAndResult[i])
+              this.set(`presetFilters.${i-2}.filteredPartnerships`, countAndResult[i+8])
             }
-            log(this.presetFilters)
+            log(countAndResult)
             this.fireEvent('global-loading', {loadingSource: 'partnership-data'});
           }).catch(err => console.error('Error querying partnerships-dash: ', err));
       }

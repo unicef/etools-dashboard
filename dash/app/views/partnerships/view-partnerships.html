@@ -209,7 +209,7 @@
       </div>
     </div>
 
-    <div class="paper-material list-panel listControls" elevation="1">
+    <div id="customFilterPanel" class="paper-material list-panel listControls" elevation="1">
       <div class="wrap-controls">
         <paper-input id="query"
                      type="search"
@@ -367,8 +367,9 @@
         </div>
       </data-table-header>
   
-      <template is="dom-repeat"
-                items="[[filteredPartnerships]]"
+      <template id="csoListTemplate"
+                items="{{filteredPartnerships}}"
+                is="dom-repeat"
                 as="row">
         <data-table-row no-collapse>
           <div slot="row-data">
@@ -484,7 +485,8 @@
           </div>
         </data-table-row>
       </template>
-      <data-table-footer page-size="[[pageSize]]"
+      <data-table-footer id="csoDashboardFooter"
+                         page-size="[[pageSize]]"
                          page-number="[[pageNumber]]"
                          visible-range="{{visibleRange}}"
                          on-page-size-changed="pageSizeChanged"
@@ -533,6 +535,10 @@
           filteredPartnerships: {
             type: Array,
             notify: true
+          },
+          currentFilter: {
+            type: String,
+            value: 'custom'
           },
           forceDataRefresh: {
             type: Boolean,
@@ -592,6 +598,13 @@
           endAfterDate: {
             type: String,
             observer: 'dateChanged'
+          },
+          visibleRange: {
+            type: Array,
+            observer: 'rangeChanged'
+          },
+          pageNumber: {
+            type: Number
           },
           params: {
             type: Array,
@@ -776,6 +789,15 @@
         });
       }
 
+      rangeChanged() {
+        if (this.currentFilter !== 'custom') {
+          this.$.csoListTemplate.items = this.presetFilters[this.currentFilter-1].filteredPartnerships.slice(
+              this.visibleRange[0]-1,
+              this.visibleRange[1]
+            )
+        }
+      }
+
       _updateUrl(query, pageNumber, pageSize, sortOrder, requiredDataLoaded,
         initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate) {
         if (!this.initComplete || !this.requiredDataLoaded) {
@@ -784,7 +806,9 @@
         this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
         const qs = this.buildQueryString();
         const currentRoute = this.route.prefix + this.route.path;
-
+        if (this.currentFilter !== 'custom') {
+          return
+        }
         if (qs !== null) {
           this.updateAppState(currentRoute, qs, true);
           if (this.requiredDataLoaded) {
@@ -876,7 +900,6 @@
             : `${Number(perc).toFixed(0)}%`;
       }
 
-
       _displayDisbursement(val) {
         let nonZero = this.displayNonZero(val);
         return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
@@ -896,10 +919,68 @@
         return status === 'signed' ? true : value;
       }
 
-      _showPresetFilter(data) {
-        debugger
-        this.set('filteredPartnerships', data)
+      _showPresetFilter(event) {
+        let repeater = this.$.csoListTemplate
+        if (this.currentFilter === event.model.__data.presets.id) {
+          this.set('currentFilter', 'custom')
+          this.set('visibleRange', [1, 10])
+          this.rangeChanged()
+          this.pageNumber = 1
+        } else {
+          this.set('currentFilter', event.model.__data.presets.id)
+          this.set('visibleRange', [1, 10])
+          this.rangeChanged()
+          this.pageNumber = 1
+        }
+        if (this.currentFilter === 'custom') {
+          this.$.customFilterPanel.hidden = false
+          this.$.csoDashboardFooter.filteredTotalResults = this.totalResults
+          repeater.items = this.filteredPartnerships
+        } else {
+          this.$.customFilterPanel.hidden = true
+          this.$.csoDashboardFooter.filteredTotalResults = event.model.__data.presets.total
+          repeater.items = event.model.__data.presets.filteredPartnerships.slice(this.visibleRange[0]-1, this.visibleRange[1])
+        }
       }
+
+      // computeFilter(filter) {
+      //   return function(row) {
+      //     if (filter === 'custom') {
+      //       return true
+      //     }
+      //     if (filter === '1') {
+      //       return (row.status === "signed" || row.status === "draft") 
+      //         && (Date.parse(row.start) < new Date().getTime())
+      //         && !row.frs_total_frs_amt
+      //     }
+      //     if (filter === '2') {
+      //       return (row.status === "active" || row.status === "ended" || row.status === "suspended")
+      //         && (row.unicef_cash === row.frs_total_frs_amt) 
+      //     }
+      //     if (filter === '3') {
+      //       return (row.status === "active" || row.status === "ended")
+      //         && (parseInt(row.days_last_pd) < 180)
+      //     }
+      //     if (filter === '4') {
+      //       return (row.status === "active" || row.status === "suspended")
+      //         && (Date.parse(row.end) < (new Date().getTime() + 2592000000))
+      //     }
+      //     if (filter === '5') {
+      //       return (row.status === "ended")
+      //         && (row.disbursement < row.frs_total_frs_amt)
+      //     }
+      //     if (filter === '6') {
+      //       return row.status === "ended"
+      //     }
+      //     // the following filters will be updated when specs are finalized
+      //     if (filter === '7') {
+      //       return true
+      //     }
+      //     if (filter === '8') {
+      //       return true
+      //     }
+      //   }
+      // }
     }
 
     window.customElements.define(ViewPartnerships.is, ViewPartnerships);
