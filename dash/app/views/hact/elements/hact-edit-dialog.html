@@ -1,0 +1,50 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../../bower_components/etools-dialog/etools-dialog.html">
+<link rel="import" href="../../../styles/grid-layout-styles">
+<dom-module id="hact-edit-dialog">
+  <template>
+    <style include="grid-layout-styles">
+      :host {
+        display: block
+      }
+    </style>
+
+    
+
+  </template>
+
+  <script>
+    /**
+     * `hact-edit-dialog` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @extends {Polymer.Element}
+     */
+    class HactEditDialog extends Polymer.Element {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'hact-edit-dialog';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+    
+        };
+      }
+
+      ready() {
+        super.ready();
+      }
+
+    }
+
+    window.customElements.define(HactEditDialog.is, HactEditDialog);
+  </script>
+</dom-module>

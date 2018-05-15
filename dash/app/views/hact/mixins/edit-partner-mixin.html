@@ -1,0 +1,25 @@
+
+<link rel="import" href="../../../mixins/event-helper-mixin.html">
+<script>
+
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+  window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+  /**
+   *
+   * @polymerMixin
+   * @mixinFunction
+   */
+  EtoolsDashboard.Mixins.HactEditPartner = Polymer.dedupingMixin((base) =>
+
+    class extends EtoolsDashboard.Mixins.EventHelper(base) {
+      constructor() {
+        super();
+      }
+
+      dispatchEditRequest({ model }) {
+        this.fireEvent('edit-partner', model.partner);
+      }
+  
+    });
+
+</script>

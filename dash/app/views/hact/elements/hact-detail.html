@@ -25,6 +25,10 @@
       <style include="shared-styles list-styles grid-layout-styles hact-tables-styles iron-flex iron-flex-factors iron-flex-alignment page-layout-styles paper-material-styles">
         :host {
           /* --paper-material-padding: 0 24px 0 24px; */
+          --cell-style: {
+            border-left: 1px solid rgba(0, 0, 0, 0.24);
+            box-sizing: border-box;
+          }
         }
         
         .hact-list {
@@ -62,22 +66,20 @@
           display: flex;
           align-items: flex-end !important;
         }
+        
 
         .quarter-heading-item {
-          border-left: 1px solid rgba(0, 0, 0, 0.24);
-          box-sizing: border-box;
+          @apply --cell-style;
         }
 
         .quarter-item {
-          border-left: 1px solid rgba(0, 0, 0, 0.24);
-          box-sizing: border-box;
+          @apply --cell-style;
           height: 48px;
         }
 
         .right-side {
+          @apply --cell-style;
           text-align: center;
-          border-left: 1px solid rgba(0, 0, 0, 0.24);
-          box-sizing: border-box;
           min-height: 48px;
         }
 
@@ -122,8 +124,7 @@
         data-table-row > div[slot="row-data"] > div > span > span:not(:first-child),
         data-table-row div[slot="row-data"] div span span:not(:first-child),
         data-table-row div[slot="row-data"] div div span:not(:first-child) {
-          border-left: 1px solid rgb(227, 227, 227);
-          box-sizing: border-box;
+         @apply --cell-style;
         }
 
         .col-75-px {
@@ -421,7 +422,7 @@
      * @appliesMixin HactDetailMixins
      */
     class HactDetail extends HactDetailMixins {
-      static get is() { return 'hact-detail' }
+      static get is() { return 'hact-detail'; }
 
       static get properties() {
         return {
@@ -430,17 +431,17 @@
             notify: true
           },
           totals: {
-            type: Array,
+            type: Array
           }
-        }
+        };
       }
 
       _checkForValueYesBlank(val) {
-        return val ? "Yes" : ""
+        return val ? 'Yes' : '';
       }
 
       _sumSpotChecks(mr, followUp) {
-        return mr + followUp
+        return mr + followUp;
       }
 
       _sumSpotCheckFollowUp(planned_engagement) {
@@ -449,10 +450,10 @@
           + planned_engagement.spot_check_follow_up_q2
           + planned_engagement.spot_check_follow_up_q3
           + planned_engagement.spot_check_follow_up_q4
-        )
+        );
       }
     }
 
-    window.customElements.define(HactDetail.is, HactDetail)
+    window.customElements.define(HactDetail.is, HactDetail);
   </script>
 </dom-module>
