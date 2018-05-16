@@ -162,12 +162,8 @@
       .alert-row div[slot="row-data"],
       .alert-row div[slot="row-data"] data-table-column {
         height: 30px;
+        width: 100%;
       }
-
-      /* data-table-column.filter-name {
-        display: flex;
-        align-content: space-between;
-      } */
 
       paper-icon-button.remove-field.remove.red {
         top: 0;
@@ -178,6 +174,19 @@
         flex-wrap: wrap;
         flex-direction: column;
         height: 124px;
+      }
+
+      .filter-name {
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .list-panel a {
+        padding-right: 0;
+      }
+
+      .clear-button {
+        opacity: 0.0;
       }
     </style>
     <app-route route="{{route}}"
@@ -202,19 +211,16 @@
         <template is="dom-repeat"
                   items="[[presetFilters]]"
                   as="presets">
-          <data-table-row class="alert-row" no-collapse>
-            <div slot="row-data">
-              <data-table-column class="col-1">[[presets.total]]</data-table-column>
-              <data-table-column class="col-5 filter-name">
-                <a on-tap="_showPresetFilter">[[presets.title]]</a>
-                <paper-icon-button
-                                 hidden
-                                 class="remove-field remove red"
+          <div class="alert-row" no-collapse>
+            <div on-tap="_showPresetFilter" slot="row-data">
+              <div class="col-1">[[presets.total]]</div>
+              <a class="col-10 filter-name">[[presets.title]]</a>
+              <paper-icon-button 
+                                 class="remove-field remove red clear-button col-1"
                                  icon="clear">
-                </paper-icon-button>
-              </data-table-column>
+              </paper-icon-button>
             </div>
-          </data-table-row>
+          </div>
         </template>
       </div>
     </div>
@@ -935,16 +941,19 @@
 
       _showPresetFilter(event) {
         if (this.currentFilter === event.model.__data.presets.id) {
+          event.srcElement.parentElement.lastElementChild.style.opacity = '0'
+          event.srcElement.parentElement.parentElement.style.backgroundColor = 'rgb(255, 255, 255)'
           this.set('currentFilter', 'custom')
-          this.set('visibleRange', [1, 10])
-          this.rangeChanged()
-          this.pageNumber = 1
         } else {
+          this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(b => b.style.opacity = '0')
+          this.shadowRoot.querySelectorAll('.alert-row').forEach(r => r.style.backgroundColor = '')
+          event.srcElement.parentElement.parentElement.style.backgroundColor = 'rgb(238, 238, 238)'
+          event.srcElement.parentElement.lastElementChild.style.opacity = '1'
           this.set('currentFilter', event.model.__data.presets.id)
-          this.set('visibleRange', [1, 10])
-          this.rangeChanged()
-          this.pageNumber = 1
         }
+        this.set('visibleRange', [1, 10])
+        this.rangeChanged()
+        this.pageNumber = 1
         if (this.currentFilter === 'custom') {
           this.$.customFilterPanel.hidden = false
           this.$.csoDashboardFooter.filteredTotalResults = this.totalResults
@@ -956,39 +965,39 @@
 
       computeFilter(filter) {
         return function(row) {
-          if (filter === 'custom') {
-            return true
-          }
-          if (filter === '1') {
-            return (row.status === "signed" || row.status === "draft") 
-              && (Date.parse(row.start) < new Date().getTime())
-              && !row.frs_total_frs_amt
-          }
-          if (filter === '2') {
-            return (row.status === "active" || row.status === "ended" || row.status === "suspended")
-              && (row.unicef_cash === row.frs_total_frs_amt) 
-          }
-          if (filter === '3') {
-            return (row.status === "active" || row.status === "ended")
-              && (parseInt(row.days_last_pd) < 180)
-          }
-          if (filter === '4') {
-            return (row.status === "active" || row.status === "suspended")
-              && (Date.parse(row.end) < (new Date().getTime() + 2592000000))
-          }
-          if (filter === '5') {
-            return (row.status === "ended")
-              && (row.disbursement < row.frs_total_frs_amt)
-          }
-          if (filter === '6') {
-            return row.status === "ended"
-          }
-          // the following filters will be updated when specs are finalized
-          if (filter === '7') {
-            return true
-          }
-          if (filter === '8') {
-            return true
+          let eq = (stts) => stts === row.status
+          switch(filter) {
+            case 'custom':
+              return true
+              break
+            case '1':
+              return ["signed", "draft"].some(eq)
+                && (Date.parse(row.start) < new Date().getTime())
+                && !row.frs_total_frs_amt
+              break
+            case '2':
+              return ["active", "ended", "suspended"].some(eq)
+                && (row.unicef_cash === row.frs_total_frs_amt)
+              break
+            case '3':
+              return ["active", "ended"].some(eq) && (parseInt(row.days_last_pd) < 180)
+              break
+            case '4':
+              return ["active", "suspended"].some(eq)
+                && (Date.parse(row.end) < (new Date().getTime() + 2592000000))
+              break
+            case '5':
+              return row.status === "ended" && (row.disbursement < row.frs_total_frs_amt)
+              break
+            case '6':
+              return row.status === "ended"
+              break
+            case '7':
+              return true
+              break
+            case '8':
+              return true
+              break
           }
         }
       }

@@ -154,9 +154,6 @@
             return Dexie.Promise.all([
               queryResult.count(),
               queryResult.clone().toArray(),
-              // .offset((pageNumber - 1) * pageSize)
-              //   .limit(pageSize)
-                // .toArray(),
               ...presetFilteredResults.map(res => res.count()),
               ...presetFilteredResults.map(
                 res => res.toArray()
