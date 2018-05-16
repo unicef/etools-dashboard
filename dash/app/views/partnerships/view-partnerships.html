@@ -211,12 +211,11 @@
         <template is="dom-repeat"
                   items="[[presetFilters]]"
                   as="presets">
-          <div class="alert-row" no-collapse>
-            <div on-tap="_showPresetFilter" slot="row-data">
+          <div on-tap="_showPresetFilter" class="alert-row" no-collapse>
+            <div slot="row-data">
               <div class="col-1">[[presets.total]]</div>
               <a class="col-10 filter-name">[[presets.title]]</a>
-              <paper-icon-button 
-                                 class="remove-field remove red clear-button col-1"
+              <paper-icon-button class="remove-field remove red clear-button col-1"
                                  icon="clear">
               </paper-icon-button>
             </div>
@@ -940,26 +939,37 @@
       }
 
       _showPresetFilter(event) {
-        if (this.currentFilter === event.model.__data.presets.id) {
-          event.srcElement.parentElement.lastElementChild.style.opacity = '0'
-          event.srcElement.parentElement.parentElement.style.backgroundColor = 'rgb(255, 255, 255)'
+        let filterDiv = event.currentTarget.firstElementChild
+        let clickedFilter = event.model.__data.presets
+
+        // reset styling for all filter buttons
+        this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(
+          b => b.style.opacity = '0'
+        )
+        this.shadowRoot.querySelectorAll('.alert-row').forEach(
+          r => r.firstElementChild.style.backgroundColor = 'rgb(255, 255, 255'
+        )
+        if (this.currentFilter === clickedFilter.id) {
           this.set('currentFilter', 'custom')
         } else {
-          this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(b => b.style.opacity = '0')
-          this.shadowRoot.querySelectorAll('.alert-row').forEach(r => r.style.backgroundColor = '')
-          event.srcElement.parentElement.parentElement.style.backgroundColor = 'rgb(238, 238, 238)'
-          event.srcElement.parentElement.lastElementChild.style.opacity = '1'
-          this.set('currentFilter', event.model.__data.presets.id)
+          // style selected filter button as pressed
+          filterDiv.lastElementChild.style.opacity = '1'
+          filterDiv.style.backgroundColor = 'rgb(238, 238, 238)'
+          this.set('currentFilter', clickedFilter.id)
         }
+
+        // reset to first results page of new filter
         this.set('visibleRange', [1, 10])
         this.rangeChanged()
         this.pageNumber = 1
+
+        // toggle custom filters visibility and footer totals source
         if (this.currentFilter === 'custom') {
           this.$.customFilterPanel.hidden = false
           this.$.csoDashboardFooter.filteredTotalResults = this.totalResults
         } else {
           this.$.customFilterPanel.hidden = true
-          this.$.csoDashboardFooter.filteredTotalResults = event.model.__data.presets.total
+          this.$.csoDashboardFooter.filteredTotalResults = clickedFilter.total
         }
       }
 

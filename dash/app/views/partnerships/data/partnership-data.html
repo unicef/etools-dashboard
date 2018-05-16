@@ -56,6 +56,10 @@
             type: String,
             value: 'partnerships-loaded'
           },
+          presetResults: {
+            type: Object,
+            value: {}
+          },
           loadedInitially: {
             type: Boolean,
             value: false
@@ -145,8 +149,11 @@
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
-            let queryResultCopy = queryResult.clone()
-            let presetFilteredResults = this.createPresetFilters(queryResultCopy)
+            //check if preset filters were populated already
+            if (isEmpty(this.presetFilters[0].filteredPartnerships)) {
+              let queryResultCopy = queryResult.clone()
+              this.set('presetResults', this.createPresetFilters(queryResultCopy))
+            }
             const callPred = (pred, partner) => this.predicates[pred](params[pred], partner);
             queryResult = queryResult.filter(
               partner => predKeys.reduce((acc, pred) => acc && callPred(pred, partner), true)
@@ -154,19 +161,19 @@
             return Dexie.Promise.all([
               queryResult.count(),
               queryResult.clone().toArray(),
-              ...presetFilteredResults.map(res => res.count()),
-              ...presetFilteredResults.map(
-                res => res.toArray()
-              )
+              ...this.presetResults.map(res => res.count()),
+              ...this.presetResults.map(res => res.toArray())
             ]);
           }).then(countAndResult => {
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
-            for (let i = 2; i < 10; i++) {
-              this.set(`presetFilters.${i-2}.total`, countAndResult[i])
-              this.set(`presetFilters.${i-2}.filteredPartnerships`, countAndResult[i+8])
+            //check if preset filters were populated already
+            if (isEmpty(this.presetFilters[0].filteredPartnerships)) {
+              for (let i = 2; i < 10; i++) {
+                this.set(`presetFilters.${i-2}.total`, countAndResult[i])
+                this.set(`presetFilters.${i-2}.filteredPartnerships`, countAndResult[i+8])
+              }
             }
-            // log(countAndResult)
             this.fireEvent('global-loading', {loadingSource: 'partnership-data'});
           }).catch(err => console.error('Error querying partnerships-dash: ', err));
       }
