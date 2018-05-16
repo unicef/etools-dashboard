@@ -153,10 +153,10 @@
             );
             return Dexie.Promise.all([
               queryResult.count(),
-              queryResult.clone()
-              .offset((pageNumber - 1) * pageSize)
-                .limit(pageSize)
-                .toArray(),
+              queryResult.clone().toArray(),
+              // .offset((pageNumber - 1) * pageSize)
+              //   .limit(pageSize)
+                // .toArray(),
               ...presetFilteredResults.map(res => res.count()),
               ...presetFilteredResults.map(
                 res => res.toArray()
@@ -169,7 +169,7 @@
               this.set(`presetFilters.${i-2}.total`, countAndResult[i])
               this.set(`presetFilters.${i-2}.filteredPartnerships`, countAndResult[i+8])
             }
-            log(countAndResult)
+            // log(countAndResult)
             this.fireEvent('global-loading', {loadingSource: 'partnership-data'});
           }).catch(err => console.error('Error querying partnerships-dash: ', err));
       }
