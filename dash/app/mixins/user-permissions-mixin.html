@@ -1,0 +1,22 @@
+<script>
+  'use strict';
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+  window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+
+  EtoolsDashboard.Mixins.UserPermissions = Polymer.dedupingMixin((superClass) => class extends superClass {
+    constructor() {
+      super();
+      this.groups = {
+        'editPartner': ['UNICEF Audit Focal Point', 'Partnership Manager', 'Senior Management Team']
+      };
+    }
+    editPartner(user) {
+      return intersection(map(prop('name'), user.groups), this.groups.editPartner).length > 0;
+    }
+
+    hasPermission(action, user) {
+      return this[action](user);
+    }
+  });
+
+</script>

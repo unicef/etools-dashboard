@@ -1,0 +1,51 @@
+
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../mixins/event-helper-mixin.html">
+<link rel="import" href="../../../mixins/ajax-server-errors-mixin.html">
+<link rel="import" href="../../../endpoints/endpoints-mixin.html">
+<link rel="import" href="../../../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
+<script>
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+  window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+
+  const EtoolsPartnerDataBaseMixin = compose(
+    EtoolsAjaxRequestMixin,
+    EtoolsDashboard.Mixins.EventHelper,
+    EtoolsDashboard.Mixins.AjaxServerErrors,
+    EtoolsDashboard.Mixins.Endpoints
+  );
+
+  EtoolsDashboard.Mixins.PartnerItemData = Polymer.dedupingMixin((base) =>
+  
+    class extends EtoolsPartnerDataBaseMixin(base) {
+
+      static get properties() {
+        return {
+          endpoints: {
+            type: Object,
+            value: {
+              DETAILS: 'partnerDetails',
+              PROGVISITS: 'programmaticVisits'
+            }
+          }
+        };
+      }
+
+      savePartnerDetails(body, partnerId, cb) {
+        const params = {
+          method: 'PATCH',
+          endpoint: this.getEndpoint(this.endpoints.DETAILS, { id: partnerId }),
+          body
+        };
+        this.sendRequest(params)
+        .then((resp)=>{
+          EtoolsDashboard.DexieDb.partners.put(resp)
+          .then(()=>cb());
+        })
+        .catch((err)=> this.handleErrorResponse(err));
+      }
+
+
+    });
+
+</script>

@@ -115,11 +115,11 @@
       <div class="content-align">
         <countries-dropdown id="countries"
                             countries="[[countries]]"
-                            current="[[user.profile.country]]"></countries-dropdown>
+                            current="[[user.country]]"></countries-dropdown>
         <etools-profile-dropdown sections="[[allSections]]"
                                  offices="[[allOffices]]"
                                  users="[[allUsers]]"
-                                 profile="{{profile}}"
+                                 profile="{{user}}"
                                  on-save-profile="_saveProfile"
                                  on-sign-out="_signOut"></etools-profile-dropdown>
         <paper-icon-button icon="refresh"
@@ -137,7 +137,6 @@
 
     const RequiredMixins = compose(
       EtoolsPageRefreshMixin,
-      EtoolsDashboard.Mixins.UserProfileData,
       EtoolsDashboard.Mixins.ReduxStore)(Polymer.Element);
     /**
      * `page-header` Description
@@ -188,7 +187,7 @@
       }
 
       static get observers() {
-        return ['_updateCountriesList(user.profile.countries_available)'];
+        return ['_updateCountriesList(user.countries_available)'];
       }
 
       /**
@@ -227,19 +226,19 @@
         if (!countries) {
           return;
         }
-        let arrayObj = countries.map(arrayItem => {
+        let arrayObj = countries.map((arrayItem) => {
           return {
             id: arrayItem.id,
             name: arrayItem.name,
             imgClass: this._getFlagIconClass(arrayItem.business_area_code)
           };
         });
-        arrayObj = sortBy(c => { c.name; })(arrayObj);
+        arrayObj = sortBy((c) => { c.name; })(arrayObj);
         this.set('countries', arrayObj);
       }
 
       _convertCollection(data) {
-        return data.map(item => {
+        return data.map((item) => {
           return { label: item.name, value: item.id };
         });
       }
