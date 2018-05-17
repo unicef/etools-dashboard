@@ -161,7 +161,7 @@
       data-table-row.alert-row,
       .alert-row div[slot="row-data"],
       .alert-row div[slot="row-data"] data-table-column {
-        height: 30px;
+        height: 36px;
         width: 100%;
       }
 
@@ -173,7 +173,7 @@
         display: flex;
         flex-wrap: wrap;
         flex-direction: column;
-        height: 124px;
+        height: 148px;
       }
 
       .filter-name {
@@ -181,8 +181,31 @@
         white-space: nowrap;
       }
 
+      .filter-name:hover {
+        color: #0099FF;
+      }
+
       .list-panel a {
         padding-right: 0;
+      }
+
+      .alerts-title {
+        color: rgba(0,0,0,0.54);
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 15px;
+      }
+      
+      .alerts-comment {
+        color: rgba(0,0,0,0.54);
+        font-size: 10px;
+        font-weight: 500;
+        line-height: 15px;
+      }
+
+      .alerts-total {
+        text-align: right;
+        padding-right: 16px;
       }
 
       .clear-button {
@@ -205,16 +228,16 @@
     </partnership-data>
   
     <div class="paper-material list-panel" elevation="1">
-      Alerts
-      <div class="divider"></div>
+      <span class="alerts-title">Alerts </span><span class="alerts-comment">(click to filter the list)</span>
       <div class="alerts-panel">
         <template is="dom-repeat"
                   items="[[presetFilters]]"
                   as="presets">
           <div on-tap="_showPresetFilter" class="alert-row" no-collapse>
+            <div class="divider"></div>
             <div slot="row-data">
-              <div class="col-1">[[presets.total]]</div>
-              <a class="col-10 filter-name">[[presets.title]]</a>
+              <div class="col-1 alerts-total">[[presets.total]]</div>
+              <div class="col-10 filter-name">[[presets.title]] <i>[[presets.status]]</i></div>
               <paper-icon-button class="remove-field remove red clear-button col-1"
                                  icon="clear">
               </paper-icon-button>
@@ -941,20 +964,25 @@
       _showPresetFilter(event) {
         let filterDiv = event.currentTarget.firstElementChild
         let clickedFilter = event.model.__data.presets
+        // temporarily disables last two filters until data is ready
+        if (clickedFilter.id === '7' || clickedFilter.id === '8') {
+          return
+        }
 
         // reset styling for all filter buttons
         this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(
           b => b.style.opacity = '0'
         )
-        this.shadowRoot.querySelectorAll('.alert-row').forEach(
-          r => r.firstElementChild.style.backgroundColor = 'rgb(255, 255, 255'
+        this.shadowRoot.querySelectorAll('.filter-name').forEach(
+          r => r.style.color = ''
         )
+
         if (this.currentFilter === clickedFilter.id) {
           this.set('currentFilter', 'custom')
         } else {
           // style selected filter button as pressed
           filterDiv.lastElementChild.style.opacity = '1'
-          filterDiv.style.backgroundColor = 'rgb(238, 238, 238)'
+          filterDiv.children[1].style.color = '#0099FF'
           this.set('currentFilter', clickedFilter.id)
         }
 
@@ -1000,7 +1028,7 @@
               return row.status === "ended" && (row.disbursement < row.frs_total_frs_amt)
               break
             case '6':
-              return row.status === "ended"
+              return row.status === "ended" && !row.has_final_partnership_review
               break
             case '7':
               return true
