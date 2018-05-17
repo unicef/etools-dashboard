@@ -81,6 +81,10 @@
           this.set('loadedInitially', true);
         }
       }
+
+      refreshList() {
+        this._requestData();
+      }
     
       query(searchString, order, pageSize, pageNumber) {
         EtoolsDashboard.DexieDb.partners.toArray().then((res) => {

@@ -130,11 +130,11 @@
         }
 
         .col-75-px {
-          min-width: 75px;
+          width: 75px;
         }
 
         .col-555-px {
-          min-width: 555px;
+          max-width: 555px;
         }
 
         .col-10-px {
@@ -326,7 +326,7 @@
             <div class="col-225-px layout-horizontal">
               <div class="col-75-px right-side center layout-horizontal align-center">[[totals.planned_engagement_required_audit]]</div>
               <div class="col-75-px right-side center layout-horizontal align-center">[[totals.hact_values_audits_completed]]</div>
-              <div class="col-75-px right-side monetary layout-horizontal align-center">$[[totals.hact_values_outstanding_findings]]</div>
+              <div class="col-75-px right-side center layout-horizontal align-center last-col">$[[totals.hact_values_outstanding_findings]]</div>
             </div>
           </div>
         </data-table-row>
@@ -391,10 +391,14 @@
                 </span>
                 <span class="col-10-px buffer"></span>
               </div>
-              <div class="col-225-px layout-horizontal">
+              <div class="col-225-px layout-horizontal align-center">
                 <span class="col-75-px right-side center layout-horizontal align-center">[[_checkForValueYesBlank(partner.planned_engagement.required_audit)]]</span>
                 <span class="col-75-px right-side center layout-horizontal align-center">[[partner.hact_values.audits.completed]]</span>
-                <span class="col-75-px right-side monetary layout-horizontal align-center">$[[partner.hact_values.outstanding_findings]]</span>
+                <span class="col-75-px right-side center layout-horizontal align-center last-col">$[[partner.hact_values.outstanding_findings]]</span>
+                <iron-icon on-click="dispatchEditRequest"
+                           class="edit-icon"
+                           hidden$="[[!canEditPartner]]"
+                           icon="editor:mode-edit"></iron-icon>
               </div>
             </div>
           </data-table-row>

@@ -88,8 +88,8 @@
           });
       }
 
-      _handleMyResponse({ detail }) {
-        this._setData(detail);
+      _handleMyResponse(res) {
+        this._setData(res);
         if (this.fireDataLoaded) {
           if (!this.dataLoadedEventName) {
             console.warn('Please specify data loaded event name(dataLoadedEventName property)');
