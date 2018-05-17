@@ -962,7 +962,7 @@
       }
 
       _showPresetFilter(event) {
-        let filterDiv = event.currentTarget.firstElementChild
+        let filterDiv = event.currentTarget.lastElementChild
         let clickedFilter = event.model.__data.presets
         // temporarily disables last two filters until data is ready
         if (clickedFilter.id === '7' || clickedFilter.id === '8') {
