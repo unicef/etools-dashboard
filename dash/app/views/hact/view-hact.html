@@ -342,7 +342,7 @@
       }
 
       _handleSaveHact(e) {
-        this.$.partners.refreshList();
+        this._requiredDataHasBeenLoaded();
       }
     
       _tabChanged(tab, hactActive) {
@@ -421,8 +421,7 @@
             }).join('') : str;
       }
 
-      _requiredDataHasBeenLoaded(e) {
-        e.stopImmediatePropagation();
+      _requiredDataHasBeenLoaded() {
         let filtered = propOr([], 'filteredPartners', this );
         if (isEmpty(filtered)) {
           this.set('forceDataRefresh', true);

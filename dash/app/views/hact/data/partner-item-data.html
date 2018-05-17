@@ -32,7 +32,6 @@
       }
 
       savePartnerDetails(body, partnerId, cb) {
-        log(body)
         const params = {
           method: 'PATCH',
           endpoint: this.getEndpoint(this.endpoints.DETAILS, { id: partnerId }),
