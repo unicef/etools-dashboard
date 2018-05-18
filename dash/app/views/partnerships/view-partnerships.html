@@ -152,6 +152,65 @@
       .status {
         padding-left: 8px;
       }
+
+      .divider {
+        background-color: rgba(0, 0, 0, 0.3);
+        height: 1px;
+      }
+
+      data-table-row.alert-row,
+      .alert-row div[slot="row-data"],
+      .alert-row div[slot="row-data"] data-table-column {
+        height: 36px;
+        width: 100%;
+      }
+
+      paper-icon-button.remove-field.remove.red {
+        top: 0;
+      }
+
+      .alerts-panel {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        height: 148px;
+      }
+
+      .filter-name {
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .filter-name:hover {
+        color: #0099FF;
+      }
+
+      .list-panel a {
+        padding-right: 0;
+      }
+
+      .alerts-title {
+        color: rgba(0,0,0,0.54);
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 15px;
+      }
+      
+      .alerts-comment {
+        color: rgba(0,0,0,0.54);
+        font-size: 10px;
+        font-weight: 500;
+        line-height: 15px;
+      }
+
+      .alerts-total {
+        text-align: right;
+        padding-right: 16px;
+      }
+
+      .clear-button {
+        opacity: 0.0;
+      }
     </style>
     <app-route route="{{route}}"
                pattern="/dash/partnerships"
@@ -164,10 +223,31 @@
                       active="[[active]]"
                       total-results="{{totalResults}}"
                       on-partnerships-loaded="_requiredDataLoaded"
-                      list-data-path="filteredPartnerships">
+                      list-data-path="filteredPartnerships"
+                      preset-filters="{{presetFilters}}">
     </partnership-data>
   
-    <div class="paper-material list-panel listControls" elevation="1">
+    <div class="paper-material list-panel" elevation="1">
+      <span class="alerts-title">Alerts </span><span class="alerts-comment">(click to filter the list)</span>
+      <div class="alerts-panel">
+        <template is="dom-repeat"
+                  items="[[presetFilters]]"
+                  as="presets">
+          <div on-tap="_showPresetFilter" class="alert-row" no-collapse>
+            <div class="divider"></div>
+            <div slot="row-data">
+              <div class="col-1 alerts-total">[[presets.total]]</div>
+              <div class="col-10 filter-name">[[presets.title]] <i>[[presets.status]]</i></div>
+              <paper-icon-button class="remove-field remove red clear-button col-1"
+                                 icon="clear">
+              </paper-icon-button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <div id="customFilterPanel" class="paper-material list-panel listControls" elevation="1">
       <div class="wrap-controls">
         <paper-input id="query"
                      type="search"
@@ -325,8 +405,10 @@
         </div>
       </data-table-header>
   
-      <template is="dom-repeat"
-                items="[[filteredPartnerships]]"
+      <template id="csoListTemplate"
+                items="{{filteredPartnerships}}"
+                filter="{{computeFilter(currentFilter)}}"
+                is="dom-repeat"
                 as="row">
         <data-table-row no-collapse>
           <div slot="row-data">
@@ -442,7 +524,8 @@
           </div>
         </data-table-row>
       </template>
-      <data-table-footer page-size="[[pageSize]]"
+      <data-table-footer id="csoDashboardFooter"
+                         page-size="[[pageSize]]"
                          page-number="[[pageNumber]]"
                          visible-range="{{visibleRange}}"
                          on-page-size-changed="pageSizeChanged"
@@ -490,7 +573,12 @@
         return {
           filteredPartnerships: {
             type: Array,
-            notify: true
+            notify: true,
+            observer: 'rangeChanged'
+          },
+          currentFilter: {
+            type: String,
+            value: 'custom'
           },
           forceDataRefresh: {
             type: Boolean,
@@ -550,6 +638,13 @@
           endAfterDate: {
             type: String,
             observer: 'dateChanged'
+          },
+          visibleRange: {
+            type: Array,
+            observer: 'rangeChanged'
+          },
+          pageNumber: {
+            type: Number
           },
           params: {
             type: Array,
@@ -734,6 +829,20 @@
         });
       }
 
+      rangeChanged() {
+        if (this.currentFilter !== 'custom') {
+          this.$.csoListTemplate.items = this.presetFilters[this.currentFilter-1].filteredPartnerships.slice(
+              this.visibleRange[0]-1,
+              this.visibleRange[1]
+            )
+        } else if (this.filteredPartnerships) {
+          this.$.csoListTemplate.items = this.filteredPartnerships.slice(
+              this.visibleRange[0]-1,
+              this.visibleRange[1]
+            )
+        }
+      }
+
       _updateUrl(query, pageNumber, pageSize, sortOrder, requiredDataLoaded,
         initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate) {
         if (!this.initComplete || !this.requiredDataLoaded) {
@@ -742,7 +851,6 @@
         this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
         const qs = this.buildQueryString();
         const currentRoute = this.route.prefix + this.route.path;
-
         if (qs !== null) {
           this.updateAppState(currentRoute, qs, true);
           if (this.requiredDataLoaded) {
@@ -834,7 +942,6 @@
             : `${Number(perc).toFixed(0)}%`;
       }
 
-
       _displayDisbursement(val) {
         let nonZero = this.displayNonZero(val);
         return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
@@ -852,6 +959,85 @@
 
       _checkSigned(status, value) {
         return status === 'signed' ? true : value;
+      }
+
+      _showPresetFilter(event) {
+        let filterDiv = event.currentTarget.lastElementChild
+        let clickedFilter = event.model.__data.presets
+        // temporarily disables last two filters until data is ready
+        if (clickedFilter.id === '7' || clickedFilter.id === '8') {
+          return
+        }
+
+        // reset styling for all filter buttons
+        this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(
+          b => b.style.opacity = '0'
+        )
+        this.shadowRoot.querySelectorAll('.filter-name').forEach(
+          r => r.style.color = ''
+        )
+
+        if (this.currentFilter === clickedFilter.id) {
+          this.set('currentFilter', 'custom')
+        } else {
+          // style selected filter button as pressed
+          filterDiv.lastElementChild.style.opacity = '1'
+          filterDiv.children[1].style.color = '#0099FF'
+          this.set('currentFilter', clickedFilter.id)
+        }
+
+        // reset to first results page of new filter
+        this.set('visibleRange', [1, 10])
+        this.rangeChanged()
+        this.pageNumber = 1
+
+        // toggle custom filters visibility and footer totals source
+        if (this.currentFilter === 'custom') {
+          this.$.customFilterPanel.hidden = false
+          this.$.csoDashboardFooter.filteredTotalResults = this.totalResults
+        } else {
+          this.$.customFilterPanel.hidden = true
+          this.$.csoDashboardFooter.filteredTotalResults = clickedFilter.total
+        }
+      }
+
+      computeFilter(filter) {
+        return function(row) {
+          let eq = (stts) => stts === row.status
+          switch(filter) {
+            case 'custom':
+              return true
+              break
+            case '1':
+              return ["signed", "draft"].some(eq)
+                && (Date.parse(row.start) < new Date().getTime())
+                && !row.frs_total_frs_amt
+              break
+            case '2':
+              return ["active", "ended", "suspended"].some(eq)
+                && (row.unicef_cash === row.frs_total_frs_amt)
+              break
+            case '3':
+              return ["active", "ended"].some(eq) && (parseInt(row.days_last_pd) < 180)
+              break
+            case '4':
+              return ["active", "suspended"].some(eq)
+                && (Date.parse(row.end) < (new Date().getTime() + 2592000000))
+              break
+            case '5':
+              return row.status === "ended" && (row.disbursement < row.frs_total_frs_amt)
+              break
+            case '6':
+              return row.status === "ended" && !row.has_final_partnership_review
+              break
+            case '7':
+              return true
+              break
+            case '8':
+              return true
+              break
+          }
+        }
       }
     }
 
