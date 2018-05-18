@@ -57,8 +57,8 @@
             value: 'partnerships-loaded'
           },
           presetResults: {
-            type: Object,
-            value: {}
+            type: Array,
+            value: []
           },
           loadedInitially: {
             type: Boolean,
@@ -91,11 +91,35 @@
               {total: 0, id: '2', title: 'PD/SSFA with planned amount not equal to FR amount', status: '(active, ended, suspended)', filteredPartnerships: []},
               {total: 0, id: '3', title: 'PD with no recent programmatic visit', status: '(active, ended)', filteredPartnerships: []},
               {total: 0, id: '4', title: 'PD/SSFA expiring in the next 30 days', status: '(active, suspended)', filteredPartnerships: []},
-              {total: 0, id: '5', title: 'ended PD/SSFA with disbursement amount less than FR planned amount', status: '(ended)', filteredPartnerships: []},
-              {total: 0, id: '6', title: 'ended PD/SSFA with missing Final Partnership Review', status: '(ended)', filteredPartnerships: []},
+              {total: 0, id: '5', title: 'PD/SSFA with disbursement amount less than FR planned amount', status: '(ended)', filteredPartnerships: []},
+              {total: 0, id: '6', title: 'PD/SSFA with missing Final Partnership Review', status: '(ended)', filteredPartnerships: []},
               {total: 0, id: '7', title: 'IPs requiring new PCA in the coming CP', status: '', filteredPartnerships: []},
               {total: 0, id: '8', title: 'IPs with active PD without a signed PCA', status: '', filteredPartnerships: []}
             ]
+          },
+          presetFiltersPredicates: {
+            type: Object,
+            value: (partner) => {
+              let eq = (stts) => stts === partner.status
+              return {
+                passedStart: partner => {
+                  ["signed", "draft"].some(eq) 
+                  && (Date.parse(partner.start) < new Date().getTime()) 
+                  && !partner.frs_total_frs_amt
+                },
+                notEqual: partner => {
+                  ["active", "ended", "suspended"].some(eq) 
+                    && (partner.unicef_cash === partner.frs_total_frs_amt)
+                    },
+                noRecetVisit: partner => ["active", "ended"].some(eq) && (parseInt(partner.days_last_pd) < 180),
+                expiring: partner => ["active", "suspended"].some(eq) && (Date.parse(partner.end) < (new Date().getTime() + 2592000000)),
+                lessThanPlanned: partner => (partner.status === "ended") && (partner.disbursement < partner.frs_total_frs_amt),
+                missingReview: partner => partner.status === "ended" && !partner.has_final_partnership_review,
+                // the following filters will be updated when specs are finalized
+                newPca: partner => true,
+                noSignedPca: partner => true
+              }
+            }
           }
         };
       }
@@ -109,6 +133,12 @@
       }
 
       createPresetFilters(results) {
+        // results.forEach(r => {
+        //   presetFiltersPredicates.forEach(
+        //     (pred, i) => pred(r) ? presetFilters[i].filteredPartnerships.push(r) : 
+        //     )
+        // })
+        
         return [
           results.clone().filter(
             partner => (partner.status === "signed" || partner.status === "draft") 
@@ -132,7 +162,7 @@
               && (partner.disbursement < partner.frs_total_frs_amt)
           ),
           results.clone().filter(
-            partner => partner.status === "ended"
+            partner => (partner.status === "ended")
               && !partner.has_final_partnership_review
           ),
           // the following filters will be updated when specs are finalized
@@ -154,8 +184,22 @@
             }
             //check if preset filters were populated already
             if (isEmpty(this.presetFilters[0].filteredPartnerships)) {
+              const filterKeys = keys(this.presetFiltersPredicates);
+              const callFilterPred = (pred, partner) => this.presetFiltersPredicates[pred](partner);
               let queryResultCopy = queryResult.clone()
-              this.set('presetResults', this.createPresetFilters(queryResultCopy))
+              let result = filterKeys.map(
+                pred => queryResultCopy.filter(partner => callFilterPred(pred, partner))
+              )
+              this.set('presetResults', result)
+              debugger
+              // queryResultCopy.each(
+              //   partner => filterKeys.forEach((pred, i) => {
+              //     if (callFilterPred(pred, partner)){
+              //       this.presetResults[i].push(partner)
+              //     }
+              //   })
+              // )
+              // this.set('presetResults', this.createPresetFilters(queryResultCopy))
             }
             const callPred = (pred, partner) => this.predicates[pred](params[pred], partner);
             queryResult = queryResult.filter(
@@ -168,6 +212,7 @@
               ...this.presetResults.map(res => res.toArray())
             ]);
           }).then(countAndResult => {
+            debugger
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
             //check if preset filters were populated already
