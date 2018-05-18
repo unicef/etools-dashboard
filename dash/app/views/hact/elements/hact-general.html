@@ -1,0 +1,379 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../styles/shared-styles.html">
+<link rel="import" href="../../../styles/list-styles.html">
+<link rel="import" href="../../../styles/grid-layout-styles.html">
+<link rel="import" href="../../../styles/page-layout-styles.html">
+<link rel="import" href="../../../styles/hact-tables-styles.html">
+<link rel="import" href="../../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
+<link rel="import" href="../../../../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../../../bower_components/iron-icons/editor-icons.html">
+
+<link rel="import" href="../../../components/data-table/data-table-header.html">
+<link rel="import" href="../../../components/data-table/data-table-column.html">
+<link rel="import" href="../../../components/data-table/data-table-row.html">
+
+<link rel="import" href="../../../mixins/common-general-mixin.html">
+<link rel="import" href="../../../mixins/pagination-mixin.html">
+<link rel="import" href="../../../mixins/event-helper-mixin.html">
+<link rel="import" href="../mixins/edit-partner-mixin.html">
+
+<dom-module id="hact-general">
+  <template>
+    <custom-style>
+      <style include="shared-styles list-styles grid-layout-styles hact-tables-styles page-layout-styles paper-material-styles">
+        :host {
+          --paper-material-padding: 0 24px 0 24px;
+          --paper-tooltip-opacity: 1;
+          width: 100%;
+        }
+
+        .hact-list {
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 5px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);  
+        }
+
+        .padded {
+          padding-right: 4px;
+        }
+
+        .group {
+          box-sizing: border-box;
+        }
+
+        .right {
+          text-align: right;
+        }
+
+        .center {
+          text-align: center;
+        }
+
+        
+
+        
+
+        .right-side {
+          text-align: center;
+          border-left: 1px solid rgba(0, 0, 0, 0.24);
+          box-sizing: border-box;
+          padding-right: 2px;
+          min-height: 48px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+
+        data-table-header data-table-column {
+          @apply --layout-start;
+          box-sizing: border-box;
+        }
+
+        data-table-row.totals {
+          --primary-background-color: var(--medium-theme-background-color);
+          --custom-style: {
+            background: var(--medium-theme-background-color);
+            border-top: 1px solid rgba(0, 0, 0, 0.24);
+            box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.24);
+          }
+        }
+
+        data-table-column.around {
+          --custom-style: {
+            @apply --layout-around-justified;
+          }
+        }
+
+        data-table-row.totals span {
+          font-weight: 500;
+        }
+
+        data-table-row > div[slot="row-data"] > div > div {
+          display: flex;
+          align-items: center;
+          height: 40px;
+        }
+
+        data-table-row > div[slot="row-data"] > div:nth-of-type(2) > div > span {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        data-table-row div[slot="row-data"] div:nth-of-type(2) span span:not(:last-child) {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+        }
+
+        data-table-row div[slot="row-data"] div:nth-of-type(2) span.right {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+        }
+
+        data-table-header {
+          height: 95px;
+        }
+     
+        @supports (-ms-ime-align:auto) {
+          :host {
+            --paper-material-padding: 12px 24px 0 24px;
+          }
+        }
+        @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+          :host {
+            --paper-material-padding: 12px 24px 0 24px;
+          }
+        }
+      </style>
+    </custom-style>
+
+    <div class="paper-material hact-list" id="list" elevation="1">
+      <!-- row of table headers -->
+      <data-table-header no-collapse>
+        <data-table-column class="col-3 layout-horizontal" group-heading="blank" transparent>
+          <data-table-column class="col-12 nowrap layout-horizontal align-center padding-right-10" id="name" sortable>
+            IP Name
+          </data-table-column>
+        </data-table-column>
+        <data-table-column class="col-4 layout-horizontal" group-heading="blank" transparent>
+          <div class="col-6 layout-horizontal">
+            <data-table-column class="col-3 nowrap layout-horizontal align-center padded" id="partner_type">
+              IP<br>Type
+            </data-table-column>
+            <data-table-column class="col-3 layout-horizontal align-center nowrap" id="shared_partner">
+              Shared<br>IP
+            </data-table-column>
+            <data-table-column class="col-6 right layout-horizontal align-center padding-right-10 nowrap" id="total_ct_cy">
+              Cash Transfers<br>1 JAN-31 DEC
+            </data-table-column>
+          </div>
+          <div class="col-6 layout-horizontal">
+            <data-table-column class="col-5 layout-horizontal align-center nowrap padded" id="assessment_type">
+              Assessment<br>Type
+            </data-table-column>
+            <data-table-column class="col-4 layout-horizontal align-center nowrap padded" id="total_ct_cp">
+              Risk<br>Rating
+            </data-table-column>
+            <data-table-column class="col-3 layout-horizontal align-center nowrap padded padding-right-10" id="hact_values.planned_cash_transfer">
+              Flags
+            </data-table-column>
+          </div>
+        </data-table-column>
+        <div class="col-5 layout-horizontal">
+          <data-table-column class="col-4 layout-horizontal" group-heading="PROGRAMMATIC VISITS">
+            <data-table-column class="col-4 nowrap layout-horizontal align-center center right-side" id="hact_values.micro_assessment_needed">
+              Planned
+            </data-table-column>
+            <data-table-column class="col-3 nowrap layout-horizontal align-center center right-side" id="rating">
+              MR
+              <paper-tooltip>Minimum Required</paper-tooltip>
+            </data-table-column>
+            <data-table-column class="col-5 layout-horizontal align-center center right-side">
+              Completed
+            </data-table-column>
+          </data-table-column>
+          <data-table-column class="col-3 layout-horizontal" group-heading="SPOT CHECKS">
+            <data-table-column class="col-half layout-horizontal align-center center buffer right-side"></data-table-column>
+            <data-table-column class="col-5 layout-horizontal align-center center right-side">
+              Required
+            </data-table-column>
+            <data-table-column class="col-6 layout-horizontal align-center center right-side">
+              Completed
+            </data-table-column>
+            <data-table-column class="col-half layout-horizontal align-center center buffer right-side"></data-table-column>
+          </data-table-column>
+          <data-table-column class="layout-horizontal flex-1" group-heading="AUDITS">
+            <data-table-column class="layout-horizontal align-center center right-side flex-1" id="hact_values.audits_mr">
+              Required
+            </data-table-column>
+            <data-table-column class="layout-horizontal align-center center right-side flex-1" id="hact_values.audits_done">
+              Completed
+            </data-table-column>
+            <data-table-column class="layout-horizontal align-center monetary right-side last-col flex-1">
+              Outstanding<br>Findings
+            </data-table-column>
+          </data-table-column>
+        </div>
+      </data-table-header>
+
+      <!--Row of Totals-->
+      <data-table-row class="totals" no-collapse>
+        <div slot="row-data">
+          <div class="col-3 layout-horizontal">
+            <span class="col-12 col-data padding-right-10 layout-horizontal align-center">
+              Total of [[totalResults]] IPs
+            </span>
+          </div>
+          <div class="col-4 layout-horizontal">
+            <span class="col-6 layout-horizontal">
+              <span class="col-3 col-data layout-horizontal align-center"></span>
+              <span class="col-3 col-data layout-horizontal align-center">[[totals.shared_with]]</span>
+              <span class="col-6 col-data padding-right-10 right">$[[currencyFormat(totals.total_ct_ytd)]]</span>
+            </span>
+            <span class="col-6 layout-horizontal">
+              <span class="col-5 col-data layout-horizontal align-center"></span>
+              <span class="col-4 col-data layout-horizontal align-center"></span>
+              <span class="col-3 col-data layout-horizontal align-center padding-right-10"></span>
+            </span>
+          </div>
+          <div class="col-5 layout-horizontal">
+            <div class="col-4 layout-horizontal group">
+              <span class="col-4 right-side">[[totals.hact_values_programmatic_visits_planned_total]]</span>
+              <span class="col-3 right-side">[[totals.hact_min_requirements_programme_visits]]</span>
+              <span class="col-5 right-side">[[totals.hact_values_programmatic_visits_completed_total]]</span>
+            </div>
+            <div class="col-3 layout-horizontal group">
+              <span class="col-half right-side"></span>
+              <span class="col-5 right-side">[[_sumSpotCheckRequiredTotals(totals)]]</span>
+              <span class="col-6 right-side">[[totals.hact_values_spot_checks_completed_total]]</span>
+              <span class="col-half right-side"></span>
+            </div>
+            <div class="layout-horizontal group flex-1">
+              <span class="right-side flex-1">[[totals.planned_engagement_required_audit]]</span>
+              <span class="right-side flex-1">[[totals.hact_values_audits_completed]]</span>
+              <span class="right-side flex-1 last-col">$[[totals.hact_values_outstanding_findings]]</span>
+            </div>
+          </div>
+        </div>
+      </data-table-row>
+
+      <template is="dom-repeat" items="[[filteredPartners]]" as="partner">
+        <data-table-row no-collapse>
+          <div slot="row-data">
+            <div class="col-3 layout-horizontal">
+              <span class="col-data name">
+                <a href="[[baseSite]]/pmp/partners/[[partner.id]]/details" id="[[partner.id]]">
+                  [[partner.name]]
+                  <paper-tooltip>[[partner.name]]</paper-tooltip>
+                </a>
+              </span>
+            </div>
+            <div class="col-4 layout-horizontal">
+              <span class="col-6 layout-horizontal">
+                <span class="col-3 col-data">[[partner.partner_type_slug]]
+                  <paper-tooltip>[[partner.partner_type]]</paper-tooltip>
+                </span>
+                <span class="col-3 col-data">[[_checkForValueYesNo(partner.shared_with)]]</span>
+                <span class="col-6 col-data right padding-right-10">$[[currencyFormat(partner.total_ct_ytd)]]</span>
+              </span>
+              <span class="col-6 layout-horizontal">
+                <span class="col-5 col-data padded name">[[partner.type_of_assessment]]</span>
+                <span class="col-4 ellipsis col-data">[[partner.rating]]</span>
+                <span class="col-2 col-data padding-right-10">
+                  <div>
+                    <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
+                    <paper-tooltip hidden="[[!partner.flags.expiring_assessment_flag]]">Assessment is expiring this year</paper-tooltip>
+                  </div>
+                  <div>
+                    <iron-icon id="threshold" class="hact-icon" icon="icons:report-problem" hidden="[[!partner.flags.approaching_threshold_flag]]"></iron-icon>
+                    <paper-tooltip hidden="[[!partner.flags.approaching_threshold_flag]]">Micro assessment will be required if more than $100,000</paper-tooltip>
+                  </div>
+                </span>
+              </span>
+            </div>
+            <div class="col-5 layout-horizontal">
+              <div class="col-4 layout-horizontal group">
+                <span class="col-4 col-data right-side">[[_getGovernmentDisplay(partner,'hact_values.programmatic_visits.planned.total')]]</span>
+                <span class="col-3 col-data right-side">[[partner.hact_min_requirements.programme_visits]]</span>
+                <span class="col-5 col-data right-side">[[partner.hact_values.programmatic_visits.completed.total]]</span>
+              </div>
+              <div class="col-3 layout-horizontal group">
+                <span class="col-half right-side buffer"></span>
+                <span class="col-5 col-data right-side">[[_sumSpotCheckRequiredPartner(partner)]]</span>
+                <span class="col-6 col-data right-side">[[partner.hact_values.spot_checks.completed.total]]</span>
+                <span class="col-half right-side buffer"></span>
+              </div>
+              <div class="layout-horizontal group flex-1">
+                <span class="col-data right-side flex-1">[[partner.planned_engagement.required_audit]]</span>
+                <span class="col-data right-side flex-1">[[partner.hact_values.audits.completed]]</span>
+                <span class=" right-side flex-1 padding-right-10 last-col">$[[partner.hact_values.outstanding_findings]]</span>
+                <iron-icon on-click="dispatchEditRequest"
+                           class="edit-icon"
+                           hidden$="[[!canEditPartner]]"
+                           icon="editor:mode-edit"></iron-icon>
+              </div>
+            </div>
+          </div>
+        </data-table-row>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    'use strict';
+    
+    /**
+    * @polymer
+    * @mixinFunction
+    * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
+    * @appliesMixin EtoolsDashboard.Mixins.Pagination
+    */
+    const HactGeneralMixins = compose(
+      EtoolsDashboard.Mixins.CommonGeneral,
+      EtoolsDashboard.Mixins.Pagination,
+      EtoolsDashboard.Mixins.Endpoints,
+      EtoolsDashboard.Mixins.HactEditPartner,
+    )(Polymer.Element);
+
+    /**
+    * @polymer
+    * @customElement
+    * @appliesMixin HactGeneralMixins
+    */
+    class HactGeneral extends HactGeneralMixins {
+      static get is() { return 'hact-general'; }
+
+      static get properties() {
+        return {
+          filteredPartners: {
+            type: Array,
+            notify: true
+          }
+        };
+      }
+
+      _checkForValueYesNo(val) {
+        return val ? 'Yes' : 'No';
+      }
+
+      _checkForValueYesBlank(val) {
+        return val ? 'Yes' : '';
+      }
+
+      _getGovernmentDisplay(partner, prop, toCurrency) {
+        const partnerValue = path(prop.split('.'), partner);
+        if (partner.partner_type === 'Government') {
+          return '-';
+        } else {
+          return toCurrency ? this.currencyFormat(partnerValue) : partnerValue;
+        }
+      }
+
+      _sumSpotCheckRequiredPartner(partner) {
+        return (
+          partner.planned_engagement.spot_check_follow_up_q1
+          + partner.planned_engagement.spot_check_follow_up_q2
+          + partner.planned_engagement.spot_check_follow_up_q3
+          + partner.planned_engagement.spot_check_follow_up_q4
+          + partner.hact_min_requirements.spot_checks
+        );
+      }
+    
+      _sumSpotCheckRequiredTotals(totals) {
+        return (
+          totals.planned_engagement_spot_check_follow_up_q1
+          + totals.planned_engagement_spot_check_follow_up_q2
+          + totals.planned_engagement_spot_check_follow_up_q3
+          + totals.planned_engagement_spot_check_follow_up_q4
+          + totals.hact_min_requirements_spot_checks
+        );
+      }
+
+
+    }
+
+    window.customElements.define(HactGeneral.is, HactGeneral);
+  </script>
+</dom-module>

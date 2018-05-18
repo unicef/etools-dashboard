@@ -2,18 +2,30 @@
   "entrypoint": "index.html",
   "shell": "dash/app-shell.html",
   "fragments": [
-    "dash/pages/page-dashboard.html",
-    "dash/pages/page-not-found.html"
+    "dash/app/views/hact/view-hact.html",
+    "dash/app/views/personalized/view-personalized.html",
+    "dash/app/views/partnerships/view-partnerships.html",
+    "dash/app/views/map/view-map.html",
+    "dash/app/views/trips/view-trips.html",
+    "dash/app/views/attachments/view-attachments.html"
   ],
-  "sourceGlobs": [
-   "dash/**/*",
-   "images/**/*",
-   "styles/**/*",
-   "scripts/**/*",
-   "data/**/*",
-   "bower.json"
+  "sources": ["images/**/*", "dash/**/*", "bower.json"],
+  "extraDependencies": [
+    "bower_components/webcomponentsjs/*.js",
+    "manifest.json"
   ],
-  "includeDependencies": [
-    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  "lint": {
+    "rules": ["polymer-2"]
+  },
+  "builds": [
+    {
+      "preset": "es5-bundled",
+      "name": "dash/es5-bundled"
+    },
+    {
+      "preset": "es6-bundled",
+      "name": "dash/es6-bundled",
+      "browserCapabilities": ["es2015"]
+    }
   ]
 }
