@@ -86,7 +86,7 @@
         <paper-listbox slot="dropdown-content"
                        id="countriesListbox"
                        attr-for-selected="countryId"
-                       selected="[[current]]"
+                       selected="[[current.id]]"
                        on-iron-select="_countrySelected">
           <template id="repeat"
                     is="dom-repeat"
@@ -161,9 +161,9 @@
        */
 
       _countrySelected(e) {
-          if (e.detail.item.countryId !== this.current) {
+          if (e.detail.item.countryId !== this.current.id) {
             // send post request to change_coutry endpoint
-            let selectedCountryId = path(['detail', 'item', 'countryId'], e)
+            let selectedCountryId = path(['detail', 'item', 'countryId'], e);
             if(selectedCountryId) {
               this._triggerCountryChangeRequest(selectedCountryId);
             }
@@ -182,7 +182,7 @@
           body: { country: countryId }
         }).then(() => {
           this._handleResponse();
-        }).catch(err => {
+        }).catch((err) => {
           this._handleError(err);
         });
       }
