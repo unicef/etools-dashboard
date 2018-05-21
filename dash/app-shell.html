@@ -199,7 +199,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                              route="{{subroute}}"></view-personalized>
           <view-hact route="{{subroute}}"
                      class="page"
-                     display-detail="{{displayDetail}}"></view-hact>
+                     display-detail="{{displayDetail}}"
                      user="[[user]]"
                      name="hact"></view-hact>
           <view-partnerships route="{{route}}"
@@ -228,14 +228,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.EventHelper
      * @appliesMixin EtoolsDashboard.Mixins.ToastNotifications
-     * @appliesMixin EtoolsDashboard.Mixins.UserData
      * @appliesMixin EtoolsMixins.LoadingMixin
      */
     const EtoolsShellMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
-      EtoolsMixins.LoadingMixin,
+      EtoolsDashboard.Mixins.ToastNotifications,
       EtoolsDashboard.Mixins.UserProfileData,
-      EtoolsDashboard.Mixins.ToastNotifications
+      EtoolsMixins.LoadingMixin
     )(Polymer.Element);
     /**
    * @customElement

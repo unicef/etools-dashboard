@@ -9,6 +9,17 @@
   'use strict';
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+  
+  /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.DataElement
+     * @appliesMixin EtoolsDashboard.Mixins.UserPermissions
+     */
+  const EtoolsProfileBaseMixin = compose(
+    EtoolsDashboard.Mixins.DataElement,
+    EtoolsDashboard.Mixins.UserPermissions
+  );
   /**
    * `user-data` Description
    *
@@ -17,10 +28,6 @@
    * @polymer
    * @extends {Polymer.Element}
    */
-  const EtoolsProfileBaseMixin = compose(
-    EtoolsDashboard.Mixins.DataElement,
-    EtoolsDashboard.Mixins.UserPermissions
-  );
 
   EtoolsDashboard.Mixins.UserProfileData = (baseClass) =>
     class extends EtoolsProfileBaseMixin(baseClass) {
