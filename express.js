@@ -2,7 +2,7 @@ const express = require('express');
 const browserCapabilities = require('browser-capabilities');
 
 const app = express();
-const basedir = __dirname + '/build/dash/bundled/';
+const basedir = __dirname + '/build/dash/';
 
 function getSourcesPath(request) {
   let clientCapabilities = browserCapabilities.browserCapabilities(
