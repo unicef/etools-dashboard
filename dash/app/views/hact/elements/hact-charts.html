@@ -495,15 +495,21 @@
   </template>
   <script>
     'use strict';
-  const ChartsMixin = compose(
-    EtoolsDashboard.Mixins.ReduxStore,
-    EtoolsDashboard.Mixins.EventHelper
-    )(Polymer.Element);
+    
+    /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
+     * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+     */
+    const ChartsMixin = compose(
+      EtoolsDashboard.Mixins.ReduxStore,
+      EtoolsDashboard.Mixins.EventHelper
+      )(Polymer.Element);
     const { baseSite } = EtoolsDashboard.Config;
     /**
     * @polymer
     * @customElement
-    * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
     */
     class HactCharts extends ChartsMixin {
       static get is() { return 'hact-charts'; }
