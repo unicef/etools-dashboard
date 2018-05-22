@@ -13,8 +13,6 @@
 <link rel="import" href="../../../../bower_components/iron-icons/av-icons.html">
 <link rel="import" href="../../../../bower_components/iron-meta/iron-meta.html">
 <link rel="import" href="../../../../bower_components/etools-dropdown/etools-dropdown.html">
-<link rel="import" href="../../../../bower_components/etools-dialog/etools-dialog.html">
-<link rel="import" href="../../../../bower_components/etools-dialog/dynamic-dialog-mixin.html">
 <link rel="import" href="../../../../bower_components/etools-behaviors/etools-mixin-factory.html">
 <link rel="import" href="../../../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../../../bower_components/app-route/app-route.html">
@@ -24,6 +22,7 @@
 <link rel="import" href="elements/hact-detail.html">
 <link rel="import" href="elements/hact-charts.html">
 <link rel="import" href="elements/hact-general.html">
+<link rel="import" href="elements/hact-edit-dialog.html">
 
 <link rel="import" href="../../components/data-table/data-table-footer.html">
 
@@ -79,8 +78,6 @@
 
       .view-toggle {
         display: flex;
-        width: calc(100vw - 48px);
-        padding-right: 42px;
         justify-content: flex-end;
         align-items: center;
         padding-bottom: 12px;
@@ -179,7 +176,7 @@
         
         <div class="paper-material hact-list detail-btn" elevation="1">
           <paper-button on-tap="_detailToggle" class="toggle" noink>
-            <a class="detailed-assurance">SHOW DETAILED ASSURANCE</a>
+            <a id="detailedAssurance" class="detailed-assurance">SHOW DETAILED ASSURANCE</a>
           </paper-button>
         </div>
 
@@ -191,6 +188,7 @@
             <hact-general
                 filtered-partners="[[filteredPartners]]"
                 totals="[[totals]]"
+                user="[[user]]"
                 total-results="[[totalResults]]"
                 filtered-total-results="[[filteredTotalResults]]">
             </hact-general>
@@ -199,6 +197,7 @@
             <hact-detail
                 filtered-partners="[[filteredPartners]]"
                 totals="[[totals]]"
+                user="[[user]]"
                 total-results="[[totalResults]]"
                 filtered-total-results="[[filteredTotalResults]]">
             </hact-detail>
@@ -272,18 +271,18 @@
           },
           initComplete: {
             type: Boolean,
-            value: false,
+            value: false
           },
           debounceTime: {
             type: Number,
             value: 50
           },
           totals: {
-            type: Array,
+            type: Array
           },
           displayDetail: {
             type: Boolean,
-            value: false
+            notify: true,
           },
           showDash: {
             type: Boolean,
@@ -295,20 +294,20 @@
           },
           graphsActive: {
             type: Boolean,
-            value: false,
+            value: false
           },
           routeData: {
             type: Object,
             notify: true
-          },
+          }
         };
       }
 
       static get observers() {
         return [
           '_updateUrl(queryString, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete)',
-          '_tabChanged(routeData.hactTab, hactActive)',
-        ]
+          '_tabChanged(routeData.hactTab, hactActive)'
+        ];
       }
 
       /**
@@ -318,18 +317,35 @@
        */
       constructor() {
         super();
+        this.addEventListener('edit-partner', this._openEditDialog);
       }
 
       /**
-       * Use for one-time configuration of your component after local DOM is initialized. 
+       * Use for one-time configuration of your component after local DOM is initialized.
        */
       ready() {
         super.ready();
       }
 
+      connectedCallback() {
+        super.connectedCallback();
+        this._createEditDialog();
+      }
+
+      _createEditDialog() {
+        this.editDialogEl = document.createElement('hact-edit-dialog');
+        this.editDialogEl.setAttribute('id', 'editHactPlanDialog');
+        this.editDialogEl.addEventListener('notify-list-change', this._handleSaveHact.bind(this));
+        document.querySelector('body').appendChild(this.editDialogEl);
+      }
+
+      _handleSaveHact(e) {
+        this._requiredDataHasBeenLoaded();
+      }
+    
       _tabChanged(tab, hactActive) {
-        this.set('active', hactActive)
-        if (!tab || !hactActive) { return }
+        this.set('active', hactActive);
+        if (!tab || !hactActive) { return; }
         if (tab === 'charts') {
           this.updateAppState(this.route.prefix+this.route.path);
         }
@@ -403,8 +419,7 @@
             }).join('') : str;
       }
 
-      _requiredDataHasBeenLoaded(e) {
-        e.stopImmediatePropagation();
+      _requiredDataHasBeenLoaded() {
         let filtered = propOr([], 'filteredPartners', this );
         if (isEmpty(filtered)) {
           this.set('forceDataRefresh', true);
@@ -413,22 +428,27 @@
         this.init(this.active);
       }
 
-      _toggleChartsView({target}) {
+      _toggleChartsView({ target }) {
         let pages = this.$.hactPages;
         pages.selectNext();
       }
 
       _detailToggle() {
-        let pages = this.$.assurance;
-        pages.selectNext();
-        let button = this.shadowRoot.querySelector('.detailed-assurance');
+        this.$.assurance.selectNext();
+        let button = this.$.detailedAssurance;
         button.innerText = !this.displayDetail ? 'HIDE DETAILED ASSURANCE' : 'SHOW DETAILED ASSURANCE';
         this.displayDetail = !this.displayDetail;
       }
 
       _isActive(current, target) {
-        return current === target
+        return current === target;
       }
+
+      _openEditDialog({ detail }) {
+        this.editDialogEl.partner = detail;
+        this.editDialogEl.openDialog();
+      }
+
     }
     
     window.customElements.define(ViewHact.is, ViewHact);

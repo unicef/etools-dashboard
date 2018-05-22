@@ -2,12 +2,24 @@
       href="../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
 <link rel="import"
       href="../scripts/ramda.html">
-    <link rel="import" href="../mixins/data-element-mixin.html">
+<link rel="import" href="./data-element-mixin.html">
+<link rel="import" href="./user-permissions-mixin.html">
 
 <script>
   'use strict';
   window.EtoolsDashboard = window.EtoolsDashboard || {};
   window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+  
+  /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.DataElement
+     * @appliesMixin EtoolsDashboard.Mixins.UserPermissions
+     */
+  const EtoolsProfileBaseMixin = compose(
+    EtoolsDashboard.Mixins.DataElement,
+    EtoolsDashboard.Mixins.UserPermissions
+  );
   /**
    * `user-data` Description
    *
@@ -16,8 +28,9 @@
    * @polymer
    * @extends {Polymer.Element}
    */
+
   EtoolsDashboard.Mixins.UserProfileData = (baseClass) =>
-    class extends EtoolsDashboard.Mixins.DataElement(baseClass) {
+    class extends EtoolsProfileBaseMixin(baseClass) {
 
       /**
        * Object describing property-related metadata used by Polymer features
@@ -29,8 +42,14 @@
             value: 'myProfile'
           },
 
-          profile: {
+          user: {
             type: Object,
+            notify: true
+          },
+
+          permissions: {
+            type: Object,
+            readOnly: true,
             notify: true
           },
 
@@ -69,16 +88,16 @@
           body: profile
         };
 
-        this.sendRequest(config).then(resp => {
+        this.sendRequest(config).then((resp) => {
           this._handleResponse(resp);
-        }).catch(err => {
+        }).catch((err) => {
           this.parseRequestErrorsAndShowAsToastMsgs(error);
           this._hideProfileSaveLoadingMsg();
         });
       }
 
       _handleResponse(response) {
-        this.set('profile', response);
+        this.set('user', response);
         this._hideProfileSaveLoadingMsg();
       }
 

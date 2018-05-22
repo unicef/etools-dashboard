@@ -6,9 +6,13 @@
       :host {
         --paper-input-container-label: {
           margin-left: 34px;
+
         }
         --paper-tooltip-opacity: 1;
         width: 100%;
+        --cell-pad-right: {
+          padding-right: 10px;
+        }
       }
 
       .buffer {
@@ -21,6 +25,14 @@
         --iron-icon-width: 12px;
       }
 
+      .edit-icon {
+        color: var(--dark-icon-color);
+        position: absolute;
+        right: 10px;
+        display: none;
+        cursor: pointer;
+      }
+
       .nowrap {
         white-space: nowrap;
       }
@@ -31,7 +43,7 @@
       }
 
       .padding-right-10 {
-        padding-right: 10px;
+        @apply --cell-pad-right;
       }
 
       .vertical {
@@ -52,32 +64,49 @@
         background: var(--medium-theme-background-color);
       }
 
-      .monetary {
+      data-table-row:hover .edit-icon {
+        display: block;
+      }
+
+      /* data-table-row:hover .monetary {
         box-sizing: border-box;
         justify-content: flex-end !important;
         text-align: right;
-      }
+      } */
+
+      .monetary {
+          text-align: right;
+          justify-content: flex-end !important;
+        }
 
       .name {
-        white-space: normal !important; 
+        white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         cursor: pointer;
         padding-right: 10px;
+        flex: 1;
       }
 
       .no-padding {
         padding: var(--paper-material-padding, 0 24px 0 24px);
       }
 
+       data-table-row .last-col, data-table-column .last-col, .last-col {
+          padding-right: 16px;
+        }
+
       /* support for IE */
+
       @supports (-ms-ime-align:auto) {
         data-table-header {
           height: 74px;
           /* padding-top: 20px; */
         }
       }
-      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+
+      @media screen and (-ms-high-contrast: active),
+      (-ms-high-contrast: none) {
         data-table-header {
           height: 74px;
           /* padding-top: 20px; */

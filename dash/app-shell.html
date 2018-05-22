@@ -37,7 +37,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="app/components/toast/toast-notifications-mixin.html">
 
 <link rel="import" href="app/mixins/event-helper-mixin.html">
-<link rel="import" href="app/mixins/user-data-mixin.html">
+<link rel="import" href="app/mixins/user-profile-data-mixin.html">
 <link rel="import" href="app/config/dexie-db-config.html">
 <link rel="import" href="../bower_components/etools-loading/etools-loading-mixin.html">
 
@@ -138,7 +138,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       Export
                     </paper-button>
                     <paper-listbox slot="dropdown-content">
-                      <template is="dom-repeat" items="[[availableYears]]">
+                      <template id="hactExport" is="dom-repeat" items="[[availableDetailYears]]">
                         <paper-item on-tap="_export">{{item.name}}</paper-item>
                       </template>
                     </paper-listbox>
@@ -199,6 +199,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                              route="{{subroute}}"></view-personalized>
           <view-hact route="{{subroute}}"
                      class="page"
+                     display-detail="{{displayDetail}}"
+                     user="[[user]]"
                      name="hact"></view-hact>
           <view-partnerships route="{{route}}"
                              class="page"
@@ -226,14 +228,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.EventHelper
      * @appliesMixin EtoolsDashboard.Mixins.ToastNotifications
-     * @appliesMixin EtoolsDashboard.Mixins.UserData
      * @appliesMixin EtoolsMixins.LoadingMixin
      */
     const EtoolsShellMixin = compose(
       EtoolsDashboard.Mixins.EventHelper,
-      EtoolsMixins.LoadingMixin,
-      EtoolsDashboard.Mixins.UserData,
-      EtoolsDashboard.Mixins.ToastNotifications
+      EtoolsDashboard.Mixins.ToastNotifications,
+      EtoolsDashboard.Mixins.UserProfileData,
+      EtoolsMixins.LoadingMixin
     )(Polymer.Element);
     /**
    * @customElement
@@ -260,18 +261,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   
           hideExport: Boolean,
 
-          availableYears: {
+          availableDetailYears: {
             type: Array,
             value: [
               { name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv' },
               { name: '2018', endpoint: '/api/v2/partners/hact?&format=csv' }
             ]
           },
+          availableGeneralYears: {
+            type: Array,
+            value: [
+              { name: '2018', endpoint: '/api/v2/partners/hact/simple?&format=csv' }
+
+            ]
+          },
+          displayDetail: {
+            type: Boolean,
+            value: false,
+            observer: '_assuranceSelected'
+          },
           pageTitle: {
             type: String,
             default: 'Dashboard'
-          },
-          hideExport: Boolean
+          }
         };
       }
 
@@ -337,6 +349,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           `${endpoint}`,
           '_blank'
         );
+      }
+      
+      // sets export endpoints based on assurance view (detailed/general)
+      _assuranceSelected() {
+        this.$.hactExport.items = this.displayDetail ? this.availableDetailYears : this.availableGeneralYears
       }
     }
 

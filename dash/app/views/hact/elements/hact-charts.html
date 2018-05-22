@@ -6,19 +6,22 @@
 <link rel="import" href="../../../styles/hact-graphs-styles.html">
 <link rel="import" href="../../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
+<link rel="import" href="../../../../../bower_components/iron-icon/iron-icon.html">
 
 <link rel="import" href="../../../../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../../../../../bower_components/google-chart/google-chart-loader.html">
+<link rel="import" href="../../../../../bower_components/google-chart/charts-loader.html">
 
 <link rel="import" href="../../../config/config.html">
 
 <link rel="import" href="../../../mixins/redux-store-mixin.html">
+<link rel="import" href="../../../config/config.html">
 <link rel="import" href="../../../mixins/event-helper-mixin.html">
 
 
 <dom-module id="hact-charts">
   <template>
-    <style include="shared-styles list-styles grid-layout-styles iron-flex iron-flex-factors iron-flex-alignment hact-graph-styles paper-material-styles">
+    <style include="shared-styles list-styles grid-layout-styles hact-graph-styles paper-material-styles">
       :host {
         --divider-light-color: #E0E0E0;
         --assuranceChart: {
@@ -31,122 +34,128 @@
         font-size: 16px;
       }
 
+      iron-icon {
+        cursor: pointer;
+      }
+  
       .viz-col {
         width: 100%;
         height: 400px;
       }
-
+      
+  
       .hact-title {
         font-size: 16px;
         height: 56px;
       }
-
+  
       .divider {
         background-color: rgba(0, 0, 0, 0.3);
         height: 1px;
       }
-
+  
       .border-bottom {
         border-bottom: 1px solid var(--divider-light-color);
       }
-
+  
       .hact-paper {
         padding: 0;
       }
-
+  
       .component {
         padding: 16px 24px;
         box-sizing: border-box;
       }
-
+  
       .border-right {
         border-right: 1px solid var(--divider-light-color);
       }
-
+  
       .assurance-color {
         color: var(--secondary-text-color);
       }
-
+  
       .assurance-data {
         margin-right: 48px;
       }
-
+  
       .prog-visits {
         margin: 16px 0 0 24px;
       }
-
+  
       .micro {
         margin: 0 0 16px 0;
       }
-
+  
       .spot {
         padding-right: 0;
         margin-right: 24px;
       }
-
+  
       .tuck-left-top {
         padding-left: 0;
         padding-top: 0
       }
-
+  
       .tuck-left-bottom {
         padding-bottom: 0;
       }
-
+  
       .viz {
-        width: 100%;
         @apply --assuranceChart;
       }
     </style>
-    
+  
     <google-chart-loader id="google"></google-chart-loader>
-
+  
     <!--Assurance Activities-->
-    <div class="paper-material list-panel hact-paper layout  center-center" elevation="1">
+    <div class="paper-material list-panel hact-paper layout  center-center"
+         elevation="1">
       <div class="hact-title component">
         Assessment and Assurance Activities
       </div>
       <div class="divider"></div>
-
-      <div class="layout column">
-
-        <div class="layout horizontal">
-
-          <div class="component flex-1 layout horizontal center border-right border-bottom tuck-left-top prog-visits ">
+  
+      <div class="layout-vertical">
+  
+        <div class="layout-horizontal">
+  
+          <div class="component flex-1 layout-horizontal center border-right border-bottom tuck-left-top prog-visits ">
             <div class="col-3 assurance-color">
-              Programmatic<br>Visits
+              Programmatic
+              <br>Visits
             </div>
-            <div class="flex-1 layout column">
-              <google-chart
-                  id="progVisitsChart"
-                  class="viz"
-                  type="bar">
+            <div class="flex-1 layout-vertical">
+              <google-chart id="progVisitsChart"
+                            class="viz"
+                            type="bar">
               </google-chart>
             </div>
-
+  
           </div>
-
-          <div class="component flex-1 layout horizontal center border-bottom spot">
+  
+          <div class="component flex-1 layout-horizontal center border-bottom spot">
             <div class="col-3 assurance-color">
-              Spot<br>Checks
+              Spot
+              <br>Checks
             </div>
-            <div class="flex-1 layout column">
-              <google-chart
-                  id="spotChecksChart"
-                  class="viz"
-                  type="bar">
+            <div class="flex-1 layout-vertical">
+              <google-chart id="spotChecksChart"
+                            class="viz"
+                            type="bar">
               </google-chart>
             </div>
           </div>
-
+  
         </div>
-
-        <div class="layout horizontal">
-          <div class="component flex-1 layout horizontal center border-right tuck-left-bottom micro ">
+  
+        <div class="layout-horizontal">
+          <div class="component flex-1 layout-horizontal center border-right tuck-left-bottom micro ">
             <div class="col-3 assurance-color">
-              Micro <br> Assessments
+              Micro
+              <br> Assessments
             </div>
-            <div class="flex-1 layout horizontal">
+            <div class="flex-1 layout-horizontal">
               <div class="assurance-data">
                 <div class="completed">[[chartData.assurance_activities.micro_assessment]]</div>
                 <div class="subheading assurance-color">Completed</div>
@@ -157,66 +166,154 @@
               </div>
             </div>
           </div>
-
-          <div class="component flex-1 layout horizontal center ">
+  
+          <div class="component flex-1 layout-horizontal center ">
             <div class="col-3 assurance-color">
-              Scheduled <br> Audits
+              Scheduled
+              <br> Audits
             </div>
-            <div class="flex-1 layout horizontal">
+            <div class="flex-1 layout-horizontal">
               <div class="assurance-data">
-                <div class="completed">[[chartData.assurance_activities.scheduled_audit]]</div>
+                <div class="completed">[[chartData.assurance_activities.scheduled_audit]]
+                  <a target="_blank"
+                     href="[[schedAuditUrl]]">
+                    <iron-icon class="dark"
+                               icon="file-download"></iron-icon>
+                  </a>
+                </div>
                 <div class="subheading assurance-color">Completed</div>
               </div>
             </div>
             <div class="col-2 assurance-color">
-              Special <br> Audits
+              Special
+              <br> Audits
             </div>
-            <div class="flex-1 layout horizontal">
+            <div class="flex-1 layout-horizontal">
               <div class="assurance-data">
-                <div class="completed">[[chartData.assurance_activities.special_audit]]</div>
+                <div class="completed">[[chartData.assurance_activities.special_audit]]
+                    <a target="_blank"
+                     href="[[specialAuditUrl]]">
+                    <iron-icon class="dark"
+                               icon="file-download"></iron-icon>
+                  </a>
+                </div>
                 <div class="subheading assurance-color">Completed</div>
               </div>
             </div>
           </div>
         </div>
-
+  
       </div>
     </div>
+  
+    <!--Assurance Coverage -->
+    <div class="paper-material list-panel hact-paper layout center-center"
+         elevation="1">
+      <div class="hact-title component">
+        Assurance Coverage
+      </div>
+      <div class="divider"></div>
+      <div class="layout-vertical">
+        <div class="layout-horizontal">
+          <div class="flex-1 layout-column component border-right border-bottom tuck-left-top prog-visits">
+            <div class="assurance-color">Coverage By Number of IPs</div>
+      
+            <google-chart id="coverageByIpChart"
+                          class="coverage-pie"
+                          type="pie">
+            </google-chart>
+          </div>
+          <div class="flex-1 layout-column component border-bottom tuck-left-bottom">
+            <div class="assurance-color">Coverage by Cash Transfers (USD)(Total)</div>
+      
+            <google-chart id="coverageCashChart"
+                          class="coverage-pie"
+                          type="pie">
+            </google-chart>
+          </div>
+        </div>
 
+        <div class="layout-horizontal">
+          <div class="component flex-1 layout-horizontal center border-right tuck-left-bottom micro ">
+            <div class="col-3 assurance-color">
+              IPs Without
+              <br> Assurance
+            </div>
+            <div class="flex-1 layout-horizontal">
+              <div class="assurance-data">
+                <div class="completed">[[chartData.assurance_coverage.table.2.value]]
+                  <a target="_blank"
+                     href="[[notProgVisitsUrl]]">
+                    <iron-icon class="dark"
+                               icon="file-download"></iron-icon>
+                  </a>
+                </div>
+                <div class="subheading assurance-color">Programmatic Visits (PV)</div>
+              </div>
+              <div class="assurance-data">
+                <div class="completed">[[chartData.assurance_coverage.table.1.value]]
+                  <a target="_blank"
+                     href="[[notSpotChecksUrl]]">
+                    <iron-icon class="dark"
+                               icon="file-download"></iron-icon>
+                  </a>
+                </div>
+                <div class="subheading assurance-color">Spot Checks (SC)</div>
+              </div>
+              <div class="assurance-data">
+                  <div class="completed">[[chartData.assurance_coverage.table.0.value]]
+                    <a target="_blank"
+                       href="[[notAssuranceUrl]]">
+                      <iron-icon class="dark"
+                                 icon="file-download"></iron-icon>
+                    </a>
+                  </div>
+                  <div class="subheading assurance-color">Both PV & SC</div>
+                </div>
+            </div>
+          </div>
+          <div class="component flex-1"></div>
+        </div>
+      </div>
+    </div>
+  
     <!--Financial Findings -->
-    <div class="paper-material list-panel hact-paper layout center-center" elevation="1">
+    <div class="paper-material list-panel hact-paper layout center-center"
+         elevation="1">
       <div class="hact-title component">
         Financial Findings
       </div>
       <div class="divider"></div>
-      <div class="layout horizontal">
-        <div class="financial-col label flex-1 layout column">
-          <template is="dom-repeat" items="[[chartData.financial_findings]]">
-            <div class$="layout horizontal justified [[isHighlighted(item.highlighted)]]">
+      <div class="layout-horizontal">
+        <div class="financial-col label flex-1 layout-vertical">
+          <template is="dom-repeat"
+                    items="[[chartData.financial_findings]]">
+            <div class$="layout-horizontal justified [[isHighlighted(item.highlighted)]]">
               <div class="fin-title flex-1">[[item.name]]</div>
               <div class="fin-amount">[[_numWithCommas(item.value)]]</div>
             </div>
           </template>
         </div>
-
-        <div class="financial-col label flex-1 layout column">
-          <div class="layout horizontal justified">
+  
+        <div class="financial-col label flex-1 layout-vertical">
+          <div class="layout-horizontal justified">
             <div class="fin-title flex-1">[[chartData.financial_findings_numbers.0.name]]</div>
             <div class="fin-amount">[[chartData.financial_findings_numbers.0.value]]</div>
           </div>
-          <div class="layout horizontal justified">
+          <div class="layout-horizontal justified">
             <div class="fin-title flex-1">[[chartData.financial_findings_numbers.1.name]]</div>
             <div class="fin-amount">[[chartData.financial_findings_numbers.1.value]]</div>
           </div>
-          <div class="layout horizontal justified">
+          <div class="layout-horizontal justified">
             <div class="fin-title flex-1">[[chartData.financial_findings_numbers.2.name]]</div>
             <div class="fin-amount">[[chartData.financial_findings_numbers.2.value]]</div>
           </div>
-          <div class="layout horizontal justified audit-line">
+          <div class="layout-horizontal justified audit-line">
             <div class="fin-title flex-1">[[chartData.financial_findings_numbers.3.name]]</div>
           </div>
-          <template is="dom-repeat" items="[[chartData.financial_findings_numbers.3.value]]">
-            <div class="layout horizontal justified audit-line">
+          <template is="dom-repeat"
+                    items="[[chartData.financial_findings_numbers.3.value]]">
+            <div class="layout-horizontal justified audit-line">
               <div class="fin-title flex-1 sub-col">[[_dashCapital(item.name)]]</div>
               <div class="fin-amount">[[item.value]]</div>
             </div>
@@ -224,169 +321,171 @@
         </div>
       </div>
     </div>
-
+  
+  
+  
     <!--Cash Transfer Amounts-->
-    <div class="paper-material list-panel hact-paper layout center-center" elevation="1">
+    <div class="paper-material list-panel hact-paper layout center-center"
+         elevation="1">
       <div class="hact-title component">
         Total Cash Transfer by Cash Transfer Ranges
       </div>
       <div class="divider"></div>
-      <div class="layout horizontal">
+      <div class="layout-horizontal">
         <div class="col-8 component">
-          <google-chart
-              id="cash_transfers_amountsChart"
-              class="viz-col"
-              type="column">
+          <google-chart id="cash_transfers_amountsChart"
+                        class="viz-col"
+                        type="column">
           </google-chart>
         </div>
-        <div class="col-3 component ratings-wrapper layout column">
-          <div class="layout horizontal justified">
+        <div class="col-3 component ratings-wrapper layout-vertical">
+          <div class="layout-horizontal justified">
             <div class="risk-rating-title">Risk Ratings</div>
             <div class="risk-rating-title">Number of IPs</div>
           </div>
-          <div class="layout column risk-ratings label">
-
-            <div class="layout horizontal">
+          <div class="layout-vertical risk-ratings label">
+  
+            <div class="layout-horizontal">
               <div class="marker risk-not-required"></div>
               <div class="flex-1 sub-col">Not Required</div>
               <div>[[riskRatings.0]]</div>
             </div>
-
-            <div class="layout horizontal">
+  
+            <div class="layout-horizontal">
               <div class="marker risk-low"></div>
               <div class="flex-1 sub-col">Low</div>
               <div>[[riskRatings.1]]</div>
             </div>
-
-            <div class="layout horizontal">
+  
+            <div class="layout-horizontal">
               <div class="marker risk-medium"></div>
               <div class="flex-1 sub-col">Medium</div>
               <div>[[riskRatings.2]]</div>
             </div>
-
-            <div class="layout horizontal">
+  
+            <div class="layout-horizontal">
               <div class="marker risk-significant"></div>
               <div class="flex-1 sub-col">Significant</div>
               <div>[[riskRatings.3]]</div>
             </div>
-
-            <div class="layout horizontal">
+  
+            <div class="layout-horizontal">
               <div class="marker risk-high"></div>
               <div class="flex-1 sub-col">High</div>
               <div>[[riskRatings.4]]</div>
             </div>
-
+  
           </div>
         </div>
       </div>
     </div>
-
+  
     <!--IP Risk Rating-->
-    <div class="paper-material list-panel hact-paper layout center-center" elevation="1">
+    <div class="paper-material list-panel hact-paper layout center-center"
+         elevation="1">
       <div class="hact-title component">
         Total Cash Transfers by IP Risk Rating
       </div>
       <div class="divider"></div>
-      <div class="layout horizontal">
+      <div class="layout-horizontal">
         <div class="col-8 component">
-          <google-chart
-              id="cash_transfers_risk_ratingsChart"
-              class="viz-col"
-              type="column">
+          <google-chart id="cash_transfers_risk_ratingsChart"
+                        class="viz-col"
+                        type="column">
           </google-chart>
         </div>
-        <div class="col-3 component ratings-wrapper layout column">
-          <div class="layout horizontal justified">
+        <div class="col-3 component ratings-wrapper layout-vertical">
+          <div class="layout-horizontal justified">
             <div class="risk-rating-title">Risk Ratings</div>
             <div class="risk-rating-title">Number of IPs</div>
           </div>
-          <div class="layout column risk-ratings label">
-
-            <div class="layout horizontal">
+          <div class="layout-vertical risk-ratings label">
+  
+            <div class="layout-horizontal">
               <div class="marker risk-not-required"></div>
               <div class="flex-1 sub-col">Not Required</div>
               <div>[[riskRatings.0]]</div>
             </div>
-
-            <div class="layout horizontal">
+  
+            <div class="layout-horizontal">
               <div class="marker risk-low"></div>
               <div class="flex-1 sub-col">Low</div>
               <div>[[riskRatings.1]]</div>
             </div>
-
-            <div class="layout horizontal">
+  
+            <div class="layout-horizontal">
               <div class="marker risk-medium"></div>
               <div class="flex-1 sub-col">Medium</div>
               <div>[[riskRatings.2]]</div>
             </div>
-
-            <div class="layout horizontal">
+  
+            <div class="layout-horizontal">
               <div class="marker risk-significant"></div>
               <div class="flex-1 sub-col">Significant</div>
               <div>[[riskRatings.3]]</div>
             </div>
-
-            <div class="layout horizontal">
+  
+            <div class="layout-horizontal">
               <div class="marker risk-high"></div>
               <div class="flex-1 sub-col">High</div>
               <div>[[riskRatings.4]]</div>
             </div>
-
+  
           </div>
         </div>
       </div>
     </div>
-
+  
     <!--PARTNER TYPE / SPOT CHECKS COMPLETED-->
-    <div class="layout horizontal flex-1">
-
-      <div class="paper-material list-panel hact-paper half-paper layout center-center" elevation="1">
+    <div class="layout-horizontal flex-1">
+  
+      <div class="paper-material list-panel hact-paper half-paper layout center-center"
+           elevation="1">
         <div class="hact-title component">
           Cash Transfers by Partner Type
         </div>
         <div class="divider"></div>
-        <div class="layout horizontal">
+        <div class="layout-horizontal">
           <div class="flex-1 component">
-            <google-chart
-                id="cash_transfers_partner_typeChart"
-                class="viz-col"
-                type="column">
+            <google-chart id="cash_transfers_partner_typeChart"
+                          class="viz-col"
+                          type="column">
             </google-chart>
           </div>
-
+  
         </div>
       </div>
-
-      <div class="paper-material hact-paper half-paper layout center-center" elevation="1">
+  
+      <div class="paper-material hact-paper half-paper layout center-center"
+           elevation="1">
         <div class="hact-title component">
           Spot Checks Completed
         </div>
         <div class="divider"></div>
-        <div class="layout horizontal component">
+        <div class="layout-horizontal component">
           <div class="col-40">
-            <google-chart
-                id="spot_checks_completedChart"
-                class="viz-col"
-                type="pie">
+            <google-chart id="spot_checks_completedChart"
+                          class="viz-col"
+                          type="pie">
             </google-chart>
           </div>
           <div class="flex-1">
-            <div class="component ratings-wrapper spot-checks-table layout column">
+            <div class="component ratings-wrapper spot-checks-table layout-vertical">
               <div class="risk-rating-title">Completed By</div>
-              <div class="layout column risk-ratings label">
-
-                <div class="layout horizontal">
+              <div class="layout-vertical risk-ratings label">
+  
+                <div class="layout-horizontal">
                   <div class="marker risk-low"></div>
                   <div class="flex-1 sub-col">Staff</div>
                   <div>[[chartData.charts.spot_checks_completed.1.1]]</div>
                 </div>
-
-                <div class="layout horizontal">
+  
+                <div class="layout-horizontal">
                   <div class="marker risk-medium"></div>
                   <div class="flex-1 sub-col">Service Providers</div>
                   <div>[[chartData.charts.spot_checks_completed.2.1]]</div>
                 </div>
-                
+  
               </div>
             </div>
           </div>
@@ -396,20 +495,47 @@
   </template>
   <script>
     'use strict';
-  const ChartsMixin = compose(
-    EtoolsDashboard.Mixins.ReduxStore,
-    EtoolsDashboard.Mixins.EventHelper
-    )(Polymer.Element);
+    
+    /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
+     * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+     */
+    const ChartsMixin = compose(
+      EtoolsDashboard.Mixins.ReduxStore,
+      EtoolsDashboard.Mixins.EventHelper
+      )(Polymer.Element);
+    const { baseSite } = EtoolsDashboard.Config;
     /**
     * @polymer
     * @customElement
-    * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
     */
     class HactCharts extends ChartsMixin {
       static get is() { return 'hact-charts'; }
 
       static get properties() {
         return {
+          notProgVisitsUrl: {
+            type: String,
+            value: `${baseSite}/api/v2/partners/not_programmatic_visit?format=csv`
+          },
+          notSpotChecksUrl: {
+            type: String,
+            value: `${baseSite}/api/v2/partners/not_spot_check/?format=csv`
+          },
+          notAssuranceUrl: {
+            type: String,
+            value: `${baseSite}/api/v2/partners/not_assurance/?format=csv`
+          },
+          specialAuditUrl: {
+            type: String,
+            value: `${baseSite}/api/v2/partners/special_audit_completed/?format=csv`
+          },
+          schedAuditUrl: {
+            type: String,
+            value: `${baseSite}/api/v2/partners/scheduled_audit_completed/?format=csv`
+          },
           assuranceChartOptions: {
             type: Object,
             value: {
@@ -642,6 +768,42 @@
               }
             }
           },
+          coverage_by_number_of_ipsOptions: {
+            type: Object,
+            value: {
+              colors: ['#1D9D5D', '#2FB0F2', '#FFCC00'],
+              pieSliceText: 'none',
+              legend: {
+                position: 'labeled',
+                labeledValueText: 'both',
+                textStyle: { fontSize: 12 }
+              },
+              chartArea: {
+                right: '88',
+                width: '80%',
+                height: '75%',
+                bottom: 24
+              }
+            }
+          },
+          coverage_by_cash_transferOptions: {
+            type: Object,
+            value: {
+              colors: ['#1D9D5D', '#2FB0F2', '#FFCC00'],
+              pieSliceText: 'none',
+              legend: {
+                position: 'labeled',
+                labeledValueText: 'both',
+                textStyle: { fontSize: 12 }
+              },
+              chartArea: {
+                right: '88',
+                width: '80%',
+                height: '75%',
+                bottom: 24
+              }
+            }
+          },
           chartData: {
             type: Object,
             statePath: 'hactGraphs',
@@ -658,13 +820,19 @@
         return ['_init(active)'];
       }
 
+      ready() {
+        super.ready();
+        log(baseSite);
+      }
+    
+
       _init(active) {
         if (active) {
           if (isEmpty(this.chartData)) {
             this.fireEvent('global-loading', { message: 'Loading chart data...', active: true });
-          }else {
+          } else {
             this.fireEvent('global-loading', { loadingSource: 'hact-charts' });
-            this.drawCharts();
+            this._drawCharts();
           }
         }
       }
@@ -679,15 +847,21 @@
 
       _formatChartData(data, chartName, options) {
         this.$.google.dataTable(data).then((dt) => {
+          if (chartName==='coverageCashChart') {
+            let formatter = new google.visualization.NumberFormat({
+              prefix: '$' });
+            formatter.format(dt, 1);
+          }
           this.shadowRoot.querySelector('#' + chartName).options = options;
           this.shadowRoot.querySelector('#' + chartName).data = dt;
           this.updateStyles();
         });
       }
 
-      drawCharts() {
+      _drawCharts() {
         if (this.chartData) {
           this.drawProgVisitsChart();
+          this.drawCoverageCharts();
           keys(this.chartData.charts).map((chart) => {
             this.drawChart(chart);
           });
@@ -711,10 +885,23 @@
           this._formatChartData(spotChecksData, 'spotChecksChart', this.assuranceChartOptions);
       }
 
+      drawCoverageCharts() {
+        log('drawing coverage');
+        const { coverage_by_number_of_ips: coverageIps, coverage_by_cash_transfer: coverageCash } = this.chartData.assurance_coverage;
+        this._formatChartData(coverageIps, 'coverageByIpChart', this.coverage_by_number_of_ipsOptions);
+        // let formatter = new this.googleVis.NumberFormat({
+        //   prefix: '$',
+        //   fractionDigits: '0'
+        // });
+        // formatter.format(coverageCash, 1);
+        this._formatChartData(coverageCash, 'coverageCashChart', this.coverage_by_cash_transferOptions);
+      }
+
       drawChart(dataName) {
         const data = this.chartData.charts[dataName];
         this._formatChartData(data, `${dataName}Chart`, this[`${dataName}Options`]);
       }
+    
 
       isHighlighted(highlighted) {
         return highlighted ? 'financial-highlight' : '';
