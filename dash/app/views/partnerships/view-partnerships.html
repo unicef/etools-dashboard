@@ -1014,7 +1014,7 @@
               return true
               break
             case '1':
-              return ["signed", "draft"].some(eq)
+              return row.status === "signed"
                 && (Date.parse(row.start) < new Date().getTime())
                 && !row.frs_total_frs_amt
               break
