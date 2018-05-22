@@ -137,7 +137,8 @@
         fill: rgb(26, 154, 250);
       }
   
-      .ip-pd {
+      data-table-row div div span.ip-pd {
+        display: block;
         padding-top: 4px;
         padding-right: 8px;
       }
@@ -224,7 +225,22 @@
       }
 
       .delete-partner {
-
+        color: #ea4022;
+        position: relative;
+        bottom: 3px;
+      }
+      
+      .delete-partner:after {
+        content: "\00d7";
+        color: rgba(255, 255, 255, 1);
+        position: absolute;
+        z-index: 1;
+        bottom: 4.5px;
+        width: 12px;
+        height: 12px;
+        left: 5.5px;
+        font-weight: bold;
+        font-size: xx-small;
       }
 
       .blocked-partner-container,
@@ -241,14 +257,16 @@
         width: 12px;
       }
 
-      .double-line {
+      .title {
+        white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
-      .delete-partner {
-
+      .partner-icons-group {
+        display: inline-flex;
       }
+
     </style>
     <app-route route="{{route}}"
                pattern="/dash/partnerships"
@@ -379,20 +397,21 @@
         <data-table-column class="col-5 no-header-line"
                            group-heading="blank"
                            transparent>
-          <data-table-column class="col-4"
-                             sortable>
+          <data-table-column class="col-5" sortable>
             IP Name
             <br>PD/SSFA Ref #
           </data-table-column>
-          <data-table-column class="col-2">
-            Section
-          </data-table-column>
-          <data-table-column class="col-2">
-            Field Office
-          </data-table-column>
-          <data-table-column class="col-2 status">
-            Status
-          </data-table-column>
+          <div class="col-5 layout horizontal">
+            <data-table-column class="col-4">
+              Section
+            </data-table-column>
+            <data-table-column class="col-5">
+              Field Office
+            </data-table-column>
+            <data-table-column class="col-3 status">
+              Status
+            </data-table-column>
+          </div>
           <data-table-column class="col-2">
             Start Date
             <br>End Date
@@ -451,20 +470,17 @@
         <data-table-row no-collapse>
           <div slot="row-data">
             <div class="col-5 layout horizontal">
-              <span class="col-data layout-horizontal col-4 ip-pd">
-                <div class="col-2">
-                  <div class="blocked-partner-container">
-                    <iron-icon class="blocked-partner" icon="block">
-                      <paper-tooltip fit-to-visible-bounds>"Hi"</paper-tooltip>
-                    </iron-icon>
+              <span class="col-data layout-horizontal col-5 ip-pd">
+                <div class="partner-icons-group" hidden>
+                  <div class="blocked-partner-container" hidden>
+                    <iron-icon class="blocked-partner" icon="block"></iron-icon>
+                    <paper-tooltip fit-to-visible-bounds>"Partner blocked"</paper-tooltip>
                   </div>
-                  <div class="delete-container">
-                    <iron-icon class="delete-partner" icon="delete">
-                      <paper-tooltip fit-to-visible-bounds>"Hi"</paper-tooltip>
-                    </iron-icon>
+                  <div class="delete-container" hidden>
+                    <iron-icon class="delete-partner" icon="delete"></iron-icon>
+                    <paper-tooltip fit-to-visible-bounds>"Partner marked for deletion"</paper-tooltip>
                   </div>
                 </div>
-                <div class="col-10 double-line">
                   <a href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details"
                     app-name="pmp"
                     page="partners"
@@ -475,37 +491,38 @@
                         [[row.partner_name]]
                       </paper-tooltip>
                   </a>
-                  <br>
-                  <a href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details"
-                    app-name="pmp"
-                    page="interventions"
-                    id="[[row.intervention_id]]/details"
-                    class="title">
-                      [[row.number]]
-                      <paper-tooltip fit-to-visible-bounds>[[row.number]]</paper-tooltip>
-                  </a>
-                </div>
+                <br>
+                <a href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details"
+                  app-name="pmp"
+                  page="interventions"
+                  id="[[row.intervention_id]]/details"
+                  class="title">
+                    [[row.number]]
+                    <paper-tooltip fit-to-visible-bounds>[[row.number]]</paper-tooltip>
+                </a>
               </span>
-              <span class="col-data col-2">
-                <div class="sections">
-                  <span>
-                    <template is="dom-repeat"
-                              items="{{commaSplit(row.sections)}}">
-                      [[item]]
-                      <br>
-                    </template>
-                  </span>
-                </div>
-              </span>
-              <span class="col-data col-2">
-                <template is="dom-repeat"
-                          items="{{commaSplit(row.offices_names)}}">
-                  [[item]]
-                  <br>
-                </template>
-              </span>
-              <span class="col-data col-2 status">
-                [[capitalizeWord(row.status)]]
+              <span class="col-5">
+                <span class="col-data col-4">
+                  <div class="sections">
+                    <span>
+                      <template is="dom-repeat"
+                                items="{{commaSplit(row.sections)}}">
+                        [[item]]
+                        <br>
+                      </template>
+                    </span>
+                  </div>
+                </span>
+                <span class="col-data col-5">
+                  <template is="dom-repeat"
+                            items="{{commaSplit(row.offices_names)}}">
+                    [[item]]
+                    <br>
+                  </template>
+                </span>
+                <span class="col-data col-3 status">
+                  [[capitalizeWord(row.status)]]
+                </span>
               </span>
               <span class="col-data col-2 date">
                 [[prettyDate(row.start)]]
