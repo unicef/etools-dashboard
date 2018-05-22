@@ -57,10 +57,14 @@
             value: 'partnerships-loaded'
           },
           presetResults: {
-            type: Object,
-            value: {}
+            type: Array,
+            value: []
           },
           loadedInitially: {
+            type: Boolean,
+            value: false
+          },
+          presetsLoaded: {
             type: Boolean,
             value: false
           },
@@ -87,7 +91,7 @@
             type: Array,
             notify: true,
             value: [
-              {total: 0, id: '1', title: 'PD/SSFA with passed start date and no FR was added', status: '(draft, signed)', filteredPartnerships: []},
+              {total: 0, id: '1', title: 'PD/SSFA with passed start date and no FR was added', status: '(signed)', filteredPartnerships: []},
               {total: 0, id: '2', title: 'PD/SSFA with planned amount not equal to FR amount', status: '(active, ended, suspended)', filteredPartnerships: []},
               {total: 0, id: '3', title: 'PD with no recent programmatic visit', status: '(active, ended)', filteredPartnerships: []},
               {total: 0, id: '4', title: 'PD/SSFA expiring in the next 30 days', status: '(active, suspended)', filteredPartnerships: []},
@@ -111,7 +115,7 @@
       createPresetFilters(results) {
         return [
           results.clone().filter(
-            partner => (partner.status === "signed" || partner.status === "draft") 
+            partner => (partner.status === "signed") 
               && (Date.parse(partner.start) < new Date().getTime())
               && !partner.frs_total_frs_amt
           ),
@@ -153,7 +157,7 @@
               queryResult = queryResult.reverse();
             }
             //check if preset filters were populated already
-            if (isEmpty(this.presetFilters[0].filteredPartnerships)) {
+            if (!this.presetsLoaded) {
               let queryResultCopy = queryResult.clone()
               this.set('presetResults', this.createPresetFilters(queryResultCopy))
             }
@@ -171,10 +175,14 @@
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
             //check if preset filters were populated already
-            if (isEmpty(this.presetFilters[0].filteredPartnerships)) {
-              for (let i = 2; i < 10; i++) {
+            if (!this.presetsLoaded) {
+              for (let i = 2; i < (this.presetResults.length + 2); i++) {
                 this.set(`presetFilters.${i-2}.total`, countAndResult[i])
-                this.set(`presetFilters.${i-2}.filteredPartnerships`, countAndResult[i+8])
+                this.set(
+                  `presetFilters.${i-2}.filteredPartnerships`,
+                  countAndResult[i + this.presetResults.length]
+                )
+                this.set('presetsLoaded', true)
               }
             }
             this.fireEvent('global-loading', {loadingSource: 'partnership-data'});
