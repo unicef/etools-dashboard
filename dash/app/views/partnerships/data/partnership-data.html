@@ -168,8 +168,8 @@
             return Dexie.Promise.all([
               queryResult.count(),
               queryResult.clone().toArray(),
-              ...this.presetResults.map(res => res.count()),
-              ...this.presetResults.map(res => res.toArray())
+              ...(this.presetResults.map(res => res.count())),
+              ...(this.presetResults.map(res => res.toArray()))
             ]);
           }).then(countAndResult => {
             this._setTotalResults(countAndResult[0]);
