@@ -198,7 +198,7 @@
       EtoolsDashboard.Mixins.ReduxStore,
       EtoolsDashboard.Mixins.Dropdown,
       EtoolsDashboard.Mixins.EventHelper
-    )(Polymer.Element)
+    )(Polymer.Element);
     
     /**
      * `view-trips` Description
@@ -256,7 +256,7 @@
             notify: true
           },
           months: {
-            type: Array,
+            type: Array
           },
           years: {
             type: Array,
@@ -283,7 +283,7 @@
             type: Object,
             value: {
               colors: ['#FCF39F', '#BFE58A', '#64BD00'],
-              legend: {position: "none"},
+              legend: { position: 'none' },
               animation: {
                 startup: true,
                 duration: 300,
@@ -292,12 +292,12 @@
               chartArea: {
                 top: '16',
                 bottom: '32',
-                width: '75%',
+                width: '75%'
               },
               isStacked: true,
               hAxis: {
                 minValue: 1,
-                gridlineColor: '#E8E8E8',
+                gridlineColor: '#E8E8E8'
               },
               vAxis: {
                 minValue: 0,
@@ -306,7 +306,7 @@
                   lineHeight: 30
                 }
               },
-              bar: {groupWidth: '22'},
+              bar: { groupWidth: '22' }
             }
           },
           actionPointsChart: {
@@ -340,9 +340,9 @@
                 textStyle: {
                   fontSize: 14,
                   lineHeight: 30
-                },
+                }
               },
-              bar: {groupWidth: '22'},
+              bar: { groupWidth: '22' },
               legend: {
                 position: 'top',
                 alignment: 'end'
@@ -352,13 +352,13 @@
           noDataOptions: {
             type: Object,
             value: {
-              legend: {position: "none"},
+              legend: { position: 'none' },
               colors: ['transparent'],
               chartArea: {
                 width: '50%',
                 left: '5%',
                 height: '75%',
-                top: '16',
+                top: '16'
               },
               vAxis: {
                 baselineColor: 'transparent',
@@ -375,21 +375,27 @@
                 alwaysOutside: true,
                 textStyle: {
                   color: '#979797',
-                  fontSize: 28,
+                  fontSize: 28
                 },
                 stem: {
                   color: 'transparent',
                   length: '50%'
                 }
               },
-              bar: {groupWidth: '22'}
+              bar: { groupWidth: '22' }
             }
           },
           noDataMessage: {
             type: Array,
-            value: [['Bar', 'Time', {role: 'annotation'}],
-              ['', 2, 'No chart data'],
+            value: [['Bar', 'Time', { role: 'annotation' }],
+              ['', 2, 'No chart data']
             ]
+          },
+          route: {
+            type: Object
+          },
+          user: {
+            type: Object
           }
         };
       }
@@ -397,14 +403,14 @@
       static get observers() {
         return [
           '_init(active)',
-          '_alertStaticDataLoaded(offices,months,years)',
-        ]
+          '_alertStaticDataLoaded(offices,months,years)'
+        ];
       }
 
       _init(active) {
         if (active) {
           if (!this.staticDataLoaded) {
-            this.fireEvent('global-loading', {message: 'Loading page data...', active: true});
+            this.fireEvent('global-loading', { message: 'Loading page data...', active: true });
           }
           this._initTripsChart();
           if (!this.actionPtsFilter) {
@@ -418,11 +424,11 @@
         this.set('months', moment.months().map((month, i) => {
           return {
             label: month,
-            value: ('0' + (i + 1)).slice(-2),
+            value: ('0' + (i + 1)).slice(-2)
           };
         }));
-        var monthsToDate = range(1, moment().month() + 2).map(month => {
-          return ('0' + (month)).slice(-2)
+        var monthsToDate = range(1, moment().month() + 2).map((month) => {
+          return ('0' + (month)).slice(-2);
         });
         this.set('month', monthsToDate);
         this._setFilter();
@@ -434,9 +440,9 @@
           this._setInvalid('tripsYear');
           return;
         }
-        var filter = {year: this.year, office_id: this.tripsOffice};
+        var filter = { year: this.year, office_id: this.tripsOffice };
         if (this.month) {
-          var monthObj = {months: this.month.join(',')};
+          var monthObj = { months: this.month.join(',') };
           _.assign(filter, monthObj);
         }
         this.set('tripsFilter', filter);
@@ -485,23 +491,23 @@
             id: 'tripsOffice'
           }
         ];
-        fields = without({id: field}, fields);
+        fields = without({ id: field }, fields);
         var invalid = fields.reduce((isValid, _field) => {
           return this[_field.name] || isValid;
         }, false);
         if (invalid && field !== 'tripsOffice') {
           this.shadowRoot.querySelector('#' + field).invalid = true;
         } else {
-          fields.forEach(f => {
+          fields.forEach((f) => {
             this.shadowRoot.querySelector('#' + f.id).invalid = false;
           });
         }
       }
 
       _formatChartData(formatted, chartName) {
-        this.$.google.dataTable(formatted).then(dt => {
-          //magic ratio number 32.71
-          this.shadowRoot.querySelector('#' + chartName).style = `height: ${Math.round(dt.getNumberOfRows() * 32.71)}px; min-height: 300px`
+        this.$.google.dataTable(formatted).then((dt) => {
+          // magic ratio number 32.71
+          this.shadowRoot.querySelector('#' + chartName).style = `height: ${Math.round(dt.getNumberOfRows() * 32.71)}px; min-height: 300px`;
           this.shadowRoot.querySelector('#' + chartName).options = this[chartName + 'Options'];
           this.shadowRoot.querySelector('#' + chartName).data = dt;
         });
@@ -511,17 +517,17 @@
         if (!isEmpty(data) && data != null) {
           var travels = prop('travels_by_section', data);
           if (!travels.length && this.active) {
-            this.fireEvent('global-loading', {active: false});
+            this.fireEvent('global-loading', { active: false });
             this._setNoData('tripsChart');
           } else {
             var formatted = [
               ['Trips', 'Planned', 'Approved', 'Completed']
             ];
-            travels.map(section => {
+            travels.map((section) => {
               formatted.push([section.section_name,
                 section.planned_travels,
                 section.approved_travels,
-                section.completed_travels])
+                section.completed_travels]);
             });
             this._formatChartData(formatted, 'tripsChart');
           }
@@ -537,21 +543,21 @@
       _apOfficeChanged() {
         var filter = {};
         if (this.apOffice && this.apOffice.length) {
-          filter.office = this.apOffice
+          filter.office = this.apOffice;
         }
         this.set('actionPtsFilter', filter);
       }
-      
+    
       _actionPointsDataChanged(data) {
         if (!isEmpty(data)) {
-          var actionPoints = prop('action_points_by_section', data).filter(ap => {
+          var actionPoints = prop('action_points_by_section', data).filter((ap) => {
             return prop('total_action_points', ap);
           });
           if (!actionPoints.length && this.active) {
             this._setNoData('actionPointsChart');
           } else {
             var formatted = [['Action Points', 'Closed', 'Total']];
-            actionPoints.forEach(ap => {
+            actionPoints.forEach((ap) => {
               formatted.push([ap.section_name,
                 ap.completed_action_points,
                 ap.total_action_points
@@ -563,7 +569,7 @@
       }
 
       _setNoData(chartName) {
-        this.$.google.dataTable(this.noDataMessage).then(dt => {
+        this.$.google.dataTable(this.noDataMessage).then((dt) => {
           this.shadowRoot.querySelector('#' + chartName).style = 'height: 300px';
           this.shadowRoot.querySelector('#' + chartName).options = this.noDataOptions;
           this.shadowRoot.querySelector('#' + chartName).data = dt;

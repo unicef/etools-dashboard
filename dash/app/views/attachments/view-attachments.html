@@ -83,7 +83,7 @@
             <div class="filter esmm">
               <etools-dropdown-multi label="[[filter.filterName]]"
                                      placeholder="&#8212;"
-                                     disabled$="[[!filter.selectionOptions.length]"
+                                     disabled$="[[!filter.selectionOptions.length]]"
                                      options="[[filter.selectionOptions]]"
                                      option-value="[[filter.optionValue]]"
                                      option-label="[[filter.optionLabel]]"
@@ -308,6 +308,9 @@
                 }
               ];
             }
+          },
+          route: {
+            type: Object
           }
         };
       }
