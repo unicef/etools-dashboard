@@ -219,12 +219,6 @@
           PD/SSFA TOR
         </a>
       </paper-button>
-      <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/government-partners" app-name="pmp" page="government-partners">
-          <iron-icon icon="account-balance"></iron-icon>
-          Goverment-in-simple
-        </a>
-      </paper-button>
     </div>
 
     <!--MY PARTNERSHIPS-->
@@ -247,7 +241,8 @@
               <span class="description description-size flex-3 col-data">
                 [[partnership.title]]
               </span>
-              <span class="col-data col-2 layout horizontal end-justified">$[[currencyFormat(partnership.total_unicef_budget)]] (Total Budget)</span>
+              <span class="col-data col-2 layout horizontal end-justified">
+                [[getCurrencyPrefix(partnership.budget_currency)]][[currencyFormat(partnership.total_unicef_budget)]] (UNICEF Cash)</span>
             </div>
           </data-table-row>
         </template>
