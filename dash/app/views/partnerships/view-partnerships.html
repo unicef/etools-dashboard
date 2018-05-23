@@ -5,6 +5,7 @@
 <link rel="import" href="../../styles/list-styles.html">
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../styles/grid-layout-styles.html">
 <link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
 
@@ -44,7 +45,7 @@
 
 <dom-module id="view-partnerships">
   <template>
-    <style include="shared-styles grid-layout-styles iron-flex page-layout-styles paper-material-styles list-styles">
+    <style include="shared-styles grid-layout-styles iron-flex iron-flex-layout page-layout-styles paper-material-styles list-styles">
       .no-header-line {
         --header-bottom-line: none;
       }
@@ -135,9 +136,10 @@
         fill: rgb(26, 154, 250);
       }
   
-      .ip-pd {
-        display: initial !important;
+      data-table-row div div span.ip-pd {
+        display: block;
         padding-top: 4px;
+        padding-right: 8px;
       }
   
       .right-nudge {
@@ -211,6 +213,59 @@
       .clear-button {
         opacity: 0.0;
       }
+
+      .blocked-partner-container {
+        background-color: #FFA149;
+        @apply --layout-vertical;
+        @apply --layout-center-justified;
+        -webkit-border-radius: 50%;
+        -moz-border-radius: 50%;
+        border-radius: 50%;
+      }
+
+      .delete-partner {
+        color: #ea4022;
+        position: relative;
+        bottom: 3px;
+      }
+      
+      .delete-partner:after {
+        content: "\00d7";
+        color: rgba(255, 255, 255, 1);
+        position: absolute;
+        z-index: 1;
+        bottom: 4.5px;
+        width: 12px;
+        height: 12px;
+        left: 5.5px;
+        font-weight: bold;
+        font-size: xx-small;
+      }
+
+      .blocked-partner-container,
+      .delete-partner {
+        height: 16px;
+        width: 16px;
+        flex-basis: auto;
+        align-items: center;
+      }
+
+      iron-icon.blocked-partner {
+        color: rgba(255, 255, 255, 1);
+        height: 12px;
+        width: 12px;
+      }
+
+      .title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .partner-icons-group {
+        display: inline-flex;
+      }
+
     </style>
     <app-route route="{{route}}"
                pattern="/dash/partnerships"
@@ -341,20 +396,21 @@
         <data-table-column class="col-5 no-header-line"
                            group-heading="blank"
                            transparent>
-          <data-table-column class="col-4"
-                             sortable>
+          <data-table-column class="col-5" sortable>
             IP Name
             <br>PD/SSFA Ref #
           </data-table-column>
-          <data-table-column class="col-2">
-            Section
-          </data-table-column>
-          <data-table-column class="col-2">
-            Field Office
-          </data-table-column>
-          <data-table-column class="col-2 status">
-            Status
-          </data-table-column>
+          <div class="col-5 layout horizontal">
+            <data-table-column class="col-4">
+              Section
+            </data-table-column>
+            <data-table-column class="col-5">
+              Field Office
+            </data-table-column>
+            <data-table-column class="col-3 status">
+              Status
+            </data-table-column>
+          </div>
           <data-table-column class="col-2">
             Start Date
             <br>End Date
@@ -413,45 +469,59 @@
         <data-table-row no-collapse>
           <div slot="row-data">
             <div class="col-5 layout horizontal">
-              <span class="col-data col-4 ip-pd">
-                <a href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details"
-                   app-name="pmp"
-                   page="partners"
-                   id="[[row.partner_id]]/details"
-                   class="title">
-                    [[row.partner_name]]
-                    <paper-tooltip fit-to-visible-bounds>[[row.partner_name]]</paper-tooltip>
+              <span class="col-data layout-horizontal col-5 ip-pd">
+                <div class="partner-icons-group" hidden="[[!_eitherTrue(row.partner_blocked, row.partner_marked_for_deletion)]]">
+                  <div class="blocked-partner-container" hidden="[[!row.partner_blocked]]">
+                    <iron-icon class="blocked-partner" icon="block"></iron-icon>
+                    <paper-tooltip fit-to-visible-bounds>"Partner blocked"</paper-tooltip>
+                  </div>
+                  <div class="delete-container" hidden="[[!row.partner_marked_for_deletion]]">
+                    <iron-icon class="delete-partner" icon="delete"></iron-icon>
+                    <paper-tooltip fit-to-visible-bounds>"Partner marked for deletion"</paper-tooltip>
+                  </div>
+                </div>
+                  <a href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details"
+                    app-name="pmp"
+                    page="partners"
+                    id="[[row.partner_id]]/details"
+                    class="title">
+                      [[row.partner_name]]
+                      <paper-tooltip fit-to-visible-bounds>
+                        [[row.partner_name]]
+                      </paper-tooltip>
                   </a>
                 <br>
                 <a href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details"
-                   app-name="pmp"
-                   page="interventions"
-                   id="[[row.intervention_id]]/details"
-                   class="title">
+                  app-name="pmp"
+                  page="interventions"
+                  id="[[row.intervention_id]]/details"
+                  class="title">
                     [[row.number]]
                     <paper-tooltip fit-to-visible-bounds>[[row.number]]</paper-tooltip>
-                  </a>
+                </a>
               </span>
-              <span class="col-data col-2">
-                <div class="sections">
-                  <span>
-                    <template is="dom-repeat"
-                              items="{{commaSplit(row.sections)}}">
-                      [[item]]
-                      <br>
-                    </template>
-                  </span>
-                </div>
-              </span>
-              <span class="col-data col-2">
-                <template is="dom-repeat"
-                          items="{{commaSplit(row.offices_names)}}">
-                  [[item]]
-                  <br>
-                </template>
-              </span>
-              <span class="col-data col-2 status">
-                [[capitalizeWord(row.status)]]
+              <span class="col-5">
+                <span class="col-data col-4">
+                  <div class="sections">
+                    <span>
+                      <template is="dom-repeat"
+                                items="{{commaSplit(row.sections)}}">
+                        [[item]]
+                        <br>
+                      </template>
+                    </span>
+                  </div>
+                </span>
+                <span class="col-data col-5">
+                  <template is="dom-repeat"
+                            items="{{commaSplit(row.offices_names)}}">
+                    [[item]]
+                    <br>
+                  </template>
+                </span>
+                <span class="col-data col-3 status">
+                  [[capitalizeWord(row.status)]]
+                </span>
               </span>
               <span class="col-data col-2 date">
                 [[prettyDate(row.start)]]
@@ -967,6 +1037,10 @@
 
       _checkSigned(status, value) {
         return status === 'signed' ? true : value;
+      }
+
+      _eitherTrue(flag1, flag2) {
+        return flag1 || flag2 ? true : false
       }
 
       _showPresetFilter(event) {
