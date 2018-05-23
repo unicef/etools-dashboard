@@ -716,6 +716,9 @@
           pageNumber: {
             type: Number
           },
+          route: {
+            type: Object
+          },
           params: {
             type: Array,
             value: function() {
@@ -748,22 +751,22 @@
                 {
                   qName: 'startAfter',
                   propName: 'startAfterDate',
-                  xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
+                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
                 },
                 {
                   qName: 'endBefore',
                   propName: 'endBeforeDate',
-                  xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
+                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
                 },
                 {
                   qName: 'startBefore',
                   propName: 'startBeforeDate',
-                  xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
+                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
                 },
                 {
                   qName: 'endAfter',
                   propName: 'endAfterDate',
-                  xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
+                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
                 }
               ];
             }
@@ -904,12 +907,12 @@
           this.$.csoListTemplate.items = this.presetFilters[this.currentFilter-1].filteredPartnerships.slice(
               this.visibleRange[0]-1,
               this.visibleRange[1]
-            )
+            );
         } else if (this.filteredPartnerships) {
           this.$.csoListTemplate.items = this.filteredPartnerships.slice(
               this.visibleRange[0]-1,
               this.visibleRange[1]
-            )
+            );
         }
       }
 
@@ -938,11 +941,11 @@
       }
 
       _buildCsvDownloadUrl() {
-        let query = this.params.reduce((acc, {qName, propName, xf}) => {
+        let query = this.params.reduce((acc, { qName, propName, xf }) => {
           return isEmpty(this[propName]) ? acc
             : `${acc}${qName}=${xf(this[propName])}&`;
-        }, "");
-        query = query.split('|').join(',')
+        }, '');
+        query = query.split('|').join(',');
         return `${this.getEndpoint('cso_dashboard').url}/?${query}format=csv`;
       }
 
@@ -984,8 +987,8 @@
       _setSelectedOffices(officesStr) {
         let officesIdsArr = officesStr.split('|');
         if (!isEmpty(officesIdsArr)) {
-          officesIdsArr = officesIdsArr.map(n => parseInt(n, 10));
-          return this.offices.filter(o => officesIdsArr.includes(parseInt(o.id, 10)));
+          officesIdsArr = officesIdsArr.map((n) => parseInt(n, 10));
+          return this.offices.filter((o) => officesIdsArr.includes(parseInt(o.id, 10)));
         }
         return [];
       }
@@ -993,7 +996,7 @@
       _setSelectedSectors(sectorsStr) {
         const sectorsArr = sectorsStr.split('|');
         if (!isEmpty(sectorsArr)) {
-          const selectedSectors = this.sectors.filter(s => {
+          const selectedSectors = this.sectors.filter((s) => {
             return sectorsArr.indexOf(s.value) > -1;
           });
           return selectedSectors;
@@ -1006,7 +1009,7 @@
         if (isEmpty(this.statuses)) {
           return [];
         }
-        return this.statuses.filter(status => {
+        return this.statuses.filter((status) => {
           return statusesStrArr.indexOf(status.value) > -1;
         });
       }
@@ -1041,82 +1044,82 @@
       }
 
       _showPresetFilter(event) {
-        let filterDiv = event.currentTarget.lastElementChild
-        let clickedFilter = event.model.__data.presets
+        let filterDiv = event.currentTarget.lastElementChild;
+        let clickedFilter = event.model.__data.presets;
         // temporarily disables last two filters until data is ready
         if (clickedFilter.id === '7' || clickedFilter.id === '8') {
-          return
+          return;
         }
 
         // reset styling for all filter buttons
         this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(
-          b => b.style.opacity = '0'
-        )
+          (b) => b.style.opacity = '0'
+        );
         this.shadowRoot.querySelectorAll('.filter-name').forEach(
-          r => r.style.color = ''
-        )
+          (r) => r.style.color = ''
+        );
 
         if (this.currentFilter === clickedFilter.id) {
-          this.set('currentFilter', 'custom')
+          this.set('currentFilter', 'custom');
         } else {
           // style selected filter button as pressed
-          filterDiv.lastElementChild.style.opacity = '1'
-          filterDiv.children[1].style.color = '#0099FF'
-          this.set('currentFilter', clickedFilter.id)
+          filterDiv.lastElementChild.style.opacity = '1';
+          filterDiv.children[1].style.color = '#0099FF';
+          this.set('currentFilter', clickedFilter.id);
         }
 
         // reset to first results page of new filter
-        this.set('visibleRange', [1, 10])
-        this.rangeChanged()
-        this.pageNumber = 1
+        this.set('visibleRange', [1, 10]);
+        this.rangeChanged();
+        this.pageNumber = 1;
 
         // toggle custom filters visibility and footer totals source
         if (this.currentFilter === 'custom') {
-          this.$.customFilterPanel.hidden = false
-          this.$.csoDashboardFooter.filteredTotalResults = this.totalResults
+          this.$.customFilterPanel.hidden = false;
+          this.$.csoDashboardFooter.filteredTotalResults = this.totalResults;
         } else {
-          this.$.customFilterPanel.hidden = true
-          this.$.csoDashboardFooter.filteredTotalResults = clickedFilter.total
+          this.$.customFilterPanel.hidden = true;
+          this.$.csoDashboardFooter.filteredTotalResults = clickedFilter.total;
         }
       }
 
       computeFilter(filter) {
         return function(row) {
-          let eq = (stts) => stts === row.status
+          let eq = (stts) => stts === row.status;
           switch(filter) {
             case 'custom':
-              return true
-              break
+              return true;
+              break;
             case '1':
-              return row.status === "signed"
+              return row.status === 'signed'
                 && (Date.parse(row.start) < new Date().getTime())
-                && !row.frs_total_frs_amt
-              break
+                && !row.frs_total_frs_amt;
+              break;
             case '2':
-              return ["active", "ended", "suspended"].some(eq)
-                && (row.unicef_cash === row.frs_total_frs_amt)
-              break
+              return ['active', 'ended', 'suspended'].some(eq)
+                && (row.unicef_cash === row.frs_total_frs_amt);
+              break;
             case '3':
-              return ["active", "ended"].some(eq) && (parseInt(row.days_last_pd) < 180)
-              break
+              return ['active', 'ended'].some(eq) && (parseInt(row.days_last_pd) < 180);
+              break;
             case '4':
-              return ["active", "suspended"].some(eq)
-                && (Date.parse(row.end) < (new Date().getTime() + 2592000000))
-              break
+              return ['active', 'suspended'].some(eq)
+                && (Date.parse(row.end) < (new Date().getTime() + 2592000000));
+              break;
             case '5':
-              return row.status === "ended" && (row.disbursement < row.frs_total_frs_amt)
-              break
+              return row.status === 'ended' && (row.disbursement < row.frs_total_frs_amt);
+              break;
             case '6':
-              return row.status === "ended" && !row.has_final_partnership_review
-              break
+              return row.status === 'ended' && !row.has_final_partnership_review;
+              break;
             case '7':
-              return true
-              break
+              return true;
+              break;
             case '8':
-              return true
-              break
+              return true;
+              break;
           }
-        }
+        };
       }
     }
 

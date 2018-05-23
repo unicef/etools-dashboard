@@ -75,8 +75,7 @@
 
       ready() {
         super.ready();
-    
-        if (!this.loadedInitially) {
+          if (!this.loadedInitially) {
           this.fireEvent('global-loading', { message: 'Loading partners data...', active: true, loadingSource: 'partners-data' });
           this.set('loadedInitially', true);
         }
