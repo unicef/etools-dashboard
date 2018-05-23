@@ -470,12 +470,12 @@
           <div slot="row-data">
             <div class="col-5 layout horizontal">
               <span class="col-data layout-horizontal col-5 ip-pd">
-                <div class="partner-icons-group" hidden="[[!_eitherTrue(row.partner_blocked)]]">
+                <div class="partner-icons-group" hidden="[[!_eitherTrue(row.partner_blocked, row.partner_marked_for_deletion)]]">
                   <div class="blocked-partner-container" hidden="[[!row.partner_blocked]]">
                     <iron-icon class="blocked-partner" icon="block"></iron-icon>
                     <paper-tooltip fit-to-visible-bounds>"Partner blocked"</paper-tooltip>
                   </div>
-                  <div class="delete-container" hidden>
+                  <div class="delete-container" hidden="[[!row.partner_marked_for_deletion]]">
                     <iron-icon class="delete-partner" icon="delete"></iron-icon>
                     <paper-tooltip fit-to-visible-bounds>"Partner marked for deletion"</paper-tooltip>
                   </div>
@@ -1039,8 +1039,8 @@
         return status === 'signed' ? true : value;
       }
 
-      _eitherTrue(flag) {
-        return flag ? true : false
+      _eitherTrue(flag1, flag2) {
+        return flag1 || flag2 ? true : false
       }
 
       _showPresetFilter(event) {
