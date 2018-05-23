@@ -95,7 +95,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             user="[[user]]"
                             toast="[[currentToastMessage]]"></etools-piwik-analytics>
 
-    <common-data-loaders></common-data-loaders>
+    <common-data-loaders user="[[user]]"></common-data-loaders>
 
     <app-location route="{{route}}"
                   url-space-regex="^[[rootPath]]">
@@ -283,6 +283,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           pageTitle: {
             type: String,
             default: 'Dashboard'
+          },
+          user: {
+            type: Object
+          },
+          currentToastMessage: {
+            type: String
           }
         };
       }
@@ -350,10 +356,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           '_blank'
         );
       }
-      
+  
       // sets export endpoints based on assurance view (detailed/general)
       _assuranceSelected() {
-        this.$.hactExport.items = this.displayDetail ? this.availableDetailYears : this.availableGeneralYears
+        this.$.hactExport.items = this.displayDetail ? this.availableDetailYears : this.availableGeneralYears;
       }
     }
 

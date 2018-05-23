@@ -70,9 +70,7 @@
           },
           user: {
             type: Object,
-            value: {
-              id: 23356
-            }
+            observer: '_init'
           }
         };
       }
@@ -140,7 +138,7 @@
             return {
               type: 'SET_PARTNERSHIPS',
               partnerships: map(
-                pick(['id', 'title', 'number', 'total_unicef_budget']),
+                pick(['id', 'title', 'number', 'total_unicef_budget', 'budget_currency']),
                 data
               )
             };
@@ -221,20 +219,19 @@
        */
       ready() {
         super.ready();
-
-        Polymer.RenderStatus.afterNextRender(this, () => {
-          this._init();
-        });
       }
 
-      _init() {
+      _init(user) {
+        if (!user) {
+          return;
+        }
         this.actionsToDispatch();
         this._callNext();
       }
 
       actionsToDispatch() {
         const { ReduxProps } = EtoolsDashboard;
-        let mappedItems = ReduxProps.map(a => {
+        let mappedItems = ReduxProps.map((a) => {
           let endpoint = a.endpointProps;
           if (typeof endpoint === 'function') {
             endpoint = endpoint.bind(this)();
@@ -264,8 +261,8 @@
             this.dispatch(next.handler, null);
             this._callNext();
           } else {
-            this.sendRequest(next.endpoint).then(res => this._handleResponse(res))
-              .catch(err => this.handleErrorResponse(err));
+            this.sendRequest(next.endpoint).then((res) => this._handleResponse(res))
+              .catch((err) => this.handleErrorResponse(err));
           }
         }
       }

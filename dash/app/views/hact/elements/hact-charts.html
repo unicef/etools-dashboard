@@ -820,12 +820,6 @@
         return ['_init(active)'];
       }
 
-      ready() {
-        super.ready();
-        log(baseSite);
-      }
-    
-
       _init(active) {
         if (active) {
           if (isEmpty(this.chartData)) {
@@ -868,7 +862,7 @@
         }
       }
 
-      AssuranceActivitiesBars(entity) {
+      getAssuranceActivitiesBars(entity) {
         return [
           ['Data', 'Text', { role: 'annotation' }, 'Count', { role: 'style' }, { role: 'annotation' }],
           ['', 0, 'Completed', entity.completed,
@@ -879,21 +873,18 @@
 
       drawProgVisitsChart() {
           const { programmatic_visits: progVisits, spot_checks: spotChecks } = this.chartData.assurance_activities;
-          const progVisitsData = this.AssuranceActivitiesBars(progVisits);
-          const spotChecksData = this.AssuranceActivitiesBars(spotChecks);
+          const progVisitsData = this.getAssuranceActivitiesBars(progVisits);
+          const spotChecksData = this.getAssuranceActivitiesBars(spotChecks);
           this._formatChartData(progVisitsData, 'progVisitsChart', this.assuranceChartOptions);
           this._formatChartData(spotChecksData, 'spotChecksChart', this.assuranceChartOptions);
       }
 
       drawCoverageCharts() {
-        log('drawing coverage');
-        const { coverage_by_number_of_ips: coverageIps, coverage_by_cash_transfer: coverageCash } = this.chartData.assurance_coverage;
+        const {
+          coverage_by_number_of_ips: coverageIps,
+          coverage_by_cash_transfer: coverageCash
+        } = this.chartData.assurance_coverage;
         this._formatChartData(coverageIps, 'coverageByIpChart', this.coverage_by_number_of_ipsOptions);
-        // let formatter = new this.googleVis.NumberFormat({
-        //   prefix: '$',
-        //   fractionDigits: '0'
-        // });
-        // formatter.format(coverageCash, 1);
         this._formatChartData(coverageCash, 'coverageCashChart', this.coverage_by_cash_transferOptions);
       }
 
