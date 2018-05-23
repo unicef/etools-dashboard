@@ -168,25 +168,24 @@
             return Dexie.Promise.all([
               queryResult.count(),
               queryResult.clone().toArray(),
-              ...(this.presetResults.map(res => res.count())),
               ...(this.presetResults.map(res => res.toArray()))
             ]);
-          }).then((countAndResult) => {
+          }).then(countAndResult => {
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
             // check if preset filters were populated already
             if (!this.presetsLoaded) {
               for (let i = 2; i < (this.presetResults.length + 2); i++) {
-                this.set(`presetFilters.${i-2}.total`, countAndResult[i]);
                 this.set(
                   `presetFilters.${i-2}.filteredPartnerships`,
-                  countAndResult[i + this.presetResults.length]
+                  countAndResult[i]
                 );
-                this.set('presetsLoaded', true);
+                this.set(`presetFilters.${i-2}.total`, countAndResult[i].length);
               }
+              this.set('presetsLoaded', true);
             }
             this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
-          }).catch((err) => console.error('Error querying partnerships-dash: ', err));
+          }).catch(err => console.error('Error querying partnerships-dash: ', err));
       }
     }
 
