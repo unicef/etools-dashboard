@@ -820,12 +820,6 @@
         return ['_init(active)'];
       }
 
-      ready() {
-        super.ready();
-        log(baseSite);
-      }
-    
-
       _init(active) {
         if (active) {
           if (isEmpty(this.chartData)) {
