@@ -18,7 +18,7 @@
       EtoolsDashboard.Mixins.ReduxStore,
       EtoolsDashboard.Mixins.Endpoints,
       EtoolsAjaxRequestMixin
-    )(Polymer.Element)
+    )(Polymer.Element);
 
     /**
    * `trips-data` Description
@@ -47,8 +47,8 @@
           user: {
             type: Object,
             observer: '_setEndpoint'
-          },
-        }
+          }
+        };
       }
 
       static get actions() {
@@ -59,12 +59,16 @@
 							trips: trips
 						};
 					}
-        }
+        };
       }
 
-      _setEndpoint() {
-        this.set('reqOptions.endpoint', this.getEndpoint('trips', {id: this.user.id}));
-        this.sendRequest(this.reqOptions).then(response => this._handleResponse(response))
+      _setEndpoint(user) {
+        if (!user) {
+          return;
+        }
+        debugger;
+        this.set('reqOptions.endpoint', this.getEndpoint('trips', { id: user.id }));
+        this.sendRequest(this.reqOptions).then((response) => this._handleResponse(response));
       }
 
       _handleResponse(response) {
@@ -75,8 +79,8 @@
       }
 
       _prepareTripsData(data) {
-        return data.map(trip => {
-          return pick(trip, ['id','start_date','purpose','reference_number','supervisor_name']);
+        return data.map((trip) => {
+          return pick(trip, ['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']);
         });
       }
     }
