@@ -349,6 +349,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.set('hideExport', !(tab === 'hact' || tab === 'partnerships'));
       }
 
+      _goToAddTrip() {
+        window.location.href = '/t2f/edit-travel/-1';
+      }
+
       _export(event) {
         var endpoint = event.model.item.endpoint;
         window.open(
