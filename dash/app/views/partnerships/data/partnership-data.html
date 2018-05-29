@@ -101,30 +101,6 @@
               {total: 0, id: '8', title: 'IPs with active PD without a signed PCA', status: '', filteredPartnerships: []}
             ]
           },
-          presetFiltersPredicates: {
-            type: Object,
-            value: (partner) => {
-              let eq = (stts) => stts === partner.status
-              return {
-                passedStart: partner => {
-                  ["signed", "draft"].some(eq) 
-                  && (Date.parse(partner.start) < new Date().getTime()) 
-                  && !partner.frs_total_frs_amt
-                },
-                notEqual: partner => {
-                  ["active", "ended", "suspended"].some(eq) 
-                    && (partner.unicef_cash === partner.frs_total_frs_amt)
-                    },
-                noRecetVisit: partner => ["active", "ended"].some(eq) && (parseInt(partner.days_last_pd) < 180),
-                expiring: partner => ["active", "suspended"].some(eq) && (Date.parse(partner.end) < (new Date().getTime() + 2592000000)),
-                lessThanPlanned: partner => (partner.status === "ended") && (partner.disbursement < partner.frs_total_frs_amt),
-                missingReview: partner => partner.status === "ended" && !partner.has_final_partnership_review,
-                // the following filters will be updated when specs are finalized
-                newPca: partner => true,
-                noSignedPca: partner => true
-              }
-            }
-          }
         };
       }
 
@@ -139,24 +115,24 @@
       createPresetFilters(results) {
         return [
           results.clone().filter(
-            (partner) => (partner.status === 'signed')
+            partner => (partner.status === 'signed')
               && (Date.parse(partner.start) < new Date().getTime())
               && !partner.frs_total_frs_amt
           ),
           results.clone().filter(
-            (partner) => (partner.status === 'active' || partner.status === 'ended' || partner.status === 'suspended')
+            partner => (partner.status === 'active' || partner.status === 'ended' || partner.status === 'suspended')
               && (partner.unicef_cash !== partner.frs_total_frs_amt)
           ),
           results.clone().filter(
-            (partner) => (partner.status === 'active' || partner.status === 'ended')
+            partner => (partner.status === 'active' || partner.status === 'ended')
               && (parseInt(partner.days_last_pd) < 180)
           ),
           results.clone().filter(
-            (partner) => (partner.status === 'active' || partner.status === 'suspended')
+            partner => (partner.status === 'active' || partner.status === 'suspended')
               && (Date.parse(partner.end) < (new Date().getTime() + 2592000000))
           ),
           results.clone().filter(
-            (partner) => (partner.status === 'ended')
+            partner => (partner.status === 'ended')
               && (partner.disbursement < partner.frs_total_frs_amt)
           ),
           results.clone().filter(
