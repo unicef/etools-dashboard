@@ -802,6 +802,15 @@
         this.set('endAfterDate', params.endAfter ? params.endAfter : '');
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
+        // the following should be removed when the final two preset filters are enabled
+        if (this.shadowRoot.querySelectorAll('.alert-row').length > 0) {
+          this.shadowRoot.querySelectorAll('.alert-row')[6].style.color = 'rgb(144,144,144)'
+          this.shadowRoot.querySelectorAll('.alert-row')[6].children[1].children[0].innerText = "-"
+          this.shadowRoot.querySelectorAll('.alert-row')[6].children[1].children[1].classList.remove('filter-name')
+          this.shadowRoot.querySelectorAll('.alert-row')[7].style.color = 'rgb(144,144,144)'
+          this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[0].innerText = "-"
+          this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[1].classList.remove('filter-name')
+        }
       }
 
       _initListFilters(sectors, statuses, offices) {
@@ -1053,10 +1062,10 @@
 
         // reset styling for all filter buttons
         this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(
-          (b) => b.style.opacity = '0'
+          b => b.style.opacity = '0'
         );
         this.shadowRoot.querySelectorAll('.filter-name').forEach(
-          (r) => r.style.color = ''
+          r => r.style.color = ''
         );
 
         if (this.currentFilter === clickedFilter.id) {
