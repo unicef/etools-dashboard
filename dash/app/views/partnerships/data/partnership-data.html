@@ -136,7 +136,7 @@
               && (partner.disbursement < partner.frs_total_frs_amt)
           ),
           results.clone().filter(
-            partner => (partner.status === "ended")
+            partner => (partner.status === 'ended')
               && !partner.has_final_partnership_review
               && parseInt(partner.disbursement_usd) >= 100000
           ),
