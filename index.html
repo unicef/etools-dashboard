@@ -64,7 +64,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     'use strict';
     var UserVoice = window.UserVoice || [];
-    (function () {
+    (function() {
       let uv = document.createElement('script');
       uv.type = 'text/javascript';
       uv.async = true;
@@ -96,10 +96,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     // Load and register pre-caching Service Worker
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
+      window.addEventListener('load', function() {
         navigator.serviceWorker.register('service-worker.js', {
-          scope: Polymer.rootPath,
-        }, err => console.log('Service Worker registration failed: ', err));
+          scope: Polymer.rootPath
+        }, (err) => console.log('Service Worker registration failed: ', err));
       });
     }
     (function() {
