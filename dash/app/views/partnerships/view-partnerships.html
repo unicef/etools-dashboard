@@ -1106,7 +1106,7 @@
               break;
             case '2':
               return ['active', 'ended', 'suspended'].some(eq)
-                && (row.unicef_cash === row.frs_total_frs_amt);
+                && (row.unicef_cash !== row.frs_total_frs_amt);
               break;
             case '3':
               return ['active', 'ended'].some(eq) && (parseInt(row.days_last_pd) < 180);
@@ -1119,7 +1119,9 @@
               return row.status === 'ended' && (row.disbursement < row.frs_total_frs_amt);
               break;
             case '6':
-              return row.status === 'ended' && !row.has_final_partnership_review;
+              return row.status === 'ended'
+                && !row.has_final_partnership_review
+                && parseInt(row.disbursement_usd) >= 100000;
               break;
             case '7':
               return true;
