@@ -149,8 +149,12 @@
 
     // change event for a etoold-datepicker filter
     _filterDateHasChanged(event) {
-      let filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
-      this.set(filterPath, event.detail.jsonDate);
+      if (!event.detail.jsonDate) {
+        return;
+      }
+      let filterPath = event.target.getAttribute('data-filter-path');
+      let selectedDate = new Date(event.detail.jsonDate);
+      this.set(filterPath, moment(selectedDate).format('YYYY-MM-DD'));
     }
 
     _validateFilterSelectedValue(value) {
