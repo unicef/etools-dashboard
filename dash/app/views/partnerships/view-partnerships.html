@@ -571,14 +571,14 @@
                   [[currencyFormat(row.frs_total_frs_amt)]]
                 </span>
                 <span class="col-data col-4 right-align green-col">
-                  <iron-icon hidden="[[_checkSigned(row.status, row.fr_currencies_are_consistent)]]"
+                  <iron-icon hidden="[[!row.multi_curr_flag]]"
                              icon="dash-custom-icons:not-equal"
                              class="blue-icon">
                   </iron-icon>
-                  <paper-tooltip hidden="[[_checkSigned(row.status, row.fr_currencies_are_consistent)]]">
-                    Disbursement currency does not match FR currency
+                  <paper-tooltip hidden="[[!row.multi_curr_flag]]">
+                    There are multiple transaction currencies in VISION
                   </paper-tooltip>
-                  <span hidden="[[!_checkSigned(row.status, row.fr_currencies_are_consistent)]]">[[_displayDisbursement(row.disbursement)]]</span>
+                  [[_displayDisbursement(row.disbursement, row.multi_curr_flag)]]
                 </span>
               </div>
               <div class="col-2 layout horizontal justify-end">
@@ -1028,7 +1028,10 @@
             : `${Number(perc).toFixed(0)}%`;
       }
 
-      _displayDisbursement(val) {
+      _displayDisbursement(val, multiCurrFlag) {
+        if (multiCurrFlag) {
+            return ""
+          }
         let nonZero = this.displayNonZero(val);
         return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
       }
