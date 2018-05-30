@@ -34,12 +34,17 @@
       return null;
     }
 
+    _getDateWithoutTimezoneOffset(date) {
+      let userTimezoneOffset = date.getTimezoneOffset() * 60000;
+      return new Date(date.getTime() + userTimezoneOffset);
+    }
+
     /*
      * Prepare date from string
      */
     prepareDate(dateString) {
       let date = this._convertDate(dateString);
-      return date || new Date();
+      return date ? this._getDateWithoutTimezoneOffset(date) : new Date();
     }
 
     /*

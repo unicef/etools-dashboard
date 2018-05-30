@@ -8,7 +8,14 @@
 <dom-module id="partnership-data">
 
   <script>
-    const PartnershipDataMixin = compose(
+    /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.DataElement
+     * @appliesMixin EtoolsDashboard.Mixins.Date
+     * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+     */
+     const PartnershipDataMixin = compose(
       EtoolsDashboard.Mixins.DataElement,
       EtoolsDashboard.Mixins.Date,
       EtoolsDashboard.Mixins.EventHelper
@@ -19,6 +26,7 @@
      * @summary ShortDescription.
      * @customElement
      * @polymer
+     * @appliesMixin PartnershipDataMixin
      * @extends {Polymer.Element}
      */
     class PartnershipData extends PartnershipDataMixin {
@@ -70,7 +78,7 @@
           },
           predicates: {
             type: Object,
-            value: () => {
+            value: function() {
               return {
                 searchString: (qs, partner)=> qs.length ? _.includes(partner.partner_name.toLowerCase(), qs.toLowerCase()): true,
                 sectors: (sectors, partner)=> sectors.length ? !!_.intersection(sectors, [_.trim(partner.sections)]).length : true,
@@ -181,7 +189,7 @@
                   `presetFilters.${i-2}.filteredPartnerships`,
                   countAndResult[i]
                 );
-                this.set(`presetFilters.${i-2}.total`, countAndResult[i].length)
+                this.set(`presetFilters.${i-2}.total`, countAndResult[i].length);
               }
               this.set('presetsLoaded', true);
             }
