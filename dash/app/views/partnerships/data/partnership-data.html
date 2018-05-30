@@ -8,7 +8,14 @@
 <dom-module id="partnership-data">
 
   <script>
-    const PartnershipDataMixin = compose(
+    /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.DataElement
+     * @appliesMixin EtoolsDashboard.Mixins.Date
+     * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+     */
+     const PartnershipDataMixin = compose(
       EtoolsDashboard.Mixins.DataElement,
       EtoolsDashboard.Mixins.Date,
       EtoolsDashboard.Mixins.EventHelper
@@ -19,6 +26,7 @@
      * @summary ShortDescription.
      * @customElement
      * @polymer
+     * @appliesMixin PartnershipDataMixin
      * @extends {Polymer.Element}
      */
     class PartnershipData extends PartnershipDataMixin {
@@ -70,7 +78,7 @@
           },
           predicates: {
             type: Object,
-            value: () => {
+            value: function() {
               return {
                 searchString: (qs, partner)=> qs.length ? _.includes(partner.partner_name.toLowerCase(), qs.toLowerCase()): true,
                 sectors: (sectors, partner)=> sectors.length ? !!_.intersection(sectors, [_.trim(partner.sections)]).length : true,
@@ -91,16 +99,16 @@
             type: Array,
             notify: true,
             value: [
-              { total: 0, id: '1', title: 'PD/SSFA with passed start date and no FR was added', status: '(signed)', filteredPartnerships: [] },
-              { total: 0, id: '2', title: 'PD/SSFA with planned amount not equal to FR amount', status: '(active, ended, suspended)', filteredPartnerships: [] },
-              { total: 0, id: '3', title: 'PD with no recent programmatic visit', status: '(active, ended)', filteredPartnerships: [] },
-              { total: 0, id: '4', title: 'PD/SSFA expiring in the next 30 days', status: '(active, suspended)', filteredPartnerships: [] },
-              { total: 0, id: '5', title: 'ended PD/SSFA with disbursement amount less than FR planned amount', status: '(ended)', filteredPartnerships: [] },
-              { total: 0, id: '6', title: 'ended PD/SSFA with missing Final Partnership Review', status: '(ended)', filteredPartnerships: [] },
-              { total: 0, id: '7', title: 'IPs requiring new PCA in the coming CP', status: '', filteredPartnerships: [] },
-              { total: 0, id: '8', title: 'IPs with active PD without a signed PCA', status: '', filteredPartnerships: [] }
+              {total: 0, id: '1', title: 'PD/SSFA with passed start date and no FR was added', status: '(signed)', filteredPartnerships: []},
+              {total: 0, id: '2', title: 'PD/SSFA with planned amount not equal to FR amount', status: '(active, ended, suspended)', filteredPartnerships: []},
+              {total: 0, id: '3', title: 'PD with no recent programmatic visit', status: '(active, ended)', filteredPartnerships: []},
+              {total: 0, id: '4', title: 'PD/SSFA expiring in the next 30 days', status: '(active, suspended)', filteredPartnerships: []},
+              {total: 0, id: '5', title: 'PD/SSFA with  actual disbursement amount less than FR planned amount', status: '(ended)', filteredPartnerships: []},
+              {total: 0, id: '6', title: 'PD/SSFA with missing Final Partnership Review', status: '(ended)', filteredPartnerships: []},
+              {total: 0, id: '7', title: 'IPs requiring new PCA in the coming CP', status: '', filteredPartnerships: []},
+              {total: 0, id: '8', title: 'IPs with active PD without a signed PCA', status: '', filteredPartnerships: []}
             ]
-          }
+          },
         };
       }
 
@@ -115,33 +123,34 @@
       createPresetFilters(results) {
         return [
           results.clone().filter(
-            (partner) => (partner.status === 'signed')
+            partner => (partner.status === 'signed')
               && (Date.parse(partner.start) < new Date().getTime())
               && !partner.frs_total_frs_amt
           ),
           results.clone().filter(
-            (partner) => (partner.status === 'active' || partner.status === 'ended' || partner.status === 'suspended')
-              && (partner.unicef_cash === partner.frs_total_frs_amt)
+            partner => (partner.status === 'active' || partner.status === 'ended' || partner.status === 'suspended')
+              && (partner.unicef_cash !== partner.frs_total_frs_amt)
           ),
           results.clone().filter(
-            (partner) => (partner.status === 'active' || partner.status === 'ended')
-              && (parseInt(partner.days_last_pd) < 180)
+            partner => (partner.status === 'active' || partner.status === 'ended')
+              && (parseInt(partner.days_last_pv) > 180)
           ),
           results.clone().filter(
-            (partner) => (partner.status === 'active' || partner.status === 'suspended')
+            partner => (partner.status === 'active' || partner.status === 'suspended')
               && (Date.parse(partner.end) < (new Date().getTime() + 2592000000))
           ),
           results.clone().filter(
-            (partner) => (partner.status === 'ended')
+            partner => (partner.status === 'ended')
               && (partner.disbursement < partner.frs_total_frs_amt)
           ),
           results.clone().filter(
-            (partner) => partner.status === 'ended'
+            partner => (partner.status === 'ended')
               && !partner.has_final_partnership_review
+              && parseInt(partner.disbursement_usd) >= 100000
           ),
           // the following filters will be updated when specs are finalized
-          results.clone().filter((partner) => true),
-          results.clone().filter((partner) => true)
+          // results.clone().filter(partner => false),
+          // results.clone().filter(partner => false)
         ];
       }
 
