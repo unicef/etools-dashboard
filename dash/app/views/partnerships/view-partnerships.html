@@ -5,7 +5,6 @@
 <link rel="import" href="../../styles/list-styles.html">
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../../styles/grid-layout-styles.html">
 <link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
 
@@ -45,7 +44,7 @@
 
 <dom-module id="view-partnerships">
   <template>
-    <style include="shared-styles grid-layout-styles iron-flex iron-flex-layout page-layout-styles paper-material-styles list-styles">
+    <style include="shared-styles grid-layout-styles iron-flex page-layout-styles paper-material-styles list-styles">
       .no-header-line {
         --header-bottom-line: none;
       }
@@ -1109,7 +1108,7 @@
                 && (row.unicef_cash !== row.frs_total_frs_amt);
               break;
             case '3':
-              return ['active', 'ended'].some(eq) && (parseInt(row.days_last_pd) < 180);
+              return ['active', 'ended'].some(eq) && (parseInt(row.days_last_pv) > 180);
               break;
             case '4':
               return ['active', 'suspended'].some(eq)

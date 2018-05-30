@@ -125,7 +125,7 @@
           ),
           results.clone().filter(
             partner => (partner.status === 'active' || partner.status === 'ended')
-              && (parseInt(partner.days_last_pd) < 180)
+              && (parseInt(partner.days_last_pv) > 180)
           ),
           results.clone().filter(
             partner => (partner.status === 'active' || partner.status === 'suspended')
