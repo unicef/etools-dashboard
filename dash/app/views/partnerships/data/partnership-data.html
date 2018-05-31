@@ -138,6 +138,7 @@
           results.clone().filter(
             partner => (partner.status === 'active' || partner.status === 'suspended')
               && (Date.parse(partner.end) < (new Date().getTime() + 2592000000))
+              && (Date.parse(partner.end) > new Date().getTime())
           ),
           results.clone().filter(
             partner => (partner.status === 'ended')
