@@ -523,8 +523,8 @@
                 </span>
               </span>
               <span class="col-data col-2 date">
-                [[prettyDate(row.start)]]
-                <br> [[prettyDate(row.end)]]
+                [[prettyDateWithoutOffset(row.start)]]
+                <br> [[prettyDateWithoutOffset(row.end)]]
               </span>
             </div>
             <div class="col-7 layout horizontal">
@@ -571,14 +571,14 @@
                   [[currencyFormat(row.frs_total_frs_amt)]]
                 </span>
                 <span class="col-data col-4 right-align green-col">
-                  <iron-icon hidden="[[_checkSigned(row.status, row.fr_currencies_are_consistent)]]"
+                  <iron-icon hidden="[[!row.multi_curr_flag]]"
                              icon="dash-custom-icons:not-equal"
                              class="blue-icon">
                   </iron-icon>
-                  <paper-tooltip hidden="[[_checkSigned(row.status, row.fr_currencies_are_consistent)]]">
-                    Disbursement currency does not match FR currency
+                  <paper-tooltip hidden="[[!row.multi_curr_flag]]">
+                    There are multiple transaction currencies in VISION
                   </paper-tooltip>
-                  <span hidden="[[!_checkSigned(row.status, row.fr_currencies_are_consistent)]]">[[_displayDisbursement(row.disbursement)]]</span>
+                  [[_displayDisbursement(row.disbursement, row.multi_curr_flag)]]
                 </span>
               </div>
               <div class="col-2 layout horizontal justify-end">
@@ -803,12 +803,12 @@
         this._updateSelectedFiltersValues();
         // the following should be removed when the final two preset filters are enabled
         if (this.shadowRoot.querySelectorAll('.alert-row').length > 0) {
-          this.shadowRoot.querySelectorAll('.alert-row')[6].style.color = 'rgb(144,144,144)'
-          this.shadowRoot.querySelectorAll('.alert-row')[6].children[1].children[0].innerText = "-"
-          this.shadowRoot.querySelectorAll('.alert-row')[6].children[1].children[1].classList.remove('filter-name')
-          this.shadowRoot.querySelectorAll('.alert-row')[7].style.color = 'rgb(144,144,144)'
-          this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[0].innerText = "-"
-          this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[1].classList.remove('filter-name')
+          this.shadowRoot.querySelectorAll('.alert-row')[6].style.color = 'rgb(144,144,144)';
+          this.shadowRoot.querySelectorAll('.alert-row')[6].children[1].children[0].innerText = '-';
+          this.shadowRoot.querySelectorAll('.alert-row')[6].children[1].children[1].classList.remove('filter-name');
+          this.shadowRoot.querySelectorAll('.alert-row')[7].style.color = 'rgb(144,144,144)';
+          this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[0].innerText = '-';
+          this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[1].classList.remove('filter-name');
         }
       }
 
@@ -973,11 +973,6 @@
         });
       }
 
-      _notifyDateChanged(event) {
-        this._filterDateHasChanged(event);
-        this._updateSelectedFiltersValues();
-      }
-
       _requiredDataLoaded(event) {
         event.stopImmediatePropagation();
         const listDataPath = event.target.getAttribute('list-data-path');
@@ -1028,7 +1023,10 @@
             : `${Number(perc).toFixed(0)}%`;
       }
 
-      _displayDisbursement(val) {
+      _displayDisbursement(val, multiCurrFlag) {
+        if (multiCurrFlag) {
+            return '';
+          }
         let nonZero = this.displayNonZero(val);
         return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
       }
@@ -1048,7 +1046,7 @@
       }
 
       _eitherTrue(flag1, flag2) {
-        return flag1 || flag2 ? true : false
+        return flag1 || flag2 ? true : false;
       }
 
       _showPresetFilter(event) {
@@ -1061,10 +1059,10 @@
 
         // reset styling for all filter buttons
         this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(
-          b => b.style.opacity = '0'
+          (b) => b.style.opacity = '0'
         );
         this.shadowRoot.querySelectorAll('.filter-name').forEach(
-          r => r.style.color = ''
+          (r) => r.style.color = ''
         );
 
         if (this.currentFilter === clickedFilter.id) {

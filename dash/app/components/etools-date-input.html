@@ -34,10 +34,10 @@
       <span slot="prefix">
         <iron-icon icon="date-range" hidden$="[[!readonly]]"></iron-icon>
         <etools-datepicker-button id="datePickerButton"
-                                  format="[[format]]"
+                                  format="YYYY-MM-DD"
                                   pretty-date="{{value}}"
                                   json-date="{{jsonValue}}"
-                                  date="[[prepareDate(value)]]"
+                                  date="[[prepareDatepickerDate(value)]]"
                                   is-disabled$="[[_disabledDatepicker(readonly, disabled)]]"
                                   hidden$="[[readonly]]"
                                   no-init="[[noInit]]"

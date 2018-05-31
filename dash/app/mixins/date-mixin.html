@@ -18,22 +18,42 @@
      */
      prettyDate(dateString, format) {
       let date = this._convertDate(dateString);
-      return (!date) ? '' : moment(date).format(format ? format : 'D MMM YYYY');
+      return (!date) ? '' : this._utcDate(date, format);
     }
-    // Comented because it's not yet clear wether we should convert dates or not
-    // utcPrettyDate(dateString, format) {
-    //   let date = this._convertDate(dateString);
-    //   return (!date) ? '' : moment.utc(date).format(format ? format : 'D MMM YYYY');
-    // }
 
-    _convertDate(dateString) {
+    prettyDateWithoutOffset(dateString, format) {
+      let date = this.prepareDate(dateString);
+      return (!date) ? '' : this._utcDate(date, format);
+    }
+
+     _utcDate(date, format) {
+      return (!date) ? '' : moment.utc(date).format(format ? format : 'D MMM YYYY');
+    }
+
+
+     _convertDate(dateString, noZTimezoneOffset) {
       if (typeof dateString === 'string' && dateString !== '') {
+        dateString = (dateString.indexOf('T') === -1) ? (dateString + 'T00:00:00') : dateString;
+        /**
+         * `Z` (zero time offset) will ensure `new Date` will create the date in UTC and then it will apply local timezone
+         * and will have the same result in all timezones (for the UTC date).
+         * Example:
+         *  d = new Date('2018-04-25T00:00:00Z');
+         *  d.toString() == "Wed Apr 25 2018 03:00:00 GMT+0300 (EEST)"
+         *  d.toGMTString() == "Wed, 25 Apr 2018 00:00:00 GMT"
+         * @type {string}
+         */
+        dateString += (noZTimezoneOffset || dateString.indexOf('Z') >= 0) ? '' : 'Z';
         let date = new Date(dateString);
-        return this.isValidDate(date) ? date : null;
+        let isValid = this.isValidDate(date);
+        if (!isValid) {
+          console.warn('Date conversion unsuccessful: ' + dateString);
+        }
+        return isValid ? date : null;
       }
       return null;
     }
-    
+  
     _getDateWithoutTimezoneOffset(date) {
       let userTimezoneOffset = date.getTimezoneOffset() * 60000;
       return new Date(date.getTime() + userTimezoneOffset);
@@ -45,6 +65,14 @@
     prepareDate(dateString) {
       let date = this._convertDate(dateString);
       return date ? this._getDateWithoutTimezoneOffset(date) : new Date();
+    }
+
+    prepareDatepickerDate(dateString) {
+      let date = this._convertDate(dateString);
+      if (!date) {
+        return new Date();
+      }
+      return this._getDateWithoutTimezoneOffset(date);
     }
 
     /*
