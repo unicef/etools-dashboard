@@ -21,6 +21,11 @@
       return (!date) ? '' : this._utcDate(date, format);
     }
 
+    prettyDateWithoutOffset(dateString, format) {
+      let date = this.prepareDate(dateString);
+      return (!date) ? '' : this._utcDate(date, format);
+    }
+
      _utcDate(date, format) {
       return (!date) ? '' : moment.utc(date).format(format ? format : 'D MMM YYYY');
     }

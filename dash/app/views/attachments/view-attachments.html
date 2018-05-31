@@ -184,7 +184,7 @@
               </span>
             </div>
             <div class="col-3 col">
-              <a href$="[[_getDownloadUrl(item.file_link)]]"
+              <a href$="[[item.file_link]]"
                  target="_blank"
                  class="col-data">[[item.filename]]</a>
             </div>
@@ -412,10 +412,6 @@
           return res;
         }
         return [];
-      }
-
-      _getDownloadUrl(link) {
-        return `${this.baseSite}${link}`;
       }
 
     }
