@@ -1,0 +1,120 @@
+<script>
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+
+  EtoolsDashboard.Endpoints = {
+    unicefUsers: {
+      url: '/api/v3/users/',
+      exp: 60 * 60 * 1000, // 1h
+      cachingKey: 'unicefUsers'
+    },
+    user: {
+      url: '/users/api/profile/',
+      exp: 30 * 60 * 1000, // 30min
+      cachingKey: 'user'
+    },
+    countryProgrammes: {
+      url: '/api/v2/reports/countryprogramme/',
+      exp: 6 * 60 * 60 * 1000,
+      cachingKey: 'countryProgrammes'
+    },
+    offices: {
+      url: '/api/offices/',
+      exp: 6 * 60 * 60 * 1000,
+      cachingkey: 'offices'
+    },
+    countries: {
+      url: '/api/countries/',
+      exp: 6 * 60 * 60 * 1000, // 6h
+      cachingKey: 'countries'
+    },
+    userCountry: {
+      url: '/api/v2/users/country'
+    },
+    changeCountry: {
+      url: '/users/api/changecountry/'
+    },
+    partners: {
+      url: '/api/v2/partners/hact',
+      exp: 6 * 60 * 60 * 1000, // 6h
+      cacheTableName: 'partners'
+    },
+    partnerDetails: {
+      template: '/api/v2/partners/<%=id%>/'
+    },
+    partnersDropdown: {
+      url: '/api/v2/partners',
+      exp: 6 * 60 * 60 * 1000, // 6h
+      cachingKey: 'partnersDropdown'
+    },
+    static: {
+      url: '/api/v2/dropdowns/static',
+      exp: 6 * 60 * 60 * 1000, // 6h
+      cachingKey: 'static'
+    },
+    sections: {
+      url: '/api/sections',
+      exp: 6 * 60 * 60 * 1000,
+      cachingKey: 'sections'
+    },
+    sectors: {
+      url: '/api/reports/sectors',
+      exp: 6 * 60 * 60 * 1000,
+      cachingKey: 'sectors'
+    },
+    actionPointsByMe: {
+      template: '/api/t2f/action_points/?f_assigned_by=<%=id%>&mf_status=ongoing,open',
+      exp: 6 * 60 * 60 * 1000,
+      cachingKey: 'actionPointsByMe'
+    },
+    actionPointsForMe: {
+      template: '/api/t2f/action_points/?f_person_responsible=<%=id%>&mf_status=ongoing,open',
+      exp: 6 * 60 * 60 * 1000,
+      cachingKey: 'actionPointsForMe'
+    },
+    mapInterventions: {
+      url: '/api/v2/interventions/map'
+    },
+    partnerships: {
+      template: '/api/v2/interventions/dash',
+      exp: 6 * 60 * 60 * 1000,
+      cacheTableName: 'partnerships'
+    },
+    cso_dashboard: {
+      template: '/api/v2/interventions/partnership-dash',
+      exp: 6 * 60 * 60 * 1000, // 6h
+      cacheTableName: 'cso_dashboard'
+    },
+    trips: {
+      template: '/api/t2f/travels/?f_traveler=<%=id%>',
+      exp: 6 * 60 * 60 * 1000,
+      cachingKey: 'trips'
+    },
+    tripsSupervised: {
+      template: '/api/t2f/travels/?f_supervisor=<%=id%>',
+      exp: 6 * 60 * 60 * 1000,
+      cachingKey: 'tripsSupervised'
+    },
+    tripsDashboard: {
+      template: '/api/t2f/travels/dashboard/?'
+    },
+    actionPointsBySection: {
+      template: '/api/t2f/action_points/dashboard/'
+    },
+    actionPointsBySectionOffice: {
+      template: '/api/t2f/action_points/dashboard/?office_id=<%=office%>'
+    },
+    myProfile: {
+      template: '/api/v3/users/profile/'
+    },
+    hactGraphs: {
+      template: '/api/v2/hact/graph/2018/',
+      exp: 6 * 60 * 60 * 1000,
+      cachingKey: 'hactGraphs'
+    },
+    attachments: {
+      template: '/api/v2/attachments/',
+      exp: 6 * 60 * 60 * 1000,
+      cacheTableName: 'attachments'
+    }
+  };
+</script>

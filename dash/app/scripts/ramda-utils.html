@@ -1,0 +1,55 @@
+<link rel="import"
+      href="ramda.html">
+
+<script>
+/* eslint-disable no-unused-vars, no-console, no-undef */
+const {
+    equals,
+    propOr,
+    pick,
+    map,
+    compose,
+    range,
+    keys,
+    contains,
+    applySpec,
+    merge,
+    concat,
+    prop,
+    identity,
+    join,
+    clone,
+    toPairs,
+    filter,
+    head,
+    tail,
+    values,
+    reduce,
+    flatten,
+    intersection,
+    union,
+    mergeAll,
+    assoc,
+    uniq,
+    without,
+    last,
+    isEmpty,
+    reject,
+    over,
+    lensIndex,
+    lensProp,
+    sum,
+    sortBy,
+    path,
+    toUpper } = R;
+
+  function log(...args) {
+    console.log(...args);
+    return args[0];
+  }
+
+  const capitalize = compose(
+      join(''),
+      over(lensIndex(0), toUpper)
+    );
+</script>

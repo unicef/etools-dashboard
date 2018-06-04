@@ -1,0 +1,76 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../../bower_components/etools-ajax/etools-ajax-request-mixin.html"> 
+<link rel="import" href="../../../mixins/event-helper-mixin.html">
+<link rel="import" href="../../../endpoints/endpoints-mixin.html">
+
+<dom-module id="action-pts-by-section-data">
+  <script>
+    'use strict';
+
+    /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+     * @appliesMixin EtoolsDashboard.Mixins.Endpoints
+     * @appliesMixin EtoolsAjaxRequestMixin
+     */
+    const ActionPtsBySectionMixin = compose(
+      EtoolsDashboard.Mixins.EventHelper,
+      EtoolsAjaxRequestMixin,
+      EtoolsDashboard.Mixins.Endpoints
+    )(Polymer.Element)
+
+    /**
+     * @polymer
+     * @customElement
+     * @appliesMixin ActionPtsBySectionMixin
+     */
+    class ActionPtsBySection extends ActionPtsBySectionMixin {
+      static get is() { return 'action-pts-by-section-data' }
+
+      static get properties() {
+        return {
+          reqOptions: {
+            type: Object,
+            value: {
+              endpoint: null,
+              csrf: null
+            }
+          },
+          actionPointsData: {
+            type: Object,
+            readOnly: true,
+            notify: true
+          },
+          filter: {
+            type: Boolean,
+            notify: true,
+            observer: '_filterChanged'
+          }
+        }
+      }
+      
+      _filterChanged(filter) {
+        if (isEmpty(filter)) {
+          this.fireEvent('global-loading', {message: 'Loading chart data...', active: true});
+          this.set('reqOptions.endpoint', this.getEndpoint('actionPointsBySection'));
+        } else {
+          this.fireEvent('global-loading', {message: 'Loading chart data...', active: true});
+          this.set('reqOptions.endpoint', this.getEndpoint('actionPointsBySectionOffice',
+              {
+                office: filter.office.join(',')
+              }
+          ));
+        }
+        this.sendRequest(this.reqOptions).then(response => this._handleResponse(response))
+      }
+
+      _handleResponse(response) {
+        this._setActionPointsData(response);
+        this.fireEvent('global-loading', { loadingSource: 'action-pts-by-section-data' });
+      }
+    }
+
+    window.customElements.define(ActionPtsBySection.is, ActionPtsBySection);
+  </script>
+</dom-module>

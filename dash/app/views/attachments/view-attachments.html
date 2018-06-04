@@ -1,0 +1,421 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../bower_components/app-route/app-route.html">
+
+<link rel="import" href="../../../../bower_components/etools-dropdown/etools-dropdown-multi.html">
+<link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="data/attachments-data.html">
+
+<link rel="import" href="../../styles/shared-styles.html">
+<link rel="import" href="../../styles/list-styles.html">
+<link rel="import" href="../../styles/grid-layout-styles.html">
+<link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
+<link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../components/data-table/data-table-column.html">
+<link rel="import" href="../../components/data-table/data-table-header.html">
+<link rel="import" href="../../components/data-table/data-table-row.html">
+<link rel="import" href="../../components/data-table/data-table-footer.html">
+
+<link rel="import" href="../../config/config.html">
+
+<link rel="import" href="../../mixins/list-filters-mixin.html">
+<link rel="import" href="../../mixins/dropdown-mixin.html">
+<link rel="import" href="../../mixins/date-mixin.html">
+<link rel="import" href="../../mixins/common-general-mixin.html">
+<link rel="import" href="../../mixins/pagination-with-filters-mixin.html">
+<link rel="import" href="../../mixins/redux-store-mixin.html">
+
+
+<link rel="import" href="../../../../bower_components/etools-datepicker/etools-datepicker-button.html">
+<link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<!-- <link rel="import" href="dashboard-data/attachments-data.html"> -->
+
+<dom-module id="view-attachments">
+  <template>
+    <style include="shared-styles grid-layout-styles page-layout-styles paper-material-styles list-styles">
+      .wrap-controls paper-input {
+        min-width: 280px;
+      }
+  
+      .custom-width {
+        width: 176px;
+      }
+      
+      .wrap-controls {
+        padding-left: 24px;
+      }
+    </style>
+  
+    <app-route route="{{route}}"
+               pattern="/dash/attachments"
+               active="{{active}}"
+               query-params="{{queryParams}}"></app-route>
+  
+    <attachments-data id="attachments"
+                        filtered-total="{{filteredTotal}}"
+                        filtered-attachments="{{filteredAttachments}}"
+                        fire-data-loaded
+                        on-attachments-loaded="_attachmentsLoaded"></attachments-data>
+  
+    <div class="paper-material list-panel listControls"
+         elevation="1">
+      <div class="wrap-controls">
+        <paper-input type="search"
+                     autocomplete="off"
+                     value="{{qs}}"
+                     placeholder="Search by Partner or Vendor #"
+                     always-float-label>
+          <iron-icon icon="search"
+                     slot="prefix"></iron-icon>
+        </paper-input>
+        <template is="dom-repeat"
+                  items="[[selectedFilters]]"
+                  as="filter">
+          <!-- dropdown filters  -->
+          <template is="dom-if"
+                    if="[[filterTypeIs('esmm', filter.type)]]">
+            <div class="filter esmm">
+              <etools-dropdown-multi label="[[filter.filterName]]"
+                                     placeholder="&#8212;"
+                                     disabled$="[[!filter.selectionOptions.length]]"
+                                     options="[[filter.selectionOptions]]"
+                                     option-value="[[filter.optionValue]]"
+                                     option-label="[[filter.optionLabel]]"
+                                     selected-values="[[filter.alreadySelected]]"
+                                     trigger-value-change-event
+                                     on-etools-selected-items-changed="esmmValueChanged"
+                                     data-filter-path$="[[filter.path]]">
+              </etools-dropdown-multi>
+              <paper-icon-button suffix
+                                 class="remove-field remove"
+                                 icon="cancel"
+                                 on-tap="removeFilter"
+                                 data-filter-name$="[[filter.filterName]]"
+                                 data-reset-path$="[[filter.path]]">
+              </paper-icon-button>
+            </div>
+          </template>
+        </template>
+      </div>
+      <div class="fixed-controls">
+        <div class="filters-divider"></div>
+        <paper-menu-button id="filterMenu"
+                           dynamic-align>
+          <paper-button class="button"
+                        slot="dropdown-trigger">
+            <iron-icon icon="filter-list"></iron-icon>
+            add filter
+          </paper-button>
+          <paper-listbox slot="dropdown-content">
+            <template is="dom-repeat"
+                      items="[[availableListFilterOptions]]">
+              <paper-item on-tap="selectFilter">[[item.filterName]]</paper-item>
+            </template>
+          </paper-listbox>
+        </paper-menu-button>
+      </div>
+    </div>
+  
+    <div class="paper-material"
+         id="list"
+         elevation="1">
+      <data-table-header no-collapse>
+        <data-table-column class="col-2 col"
+                           field="partner"
+                           sortable>
+          Partner
+        </data-table-column>
+        <data-table-column class="col-1 col">
+          Vendor #
+        </data-table-column>
+        <data-table-column class="custom-width col"
+                           field="partner_type"
+                           sortable>
+          Partner Type
+        </data-table-column>
+        <data-table-column class="custom-width col"
+                           field="source">
+          Source
+        </data-table-column>
+        <data-table-column class="custom-width col"
+                           sortable
+                           field="file_type">
+          Document Type
+        </data-table-column>
+        <data-table-column class="col-3 col">
+          File Download
+        </data-table-column>
+        <data-table-column class="col-1 col"
+                           sortable
+                           field="created">
+          Date Uploaded
+        </data-table-column>
+      </data-table-header>
+  
+      <template is="dom-repeat"
+                items="[[filteredAttachments]]">
+        <data-table-row no-collapse>
+          <div slot="row-data">
+            <div class="col col-2">
+              <span class="col-data">
+                [[item.partner]]
+                <paper-tooltip fit-to-visible-bounds>[[item.partner]]</paper-tooltip>
+              </span>
+            </div>
+            <div class="col col-1">
+              <span class="col-data">[[item.vendor_number]]</span>
+            </div>
+            <div class="col custom-width">
+              <span class="col-data">[[item.partner_type]]</span>
+            </div>
+            <div class="col custom-width">
+              <span class="col-data">Partnership Management</span>
+            </div>
+            <div class="col custom-width">
+              <span class="col-data">
+                [[item.file_type]]
+                <paper-tooltip fit-to-visible-bounds>[[item.file_type]]</paper-tooltip>
+              </span>
+            </div>
+            <div class="col-3 col">
+              <a href$="[[item.file_link]]"
+                 target="_blank"
+                 class="col-data">[[item.filename]]</a>
+            </div>
+            <div class="col-1 col">
+              <span class="col-data">[[item.created]]</span>
+            </div>
+          </div>
+        </data-table-row>
+      </template>
+      <data-table-footer page-size="[[pageSize]]"
+                         page-number="[[pageNumber]]"
+                         visible-range="{{visibleRange}}"
+                         on-page-size-changed="pageSizeChanged"
+                         filtered-total-results="[[filteredTotal]]"
+                         on-page-number-changed="pageNumberChanged">
+      </data-table-footer>
+    </div>
+  </template>
+  
+  <script>
+    /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
+     * @appliesMixin EtoolsDashboard.Mixins.Dropdown
+     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
+     * @appliesMixin EtoolsDashboard.Mixins.ListFilters
+     * @appliesMixin EtoolsDashboard.Mixins.PaginationWithFilters
+     * @appliesMixin EtoolsDashboard.Mixins.Date
+     */
+    const AttachmentsMixin = compose(
+      EtoolsDashboard.Mixins.ListFilters,
+      EtoolsDashboard.Mixins.Date,
+      EtoolsDashboard.Mixins.CommonGeneral,
+      EtoolsDashboard.Mixins.PaginationWithFilters,
+      EtoolsDashboard.Mixins.ReduxStore,
+      EtoolsDashboard.Mixins.Dropdown
+    )(Polymer.Element);
+    /**
+     * `view-attachments` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @appliesMixin AttachmentsMixin
+     */
+    class ViewAttachments extends AttachmentsMixin {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'view-attachments';
+      }
+    
+      static get observers() {
+        return [
+          '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, requiredDataLoaded)',
+          '_initListFilters(attachmentTypes)',
+          '_init(active, attachmentTypes)'
+        ];
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          filteredAttachments: {
+            type: Array,
+            value: []
+          },
+          filteredTotal: {
+            type: Number
+          },
+          qs: {
+            type: String
+          },
+          attachmentTypes: {
+            type: Array,
+            statePath: 'static.attachment_types'
+          },
+          static: {
+            type: Object,
+            statePath: 'static'
+          },
+          selectedAttachmentTypes: {
+            type: Array,
+            observer: 'filterChanged'
+          },
+          requiredDataLoaded: {
+            type: Boolean,
+            value: false
+          },
+          formattedTypes: {
+            type: Array,
+            value: []
+          },
+          params: {
+            type: Array,
+            value: function() {
+              return [
+                {
+                  qName: 'qs',
+                  propName: 'qs',
+                  xf: identity
+                },
+                {
+                  qName: 'sort',
+                  propName: 'sortOrder',
+                  xf: identity
+                },
+                {
+                  qName: 'sortBy',
+                  propName: 'orderBy',
+                  xf: identity
+                },
+                {
+                  qName: 'type',
+                  propName: 'selectedAttachmentTypes',
+                  xf: compose(join('|'), map(prop('value')))
+                }
+              ];
+            }
+          },
+          route: {
+            type: Object
+          }
+        };
+      }
+
+      _init(active, attachmentTypes) {
+        let params = this.queryParams;
+          if (!active || isEmpty(attachmentTypes) || !attachmentTypes) {
+            return;
+          }
+          if (isEmpty(this.formattedTypes)) {
+            this._formatAttachmentTypes(attachmentTypes);
+          }
+          this.set('initComplete', false);
+          this.set('qs', params.qs || '');
+          this.set('pageNumber', params.page ? parseInt(params.page) : 1);
+          this.set('pageSize', params.size ? parseInt(params.size) : 10);
+          this.set('sortOrder', params.sort || 'desc');
+          this.set('orderBy', params.sortBy || '');
+          this.set('selectedAttachmentTypes', params.type ? this._setSelectedFromCollection(params.type, this.formattedTypes) : []);
+          this.set('initComplete', true);
+          this._updateSelectedFiltersValues();
+      }
+
+      _formatAttachmentTypes(list) {
+        const formattedTypes = union(this.attachmentTypes, this.static.partner_file_types).map((type) => ({
+          label: type,
+          value: type
+        }));
+        this.set('formattedTypes', formattedTypes);
+      }
+
+      _attachmentsLoaded(e) {
+        e.stopImmediatePropagation();
+          this.set('requiredDataLoaded', true);
+      }
+
+      _initListFilters(attachmentTypes) {
+        this.initListFiltersData([
+          {
+            filterName: 'Document Type',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            path: 'selectedAttachmentTypes',
+            selectionOptions: union(this.attachmentTypes, this.static.partner_file_types).map((type) => ({
+              label: type,
+              value: type
+            })),
+            alreadySelected: []
+          }
+        ]);
+      }
+
+      _updateSelectedFiltersValues() {
+        this.updateFiltersDebouncer = Polymer.Debouncer.debounce(
+          this.updateFiltersDebouncer,
+          Polymer.Async.timeOut.after(20), () => {
+            let filtersValues = [
+              {
+                filterName: 'Document Type',
+                selectedValue: map(prop('value'), this.selectedAttachmentTypes)
+              }
+            ];
+            this.updateShownFilters(filtersValues);
+          });
+      }
+
+      _filterDocuments() {
+        const selectedParams = {
+          searchString: this.qs,
+          attachmentType: map(prop('value'), this.selectedAttachmentTypes),
+          orderBy: this.orderBy
+        };
+        const query = merge(reject(isEmpty, selectedParams), {
+          pageNumber: this.pageNumber,
+          pageSize: this.pageSize,
+          order: this.sortOrder
+        });
+        this.$.attachments.query(query);
+      }
+
+      _updateUrl(query, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, requiredDataLoaded) {
+        if (!this.initComplete || !this.requiredDataLoaded) {
+          return;
+        }
+        const currentRoute = this.route.prefix + this.route.path;
+
+        const qs = this.buildQueryString();
+        this.updateAppState(currentRoute, qs, true);
+        if (this.requiredDataLoaded) {
+          this._filterDocuments();
+        }
+      }
+
+      _setSelectedFromCollection(param, collection) {
+        const itemsFromParam = param.split('|');
+        if (!isEmpty(itemsFromParam)) {
+          const res = collection.filter((u) => itemsFromParam.indexOf(u.value) > -1);
+          return res;
+        }
+        return [];
+      }
+
+    }
+
+    window.customElements.define(ViewAttachments.is, ViewAttachments);
+  </script>
+</dom-module>
