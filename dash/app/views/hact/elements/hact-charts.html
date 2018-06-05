@@ -104,10 +104,24 @@
       .viz {
         @apply --assuranceChart;
       }
+
+      iron-icon.warn {
+        margin-right: 16px;
+      }
+
+      h2.warn{
+        color: var(--light-error-color);
+        margin:0;
+      } 
     </style>
   
     <google-chart-loader id="google"></google-chart-loader>
-  
+
+    <div class="layout-horizontal align-center">
+      <iron-icon class="dark warn"
+                 icon="warning"></iron-icon>
+                 <h2 class="warn">This page is still under construction</h2>
+    </div>
     <!--Assurance Activities-->
     <div class="paper-material list-panel hact-paper layout  center-center"
          elevation="1">
