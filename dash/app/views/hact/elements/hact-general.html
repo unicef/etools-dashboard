@@ -275,7 +275,7 @@
             </div>
             <div class="col-5 layout-horizontal">
               <div class="col-4 layout-horizontal group">
-                <span class="col-4 col-data right-side">[[_getGovernmentDisplay(partner,'hact_values.programmatic_visits.planned.total')]]</span>
+                <span class="col-4 col-data right-side">[[partner.hact_values.programmatic_visits.planned.total]]</span>
                 <span class="col-3 col-data right-side">[[partner.hact_min_requirements.programme_visits]]</span>
                 <span class="col-5 col-data right-side">[[partner.hact_values.programmatic_visits.completed.total]]</span>
               </div>
@@ -340,15 +340,6 @@
 
       _checkForValueYesBlank(val) {
         return val ? 'Yes' : '';
-      }
-
-      _getGovernmentDisplay(partner, prop, toCurrency) {
-        const partnerValue = path(prop.split('.'), partner);
-        if (partner.partner_type === 'Government') {
-          return '-';
-        } else {
-          return toCurrency ? this.currencyFormat(partnerValue) : partnerValue;
-        }
       }
 
       _sumSpotCheckRequiredPartner(partner) {
