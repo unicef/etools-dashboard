@@ -270,6 +270,17 @@
         display: inline-flex;
       }
 
+      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        data-table-header {
+          height: 110px;
+          padding-bottom: 0;
+        }
+
+        div.paper-material.listControls {
+          height: 48px;
+        }
+      }
+
     </style>
     <app-route route="{{route}}"
                pattern="/dash/partnerships"
