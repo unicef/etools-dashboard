@@ -45,6 +45,10 @@
 <dom-module id="view-partnerships">
   <template>
     <style include="shared-styles grid-layout-styles iron-flex page-layout-styles paper-material-styles list-styles">
+      html {
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+      }
+      
       .no-header-line {
         --header-bottom-line: none;
       }
@@ -96,6 +100,7 @@
         height: 48px;
         white-space: normal;
         overflow-y: scroll;
+        width: 100%;
       }
 
       div.sections span.pad-top-4 {
