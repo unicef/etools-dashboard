@@ -48,10 +48,6 @@
           text-align: center;
         }
 
-        
-
-        
-
         .right-side {
           text-align: center;
           border-left: 1px solid rgba(0, 0, 0, 0.24);
@@ -62,7 +58,6 @@
           justify-content: center;
           align-items: center;
         }
-
 
         data-table-header data-table-column {
           @apply --layout-start;
@@ -100,11 +95,11 @@
           align-items: center;
         }
 
-        data-table-row div[slot="row-data"] div:nth-of-type(2) span span:not(:last-child) {
+        /* data-table-row div[slot="row-data"] div:nth-of-type(2) span span:not(:last-child) {
           display: flex;
           justify-content: flex-start;
           align-items: center;
-        }
+        } */
 
         data-table-row div[slot="row-data"] div:nth-of-type(2) span.right {
           display: flex;
@@ -114,6 +109,11 @@
 
         data-table-header {
           height: 95px;
+        }
+
+        .ellipsis {
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
      
         @supports (-ms-ime-align:auto) {
@@ -259,7 +259,10 @@
                 <span class="col-6 col-data right padding-right-10">$[[currencyFormat(partner.total_ct_ytd)]]</span>
               </span>
               <span class="col-6 layout-horizontal">
-                <span class="col-5 col-data padded name">[[partner.type_of_assessment]]</span>
+                <span class="col-5 col-data padded name">
+                  [[partner.type_of_assessment]]
+                  <paper-tooltip>[[partner.type_of_assessment]]</paper-tooltip>
+                </span>
                 <span class="col-4 ellipsis col-data">[[partner.rating]]</span>
                 <span class="col-2 col-data padding-right-10">
                   <div>
