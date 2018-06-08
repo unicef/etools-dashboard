@@ -95,12 +95,6 @@
           align-items: center;
         }
 
-        /* data-table-row div[slot="row-data"] div:nth-of-type(2) span span:not(:last-child) {
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-        } */
-
         data-table-row div[slot="row-data"] div:nth-of-type(2) span.right {
           display: flex;
           justify-content: flex-end;
@@ -109,11 +103,6 @@
 
         data-table-header {
           height: 95px;
-        }
-
-        .ellipsis {
-          overflow: hidden;
-          text-overflow: ellipsis;
         }
      
         @supports (-ms-ime-align:auto) {
@@ -263,7 +252,7 @@
                   [[partner.type_of_assessment]]
                   <paper-tooltip>[[partner.type_of_assessment]]</paper-tooltip>
                 </span>
-                <span class="col-4 ellipsis col-data">[[partner.rating]]</span>
+                <span class="col-4 col-data">[[partner.rating]]</span>
                 <span class="col-2 col-data padding-right-10">
                   <div>
                     <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
