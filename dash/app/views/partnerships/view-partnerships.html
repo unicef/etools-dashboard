@@ -92,10 +92,10 @@
       }
   
       div.sections {
-        display: grid;
+        display: flex;
         height: 48px;
         white-space: normal;
-        overflow-y: scroll;
+        overflow-y: auto;
         -ms-overflow-style: -ms-autohiding-scrollbar;
       }
 
@@ -516,17 +516,15 @@
                 </a>
               </span>
               <span class="col-6">
-                <span class="col-data col-5">
-                  <div class="sections">
-                    <span class="pad-top-4">
-                      <template is="dom-repeat"
-                                items="{{commaSplit(row.sections)}}">
-                        [[item]]
-                        <br>
-                      </template>
-                    </span>
-                  </div>
-                </span>
+                <div class="col-data col-5 sections">
+                  <span class="pad-top-4">
+                    <template is="dom-repeat"
+                              items="{{commaSplit(row.sections)}}">
+                      [[item]]
+                      <br>
+                    </template>
+                  </span>
+                </div>
                 <span class="col-data col-4">
                   <template is="dom-repeat"
                             items="{{commaSplit(row.offices_names)}}">
