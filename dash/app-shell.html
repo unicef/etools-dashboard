@@ -89,6 +89,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       paper-menu-button {
         padding: 0;
       }
+
+      app-header {
+        background-color: var(--header-bg-color);
+      }
     </style>
 
     <etools-piwik-analytics page="[[subroute.prefix]]"
@@ -309,6 +313,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       ready() {
         super.ready();
+        this._setBgColor();
       }
 
       _routePageChanged(page) {
@@ -326,6 +331,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this._onPageLoad(page).bind(this),
           this._showPage404.bind(this),
           true);
+      }
+
+      _setBgColor() {
+        // If not production environment, changing header color to red
+        if (!EtoolsDashboard.Config.isProductionServer()) {
+          this.updateStyles({'--header-bg-color': 'var(--nonprod-header-color)'});
+        }
       }
 
       _onPageLoad(page) {
