@@ -353,7 +353,7 @@
       }
 
       _checkPartnershipsData(data) {
-        if ((data && data.length) || !data) {
+        if ((data && data.length) || !data.length) {
           this.set('partnershipsLoaded', true);
         }
       }
