@@ -48,10 +48,6 @@
           text-align: center;
         }
 
-        
-
-        
-
         .right-side {
           text-align: center;
           border-left: 1px solid rgba(0, 0, 0, 0.24);
@@ -62,7 +58,6 @@
           justify-content: center;
           align-items: center;
         }
-
 
         data-table-header data-table-column {
           @apply --layout-start;
@@ -97,12 +92,6 @@
         data-table-row > div[slot="row-data"] > div:nth-of-type(2) > div > span {
           display: flex;
           justify-content: center;
-          align-items: center;
-        }
-
-        data-table-row div[slot="row-data"] div:nth-of-type(2) span span:not(:last-child) {
-          display: flex;
-          justify-content: flex-start;
           align-items: center;
         }
 
@@ -226,7 +215,7 @@
             </div>
             <div class="col-3 layout-horizontal group">
               <span class="col-half right-side"></span>
-              <span class="col-5 right-side">[[_sumSpotCheckRequiredTotals(totals)]]</span>
+              <span class="col-5 right-side">[[totals.planned_engagement_spot_check_required]]</span>
               <span class="col-6 right-side">[[totals.hact_values_spot_checks_completed_total]]</span>
               <span class="col-half right-side"></span>
             </div>
@@ -259,8 +248,11 @@
                 <span class="col-6 col-data right padding-right-10">$[[currencyFormat(partner.total_ct_ytd)]]</span>
               </span>
               <span class="col-6 layout-horizontal">
-                <span class="col-5 col-data padded name">[[partner.type_of_assessment]]</span>
-                <span class="col-4 ellipsis col-data">[[partner.rating]]</span>
+                <span class="col-5 col-data padded name">
+                  [[partner.type_of_assessment]]
+                  <paper-tooltip>[[partner.type_of_assessment]]</paper-tooltip>
+                </span>
+                <span class="col-4 col-data">[[partner.rating]]</span>
                 <span class="col-2 col-data padding-right-10">
                   <div>
                     <iron-icon id="expiring" class="hact-icon" icon="icons:schedule" hidden="[[!partner.flags.expiring_assessment_flag]]"></iron-icon>
@@ -281,7 +273,7 @@
               </div>
               <div class="col-3 layout-horizontal group">
                 <span class="col-half right-side buffer"></span>
-                <span class="col-5 col-data right-side">[[_sumSpotCheckRequiredPartner(partner)]]</span>
+                <span class="col-5 col-data right-side">[[partner.planned_engagement.spot_check_required]]</span>
                 <span class="col-6 col-data right-side">[[partner.hact_values.spot_checks.completed.total]]</span>
                 <span class="col-half right-side buffer"></span>
               </div>
@@ -341,28 +333,6 @@
       _checkForValueYesBlank(val) {
         return val ? 'Yes' : '';
       }
-
-      _sumSpotCheckRequiredPartner(partner) {
-        return (
-          partner.planned_engagement.spot_check_follow_up_q1
-          + partner.planned_engagement.spot_check_follow_up_q2
-          + partner.planned_engagement.spot_check_follow_up_q3
-          + partner.planned_engagement.spot_check_follow_up_q4
-          + partner.hact_min_requirements.spot_checks
-        );
-      }
-    
-      _sumSpotCheckRequiredTotals(totals) {
-        return (
-          totals.planned_engagement_spot_check_follow_up_q1
-          + totals.planned_engagement_spot_check_follow_up_q2
-          + totals.planned_engagement_spot_check_follow_up_q3
-          + totals.planned_engagement_spot_check_follow_up_q4
-          + totals.hact_min_requirements_spot_checks
-        );
-      }
-
-
     }
 
     window.customElements.define(HactGeneral.is, HactGeneral);
