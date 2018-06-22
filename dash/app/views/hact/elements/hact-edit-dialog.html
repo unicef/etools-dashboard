@@ -51,7 +51,7 @@
       }
     </style>
     <etools-dialog id="editPartnersDialog"
-                   size="md"
+                   size="lg"
                    dialog-title="Edit HACT Assurance Plan"
                    ok-btn-text="Save"
                    keep-dialog-open
@@ -66,7 +66,7 @@
   
         <div class="layout-horizontal space-between">
   
-          <div class="layout-vertical col-4">
+          <div class="layout-vertical col-3">
             <div class="heading">Planned Programmatic Visits</div>
             <div class="layout-horizontal space-around">
               <paper-input type="number"
@@ -83,21 +83,29 @@
                            label="Q4"></paper-input>
             </div>
           </div>
+
+          <div class="layout-vertical col-2">
+            <div class="heading">Follow-up Spot Checks</div>
+            <div class="layout-horizontal space-around">
+              <paper-input value="{{editableValues.planned_engagement.spot_check_follow_up}}"
+                            type="number"></paper-input>
+            </div>  
+          </div>
   
           <div class="layout-vertical col-3">
             <div class="heading">Planned Spot Checks</div>
             <div class="layout-horizontal space-around">
               <paper-input type="number"
-                           value="{{editableValues.planned_engagement.spot_check_follow_up_q1}}"
+                           value="{{editableValues.planned_engagement.spot_check_planned_q1}}"
                            label="Q1"></paper-input>
               <paper-input type="number"
-                           value="{{editableValues.planned_engagement.spot_check_follow_up_q2}}"
+                           value="{{editableValues.planned_engagement.spot_check_planned_q2}}"
                            label="Q2"></paper-input>
               <paper-input type="number"
-                           value="{{editableValues.planned_engagement.spot_check_follow_up_q3}}"
+                           value="{{editableValues.planned_engagement.spot_check_planned_q3}}"
                            label="Q3"></paper-input>
               <paper-input type="number"
-                           value="{{editableValues.planned_engagement.spot_check_follow_up_q4}}"
+                           value="{{editableValues.planned_engagement.spot_check_planned_q4}}"
                            label="Q4"></paper-input>
             </div>
           </div>

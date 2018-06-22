@@ -91,10 +91,17 @@
         text-align: right;
       }
   
-      div.sections {
+      div.sections,
+      span.sections {
+        display: flex;
         height: 48px;
         white-space: normal;
-        overflow-y: scroll;
+        overflow-y: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+      }
+
+      div.sections span.pad-top-4 {
+        padding-right: 0;
       }
   
       div.sections>span {
@@ -103,7 +110,6 @@
       }
   
       div div span {
-        height: 48px;
         align-items: center;
       }
   
@@ -265,6 +271,17 @@
         display: inline-flex;
       }
 
+      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        data-table-header {
+          height: 110px;
+          padding-bottom: 0;
+        }
+
+        div.paper-material.listControls {
+          height: 48px;
+        }
+      }
+
     </style>
     <app-route route="{{route}}"
                pattern="/dash/partnerships"
@@ -395,15 +412,15 @@
         <data-table-column class="col-5 no-header-line"
                            group-heading="blank"
                            transparent>
-          <data-table-column class="col-5" sortable>
+          <data-table-column class="col-4" sortable>
             IP Name
             <br>PD/SSFA Ref #
           </data-table-column>
-          <div class="col-5 layout horizontal">
-            <data-table-column class="col-4">
+          <div class="col-6 layout horizontal">
+            <data-table-column class="col-5">
               Section
             </data-table-column>
-            <data-table-column class="col-5">
+            <data-table-column class="col-4">
               Field Office
             </data-table-column>
             <data-table-column class="col-3 status">
@@ -468,7 +485,7 @@
         <data-table-row no-collapse>
           <div slot="row-data">
             <div class="col-5 layout horizontal">
-              <span class="col-data layout-horizontal col-5 ip-pd">
+              <span class="col-data layout-horizontal col-4 ip-pd">
                 <div class="partner-icons-group" hidden="[[!_eitherTrue(row.partner_blocked, row.partner_marked_for_deletion)]]">
                   <div class="blocked-partner-container" hidden="[[!row.partner_blocked]]">
                     <iron-icon class="blocked-partner" icon="block"></iron-icon>
@@ -499,19 +516,17 @@
                     <paper-tooltip fit-to-visible-bounds>[[row.number]]</paper-tooltip>
                 </a>
               </span>
-              <span class="col-5">
-                <span class="col-data col-4">
-                  <div class="sections">
-                    <span>
-                      <template is="dom-repeat"
-                                items="{{commaSplit(row.sections)}}">
-                        [[item]]
-                        <br>
-                      </template>
-                    </span>
-                  </div>
-                </span>
-                <span class="col-data col-5">
+              <span class="col-6">
+                <div class="col-data col-5 sections">
+                  <span class="pad-top-4">
+                    <template is="dom-repeat"
+                              items="{{commaSplit(row.sections)}}">
+                      [[item]]
+                      <br>
+                    </template>
+                  </span>
+                </div>
+                <span class="col-data col-4 sections">
                   <template is="dom-repeat"
                             items="{{commaSplit(row.offices_names)}}">
                     [[item]]

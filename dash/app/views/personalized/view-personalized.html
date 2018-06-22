@@ -86,11 +86,23 @@
         .list-title {
           font-size: 20px;
           font-weight: 500;
-          min-height: 64px;
+        }
+
+        data-table-header.main {
+          border-bottom: none;
         }
 
         data-table-row.wrapper {
           padding-left: 0;
+        }
+
+        .small-text {
+          font-size: 12px;
+          color: var(--secondary-text-color)
+        }
+
+        .right-padded {
+          padding-right: 24px;
         }
       </style>
     </custom-style>
@@ -118,7 +130,7 @@
     <div class="layout horizontal double">
       <!-- TRIPS -------------------------->
       <div class="paper-material list-panel half-paper clear-pad" elevation="1">
-        <data-table-header class="list-title layout horizontal center" no-title no-collapse>
+        <data-table-header class="list-title layout horizontal center main" no-title no-collapse>
           <div>Trips</div>
         </data-table-header>
         <div class="top-content-row tabs-header">
@@ -133,12 +145,17 @@
             </paper-tab>
           </paper-tabs>
         </div>
+        <data-table-header>
+          <div class="col small-text right-padded col-data col-2">Reference<br>Number</div>
+          <div class="flex-2 small-text right-padded col-data">Purpose of Trip</div>
+          <div class="col-2 small-text col-data">Start Date<br>[[_principal(tripsTab)]]</div>
+        </data-table-header>
         <div class="list-content">
           <template is="dom-repeat" items="[[tripsItems]]" as="trip">
             <data-table-row no-collapse>
               <div slot="row-data">
                 <a on-tap="goToPage" href="[[baseSite]]/t2f/edit-travel/[[trip.id]]" app-name="t2f" page="edit-travel"
-                  id="[[trip.id]]" class="col-data col">
+                  id="[[trip.id]]" class="col-data col col-2">
                   [[trip.reference_number]]
                 </a>
                 <span class="description description-size col-data flex-2">
@@ -156,7 +173,7 @@
 
       <!-- ACTION POINTS -------------------------->
       <div class="paper-material list-panel half-paper clear-pad" elevation="1">
-        <data-table-header class="list-title layout horizontal center" no-title no-collapse>
+        <data-table-header class="list-title layout horizontal center main" no-title no-collapse>
           <span>Action Points</span>
         </data-table-header>
         <div class="top-content-row tabs-header">
@@ -171,6 +188,10 @@
             </paper-tab>
           </paper-tabs>
         </div>
+        <data-table-header>
+            <div class="col small-text right-padded col-data col-10">Description<br>Status</div>
+            <div class="col-2 small-text col-data">Due Date<br>[[_principal(actionsTab)]]</div>
+          </data-table-header>
         <div class="list-content">
           <template is="dom-repeat" items="[[actionPointsItems]]" as="action">
             <data-table-row no-collapse>
@@ -223,12 +244,17 @@
 
     <!--MY PARTNERSHIPS-->
     <div class="paper-material list-panel clear-pad" elevation="1">
-      <data-table-header no-title no-collapse class="list-title layout horizontal center">
+      <data-table-header no-title no-collapse class="list-title layout horizontal center main">
         <span>My Partnerships</span>
       </data-table-header>
       <template is="dom-if" if="[[!partnershipsLoaded]]">
         <etools-loading active></etools-loading>
       </template>
+      <data-table-header>
+        <div class="col-data small-text col-2">PD/SSFA Reference Number</div>
+        <div class="col-data small-text flex-3">PD/SSFA Title</div>
+        <div class="col-data small-text col-2">UNICEF Cash Amount</div>
+      </data-table-header>
       <div class="list-content">
         <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden="[[!partnershipsLoaded]]">
           <data-table-row no-collapse>
@@ -353,7 +379,7 @@
       }
 
       _checkPartnershipsData(data) {
-        if ((data && data.length) || !data) {
+        if ((data && data.length) || !data.length) {
           this.set('partnershipsLoaded', true);
         }
       }
@@ -369,6 +395,23 @@
             message: 'Loading data...',
             active: true
           });
+        }
+      }
+
+      _principal(tab) {
+        switch(tab) {
+          case "myTrips":
+            return "Trip Supervisor"
+            break;
+          case "tripsSupervised":
+            return "Traveler"
+            break;
+          case "actionPointsForMe":
+            return "Assigned By"
+            break;
+          case "actionPointsByMe":
+            return "Assigned To"
+            break;
         }
       }
 
