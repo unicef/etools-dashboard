@@ -91,7 +91,8 @@
         text-align: right;
       }
   
-      div.sections {
+      div.sections,
+      span.sections {
         display: flex;
         height: 48px;
         white-space: normal;
@@ -525,7 +526,7 @@
                     </template>
                   </span>
                 </div>
-                <span class="col-data col-4">
+                <span class="col-data col-4 sections">
                   <template is="dom-repeat"
                             items="{{commaSplit(row.offices_names)}}">
                     [[item]]
