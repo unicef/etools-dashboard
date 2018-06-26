@@ -108,10 +108,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         webcomponentsLoaderScript.async = true;
         webcomponentsLoaderScript.src = BASEURL + 'bower_components/webcomponentsjs/webcomponents-loader.js';
         document.head.appendChild(webcomponentsLoaderScript);
-        const ramdaUtils = document.createElement('link');
-        ramdaUtils.rel = 'import';
-        ramdaUtils.href = BASEURL + 'dash/app/scripts/ramda-utils.html';
-        document.head.appendChild(ramdaUtils);
         // Load application shell
         const appShellImport = document.createElement('link');
         appShellImport.rel = 'import';
