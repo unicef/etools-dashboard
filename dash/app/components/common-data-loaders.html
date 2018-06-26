@@ -81,7 +81,7 @@
           setCountryProgrammes(data = []) {
             return {
               type: 'SET_COUNTRY_PROGRAMMES',
-              countryProgrammes: map(pick(['id', 'name']), data)
+              countryProgrammes: map(pick(['id', 'name', 'active', 'special', 'invalid']), data)
             };
           },
 
