@@ -100,6 +100,10 @@
       this.set('availableListFilterOptions', availableOptions);
     }
 
+    _validateFilterSelectedValue(value) {
+      return value && !isEmpty(value);
+    }
+
     // remove already selected filter, also reset filter path value
     removeFilter(event) {
       let filterName = event.target.getAttribute('data-filter-name');
@@ -169,6 +173,7 @@
       if (filters.length) {
         filters.forEach((filter) => {
           // check available filters
+          if (this._validateFilterSelectedValue(filter.selectedValue)) {
             let foundInAvailable = false;
             if (this.availableListFilterOptions instanceof Array && this.availableListFilterOptions.length > 0) {
               for (i = 0; i < this.availableListFilterOptions.length; i++) {
@@ -214,7 +219,7 @@
                 }
               }
             }
-          
+          }
         });
         // refresh available filters and remove those selected
         this._updateAvailableFilterOptions();
