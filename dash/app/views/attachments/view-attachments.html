@@ -34,11 +34,87 @@
 <link rel="import" href="../../../../bower_components/etools-datepicker/etools-datepicker-button.html">
 <link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
 
-<!-- <link rel="import" href="dashboard-data/attachments-data.html"> -->
 
 <dom-module id="view-attachments">
   <template>
     <style include="shared-styles grid-layout-styles page-layout-styles paper-material-styles list-styles">
+      :host {
+        --col: {
+          @apply --layout-horizontal;
+          box-sizing: border-box;
+        };
+        --col-first: {
+          padding-left: 0;
+        };
+        --col-1: {
+          flex: 0 0 8.33333333%;
+          max-width: 8.33333333%;
+        };
+        --col-2: {
+          flex: 0 0 16.66666667%;
+          max-width: 16.66666667%;
+        };
+        --flex-1: {
+          flex: 1;
+        }
+
+      }
+
+      /* Table Columns Start */
+
+      .partner-column {
+        width: 10%;
+        @apply --col;
+        @apply col-first;
+      }
+
+      .vendor-column {
+        @apply --col;
+        @apply --col-1;
+      }
+
+      .pd-column {
+        @apply --col;
+        @apply --col-1;
+      }
+
+      .pca-column {
+        @apply --col;
+        @apply --col-1;
+      }
+
+      .partner-type-column {
+        @apply --col;
+        @apply --col-2;
+      }
+
+      .source-column {
+        @apply --col;
+        width: 144px;
+      }
+
+      .doctype-column {
+        @apply --col;
+        width: 10%;
+      }
+
+      .download-column {
+        @apply --col;
+        @apply --col-2;
+      }
+
+      .created-column {
+        @apply --col;
+        @apply --col-1;
+      }
+
+
+      /* Table Columns End */
+
+      data-table-column:not(:first-child),data-table-row >div > div:not(:first-child) {
+        padding-left: 24px;
+      }
+
       .wrap-controls paper-input {
         min-width: 280px;
       }
@@ -50,6 +126,9 @@
       .wrap-controls {
         padding-left: 24px;
       }
+      
+
+
     </style>
   
     <app-route route="{{route}}"
@@ -126,32 +205,42 @@
          id="list"
          elevation="1">
       <data-table-header no-collapse>
-        <data-table-column class="col-2 col"
+        <data-table-column class="partner-column"
                            field="partner"
                            sortable>
           Partner
         </data-table-column>
-        <data-table-column class="col-1 col">
+        <data-table-column class="vendor-column">
           Vendor #
         </data-table-column>
-        <data-table-column class="custom-width col"
+        <data-table-column field="pd_ssfa_number"
+                           sortable
+                           class="pd-column">
+          PD SSFA #
+        </data-table-column>
+        <data-table-column field="agreement_reference_number"
+                           sortable
+                           class="pca-column">
+          PCA #
+        </data-table-column>
+        <data-table-column class="partner-type-column"
                            field="partner_type"
                            sortable>
           Partner Type
         </data-table-column>
-        <data-table-column class="custom-width col"
+        <data-table-column class="source-column"
                            field="source">
           Source
         </data-table-column>
-        <data-table-column class="custom-width col"
+        <data-table-column class="doctype-column"
                            sortable
                            field="file_type">
           Document Type
         </data-table-column>
-        <data-table-column class="col-3 col">
+        <data-table-column class="download-column">
           File Download
         </data-table-column>
-        <data-table-column class="col-1 col"
+        <data-table-column class="created-column"
                            sortable
                            field="created">
           Date Uploaded
@@ -162,33 +251,39 @@
                 items="[[filteredAttachments]]">
         <data-table-row no-collapse>
           <div slot="row-data">
-            <div class="col col-2">
+            <div class="partner-column">
               <span class="col-data">
                 [[item.partner]]
                 <paper-tooltip fit-to-visible-bounds>[[item.partner]]</paper-tooltip>
               </span>
             </div>
-            <div class="col col-1">
+            <div class="vendor-column">
               <span class="col-data">[[item.vendor_number]]</span>
             </div>
-            <div class="col custom-width">
+            <div class="pd-column">
+              <span class="col-data">[[item.pd_ssfa_number]]</span>
+            </div>
+            <div class="pca-column">
+              <span class="col-data">[[item.agreement_reference_number]]</span>
+            </div>
+            <div class="partner-type-column">
               <span class="col-data">[[item.partner_type]]</span>
             </div>
-            <div class="col custom-width">
+            <div class="source-column">
               <span class="col-data">Partnership Management</span>
             </div>
-            <div class="col custom-width">
+            <div class="doctype-column">
               <span class="col-data">
                 [[item.file_type]]
                 <paper-tooltip fit-to-visible-bounds>[[item.file_type]]</paper-tooltip>
               </span>
             </div>
-            <div class="col-3 col">
+            <div class="download-column">
               <a href$="[[item.file_link]]"
                  target="_blank"
                  class="col-data">[[item.filename]]</a>
             </div>
-            <div class="col-1 col">
+            <div class="created-column">
               <span class="col-data">[[item.created]]</span>
             </div>
           </div>

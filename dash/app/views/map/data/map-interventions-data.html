@@ -56,11 +56,7 @@
       }
 
       queryMapInterventions(filter) {
-        let newEp = this.getEndpoint('mapInterventions');
-        if (equals(this.endpoint, newEp)) {
-          return;
-        }
-        this.set('reqOptions.endpoint', newEp);
+        this.set('reqOptions.endpoint', this.getEndpoint('mapInterventions'));
         this.set('reqOptions.params', filter);
         this._requestMapData();
       }

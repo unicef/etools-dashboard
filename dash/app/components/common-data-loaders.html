@@ -7,8 +7,8 @@
 <link rel="import" href="../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
 
 <link rel="import" href="../config/dexie-db-config.html">
-
 <link rel="import" href="reduxProps.html">
+
 <dom-module id="common-data-loaders">
   <template>
     <style>
@@ -81,7 +81,7 @@
           setCountryProgrammes(data = []) {
             return {
               type: 'SET_COUNTRY_PROGRAMMES',
-              countryProgrammes: map(pick(['id', 'name']), data)
+              countryProgrammes: map(pick(['id', 'name', 'active', 'special', 'invalid']), data)
             };
           },
 
