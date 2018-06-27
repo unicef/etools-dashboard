@@ -369,7 +369,7 @@
 
       _filterChanged(country_programme, sector, status, partner) {
         let newFilter = {};
-        if(country_programme && !isEmpty(country_programme)) {
+        if(country_programme) {
           newFilter['country_programme'] = country_programme;
         }
         if(sector) {
@@ -404,7 +404,6 @@
           this.set('hasResult', false);
         }
         this.set('markers', locations);
-        // this.fire('global-loading');
       }
 
       _partnerFilter(filter) {

@@ -200,6 +200,20 @@
               type: 'SET_HACT_GRAPHS',
               hactGraphs: propOr([], 'partner_values', data)
             };
+          },
+
+          setAgreements(data = []) {
+            return {
+              type: 'SET_AGREEMENTS',
+              agreements: data
+            };
+          },
+    
+          setInterventions(data = []) {
+            return {
+              type: 'SET_INTERVENTIONS',
+              interventions: data
+            };
           }
 
         };

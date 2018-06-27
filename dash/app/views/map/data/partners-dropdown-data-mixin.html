@@ -37,7 +37,7 @@
       ready() {
         super.ready();
         if (!this.loadedInitially) {
-          this.fireEvent('global-loading', { message: 'Loading partnerszz data...', active: true, loadingSource: 'partners-dropdown' });
+          this.fireEvent('global-loading', { message: 'Loading partners data...', active: true, loadingSource: 'partners-dropdown' });
           this.set('loadedInitially', true);
         }
       }
