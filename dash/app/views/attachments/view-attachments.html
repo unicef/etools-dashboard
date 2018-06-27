@@ -57,6 +57,9 @@
         --flex-1: {
           flex: 1;
         }
+        --esmm-external-wrapper: {
+          width: 280px;
+        }
 
       }
 
@@ -148,7 +151,7 @@
         <paper-input type="search"
                      autocomplete="off"
                      value="{{qs}}"
-                     placeholder="Search by Partner or Vendor #"
+                     placeholder="Search"
                      always-float-label>
           <iron-icon icon="search"
                      slot="prefix"></iron-icon>
@@ -261,10 +264,14 @@
               <span class="col-data">[[item.vendor_number]]</span>
             </div>
             <div class="pd-column">
-              <span class="col-data">[[item.pd_ssfa_number]]</span>
+              <span class="col-data">[[item.pd_ssfa_number]]
+                <paper-tooltip fit-to-visible-bounds>[[item.pd_ssfa_number]]</paper-tooltip>
+              </span>
             </div>
             <div class="pca-column">
-              <span class="col-data">[[item.agreement_reference_number]]</span>
+              <span class="col-data">[[item.agreement_reference_number]]
+                <paper-tooltip fit-to-visible-bounds>[[item.agreement_reference_number]]</paper-tooltip>
+              </span>
             </div>
             <div class="partner-type-column">
               <span class="col-data">[[item.partner_type]]</span>
@@ -336,9 +343,9 @@
     
       static get observers() {
         return [
-          '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, requiredDataLoaded)',
-          '_initListFilters(attachmentTypes)',
-          '_init(active, attachmentTypes)'
+          '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, selectedPDs, selectedPCAs, requiredDataLoaded)',
+          '_initListFilters(attachmentTypes,agreements,interventions)',
+          '_init(active, attachmentTypes, agreements, interventions)'
         ];
       }
 
@@ -408,6 +415,16 @@
                   qName: 'type',
                   propName: 'selectedAttachmentTypes',
                   xf: compose(join('|'), map(prop('value')))
+                },
+                {
+                  qName: 'pca',
+                  propName: 'selectedPCAs',
+                  xf: compose(join('|'), map(prop('value')))
+                },
+                {
+                  qName: 'pd',
+                  propName: 'selectedPDs',
+                  xf: compose(join('|'), map(prop('value')))
                 }
               ];
             }
@@ -418,9 +435,9 @@
         };
       }
 
-      _init(active, attachmentTypes) {
+      _init(active, attachmentTypes, interventions, agreements) {
         let params = this.queryParams;
-          if (!active || isEmpty(attachmentTypes) || !attachmentTypes) {
+          if (!active || !attachmentTypes || !interventions || !agreements) {
             return;
           }
           if (isEmpty(this.formattedTypes)) {
@@ -433,6 +450,8 @@
           this.set('sortOrder', params.sort || 'desc');
           this.set('orderBy', params.sortBy || '');
           this.set('selectedAttachmentTypes', params.type ? this._setSelectedFromCollection(params.type, this.formattedTypes) : []);
+          this.set('selectedPCAs', params.pca ? this._setSelectedFromCollection(params.pca, this.agreements): [] );
+          this.set('selectedPDs', params.pd ? this._setSelectedFromCollection(params.pd, this.interventions): [] );
           this.set('initComplete', true);
           this._updateSelectedFiltersValues();
       }
@@ -450,7 +469,10 @@
           this.set('requiredDataLoaded', true);
       }
 
-      _initListFilters(attachmentTypes) {
+      _initListFilters(attachmentTypes, agreements, interventions) {
+        if (!attachmentTypes || !agreements || !interventions) {
+          return;
+        }
         this.initListFiltersData([
           {
             filterName: 'Document Type',
@@ -462,6 +484,24 @@
               label: type,
               value: type
             })),
+            alreadySelected: []
+          },
+          {
+            filterName: 'PD/SSFA',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            path: 'selectedPDs',
+            selectionOptions: this.interventions,
+            alreadySelected: []
+          },
+          {
+            filterName: 'PCA',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            path: 'selectedPCAs',
+            selectionOptions: this.agreements,
             alreadySelected: []
           }
         ]);
@@ -475,6 +515,14 @@
               {
                 filterName: 'Document Type',
                 selectedValue: map(prop('value'), this.selectedAttachmentTypes)
+              },
+              {
+                filterName: 'PD/SSFA',
+                selectedValue: map(prop('value'), this.selectedPDs)
+              },
+              {
+                filterName: 'PCA',
+                selectedValue: map(prop('value'), this.selectedPCAs)
               }
             ];
             this.updateShownFilters(filtersValues);
@@ -485,6 +533,8 @@
         const selectedParams = {
           searchString: this.qs,
           attachmentType: map(prop('value'), this.selectedAttachmentTypes),
+          pca: map(prop('label'), this.selectedPCAs),
+          pd: map(prop('label'), this.selectedPDs),
           orderBy: this.orderBy
         };
         const query = merge(reject(isEmpty, selectedParams), {
@@ -495,12 +545,11 @@
         this.$.attachments.query(query);
       }
 
-      _updateUrl(query, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, requiredDataLoaded) {
+      _updateUrl(query, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, selectedPDs, selectedPCAs, requiredDataLoaded) {
         if (!this.initComplete || !this.requiredDataLoaded) {
           return;
         }
         const currentRoute = this.route.prefix + this.route.path;
-
         const qs = this.buildQueryString();
         this.updateAppState(currentRoute, qs, true);
         if (this.requiredDataLoaded) {
@@ -511,7 +560,7 @@
       _setSelectedFromCollection(param, collection) {
         const itemsFromParam = param.split('|');
         if (!isEmpty(itemsFromParam)) {
-          const res = collection.filter((u) => itemsFromParam.indexOf(u.value) > -1);
+          const res = collection.filter((u) => itemsFromParam.indexOf(u.value.toString()) > -1);
           return res;
         }
         return [];

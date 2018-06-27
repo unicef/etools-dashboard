@@ -205,14 +205,20 @@
           setAgreements(data = []) {
             return {
               type: 'SET_AGREEMENTS',
-              agreements: data
+              agreements: data.filter((a)=>a.agreement_type==='PCA').map((ag)=>({
+                label: ag.agreement_number,
+                value: ag.id
+              }))
             };
           },
     
           setInterventions(data = []) {
             return {
               type: 'SET_INTERVENTIONS',
-              interventions: data
+              interventions: data.map((inter)=>({
+                label: inter.number,
+                value: inter.id
+              }))
             };
           }
 

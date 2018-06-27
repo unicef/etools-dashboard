@@ -58,24 +58,32 @@
           },
           predicates: {
             type: Object,
-            value: function () {
+            value: function() {
               return {
-                searchString: ({ partner, vendor_number }, query) => {
-                  partner = partner ? partner.toLowerCase() : '';
-                  vendor_number = vendor_number ? vendor_number.toLowerCase() : '';
-                  return contains(query.toLowerCase(), partner) || contains(query.toLowerCase(),vendor_number)
+                searchString: ({ partner, vendor_number, pd_ssfa_number, agreement_reference_number }, query) => {
+                  partner = partner.toLowerCase();
+                  vendor_number = vendor_number.toLowerCase();
+                  pd_ssfa_number = pd_ssfa_number.toLowerCase();
+                  agreement_reference_number = agreement_reference_number.toLowerCase();
+                  query = query.toLowerCase();
+                  return contains(query, partner)
+                  || contains(query, vendor_number)
+                  || contains(query, pd_ssfa_number)
+                  || contains(query, agreement_reference_number);
                 },
                 attachmentType: ({ file_type }, type) => contains(file_type, type),
-              }
+                pca: ({ agreement_reference_number }, selectedPCA) => contains(agreement_reference_number, selectedPCA),
+                pd: ({ pd_ssfa_number }, selectedPD) => contains(pd_ssfa_number, selectedPD)
+              };
             }
           }
         };
       }
 
-      ready(){
+      ready() {
         super.ready();
         if (!this.loadedInitially) {
-          this.fireEvent('global-loading', {message: 'Loading documents...', active: true, loadingSource: 'attachments-data'});
+          this.fireEvent('global-loading', { message: 'Loading documents...', active: true, loadingSource: 'attachments-data' });
           this.set('loadedInitially', true);
         }
       }
@@ -87,13 +95,13 @@
           if (order === 'asc') {
             queryResult = queryResult.reverse();
           }
-          const fieldsToFilter = without(['pageNumber', 'pageSize', 'order', 'orderBy'],keys(params));
-          queryResult = queryResult.filter(file => !isEmpty(fieldsToFilter) ?
+          const fieldsToFilter = without(['pageNumber', 'pageSize', 'order', 'orderBy'], keys(params));
+          queryResult = queryResult.filter((file) => !isEmpty(fieldsToFilter) ?
             fieldsToFilter.reduce(
               (acc, field) => acc && this.predicates[field](file, params[field]), true)
             : !!file.file_link && !!file.partner
           );
-          queryResult = queryResult.filter(file => !isEmpty(file.filename))
+          queryResult = queryResult.filter((file) => !isEmpty(file.filename));
 
           return Dexie.Promise.all([
             queryResult.count(),
@@ -102,11 +110,11 @@
               .offset((pageNumber - 1) * pageSize)
               .limit(pageSize)
               .toArray()])
-            .then(countAndResult => {
+            .then((countAndResult) => {
               this._setFilteredTotal(countAndResult[0]);
               this._setFilteredAttachments(countAndResult[1]);
               this.fireEvent('global-loading', { loadingSource: 'attachments-data' });
-            })
+            });
 
         });
       }
