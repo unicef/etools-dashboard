@@ -16,7 +16,7 @@
     /**
      * Format date string to any format supported by momentjs
      */
-     prettyDate(dateString, format) {
+    prettyDate(dateString, format) {
       let date = this._convertDate(dateString);
       return (!date) ? '' : this._utcDate(date, format);
     }
@@ -26,12 +26,12 @@
       return (!date) ? '' : this._utcDate(date, format);
     }
 
-     _utcDate(date, format) {
+    _utcDate(date, format) {
       return (!date) ? '' : moment.utc(date).format(format ? format : 'D MMM YYYY');
     }
 
 
-     _convertDate(dateString, noZTimezoneOffset) {
+    _convertDate(dateString, noZTimezoneOffset) {
       if (typeof dateString === 'string' && dateString !== '') {
         dateString = (dateString.indexOf('T') === -1) ? (dateString + 'T00:00:00') : dateString;
         /**
