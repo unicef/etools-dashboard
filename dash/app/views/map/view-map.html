@@ -14,7 +14,7 @@
 <link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../../../bower_components/leaflet-map/leaflet-map.html">
-<link rel="import" href="../../../../bower_components/etools-dropdown/etools-dropdown-multi.html">
+<link rel="import" href="../../../../bower_components/etools-dropdown/etools-dropdown.html">
 
 <link rel="import" href="elements/marker-dialog.html">
 
@@ -67,6 +67,10 @@
         top: 60px;
         position: absolute;
       }
+
+      .warning-box {
+        min-width: 228px;
+      }
     </style>
     <app-route route="{{route}}"
                pattern="/dash/map"
@@ -74,12 +78,12 @@
                query-params="{{queryParams}}"></app-route>
     <div class="paper-material list-panel listControls"
          elevation="1">
-      <div class="wrap-controls">
+      <div class="wrap-controls warning-box">
         <div class="title-row">
           <h1 sub-title>Partnerships</h1>
         </div>
-        <p hidden$="[[hasResult]]"
-           class="error">No results for this query</p>
+        <p hidden$="[[!hasWarning]]"
+           class="error">[[warningMessage]]</p>
 
       </div>
       <div class="filters-divider"></div>
@@ -99,6 +103,7 @@
                                      option-value="[[filter.optionValue]]"
                                      option-label="[[filter.optionLabel]]"
                                      on-selected-changed="_handleSelect"
+                                     selected="[[filter.alreadySelected]]"
                                      trigger-value-change-event
                                      on-etools-selected-items-changed="esmmValueChanged"
                                      >
@@ -194,9 +199,12 @@
        */
       static get properties() {
         return {
-          hasResult: {
+          hasWarning: {
             type: Boolean,
             value: true
+          },
+          warningMessage: {
+            type: String
           },
           countryProgrammes: {
             type: Array,
@@ -244,15 +252,14 @@
           },
           partners: {
             type: Array,
-            value: []
+            observer: '_partnersReceived'
+          },
+          partnersList: {
+            type: Array
           },
           availableListFilterOptions: {
             type: Array,
             value: []
-          },
-          staticDataLoaded: {
-            type: Boolean,
-            value: false
           },
           markerDialog: Object,
           leafletUrl: {
@@ -261,6 +268,14 @@
           },
           route: {
             type: Object
+          },
+          currentCountryProgramme: {
+            tpye: Object,
+            value: {
+              active: true,
+              special: false,
+              invalid: false
+            }
           }
         };
       }
@@ -270,11 +285,15 @@
         const { value } = e.detail;
         this.set(filter.path, value);
       }
+      _partnersReceived(partners){
+        this.set('partnersList', partners)
+      }
 
       static get observers() {
         return [
-          '_init(countryProgrammes,sectors,statuses,userCountry,partners)',
-          '_filterChanged(country_programme, sector, status, partner)'
+          '_init(countryProgrammes,sectors,statuses,userCountry, partners)',
+          '_filterChanged(country_programme, sector, status, partner)',
+          '_setWarnings(country_programme, sector, status, partner)'
         ];
       }
 
@@ -312,19 +331,19 @@
           return;
         }
 
-
-        if (!this.staticDataLoaded) {
           // initialize the intLocMap object
-          this.queryMapInterventions('');
+          // this.queryMapInterventions('');
           this._validateUserCountry(userCountry);
+        // find the current country programme based on criteria in property currentCountryProgramme
+        const currentCp = find(
+          cp => keys(this.currentCountryProgramme).reduce(
+            (curr, next) => {
+              return cp[next] === this.currentCountryProgramme[next] && curr
+            }, true
+          ), this.countryProgrammes);
 
-          // this.fire('global-loading', {
-          //   message: 'Loading page data...',
-          //   active: true
-          // });
-        }
-        this.set('staticDataLoaded', true);
-        // this.fire('global-loading');
+        this._initDefaultFilters(currentCp);
+
         if (_.isEmpty(this.availableListFilterOptions)) {
           this.initListFiltersData([
             {
@@ -337,7 +356,7 @@
               path: 'country_programme'
             },
             {
-              filterName: 'Sectors',
+              filterName: 'Sections',
               type: 'esmm',
               optionValue: 'value',
               optionLabel: 'label',
@@ -360,16 +379,43 @@
               optionValue: 'value',
               optionLabel: 'label',
               alreadySelected: null,
-              selectionOptions: this.partners,
+              selectionOptions: partners,
               path: 'partner'
             }
           ]);
         }
+        this._updateSelectedFiltersValues();
+      }
+
+      _initDefaultFilters(currentCp) {
+        this.setProperties({
+          country_programme: currentCp.id,
+          status: 'active'
+        })
+      }
+
+      _updateSelectedFiltersValues() {
+        this.updateFiltersDebouncer = Polymer.Debouncer.debounce(
+          this.updateFiltersDebouncer,
+          Polymer.Async.timeOut.after(20), () => {
+          let filtersValues = [
+            {
+              filterName: 'Country Programme',
+              selectedValue: this.country_programme
+            },
+            {
+              filterName: 'Status',
+              selectedValue: this.status
+            }
+          
+          ];
+          this.updateShownFilters(filtersValues);
+        });
       }
 
       _filterChanged(country_programme, sector, status, partner) {
         let newFilter = {};
-        if(country_programme && !isEmpty(country_programme)) {
+        if(country_programme) {
           newFilter['country_programme'] = country_programme;
         }
         if(sector) {
@@ -390,21 +436,18 @@
           this.set('showActive', false);
           return;
         }
-        this.set('hasResult', true);
+        this.set('hasWarning', false);
         this.set('mapFilter', newFilter);
-      }
-
-      // ensure redux items loaded before initializing the filters
-      _callLocations(locations) {
-        this.queryMapLocations(locations);
       }
 
       _plotMarkers(locations) {
         if (!locations.length) {
-          this.set('hasResult', false);
+          this.setProperties({
+            hasWarning: true,
+            warningMessage: 'No results for this query.'
+          });
         }
         this.set('markers', locations);
-        // this.fire('global-loading');
       }
 
       _partnerFilter(filter) {
@@ -414,6 +457,15 @@
       _partnerChanged(val) {
         let id = path(['detail', 'selectedValues', 'id'], val);
         this.set('partner', id);
+      }
+
+      _setWarnings(country_programme, sector, status, partner) {
+        if (!country_programme && !sector && !status && !partner) {
+          this.setProperties({
+            hasWarning: true,
+            warningMessage: 'Select filters to show results on map',
+          })
+        }
       }
 
       _validateUserCountry(userCountry) {

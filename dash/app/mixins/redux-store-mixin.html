@@ -73,9 +73,19 @@
 
       case 'SET_HACT_GRAPHS':
         return merge(state, { hactGraphs: action.hactGraphs });
+  
+      case 'SET_AGREEMENTS':
+        return merge(state, {
+          agreements: action.agreements
+        });
+  
+      case 'SET_INTERVENTIONS':
+        return merge(state, {
+          interventions: action.interventions
+        });
 
     }
-  }
+  };
 
   const store = Redux.createStore(
     reducer,
@@ -83,7 +93,7 @@
     Redux.compose(
       window.devToolsExtension
         ? window.devToolsExtension()
-        : v => v
+        : (v) => v
     ));
 
   /**

@@ -33,6 +33,11 @@
     changeCountry: {
       url: '/users/api/changecountry/'
     },
+    agreements: {
+      url: '/api/v2/agreements/',
+      exp: 6 * 60 * 60 * 1000, // 6h
+      cachingKey: 'agreements'
+    },
     partners: {
       url: '/api/v2/partners/hact',
       exp: 6 * 60 * 60 * 1000, // 6h
@@ -73,6 +78,11 @@
     },
     mapInterventions: {
       url: '/api/v2/interventions/map'
+    },
+    interventions: {
+      url: '/api/v2/interventions/',
+      exp: 10 * 60 * 1000,
+      cachingKey: 'interventions'
     },
     partnerships: {
       template: '/api/v2/interventions/dash',

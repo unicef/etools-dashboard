@@ -7,8 +7,8 @@
 <link rel="import" href="../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
 
 <link rel="import" href="../config/dexie-db-config.html">
-
 <link rel="import" href="reduxProps.html">
+
 <dom-module id="common-data-loaders">
   <template>
     <style>
@@ -81,7 +81,7 @@
           setCountryProgrammes(data = []) {
             return {
               type: 'SET_COUNTRY_PROGRAMMES',
-              countryProgrammes: map(pick(['id', 'name']), data)
+              countryProgrammes: map(pick(['id', 'name', 'active', 'special', 'invalid']), data)
             };
           },
 
@@ -199,6 +199,26 @@
             return {
               type: 'SET_HACT_GRAPHS',
               hactGraphs: propOr([], 'partner_values', data)
+            };
+          },
+
+          setAgreements(data = []) {
+            return {
+              type: 'SET_AGREEMENTS',
+              agreements: data.filter((a)=>a.agreement_type==='PCA').map((ag)=>({
+                label: ag.agreement_number,
+                value: ag.id
+              }))
+            };
+          },
+    
+          setInterventions(data = []) {
+            return {
+              type: 'SET_INTERVENTIONS',
+              interventions: data.map((inter)=>({
+                label: inter.number,
+                value: inter.id
+              }))
             };
           }
 

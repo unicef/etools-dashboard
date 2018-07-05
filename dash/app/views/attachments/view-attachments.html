@@ -34,11 +34,90 @@
 <link rel="import" href="../../../../bower_components/etools-datepicker/etools-datepicker-button.html">
 <link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
 
-<!-- <link rel="import" href="dashboard-data/attachments-data.html"> -->
 
 <dom-module id="view-attachments">
   <template>
     <style include="shared-styles grid-layout-styles page-layout-styles paper-material-styles list-styles">
+      :host {
+        --col: {
+          @apply --layout-horizontal;
+          box-sizing: border-box;
+        };
+        --col-first: {
+          padding-left: 0;
+        };
+        --col-1: {
+          flex: 0 0 8.33333333%;
+          max-width: 8.33333333%;
+        };
+        --col-2: {
+          flex: 0 0 16.66666667%;
+          max-width: 16.66666667%;
+        };
+        --flex-1: {
+          flex: 1;
+        }
+        --esmm-external-wrapper: {
+          width: 280px;
+        }
+
+      }
+
+      /* Table Columns Start */
+
+      .partner-column {
+        width: 10%;
+        @apply --col;
+        @apply col-first;
+      }
+
+      .vendor-column {
+        @apply --col;
+        @apply --col-1;
+      }
+
+      .pd-column {
+        @apply --col;
+        @apply --col-1;
+      }
+
+      .pca-column {
+        @apply --col;
+        @apply --col-1;
+      }
+
+      .partner-type-column {
+        @apply --col;
+        @apply --col-2;
+      }
+
+      .source-column {
+        @apply --col;
+        width: 144px;
+      }
+
+      .doctype-column {
+        @apply --col;
+        width: 10%;
+      }
+
+      .download-column {
+        @apply --col;
+        @apply --col-2;
+      }
+
+      .created-column {
+        @apply --col;
+        @apply --col-1;
+      }
+
+
+      /* Table Columns End */
+
+      data-table-column:not(:first-child),data-table-row >div > div:not(:first-child) {
+        padding-left: 24px;
+      }
+
       .wrap-controls paper-input {
         min-width: 280px;
       }
@@ -50,6 +129,9 @@
       .wrap-controls {
         padding-left: 24px;
       }
+      
+
+
     </style>
   
     <app-route route="{{route}}"
@@ -69,7 +151,7 @@
         <paper-input type="search"
                      autocomplete="off"
                      value="{{qs}}"
-                     placeholder="Search by Partner or Vendor #"
+                     placeholder="Search"
                      always-float-label>
           <iron-icon icon="search"
                      slot="prefix"></iron-icon>
@@ -126,32 +208,42 @@
          id="list"
          elevation="1">
       <data-table-header no-collapse>
-        <data-table-column class="col-2 col"
+        <data-table-column class="partner-column"
                            field="partner"
                            sortable>
           Partner
         </data-table-column>
-        <data-table-column class="col-1 col">
+        <data-table-column class="vendor-column">
           Vendor #
         </data-table-column>
-        <data-table-column class="custom-width col"
+        <data-table-column field="pd_ssfa_number"
+                           sortable
+                           class="pd-column">
+          PD SSFA #
+        </data-table-column>
+        <data-table-column field="agreement_reference_number"
+                           sortable
+                           class="pca-column">
+          PCA #
+        </data-table-column>
+        <data-table-column class="partner-type-column"
                            field="partner_type"
                            sortable>
           Partner Type
         </data-table-column>
-        <data-table-column class="custom-width col"
+        <data-table-column class="source-column"
                            field="source">
           Source
         </data-table-column>
-        <data-table-column class="custom-width col"
+        <data-table-column class="doctype-column"
                            sortable
                            field="file_type">
           Document Type
         </data-table-column>
-        <data-table-column class="col-3 col">
+        <data-table-column class="download-column">
           File Download
         </data-table-column>
-        <data-table-column class="col-1 col"
+        <data-table-column class="created-column"
                            sortable
                            field="created">
           Date Uploaded
@@ -162,33 +254,43 @@
                 items="[[filteredAttachments]]">
         <data-table-row no-collapse>
           <div slot="row-data">
-            <div class="col col-2">
+            <div class="partner-column">
               <span class="col-data">
                 [[item.partner]]
                 <paper-tooltip fit-to-visible-bounds>[[item.partner]]</paper-tooltip>
               </span>
             </div>
-            <div class="col col-1">
+            <div class="vendor-column">
               <span class="col-data">[[item.vendor_number]]</span>
             </div>
-            <div class="col custom-width">
+            <div class="pd-column">
+              <span class="col-data">[[item.pd_ssfa_number]]
+                <paper-tooltip fit-to-visible-bounds>[[item.pd_ssfa_number]]</paper-tooltip>
+              </span>
+            </div>
+            <div class="pca-column">
+              <span class="col-data">[[item.agreement_reference_number]]
+                <paper-tooltip fit-to-visible-bounds>[[item.agreement_reference_number]]</paper-tooltip>
+              </span>
+            </div>
+            <div class="partner-type-column">
               <span class="col-data">[[item.partner_type]]</span>
             </div>
-            <div class="col custom-width">
+            <div class="source-column">
               <span class="col-data">Partnership Management</span>
             </div>
-            <div class="col custom-width">
+            <div class="doctype-column">
               <span class="col-data">
                 [[item.file_type]]
                 <paper-tooltip fit-to-visible-bounds>[[item.file_type]]</paper-tooltip>
               </span>
             </div>
-            <div class="col-3 col">
+            <div class="download-column">
               <a href$="[[item.file_link]]"
                  target="_blank"
                  class="col-data">[[item.filename]]</a>
             </div>
-            <div class="col-1 col">
+            <div class="created-column">
               <span class="col-data">[[item.created]]</span>
             </div>
           </div>
@@ -241,9 +343,9 @@
     
       static get observers() {
         return [
-          '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, requiredDataLoaded)',
-          '_initListFilters(attachmentTypes)',
-          '_init(active, attachmentTypes)'
+          '_updateUrl(qs, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, selectedPDs, selectedPCAs, requiredDataLoaded)',
+          '_initListFilters(attachmentTypes,agreements,interventions)',
+          '_init(active, attachmentTypes, agreements, interventions)'
         ];
       }
 
@@ -269,6 +371,14 @@
           static: {
             type: Object,
             statePath: 'static'
+          },
+          agreements: {
+            type: Array,
+            statePath: 'agreements'
+          },
+          interventions: {
+            type: Array,
+            statePath: 'interventions'
           },
           selectedAttachmentTypes: {
             type: Array,
@@ -305,6 +415,16 @@
                   qName: 'type',
                   propName: 'selectedAttachmentTypes',
                   xf: compose(join('|'), map(prop('value')))
+                },
+                {
+                  qName: 'pca',
+                  propName: 'selectedPCAs',
+                  xf: compose(join('|'), map(prop('value')))
+                },
+                {
+                  qName: 'pd',
+                  propName: 'selectedPDs',
+                  xf: compose(join('|'), map(prop('value')))
                 }
               ];
             }
@@ -315,9 +435,9 @@
         };
       }
 
-      _init(active, attachmentTypes) {
+      _init(active, attachmentTypes, interventions, agreements) {
         let params = this.queryParams;
-          if (!active || isEmpty(attachmentTypes) || !attachmentTypes) {
+          if (!active || !attachmentTypes || !interventions || !agreements) {
             return;
           }
           if (isEmpty(this.formattedTypes)) {
@@ -330,6 +450,8 @@
           this.set('sortOrder', params.sort || 'desc');
           this.set('orderBy', params.sortBy || '');
           this.set('selectedAttachmentTypes', params.type ? this._setSelectedFromCollection(params.type, this.formattedTypes) : []);
+          this.set('selectedPCAs', params.pca ? this._setSelectedFromCollection(params.pca, this.agreements): [] );
+          this.set('selectedPDs', params.pd ? this._setSelectedFromCollection(params.pd, this.interventions): [] );
           this.set('initComplete', true);
           this._updateSelectedFiltersValues();
       }
@@ -347,7 +469,10 @@
           this.set('requiredDataLoaded', true);
       }
 
-      _initListFilters(attachmentTypes) {
+      _initListFilters(attachmentTypes, agreements, interventions) {
+        if (!attachmentTypes || !agreements || !interventions) {
+          return;
+        }
         this.initListFiltersData([
           {
             filterName: 'Document Type',
@@ -359,6 +484,24 @@
               label: type,
               value: type
             })),
+            alreadySelected: []
+          },
+          {
+            filterName: 'PD/SSFA',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            path: 'selectedPDs',
+            selectionOptions: this.interventions,
+            alreadySelected: []
+          },
+          {
+            filterName: 'PCA',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            path: 'selectedPCAs',
+            selectionOptions: this.agreements,
             alreadySelected: []
           }
         ]);
@@ -372,6 +515,14 @@
               {
                 filterName: 'Document Type',
                 selectedValue: map(prop('value'), this.selectedAttachmentTypes)
+              },
+              {
+                filterName: 'PD/SSFA',
+                selectedValue: map(prop('value'), this.selectedPDs)
+              },
+              {
+                filterName: 'PCA',
+                selectedValue: map(prop('value'), this.selectedPCAs)
               }
             ];
             this.updateShownFilters(filtersValues);
@@ -382,6 +533,8 @@
         const selectedParams = {
           searchString: this.qs,
           attachmentType: map(prop('value'), this.selectedAttachmentTypes),
+          pca: map(prop('label'), this.selectedPCAs),
+          pd: map(prop('label'), this.selectedPDs),
           orderBy: this.orderBy
         };
         const query = merge(reject(isEmpty, selectedParams), {
@@ -392,12 +545,11 @@
         this.$.attachments.query(query);
       }
 
-      _updateUrl(query, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, requiredDataLoaded) {
+      _updateUrl(query, pageNumber, pageSize, initComplete, sortOrder, orderBy, selectedAttachmentTypes, selectedPDs, selectedPCAs, requiredDataLoaded) {
         if (!this.initComplete || !this.requiredDataLoaded) {
           return;
         }
         const currentRoute = this.route.prefix + this.route.path;
-
         const qs = this.buildQueryString();
         this.updateAppState(currentRoute, qs, true);
         if (this.requiredDataLoaded) {
@@ -408,7 +560,7 @@
       _setSelectedFromCollection(param, collection) {
         const itemsFromParam = param.split('|');
         if (!isEmpty(itemsFromParam)) {
-          const res = collection.filter((u) => itemsFromParam.indexOf(u.value) > -1);
+          const res = collection.filter((u) => itemsFromParam.indexOf(u.value.toString()) > -1);
           return res;
         }
         return [];

@@ -21,7 +21,7 @@
     <style include="shared-styles">
       app-toolbar {
         padding: 0 16px 0 0;
-        background-color: var(--nonprod-header-color, #233944);
+        background-color: var(--header-bg-color, #233944);
       }
 
       div[main-title] {
@@ -89,6 +89,12 @@
         width: auto;
       }
 
+      .envWarning {
+        color: var(--nonprod-text-warn-color);
+        font-weight: 700;
+        font-size: 18px;
+      }
+
       @media (min-width: 850px) {
         #menuButton {
           display: none;
@@ -111,6 +117,11 @@
         <etools-app-selector id="selector"></etools-app-selector>
         <img id="second-logo"
              src$="[[importPath]]../../../images/etools-logo-color-white.svg">
+          <dom-if id="envWarningIf">
+            <template>
+              <div class="envWarning"> - STAGING TESTING ENVIRONMENT</div>
+            </template>
+          </dom-if>
       </div>
       <div class="content-align">
         <countries-dropdown id="countries"
@@ -204,6 +215,13 @@
        */
       ready() {
         super.ready();
+        this._isStaging();
+      }
+
+      _isStaging() {
+        if (EtoolsDashboard.Config.isStagingServer()) {
+          this.$.envWarningIf.if = true;
+        }
       }
 
       openDrawer() {
