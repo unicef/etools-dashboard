@@ -151,16 +151,6 @@
             };
           },
 
-          setSections(data = []) {
-            return {
-              type: 'SET_SECTIONS',
-              sections: map(
-                (s) => ({ value: parseInt(s.id), label: s.name }),
-                data
-              )
-            };
-          },
-
           setSectors(data = []) {
             return {
               type: 'SET_SECTORS',
