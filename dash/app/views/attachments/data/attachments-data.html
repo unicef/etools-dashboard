@@ -126,8 +126,8 @@
                   if (!that.orderedResults.some(item => item.keys === `${file.partner} - ${file.vendor_number}`)) {
                     let obj = {}
                     let vend = countAndResult[2].filter(file2 => file2.vendor_number === file.vendor_number)
+                    vend = sortBy(prop('created'))(vend)
                     let key = `${file.partner} - ${file.vendor_number}`
-                    // log(key)
                     obj['label'] = key
                     obj['value'] = vend
                     that.orderedResults.push(obj)

@@ -3,6 +3,7 @@
 <link rel="import" href="../../../../../bower_components/etools-dropdown/etools-dropdown.html">
 <link rel="import" href="../../../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../../../bower_components/paper-chip/paper-chip.html">
+<link rel="import" href="../../../../../bower_components/iron-pages/iron-pages.html">
 
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
@@ -32,6 +33,10 @@
           flex: 0 0 16.66666667%;
           max-width: 16.66666667%;
         };
+        --col-3: {
+          flex: 0 0 25%;
+          max-width: 25%;
+        };
         --col-4: {
           flex: 0 0 33.3333333%;
           max-width: 33.3333333%;
@@ -42,7 +47,7 @@
         };
         --esmm-external-wrapper: {
           width: 280px;
-        }
+        };
       }
       
       /* Grouped Columns */
@@ -61,15 +66,26 @@
           @apply --col-1;
         }
 
-        .source-group {
+        .source-group-a {
           @apply --col;
           @apply --col-5;
+        }
+
+        .source-group-b {
+          @apply --col;
+          @apply --col-3;
+        }
+
+        .related-group {
+          @apply --col;
+          @apply --col-2;
         }
       /* Grouped Columns End */
 
       paper-chip {
+        margin-left: 7px;
         font-weight: 500;
-        --paper-chip-background: #F4EFEC;
+        --paper-chip-background: rgb(243, 238, 233);
         --paper-chip-color: --primary-text-color;
       }
 
@@ -77,6 +93,24 @@
         --paper-chip-background: #0099FF;
         --paper-chip-color: #FFFFFF;
         font-weight: 500;
+      }
+
+      etools-dropdown {
+        width: 50%;
+      }
+
+      div.paper-material.list {
+        padding: 0;
+      }
+
+      data-table-header {
+        --primary-background-color: rgb(243, 238, 233);
+        --paper-material-padding: 0 24px;
+      }
+      
+      #superHeader {
+        padding: 11px 24px;
+        font-size: 20px;
       }
 
     </style>
@@ -88,44 +122,97 @@
                   selected="{{selectedPartner}}">
       <etools-dropdown>
     </div>
-    <div class="paper-material" elevation="1">
+    <div class="paper-material list" elevation="1">
       <div id="superHeader">Select a partner to see related documents.</div>
-      <data-table-header no-collapse>
-        <data-table-column class="doctype-group">
-          Document Type
-        </data-table-column>
-        <data-table-column class="file-download-group">
-          File Download
-        </data-table-column>
-        <data-table-column class="date-uploaded-group">
-          Date Uploaded
-        </data-table-column>
-        <data-table-column class="source-group">
-          Source
-        </data-table-column>
-      </data-table-header>
 
-      <template is="dom-repeat"
-                items="[[assessmentsAudits]]">
-        <data-table-row no-collapse>
-          <div slot="row-data">
+      <iron-pages id="docSelector"
+                  attr-for-selected="name"
+                  fallback-selection="assessments">
+
+        <div name="assessments">
+          <data-table-header no-collapse>
             <data-table-column class="doctype-group">
-                [[item.file_type]]
-              </data-table-column>
-              <data-table-column class="file-download-group">
-                <a href$="[[item.file_link]]"
-                    target="_blank"
-                    class="col-data">[[item.filename]]</a>
-              </data-table-column>
-              <data-table-column class="date-uploaded-group">
-                [[item.created]]
-              </data-table-column>
-              <data-table-column class="source-group">
-                [[item.uploaded_by]]
-              </data-table-column>
-          </div>
-        </data-table-row>
-      </template>
+              Document Type
+            </data-table-column>
+            <data-table-column class="file-download-group">
+              File Download
+            </data-table-column>
+            <data-table-column class="date-uploaded-group">
+              Date Uploaded
+            </data-table-column>
+            <data-table-column class="source-group-a">
+              Source
+            </data-table-column>
+          </data-table-header>
+
+          <template is="dom-repeat"
+                    items="[[assessmentsAudits]]">
+            <data-table-row no-collapse>
+              <div slot="row-data">
+                <data-table-column class="doctype-group">
+                    [[item.file_type]]
+                  </data-table-column>
+                  <data-table-column class="file-download-group">
+                    <a href$="[[item.file_link]]"
+                        target="_blank"
+                        class="col-data">[[item.filename]]</a>
+                  </data-table-column>
+                  <data-table-column class="date-uploaded-group">
+                    [[item.created]]
+                  </data-table-column>
+                  <data-table-column class="source-group-a">
+                    Partnership Management
+                  </data-table-column>
+              </div>
+            </data-table-row>
+          </template>
+        </div>
+
+        <div name="pdssfa">
+          <data-table-header no-collapse>
+            <data-table-column class="related-group">
+              Related To
+            </data-table-column>
+            <data-table-column class="doctype-group">
+              Document Type
+            </data-table-column>
+            <data-table-column class="file-download-group">
+              File Download
+            </data-table-column>
+            <data-table-column class="date-uploaded-group">
+              Date Uploaded
+            </data-table-column>
+            <data-table-column class="source-group-b">
+              Source
+            </data-table-column>
+          </data-table-header>
+
+          <template is="dom-repeat"
+                    items="[[selectedPDSSFA]]">
+            <data-table-row no-collapse>
+              <div slot="row-data">
+                <data-table-column class="related-group">
+                  [[item.pd_ssfa_number]]
+                </data-table-column>
+                <data-table-column class="doctype-group">
+                    [[item.file_type]]
+                  </data-table-column>
+                  <data-table-column class="file-download-group">
+                    <a href$="[[item.file_link]]"
+                        target="_blank"
+                        class="col-data">[[item.filename]]</a>
+                  </data-table-column>
+                  <data-table-column class="date-uploaded-group">
+                    [[item.created]]
+                  </data-table-column>
+                  <data-table-column class="source-group-b">
+                    Partnership Management
+                  </data-table-column>
+              </div>
+            </data-table-row>
+          </template>
+        </div>
+      </iron-pages>
     </div>
   </template>
 
@@ -178,54 +265,45 @@
         assessments.className = "selected"
         assessments.innerText = 'Assessments & Audits'
         assessments.selectable = true
+        assessments.addEventListener('tap', function() {
+          [...header.children].forEach(child => child.classList.remove('selected'));
+          assessments.className = 'selected';
+          if (that.$.docSelector.selected === "pdssfa") {
+            that.$.docSelector.selected = "assessments"
+          }
+        });
         header.innerHTML = null
         header.appendChild(assessments)
         this.set('assessmentsAudits', this.selectedPartner.filter(
           file => file.file_type.indexOf('Assessment') > -1 || file.file_type.indexOf('Audit') > -1
         ))
-
-        let pDFiles = this.selectedPartner.filter(file => !!file.pd_ssfa_number)
+  log(this.assessmentsAudits)
+        let pDFiles = this.selectedPartner.filter(file => !!file.pd_ssfa_number && file.pd_ssfa_number.split('/').length - 1 === 2)
         let pDKeys = uniq(pDFiles.map(file => file.pd_ssfa_number))
-        this.set('pDSSFA', pDKeys.map(function(k) {
-            let obj = {}
-            obj[k] = pDFiles.filter(pDFile => pDFile.pd_ssfa_number === k)
-            return obj
-          })
-        )
+        pDKeys = uniq(pDKeys.map(file => file.split('/').slice(0, 2).join("/")))
+        let nestedGroups = pDKeys.map(function(k) {
+          let obj = {}
+          obj[k] = pDFiles.filter(pDFile => pDFile.pd_ssfa_number.indexOf(k) > -1)
+          return obj
+        })
+        this.set('pDSSFA', nestedGroups)
         
         this.pDSSFA.forEach(function(pd) {
           let pdChip = document.createElement('paper-chip');
-          pdChip.innerText = Object.keys(pd)[0];
+          pdChip.innerText = Object.keys(pd);
           pdChip.selectable = true;
           pdChip.addEventListener('tap', function() {
             [...header.children].forEach(child => child.classList.remove('selected'));
             pdChip.className = 'selected';
-            that.selectedPDSSFA = pd;
+            that.selectedPDSSFA = Object.values(pd)[0];
             log(that.selectedPDSSFA)
+            if (that.$.docSelector.selected === "assessments") {
+              that.$.docSelector.selected = "pdssfa"
+            }
           });
           header.appendChild(pdChip);
         })
       }
-
-            // _tabChanged(tab, docsActive) {
-      //   this.set('active', docsActive);
-      //   if (!tab || !docsActive) { return; }
-      //   if (tab === 'grouped') {
-      //     this.updateAppState(this.route.prefix+this.route.path);
-      //   }
-      //   this.docsPage = tab;
-      //   if (this.docsPage === 'grouped') {
-      //     this.$.allDocs.classList.add('dark-button');
-      //     this.$.allDocsIcon.classList.add('dark-button');
-      //     this.$.grouped.classList.add('light-button');
-      //     this.$.groupedIcon.classList.add('light-button');
-      //   } else {
-      //     this.$.allDocs.classList.remove('dark-button');
-      //     this.$.allDocsIcon.classList.remove('dark-button');
-      //     this.$.grouped.classList.remove('light-button');
-      //     this.$.groupedIcon.classList.remove('light-button');
-      //   }
-      // }
     }
 
     window.customElements.define(AttachmentsGrouped.is, AttachmentsGrouped);
