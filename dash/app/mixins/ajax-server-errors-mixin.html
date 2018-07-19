@@ -38,7 +38,6 @@
     }
 
     handleErrorResponse(response, ajaxMethod, redirectOn404) {
-      debugger
       if (redirectOn404 && response.status === 404) {
         this.fireEvent('404');
         return;
