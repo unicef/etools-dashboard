@@ -157,6 +157,11 @@
         align-items: center;
         border-bottom: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
       }
+
+      #down {
+        width: 16px;
+        height: 16px;
+      }
     </style>
 
     <div class="paper-material list-panel listControls"
@@ -183,6 +188,7 @@
             </data-table-column>
             <data-table-column class="date-uploaded-group">
               Date Uploaded
+              <iron-icon id="down" icon="arrow-downward"></iron-icon>
             </data-table-column>
             <data-table-column class="source-group-a">
               Source
@@ -226,6 +232,7 @@
               </data-table-column>
               <data-table-column class="date-uploaded-group">
                 Date Uploaded
+                <iron-icon id="down" icon="arrow-downward"></iron-icon>
               </data-table-column>
               <data-table-column class="source-group-b">
                 Source

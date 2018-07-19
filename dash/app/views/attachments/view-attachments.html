@@ -140,34 +140,30 @@
 
       paper-button.curved-left {
         border-radius: 50px 0 0 50px;
-        background: rgb(255, 255, 255);
         height: 36px;
         margin-right: 0;
         padding-right: 1em;
         padding-left: 16px;
         cursor: pointer;
-        color: var(--secondary-text-color)
       }
 
       paper-button.curved-right {
         border-radius: 0 50px 50px 0;
-        background: rgb(216, 216, 216);
         height: 36px;
         margin-left: 0;
         padding-left: 1em;
         padding-right: 16px;
         cursor: pointer;
-        color: var(--dark-disabled-text-color)
       }
 
       .dark-button {
-        background: rgb(216, 216, 216) !important;
-        color: var(--dark-disabled-text-color) !important
+        background: rgb(216, 216, 216);
+        color: var(--dark-disabled-text-color, rbga(0, 0, 0, 0.54));
       }
 
       .light-button {
-        background: rgb(255, 255, 255) !important;
-        color: var(--secondary-text-color) !important
+        background: rgb(255, 255, 255);
+        color: var(--secondary-text-color, rbga(0, 0, 0, 0.87));
       }
     </style>
   
@@ -184,11 +180,11 @@
                         on-attachments-loaded="_attachmentsLoaded"></attachments-data>
 
     <div class="view-toggle">
-      <paper-button id="allDocs" on-tap="_toggleDocsView" name="allDocs" noink class="curved-left">
+      <paper-button id="allDocs" on-tap="_toggleDocsView" name="allDocs" noink class="curved-left light-button">
         <iron-icon id="allDocsIcon" name="allDocs" icon="list"></iron-icon>
         ALL DOCUMENTS
       </paper-button>
-      <paper-button id="grouped" on-tap="_toggleDocsView"  name="grouped" noink class="curved-right">
+      <paper-button id="grouped" on-tap="_toggleDocsView"  name="grouped" noink class="curved-right dark-button">
         <iron-icon id="groupedIcon" name="grouped" icon="dash-custom-icons:list-alt"></iron-icon>
         GROUPED BY PARTNER/AGREEMENT
       </paper-button>
@@ -643,6 +639,10 @@
       _toggleDocsView({ target }) {
         let pages = this.$.docPages;
         pages.selectNext();
+        this.$.allDocs.classList.toggle("light-button")
+        this.$.allDocs.classList.toggle("dark-button")
+        this.$.grouped.classList.toggle("dark-button")
+        this.$.grouped.classList.toggle("light-button")
       }
 
 
