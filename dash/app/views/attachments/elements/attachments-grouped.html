@@ -26,10 +26,6 @@
           @apply --layout-horizontal;
           box-sizing: border-box;
         };
-        --col-1: {
-          flex: 0 0 8.33333333%;
-          max-width: 8.33333333%;
-        };
         --col-2: {
           flex: 0 0 16.66666667%;
           max-width: 16.66666667%;
@@ -50,10 +46,6 @@
           flex: 0 0 83.333333%;
           max-width: 0 0 83.333333%;
         }
-        --col-ten: {
-          flex: 0 0 10%;
-          max-width: 10%;
-        };
         --col-20: {
           flex: 0 0 20%;
           max-width: 20%;
@@ -66,38 +58,54 @@
           flex: 0 0 40%;
           max-width: 40%;
         };
-        --esmm-external-wrapper: {
-          width: 280px;
-        };
       }
       
       /* Grouped Columns */
       .doctype-group {
         @apply --col;
-        @apply --col-20;
+        @apply --col-2;
       }
 
       .doctype-group-alt {
         @apply --col;
-        @apply --col-2;
+        @apply --col-20;
       }
 
       .file-download-group {
         @apply --col;
+        @apply --col-5;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .file-download-group-alt {
+        @apply --col;
         @apply --col-40;
+      }
+
+      .col-4 {
+        @apply --col;
+        @apply --col-4;
       }
 
       .date-uploaded-group {
         @apply --col;
-        @apply --col-ten;
+        @apply --col-2;
+        padding-left: 10px;
       }
 
-      .source-group-a {
+      .date-uploaded-group-alt {
         @apply --col;
-        @apply --col-5;
+        @apply --col-20;
       }
 
-      .source-group-b {
+      .source-group {
+        @apply --col;
+        @apply --col-3;
+        padding-left: 10px;
+      }
+
+      .source-group-alt {
         @apply --col;
         @apply --col-30;
       }
@@ -162,6 +170,14 @@
         width: 16px;
         height: 16px;
       }
+
+      .no-overflow {
+        overflow: hidden;
+      }
+
+      .padding-left {
+        padding-left: 10px;
+      }
     </style>
 
     <div class="paper-material list-panel listControls"
@@ -190,7 +206,7 @@
               Date Uploaded
               <iron-icon id="down" icon="arrow-downward"></iron-icon>
             </data-table-column>
-            <data-table-column class="source-group-a">
+            <data-table-column class="source-group">
               Source
             </data-table-column>
           </data-table-header>
@@ -203,14 +219,16 @@
                     [[item.file_type]]
                   </data-table-column>
                   <data-table-column class="file-download-group">
-                    <a href$="[[item.file_link]]"
-                        target="_blank"
-                        class="col-data">[[item.filename]]</a>
+                    <div class="overflow-hidden">
+                      <a href$="[[item.file_link]]"
+                          target="_blank"
+                          class="col-data">[[item.filename]]</a>
+                    </div>
                   </data-table-column>
                   <data-table-column class="date-uploaded-group">
                     [[item.created]]
                   </data-table-column>
-                  <data-table-column class="source-group-a">
+                  <data-table-column class="source-group">
                     Partnership Management
                   </data-table-column>
               </div>
@@ -224,17 +242,17 @@
               Related To
             </data-table-column>
             <div class="second-header layout-horizontal big-group">
-              <data-table-column class="doctype-group">
+              <data-table-column class="doctype-group-alt">
                 Document Type
               </data-table-column>
-              <data-table-column class="file-download-group">
+              <data-table-column class="file-download-group-alt">
                 File Download
               </data-table-column>
-              <data-table-column class="date-uploaded-group">
+              <data-table-column class="date-uploaded-group-alt">
                 Date Uploaded
                 <iron-icon id="down" icon="arrow-downward"></iron-icon>
               </data-table-column>
-              <data-table-column class="source-group-b">
+              <data-table-column class="source-group-alt">
                 Source
               </data-table-column>
             </div>
@@ -246,12 +264,61 @@
                 [[item.pdssfa]]
               </data-table-column>
               <div class="big-group">
-                  <sub-attachments related-to="[[item.files]]">
-                  </sub-attachments>
+                <sub-attachments related-to="[[item.files]]">
+                </sub-attachments>
               </div>
             </div>
           </template>
         </div>
+
+        <div name="older">
+          <data-table-header no-collapse>
+            <data-table-column class="related-group">
+              PD/SSFA Number
+            </data-table-column>
+            <data-table-column class="related-group">
+              Document Type
+            </data-table-column>
+            <data-table-column class="col-4">
+              File Download
+            </data-table-column>
+            <data-table-column class="related-group padding-left">
+              Date Uploaded
+              <iron-icon id="down" icon="arrow-downward"></iron-icon>
+            </data-table-column>
+            <data-table-column class="related-group">
+              Source
+            </data-table-column>
+          </data-table-header>
+
+          <template is="dom-repeat"
+                    items="[[olderFiles]]">
+            <data-table-row no-collapse>
+              <div slot="row-data">
+                <data-table-column class="related-group">
+                  [[item.pd_ssfa_number]]
+                </data-table-column>
+                <data-table-column class="related-group">
+                  [[item.file_type]]
+                </data-table-column>
+                <data-table-column class="col-4 no-overflow">
+                  <div class="overflow-hidden">
+                    <a href$="[[item.file_link]]"
+                        target="_blank"
+                        class="col-data">[[item.filename]]</a>
+                  </div>
+                </data-table-column>
+                <data-table-column class="related-group padding-left">
+                  [[item.created]]
+                </data-table-column>
+                <data-table-column class="related-group">
+                  Partnership Management
+                </data-table-column>
+              </div>
+            </data-table-row>
+          </template>
+        </div>
+
       </iron-pages>
     </div>
   </template>
@@ -291,12 +358,18 @@
           },
           selectedPDSSFA: {
             type: Array
+          },
+          olderFiles: {
+            type: Array
           }
         };
       }
 
+      // this function, upon a partner being selected, reorganizes the endpoint data and creates groupings
       _valueSelected() {
+        this.$.docSelector.selected = "assessments"
         let header = this.$.superHeader
+        // create a paper-chip for assessments and audits
         let assessments = document.createElement('paper-chip')
         assessments.className = "selected"
         assessments.innerText = 'Assessments & Audits'
@@ -304,7 +377,7 @@
         assessments.addEventListener('tap', () => {
           [...header.children].forEach(child => child.classList.remove('selected'));
           assessments.className = 'selected';
-          if (this.$.docSelector.selected === "pdssfa") {
+          if (this.$.docSelector.selected != "assessments") {
             this.$.docSelector.selected = "assessments"
           }
         });
@@ -314,10 +387,11 @@
           file => file.file_type.indexOf('Assessment') > -1 || file.file_type.indexOf('Audit') > -1
         ))
         
+        // select and reorganize data from endpoint for grouping
         let pDFiles = this.selectedPartner.filter(file => !!file.pd_ssfa_number && file.pd_ssfa_number.split('/').length - 1 === 2)
         let pDKeys = uniq(pDFiles.map(file => file.pd_ssfa_number))
-        let pDRef = uniq(pDKeys.map(file => file.split('/').slice(0, 2).join("/")))
-        let nestedGroups = pDRef.map(k => {
+        let pDRefs = uniq(pDKeys.map(file => file.split('/').slice(0, 2).join("/")))
+        let nestedGroups = pDRefs.map(k => {
           pDFiles = sortWith([
             ascend(prop('pd_ssfa_number')),
             descend(prop('created'))
@@ -338,6 +412,7 @@
         })
         this.set('pDSSFA', nestedGroups)
         
+        // create a paper-chip for each PD Reference
         this.pDSSFA.forEach(pd => {
           let pdChip = document.createElement('paper-chip');
           pdChip.innerText = pd.pdReference;
@@ -346,13 +421,29 @@
             [...header.children].forEach(child => child.classList.remove('selected'));
             pdChip.className = 'selected';
             this.selectedPDSSFA = pd.pd;
-            log(this.selectedPDSSFA)
-            if (this.$.docSelector.selected === "assessments") {
+            if (this.$.docSelector.selected != "pdssfa") {
               this.$.docSelector.selected = "pdssfa"
             }
           });
           header.appendChild(pdChip);
         })
+
+        // create a paper-chip for the older PD/SSFA files that can't be grouped
+        let olderFiles = this.selectedPartner.filter(
+          file => !!file.pd_ssfa_number && file.pd_ssfa_number.split('/').length - 1 != 2
+        )
+        let oldFiles = document.createElement('paper-chip')
+        oldFiles.innerText = 'Older Documents'
+        oldFiles.selectable = true
+        oldFiles.addEventListener('tap', () => {
+          [...header.children].forEach(child => child.classList.remove('selected'));
+          oldFiles.className = 'selected';
+          if (this.$.docSelector.selected != "older") {
+            this.$.docSelector.selected = "older"
+          }
+        });
+        header.appendChild(oldFiles)
+        this.set('olderFiles', olderFiles)
       }
     }
 

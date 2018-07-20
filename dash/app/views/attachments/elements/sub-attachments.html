@@ -15,10 +15,6 @@
           @apply --layout-horizontal;
           box-sizing: border-box;
         };
-        --col-10: {
-          flex: 0 0 10%;
-          max-width: 10%;
-        };
         --col-20: {
           flex: 0 0 20%;
           max-width: 20%;
@@ -46,7 +42,7 @@
 
       .date-uploaded-group {
         @apply --col;
-        @apply --col-10;
+        @apply --col-20;
       }
 
       .source-group-b {
@@ -62,15 +58,14 @@
 
     <template is="dom-repeat" items="[[relatedTo]]">
       <data-table-row no-collapse>
-        <!-- <div> -->
         <div slot="row-data">
           <data-table-column class="doctype-group">
             [[item.file_type]]
           </data-table-column>
           <data-table-column class="file-download-group">
             <a href$="[[item.file_link]]"
-                target="_blank"
-                class="col-data">[[item.filename]]
+               target="_blank"
+               class="col-data">[[item.filename]]
             </a>
           </data-table-column>
           <data-table-column class="date-uploaded-group">
@@ -79,8 +74,7 @@
           <data-table-column class="source-group-b">
             Partnership Management
           </data-table-column>
-        <!-- </div> -->
-      </div>
+        </div>
       </data-table-row>
     </template>
   </template>
