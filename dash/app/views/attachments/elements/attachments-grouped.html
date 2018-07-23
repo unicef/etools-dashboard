@@ -4,6 +4,7 @@
 <link rel="import" href="../../../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../../../bower_components/paper-chip/paper-chip.html">
 <link rel="import" href="../../../../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../../../../bower_components/paper-tooltip/paper-tooltip.html">
 
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
@@ -211,6 +212,9 @@
             </data-table-column>
           </data-table-header>
 
+          <template is="dom-if" if="[[!assessmentsAudits.length]]">
+            <div class="paper-material">No results to show.</div>
+          </template>
           <template is="dom-repeat"
                     items="[[assessmentsAudits]]">
             <data-table-row no-collapse>
@@ -218,12 +222,11 @@
                 <data-table-column class="doctype-group">
                   [[item.file_type]]
                 </data-table-column>
-                <data-table-column class="file-download-group">
-                  <div class="overflow-hidden">
-                    <a href$="[[item.file_link]]"
-                        target="_blank"
-                        class="col-data">[[item.filename]]</a>
-                  </div>
+                <data-table-column class="file-download-group no-overflow">
+                  <a href$="[[item.file_link]]"
+                      target="_blank"
+                      class="col-data">[[item.filename]]</a>
+                  <paper-tooltip>[[item.filename]]</paper-tooltip>
                 </data-table-column>
                 <data-table-column class="date-uploaded-group">
                   [[item.created]]
@@ -248,7 +251,7 @@
               <data-table-column class="file-download-group-alt">
                 File Download
               </data-table-column>
-              <data-table-column class="date-uploaded-group-alt">
+              <data-table-column class="date-uploaded-group-alt padding-left">
                 Date Uploaded
                 <iron-icon id="down" icon="arrow-downward"></iron-icon>
               </data-table-column>
@@ -258,6 +261,9 @@
             </div>
           </data-table-header>
 
+          <template is="dom-if" if="[[!selectedPDSSFA.length]]">
+            <div class="paper-material">No results to show.</div>
+          </template>
           <template is="dom-repeat" items="[[selectedPDSSFA]]">
             <div class="layout-horizontal pd-group">
               <data-table-column class="related-group">
@@ -291,6 +297,9 @@
             </data-table-column>
           </data-table-header>
 
+          <template is="dom-if" if="[[!olderFiles.length]]">
+            <div class="paper-material">No results to show.</div>
+          </template>
           <template is="dom-repeat"
                     items="[[olderFiles]]">
             <data-table-row no-collapse>
@@ -302,11 +311,10 @@
                   [[item.file_type]]
                 </data-table-column>
                 <data-table-column class="col-4 no-overflow">
-                  <div class="overflow-hidden">
-                    <a href$="[[item.file_link]]"
-                       target="_blank"
-                       class="col-data">[[item.filename]]</a>
-                  </div>
+                  <a href$="[[item.file_link]]"
+                      target="_blank"
+                      class="col-data">[[item.filename]]</a>
+                  <paper-tooltip>[[item.filename]]</paper-tooltip>
                 </data-table-column>
                 <data-table-column class="related-group padding-left">
                   [[item.created]]
@@ -387,7 +395,7 @@
             this.$.docSelector.selected = "assessments"
           }
         });
-        header.innerHTML = null
+        header.innerHTML = ""
         header.appendChild(assessments)
         this.set('assessmentsAudits', this.selectedPartner.filter(
           file => file.file_type.indexOf('Assessment') > -1 || file.file_type.indexOf('Audit') > -1
@@ -446,7 +454,9 @@
         let header = this.$.superHeader
         // create a paper-chip for the older PD/SSFA files that can't be grouped
         let olderFiles = this.selectedPartner.filter(
-          file => !!file.pd_ssfa_number && file.pd_ssfa_number.split('/').length - 1 != 2
+          file => (file.file_type.indexOf('Assessment') === -1) 
+                  && (file.file_type.indexOf('Audit') === -1) 
+                  && (file.pd_ssfa_number.split('/').length - 1 != 2 || !file.pd_ssfa_number)
         )
         let oldFiles = document.createElement('paper-chip')
         oldFiles.innerText = 'Older Documents'
