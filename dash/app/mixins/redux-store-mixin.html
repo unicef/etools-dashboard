@@ -17,7 +17,6 @@
     countryProgrammes: [],
     offices: [],
     sectors: [],
-    sections: [],
     trips: null,
     tripsSupervised: null,
     actionPointsByMe: null,
@@ -55,9 +54,6 @@
 
       case 'SET_TRIPS_YEARS':
         return merge(state, { tripsYears: action.tripsYears });
-
-      case 'SET_SECTIONS':
-        return merge(state, { sections: action.sections });
 
       case 'SET_SECTORS':
         return merge(state, { sectors: action.sectors });

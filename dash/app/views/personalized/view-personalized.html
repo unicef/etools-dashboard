@@ -4,6 +4,7 @@
 <link rel="import" href="../../styles/list-styles.html">
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../styles/grid-layout-styles.html">
+<link rel="import" href="../../styles/buttons-styles.html">
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <link rel="import" href="../../../../bower_components/paper-tabs/paper-tab.html">
@@ -32,7 +33,7 @@
 <dom-module id="view-personalized">
   <template>
     <custom-style>
-      <style include="shared-styles grid-layout-styles list-styles iron-flex iron-flex-factors page-layout-styles paper-material-styles">
+      <style include="shared-styles grid-layout-styles list-styles iron-flex iron-flex-factors page-layout-styles paper-material-styles buttons-styles">
         :host {
           width: 100%;
         }
@@ -73,27 +74,21 @@
           height: 42px;
         }
 
-        .toolbar-title {
-          font-size: 16px;
-          text-transform: uppercase;
-          color: var(--dark-primary-text-color);
-        }
-
         .toolbar-item {
           margin-left: 24px;
         }
 
         .list-title {
-          font-size: 20px;
           font-weight: 500;
         }
 
-        data-table-header.main {
-          border-bottom: none;
+        div.title {
+          font-size: 18px;
         }
 
-        data-table-row.wrapper {
-          padding-left: 0;
+        .end-justified {
+          justify-content: flex-end;
+          text-align: right;
         }
 
         .small-text {
@@ -104,35 +99,161 @@
         .right-padded {
           padding-right: 24px;
         }
+
+        .list-panel paper-button a {
+          padding-right: 0;
+        }
+
+        div.partnership-buttons paper-button:last-child {
+          padding-right: 0;
+          margin-right: 0;
+        }
+
+        .trips-ap {
+          display: flex;
+          justify-content: space-between;
+          padding: 0 24px;
+          height: 64px;
+          align-items: center;
+          border-bottom: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
+        }
+
+        data-table-header.double {
+          --paper-material-padding: 6.5px 24px;
+          height: 56px;
+        }
+
+        data-table-header.single {
+          --paper-material-padding: 18px 24px;
+          height: 56px;
+        }
       </style>
     </custom-style>
 
-    <h1 class="greeting">Welcome, [[user.first_name]]</h1>
-    <div class="paper-material list-panel management-toolbar layout horizontal center" elevation="1">
-      <div class="toolbar-icon-container trip-management">
-        <iron-icon class="toolbar-icon" icon="language"></iron-icon>
-      </div>
-      <div class="toolbar-title toolbar-item flex-2">
-        Trip management
-      </div>
-      <paper-button class="button toolbar-item">
-        <a href="[[baseSite]]/t2f/travel-list/" on-tap="goToPage" app-name="t2f" page="travel-list">
-          <iron-icon icon="maps:transfer-within-a-station"></iron-icon>
-          Travel 2 Field
-        </a>
+    <h1 class="greeting">Welcome, [[user.first_name]]!</h1>
 
-      </paper-button>
-      <paper-button on-tap="goToPage" app-name="t2f" page="action-points-list" class="button toolbar-item">
-        <iron-icon icon="list"></iron-icon>
-        Action Points
-      </paper-button>
+    <!--MY PARTNERSHIPS-->
+    <div class="paper-material list-panel clear-pad" elevation="1">
+      <div no-title no-collapse class="list-title layout horizontal center main trips-ap">
+        <div class="flex-2 title">My Partnerships</div>
+        <div class="partnership-buttons">
+          <paper-button class="button toolbar-item">
+            <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/list" app-name="pmp" page="partners">
+              <iron-icon icon="social:people"></iron-icon>
+              Partners
+            </a>
+          </paper-button>
+          <paper-button class="button toolbar-item">
+            <a on-tap="goToPage" href="[[baseSite]]/pmp/agreements" app-name="pmp" page="agreements">
+              <iron-icon icon="av:playlist-add-check"></iron-icon>
+              Agreements
+            </a>
+          </paper-button>
+          <paper-button class="button toolbar-item">
+            <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions" app-name="pmp"
+              page="interventions">
+              <iron-icon icon="icons:description"></iron-icon>
+              PD/SSFA TOR
+            </a>
+          </paper-button>
+          <paper-button class="button toolbar-item">
+            <a on-tap="goToPage" href="[[baseSite]]/pmp/government-partners" app-name="pmp"
+              page="government-partners">
+              <iron-icon icon="icons:account-balance"></iron-icon>
+              Government
+            </a>
+          </paper-button>
+        </div>
+      </div>
+      <template is="dom-if" if="[[!partnershipsLoaded]]">
+        <etools-loading active></etools-loading>
+      </template>
+      <data-table-header class="single">
+        <div class="col-data small-text col-2">PD/SSFA Reference No.</div>
+        <div class="col-data small-text flex-3">PD/SSFA Title</div>
+        <div class="col-data small-text col-2 end-justified">UNICEF Cash Amount</div>
+      </data-table-header>
+      <div class="list-content">
+        <template is="dom-if" if="[[!partnerships.length]]">
+          <div class="paper-material">No results to show.</div>
+        </template>
+        <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden="[[!partnershipsLoaded]]">
+          <data-table-row no-collapse>
+            <div slot="row-data">
+              <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[partnership.id]]/details" app-name="pmp"
+                page="interventions" id="[[partnership.id]]/details"
+                class="col-data col-2">
+                [[partnership.number]]
+              </a>
+              <span class="description description-size flex-3 col-data">
+                [[partnership.title]]
+              </span>
+              <span class="col-data col-2 layout horizontal end-justified">
+                [[partnership.budget_currency]] [[currencyFormat(partnership.total_unicef_budget)]] (UNICEF Cash)</span>
+            </div>
+          </data-table-row>
+        </template>
+      </div>
     </div>
+    
     <div class="layout horizontal double">
+      <!-- ACTION POINTS -------------------------->
+      <div class="paper-material list-panel half-paper clear-pad" elevation="1">
+        <div class="list-title layout horizontal main trips-ap" no-title no-collapse>
+          <div class="title">Action Points</div>
+          <paper-button class="primary-btn with-prefix" on-tap="_goToAddActionPoint">
+            <iron-icon icon="add"></iron-icon>
+            Add Action Point
+          </paper-button>
+        </div>
+        <div class="top-content-row tabs-header">
+          <paper-tabs selected="{{actionsTab}}"
+                      attr-for-selected="name"
+                      fallback-selection="actionPointsForMe" noink bottom-item>
+            <paper-tab name="actionPointsForMe" link>
+              <span class="tab-content">Assigned To Me</span>
+            </paper-tab>
+            <paper-tab name="actionPointsByMe" link>
+              <span class="tab-content">Assigned By Me</span>
+            </paper-tab>
+          </paper-tabs>
+        </div>
+        <data-table-header class="double">
+          <div class="col small-text right-padded col-data col-10">Description<br>Status</div>
+          <div class="col-2 small-text col-data">Due Date<br>[[_principal(actionsTab)]]</div>
+        </data-table-header>
+        <div class="list-content">
+          <template is="dom-if" if="[[!tripsItems.length]]">
+            <div class="paper-material">No results to show.</div>
+          </template>
+          <template is="dom-repeat" items="[[actionPointsItems]]" as="action">
+            <data-table-row no-collapse>
+              <div slot="row-data">
+                <div class="layout vertical col-10">
+                  <span class="col-data description">
+                    <a on-tap="_goToActionPoint" href="[[baseSite]]/t2f/action-point/[[action.id]]">[[action.description]]</a>
+                  </span>
+                  <span class="suppData">[[capitalizeWord(action.status)]]</span>
+                </div>
+                <div class="layout vertical start col-data col-2 ">
+                  <span class="col-data">[[_dateFormatted(action.due_date)]]</span>
+                  <span class="suppData">[[_getDisplayName('actions',action)]]</span>
+                </div>
+              </div>
+            </data-table-row>
+          </template>
+        </div>
+      </div>
+
       <!-- TRIPS -------------------------->
       <div class="paper-material list-panel half-paper clear-pad" elevation="1">
-        <data-table-header class="list-title layout horizontal center main" no-title no-collapse>
-          <div>Trips</div>
-        </data-table-header>
+        <div class="list-title layout horizontal main trips-ap" no-title no-collapse>
+          <div class="title">Trips</div>
+          <paper-button class="primary-btn with-prefix" on-tap="_goToAddTrip">
+            <iron-icon icon="add"></iron-icon>
+            Add New Trip
+          </paper-button>
+        </div>
         <div class="top-content-row tabs-header">
           <paper-tabs selected="{{tripsTab}}"
                       attr-for-selected="name"
@@ -145,12 +266,15 @@
             </paper-tab>
           </paper-tabs>
         </div>
-        <data-table-header>
-          <div class="col small-text right-padded col-data col-2">Reference<br>Number</div>
+        <data-table-header class="double">
+          <div class="col small-text right-padded col-data col-2">Reference No.</div>
           <div class="flex-2 small-text right-padded col-data">Purpose of Trip</div>
           <div class="col-2 small-text col-data">Start Date<br>[[_principal(tripsTab)]]</div>
         </data-table-header>
         <div class="list-content">
+          <template is="dom-if" if="[[!tripsItems.length]]">
+            <div class="paper-material">No results to show.</div>
+          </template>
           <template is="dom-repeat" items="[[tripsItems]]" as="trip">
             <data-table-row no-collapse>
               <div slot="row-data">
@@ -170,110 +294,6 @@
           </template>
         </div>
       </div>
-
-      <!-- ACTION POINTS -------------------------->
-      <div class="paper-material list-panel half-paper clear-pad" elevation="1">
-        <data-table-header class="list-title layout horizontal center main" no-title no-collapse>
-          <span>Action Points</span>
-        </data-table-header>
-        <div class="top-content-row tabs-header">
-          <paper-tabs selected="{{actionsTab}}"
-                      attr-for-selected="name"
-                      fallback-selection="actionPointsForMe" noink bottom-item>
-            <paper-tab name="actionPointsForMe" link>
-              <span class="tab-content">Assigned To Me</span>
-            </paper-tab>
-            <paper-tab name="actionPointsByMe" link>
-              <span class="tab-content">Assigned By Me</span>
-            </paper-tab>
-          </paper-tabs>
-        </div>
-        <data-table-header>
-            <div class="col small-text right-padded col-data col-10">Description<br>Status</div>
-            <div class="col-2 small-text col-data">Due Date<br>[[_principal(actionsTab)]]</div>
-          </data-table-header>
-        <div class="list-content">
-          <template is="dom-repeat" items="[[actionPointsItems]]" as="action">
-            <data-table-row no-collapse>
-              <div slot="row-data">
-                <div class="layout vertical col-10">
-                  <span class="col-data description">
-                    <a on-tap="_goToActionPoint" href="[[baseSite]]/t2f/action-point/[[action.id]]">[[action.description]]</a>
-                  </span>
-                  <span class="suppData">[[capitalizeWord(action.status)]]</span>
-                </div>
-                <div class="layout vertical start col-data col-2 ">
-                  <span class="col-data">[[_dateFormatted(action.due_date)]]</span>
-                  <span class="suppData">[[_getDisplayName('actions',action)]]</span>
-                </div>
-              </div>
-            </data-table-row>
-          </template>
-        </div>
-      </div>
-    </div>
-
-    <!-- PARTNERSHIP MANAGEMENT TOOLBAR-->
-    <div class="paper-material list-panel management-toolbar layout horizontal center" elevation="1">
-      <div class="toolbar-icon-container partnership-management">
-        <iron-icon class="toolbar-icon" icon="social:group"></iron-icon> <!-- Placeholder icon -->
-      </div>
-      <div class="toolbar-title toolbar-item flex-2">
-        Partnership management
-      </div>
-      <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/list" app-name="pmp" page="partners">
-          <iron-icon icon="social:people"></iron-icon>
-          Partners
-        </a>
-      </paper-button>
-      <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/agreements" app-name="pmp" page="agreements">
-          <iron-icon icon="av:playlist-add-check"></iron-icon>
-          Agreements
-        </a>
-      </paper-button>
-      <paper-button class="button toolbar-item">
-        <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions" app-name="pmp"
-          page="interventions">
-          <iron-icon icon="verified-user"></iron-icon>
-          PD/SSFA TOR
-        </a>
-      </paper-button>
-    </div>
-
-    <!--MY PARTNERSHIPS-->
-    <div class="paper-material list-panel clear-pad" elevation="1">
-      <data-table-header no-title no-collapse class="list-title layout horizontal center main">
-        <span>My Partnerships</span>
-      </data-table-header>
-      <template is="dom-if" if="[[!partnershipsLoaded]]">
-        <etools-loading active></etools-loading>
-      </template>
-      <data-table-header>
-        <div class="col-data small-text col-2">PD/SSFA Reference Number</div>
-        <div class="col-data small-text flex-3">PD/SSFA Title</div>
-        <div class="col-data small-text col-2">UNICEF Cash Amount</div>
-      </data-table-header>
-      <div class="list-content">
-        <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden="[[!partnershipsLoaded]]">
-          <data-table-row no-collapse>
-            <div slot="row-data">
-              <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[partnership.id]]/details" app-name="pmp"
-                page="interventions" id="[[partnership.id]]/details"
-                class="col-data col-2">
-                [[partnership.number]]
-              </a>
-              <span class="description description-size flex-3 col-data">
-                [[partnership.title]]
-              </span>
-              <span class="col-data col-2 layout horizontal end-justified">
-                [[getCurrencyPrefix(partnership.budget_currency)]][[currencyFormat(partnership.total_unicef_budget)]] (UNICEF Cash)</span>
-            </div>
-          </data-table-row>
-        </template>
-      </div>
-
     </div>
   </template>
 
@@ -410,7 +430,7 @@
             return "Assigned By"
             break;
           case "actionPointsByMe":
-            return "Assigned To"
+            return "Assignee"
             break;
         }
       }
@@ -439,6 +459,14 @@
         if (active) {
           this.updateAppState('dashboard/personalized', [], true);
         }
+      }
+
+      _goToAddActionPoint() {
+        window.location.href = '/apd/action-points/new'
+      }
+
+      _goToAddTrip() {
+        window.location.href = '/t2f/edit-travel/-1';
       }
 
       _goToActionPoint(e) {

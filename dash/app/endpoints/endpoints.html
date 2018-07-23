@@ -56,23 +56,18 @@
       exp: 6 * 60 * 60 * 1000, // 6h
       cachingKey: 'static'
     },
-    sections: {
-      url: '/api/sections',
-      exp: 6 * 60 * 60 * 1000,
-      cachingKey: 'sections'
-    },
     sectors: {
       url: '/api/reports/sectors',
       exp: 6 * 60 * 60 * 1000,
       cachingKey: 'sectors'
     },
     actionPointsByMe: {
-      template: '/api/t2f/action_points/?f_assigned_by=<%=id%>&mf_status=ongoing,open',
+      template: '/api/action-points/action-points/??f_assigned_by=<%=id%>&mf_status=ongoing,open',
       exp: 6 * 60 * 60 * 1000,
       cachingKey: 'actionPointsByMe'
     },
     actionPointsForMe: {
-      template: '/api/t2f/action_points/?f_person_responsible=<%=id%>&mf_status=ongoing,open',
+      template: '/api/action-points/action-points/?f_person_responsible=<%=id%>&mf_status=ongoing,open',
       exp: 6 * 60 * 60 * 1000,
       cachingKey: 'actionPointsForMe'
     },
