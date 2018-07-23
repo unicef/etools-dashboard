@@ -114,22 +114,22 @@
             };
           },
 
-          setActionPointsByMe({ data } = []) {
+          setActionPointsByMe({results} = []) {
             return {
               type: 'SET_ACTION_PTS_BY_ME',
               actionPointsByMe: map(
                 pick(['status', 'description', 'created_at', 'person_responsible_name', 'id', 'due_date']),
-                data
+                results
               )
             };
           },
 
-          setActionPointsForMe({ data } = []) {
+          setActionPointsForMe({ results } = []) {
             return {
               type: 'SET_ACTION_PTS_FOR_ME',
               actionPointsForMe: map(
                 pick(['status', 'description', 'created_at', 'assigned_by_name', 'id', 'due_date']),
-                data
+                results
               )
             };
           },
@@ -272,7 +272,7 @@
             this._callNext();
           } else {
             this.sendRequest(next.endpoint).then((res) => this._handleResponse(res))
-              .catch((err) => this.handleErrorResponse(err));
+              .catch((err) => log(err));
           }
         }
       }
