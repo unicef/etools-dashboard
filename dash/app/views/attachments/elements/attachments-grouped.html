@@ -216,21 +216,21 @@
             <data-table-row no-collapse>
               <div slot="row-data">
                 <data-table-column class="doctype-group">
-                    [[item.file_type]]
-                  </data-table-column>
-                  <data-table-column class="file-download-group">
-                    <div class="overflow-hidden">
-                      <a href$="[[item.file_link]]"
-                          target="_blank"
-                          class="col-data">[[item.filename]]</a>
-                    </div>
-                  </data-table-column>
-                  <data-table-column class="date-uploaded-group">
-                    [[item.created]]
-                  </data-table-column>
-                  <data-table-column class="source-group">
-                    Partnership Management
-                  </data-table-column>
+                  [[item.file_type]]
+                </data-table-column>
+                <data-table-column class="file-download-group">
+                  <div class="overflow-hidden">
+                    <a href$="[[item.file_link]]"
+                        target="_blank"
+                        class="col-data">[[item.filename]]</a>
+                  </div>
+                </data-table-column>
+                <data-table-column class="date-uploaded-group">
+                  [[item.created]]
+                </data-table-column>
+                <data-table-column class="source-group">
+                  [[item.uploaded_by]]
+                </data-table-column>
               </div>
             </data-table-row>
           </template>
@@ -304,15 +304,15 @@
                 <data-table-column class="col-4 no-overflow">
                   <div class="overflow-hidden">
                     <a href$="[[item.file_link]]"
-                        target="_blank"
-                        class="col-data">[[item.filename]]</a>
+                       target="_blank"
+                       class="col-data">[[item.filename]]</a>
                   </div>
                 </data-table-column>
                 <data-table-column class="related-group padding-left">
                   [[item.created]]
                 </data-table-column>
                 <data-table-column class="related-group">
-                  Partnership Management
+                  [[item.uploaded_by]]
                 </data-table-column>
               </div>
             </data-table-row>
@@ -344,7 +344,6 @@
           },
           selectedPartner: {
             type: Object,
-            observer: '_valueSelected'
           },
           groupView: {
             type: String,
@@ -365,8 +364,15 @@
         };
       }
 
-      // this function, upon a partner being selected, reorganizes the endpoint data and creates groupings
-      _valueSelected() {
+      static get observers() {
+        return [
+          '_appendAssessmentChip(selectedPartner)',
+          '_reorganizeData(selectedPartner)',
+          '_appendChips(pDSSFA)'
+        ]
+      }
+
+      _appendAssessmentChip() {
         this.$.docSelector.selected = "assessments"
         let header = this.$.superHeader
         // create a paper-chip for assessments and audits
@@ -386,9 +392,13 @@
         this.set('assessmentsAudits', this.selectedPartner.filter(
           file => file.file_type.indexOf('Assessment') > -1 || file.file_type.indexOf('Audit') > -1
         ))
-        
-        // select and reorganize data from endpoint for grouping
-        let pDFiles = this.selectedPartner.filter(file => !!file.pd_ssfa_number && file.pd_ssfa_number.split('/').length - 1 === 2)
+      }
+
+      // select and reorganize data from endpoint for grouping
+      _reorganizeData() {
+        let pDFiles = this.selectedPartner.filter(
+          file => !!file.pd_ssfa_number && file.pd_ssfa_number.split('/').length - 1 === 2
+        )
         let pDKeys = uniq(pDFiles.map(file => file.pd_ssfa_number))
         let pDRefs = uniq(pDKeys.map(file => file.split('/').slice(0, 2).join("/")))
         let nestedGroups = pDRefs.map(k => {
@@ -411,7 +421,10 @@
           return obj
         })
         this.set('pDSSFA', nestedGroups)
-        
+      }
+
+      _createPDChips() {
+        let header = this.$.superHeader
         // create a paper-chip for each PD Reference
         this.pDSSFA.forEach(pd => {
           let pdChip = document.createElement('paper-chip');
@@ -427,7 +440,10 @@
           });
           header.appendChild(pdChip);
         })
+      }
 
+      _handleOlderPDs() {
+        let header = this.$.superHeader
         // create a paper-chip for the older PD/SSFA files that can't be grouped
         let olderFiles = this.selectedPartner.filter(
           file => !!file.pd_ssfa_number && file.pd_ssfa_number.split('/').length - 1 != 2
@@ -445,6 +461,12 @@
         header.appendChild(oldFiles)
         this.set('olderFiles', olderFiles)
       }
+
+       _appendChips() {
+        this._createPDChips()
+        this._handleOlderPDs()
+      }
+
     }
 
     window.customElements.define(AttachmentsGrouped.is, AttachmentsGrouped);

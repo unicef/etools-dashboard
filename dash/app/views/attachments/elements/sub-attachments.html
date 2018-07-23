@@ -30,22 +30,17 @@
       }
       
       /* Grouped Columns */
-      .doctype-group {
+      .col-20 {
         @apply --col;
         @apply --col-20;
       }
 
-      .file-download-group {
+      .col-40 {
         @apply --col;
         @apply --col-40;
       }
 
-      .date-uploaded-group {
-        @apply --col;
-        @apply --col-20;
-      }
-
-      .source-group-b {
+      .col-30 {
         @apply --col;
         @apply --col-30;
       }
@@ -59,20 +54,20 @@
     <template is="dom-repeat" items="[[relatedTo]]">
       <data-table-row no-collapse>
         <div slot="row-data">
-          <data-table-column class="doctype-group">
+          <data-table-column class="col-20">
             [[item.file_type]]
           </data-table-column>
-          <data-table-column class="file-download-group">
+          <data-table-column class="col-40">
             <a href$="[[item.file_link]]"
                target="_blank"
                class="col-data">[[item.filename]]
             </a>
           </data-table-column>
-          <data-table-column class="date-uploaded-group">
+          <data-table-column class="col-20">
             [[item.created]]
           </data-table-column>
-          <data-table-column class="source-group-b">
-            Partnership Management
+          <data-table-column class="col-30">
+            [[item.uploaded_by]]
           </data-table-column>
         </div>
       </data-table-row>
