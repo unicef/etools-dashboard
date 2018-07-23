@@ -2,6 +2,7 @@
 <link rel="import" href="../../../components/data-table/data-table-column.html">
 <link rel="import" href="../../../components/data-table/data-table-header.html">
 <link rel="import" href="../../../components/data-table/data-table-row.html">
+<link rel="import" href="../../../../../bower_components/paper-tooltip/paper-tooltip.html">
 
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
@@ -38,6 +39,7 @@
       .col-40 {
         @apply --col;
         @apply --col-40;
+        overflow: hidden;
       }
 
       .col-30 {
@@ -45,6 +47,10 @@
         @apply --col-30;
       }
       /* Grouped Columns End */
+
+      .padding-left {
+        padding-left: 10px;
+      }
 
       data-table-row {
         border-left: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
@@ -59,11 +65,12 @@
           </data-table-column>
           <data-table-column class="col-40">
             <a href$="[[item.file_link]]"
-               target="_blank"
-               class="col-data">[[item.filename]]
+              target="_blank"
+              class="col-data">[[item.filename]]
             </a>
+            <paper-tooltip>[[item.filename]]</paper-tooltip>
           </data-table-column>
-          <data-table-column class="col-20">
+          <data-table-column class="col-20 padding-left">
             [[item.created]]
           </data-table-column>
           <data-table-column class="col-30">
