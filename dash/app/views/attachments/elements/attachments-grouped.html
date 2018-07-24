@@ -389,7 +389,7 @@
         assessments.innerText = 'Assessments & Audits'
         assessments.selectable = true
         assessments.addEventListener('tap', () => {
-          [...header.children].forEach(child => child.classList.remove('selected'));
+          Array.from(header.children).forEach(child => child.classList.remove('selected'));
           assessments.className = 'selected';
           if (this.$.docSelector.selected != "assessments") {
             this.$.docSelector.selected = "assessments"
@@ -439,7 +439,7 @@
           pdChip.innerText = pd.pdReference;
           pdChip.selectable = true;
           pdChip.addEventListener('tap', () => {
-            [...header.children].forEach(child => child.classList.remove('selected'));
+            Array.from(header.children).forEach(child => child.classList.remove('selected'));
             pdChip.className = 'selected';
             this.selectedPDSSFA = pd.pd;
             if (this.$.docSelector.selected != "pdssfa") {
@@ -462,7 +462,7 @@
         oldFiles.innerText = 'Older Documents'
         oldFiles.selectable = true
         oldFiles.addEventListener('tap', () => {
-          [...header.children].forEach(child => child.classList.remove('selected'));
+          Array.from(header.children).forEach(child => child.classList.remove('selected'));
           oldFiles.className = 'selected';
           if (this.$.docSelector.selected != "older") {
             this.$.docSelector.selected = "older"
