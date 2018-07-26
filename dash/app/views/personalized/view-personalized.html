@@ -38,6 +38,10 @@
           width: 100%;
         }
 
+        div.paper-material {
+          -ms-overflow-style: -ms-autohiding-scrollbar;
+        }
+
         .greeting {
           padding: 0 24px;
           font-size: 24px;
@@ -127,6 +131,10 @@
           --paper-material-padding: 18px 24px;
           height: 56px;
         }
+
+        div.inherit-width {
+          width: inherit;
+        }
       </style>
     </custom-style>
 
@@ -175,7 +183,7 @@
       </data-table-header>
       <div class="list-content">
         <template is="dom-if" if="[[!partnerships.length]]">
-          <div class="paper-material">No results to show.</div>
+          <div class="paper-material inherit-width">No results to show.</div>
         </template>
         <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden="[[!partnershipsLoaded]]">
           <data-table-row no-collapse>
@@ -224,7 +232,7 @@
         </data-table-header>
         <div class="list-content">
           <template is="dom-if" if="[[!actionPointsItems.length]]">
-            <div class="paper-material">No results to show.</div>
+            <div class="paper-material inherit-width">No results to show.</div>
           </template>
           <template is="dom-repeat" items="[[actionPointsItems]]" as="action">
             <data-table-row no-collapse>
@@ -273,7 +281,7 @@
         </data-table-header>
         <div class="list-content">
           <template is="dom-if" if="[[!tripsItems.length]]">
-            <div class="paper-material">No results to show.</div>
+            <div class="paper-material inherit-width">No results to show.</div>
           </template>
           <template is="dom-repeat" items="[[tripsItems]]" as="trip">
             <data-table-row no-collapse>
