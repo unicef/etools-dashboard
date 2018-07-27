@@ -83,7 +83,7 @@
         padding-bottom: 12px;
       }
 
-      paper-button.curved-left {
+      .curved-left {
         border-radius: 50px 0 0 50px;
         background: rgb(255, 255, 255);
         height: 36px;
@@ -91,10 +91,9 @@
         padding-right: 1em;
         padding-left: 16px;
         cursor: pointer;
-        color: var(--secondary-text-color)
       }
 
-      paper-button.curved-right {
+      .curved-right {
         border-radius: 0 50px 50px 0;
         background: rgb(216, 216, 216);
         height: 36px;
@@ -102,17 +101,16 @@
         padding-left: 1em;
         padding-right: 16px;
         cursor: pointer;
-        color: var(--dark-disabled-text-color)
       }
 
       .dark-button {
-        background: rgb(216, 216, 216) !important;
-        color: var(--dark-disabled-text-color) !important
+        background: rgb(216, 216, 216);
+        color: rgba(0, 0, 0, 0.54);
       }
 
       .light-button {
-        background: rgb(255, 255, 255) !important;
-        color: var(--secondary-text-color) !important
+        background: rgb(255, 255, 255);
+        color: rgba(0, 0, 0, 0.87);
       }
 
       iron-icon[name="assurance"],
@@ -358,18 +356,12 @@
         if (!tab || !hactActive) { return; }
         if (tab === 'charts') {
           this.updateAppState(this.route.prefix+this.route.path);
-        }
-        this.hactPage = tab;
-        if (this.hactPage === 'charts') {
           this.$.assurancePlan.classList.add('dark-button');
-          this.$.assuranceIcon.classList.add('dark-button');
           this.$.dashboardCharts.classList.add('light-button');
-          this.$.chartsIcon.classList.add('light-button');
         } else {
+          this.updateAppState(this.route.prefix+this.route.path+'?'+this.buildQueryString())
           this.$.assurancePlan.classList.remove('dark-button');
-          this.$.assuranceIcon.classList.remove('dark-button');
           this.$.dashboardCharts.classList.remove('light-button');
-          this.$.chartsIcon.classList.remove('light-button');
         }
       }
 
@@ -391,13 +383,13 @@
         this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
         const qs = this.buildQueryString();
         const currentRoute = this.route.prefix+this.route.path;
-        if (qs !== null) {
+        if (qs !== null && this.route.path != "/charts") {
           this.updateAppState(currentRoute, qs, true);
           if (this.requiredDataLoaded) {
             this._filterPartnersData();
           }
         } else {
-          if (location.search === '') {
+          if (location.search === '' && this.route.path != "/charts") {
             this.updateAppState(currentRoute, qs, false);
           }
           if (this.forceDataRefresh && this.requiredDataLoaded) {
