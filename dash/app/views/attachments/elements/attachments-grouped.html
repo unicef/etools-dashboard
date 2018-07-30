@@ -297,9 +297,6 @@
             </data-table-column>
           </data-table-header>
 
-          <template is="dom-if" if="[[!olderFiles.length]]">
-            <div class="paper-material">No results to show.</div>
-          </template>
           <template is="dom-repeat"
                     items="[[olderFiles]]">
             <data-table-row no-collapse>
@@ -462,6 +459,9 @@
                   && (file.file_type.indexOf('Audit') === -1) 
                   && (file.pd_ssfa_number.split('/').length - 1 != 2 || !file.pd_ssfa_number)
         )
+        if (!olderFiles.length) {
+          return
+        }
         let oldFiles = document.createElement('paper-chip')
         oldFiles.innerText = 'Older Documents'
         oldFiles.selectable = true
