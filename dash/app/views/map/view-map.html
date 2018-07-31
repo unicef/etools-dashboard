@@ -32,42 +32,42 @@
         --paper-toggle-button-checked-button-color: #3baaee;
         /* TODO: replace with app-theme var */
       }
-
+  
       leaflet-map {
         height: 630px;
       }
-
+  
       paper-menu {
         max-width: 266px;
       }
-
-
+  
+  
       .map {
         display: block;
       }
-
+  
       .toggler {
         display: flex;
         bottom: 8px;
         margin-bottom: 20px;
         padding-left: 24px;
       }
-
+  
       p {
         margin: 0;
       }
-
+  
       paper-toggle-button {
         margin-left: 16px;
       }
-
+  
       .error {
         color: var(--error-color);
         left: 24px;
         top: 60px;
         position: absolute;
       }
-
+  
       .warning-box {
         min-width: 228px;
       }
@@ -84,29 +84,28 @@
         </div>
         <p hidden$="[[!hasWarning]]"
            class="error">[[warningMessage]]</p>
-
+  
       </div>
       <div class="filters-divider"></div>
       <div class="wrap-controls">
         <template is="dom-repeat"
                   items="[[selectedFilters]]"
                   as="filter">
-
+  
           <template is="dom-if"
                     if="[[filterTypeIs('esmm', filter.type)]]">
             <div class="filter esmm">
-
+  
               <etools-dropdown label="[[filter.filterName]]"
-                                     placeholder="&#8212;"
-                                     disabled$="[[!filter.selectionOptions.length]]"
-                                     options="[[filter.selectionOptions]]"
-                                     option-value="[[filter.optionValue]]"
-                                     option-label="[[filter.optionLabel]]"
-                                     on-selected-changed="_handleSelect"
-                                     selected="[[filter.alreadySelected]]"
-                                     trigger-value-change-event
-                                     on-etools-selected-items-changed="esmmValueChanged"
-                                     >
+                               placeholder="&#8212;"
+                               disabled$="[[!filter.selectionOptions.length]]"
+                               options="[[filter.selectionOptions]]"
+                               option-value="[[filter.optionValue]]"
+                               option-label="[[filter.optionLabel]]"
+                               on-selected-changed="_handleSelect"
+                               selected="[[filter.alreadySelected]]"
+                               trigger-value-change-event
+                               on-etools-selected-items-changed="esmmValueChanged">
               </etools-dropdown>
               <paper-icon-button class="remove-field remove"
                                  icon="cancel"
@@ -116,7 +115,7 @@
                                  data-reset-path$="[[filter.path]]">
               </paper-icon-button>
             </div>
-
+  
           </template>
         </template>
       </div>
@@ -140,8 +139,9 @@
     <div class="paper-material map"
          elevation="1">
       <!-- <template is="dom-if"
-                if="[[staticDataLoaded]]"> -->
+                        if="[[staticDataLoaded]]"> -->
       <leaflet-map fit-to-markers
+                   id="map"
                    zoom="[[country.initial_zoom]]"
                    longitude="[[country.longitude]]"
                    latitude="[[country.latitude]]">
@@ -203,7 +203,7 @@
             type: Boolean,
             value: true
           },
-          warningMessage: {
+            warningMessage: {
             type: String
           },
           countryProgrammes: {
@@ -285,8 +285,8 @@
         const { value } = e.detail;
         this.set(filter.path, value);
       }
-      _partnersReceived(partners){
-        this.set('partnersList', partners)
+      _partnersReceived(partners) {
+        this.set('partnersList', partners);
       }
 
       static get observers() {
@@ -336,9 +336,9 @@
           this._validateUserCountry(userCountry);
         // find the current country programme based on criteria in property currentCountryProgramme
         const currentCp = find(
-          cp => keys(this.currentCountryProgramme).reduce(
+          (cp) => keys(this.currentCountryProgramme).reduce(
             (curr, next) => {
-              return cp[next] === this.currentCountryProgramme[next] && curr
+              return cp[next] === this.currentCountryProgramme[next] && curr;
             }, true
           ), this.countryProgrammes);
 
@@ -391,7 +391,7 @@
         this.setProperties({
           country_programme: currentCp.id,
           status: 'active'
-        })
+        });
       }
 
       _updateSelectedFiltersValues() {
@@ -407,7 +407,7 @@
               filterName: 'Status',
               selectedValue: this.status
             }
-          
+    
           ];
           this.updateShownFilters(filtersValues);
         });
@@ -463,8 +463,8 @@
         if (!country_programme && !sector && !status && !partner) {
           this.setProperties({
             hasWarning: true,
-            warningMessage: 'Select filters to show results on map',
-          })
+            warningMessage: 'Select filters to show results on map'
+          });
         }
       }
 

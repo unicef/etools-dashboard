@@ -210,7 +210,7 @@
       </div>
 
       <div name="charts">
-        <hact-charts active="[[_isActive(hactPage,'charts')]]"></hact-charts>
+        <hact-charts active="[[_isActive(routeData.hactTab,'charts')]]"></hact-charts>
       </div>
     </iron-pages>
   </template>
@@ -287,10 +287,6 @@
             type: Boolean,
             value: false
           },
-          hactPage: {
-            type: String,
-            notify: true
-          },
           graphsActive: {
             type: Boolean,
             value: false
@@ -360,7 +356,7 @@
           this.$.assurancePlan.classList.add('dark-button');
           this.$.dashboardCharts.classList.add('light-button');
         } else {
-          this.updateAppState(this.route.prefix+this.route.path+'?'+this.buildQueryString())
+          this.updateAppState(this.route.prefix+this.route.path+'?'+this.buildQueryString());
           this.$.assurancePlan.classList.remove('dark-button');
           this.$.dashboardCharts.classList.remove('light-button');
         }
@@ -384,13 +380,13 @@
         this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
         const qs = this.buildQueryString();
         const currentRoute = this.route.prefix+this.route.path;
-        if (qs !== null && this.route.path != "/charts") {
+        if (qs !== null && this.route.path != '/charts') {
           this.updateAppState(currentRoute, qs, true);
           if (this.requiredDataLoaded) {
             this._filterPartnersData();
           }
         } else {
-          if (location.search === '' && this.route.path != "/charts") {
+          if (location.search === '' && this.route.path != '/charts') {
             this.updateAppState(currentRoute, qs, false);
           }
           if (this.forceDataRefresh && this.requiredDataLoaded) {
