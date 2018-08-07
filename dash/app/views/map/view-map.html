@@ -22,6 +22,7 @@
 <link rel="import" href="../../styles/list-styles.html">
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
+<link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <dom-module id="view-map">
   <template>
@@ -61,15 +62,15 @@
         margin-left: 16px;
       }
   
-      .error {
+      .error-msg {
         color: var(--error-color);
-        left: 24px;
-        top: 60px;
-        position: absolute;
       }
   
       .warning-box {
         min-width: 228px;
+        @apply --layout-vertical;
+        @apply --layout-center-justified;
+        @apply --layout-start;
       }
     </style>
     <app-route route="{{route}}"
@@ -82,8 +83,9 @@
         <div class="title-row">
           <h1 sub-title>Partnerships</h1>
         </div>
-        <p hidden$="[[!hasWarning]]"
-           class="error">[[warningMessage]]</p>
+        <template is="dom-if" if="[[hasWarning]]">
+          <p class="error-msg">[[warningMessage]]</p>
+        </template>
   
       </div>
       <div class="filters-divider"></div>
@@ -138,8 +140,6 @@
     </div>
     <div class="paper-material map"
          elevation="1">
-      <!-- <template is="dom-if"
-                        if="[[staticDataLoaded]]"> -->
       <leaflet-map fit-to-markers
                    id="map"
                    zoom="[[country.initial_zoom]]"
@@ -156,7 +156,7 @@
                           on-click="_openModal"></leaflet-marker>
         </template>
       </leaflet-map>
-      <!-- </template> -->
+
     </div>
   </template>
 
@@ -217,7 +217,7 @@
             type: Array,
             statePath: 'sectors'
           },
-          sector: {
+          section: {
             type: String
           },
           statuses: {
@@ -292,8 +292,8 @@
       static get observers() {
         return [
           '_init(countryProgrammes,sectors,statuses,userCountry, partners)',
-          '_filterChanged(country_programme, sector, status, partner)',
-          '_setWarnings(country_programme, sector, status, partner)'
+          '_filterChanged(country_programme, section, status, partner)',
+          '_setWarnings(country_programme, section, status, partner)'
         ];
       }
 
@@ -362,7 +362,7 @@
               optionLabel: 'label',
               alreadySelected: null,
               selectionOptions: this.sectors,
-              path: 'sector'
+              path: 'section'
             },
             {
               filterName: 'Status',
@@ -413,13 +413,13 @@
         });
       }
 
-      _filterChanged(country_programme, sector, status, partner) {
+      _filterChanged(country_programme, section, status, partner) {
         let newFilter = {};
         if(country_programme) {
           newFilter['country_programme'] = country_programme;
         }
-        if(sector) {
-          newFilter['sector'] = sector;
+        if(section) {
+          newFilter['section'] = section;
         }
         if(status) {
           newFilter['status'] = status;
