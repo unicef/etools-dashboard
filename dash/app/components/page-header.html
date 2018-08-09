@@ -216,6 +216,7 @@
       ready() {
         super.ready();
         this._isStaging();
+        this._setBgColor();
       }
 
       _isStaging() {
@@ -279,6 +280,12 @@
         localStorage.clear();
       }
 
+      _setBgColor() {
+        // If not production environment, changing header color to red
+        if (!EtoolsDashboard.Config.isProductionServer()) {
+          this.updateStyles({'--header-bg-color': 'var(--nonprod-header-color)'});
+        }
+      }
     }
 
     window.customElements.define(PageHeader.is, PageHeader);

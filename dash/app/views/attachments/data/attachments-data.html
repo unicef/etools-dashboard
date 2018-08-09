@@ -48,6 +48,11 @@
             readOnly: true,
             notify: true
           },
+          orderedResults: {
+            type: Array,
+            value: [],
+            notify: true
+          },
           dataLoadedEventName: {
             type: String,
             value: 'attachments-loaded'
@@ -89,9 +94,12 @@
       }
 
       query(params) {
+        let that = this
         const { pageNumber, pageSize, order, orderBy } = params;
         EtoolsDashboard.DexieDb.transaction('r', EtoolsDashboard.DexieDb.attachments, () => {
-          let queryResult = EtoolsDashboard.DexieDb.attachments.orderBy(orderBy || 'created');
+          let queryResult = EtoolsDashboard.DexieDb.attachments
+          let allResults = queryResult.orderBy('partner')
+          queryResult = queryResult.orderBy(orderBy || 'created');
           if (order === 'asc') {
             queryResult = queryResult.reverse();
           }
@@ -109,13 +117,25 @@
             queryResult.clone()
               .offset((pageNumber - 1) * pageSize)
               .limit(pageSize)
-              .toArray()])
-            .then((countAndResult) => {
+              .toArray(),
+            allResults.toArray()
+          ]).then((countAndResult) => {
               this._setFilteredTotal(countAndResult[0]);
               this._setFilteredAttachments(countAndResult[1]);
+              countAndResult[2].forEach(function(file) {
+                  if (!that.orderedResults.some(item => item.keys === `${file.partner} - ${file.vendor_number}`)) {
+                    let obj = {}
+                    let vend = countAndResult[2].filter(file2 => file2.vendor_number === file.vendor_number)
+                    vend = sortBy(prop('created'))(vend)
+                    let key = `${file.partner} - ${file.vendor_number}`
+                    obj['label'] = key
+                    obj['value'] = vend
+                    that.orderedResults.push(obj)
+                  }
+                })
+                this.orderedResults = uniq(this.orderedResults)
               this.fireEvent('global-loading', { loadingSource: 'attachments-data' });
             });
-
         });
       }
     }

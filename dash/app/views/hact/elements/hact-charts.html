@@ -841,7 +841,7 @@
       }
 
       _init(active) {
-        if (active) {
+        if (active && this.chartData) {
           if (isEmpty(this.chartData)) {
             this.fireEvent('global-loading', { message: 'Loading chart data...', active: true });
           } else {
@@ -870,6 +870,7 @@
           this.shadowRoot.querySelector('#' + chartName).data = dt;
           this.updateStyles();
         });
+
       }
 
       _drawCharts() {
