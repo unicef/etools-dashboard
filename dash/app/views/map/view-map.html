@@ -140,7 +140,7 @@
     </div>
     <div class="paper-material map"
          elevation="1">
-      <leaflet-map fit-to-markers
+      <leaflet-map fit-to-markers="[[fitToMarkers]]"
                    id="map"
                    zoom="[[country.initial_zoom]]"
                    longitude="[[country.longitude]]"
@@ -219,6 +219,10 @@
           },
           section: {
             type: String
+          },
+          fitToMarkers: {
+            type: Boolean,
+            value: true
           },
           statuses: {
             type: Array,
@@ -446,6 +450,11 @@
             hasWarning: true,
             warningMessage: 'No results for this query.'
           });
+        }
+        if (locations.length === 1) {
+          this.set('fitToMarkers', false);
+        }else {
+          this.set('fitToMarkers', true);
         }
         this.set('markers', locations);
       }
