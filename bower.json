@@ -11,7 +11,7 @@
     "app-route": "PolymerElements/app-route#^2.0.0",
     "dexie": "^2.0.1",
     "etools-ajax": "3.0.0",
-    "etools-app-selector": "2.1.0",
+    "etools-app-selector": "2.1.1",
     "etools-behaviors": "2.0.0",
     "etools-datepicker": "2.0.0",
     "etools-dialog": "2.0.0",
