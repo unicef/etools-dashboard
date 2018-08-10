@@ -2,7 +2,6 @@
 
 <script>
   window.EtoolsDashboard = window.EtoolsDashboard || {};
-
   EtoolsDashboard.DexieDb = new Dexie('dashApp');
   EtoolsDashboard.DexieDb.version(1).stores({
     collectionsList: 'name, expire',
