@@ -22,6 +22,7 @@
 <link rel="import" href="../../styles/list-styles.html">
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
+<link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <dom-module id="view-map">
   <template>
@@ -32,44 +33,44 @@
         --paper-toggle-button-checked-button-color: #3baaee;
         /* TODO: replace with app-theme var */
       }
-
+  
       leaflet-map {
         height: 630px;
       }
-
+  
       paper-menu {
         max-width: 266px;
       }
-
-
+  
+  
       .map {
         display: block;
       }
-
+  
       .toggler {
         display: flex;
         bottom: 8px;
         margin-bottom: 20px;
         padding-left: 24px;
       }
-
+  
       p {
         margin: 0;
       }
-
+  
       paper-toggle-button {
         margin-left: 16px;
       }
-
-      .error {
+  
+      .error-msg {
         color: var(--error-color);
-        left: 24px;
-        top: 60px;
-        position: absolute;
       }
-
+  
       .warning-box {
         min-width: 228px;
+        @apply --layout-vertical;
+        @apply --layout-center-justified;
+        @apply --layout-start;
       }
     </style>
     <app-route route="{{route}}"
@@ -82,31 +83,31 @@
         <div class="title-row">
           <h1 sub-title>Partnerships</h1>
         </div>
-        <p hidden$="[[!hasWarning]]"
-           class="error">[[warningMessage]]</p>
-
+        <template is="dom-if" if="[[hasWarning]]">
+          <p class="error-msg">[[warningMessage]]</p>
+        </template>
+  
       </div>
       <div class="filters-divider"></div>
       <div class="wrap-controls">
         <template is="dom-repeat"
                   items="[[selectedFilters]]"
                   as="filter">
-
+  
           <template is="dom-if"
                     if="[[filterTypeIs('esmm', filter.type)]]">
             <div class="filter esmm">
-
+  
               <etools-dropdown label="[[filter.filterName]]"
-                                     placeholder="&#8212;"
-                                     disabled$="[[!filter.selectionOptions.length]]"
-                                     options="[[filter.selectionOptions]]"
-                                     option-value="[[filter.optionValue]]"
-                                     option-label="[[filter.optionLabel]]"
-                                     on-selected-changed="_handleSelect"
-                                     selected="[[filter.alreadySelected]]"
-                                     trigger-value-change-event
-                                     on-etools-selected-items-changed="esmmValueChanged"
-                                     >
+                               placeholder="&#8212;"
+                               disabled$="[[!filter.selectionOptions.length]]"
+                               options="[[filter.selectionOptions]]"
+                               option-value="[[filter.optionValue]]"
+                               option-label="[[filter.optionLabel]]"
+                               on-selected-changed="_handleSelect"
+                               selected="[[filter.alreadySelected]]"
+                               trigger-value-change-event
+                               on-etools-selected-items-changed="esmmValueChanged">
               </etools-dropdown>
               <paper-icon-button class="remove-field remove"
                                  icon="cancel"
@@ -116,7 +117,7 @@
                                  data-reset-path$="[[filter.path]]">
               </paper-icon-button>
             </div>
-
+  
           </template>
         </template>
       </div>
@@ -139,9 +140,8 @@
     </div>
     <div class="paper-material map"
          elevation="1">
-      <!-- <template is="dom-if"
-                if="[[staticDataLoaded]]"> -->
-      <leaflet-map fit-to-markers
+      <leaflet-map fit-to-markers="[[fitToMarkers]]"
+                   id="map"
                    zoom="[[country.initial_zoom]]"
                    longitude="[[country.longitude]]"
                    latitude="[[country.latitude]]">
@@ -156,7 +156,7 @@
                           on-click="_openModal"></leaflet-marker>
         </template>
       </leaflet-map>
-      <!-- </template> -->
+
     </div>
   </template>
 
@@ -203,7 +203,7 @@
             type: Boolean,
             value: true
           },
-          warningMessage: {
+            warningMessage: {
             type: String
           },
           countryProgrammes: {
@@ -217,8 +217,12 @@
             type: Array,
             statePath: 'sectors'
           },
-          sector: {
+          section: {
             type: String
+          },
+          fitToMarkers: {
+            type: Boolean,
+            value: true
           },
           statuses: {
             type: Array,
@@ -285,15 +289,15 @@
         const { value } = e.detail;
         this.set(filter.path, value);
       }
-      _partnersReceived(partners){
-        this.set('partnersList', partners)
+      _partnersReceived(partners) {
+        this.set('partnersList', partners);
       }
 
       static get observers() {
         return [
           '_init(countryProgrammes,sectors,statuses,userCountry, partners)',
-          '_filterChanged(country_programme, sector, status, partner)',
-          '_setWarnings(country_programme, sector, status, partner)'
+          '_filterChanged(country_programme, section, status, partner)',
+          '_setWarnings(country_programme, section, status, partner)'
         ];
       }
 
@@ -336,9 +340,9 @@
           this._validateUserCountry(userCountry);
         // find the current country programme based on criteria in property currentCountryProgramme
         const currentCp = find(
-          cp => keys(this.currentCountryProgramme).reduce(
+          (cp) => keys(this.currentCountryProgramme).reduce(
             (curr, next) => {
-              return cp[next] === this.currentCountryProgramme[next] && curr
+              return cp[next] === this.currentCountryProgramme[next] && curr;
             }, true
           ), this.countryProgrammes);
 
@@ -362,7 +366,7 @@
               optionLabel: 'label',
               alreadySelected: null,
               selectionOptions: this.sectors,
-              path: 'sector'
+              path: 'section'
             },
             {
               filterName: 'Status',
@@ -391,7 +395,7 @@
         this.setProperties({
           country_programme: currentCp.id,
           status: 'active'
-        })
+        });
       }
 
       _updateSelectedFiltersValues() {
@@ -407,19 +411,19 @@
               filterName: 'Status',
               selectedValue: this.status
             }
-          
+    
           ];
           this.updateShownFilters(filtersValues);
         });
       }
 
-      _filterChanged(country_programme, sector, status, partner) {
+      _filterChanged(country_programme, section, status, partner) {
         let newFilter = {};
         if(country_programme) {
           newFilter['country_programme'] = country_programme;
         }
-        if(sector) {
-          newFilter['sector'] = sector;
+        if(section) {
+          newFilter['section'] = section;
         }
         if(status) {
           newFilter['status'] = status;
@@ -447,6 +451,11 @@
             warningMessage: 'No results for this query.'
           });
         }
+        if (locations.length === 1) {
+          this.set('fitToMarkers', false);
+        }else {
+          this.set('fitToMarkers', true);
+        }
         this.set('markers', locations);
       }
 
@@ -463,8 +472,8 @@
         if (!country_programme && !sector && !status && !partner) {
           this.setProperties({
             hasWarning: true,
-            warningMessage: 'Select filters to show results on map',
-          })
+            warningMessage: 'Select filters to show results on map'
+          });
         }
       }
 

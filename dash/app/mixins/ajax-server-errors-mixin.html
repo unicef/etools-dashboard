@@ -50,8 +50,8 @@
 
       let errors = this.tryGetResponseError(response);
 
-      let errorMessage = this.globalMessage;
-
+      let errorMessage = response.message || this.globalMessage;
+      
       if (!ajaxMethod) {
         ajaxMethod = 'GET';
       }

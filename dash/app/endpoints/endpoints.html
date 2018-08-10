@@ -62,12 +62,12 @@
       cachingKey: 'sectors'
     },
     actionPointsByMe: {
-      template: '/api/action-points/action-points/??f_assigned_by=<%=id%>&mf_status=ongoing,open',
+      template: '/api/action-points/action-points/?assigned_by=<%=id%>&status=open&ordering=-due_date',
       exp: 6 * 60 * 60 * 1000,
       cachingKey: 'actionPointsByMe'
     },
     actionPointsForMe: {
-      template: '/api/action-points/action-points/?f_person_responsible=<%=id%>&mf_status=ongoing,open',
+      template: '/api/action-points/action-points/?assigned_to=<%=id%>&status=open&ordering=-due_date',
       exp: 6 * 60 * 60 * 1000,
       cachingKey: 'actionPointsForMe'
     },
