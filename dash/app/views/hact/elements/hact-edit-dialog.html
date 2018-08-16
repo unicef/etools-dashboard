@@ -66,23 +66,27 @@
   
         <div class="layout-horizontal space-between">
   
-          <div class="layout-vertical col-3">
-            <div class="heading">Planned Programmatic Visits</div>
-            <div class="layout-horizontal space-around">
-              <paper-input type="number"
-                           value="{{editableValues.planned_visits.programmatic_q1}}"
-                           label="Q1"></paper-input>
-              <paper-input value="{{editableValues.planned_visits.programmatic_q2}}"
-                           type="number"
-                           label="Q2"></paper-input>
-              <paper-input value="{{editableValues.planned_visits.programmatic_q3}}"
-                           type="number"
-                           label="Q3"></paper-input>
-              <paper-input type="number"
-                           value="{{editableValues.planned_visits.programmatic_q4}}"
-                           label="Q4"></paper-input>
-            </div>
-          </div>
+          <dom-if id="pPV">
+            <template>
+              <div class="layout-vertical col-3">
+                <div class="heading">Planned Programmatic Visits</div>
+                <div class="layout-horizontal space-around">
+                  <paper-input type="number"
+                                value="{{editableValues.planned_visits.programmatic_q1}}"
+                                label="Q1"></paper-input>
+                  <paper-input value="{{editableValues.planned_visits.programmatic_q2}}"
+                                type="number"
+                                label="Q2"></paper-input>
+                  <paper-input value="{{editableValues.planned_visits.programmatic_q3}}"
+                                type="number"
+                                label="Q3"></paper-input>
+                  <paper-input type="number"
+                                value="{{editableValues.planned_visits.programmatic_q4}}"
+                                label="Q4"></paper-input>
+                </div>
+              </div>
+            </template>
+          </dom-if>
 
           <div class="layout-vertical col-2">
             <div class="heading">Follow-up Spot Checks</div>
@@ -201,6 +205,8 @@
 
       openDialog() {
         this.$.editPartnersDialog.opened = true;
+        let conditional = this.$.pPV
+        conditional.if = this.partner.partner_type_slug === "Gov"
       }
 
       _partnerChanged(partner) {
