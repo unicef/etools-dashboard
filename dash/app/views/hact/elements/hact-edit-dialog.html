@@ -66,27 +66,25 @@
   
         <div class="layout-horizontal space-between">
   
-          <dom-if id="pPV">
-            <template>
-              <div class="layout-vertical col-3">
-                <div class="heading">Planned Programmatic Visits</div>
-                <div class="layout-horizontal space-around">
-                  <paper-input type="number"
-                                value="{{editableValues.planned_visits.programmatic_q1}}"
-                                label="Q1"></paper-input>
-                  <paper-input value="{{editableValues.planned_visits.programmatic_q2}}"
-                                type="number"
-                                label="Q2"></paper-input>
-                  <paper-input value="{{editableValues.planned_visits.programmatic_q3}}"
-                                type="number"
-                                label="Q3"></paper-input>
-                  <paper-input type="number"
-                                value="{{editableValues.planned_visits.programmatic_q4}}"
-                                label="Q4"></paper-input>
-                </div>
+          <template is="dom-if" if="{{isGovPartner}}">
+            <div class="layout-vertical col-3">
+              <div class="heading">Planned Programmatic Visits</div>
+              <div class="layout-horizontal space-around">
+                <paper-input type="number"
+                              value="{{editableValues.planned_visits.programmatic_q1}}"
+                              label="Q1"></paper-input>
+                <paper-input value="{{editableValues.planned_visits.programmatic_q2}}"
+                              type="number"
+                              label="Q2"></paper-input>
+                <paper-input value="{{editableValues.planned_visits.programmatic_q3}}"
+                              type="number"
+                              label="Q3"></paper-input>
+                <paper-input type="number"
+                              value="{{editableValues.planned_visits.programmatic_q4}}"
+                              label="Q4"></paper-input>
               </div>
-            </template>
-          </dom-if>
+            </div>
+          </template>
 
           <div class="layout-vertical col-2">
             <div class="heading">Follow-up Spot Checks</div>
@@ -163,6 +161,9 @@
             type: Object,
             observer: '_partnerChanged'
           },
+          isGovPartner: {
+            type: Boolean,
+          },
           // Spot Checks and Audits changes get put here for PATCH request
           editableValues: {
             type: Object
@@ -205,8 +206,7 @@
 
       openDialog() {
         this.$.editPartnersDialog.opened = true;
-        let conditional = this.$.pPV
-        conditional.if = this.partner.partner_type_slug === "Gov"
+        this.set('isGovPartner', this.partner.partner_type_slug === "Gov")
       }
 
       _partnerChanged(partner) {
