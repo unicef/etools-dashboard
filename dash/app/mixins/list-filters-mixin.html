@@ -81,24 +81,28 @@
     // select a filter from ADD FILTER menu
     selectFilter(event) {
       let selectedOption = event.model.item;
-      this.push('selectedFilters', selectedOption);
-      this.$.filterMenu.close();
-      this._updateAvailableFilterOptions();
+      if (!contains(selectedOption, this.selectedFilters)) {
+        this.push('selectedFilters', selectedOption);
+      } else {
+        let paredFilters = this.selectedFilters.filter(fil => fil.filterName != selectedOption.filterName)
+        this.set('selectedFilters', paredFilters)
+      }
+      // this._updateAvailableFilterOptions();
     }
 
     // update ADD FILTER menu options
-    _updateAvailableFilterOptions() {
-      if (!(this.listFilterOptions instanceof Array && this.listFilterOptions.length > 0)) {
-        return;
-      }
-      let availableOptions = this.listFilterOptions.filter((option) => {
-        let selectedOpt = this.selectedFilters.filter((selectedFilter) => {
-          return selectedFilter.filterName === option.filterName;
-        })[0];
-        return !selectedOpt;
-      });
-      this.set('availableListFilterOptions', availableOptions);
-    }
+    // _updateAvailableFilterOptions() {
+    //   if (!(this.listFilterOptions instanceof Array && this.listFilterOptions.length > 0)) {
+    //     return;
+    //   }
+    //   let availableOptions = this.listFilterOptions.filter((option) => {
+    //     let selectedOpt = this.selectedFilters.filter((selectedFilter) => {
+    //       return selectedFilter.filterName === option.filterName;
+    //     })[0];
+    //     return !selectedOpt;
+    //   });
+    //   this.set('availableListFilterOptions', availableOptions);
+    // }
 
     _validateFilterSelectedValue(value) {
       return value && !isEmpty(value);

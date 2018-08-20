@@ -103,6 +103,12 @@
       div.sections span.pad-top-4 {
         padding-right: 0;
       }
+
+      #filterMenu paper-item {
+        --paper-item-selected: {
+            background-color: rgb(220, 220, 220);
+        }
+      }
   
       div.sections>span {
         vertical-align: middle;
@@ -349,13 +355,13 @@
                                      on-etools-selected-items-changed="esmmValueChanged"
                                      data-filter-path$="[[filter.path]]">
               </etools-dropdown-multi>
-              <paper-icon-button suffix
+              <!-- <paper-icon-button suffix
                                  class="remove-field remove"
                                  icon="cancel"
                                  on-tap="removeFilter"
                                  data-filter-name$="[[filter.filterName]]"
                                  data-reset-path$="[[filter.path]]">
-              </paper-icon-button>
+              </paper-icon-button> -->
             </div>
           </template>
   
@@ -375,27 +381,27 @@
                                  show-clear-btn>
               </etools-date-input>
   
-              <paper-icon-button suffix
+              <!-- <paper-icon-button suffix
                                  class="remove-field remove"
                                  icon="cancel"
                                  on-tap="removeFilter"
                                  data-filter-name$="[[filter.filterName]]"
                                  data-reset-path$="[[filter.path]]">
-              </paper-icon-button>
+              </paper-icon-button> -->
             </div>
           </template>
         </template>
       </div>
       <div class="fixed-controls">
         <div class="filters-divider"></div>
-        <paper-menu-button id="filterMenu"
+        <paper-menu-button ignore-select id="filterMenu"
                            dynamic-align>
           <paper-button class="button"
                         slot="dropdown-trigger">
             <iron-icon icon="filter-list"></iron-icon>
             add filter
           </paper-button>
-          <paper-listbox slot="dropdown-content">
+          <paper-listbox multi slot="dropdown-content">
             <template is="dom-repeat"
                       items="[[availableListFilterOptions]]">
               <paper-item on-tap="selectFilter">[[item.filterName]]</paper-item>
@@ -733,6 +739,21 @@
           route: {
             type: Object
           },
+          // addFilterOptions: {
+          //   type: Array,
+          //   value: () => {
+          //     this.availableListFilterOptions.map((opt, i) =>
+          //   {
+          //     return {option_key: i, option_label: opt.filterName}
+          //   })
+          //     let opt = [];
+          //     for (i = 0; i < this.availableListFilterOptions; i++) {
+          //       opt.push({
+
+          //       })
+          //     }
+          //   }
+          // },
           params: {
             type: Array,
             value: function() {
@@ -816,7 +837,7 @@
         this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
         this.set('endAfterDate', params.endAfter ? params.endAfter : '');
         this.set('initComplete', true);
-        this._updateSelectedFiltersValues();
+        // this._updateSelectedFiltersValues();
         // the following should be removed when the final two preset filters are enabled
         if (this.shadowRoot.querySelectorAll('.alert-row').length > 0) {
           this.shadowRoot.querySelectorAll('.alert-row')[6].style.color = 'rgb(144,144,144)';
