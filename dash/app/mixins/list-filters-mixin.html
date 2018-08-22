@@ -125,7 +125,7 @@
       if (selectedFilterIndex > -1) {
         // remove filter
         this.splice('selectedFilters', selectedFilterIndex, 1);
-        this._updateAvailableFilterOptions();
+        // this._updateAvailableFilterOptions();
         const resetValue = Array.isArray(this[path]) ? []: null;
         this.set(path, resetValue);
       }
@@ -226,7 +226,7 @@
           }
         });
         // refresh available filters and remove those selected
-        this._updateAvailableFilterOptions();
+        // this._updateAvailableFilterOptions();
       }
     }
 

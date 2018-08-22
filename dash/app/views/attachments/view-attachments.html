@@ -115,6 +115,23 @@
 
       /* Table Columns End */
 
+      /* .filters-divider {
+        margin: 0 8px;
+      } */
+
+      #filterMenu paper-item {
+        --paper-item-selected: {
+            background-color: rgb(220, 220, 220);
+        };
+        --paper-item-focused: {
+            background-color: rgb(198, 198, 198);
+        };
+      }
+
+      paper-menu-button {
+        padding: 0;
+      }
+
       data-table-column:not(:first-child),data-table-row >div > div:not(:first-child) {
         padding-left: 24px;
       }
@@ -163,7 +180,11 @@
 
       .light-button {
         background: rgb(255, 255, 255);
-        color: rgba(0, 0, 0, 0.87));
+        color: rgba(0, 0, 0, 0.87);
+      }
+
+      paper-button {
+        margin: 0;
       }
     </style>
   
@@ -238,13 +259,14 @@
           <div class="fixed-controls">
             <div class="filters-divider"></div>
             <paper-menu-button id="filterMenu"
+                              ignore-select
                               dynamic-align>
               <paper-button class="button"
                             slot="dropdown-trigger">
                 <iron-icon icon="filter-list"></iron-icon>
-                add filter
+                filters
               </paper-button>
-              <paper-listbox slot="dropdown-content">
+              <paper-listbox multi slot="dropdown-content">
                 <template is="dom-repeat"
                           items="[[availableListFilterOptions]]">
                   <paper-item on-tap="selectFilter">[[item.filterName]]</paper-item>
