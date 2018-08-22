@@ -21,9 +21,9 @@
         listFilterOptions: {
           type: Array
         },
-        availableListFilterOptions: {
-          type: Array
-        },
+        // availableListFilterOptions: {
+        //   type: Array
+        // },
         selectedFilters: {
           type: Array
         }
@@ -36,56 +36,64 @@
      */
     initListFiltersData(filterOptions) {
       // init add filter menu options
-      this.set('listFilterOptions', filterOptions);
-      this.set('availableListFilterOptions', this.listFilterOptions);
-      this.set('selectedFilters', []);
+      // this.set('listFilterOptions', filterOptions);
+      // this.set('availableListFilterOptions', this.listFilterOptions);
+      // this.set('selectedFilters', []);
+      this.setProperties({
+        listFilterOptions: filterOptions,
+        selectedFilters: []
+      })
     }
 
     // update filter data
-    updateFilters(filterName, property, newValue) {
-      // update main filters
-      if (this.listFilterOptions) {
-        if (this.listFilterOptions.length > 0) {
-          for (let i = 0; i < this.listFilterOptions.length; i++) {
-            if (this.listFilterOptions[i].filterName === filterName) {
-              this.set('listFilterOptions.' + i + '.' + property, newValue);
-              break;
-            }
-          }
-        }
-        // update available filters
-        let found = false;
-        if (this.availableListFilterOptions.length > 0) {
-          for (let i = 0; i < this.availableListFilterOptions.length; i++) {
-            if (this.availableListFilterOptions[i].filterName === filterName) {
-              this.set('availableListFilterOptions.' + i + '.' + property, newValue);
-              found = true;
-              break;
-            }
-          }
-        }
-        // if the filter was moved from available to selected then update in selected filters
-        if (!found) {
-          if (this.selectedFilters.length > 0) {
-            for (let j = 0; j < this.selectedFilters.length; j++) {
-              if (this.selectedFilters[j].filterName === filterName) {
-                this.set('selectedFilters.' + j + '.' + property, newValue);
-                break;
-              }
-            }
-          }
-        }
-      }
-    }
+    // updateFilters(filterName, property, newValue) {
+    //   // update main filters
+    //   if (this.listFilterOptions) {
+    //     if (this.listFilterOptions.length > 0) {
+    //       for (let i = 0; i < this.listFilterOptions.length; i++) {
+    //         if (this.listFilterOptions[i].filterName === filterName) {
+    //           this.set('listFilterOptions.' + i + '.' + property, newValue);
+    //           break;
+    //         }
+    //       }
+    //     }
+    //     // update available filters
+    //     let found = false;
+    //     if (this.availableListFilterOptions.length > 0) {
+    //       for (let i = 0; i < this.availableListFilterOptions.length; i++) {
+    //         if (this.availableListFilterOptions[i].filterName === filterName) {
+    //           this.set('availableListFilterOptions.' + i + '.' + property, newValue);
+    //           found = true;
+    //           break;
+    //         }
+    //       }
+    //     }
+    //     // if the filter was moved from available to selected then update in selected filters
+    //     if (!found) {
+    //       if (this.selectedFilters.length > 0) {
+    //         for (let j = 0; j < this.selectedFilters.length; j++) {
+    //           if (this.selectedFilters[j].filterName === filterName) {
+    //             this.set('selectedFilters.' + j + '.' + property, newValue);
+    //             break;
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
     // select a filter from ADD FILTER menu
     selectFilter(event) {
       let selectedOption = event.model.item;
+      let selectedIdx = event.model.index;
       if (!contains(selectedOption, this.selectedFilters)) {
         this.push('selectedFilters', selectedOption);
+        this.set(['listFilterOptions', selectedIdx, 'selected'], true);
+        log(this.listFilterOptions)
       } else {
         let paredFilters = this.selectedFilters.filter(fil => fil.filterName != selectedOption.filterName)
         this.set('selectedFilters', paredFilters)
+        this.set(['listFilterOptions', selectedIdx, 'selected'], false);
       }
       // this._updateAvailableFilterOptions();
     }

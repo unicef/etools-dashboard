@@ -105,13 +105,17 @@
         padding-right: 0;
       }
 
-      #filterMenu paper-item {
+      #filterMenu paper-icon-item {
         --paper-item-selected: {
             background-color: rgb(220, 220, 220);
         };
         --paper-item-focused: {
             background-color: rgb(198, 198, 198);
         };
+      }
+
+      paper-icon-item {
+        --paper-item-icon-width: 32px;
       }
 
       paper-menu-button {
@@ -215,6 +219,10 @@
         font-size: 13px;
         font-weight: 500;
         line-height: 15px;
+      }
+
+      etools-dropdown-multi {
+        width: 160px;
       }
       
       .alerts-comment {
@@ -361,7 +369,10 @@
                                      selected-values="[[filter.alreadySelected]]"
                                      trigger-value-change-event
                                      on-etools-selected-items-changed="esmmValueChanged"
-                                     data-filter-path$="[[filter.path]]">
+                                     data-filter-path$="[[filter.path]]"
+                                     min-width="300px"
+                                     horizontal-align="left"
+                                     no-dynamic-align>
               </etools-dropdown-multi>
               <!-- <paper-icon-button suffix
                                  class="remove-field remove"
@@ -412,9 +423,9 @@
           </paper-button>
           <paper-listbox multi slot="dropdown-content">
             <template is="dom-repeat"
-                      items="[[availableListFilterOptions]]">
+                      items="[[listFilterOptions]]">
               <paper-icon-item on-tap="selectFilter">
-                <iron-icon icon="check" slot="item-icon"></iron-icon>
+                <iron-icon icon="check" slot="item-icon" hidden$="[[!item.selected]]"></iron-icon>
                 [[item.filterName]]
               </paper-icon-item>
             </template>
@@ -873,7 +884,8 @@
             optionLabel: 'label',
             selectionOptions: this.sectors,
             alreadySelected: [],
-            path: 'selectedSectors'
+            path: 'selectedSectors',
+            selected: false
           },
           {
             filterName: 'Field Office',
@@ -882,7 +894,8 @@
             optionLabel: 'name',
             selectionOptions: this.offices,
             alreadySelected: [],
-            path: 'selectedOffices'
+            path: 'selectedOffices',
+            selected: false
           },
           {
             filterName: 'Status',
@@ -891,31 +904,36 @@
             optionLabel: 'label',
             selectionOptions: this.statuses.slice(1),
             alreadySelected: [],
-            path: 'selectedStatuses'
+            path: 'selectedStatuses',
+            selected: false
           },
           {
             filterName: 'Starts After',
             type: 'datepicker', // etools-datepicker
             path: 'startAfterDate',
-            dateSelected: ''
+            dateSelected: '',
+            selected: false
           },
           {
             filterName: 'Ends Before',
             type: 'datepicker', // etools-datepicker
             path: 'endBeforeDate',
-            dateSelected: ''
+            dateSelected: '',
+            selected: false
           },
           {
             filterName: 'Starts Before',
             type: 'datepicker', // etools-datepicker
             path: 'startBeforeDate',
-            dateSelected: ''
+            dateSelected: '',
+            selected: false
           },
           {
             filterName: 'Ends After',
             type: 'datepicker', // etools-datepicker
             path: 'endAfterDate',
-            dateSelected: ''
+            dateSelected: '',
+            selected: false
           }
         ]);
 

@@ -5,6 +5,7 @@
 <link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../../bower_components/iron-pages/iron-pages.html">
@@ -119,7 +120,7 @@
         margin: 0 8px;
       } */
 
-      #filterMenu paper-item {
+      #filterMenu paper-icon-item {
         --paper-item-selected: {
             background-color: rgb(220, 220, 220);
         };
@@ -128,8 +129,16 @@
         };
       }
 
+      paper-icon-item {
+        --paper-item-icon-width: 32px;
+      }
+
       paper-menu-button {
         padding: 0;
+      }
+
+      etools-dropdown-multi {
+        width: 160px;
       }
 
       data-table-column:not(:first-child),data-table-row >div > div:not(:first-child) {
@@ -243,7 +252,10 @@
                                         selected-values="[[filter.alreadySelected]]"
                                         trigger-value-change-event
                                         on-etools-selected-items-changed="esmmValueChanged"
-                                        data-filter-path$="[[filter.path]]">
+                                        data-filter-path$="[[filter.path]]"
+                                        min-width="300px"
+                                        horizontal-align="left"
+                                        no-dynamic-align>
                   </etools-dropdown-multi>
                   <!-- <paper-icon-button suffix
                                     class="remove-field remove"
@@ -268,8 +280,11 @@
               </paper-button>
               <paper-listbox multi slot="dropdown-content">
                 <template is="dom-repeat"
-                          items="[[availableListFilterOptions]]">
-                  <paper-item on-tap="selectFilter">[[item.filterName]]</paper-item>
+                          items="[[listFilterOptions]]">
+                  <paper-icon-item on-tap="selectFilter">[[item.filterName]]
+                    <iron-icon icon="check" slot="item-icon" hidden$="[[!item.selected]]"></iron-icon>
+                    [[item.filterName]]
+                  </paper-icon-item>
                 </template>
               </paper-listbox>
             </paper-menu-button>
@@ -576,7 +591,8 @@
               label: type,
               value: type
             })),
-            alreadySelected: []
+            alreadySelected: [],
+            selected: false
           },
           {
             filterName: 'PD/SSFA',
@@ -585,7 +601,8 @@
             optionLabel: 'label',
             path: 'selectedPDs',
             selectionOptions: this.interventions,
-            alreadySelected: []
+            alreadySelected: [],
+            selected: false
           },
           {
             filterName: 'PCA',
@@ -594,7 +611,8 @@
             optionLabel: 'label',
             path: 'selectedPCAs',
             selectionOptions: this.agreements,
-            alreadySelected: []
+            alreadySelected: [],
+            selected: false
           }
         ]);
       }

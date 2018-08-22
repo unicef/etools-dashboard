@@ -52,7 +52,8 @@
     "lodash": "^4.17.5",
     "polymer": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
-    "etools-dialog": "^2.1.0"
+    "etools-dialog": "^2.1.0",
+    "etools-dropdown": "9e2fb79"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
