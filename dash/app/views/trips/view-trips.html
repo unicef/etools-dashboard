@@ -77,7 +77,6 @@
           <div class="filters-divider"></div>
           <div class="wrap-controls flex">
             <div class="dropdown-with-clear-btn">
-              <!-- <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button> -->
               <paper-dropdown-menu label="Year"
                                   id="tripsYear"
                                   class="sm-dropdown"
@@ -92,7 +91,6 @@
               </paper-dropdown-menu>
             </div>
             <div class="dropdown-with-clear-btn">
-              <!-- <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button> -->
               <etools-dropdown-multi label="Month"
                                           id="tripsMonth"
                                           placeholder="Select from list"
@@ -102,16 +100,14 @@
                                           options="[[months]]"></etools-dropdown-multi>
             </div>
             <div class="dropdown-with-clear-btn">
-              <!-- <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button> -->
-              <paper-dropdown-menu label="Office"
-                                  id="tripsOffice"
-                                  placeholder="Select from list" noink>
-                <paper-listbox slot="dropdown-content" attr-for-selected="id" selected="{{tripsOffice}}">
-                  <template is="dom-repeat" items="[[offices]]" as="office">
-                    <paper-item id="[[office.id]]">[[office.name]]</paper-item>
-                  </template>
-                </paper-listbox>
-              </paper-dropdown-menu>
+              <etools-dropdown-multi label="Office"
+                                          id="tripsOffice"
+                                          placeholder="Select from list"
+                                          selected-items="{{tripsOffice}}"
+                                          option-label="name"
+                                          option-value="id"
+                                          trigger-value-change-event
+                                          options="[[offices]]"></etools-dropdown-multi>
             </div>
           </div>
           <paper-button class="primary-btn" on-tap="_setFilter" disabled="[[fetchDisabled]]">
@@ -159,7 +155,6 @@
           <div class="filters-divider"></div>
           <div class="wrap-controls">
             <div class="dropdown-with-clear-btn">
-              <!-- <paper-icon-button class="clear dark" icon="close" on-tap="clearDropdown"></paper-icon-button> -->
               <etools-dropdown-multi label="Office"
                                      id="actionPtsOffice"
                                      placeholder="Select from list"
@@ -234,7 +229,7 @@
             statePath: 'offices'
           },
           tripsOffice: {
-            type: String,
+            type: Array,
             observer: '_monthChanged'
           },
           tripsChart: {

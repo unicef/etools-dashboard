@@ -1,4 +1,3 @@
-<!-- <link rel="import" href="../../bower_components/polymer/polymer.html"> -->
 <link rel="import" href="../scripts/ramda.html">
 
 <script>
@@ -21,9 +20,6 @@
         listFilterOptions: {
           type: Array
         },
-        // availableListFilterOptions: {
-        //   type: Array
-        // },
         selectedFilters: {
           type: Array
         }
@@ -36,81 +32,43 @@
      */
     initListFiltersData(filterOptions) {
       // init add filter menu options
-      // this.set('listFilterOptions', filterOptions);
-      // this.set('availableListFilterOptions', this.listFilterOptions);
-      // this.set('selectedFilters', []);
       this.setProperties({
         listFilterOptions: filterOptions,
         selectedFilters: []
       })
     }
 
-    // update filter data
-    // updateFilters(filterName, property, newValue) {
-    //   // update main filters
-    //   if (this.listFilterOptions) {
-    //     if (this.listFilterOptions.length > 0) {
-    //       for (let i = 0; i < this.listFilterOptions.length; i++) {
-    //         if (this.listFilterOptions[i].filterName === filterName) {
-    //           this.set('listFilterOptions.' + i + '.' + property, newValue);
-    //           break;
-    //         }
-    //       }
-    //     }
-    //     // update available filters
-    //     let found = false;
-    //     if (this.availableListFilterOptions.length > 0) {
-    //       for (let i = 0; i < this.availableListFilterOptions.length; i++) {
-    //         if (this.availableListFilterOptions[i].filterName === filterName) {
-    //           this.set('availableListFilterOptions.' + i + '.' + property, newValue);
-    //           found = true;
-    //           break;
-    //         }
-    //       }
-    //     }
-    //     // if the filter was moved from available to selected then update in selected filters
-    //     if (!found) {
-    //       if (this.selectedFilters.length > 0) {
-    //         for (let j = 0; j < this.selectedFilters.length; j++) {
-    //           if (this.selectedFilters[j].filterName === filterName) {
-    //             this.set('selectedFilters.' + j + '.' + property, newValue);
-    //             break;
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
+    _isAlreadySelected(filter) {
+      let selectedOpt = this.selectedFilters.find(function(selectedFilter) {
+        return selectedFilter.filterName === filter.filterName;
+      })
+      return !!selectedOpt;
+    }
 
     // select a filter from ADD FILTER menu
     selectFilter(event) {
       let selectedOption = event.model.item;
       let selectedIdx = event.model.index;
-      if (!contains(selectedOption, this.selectedFilters)) {
+      if (!this._isAlreadySelected(selectedOption)) {
         this.push('selectedFilters', selectedOption);
         this.set(['listFilterOptions', selectedIdx, 'selected'], true);
-        log(this.listFilterOptions)
       } else {
         let paredFilters = this.selectedFilters.filter(fil => fil.filterName != selectedOption.filterName)
+        this._clearFilterSelection(selectedOption);
         this.set('selectedFilters', paredFilters)
         this.set(['listFilterOptions', selectedIdx, 'selected'], false);
       }
-      // this._updateAvailableFilterOptions();
     }
 
-    // update ADD FILTER menu options
-    // _updateAvailableFilterOptions() {
-    //   if (!(this.listFilterOptions instanceof Array && this.listFilterOptions.length > 0)) {
-    //     return;
-    //   }
-    //   let availableOptions = this.listFilterOptions.filter((option) => {
-    //     let selectedOpt = this.selectedFilters.filter((selectedFilter) => {
-    //       return selectedFilter.filterName === option.filterName;
-    //     })[0];
-    //     return !selectedOpt;
-    //   });
-    //   this.set('availableListFilterOptions', availableOptions);
-    // }
+    _clearFilterSelection(filter) {
+      if (filter) {
+        if (filter.singleSelection) {
+          this.set(filter.path, null);
+        } else {
+          this.set(filter.path, (filter.type === 'esmm') ? [] : (filter.type === 'datepicker' ? '' : null));
+        }
+      }
+    }
 
     _validateFilterSelectedValue(value) {
       return value && !isEmpty(value);
@@ -133,7 +91,6 @@
       if (selectedFilterIndex > -1) {
         // remove filter
         this.splice('selectedFilters', selectedFilterIndex, 1);
-        // this._updateAvailableFilterOptions();
         const resetValue = Array.isArray(this[path]) ? []: null;
         this.set(path, resetValue);
       }
@@ -163,7 +120,7 @@
       this.set(filterPath, filterVal);
     }
 
-    // change event for a etoold-datepicker filter
+    // change event for a etools-datepicker filter
     _filterDateHasChanged(event) {
       if (!event.detail.jsonDate) {
         return;
@@ -172,11 +129,6 @@
       let selectedDate = new Date(event.detail.jsonDate);
       this.set(filterPath, moment(selectedDate).format('YYYY-MM-DD'));
     }
-
-    // _validateFilterSelectedValue(value) {
-    //   return value && ((typeof value === 'string' && value !== '') ||
-    //     (Array.isArray(value) && value.length > 0));
-    // }
 
     // update shown filters
     updateShownFilters(filters) {
@@ -234,7 +186,6 @@
           }
         });
         // refresh available filters and remove those selected
-        // this._updateAvailableFilterOptions();
       }
     }
 
