@@ -21,6 +21,7 @@
 <link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../../bower_components/app-route/app-route.html">
@@ -102,6 +103,23 @@
 
       div.sections span.pad-top-4 {
         padding-right: 0;
+      }
+
+      #filterMenu paper-icon-item {
+        --paper-item-selected: {
+            background-color: rgb(220, 220, 220);
+        };
+        --paper-item-focused: {
+            background-color: rgb(198, 198, 198);
+        };
+      }
+
+      paper-icon-item {
+        --paper-item-icon-width: 32px;
+      }
+
+      paper-menu-button {
+        padding: 0;
       }
   
       div.sections>span {
@@ -201,6 +219,10 @@
         font-size: 13px;
         font-weight: 500;
         line-height: 15px;
+      }
+
+      etools-dropdown-multi {
+        min-width: 160px;
       }
       
       .alerts-comment {
@@ -347,15 +369,11 @@
                                      selected-values="[[filter.alreadySelected]]"
                                      trigger-value-change-event
                                      on-etools-selected-items-changed="esmmValueChanged"
-                                     data-filter-path$="[[filter.path]]">
+                                     data-filter-path$="[[filter.path]]"
+                                     min-width="300px"
+                                     horizontal-align="left"
+                                     no-dynamic-align>
               </etools-dropdown-multi>
-              <paper-icon-button suffix
-                                 class="remove-field remove"
-                                 icon="cancel"
-                                 on-tap="removeFilter"
-                                 data-filter-name$="[[filter.filterName]]"
-                                 data-reset-path$="[[filter.path]]">
-              </paper-icon-button>
             </div>
           </template>
   
@@ -374,14 +392,6 @@
                                  no-init
                                  show-clear-btn>
               </etools-date-input>
-  
-              <paper-icon-button suffix
-                                 class="remove-field remove"
-                                 icon="cancel"
-                                 on-tap="removeFilter"
-                                 data-filter-name$="[[filter.filterName]]"
-                                 data-reset-path$="[[filter.path]]">
-              </paper-icon-button>
             </div>
           </template>
         </template>
@@ -389,16 +399,20 @@
       <div class="fixed-controls">
         <div class="filters-divider"></div>
         <paper-menu-button id="filterMenu"
+                           ignore-select
                            dynamic-align>
           <paper-button class="button"
                         slot="dropdown-trigger">
             <iron-icon icon="filter-list"></iron-icon>
-            add filter
+            filters
           </paper-button>
-          <paper-listbox slot="dropdown-content">
+          <paper-listbox multi slot="dropdown-content" selected-values="[2]">
             <template is="dom-repeat"
-                      items="[[availableListFilterOptions]]">
-              <paper-item on-tap="selectFilter">[[item.filterName]]</paper-item>
+                      items="[[listFilterOptions]]">
+              <paper-icon-item on-tap="selectFilter">
+                <iron-icon icon="check" slot="item-icon" hidden$="[[!item.selected]]"></iron-icon>
+                [[item.filterName]]
+              </paper-icon-item>
             </template>
           </paper-listbox>
         </paper-menu-button>
@@ -816,7 +830,6 @@
         this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
         this.set('endAfterDate', params.endAfter ? params.endAfter : '');
         this.set('initComplete', true);
-        this._updateSelectedFiltersValues();
         // the following should be removed when the final two preset filters are enabled
         if (this.shadowRoot.querySelectorAll('.alert-row').length > 0) {
           this.shadowRoot.querySelectorAll('.alert-row')[6].style.color = 'rgb(144,144,144)';
@@ -826,6 +839,20 @@
           this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[0].innerText = '-';
           this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[1].classList.remove('filter-name');
         }
+        // initialize with status filter prefilled
+        let dummyEvent = {model: {item: {}, index: '2'}}
+        dummyEvent.model.item = {
+          filterName: 'Status',
+          type: 'esmm',
+          optionValue: 'value',
+          optionLabel: 'label',
+          selectionOptions: this.statuses.slice(1),
+          alreadySelected: ["signed", "active", "ended", "suspended", "terminated"],
+          path: 'selectedStatuses',
+          selected: false
+        };
+        this.selectFilter(dummyEvent)
+        this._updateSelectedFiltersValues()
       }
 
       _initListFilters(sectors, statuses, offices) {
@@ -840,7 +867,8 @@
             optionLabel: 'label',
             selectionOptions: this.sectors,
             alreadySelected: [],
-            path: 'selectedSectors'
+            path: 'selectedSectors',
+            selected: false
           },
           {
             filterName: 'Field Office',
@@ -849,7 +877,8 @@
             optionLabel: 'name',
             selectionOptions: this.offices,
             alreadySelected: [],
-            path: 'selectedOffices'
+            path: 'selectedOffices',
+            selected: false
           },
           {
             filterName: 'Status',
@@ -858,31 +887,36 @@
             optionLabel: 'label',
             selectionOptions: this.statuses.slice(1),
             alreadySelected: [],
-            path: 'selectedStatuses'
+            path: 'selectedStatuses',
+            selected: false
           },
           {
             filterName: 'Starts After',
             type: 'datepicker', // etools-datepicker
             path: 'startAfterDate',
-            dateSelected: ''
+            dateSelected: '',
+            selected: false
           },
           {
             filterName: 'Ends Before',
             type: 'datepicker', // etools-datepicker
             path: 'endBeforeDate',
-            dateSelected: ''
+            dateSelected: '',
+            selected: false
           },
           {
             filterName: 'Starts Before',
             type: 'datepicker', // etools-datepicker
             path: 'startBeforeDate',
-            dateSelected: ''
+            dateSelected: '',
+            selected: false
           },
           {
             filterName: 'Ends After',
             type: 'datepicker', // etools-datepicker
             path: 'endAfterDate',
-            dateSelected: ''
+            dateSelected: '',
+            selected: false
           }
         ]);
 
