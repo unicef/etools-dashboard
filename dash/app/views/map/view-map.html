@@ -108,7 +108,7 @@
                                      placeholder="&#8212;"
                                      disabled$="[[!filter.selectionOptions.length]]"
                                      options="[[filter.selectionOptions]]"
-                                     option-value="[[filter.optionValue]]"
+                                     option-value$="[[filter.optionValue]]"
                                      option-label="[[filter.optionLabel]]"
                                      selected-values="[[filter.alreadySelected]]"
                                      trigger-value-change-event
@@ -448,7 +448,7 @@
           {
             filterName: 'Donors',
             type: 'esmm',
-            optionValue: 'value',
+            optionValue: 'label',
             optionLabel: 'label',
             alreadySelected: [],
             selectionOptions: donors,

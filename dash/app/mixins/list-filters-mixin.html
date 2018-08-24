@@ -120,11 +120,13 @@
     // for esmm on pages without url params
     esmmValueChangedForValues(event) {
       let filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
+      const valueProp = Polymer.dom(event).localTarget.getAttribute('option-value');
+
       let filterVal = event.detail.selectedItems;
       if (Array.isArray(filterVal)) {
         filterVal = filterVal.map((xs)=> {
           if (typeof xs === 'object') {
-            return xs.value;
+            return xs[valueProp];
           }
           return xs;
         });
