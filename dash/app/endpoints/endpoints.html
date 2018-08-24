@@ -79,6 +79,16 @@
       exp: 10 * 60 * 1000,
       cachingKey: 'interventions'
     },
+    donors: {
+      url: '/api/v2/funds/donor/',
+      exp: 10*60000,
+      cachingKey: 'donors'
+    },
+    grants: {
+      url: '/api/v2/funds/grant/',
+      exp: 10*60000,
+      cachingKey: 'grants'
+    },
     partnerships: {
       template: '/api/v2/interventions/dash',
       exp: 6 * 60 * 60 * 1000,

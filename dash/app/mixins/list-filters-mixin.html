@@ -117,6 +117,15 @@
     esmmValueChanged(event) {
       let filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
       let filterVal = event.detail.selectedItems;
+      if (Array.isArray(filterVal)) {
+        filterVal = filterVal.map((xs)=> {
+          if (typeof xs === 'object') {
+            return xs.value;
+          }
+          return xs;
+        });
+      }
+
       this.set(filterPath, filterVal);
     }
 

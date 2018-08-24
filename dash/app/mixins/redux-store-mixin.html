@@ -26,7 +26,9 @@
     unicefUsers: [],
     static: null,
     userCountry: null,
-    hactGraphs: []
+    hactGraphs: [],
+    donors: [],
+    grants: []
   };
 
   const reducer = (state, action) => {
@@ -78,6 +80,16 @@
       case 'SET_INTERVENTIONS':
         return merge(state, {
           interventions: action.interventions
+        });
+  
+      case 'SET_GRANTS':
+        return merge(state, {
+          grants: action.grants
+        });
+
+      case 'SET_DONORS':
+        return merge(state, {
+          donors: action.donors
         });
 
     }

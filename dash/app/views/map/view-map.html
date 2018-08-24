@@ -3,6 +3,7 @@
 <link rel="import" href="../../mixins/common-general-mixin.html">
 <link rel="import" href="../../mixins/list-filters-mixin.html">
 <link rel="import" href="../../mixins/redux-store-mixin.html">
+<link rel="import" href="../../mixins/event-helper-mixin.html">
 <link rel="import" href="data/partners-dropdown-data-mixin.html">
 
 <link rel="import" href="data/map-interventions-data.html">
@@ -14,7 +15,7 @@
 <link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../../../bower_components/leaflet-map/leaflet-map.html">
-<link rel="import" href="../../../../bower_components/etools-dropdown/etools-dropdown.html">
+<link rel="import" href="../../../../bower_components/etools-dropdown/etools-dropdown-multi.html">
 
 <link rel="import" href="elements/marker-dialog.html">
 
@@ -102,17 +103,17 @@
                     if="[[filterTypeIs('esmm', filter.type)]]">
             <div class="filter esmm">
   
-              <etools-dropdown label="[[filter.filterName]]"
+              <etools-dropdown-multi label="[[filter.filterName]]"
                                placeholder="&#8212;"
                                disabled$="[[!filter.selectionOptions.length]]"
                                options="[[filter.selectionOptions]]"
                                option-value="[[filter.optionValue]]"
                                option-label="[[filter.optionLabel]]"
-                               on-selected-changed="_handleSelect"
-                               selected="[[filter.alreadySelected]]"
+                               selected-values="[[filter.alreadySelected]]"
                                trigger-value-change-event
-                               on-etools-selected-items-changed="esmmValueChanged">
-              </etools-dropdown>
+                               on-etools-selected-items-changed="esmmValueChanged"
+                               data-filter-path$="[[filter.path]]">
+              </etools-dropdown-multi>
               <paper-icon-button class="remove-field remove"
                                  icon="cancel"
                                  suffix
@@ -180,7 +181,8 @@
       EtoolsDashboard.Mixins.PartnersDropdownData,
       EtoolsDashboard.Mixins.MapInterventionsData,
       EtoolsDashboard.Mixins.ListFilters,
-      EtoolsDashboard.Mixins.CommonGeneral
+      EtoolsDashboard.Mixins.CommonGeneral,
+      EtoolsDashboard.Mixins.EventHelper
     )(Polymer.Element);
 
     /**
@@ -214,12 +216,47 @@
             type: Array,
             statePath: 'countryProgrammes'
           },
-          country_programme: {
-            type: Object
+          selectedCps: {
+            type: Array
           },
+          selectedSections: {
+            type: Array
+          },
+          selectedDonors: {
+            type: Array
+          },
+          selectedGrants: {
+            type: Array
+          },
+          selectedFocalPoints: {
+            type: Array
+          },
+          selectedInterventions: {
+            type: Array
+          },
+          selectedStatuses: {
+            type: Array
+          },
+    
           sectors: {
             type: Array,
             statePath: 'sectors'
+          },
+          interventions: {
+            type: Array,
+            statePath: 'interventions'
+          },
+          donors: {
+            type: Array,
+            statePath: 'donors'
+          },
+          grants: {
+            type: Array,
+            statePath: 'grants'
+          },
+          unicefUsers: {
+            type: Array,
+            statePath: 'unicefUsers'
           },
           section: {
             type: String
@@ -255,8 +292,8 @@
             type: Array,
             observer: '_plotMarkers'
           },
-          partner: {
-            type: String
+          selectedPartners: {
+            type: Array
           },
           partners: {
             type: Array,
@@ -288,19 +325,19 @@
         };
       }
 
-      _handleSelect(e) {
-        const { filter } = e.model;
-        const { value } = e.detail;
-        this.set(filter.path, value);
-      }
+      // _handleSelect(e) {
+      //   const { filter } = e.model;
+      //   const { value } = e.detail;
+      //   this.set(filter.path, value);
+      // }
       _partnersReceived(partners) {
         this.set('partnersList', partners);
       }
 
       static get observers() {
         return [
-          '_init(countryProgrammes,sectors,statuses,userCountry, partners)',
-          '_filterChanged(country_programme, section, status, partner)',
+          '_init(countryProgrammes, sectors, statuses, userCountry, partners, donors, grants, interventions, unicefUsers)',
+          '_filterChanged(selectedCps, selectedSections, selectedStatuses, selectedPartners, selectedDonors, selectedGrants, selectedInterventions, selectedFocalPoints)',
           '_setWarnings(country_programme, section, status, partner)'
         ];
       }
@@ -312,6 +349,13 @@
        */
       constructor() {
         super();
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.fireEvent('global-loading', {
+          active: true
+        });
       }
 
       /**
@@ -334,14 +378,18 @@
         this.markerDialog.opened = true;
       }
 
-      _init(countryProgrammes, sectors, statuses, userCountry, partners) {
-        if (!countryProgrammes || !sectors || !statuses || !partners || !userCountry) {
+      _init(countryProgrammes, sectors, statuses, userCountry, partners, donors, grants, interventions, unicefUsers) {
+        const staticDataLoaded = [...arguments].reduce(
+          (allLoaded, xs) => Boolean(xs) && allLoaded,
+          true
+        );
+
+        if (!staticDataLoaded) {
           return;
         }
-
-          // initialize the intLocMap object
-          // this.queryMapInterventions('');
-          this._validateUserCountry(userCountry);
+        // initialize the intLocMap object
+        // this.queryMapInterventions('');
+        this._validateUserCountry(userCountry);
         // find the current country programme based on criteria in property currentCountryProgramme
         const currentCp = find(
           (cp) => keys(this.currentCountryProgramme).reduce(
@@ -352,53 +400,90 @@
 
         this._initDefaultFilters(currentCp);
 
-        if (_.isEmpty(this.availableListFilterOptions)) {
-          this.initListFiltersData([
-            {
-              filterName: 'Country Programme',
-              type: 'esmm',
-              optionValue: 'value',
-              optionLabel: 'label',
-              alreadySelected: null,
-              selectionOptions: map(({ name, id }) => ({ label: name, value: id }), countryProgrammes),
-              path: 'country_programme'
-            },
-            {
-              filterName: 'Sections',
-              type: 'esmm',
-              optionValue: 'value',
-              optionLabel: 'label',
-              alreadySelected: null,
-              selectionOptions: this.sectors,
-              path: 'section'
-            },
-            {
-              filterName: 'Status',
-              type: 'esmm',
-              optionValue: 'value',
-              optionLabel: 'label',
-              alreadySelected: null,
-              selectionOptions: this.statuses,
-              path: 'status'
-            },
-            {
-              filterName: 'Partners',
-              type: 'esmm',
-              optionValue: 'value',
-              optionLabel: 'label',
-              alreadySelected: null,
-              selectionOptions: partners,
-              path: 'partner'
-            }
-          ]);
-        }
+
+        this.initListFiltersData([
+          {
+            filterName: 'Country Programme',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            alreadySelected: [],
+            selectionOptions: map(({ name, id }) => ({ label: name, value: id }), countryProgrammes),
+            path: 'selectedCps'
+          },
+          {
+            filterName: 'Sections',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            alreadySelected: [],
+            selectionOptions: sectors,
+            path: 'selectedSections'
+          },
+          {
+            filterName: 'Status',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            alreadySelected: [],
+            selectionOptions: statuses,
+            path: 'selectedStatuses'
+          },
+          {
+            filterName: 'Partners',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            alreadySelected: [],
+            selectionOptions: partners,
+            path: 'selectedPartners'
+          },
+          {
+            filterName: 'Donors',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            alreadySelected: [],
+            selectionOptions: donors,
+            path: 'selectedDonors'
+          },
+          {
+            filterName: 'Grants',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            alreadySelected: [],
+            selectionOptions: grants,
+            path: 'selectedGrants'
+          },
+          {
+            filterName: 'Focal Points',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            alreadySelected: [],
+            selectionOptions: unicefUsers,
+            path: 'selectedFocalPoints'
+          },
+          {
+            filterName: 'PD/SSFA',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            alreadySelected: [],
+            selectionOptions: interventions,
+            path: 'selectedInterventions'
+          }
+
+        ]);
+
         this._updateSelectedFiltersValues();
       }
 
       _initDefaultFilters(currentCp) {
         this.setProperties({
-          country_programme: currentCp.id,
-          status: 'active'
+          selectedCps: [currentCp.id],
+          selectedStatuses: ['active']
         });
       }
 
@@ -409,36 +494,43 @@
           let filtersValues = [
             {
               filterName: 'Country Programme',
-              selectedValue: this.country_programme
+              selectedValue: this.selectedCps
             },
             {
               filterName: 'Status',
-              selectedValue: this.status
+              selectedValue: this.selectedStatuses
             }
     
           ];
+
           this.updateShownFilters(filtersValues);
+          this.fireEvent('global-loading', {});
         });
       }
 
-      _filterChanged(country_programme, section, status, partner) {
+      _filterChanged(...args) {
+        // these must be in same order as arguments to function defined in observer
+        let backendFields = [
+          'country_programmes',
+          'sections',
+          'status',
+          'donors',
+          'grants',
+          'interventions',
+          'unicef_focal_points'
+        ];
         let newFilter = {};
-        if(country_programme) {
-          newFilter['country_programme'] = country_programme;
-        }
-        if(section) {
-          newFilter['section'] = section;
-        }
-        if(status) {
-          newFilter['status'] = status;
-        }
-        if(partner) {
-          newFilter['partner'] = partner;
-        }
-    
+        args.forEach((xs, i)=>{
+          if (xs && !isEmpty(xs)) {
+            console.log('xxx', xs, backendFields[i]);
+            newFilter[backendFields[i]] = xs.join(',');
+          }
+        });
+
         if (equals(this.mapFilter, newFilter)) {
           return;
         }
+    
         if (isEmpty(newFilter)) {
           this.set('markers', []);
           this.set('showActive', false);
@@ -463,15 +555,7 @@
         this.set('markers', locations);
       }
 
-      _partnerFilter(filter) {
-        return filter.filterName === 'Partners';
-      }
-
-      _partnerChanged(val) {
-        let id = path(['detail', 'selectedValues', 'id'], val);
-        this.set('partner', id);
-      }
-
+    
       _setWarnings(country_programme, sector, status, partner) {
         if (!country_programme && !sector && !status && !partner) {
           this.setProperties({

@@ -885,7 +885,7 @@
             type: 'esmm',
             optionValue: 'value',
             optionLabel: 'label',
-            selectionOptions: this.statuses.slice(1),
+            selectionOptions: this.statuses.slice(1), // exclude closed status per business req.
             alreadySelected: [],
             path: 'selectedStatuses',
             selected: false
