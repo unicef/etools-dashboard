@@ -13,6 +13,11 @@
 <dom-module id="marker-dialog">
   <template>
     <style include="shared-styles page-layout-styles list-styles grid-layout-styles">
+      :host {
+        --item-margin: {
+          margin-left: 24px;
+        }
+      }
       .marker {
         width: 900px;
         min-height: 86px;
@@ -20,6 +25,11 @@
         top: 10%;
         max-height: 50%;
         overflow: hidden;
+      }
+
+      .intervention-block {
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--dark-divider-color);
       }
   
       paper-dialog paper-icon-button.close {
@@ -53,6 +63,7 @@
         font-size: 14px;
         text-transform: uppercase;
         line-height: 14px;
+        font-weight: 500;
       }
   
       paper-dialog a.partner-number {
@@ -63,20 +74,26 @@
       }
   
       paper-dialog span.partner-title {
-        margin-left: 4px;
+        @apply --item-margin;
       }
   
       paper-dialog .partner {
         padding-top: 8px;
       }
-  
+
+      .additonal-info {
+        color: var(--dark-secondary-text-color);
+        margin-top: 5px;
+
+      }
+
       .interventions {
         margin-bottom: 50px;
         height: 480px;
       }
   
-      .interventions>div:nth-child(2) {
-        margin-left: 24px;
+      .interventions>div:nth-child(2), .additional {
+        @apply --item-margin;
       }
   
       .wrapper {
@@ -110,40 +127,80 @@
         <paper-icon-button icon="communication:location-on"></paper-icon-button>
         <div class="layout-vertical">
           <h1 sub-title>[[data.name]]</h1>
-          <h2 class="type">[[data.type]]</h2>
         </div>
       </div>
       <div class="layout-horizontal interventions">
-  
-          <div class="sections">
-        <template is="dom-repeat"
-        items="[[data.sections]]"
-        as="sector">
-        <h2 class="sector">[[sector]]</h2>
-        </template>
+    
+        <div class="sections">
+          <template is="dom-repeat"
+                    items="[[data.sections]]"
+                    as="sector">
+            <h2 class="sector">[[sector]]</h2>
+          </template>
         </div>
-  
+    
         <div class="wrapper">
           <div class="layout-vertical list-panel title-row">
             <template is="dom-repeat"
                       items="[[data.interventions]]">
-              <div class="layout-vertical start">
+              <div class="layout-vertical intervention-block">
                 <h2 class="partner-name">[[item.partner_name]]</h2>
+
                 <div class="partner">
                   <a class="partner-number"
-                     href="[[_getHref(item.id)]]"
-                     target="_blank">[[item.number]]:</a>
+                         href="[[_getHref(item.id)]]"
+                         target="_blank">[[item.number]]:</a>
                   <span class="partner-title">[[item.title]] </span>
                 </div>
+                <div class="additonal-info">
+                  <div class="layout-horizontal">
+                    <span>Grants: </span>
+                    <span class="additional">[[_formatSplits(item.grants)]]</span>
+                  </div>
+                  <div class="layout-horizontal">
+                    <span>Donors: </span>
+                    <span class="additional">[[_formatSplits(item.donors)]]</span>
+                  </div>
+                  <div class="layout-horizontal">
+                    <span>Offices: </span>
+                    <span class="additional">
+                      <template is="dom-repeat" items="[[item.offices]]" as="office">
+                        [[office]] 
+                      </template>
+                    </span>
+                  </div>
+                  <div class="layout-horizontal">
+                    <span>Focal Points: </span>
+                    <span class="additional">
+                      <template is="dom-repeat" items="[[item.unicef_focal_points]]" as="focalPoint">
+                        [[focalPoint]] 
+                      </template>
+                    </span>
+                  </div>
+                  <template is="dom-if"
+                            if="[[item.results]]">
+                    <div class="layout-horizontal">
+                      <span>CP Outputs: </span>
+                      <span class="additional">[[item.results]]</span>
+                    </div>
+                  </template>
+                  <template is="dom-if"
+                            if="[[item.clusters]]">
+                    <div class="layout-horizontal">
+                      <span>CP Outputs: </span>
+                      <span class="additional">[[item.clusters]]</span>
+                    </div>
+                  </template>
+                  </div>
               </div>
             </template>
-  
+    
           </div>
         </div>
       </div>
     </paper-dialog>
-  
-  </template>
+    
+    </template>
 
   <script>
     /**
@@ -206,6 +263,10 @@
 
       _getHref(id) {
         return '/pmp/interventions/'+ id + '/details';
+      }
+
+      _formatSplits(str) {
+        return str.split('|').join(' | ');
       }
 
     }
