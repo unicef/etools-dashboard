@@ -35,14 +35,13 @@
       this.setProperties({
         listFilterOptions: filterOptions,
         selectedFilters: []
-      })
+      });
     }
 
     _isAlreadySelected(filter) {
-      let selectedOpt = this.selectedFilters.find(function(selectedFilter) {
-        return selectedFilter.filterName === filter.filterName;
-      })
-      return !!selectedOpt;
+      return Boolean(
+        this.selectedFilters.find((sF) => sF.filterName === filter.filterName)
+      );
     }
 
     // select a filter from ADD FILTER menu
@@ -53,9 +52,9 @@
         this.push('selectedFilters', selectedOption);
         this.set(['listFilterOptions', selectedIdx, 'selected'], true);
       } else {
-        let paredFilters = this.selectedFilters.filter(fil => fil.filterName != selectedOption.filterName)
+        let paredFilters = this.selectedFilters.filter((fil) => fil.filterName != selectedOption.filterName);
         this._clearFilterSelection(selectedOption);
-        this.set('selectedFilters', paredFilters)
+        this.set('selectedFilters', paredFilters);
         this.set(['listFilterOptions', selectedIdx, 'selected'], false);
       }
     }
