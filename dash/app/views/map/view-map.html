@@ -239,6 +239,9 @@
           selectedStatuses: {
             type: Array
           },
+          selectedOffices: {
+            type: Array
+          },
           sectors: {
             type: Array,
             statePath: 'sectors'
@@ -258,6 +261,10 @@
           unicefUsers: {
             type: Array,
             statePath: 'unicefUsers'
+          },
+          offices: {
+            type: Array,
+            statePath: 'offices'
           },
           section: {
             type: String
@@ -337,8 +344,8 @@
 
       static get observers() {
         return [
-          '_init(countryProgrammes, sectors, statuses, userCountry, partners, donors, grants, interventions, unicefUsers)',
-          '_filterChanged(selectedCps, selectedSections, selectedStatuses, selectedPartners, selectedDonors, selectedGrants, selectedInterventions, selectedFocalPoints)',
+          '_init(countryProgrammes, sectors, statuses, userCountry, offices, partners, donors, grants, interventions, unicefUsers)',
+          '_filterChanged(selectedCps, selectedSections, selectedStatuses, selectedPartners, selectedDonors, selectedGrants, selectedInterventions, selectedFocalPoints, selectedOffices)',
           '_setWarnings(country_programme, section, status, partner)'
         ];
       }
@@ -374,12 +381,11 @@
       _openModal(e) {
         let { id } = e.model.marker;
         let data = clone(this.locationsDict[id]);
-        data.sections = data.sections.map((s)=> this.sectors.find((se)=>se.value === Number(s)).label );
         this.markerDialog.data = data;
         this.markerDialog.opened = true;
       }
 
-      _init(countryProgrammes, sectors, statuses, userCountry, partners, donors, grants, interventions, unicefUsers) {
+      _init(countryProgrammes, sectors, statuses, userCountry, offices, partners, donors, grants, interventions, unicefUsers) {
         const staticDataLoaded = [...arguments].reduce(
           (allLoaded, xs) => Boolean(xs) && allLoaded,
           true
@@ -449,6 +455,15 @@
             path: 'selectedDonors'
           },
           {
+            filterName: 'Offices',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            alreadySelected: [],
+            selectionOptions: map(({ name, id }) => ({ label: name, value: id }), offices),
+            path: 'selectedOffices'
+          },
+          {
             filterName: 'Grants',
             type: 'esmm',
             optionValue: 'value',
@@ -515,10 +530,12 @@
           'country_programmes',
           'sections',
           'status',
+          'partners',
           'donors',
           'grants',
           'interventions',
-          'unicef_focal_points'
+          'unicef_focal_points',
+          'offices'
         ];
         let newFilter = {};
         args.forEach((xs, i)=>{
