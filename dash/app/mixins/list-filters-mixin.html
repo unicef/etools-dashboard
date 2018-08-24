@@ -35,27 +35,24 @@
       this.setProperties({
         listFilterOptions: filterOptions,
         selectedFilters: []
-      })
+      });
     }
 
     _isAlreadySelected(filter) {
-      let selectedOpt = this.selectedFilters.find(function(selectedFilter) {
-        return selectedFilter.filterName === filter.filterName;
-      })
-      return !!selectedOpt;
+      return Boolean(
+        this.selectedFilters.find((sF) => sF.filterName === filter.filterName)
+      );
     }
 
     // select a filter from ADD FILTER menu
-    selectFilter(event) {
-      let selectedOption = event.model.item;
-      let selectedIdx = event.model.index;
+    selectFilter({ model: { item: selectedOption, index: selectedIdx } }) {
       if (!this._isAlreadySelected(selectedOption)) {
         this.push('selectedFilters', selectedOption);
         this.set(['listFilterOptions', selectedIdx, 'selected'], true);
       } else {
-        let paredFilters = this.selectedFilters.filter(fil => fil.filterName != selectedOption.filterName)
+        let paredFilters = this.selectedFilters.filter((fil) => fil.filterName != selectedOption.filterName);
         this._clearFilterSelection(selectedOption);
-        this.set('selectedFilters', paredFilters)
+        this.set('selectedFilters', paredFilters);
         this.set(['listFilterOptions', selectedIdx, 'selected'], false);
       }
     }
@@ -119,6 +116,23 @@
       let filterVal = event.detail.selectedItems;
       this.set(filterPath, filterVal);
     }
+  
+    // for esmm on pages without url params
+    esmmValueChangedForValues(event) {
+      let filterPath = Polymer.dom(event).localTarget.getAttribute('data-filter-path');
+      const valueProp = Polymer.dom(event).localTarget.getAttribute('option-value');
+
+      let filterVal = event.detail.selectedItems;
+      if (Array.isArray(filterVal)) {
+        filterVal = filterVal.map((xs)=> {
+          if (typeof xs === 'object') {
+            return xs[valueProp];
+          }
+          return xs;
+        });
+      }
+      this.set(filterPath, filterVal);
+    }
 
     // change event for a etools-datepicker filter
     _filterDateHasChanged(event) {
@@ -139,23 +153,22 @@
           // check available filters
           if (this._validateFilterSelectedValue(filter.selectedValue)) {
             let foundInAvailable = false;
-            if (this.availableListFilterOptions instanceof Array && this.availableListFilterOptions.length > 0) {
-              for (i = 0; i < this.availableListFilterOptions.length; i++) {
-                if (this.availableListFilterOptions[i].filterName === filter.filterName) {
-                  const type = this.availableListFilterOptions[i].type;
-                  let filterPath = '';
+            if (this.listFilterOptions instanceof Array && this.listFilterOptions.length > 0) {
+              for (i = 0; i < this.listFilterOptions.length; i++) {
+                if (this.listFilterOptions[i].filterName === filter.filterName) {
+                  const type = this.listFilterOptions[i].type;
+                  let filterPath = 'listFilterOptions.' + i;
                   if (type === 'esmm' || type === 'dropdown') {
                     // update esmm dropdown selection
-                    filterPath = 'availableListFilterOptions.' + i;
                     this.set(filterPath + '.alreadySelected', filter.selectedValue);
                   } else if (type === 'datepicker') {
                     // update datepicker selection
-                    filterPath = 'availableListFilterOptions.' + i;
                     this.set(filterPath + '.dateSelected', filter.selectedValue);
                   }
+                  this.set(filterPath + '.selected', true);
                   this._disableFilter(filter, filterPath);
                   // add filter to selected filters list
-                  this.push('selectedFilters', this.availableListFilterOptions[i]);
+                  this.push('selectedFilters', this.listFilterOptions[i]);
                   foundInAvailable = true;
                   break;
                 }

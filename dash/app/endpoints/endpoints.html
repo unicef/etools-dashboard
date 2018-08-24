@@ -47,7 +47,7 @@
       template: '/api/v2/partners/<%=id%>/'
     },
     partnersDropdown: {
-      url: '/api/v2/partners',
+      url: '/api/v2/partners/?hidden=false',
       exp: 6 * 60 * 60 * 1000, // 6h
       cachingKey: 'partnersDropdown'
     },
@@ -78,6 +78,16 @@
       url: '/api/v2/interventions/',
       exp: 10 * 60 * 1000,
       cachingKey: 'interventions'
+    },
+    donors: {
+      url: '/api/v2/funds/donor/',
+      exp: 10*60000,
+      cachingKey: 'donors'
+    },
+    grants: {
+      url: '/api/v2/funds/grant/',
+      exp: 10*60000,
+      cachingKey: 'grants'
     },
     partnerships: {
       template: '/api/v2/interventions/dash',

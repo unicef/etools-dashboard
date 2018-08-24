@@ -3,6 +3,7 @@
 
 <link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../styles/list-styles.html">
+<link rel="import" href="../../styles/filter-styles.html">
 <link rel="import" href="../../styles/page-layout-styles.html">
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../styles/grid-layout-styles.html">
@@ -20,7 +21,6 @@
 <link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../../bower_components/paper-listbox/paper-listbox.html">
-<link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
@@ -45,7 +45,8 @@
 
 <dom-module id="view-partnerships">
   <template>
-    <style include="shared-styles grid-layout-styles iron-flex page-layout-styles paper-material-styles list-styles">
+    <style include="shared-styles grid-layout-styles iron-flex page-layout-styles 
+        paper-material-styles list-styles filter-styles">
       .no-header-line {
         --header-bottom-line: none;
       }
@@ -105,16 +106,7 @@
         padding-right: 0;
       }
 
-      #filterMenu paper-icon-item {
-        --paper-item-selected: {
-            background-color: rgb(220, 220, 220);
-        };
-        --paper-item-focused: {
-            background-color: rgb(198, 198, 198);
-        };
-      }
-
-      paper-icon-item {
+       paper-icon-item {
         --paper-item-icon-width: 32px;
       }
 
@@ -221,9 +213,7 @@
         line-height: 15px;
       }
 
-      etools-dropdown-multi {
-        min-width: 160px;
-      }
+
       
       .alerts-comment {
         color: rgba(0,0,0,0.54);
@@ -805,16 +795,14 @@
       static get observers() {
         return [
           '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate)',
-          '_initListFilters(sectors, statuses, offices)',
-          '_init(active, sectors, statuses, offices)'
+          '_init(active, sectors, statuses, offices, requiredDataLoaded)'
         ];
       }
 
 
-      _init(active, sectors, statuses, offices) {
+      _init(active, sectors, statuses, offices, requiredDataLoaded) {
         let params = this.queryParams;
-        let staticLoaded = this._allHaveValues('sectors', 'statuses', 'offices');
-        if (!active || !staticLoaded) {
+        if (!active || !sectors || !statuses || !offices || !requiredDataLoaded) {
           return;
         }
         this.set('initComplete', false);
@@ -829,7 +817,6 @@
         this.set('endBeforeDate', params.endBefore ? params.endBefore : '');
         this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
         this.set('endAfterDate', params.endAfter ? params.endAfter : '');
-        this.set('initComplete', true);
         // the following should be removed when the final two preset filters are enabled
         if (this.shadowRoot.querySelectorAll('.alert-row').length > 0) {
           this.shadowRoot.querySelectorAll('.alert-row')[6].style.color = 'rgb(144,144,144)';
@@ -839,26 +826,14 @@
           this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[0].innerText = '-';
           this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[1].classList.remove('filter-name');
         }
-        // initialize with status filter prefilled
-        let dummyEvent = {model: {item: {}, index: '2'}}
-        dummyEvent.model.item = {
-          filterName: 'Status',
-          type: 'esmm',
-          optionValue: 'value',
-          optionLabel: 'label',
-          selectionOptions: this.statuses.slice(1),
-          alreadySelected: ["signed", "active", "ended", "suspended", "terminated"],
-          path: 'selectedStatuses',
-          selected: false
-        };
-        this.selectFilter(dummyEvent)
-        this._updateSelectedFiltersValues()
+
+        this._initListFilters();
+        this.set('initComplete', true);
+        this._updateSelectedFiltersValues();
+
       }
 
-      _initListFilters(sectors, statuses, offices) {
-        if (!this._allHaveValues('sectors', 'statuses', 'offices')) {
-          return;
-        }
+      _initListFilters() {
         this.initListFiltersData([
           {
             filterName: 'Section/Cluster',
@@ -885,7 +860,7 @@
             type: 'esmm',
             optionValue: 'value',
             optionLabel: 'label',
-            selectionOptions: this.statuses.slice(1),
+            selectionOptions: this.statuses.slice(1), // exclude closed status per business req.
             alreadySelected: [],
             path: 'selectedStatuses',
             selected: false
@@ -976,9 +951,10 @@
 
       _updateUrl(query, pageNumber, pageSize, sortOrder, requiredDataLoaded,
         initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate) {
-        if (!this.initComplete || !this.requiredDataLoaded) {
+          if (!this.initComplete || !this.requiredDataLoaded) {
           return;
         }
+
         this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
         const qs = this.buildQueryString();
         const currentRoute = this.route.prefix + this.route.path;
@@ -1034,7 +1010,6 @@
         }
         this.set('initComplete', false);
         this.set('requiredDataLoaded', true);
-        this._init(this.active);
       }
 
       _setSelectedOffices(officesStr) {

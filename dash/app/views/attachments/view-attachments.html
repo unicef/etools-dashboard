@@ -132,10 +132,7 @@
       paper-menu-button {
         padding: 0;
       }
-
-      etools-dropdown-multi {
-        min-width: 160px;
-      }
+      
 
       data-table-column:not(:first-child),data-table-row >div > div:not(:first-child) {
         padding-left: 24px;
@@ -270,7 +267,7 @@
               <paper-listbox multi slot="dropdown-content">
                 <template is="dom-repeat"
                           items="[[listFilterOptions]]">
-                  <paper-icon-item on-tap="selectFilter">[[item.filterName]]
+                  <paper-icon-item on-tap="handleFilterSelect">[[item.filterName]]
                     <iron-icon icon="check" slot="item-icon" hidden$="[[!item.selected]]"></iron-icon>
                     [[item.filterName]]
                   </paper-icon-item>
@@ -668,10 +665,10 @@
       _toggleDocsView({ target }) {
         let pages = this.$.docPages;
         pages.selectNext();
-        this.$.allDocs.classList.toggle("light-button")
-        this.$.allDocs.classList.toggle("dark-button")
-        this.$.grouped.classList.toggle("dark-button")
-        this.$.grouped.classList.toggle("light-button")
+        this.$.allDocs.classList.toggle('light-button');
+        this.$.allDocs.classList.toggle('dark-button');
+        this.$.grouped.classList.toggle('dark-button');
+        this.$.grouped.classList.toggle('light-button');
       }
 
 
