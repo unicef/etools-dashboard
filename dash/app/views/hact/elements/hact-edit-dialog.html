@@ -220,10 +220,12 @@
           'programmatic_q3': planned.q3,
           'programmatic_q4': planned.q4
         };
-        const editableValues = merge(
-          clone(pick(['planned_engagement'], partner)),
-          { planned_visits }
-        );
+        const editableValues = this.isGovPartner ? 
+                               merge(
+                                 clone(pick(['planned_engagement'], partner)),
+                                 { planned_visits }
+                               ) :
+                               clone(pick(['planned_engagement'], partner));
 
         const hasAudit = (auditType) => partner.planned_engagement[auditType.prop];
         const selectedAudits = compose(map(prop('label')), filter(hasAudit))(this.auditMap);
