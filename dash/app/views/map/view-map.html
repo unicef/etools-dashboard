@@ -242,6 +242,9 @@
           selectedOffices: {
             type: Array
           },
+          selectedResults: {
+            type: Array
+          },
           sectors: {
             type: Array,
             statePath: 'sectors'
@@ -265,6 +268,10 @@
           offices: {
             type: Array,
             statePath: 'offices'
+          },
+          results: {
+            type: Array,
+            statePath: 'results'
           },
           section: {
             type: String
@@ -332,20 +339,16 @@
           }
         };
       }
-
-      // _handleSelect(e) {
-      //   const { filter } = e.model;
-      //   const { value } = e.detail;
-      //   this.set(filter.path, value);
-      // }
+        /* globals keys, clone */
+    
       _partnersReceived(partners) {
         this.set('partnersList', partners);
       }
 
       static get observers() {
         return [
-          '_init(countryProgrammes, sectors, statuses, userCountry, offices, partners, donors, grants, interventions, unicefUsers)',
-          '_filterChanged(selectedCps, selectedSections, selectedStatuses, selectedPartners, selectedDonors, selectedGrants, selectedInterventions, selectedFocalPoints, selectedOffices)',
+          '_init(userCountry, countryProgrammes, sectors, statuses, offices, partners, donors, grants, interventions, unicefUsers, results)',
+          '_filterChanged(selectedCps, selectedSections, selectedStatuses, selectedPartners, selectedDonors, selectedGrants, selectedInterventions, selectedFocalPoints, selectedOffices, selectedResults)',
           '_setWarnings(country_programme, section, status, partner)'
         ];
       }
@@ -385,7 +388,7 @@
         this.markerDialog.opened = true;
       }
 
-      _init(countryProgrammes, sectors, statuses, userCountry, offices, partners, donors, grants, interventions, unicefUsers) {
+      _init(userCountry, countryProgrammes, sectors, statuses, offices, partners, donors, grants, interventions, unicefUsers, results) {
         const staticDataLoaded = [...arguments].reduce(
           (allLoaded, xs) => Boolean(xs) && allLoaded,
           true
@@ -394,8 +397,6 @@
         if (!staticDataLoaded) {
           return;
         }
-        // initialize the intLocMap object
-        // this.queryMapInterventions('');
         this._validateUserCountry(userCountry);
         // find the current country programme based on criteria in property currentCountryProgramme
         const currentCp = find(
@@ -406,7 +407,6 @@
           ), this.countryProgrammes);
 
         this._initDefaultFilters(currentCp);
-
 
         this.initListFiltersData([
           {
@@ -482,6 +482,15 @@
             path: 'selectedFocalPoints'
           },
           {
+            filterName: 'Results',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            alreadySelected: [],
+            selectionOptions: results,
+            path: 'selectedResults'
+          },
+          {
             filterName: 'PD/SSFA',
             type: 'esmm',
             optionValue: 'value',
@@ -535,7 +544,8 @@
           'grants',
           'interventions',
           'unicef_focal_points',
-          'offices'
+          'offices',
+          'results'
         ];
         let newFilter = {};
         args.forEach((xs, i)=>{

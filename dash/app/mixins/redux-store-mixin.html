@@ -28,7 +28,8 @@
     userCountry: null,
     hactGraphs: [],
     donors: [],
-    grants: []
+    grants: [],
+    results: []
   };
 
   const reducer = (state, action) => {
@@ -90,6 +91,11 @@
       case 'SET_DONORS':
         return merge(state, {
           donors: action.donors
+        });
+
+      case 'SET_RESULTS':
+        return merge(state, {
+          results: action.results
         });
 
     }
