@@ -264,10 +264,10 @@
                 <iron-icon icon="filter-list"></iron-icon>
                 filters
               </paper-button>
-              <paper-listbox multi slot="dropdown-content">
+              <paper-listbox multi slot="dropdown-content" selected-values="[2]">
                 <template is="dom-repeat"
                           items="[[listFilterOptions]]">
-                  <paper-icon-item on-tap="handleFilterSelect">[[item.filterName]]
+                  <paper-icon-item on-tap="selectFilter">
                     <iron-icon icon="check" slot="item-icon" hidden$="[[!item.selected]]"></iron-icon>
                     [[item.filterName]]
                   </paper-icon-item>

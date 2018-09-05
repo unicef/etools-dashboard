@@ -61,6 +61,10 @@
             type: Boolean,
             value: false
           },
+          currentParams: {
+            type: Object,
+            value: {}
+          },
           predicates: {
             type: Object,
             value: function() {
@@ -94,11 +98,15 @@
       }
 
       query(params) {
-        let that = this
+        if (equals(params, this.currentParams)) {
+          return;
+        }
+        this.set('currentParams', params);
+        this.fireEvent('global-loading', { active: true });
         const { pageNumber, pageSize, order, orderBy } = params;
         EtoolsDashboard.DexieDb.transaction('r', EtoolsDashboard.DexieDb.attachments, () => {
-          let queryResult = EtoolsDashboard.DexieDb.attachments
-          let allResults = queryResult.orderBy('partner')
+          let queryResult = EtoolsDashboard.DexieDb.attachments;
+          let allResults = queryResult.orderBy('partner');
           queryResult = queryResult.orderBy(orderBy || 'created');
           if (order === 'asc') {
             queryResult = queryResult.reverse();
@@ -113,7 +121,7 @@
 
           return Dexie.Promise.all([
             queryResult.count(),
-            // Use clone() as offset() and limit() otherwise mutates the same query that is counted
+            // Use clone() as offset() and limit() otherwise mutates the same query this is counted
             queryResult.clone()
               .offset((pageNumber - 1) * pageSize)
               .limit(pageSize)
@@ -122,18 +130,18 @@
           ]).then((countAndResult) => {
               this._setFilteredTotal(countAndResult[0]);
               this._setFilteredAttachments(countAndResult[1]);
-              countAndResult[2].forEach(function(file) {
-                  if (!that.orderedResults.some(item => item.keys === `${file.partner} - ${file.vendor_number}`)) {
-                    let obj = {}
-                    let vend = countAndResult[2].filter(file2 => file2.vendor_number === file.vendor_number)
-                    vend = sortBy(prop('created'))(vend)
-                    let key = `${file.partner} - ${file.vendor_number}`
-                    obj['label'] = key
-                    obj['value'] = vend
-                    that.orderedResults.push(obj)
+              countAndResult[2].forEach((file)=> {
+                  if (!this.orderedResults.some((item) => item.keys === `${file.partner} - ${file.vendor_number}`)) {
+                    let obj = {};
+                    let vend = countAndResult[2].filter((file2) => file2.vendor_number === file.vendor_number);
+                    vend = sortBy(prop('created'))(vend);
+                    let key = `${file.partner} - ${file.vendor_number}`;
+                    obj['label'] = key;
+                    obj['value'] = vend;
+                    this.orderedResults.push(obj);
                   }
-                })
-                this.orderedResults = uniq(this.orderedResults)
+                });
+                this.orderedResults = uniq(this.orderedResults);
               this.fireEvent('global-loading', { loadingSource: 'attachments-data' });
             });
         });
