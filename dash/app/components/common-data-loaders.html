@@ -114,7 +114,7 @@
             };
           },
 
-          setActionPointsByMe({results} = []) {
+          setActionPointsByMe({ results } = []) {
             return {
               type: 'SET_ACTION_PTS_BY_ME',
               actionPointsByMe: map(
@@ -208,6 +208,36 @@
               interventions: data.map((inter)=>({
                 label: inter.number,
                 value: inter.id
+              }))
+            };
+          },
+
+          setGrants(data = []) {
+            return {
+              type: 'SET_GRANTS',
+              grants: data.map((grant)=>({
+                label: grant.description,
+                value: grant.id
+              }))
+            };
+          },
+    
+          setDonors(data = []) {
+            return {
+              type: 'SET_DONORS',
+              donors: data.map((donor)=>({
+                label: donor.name,
+                value: donor.id
+              }))
+            };
+          },
+    
+          setResults(data = []) {
+            return {
+              type: 'SET_RESULTS',
+              results: data.map((res)=>({
+                label: res.name,
+                value: res.id
               }))
             };
           }

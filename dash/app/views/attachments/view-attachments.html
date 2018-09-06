@@ -5,6 +5,7 @@
 <link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../../bower_components/iron-pages/iron-pages.html">
@@ -115,6 +116,24 @@
 
       /* Table Columns End */
 
+      #filterMenu paper-icon-item {
+        --paper-item-selected: {
+            background-color: rgb(220, 220, 220);
+        };
+        --paper-item-focused: {
+            background-color: rgb(198, 198, 198);
+        };
+      }
+
+      paper-icon-item {
+        --paper-item-icon-width: 32px;
+      }
+
+      paper-menu-button {
+        padding: 0;
+      }
+      
+
       data-table-column:not(:first-child),data-table-row >div > div:not(:first-child) {
         padding-left: 24px;
       }
@@ -163,7 +182,11 @@
 
       .light-button {
         background: rgb(255, 255, 255);
-        color: rgba(0, 0, 0, 0.87));
+        color: rgba(0, 0, 0, 0.87);
+      }
+
+      paper-button {
+        margin: 0;
       }
     </style>
   
@@ -222,15 +245,11 @@
                                         selected-values="[[filter.alreadySelected]]"
                                         trigger-value-change-event
                                         on-etools-selected-items-changed="esmmValueChanged"
-                                        data-filter-path$="[[filter.path]]">
+                                        data-filter-path$="[[filter.path]]"
+                                        min-width="300px"
+                                        horizontal-align="left"
+                                        no-dynamic-align>
                   </etools-dropdown-multi>
-                  <paper-icon-button suffix
-                                    class="remove-field remove"
-                                    icon="cancel"
-                                    on-tap="removeFilter"
-                                    data-filter-name$="[[filter.filterName]]"
-                                    data-reset-path$="[[filter.path]]">
-                  </paper-icon-button>
                 </div>
               </template>
             </template>
@@ -238,16 +257,20 @@
           <div class="fixed-controls">
             <div class="filters-divider"></div>
             <paper-menu-button id="filterMenu"
+                              ignore-select
                               dynamic-align>
               <paper-button class="button"
                             slot="dropdown-trigger">
                 <iron-icon icon="filter-list"></iron-icon>
-                add filter
+                filters
               </paper-button>
-              <paper-listbox slot="dropdown-content">
+              <paper-listbox multi slot="dropdown-content" selected-values="[2]">
                 <template is="dom-repeat"
-                          items="[[availableListFilterOptions]]">
-                  <paper-item on-tap="selectFilter">[[item.filterName]]</paper-item>
+                          items="[[listFilterOptions]]">
+                  <paper-icon-item on-tap="selectFilter">
+                    <iron-icon icon="check" slot="item-icon" hidden$="[[!item.selected]]"></iron-icon>
+                    [[item.filterName]]
+                  </paper-icon-item>
                 </template>
               </paper-listbox>
             </paper-menu-button>
@@ -327,7 +350,7 @@
                   <span class="col-data">[[item.partner_type]]</span>
                 </div>
                 <div class="source-column">
-                  <span class="col-data">Partnership Management</span>
+                  <span class="col-data">[[item.source]]</span>
                 </div>
                 <div class="doctype-column">
                   <span class="col-data">
@@ -554,7 +577,8 @@
               label: type,
               value: type
             })),
-            alreadySelected: []
+            alreadySelected: [],
+            selected: false
           },
           {
             filterName: 'PD/SSFA',
@@ -563,7 +587,8 @@
             optionLabel: 'label',
             path: 'selectedPDs',
             selectionOptions: this.interventions,
-            alreadySelected: []
+            alreadySelected: [],
+            selected: false
           },
           {
             filterName: 'PCA',
@@ -572,7 +597,8 @@
             optionLabel: 'label',
             path: 'selectedPCAs',
             selectionOptions: this.agreements,
-            alreadySelected: []
+            alreadySelected: [],
+            selected: false
           }
         ]);
       }
@@ -639,10 +665,10 @@
       _toggleDocsView({ target }) {
         let pages = this.$.docPages;
         pages.selectNext();
-        this.$.allDocs.classList.toggle("light-button")
-        this.$.allDocs.classList.toggle("dark-button")
-        this.$.grouped.classList.toggle("dark-button")
-        this.$.grouped.classList.toggle("light-button")
+        this.$.allDocs.classList.toggle('light-button');
+        this.$.allDocs.classList.toggle('dark-button');
+        this.$.grouped.classList.toggle('dark-button');
+        this.$.grouped.classList.toggle('light-button');
       }
 
 

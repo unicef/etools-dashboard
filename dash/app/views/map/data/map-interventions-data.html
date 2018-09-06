@@ -108,11 +108,11 @@
             const locationObj = acc[location.id] || {
               interventions: [],
               sections: [],
-              name: location.name,
-              type: location.location_type
+              name: location.name
             };
             locationObj.interventions = uniq([
-              pick(['partner_name', 'number', 'title'], inter),
+              pick(['partner_name', 'number', 'title', 'grants', 'donors', 'clusters',
+                'offices', 'unicef_focal_points', 'results'], inter),
               ...locationObj.interventions
             ]);
             locationObj.sections = uniq([...inter.sections, ...locationObj.sections]);

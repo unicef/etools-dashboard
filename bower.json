@@ -11,11 +11,11 @@
     "app-route": "PolymerElements/app-route#^2.0.0",
     "dexie": "^2.0.1",
     "etools-ajax": "3.0.0",
-    "etools-app-selector": "2.1.0",
+    "etools-app-selector": "2.1.1",
     "etools-behaviors": "2.0.0",
     "etools-datepicker": "2.0.0",
     "etools-dialog": "2.0.0",
-    "etools-dropdown": "2.0.0",
+    "etools-dropdown": "9e2fb79",
     "etools-loading": "3.0.0",
     "etools-profile-dropdown": "3.1.0",
     "etools-info-tooltip": "2.0.0",
@@ -52,7 +52,8 @@
     "lodash": "^4.17.5",
     "polymer": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
-    "etools-dialog": "^2.1.0"
+    "etools-dialog": "^2.1.0",
+    "etools-dropdown": "9e2fb79"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
