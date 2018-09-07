@@ -96,7 +96,6 @@
   
       div.sections,
       span.sections {
-        display: flex;
         height: 48px;
         white-space: normal;
         overflow-y: auto;
@@ -165,6 +164,10 @@
   
       .no-padding {
         padding: 0;
+      }
+
+      div.display-flex {
+        display: flex;
       }
   
       .status {
@@ -275,6 +278,7 @@
       }
 
       .title {
+        display: flex;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -569,16 +573,16 @@
                         <paper-tooltip fit-to-visible-bounds>"Partner marked for deletion"</paper-tooltip>
                       </div>
                     </div>
-                      <a href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details"
-                        app-name="pmp"
-                        page="partners"
-                        id="[[row.partner_id]]/details"
-                        class="title">
+                    <a href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details"
+                      app-name="pmp"
+                      page="partners"
+                      id="[[row.partner_id]]/details"
+                      class="title">
+                        [[row.partner_name]]
+                        <paper-tooltip fit-to-visible-bounds>
                           [[row.partner_name]]
-                          <paper-tooltip fit-to-visible-bounds>
-                            [[row.partner_name]]
-                          </paper-tooltip>
-                      </a>
+                        </paper-tooltip>
+                    </a>
                     <br>
                     <a href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details"
                       app-name="pmp"
@@ -692,7 +696,222 @@
         </div>
       </div>
       <div name="cso">
+        <div class="paper-material list-panel" elevation="1">
+          <span class="alerts-title">Alerts </span><span class="alerts-comment">(click to filter the list)</span>
+          <div class="alerts-panel">
+            <template is="dom-repeat"
+                      items="[[presetFilters]]"
+                      as="presets">
+              <div on-tap="_showPresetFilter" class="alert-row" no-collapse>
+                <div class="divider"></div>
+                <div slot="row-data">
+                  <div class="col-1 alerts-total">[[presets.filteredPartnerships.length]]</div>
+                  <div class="col-10 filter-name">[[presets.title]] <i>[[presets.status]]</i></div>
+                  <paper-icon-button class="remove-field remove red clear-button col-1"
+                                    icon="clear">
+                  </paper-icon-button>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
 
+        <div id="customFilterPanel" class="paper-material list-panel listControls" elevation="1">
+          <div class="wrap-controls">
+            <paper-input id="query"
+                        type="search"
+                        autocomplete="off"
+                        value="{{qs}}"
+                        placeholder="Search"
+                        always-float-label>
+              <iron-icon icon="search"
+                        slot="prefix"></iron-icon>
+            </paper-input>
+      
+            <template is="dom-repeat"
+                      items="[[selectedFilters]]"
+                      as="filter">
+      
+              <!-- dropdown filters  -->
+              <template is="dom-if"
+                        if="[[filterTypeIs('esmm', filter.type)]]">
+                <div class="filter esmm">
+                  <etools-dropdown-multi label="[[filter.filterName]]"
+                                        placeholder="&#8212;"
+                                        disabled$="[[!filter.selectionOptions.length]]"
+                                        options="[[filter.selectionOptions]]"
+                                        option-value="[[filter.optionValue]]"
+                                        option-label="[[filter.optionLabel]]"
+                                        trigger-value-change-event
+                                        on-etools-selected-items-changed="esmmValueChanged"
+                                        data-filter-path$="[[filter.path]]"
+                                        min-width="300px"
+                                        horizontal-align="left"
+                                        no-dynamic-align>
+                  </etools-dropdown-multi>
+                </div>
+              </template>
+      
+              <!-- date pickers -->
+              <template is="dom-if"
+                        if="[[filterTypeIs('datepicker', filter.type)]]">
+                <div class="filter">
+                  <etools-date-input id$="datepicker_[[filter.path]]"
+                                    label="[[filter.filterName]]"
+                                    placeholder="&#8212;"
+                                    value="{{filter.dateSelected}}"
+                                    format="D MMM YYYY"
+                                    on-date-has-changed="_filterDateHasChanged"
+                                    data-filter-path$="[[filter.path]]"
+                                    fire-date-has-changed
+                                    no-init
+                                    show-clear-btn>
+                  </etools-date-input>
+                </div>
+              </template>
+            </template>
+          </div>
+          <div class="fixed-controls">
+            <div class="filters-divider"></div>
+            <paper-menu-button id="filterMenu"
+                              ignore-select
+                              dynamic-align>
+              <paper-button class="button"
+                            slot="dropdown-trigger">
+                <iron-icon icon="filter-list"></iron-icon>
+                filters
+              </paper-button>
+              <paper-listbox multi slot="dropdown-content" selected-values="[2]">
+                <template is="dom-repeat"
+                          items="[[listFilterOptions]]">
+                  <paper-icon-item on-tap="selectFilter">
+                    <iron-icon icon="check" slot="item-icon" hidden$="[[!item.selected]]"></iron-icon>
+                    [[item.filterName]]
+                  </paper-icon-item>
+                </template>
+              </paper-listbox>
+            </paper-menu-button>
+          </div>
+        </div>
+      
+        <div class="paper-material"
+            id="list"
+            elevation="1">
+          <data-table-header no-collapse>
+            <data-table-column class="col-2" sortable>
+              Partner
+            </data-table-column>
+            <data-table-column class="col-1" sortable>
+              Cost Centre
+            </data-table-column>
+            <data-table-column class="col-1" sortable>
+              Section
+            </data-table-column>
+            <div class="col-6 layout horizontal">
+              <data-table-column class="col-3 right-align" sortable>
+                Cash in the<br>
+                Current CP Cycle (USD)
+              </data-table-column>
+              <data-table-column class="col-3 right-align" sortable>
+                Cash in the<br>
+                Current Year (USD)
+              </data-table-column>
+              <data-table-column class="col-3 right-align">
+                Outstanding<br>
+                DCT >6 Months
+              </data-table-column>
+              <data-table-column class="col-3 right-align">
+                Outstanding<br>
+                DCT >9 Months
+              </data-table-column>
+            </div>
+            <data-table-column class="col-1 right-align" sortable>
+              Action<br>
+              Points
+            </data-table-column>
+            <data-table-column class="col-1 right-align" sortable>
+              Days Since<br>
+              Last PV
+            </data-table-column>
+          </data-table-header>
+      
+          <template id="csoListTemplate"
+                    items="{{filteredPartnerships}}"
+                    filter="{{computeFilter(currentFilter)}}"
+                    is="dom-repeat"
+                    as="row">
+            <data-table-row no-collapse>
+              <div slot="row-data">
+                <div class="col-2">
+                  <div class="partner-icons-group" hidden="[[!_eitherTrue(row.partner_blocked, row.partner_marked_for_deletion)]]">
+                    <div class="blocked-partner-container" hidden="[[!row.partner_blocked]]">
+                      <iron-icon class="blocked-partner" icon="block"></iron-icon>
+                      <paper-tooltip fit-to-visible-bounds>"Partner blocked"</paper-tooltip>
+                    </div>
+                    <div class="delete-container" hidden="[[!row.partner_marked_for_deletion]]">
+                      <iron-icon class="delete-partner" icon="delete"></iron-icon>
+                      <paper-tooltip fit-to-visible-bounds>"Partner marked for deletion"</paper-tooltip>
+                    </div>
+                  </div>
+                  <a href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details"
+                    app-name="pmp"
+                    page="partners"
+                    id="[[row.partner_id]]/details"
+                    class="title">
+                      [[row.partner_name]]
+                      <paper-tooltip fit-to-visible-bounds>
+                        [[row.partner_name]]
+                      </paper-tooltip>
+                  </a>
+                </div>
+                <div class="col-data col-1 sections">
+                  <template is="dom-repeat"
+                            items="{{commaSplit(row.offices_names)}}">
+                    [[item]]
+                    <br>
+                  </template>
+                </div>
+                <div class="col-data col-1 sections">
+                  <span class="pad-top-4">
+                    <template is="dom-repeat"
+                              items="{{commaSplit(row.sections)}}">
+                      [[item]]
+                      <br>
+                    </template>
+                  </span>
+                </div>
+                <div class="col-6 layout horizontal">
+                  <span class="col-3 right-align">
+                    cash_current_cp
+                  </span>
+                  <span class="col-3 right-align">
+                    cash_current_year
+                  </span>
+                  <span class="col-3 right-align">
+                    outstanding_DCT_6
+                  </span>
+                  <span class="col-3 right-align">
+                    outstanding_DCT_9
+                  </span>
+                </div>
+                <div class="col-1 right-align">
+                  action_pts
+                </div>
+                <div class="col-1 col-data right-align">
+                  [[displayNonZero(row.days_last_pv)]]
+                </div>
+              </div>
+            </data-table-row>
+          </template>
+          <data-table-footer id="csoDashboardFooter"
+                            page-size="[[pageSize]]"
+                            page-number="[[pageNumber]]"
+                            visible-range="{{visibleRange}}"
+                            on-page-size-changed="pageSizeChanged"
+                            filtered-total-results="[[totalResults]]"
+                            on-page-number-changed="pageNumberChanged">
+          </data-table-footer>
+        </div>
       </div>
     </iron-pages>
   </template>
