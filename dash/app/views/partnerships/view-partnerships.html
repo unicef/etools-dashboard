@@ -684,6 +684,10 @@
             type: String,
             notify: true
           },
+          alertsCsvDownloadUrl: {
+            type: String,
+            value: ''
+          },
           urlParams: {
             type: Object
           },
@@ -975,11 +979,16 @@
       }
 
       _buildCsvDownloadUrl() {
-        let query = this.params.reduce((acc, { qName, propName, xf }) => {
-          return isEmpty(this[propName]) ? acc
-            : `${acc}${qName}=${xf(this[propName])}&`;
-        }, '');
-        query = query.split('|').join(',');
+        let query
+        if (this.currentFilter === 'custom') {
+          query = this.params.reduce((acc, { qName, propName, xf }) => {
+            return isEmpty(this[propName]) ? acc
+              : `${acc}${qName}=${xf(this[propName])}&`;
+          }, '');
+          query = query.split('|').join(',');
+        } else {
+          query = this.alertsCsvDownloadUrl
+        }
         return `${this.getEndpoint('cso_dashboard').url}/?${query}format=csv`;
       }
 
@@ -1077,6 +1086,7 @@
       _showPresetFilter(event) {
         let filterDiv = event.currentTarget.lastElementChild;
         let clickedFilter = event.model.__data.presets;
+        this.set('alertsCsvDownloadUrl', clickedFilter.csvDownload)
         // temporarily disables last two filters until data is ready
         if (clickedFilter.id === '7' || clickedFilter.id === '8') {
           return;
@@ -1098,6 +1108,7 @@
           filterDiv.children[1].style.color = '#0099FF';
           this.set('currentFilter', clickedFilter.id);
         }
+        this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
 
         // reset to first results page of new filter
         this.set('visibleRange', [1, 10]);

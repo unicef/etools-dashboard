@@ -99,14 +99,14 @@
             type: Array,
             notify: true,
             value: [
-              { total: 0, id: '1', title: 'PD/SSFA with passed start date and no FR was added', status: '(signed)', filteredPartnerships: [] },
-              { total: 0, id: '2', title: 'PD/SSFA with planned amount not equal to FR amount', status: '(active, ended, suspended)', filteredPartnerships: [] },
-              { total: 0, id: '3', title: 'PD with no recent programmatic visit', status: '(active, ended)', filteredPartnerships: [] },
-              { total: 0, id: '4', title: 'PD/SSFA expiring in the next 30 days', status: '(active, suspended)', filteredPartnerships: [] },
-              { total: 0, id: '5', title: 'PD/SSFA with  actual disbursement amount less than FR planned amount', status: '(ended)', filteredPartnerships: [] },
-              { total: 0, id: '6', title: 'PD/SSFA with missing Final Partnership Review', status: '(ended)', filteredPartnerships: [] },
-              { total: 0, id: '7', title: 'IPs requiring new PCA in the coming CP', status: '', filteredPartnerships: [] },
-              { total: 0, id: '8', title: 'IPs with active PD without a signed PCA', status: '', filteredPartnerships: [] }
+              { total: 0, id: '1', title: 'PD/SSFA with passed start date and no FR was added', status: '(signed)', csvDownload: 'alerts=expired_without_FR&', filteredPartnerships: [] },
+              { total: 0, id: '2', title: 'PD/SSFA with planned amount not equal to FR amount', status: '(active, ended, suspended)', csvDownload: 'alerts=planned_amount_different_FR&', filteredPartnerships: [] },
+              { total: 0, id: '3', title: 'PD with no recent programmatic visit', status: '(active, ended)', csvDownload: 'alerts=no_recent_PV&', filteredPartnerships: [] },
+              { total: 0, id: '4', title: 'PD/SSFA expiring in the next 30 days', status: '(active, suspended)', csvDownload: 'alerts=expiring&', filteredPartnerships: [] },
+              { total: 0, id: '5', title: 'PD/SSFA with  actual disbursement amount less than FR planned amount', status: '(ended)', csvDownload: 'alerts=disbursment_less_FR_planned&', filteredPartnerships: [] },
+              { total: 0, id: '6', title: 'PD/SSFA with missing Final Partnership Review', status: '(ended)', csvDownload: 'alerts=missing_final_partnership_review&', filteredPartnerships: [] },
+              { total: 0, id: '7', title: 'IPs requiring new PCA in the coming CP', status: '', csvDownload: '&', filteredPartnerships: [] },
+              { total: 0, id: '8', title: 'IPs with active PD without a signed PCA', status: '', csvDownload: '&', filteredPartnerships: [] }
             ]
           }
         };
