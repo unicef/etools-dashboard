@@ -3,6 +3,8 @@
 <link rel="import" href="../../../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../../../bower_components/iron-icons/communication-icons.html">
 
+<link rel="import" href="../../../components/data-table/data-table-row.html">
+
 <link rel="import" href="../../../styles/grid-layout-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
 <link rel="import" href="../../../styles/shared-styles.html">
@@ -17,21 +19,30 @@
         --item-margin: {
           margin-left: 24px;
         }
-      }
-      .marker {
-        width: 900px;
-        min-height: 86px;
-        overflow: scroll;
-        top: 10%;
-        max-height: 50%;
-        overflow: hidden;
+
+        @apply --layout-vertical;
+
+        --row-data-details: {
+          flex-direction: column;
+          font-size: 12px;
+        }
       }
 
-      .intervention-block {
-        padding-bottom: 16px;
-        border-bottom: 1px solid var(--dark-divider-color);
+      .marker {
+        width: 960px;
+        min-height: 86px;
+        overflow: hidden;
+        top: 320px;
+        max-height: 50%;
       }
-  
+
+      .wrapper {
+        height: 100%;
+        overflow: auto;
+        padding: 0;
+        margin-bottom: 0;
+      }
+
       paper-dialog paper-icon-button.close {
         position: absolute;
         top: 24px;
@@ -39,7 +50,7 @@
         margin: 0 !important;
         padding: 0;
       }
-  
+
       paper-icon-button {
         width: 25px;
         height: 25px;
@@ -47,160 +58,194 @@
         margin-right: 8px;
         color: var(--dark-secondary-text-color);
       }
-  
-      paper-dialog h2 {
+
+      h2.expanded-title {
         color: var(--dark-secondary-text-color);
-        line-height: 16px;
-        font-weight: normal;
+        line-height: 24px;
+        font-weight: 500;
+        margin: 0;
+        font-size: inherit;
       }
-  
+
+      .donor {
+        width: 40%;
+      }
+
       paper-dialog h2.type {
         margin-top: 8px;
         font-size: 14px;
       }
-  
+
       paper-dialog h2.partner-name {
         font-size: 14px;
         text-transform: uppercase;
         line-height: 14px;
         font-weight: 500;
+        color: var(--gray-light);
+        margin: 0 20px 0 0;
       }
-  
+
       paper-dialog a.partner-number {
         color: var(--accent-color);
         text-transform: uppercase;
         font-size: 14px;
         font-weight: bold;
       }
-  
-      paper-dialog span.partner-title {
+
+      paper-dialog span.partner-data {
         @apply --item-margin;
+        white-space: normal;
       }
-  
+
       paper-dialog .partner {
         padding-top: 8px;
       }
 
-      .additonal-info {
-        color: var(--dark-secondary-text-color);
-        margin-top: 5px;
-
+      data-table-row {
+        padding: 0;
+        margin-top: 0;
       }
 
-      .interventions {
-        margin-bottom: 50px;
-        height: 480px;
+      .table-row {
+        width: 100%;
       }
-  
-      .interventions>div:nth-child(2), .additional {
-        @apply --item-margin;
+
+      .partner-sections {
+        margin-bottom: 12px;
       }
-  
-      .wrapper {
-        overflow: auto;
+
+      .chip {
+        height: 18px;
+        border-radius: 2px;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 2px 4px;
       }
-  
-      .sections {
-        padding-top: 35px;
-        min-width: 150px;
-        overflow: auto;
+
+      .chip:not(:first-of-type) {
+        margin: 0 0 5px 5px;
       }
-  
-      paper-dialog h2.sector {
-        background: var(--gray-light);
-        color: white;
-        width: 133px;
-        padding: 8px;
-        text-align: center;
-        font-size: 16px;
-        line-height: 19px;
-        margin-bottom: 2px;
+
+      .section {
+        background-color: var(--primary-color);
+      }
+
+      .cluster {
+        background-color: var(--trip-color-four);
+      }
+
+
+      .focal-points {
+        margin-bottom: 16px;
+      }
+
+      span.details-data {
+        font-size: 12px;
+        line-height: 24px;
       }
     </style>
-    <paper-dialog class="marker"
-                  opened="{{opened}}"
-                  with-backdrop>
-      <paper-icon-button class="close"
-                         icon="close"
-                         on-tap="_close"></paper-icon-button>
+    <paper-dialog class="marker layout-vertical" opened="{{opened}}" with-backdrop>
+      <paper-icon-button class="close" icon="close" on-tap="_close"></paper-icon-button>
       <div class="layout-horizontal start-align list-panel title-row">
         <paper-icon-button icon="communication:location-on"></paper-icon-button>
         <div class="layout-vertical">
           <h1 sub-title>[[data.name]]</h1>
         </div>
       </div>
-      <div class="layout-horizontal interventions">
-    
-        <div class="sections">
-          <template is="dom-repeat"
-                    items="[[data.sections]]"
-                    as="sector">
-            <h2 class="sector">[[sector]]</h2>
-          </template>
-        </div>
-    
-        <div class="wrapper">
-          <div class="layout-vertical list-panel title-row">
-            <template is="dom-repeat"
-                      items="[[data.interventions]]">
-              <div class="layout-vertical intervention-block">
-                <h2 class="partner-name">[[item.partner_name]]</h2>
 
-                <div class="partner">
-                  <a class="partner-number"
-                         href="[[_getHref(item.id)]]"
-                         target="_blank">[[item.number]]:</a>
-                  <span class="partner-title">[[item.title]] </span>
+      <div class="wrapper">
+        <template is="dom-repeat" items="[[data.interventions]]">
+          <data-table-row>
+
+            <!-- Collapse Row -->
+            <div slot="row-data">
+              <div class="layout-vertical table-row">
+
+                <!-- Partner Name & Sections -->
+                <div class="layout-horizontal space-between align-baseline partner-sections">
+                  <h2 class="partner-name">[[item.partner_name]]</h2>
+                  <div class="layout-horizontal wrap justify-end">
+                    <template is="dom-repeat" items="[[_getSlicedChips(item.sections)]]" as="section">
+                      <span class="chip section">[[section]]</span>
+                    </template>
+                    <template is="dom-if" if="[[_hasMoreThan3(item.sections)]]">
+                      <span class="chip section">+[[_getNumRemaining(item.sections)]]</span>
+                    </template>
+
+                    <template is="dom-if" if="[[_hasClusters(item)]]">
+                      <template is="dom-repeat" items="[[_getSlicedChips(item.clusters)]]" as="cluster">
+                        <span class="chip cluster">[[cluster]]</span>
+                      </template>
+                      <template is="dom-if" if="[[_hasMoreThan3(item.clusters)]]">
+                        <span class="chip cluster">+[[_getNumRemaining(item.sections)]]</span>
+                      </template>
+                    </template>
+
+                  </div>
+
                 </div>
-                <div class="additonal-info">
-                  <div class="layout-horizontal">
-                    <span>Grants: </span>
-                    <span class="additional">[[_formatSplits(item.grants)]]</span>
-                  </div>
-                  <div class="layout-horizontal">
-                    <span>Donors: </span>
-                    <span class="additional">[[_formatSplits(item.donors)]]</span>
-                  </div>
-                  <div class="layout-horizontal">
-                    <span>Offices: </span>
-                    <span class="additional">
-                      <template is="dom-repeat" items="[[item.offices]]" as="office">
-                        [[office]] 
-                      </template>
-                    </span>
-                  </div>
-                  <div class="layout-horizontal">
-                    <span>Focal Points: </span>
-                    <span class="additional">
-                      <template is="dom-repeat" items="[[item.unicef_focal_points]]" as="focalPoint">
-                        [[focalPoint]] 
-                      </template>
-                    </span>
-                  </div>
-                  <template is="dom-if"
-                            if="[[item.results]]">
-                    <div class="layout-horizontal">
-                      <span>CP Outputs: </span>
-                      <span class="additional">[[item.results]]</span>
-                    </div>
-                  </template>
-                  <template is="dom-if"
-                            if="[[item.clusters]]">
-                    <div class="layout-horizontal">
-                      <span>CP Outputs: </span>
-                      <span class="additional">[[item.clusters]]</span>
-                    </div>
-                  </template>
-                  </div>
+
+                <!-- Intervention & Description -->
+                <div class="layout-horizontal">
+                  <a class="partner-number" href="[[_getHref(item.id)]]" target="_blank">[[item.number]]:</a>
+                  <span class="partner-data">[[item.title]]</span>
+                </div>
               </div>
-            </template>
-    
-          </div>
-        </div>
+            </div>
+
+            <!-- Expanded Details -->
+            <div slot="row-data-details">
+              <div class="layout-horizontal table-row">
+
+                <!-- Focal Points & Offices -->
+                <div class="layout-vertical col-6">
+
+                  <div class="focal-points">
+                    <h2 class="expanded-title">Unicef Focal Point(s)</h2>
+                    <span class="details-data">
+                      [[_commaJoin(item.unicef_focal_points)]]
+                    </span>
+                  </div>
+
+                  <h2 class="expanded-title">Office</h2>
+                  <template is="dom-repeat" items="[[item.offices]]" as="office">
+                    <span class="details-data">[[office]]</span>
+                  </template>
+
+                </div>
+
+                <!-- Donor & Grants -->
+                <div class="layout-vertical col-6">
+                  <!-- Titles -->
+                  <div class="layout-horizontal">
+                    <h2 class="expanded-title donor">Donor</h2>
+                    <h2 class="expanded-title">Grant</h2>
+                  </div>
+
+                  <!-- Pairs -->
+                  <template is="dom-repeat" items="[[item.frs]]" as="fr">
+
+                    <template is="dom-repeat" items="[[fr.line_item_details]]" as="detail">
+                      <div class="layout-horizontal">
+
+                        <span class="details-data donor">[[detail.donor]]</span>
+                        <span class="details-data">[[detail.grant_number]]</span>
+                      </div>
+                    </template>
+                  </template>
+
+                </div>
+              </div>
+            </div>
+          </data-table-row>
+
+        </template>
+
       </div>
     </paper-dialog>
-    
-    </template>
+
+  </template>
 
   <script>
     /**
@@ -237,24 +282,24 @@
         };
       }
 
-      /**
-       * Instance of the element is created/upgraded. Use: initializing state,
-       * set up event listeners, create shadow dom.
-       * @constructor
-       */
-      constructor() {
-        super();
-      }
-
-      /**
-       * Use for one-time configuration of your component after local DOM is initialized.
-       */
-      ready() {
-        super.ready();
-      }
-
       _values(obj) {
         return values(obj);
+      }
+
+      _getSlicedChips(list) {
+        return list.slice(0, 3);
+      }
+
+      _getNumRemaining(list) {
+        return list.length - 3;
+      }
+
+      _hasMoreThan3(list) {
+        return list.length > 3;
+      }
+
+      _hasClusters(item) {
+        return Array.isArray(item.clusters);
       }
 
       _close() {
@@ -262,11 +307,11 @@
       }
 
       _getHref(id) {
-        return '/pmp/interventions/'+ id + '/details';
+        return '/pmp/interventions/' + id + '/details';
       }
 
-      _formatSplits(str) {
-        return str.split('|').join(' | ');
+      _commaJoin(list) {
+        return list.join(', ');
       }
 
     }

@@ -44,7 +44,7 @@
         @apply --layout-center;
       }
     
-      .wrap-controls {
+      .wrap-controls, .wrap {
         @apply --layout-wrap;
       }
     
@@ -102,11 +102,14 @@
         @apply --layout-flex;
         @apply --layout-center;
       }
-    
+
+   
+
       *[slot="row-data"] {
-        height: 100%;
+        margin-top: 12px;
+        margin-bottom: 12px;
       }
-    
+        
       .row-details-content {
         font-size: 12px;
       }
@@ -120,11 +123,14 @@
       }
     
       .col-data {
-        line-height: 20px;
         font-weight: normal;
         box-sizing: border-box;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+
+      *[slot="row-data"] .col-data {
+        line-height: 24px;
       }
     
       a.col-data,

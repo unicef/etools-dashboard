@@ -78,6 +78,8 @@
         }
         const addParsedPoint = (p)=> assoc('point', this.parseMapPoint(p.geo_point), p);
         const hasGeoPoint = (g)=> !isEmpty(prop('geo_point', g));
+  
+        // locations are the locations from each intervention combined into a single flattened array of uniques
         let locations = compose(
           map(compose(addParsedPoint, pick(['id', 'geo_point']))),
           filter(hasGeoPoint),
@@ -101,21 +103,20 @@
         }
       }
 
+      // Filters interventions with locations and geo points, creates a mapping from location id to all interventions
+      // at that location
       _mapLocationsToInterventions(data) {
         const hasLocationsAndGeopoint = (x)=> !isEmpty(prop('locations', x)) && !isEmpty(prop('geo_point', x));
         const addDataToDict = (acc, inter)=> {
           inter.locations.map((location)=>{
             const locationObj = acc[location.id] || {
               interventions: [],
-              sections: [],
               name: location.name
             };
             locationObj.interventions = uniq([
-              pick(['partner_name', 'number', 'title', 'grants', 'donors', 'clusters',
-                'offices', 'unicef_focal_points', 'results'], inter),
+               inter,
               ...locationObj.interventions
             ]);
-            locationObj.sections = uniq([...inter.sections, ...locationObj.sections]);
             acc = merge(acc, { [location.id]: locationObj });
           });
           return acc;
