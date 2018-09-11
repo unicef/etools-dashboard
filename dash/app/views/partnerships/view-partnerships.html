@@ -684,10 +684,6 @@
             type: String,
             notify: true
           },
-          alertsCsvDownloadUrl: {
-            type: String,
-            value: ''
-          },
           urlParams: {
             type: Object
           },
@@ -987,7 +983,11 @@
           }, '');
           query = query.split('|').join(',');
         } else {
-          query = this.alertsCsvDownloadUrl
+          let pks = this.presetFilters[this.currentFilter-1].filteredPartnerships.map(
+            partner => prop('intervention_id', partner)
+          )
+          pks.join(',')
+          query = `pk=${pks}&`
         }
         return `${this.getEndpoint('cso_dashboard').url}/?${query}format=csv`;
       }
@@ -1086,7 +1086,6 @@
       _showPresetFilter(event) {
         let filterDiv = event.currentTarget.lastElementChild;
         let clickedFilter = event.model.__data.presets;
-        this.set('alertsCsvDownloadUrl', clickedFilter.csvDownload)
         // temporarily disables last two filters until data is ready
         if (clickedFilter.id === '7' || clickedFilter.id === '8') {
           return;
