@@ -1,5 +1,5 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../../../bower_components/polymer/lib/utils/debounce.html">
+<!-- <link rel="import" href="../../../../bower_components/polymer/lib/utils/debounce.html">
 
 <link rel="import" href="../../styles/shared-styles.html">
 <link rel="import" href="../../styles/list-styles.html">
@@ -40,9 +40,13 @@
 <link rel="import" href="../../mixins/redux-store-mixin.html">
 <link rel="import" href="../../endpoints/endpoints-mixin.html">
 
-<link rel="import" href="../../components/etools-date-input.html">
+<link rel="import" href="../../components/etools-date-input.html"> -->
+
+<link rel="import" href="views/cso-dashboard.html">
+<link rel="import" href="views/partnerships-overview.html">
 
 <link rel="import" href="data/partnership-data.html">
+<link rel="import" href="data/partnership-dashboard-data.html">
 
 <dom-module id="view-partnerships">
   <template>
@@ -99,6 +103,8 @@
         height: 48px;
         white-space: normal;
         overflow-y: auto;
+        display: flex;
+        align-items: center;
         -ms-overflow-style: -ms-autohiding-scrollbar;
       }
 
@@ -216,8 +222,6 @@
         font-weight: 500;
         line-height: 15px;
       }
-
-
       
       .alerts-comment {
         color: rgba(0,0,0,0.54);
@@ -278,10 +282,17 @@
       }
 
       .title {
-        display: flex;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+
+      .cso-title {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 8px;
       }
 
       .partner-icons-group {
@@ -366,6 +377,17 @@
                       preset-filters="{{presetFilters}}">
     </partnership-data>
 
+    <!-- <partnership-dashboard-data id="partnerships-dashboard"
+                                filtered-partnerships-dashboard="{{filteredPartnershipsDashboard}}"
+                                fire-data-loaded
+                                active="[[active]]"
+                                total-results="{{totalResults}}"
+                                on-partnerships-loaded="_requiredDataLoaded"
+                                list-data-path="filteredPartnershipsDashboard"
+                                
+                                >
+    </partnership-dashboard-data> -->
+
     <div class="view-toggle">
       <paper-button id="overview" on-tap="_toggleDashView" name="csoOverview" noink class="curved-left">
         <iron-icon id="overviewIcon" name="overview" icon="reorder"></iron-icon>
@@ -383,7 +405,15 @@
         fallback-selection="overview">
 
       <div name="overview">
-        <div class="paper-material list-panel" elevation="1">
+        <partnerships-overview filtered-partnerships="{{filteredPartnerships}}"
+                               fire-data-loaded
+                               active="[[active]]"
+                               total-results="{{totalResults}}"
+                               on-partnerships-loaded="_requiredDataLoaded"
+                               list-data-path="filteredPartnerships"
+                               preset-filters="{{presetFilters}}"
+        ></partnerships-overview>
+        <!-- <div class="paper-material list-panel" elevation="1">
           <span class="alerts-title">Alerts </span><span class="alerts-comment">(click to filter the list)</span>
           <div class="alerts-panel">
             <template is="dom-repeat"
@@ -419,7 +449,6 @@
                       items="[[selectedFilters]]"
                       as="filter">
       
-              <!-- dropdown filters  -->
               <template is="dom-if"
                         if="[[filterTypeIs('esmm', filter.type)]]">
                 <div class="filter esmm">
@@ -440,7 +469,6 @@
                 </div>
               </template>
       
-              <!-- date pickers -->
               <template is="dom-if"
                         if="[[filterTypeIs('datepicker', filter.type)]]">
                 <div class="filter">
@@ -693,10 +721,11 @@
                             filtered-total-results="[[totalResults]]"
                             on-page-number-changed="pageNumberChanged">
           </data-table-footer>
-        </div>
+        </div> -->
       </div>
       <div name="cso">
-        <div class="paper-material list-panel" elevation="1">
+        <cso-dashboard></cso-dashboard>
+        <!-- <div class="paper-material list-panel" elevation="1">
           <span class="alerts-title">Alerts </span><span class="alerts-comment">(click to filter the list)</span>
           <div class="alerts-panel">
             <template is="dom-repeat"
@@ -732,7 +761,7 @@
                       items="[[selectedFilters]]"
                       as="filter">
       
-              <!-- dropdown filters  -->
+
               <template is="dom-if"
                         if="[[filterTypeIs('esmm', filter.type)]]">
                 <div class="filter esmm">
@@ -752,7 +781,7 @@
                 </div>
               </template>
       
-              <!-- date pickers -->
+
               <template is="dom-if"
                         if="[[filterTypeIs('datepicker', filter.type)]]">
                 <div class="filter">
@@ -857,7 +886,7 @@
                     app-name="pmp"
                     page="partners"
                     id="[[row.partner_id]]/details"
-                    class="title">
+                    class="cso-title">
                       [[row.partner_name]]
                       <paper-tooltip fit-to-visible-bounds>
                         [[row.partner_name]]
@@ -911,7 +940,7 @@
                             filtered-total-results="[[totalResults]]"
                             on-page-number-changed="pageNumberChanged">
           </data-table-footer>
-        </div>
+        </div> -->
       </div>
     </iron-pages>
   </template>
@@ -922,20 +951,20 @@
     /**
      * @polymer
      * @mixinFunction
-     * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
-     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
-     * @appliesMixin EtoolsDashboard.Mixins.ListFilters
-     * @appliesMixin EtoolsDashboard.Mixins.PaginationWithFilters
-     * @appliesMixin EtoolsDashboard.Mixins.Date
+    //  * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
+    //  * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
+    //  * @appliesMixin EtoolsDashboard.Mixins.ListFilters
+    //  * @appliesMixin EtoolsDashboard.Mixins.PaginationWithFilters
+    //  * @appliesMixin EtoolsDashboard.Mixins.Date
      */
-    const ViewPartnershipsMixins = compose(
-      EtoolsDashboard.Mixins.CommonGeneral,
-      EtoolsDashboard.Mixins.ReduxStore,
-      EtoolsDashboard.Mixins.ListFilters,
-      EtoolsDashboard.Mixins.Endpoints,
-      EtoolsDashboard.Mixins.PaginationWithFilters,
-      EtoolsDashboard.Mixins.Date
-      )(Polymer.Element);
+    // const ViewPartnershipsMixins = compose(
+      // EtoolsDashboard.Mixins.CommonGeneral,
+      // EtoolsDashboard.Mixins.ReduxStore,
+      // EtoolsDashboard.Mixins.ListFilters,
+      // EtoolsDashboard.Mixins.Endpoints,
+      // EtoolsDashboard.Mixins.PaginationWithFilters,
+      // EtoolsDashboard.Mixins.Date
+      // )(Polymer.Element);
     
     /**
      * `view-partnerships` Description
@@ -944,7 +973,7 @@
      * @customElement
      * @polymer
      */
-    class ViewPartnerships extends ViewPartnershipsMixins {
+    class ViewPartnerships extends Polymer.Element {
       static get is() { return 'view-partnerships'; }
 
       /**
@@ -952,282 +981,287 @@
        */
       static get properties() {
         return {
-          filteredPartnerships: {
-            type: Array,
-            notify: true,
-            observer: 'rangeChanged'
-          },
-          currentFilter: {
-            type: String,
-            value: 'custom'
-          },
-          forceDataRefresh: {
-            type: Boolean,
-            value: false
-          },
-          requiredDataLoaded: {
-            type: Boolean,
-            value: false
-          },
-          initComplete: {
-            type: Boolean,
-            value: false
-          },
-          csvDownloadUrl: {
-            type: String,
-            notify: true
-          },
-          urlParams: {
-            type: Object
-          },
-          sectors: {
-            type: Array,
-            statePath: 'sectors'
-          },
-          statuses: {
-            type: Array,
-            statePath: 'static.intervention_status'
-          },
-          offices: {
-            type: Array,
-            statePath: 'offices'
-          },
-          selectedSectors: {
-            type: Array,
-            observer: 'filterChanged'
-          },
-          selectedOffices: {
-            type: Array,
-            observer: 'filterChanged'
-          },
-          selectedStatuses: {
-            type: Array,
-            observer: 'filterChanged'
-          },
-          startAfterDate: {
-            type: String,
-            observer: 'dateChanged'
-          },
-          startBeforeDate: {
-            type: String,
-            observer: 'dateChanged'
-          },
-          endBeforeDate: {
-            type: String,
-            observer: 'dateChanged'
-          },
-          endAfterDate: {
-            type: String,
-            observer: 'dateChanged'
-          },
-          visibleRange: {
-            type: Array,
-            observer: 'rangeChanged'
-          },
-          pageNumber: {
-            type: Number
-          },
-          route: {
-            type: Object
-          },
-          params: {
-            type: Array,
-            value: function() {
-              return [
-                {
-                  qName: 'qs',
-                  propName: 'qs',
-                  xf: identity
-                },
-                {
-                  qName: 'sort',
-                  propName: 'sortOrder',
-                  xf: identity
-                },
-                {
-                  qName: 'sectors',
-                  propName: 'selectedSectors',
-                  xf: compose(join('|'), map(prop('value')))
-                },
-                {
-                  qName: 'offices',
-                  propName: 'selectedOffices',
-                  xf: compose(join('|'), map(prop('id')))
-                },
-                {
-                  qName: 'status',
-                  propName: 'selectedStatuses',
-                  xf: compose(join('|'), map(prop('value')))
-                },
-                {
-                  qName: 'startAfter',
-                  propName: 'startAfterDate',
-                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
-                },
-                {
-                  qName: 'endBefore',
-                  propName: 'endBeforeDate',
-                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
-                },
-                {
-                  qName: 'startBefore',
-                  propName: 'startBeforeDate',
-                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
-                },
-                {
-                  qName: 'endAfter',
-                  propName: 'endAfterDate',
-                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
-                }
-              ];
-            }
-          }
+        //   filteredPartnerships: {
+        //     type: Array,
+        //     notify: true,
+        //     observer: 'rangeChanged'
+        //   },
+        //   filteredPartnershipsDashboard: {
+        //     type: Array,
+        //     notify: true,
+        //     observer: 'rangeChanged'
+        //   },
+        //   currentFilter: {
+        //     type: String,
+        //     value: 'custom'
+        //   },
+        //   forceDataRefresh: {
+        //     type: Boolean,
+        //     value: false
+        //   },
+        //   requiredDataLoaded: {
+        //     type: Boolean,
+        //     value: false
+        //   },
+        //   initComplete: {
+        //     type: Boolean,
+        //     value: false
+        //   },
+        //   csvDownloadUrl: {
+        //     type: String,
+        //     notify: true
+        //   },
+        //   urlParams: {
+        //     type: Object
+        //   },
+        //   sectors: {
+        //     type: Array,
+        //     statePath: 'sectors'
+        //   },
+        //   statuses: {
+        //     type: Array,
+        //     statePath: 'static.intervention_status'
+        //   },
+        //   offices: {
+        //     type: Array,
+        //     statePath: 'offices'
+        //   },
+        //   selectedSectors: {
+        //     type: Array,
+        //     observer: 'filterChanged'
+        //   },
+        //   selectedOffices: {
+        //     type: Array,
+        //     observer: 'filterChanged'
+        //   },
+        //   selectedStatuses: {
+        //     type: Array,
+        //     observer: 'filterChanged'
+        //   },
+        //   startAfterDate: {
+        //     type: String,
+        //     observer: 'dateChanged'
+        //   },
+        //   startBeforeDate: {
+        //     type: String,
+        //     observer: 'dateChanged'
+        //   },
+        //   endBeforeDate: {
+        //     type: String,
+        //     observer: 'dateChanged'
+        //   },
+        //   endAfterDate: {
+        //     type: String,
+        //     observer: 'dateChanged'
+        //   },
+        //   visibleRange: {
+        //     type: Array,
+        //     observer: 'rangeChanged'
+        //   },
+        //   pageNumber: {
+        //     type: Number
+        //   },
+        //   route: {
+        //     type: Object
+        //   },
+        //   params: {
+        //     type: Array,
+        //     value: function() {
+        //       return [
+        //         {
+        //           qName: 'qs',
+        //           propName: 'qs',
+        //           xf: identity
+        //         },
+        //         {
+        //           qName: 'sort',
+        //           propName: 'sortOrder',
+        //           xf: identity
+        //         },
+        //         {
+        //           qName: 'sectors',
+        //           propName: 'selectedSectors',
+        //           xf: compose(join('|'), map(prop('value')))
+        //         },
+        //         {
+        //           qName: 'offices',
+        //           propName: 'selectedOffices',
+        //           xf: compose(join('|'), map(prop('id')))
+        //         },
+        //         {
+        //           qName: 'status',
+        //           propName: 'selectedStatuses',
+        //           xf: compose(join('|'), map(prop('value')))
+        //         },
+        //         {
+        //           qName: 'startAfter',
+        //           propName: 'startAfterDate',
+        //           xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
+        //         },
+        //         {
+        //           qName: 'endBefore',
+        //           propName: 'endBeforeDate',
+        //           xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
+        //         },
+        //         {
+        //           qName: 'startBefore',
+        //           propName: 'startBeforeDate',
+        //           xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
+        //         },
+        //         {
+        //           qName: 'endAfter',
+        //           propName: 'endAfterDate',
+        //           xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
+        //         }
+        //       ];
+        //     }
+        //   }
         };
       }
 
       static get observers() {
         return [
           '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate)',
-          '_init(active, sectors, statuses, offices, requiredDataLoaded)',
+          // '_init(active, sectors, statuses, offices, requiredDataLoaded)',
           '_tabChanged(routeData.partnershipsTab, active)'
         ];
       }
 
 
-      _init(active, sectors, statuses, offices, requiredDataLoaded) {
-        let params = this.queryParams;
-        if (!active || !sectors || !statuses || !offices || !requiredDataLoaded) {
-          return;
-        }
-        this.set('initComplete', false);
-        this.set('qs', params.qs ? params.qs : '');
-        this.set('pageNumber', params.page ? parseInt(params.page) : 1);
-        this.set('pageSize', params.size ? parseInt(params.size) : 10);
-        this.set('sortOrder', params.sort ? params.sort : 'asc');
-        this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
-        this.set('selectedOffices', params.offices ? this._setSelectedOffices(params.offices) : []);
-        this.set('selectedStatuses', params.status ? this._setSelectedStatuses(params.status) : this._setSelectedStatuses('signed|active|ended|suspended|terminated'));
-        this.set('startAfterDate', params.startAfter ? params.startAfter : '');
-        this.set('endBeforeDate', params.endBefore ? params.endBefore : '');
-        this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
-        this.set('endAfterDate', params.endAfter ? params.endAfter : '');
-        // the following should be removed when the final two preset filters are enabled
-        if (this.shadowRoot.querySelectorAll('.alert-row').length > 0) {
-          this.shadowRoot.querySelectorAll('.alert-row')[6].style.color = 'rgb(144,144,144)';
-          this.shadowRoot.querySelectorAll('.alert-row')[6].children[1].children[0].innerText = '-';
-          this.shadowRoot.querySelectorAll('.alert-row')[6].children[1].children[1].classList.remove('filter-name');
-          this.shadowRoot.querySelectorAll('.alert-row')[7].style.color = 'rgb(144,144,144)';
-          this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[0].innerText = '-';
-          this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[1].classList.remove('filter-name');
-        }
+      // _init(active, sectors, statuses, offices, requiredDataLoaded) {
+      //   let params = this.queryParams;
+      //   if (!active || !sectors || !statuses || !offices || !requiredDataLoaded) {
+      //     return;
+      //   }
+      //   this.set('initComplete', false);
+      //   this.set('qs', params.qs ? params.qs : '');
+      //   this.set('pageNumber', params.page ? parseInt(params.page) : 1);
+      //   this.set('pageSize', params.size ? parseInt(params.size) : 10);
+      //   this.set('sortOrder', params.sort ? params.sort : 'asc');
+      //   this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
+      //   this.set('selectedOffices', params.offices ? this._setSelectedOffices(params.offices) : []);
+      //   this.set('selectedStatuses', params.status ? this._setSelectedStatuses(params.status) : this._setSelectedStatuses('signed|active|ended|suspended|terminated'));
+      //   this.set('startAfterDate', params.startAfter ? params.startAfter : '');
+      //   this.set('endBeforeDate', params.endBefore ? params.endBefore : '');
+      //   this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
+      //   this.set('endAfterDate', params.endAfter ? params.endAfter : '');
+      //   // the following should be removed when the final two preset filters are enabled
+      //   if (this.shadowRoot.querySelectorAll('.alert-row').length > 0) {
+      //     this.shadowRoot.querySelectorAll('.alert-row')[6].style.color = 'rgb(144,144,144)';
+      //     this.shadowRoot.querySelectorAll('.alert-row')[6].children[1].children[0].innerText = '-';
+      //     this.shadowRoot.querySelectorAll('.alert-row')[6].children[1].children[1].classList.remove('filter-name');
+      //     this.shadowRoot.querySelectorAll('.alert-row')[7].style.color = 'rgb(144,144,144)';
+      //     this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[0].innerText = '-';
+      //     this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[1].classList.remove('filter-name');
+      //   }
 
-        this._initListFilters();
-        this.set('initComplete', true);
-        this._updateSelectedFiltersValues();
+      //   this._initListFilters();
+      //   this.set('initComplete', true);
+      //   this._updateSelectedFiltersValues();
 
-      }
+      // }
 
-      _initListFilters() {
-        this.initListFiltersData([
-          {
-            filterName: 'Section/Cluster',
-            type: 'esmm',
-            optionValue: 'value',
-            optionLabel: 'label',
-            selectionOptions: this.sectors,
-            alreadySelected: [],
-            path: 'selectedSectors',
-            selected: false
-          },
-          {
-            filterName: 'Field Office',
-            type: 'esmm',
-            optionValue: 'id',
-            optionLabel: 'name',
-            selectionOptions: this.offices,
-            alreadySelected: [],
-            path: 'selectedOffices',
-            selected: false
-          },
-          {
-            filterName: 'Status',
-            type: 'esmm',
-            optionValue: 'value',
-            optionLabel: 'label',
-            selectionOptions: this.statuses.slice(1), // exclude closed status per business req.
-            alreadySelected: [],
-            path: 'selectedStatuses',
-            selected: false
-          },
-          {
-            filterName: 'Starts After',
-            type: 'datepicker', // etools-datepicker
-            path: 'startAfterDate',
-            dateSelected: '',
-            selected: false
-          },
-          {
-            filterName: 'Ends Before',
-            type: 'datepicker', // etools-datepicker
-            path: 'endBeforeDate',
-            dateSelected: '',
-            selected: false
-          },
-          {
-            filterName: 'Starts Before',
-            type: 'datepicker', // etools-datepicker
-            path: 'startBeforeDate',
-            dateSelected: '',
-            selected: false
-          },
-          {
-            filterName: 'Ends After',
-            type: 'datepicker', // etools-datepicker
-            path: 'endAfterDate',
-            dateSelected: '',
-            selected: false
-          }
-        ]);
+      // _initListFilters() {
+      //   this.initListFiltersData([
+      //     {
+      //       filterName: 'Section/Cluster',
+      //       type: 'esmm',
+      //       optionValue: 'value',
+      //       optionLabel: 'label',
+      //       selectionOptions: this.sectors,
+      //       alreadySelected: [],
+      //       path: 'selectedSectors',
+      //       selected: false
+      //     },
+      //     {
+      //       filterName: 'Field Office',
+      //       type: 'esmm',
+      //       optionValue: 'id',
+      //       optionLabel: 'name',
+      //       selectionOptions: this.offices,
+      //       alreadySelected: [],
+      //       path: 'selectedOffices',
+      //       selected: false
+      //     },
+      //     {
+      //       filterName: 'Status',
+      //       type: 'esmm',
+      //       optionValue: 'value',
+      //       optionLabel: 'label',
+      //       selectionOptions: this.statuses.slice(1), // exclude closed status per business req.
+      //       alreadySelected: [],
+      //       path: 'selectedStatuses',
+      //       selected: false
+      //     },
+      //     {
+      //       filterName: 'Starts After',
+      //       type: 'datepicker', // etools-datepicker
+      //       path: 'startAfterDate',
+      //       dateSelected: '',
+      //       selected: false
+      //     },
+      //     {
+      //       filterName: 'Ends Before',
+      //       type: 'datepicker', // etools-datepicker
+      //       path: 'endBeforeDate',
+      //       dateSelected: '',
+      //       selected: false
+      //     },
+      //     {
+      //       filterName: 'Starts Before',
+      //       type: 'datepicker', // etools-datepicker
+      //       path: 'startBeforeDate',
+      //       dateSelected: '',
+      //       selected: false
+      //     },
+      //     {
+      //       filterName: 'Ends After',
+      //       type: 'datepicker', // etools-datepicker
+      //       path: 'endAfterDate',
+      //       dateSelected: '',
+      //       selected: false
+      //     }
+      //   ]);
 
-      }
+      // }
 
-      _updateSelectedFiltersValues() {
-        this.updateFiltersDebouncer = Polymer.Debouncer.debounce(
-          this.updateFiltersDebouncer,
-          Polymer.Async.timeOut.after(20), () => {
-          let filtersValues = [
-            {
-              filterName: 'Section/Cluster',
-              selectedValue: map(prop('value'), this.selectedSectors)
-            },
-            {
-              filterName: 'Field Office',
-              selectedValue: map(prop('id'), this.selectedOffices)
-            },
-            {
-              filterName: 'Status',
-              selectedValue: map(prop('value'), this.selectedStatuses)
-            },
-            {
-              filterName: 'Starts After',
-              selectedValue: this.startAfterDate
-            },
-            {
-              filterName: 'Starts Before',
-              selectedValue: this.startBeforeDate
-            },
-            {
-              filterName: 'Ends Before',
-              selectedValue: this.endBeforeDate
-            },
-            {
-              filterName: 'Ends After',
-              selectedValue: this.endAfterDate
-            }
-          ];
-          this.updateShownFilters(filtersValues);
-        });
-      }
+      // _updateSelectedFiltersValues() {
+      //   this.updateFiltersDebouncer = Polymer.Debouncer.debounce(
+      //     this.updateFiltersDebouncer,
+      //     Polymer.Async.timeOut.after(20), () => {
+      //     let filtersValues = [
+      //       {
+      //         filterName: 'Section/Cluster',
+      //         selectedValue: map(prop('value'), this.selectedSectors)
+      //       },
+      //       {
+      //         filterName: 'Field Office',
+      //         selectedValue: map(prop('id'), this.selectedOffices)
+      //       },
+      //       {
+      //         filterName: 'Status',
+      //         selectedValue: map(prop('value'), this.selectedStatuses)
+      //       },
+      //       {
+      //         filterName: 'Starts After',
+      //         selectedValue: this.startAfterDate
+      //       },
+      //       {
+      //         filterName: 'Starts Before',
+      //         selectedValue: this.startBeforeDate
+      //       },
+      //       {
+      //         filterName: 'Ends Before',
+      //         selectedValue: this.endBeforeDate
+      //       },
+      //       {
+      //         filterName: 'Ends After',
+      //         selectedValue: this.endAfterDate
+      //       }
+      //     ];
+      //     this.updateShownFilters(filtersValues);
+      //   });
+      // }
 
       _tabChanged(tab, active) {
         this.set('active', active);
@@ -1290,21 +1324,21 @@
         return `${this.getEndpoint('cso_dashboard').url}/?${query}format=csv`;
       }
 
-      _filterPartnershipsData() {
-        this.$.partnerships.query({
-          searchString: this.qs,
-          sectors: map(prop('label'), this.selectedSectors),
-          offices: map(prop('name'), this.selectedOffices),
-          status: map(prop('value'), this.selectedStatuses),
-          startAfterDate: this.startAfterDate,
-          endBeforeDate: this.endBeforeDate,
-          startBeforeDate: this.startBeforeDate,
-          endAfterDate: this.endAfterDate,
-          order: this.sortOrder,
-          pageSize: this.pageSize,
-          pageNumber: this.pageNumber
-        });
-      }
+      // _filterPartnershipsData() {
+      //   this.$.partnerships.query({
+      //     searchString: this.qs,
+      //     sectors: map(prop('label'), this.selectedSectors),
+      //     offices: map(prop('name'), this.selectedOffices),
+      //     status: map(prop('value'), this.selectedStatuses),
+      //     startAfterDate: this.startAfterDate,
+      //     endBeforeDate: this.endBeforeDate,
+      //     startBeforeDate: this.startBeforeDate,
+      //     endAfterDate: this.endAfterDate,
+      //     order: this.sortOrder,
+      //     pageSize: this.pageSize,
+      //     pageNumber: this.pageNumber
+      //   });
+      // }
 
       _requiredDataLoaded(event) {
         event.stopImmediatePropagation();
@@ -1319,153 +1353,153 @@
         this.set('requiredDataLoaded', true);
       }
 
-      _setSelectedOffices(officesStr) {
-        let officesIdsArr = officesStr.split('|');
-        if (!isEmpty(officesIdsArr)) {
-          officesIdsArr = officesIdsArr.map((n) => parseInt(n, 10));
-          return this.offices.filter((o) => officesIdsArr.includes(parseInt(o.id, 10)));
-        }
-        return [];
-      }
+      // _setSelectedOffices(officesStr) {
+      //   let officesIdsArr = officesStr.split('|');
+      //   if (!isEmpty(officesIdsArr)) {
+      //     officesIdsArr = officesIdsArr.map((n) => parseInt(n, 10));
+      //     return this.offices.filter((o) => officesIdsArr.includes(parseInt(o.id, 10)));
+      //   }
+      //   return [];
+      // }
 
-      _setSelectedSectors(sectorsStr) {
-        const sectorsArr = sectorsStr.split('|');
-        if (!isEmpty(sectorsArr)) {
-          const selectedSectors = this.sectors.filter((s) => {
-            return sectorsArr.indexOf(s.value) > -1;
-          });
-          return selectedSectors;
-        }
-        return [];
-      }
+      // _setSelectedSectors(sectorsStr) {
+      //   const sectorsArr = sectorsStr.split('|');
+      //   if (!isEmpty(sectorsArr)) {
+      //     const selectedSectors = this.sectors.filter((s) => {
+      //       return sectorsArr.indexOf(s.value) > -1;
+      //     });
+      //     return selectedSectors;
+      //   }
+      //   return [];
+      // }
 
-      _setSelectedStatuses(statuses) {
-        const statusesStrArr = statuses.split('|');
-        if (isEmpty(this.statuses)) {
-          return [];
-        }
-        return this.statuses.filter((status) => {
-          return statusesStrArr.indexOf(status.value) > -1;
-        });
-      }
+      // _setSelectedStatuses(statuses) {
+      //   const statusesStrArr = statuses.split('|');
+      //   if (isEmpty(this.statuses)) {
+      //     return [];
+      //   }
+      //   return this.statuses.filter((status) => {
+      //     return statusesStrArr.indexOf(status.value) > -1;
+      //   });
+      // }
 
-      _getDisbPercent(perc) {
-        return perc === '0.00' ? '0'
-          : perc === '!Error! (currencies do not match)' ? 'N/A'
-            : `${Number(perc).toFixed(0)}%`;
-      }
+      // _getDisbPercent(perc) {
+      //   return perc === '0.00' ? '0'
+      //     : perc === '!Error! (currencies do not match)' ? 'N/A'
+      //       : `${Number(perc).toFixed(0)}%`;
+      // }
 
-      _displayDisbursement(val, multiCurrFlag) {
-        if (multiCurrFlag) {
-            return '';
-          }
-        let nonZero = this.displayNonZero(val);
-        return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
-      }
+      // _displayDisbursement(val, multiCurrFlag) {
+      //   if (multiCurrFlag) {
+      //       return '';
+      //     }
+      //   let nonZero = this.displayNonZero(val);
+      //   return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
+      // }
 
-      _isEqual(status, first, second) {
-        return status === 'signed' ? true : (first === second);
-      }
+      // _isEqual(status, first, second) {
+      //   return status === 'signed' ? true : (first === second);
+      // }
 
-      _checkAllCurrenciesConsistent(status, all_currencies_are_consistent, fr_currencies_are_consistent) {
-        return status === 'signed' ? true :
-          (!all_currencies_are_consistent) ? true :
-            (!fr_currencies_are_consistent) ? false : true;
-      }
+      // _checkAllCurrenciesConsistent(status, all_currencies_are_consistent, fr_currencies_are_consistent) {
+      //   return status === 'signed' ? true :
+      //     (!all_currencies_are_consistent) ? true :
+      //       (!fr_currencies_are_consistent) ? false : true;
+      // }
 
-      _checkSigned(status, value) {
-        return status === 'signed' ? true : value;
-      }
+      // _checkSigned(status, value) {
+      //   return status === 'signed' ? true : value;
+      // }
 
-      _eitherTrue(flag1, flag2) {
-        return flag1 || flag2 ? true : false;
-      }
+      // _eitherTrue(flag1, flag2) {
+      //   return flag1 || flag2 ? true : false;
+      // }
 
       _toggleDashView({ target }) {
         let pages = this.$.partnershipsPages;
         pages.selectNext();
       }
 
-      _showPresetFilter(event) {
-        let filterDiv = event.currentTarget.lastElementChild;
-        let clickedFilter = event.model.__data.presets;
-        // temporarily disables last two filters until data is ready
-        if (clickedFilter.id === '7' || clickedFilter.id === '8') {
-          return;
-        }
+      // _showPresetFilter(event) {
+      //   let filterDiv = event.currentTarget.lastElementChild;
+      //   let clickedFilter = event.model.__data.presets;
+      //   // temporarily disables last two filters until data is ready
+      //   if (clickedFilter.id === '7' || clickedFilter.id === '8') {
+      //     return;
+      //   }
 
-        // reset styling for all filter buttons
-        this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(
-          (b) => b.style.opacity = '0'
-        );
-        this.shadowRoot.querySelectorAll('.filter-name').forEach(
-          (r) => r.style.color = ''
-        );
+      //   // reset styling for all filter buttons
+      //   this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(
+      //     (b) => b.style.opacity = '0'
+      //   );
+      //   this.shadowRoot.querySelectorAll('.filter-name').forEach(
+      //     (r) => r.style.color = ''
+      //   );
 
-        if (this.currentFilter === clickedFilter.id) {
-          this.set('currentFilter', 'custom');
-        } else {
-          // style selected filter button as pressed
-          filterDiv.lastElementChild.style.opacity = '1';
-          filterDiv.children[1].style.color = '#0099FF';
-          this.set('currentFilter', clickedFilter.id);
-        }
+      //   if (this.currentFilter === clickedFilter.id) {
+      //     this.set('currentFilter', 'custom');
+      //   } else {
+      //     // style selected filter button as pressed
+      //     filterDiv.lastElementChild.style.opacity = '1';
+      //     filterDiv.children[1].style.color = '#0099FF';
+      //     this.set('currentFilter', clickedFilter.id);
+      //   }
 
-        // reset to first results page of new filter
-        this.set('visibleRange', [1, 10]);
-        this.rangeChanged();
-        this.pageNumber = 1;
+      //   // reset to first results page of new filter
+      //   this.set('visibleRange', [1, 10]);
+      //   this.rangeChanged();
+      //   this.pageNumber = 1;
 
-        // toggle custom filters visibility and footer totals source
-        if (this.currentFilter === 'custom') {
-          this.$.customFilterPanel.hidden = false;
-          this.$.csoDashboardFooter.filteredTotalResults = this.totalResults;
-        } else {
-          this.$.customFilterPanel.hidden = true;
-          this.$.csoDashboardFooter.filteredTotalResults = clickedFilter.total;
-        }
-      }
+      //   // toggle custom filters visibility and footer totals source
+      //   if (this.currentFilter === 'custom') {
+      //     this.$.customFilterPanel.hidden = false;
+      //     this.$.csoDashboardFooter.filteredTotalResults = this.totalResults;
+      //   } else {
+      //     this.$.customFilterPanel.hidden = true;
+      //     this.$.csoDashboardFooter.filteredTotalResults = clickedFilter.total;
+      //   }
+      // }
 
-      computeFilter(filter) {
-        return function(row) {
-          let eq = (stts) => stts === row.status;
-          switch(filter) {
-            case 'custom':
-              return true;
-              break;
-            case '1':
-              return row.status === 'signed'
-                && (Date.parse(row.start) < new Date().getTime())
-                && !row.frs_total_frs_amt;
-              break;
-            case '2':
-              return ['active', 'ended', 'suspended'].some(eq)
-                && (row.unicef_cash !== row.frs_total_frs_amt);
-              break;
-            case '3':
-              return ['active', 'ended'].some(eq) && (parseInt(row.days_last_pv) > 180);
-              break;
-            case '4':
-              return ['active', 'suspended'].some(eq)
-                && (Date.parse(row.end) < (new Date().getTime() + 2592000000));
-              break;
-            case '5':
-              return row.status === 'ended' && (row.disbursement < row.frs_total_frs_amt);
-              break;
-            case '6':
-              return row.status === 'ended'
-                && !row.has_final_partnership_review
-                && parseInt(row.disbursement_usd) >= 100000;
-              break;
-            case '7':
-              return true;
-              break;
-            case '8':
-              return true;
-              break;
-          }
-        };
-      }
+      // computeFilter(filter) {
+      //   return function(row) {
+      //     let eq = (stts) => stts === row.status;
+      //     switch(filter) {
+      //       case 'custom':
+      //         return true;
+      //         break;
+      //       case '1':
+      //         return row.status === 'signed'
+      //           && (Date.parse(row.start) < new Date().getTime())
+      //           && !row.frs_total_frs_amt;
+      //         break;
+      //       case '2':
+      //         return ['active', 'ended', 'suspended'].some(eq)
+      //           && (row.unicef_cash !== row.frs_total_frs_amt);
+      //         break;
+      //       case '3':
+      //         return ['active', 'ended'].some(eq) && (parseInt(row.days_last_pv) > 180);
+      //         break;
+      //       case '4':
+      //         return ['active', 'suspended'].some(eq)
+      //           && (Date.parse(row.end) < (new Date().getTime() + 2592000000));
+      //         break;
+      //       case '5':
+      //         return row.status === 'ended' && (row.disbursement < row.frs_total_frs_amt);
+      //         break;
+      //       case '6':
+      //         return row.status === 'ended'
+      //           && !row.has_final_partnership_review
+      //           && parseInt(row.disbursement_usd) >= 100000;
+      //         break;
+      //       case '7':
+      //         return true;
+      //         break;
+      //       case '8':
+      //         return true;
+      //         break;
+      //     }
+      //   };
+      // }
     }
 
     window.customElements.define(ViewPartnerships.is, ViewPartnerships);
