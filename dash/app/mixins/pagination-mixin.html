@@ -11,7 +11,7 @@
    */
   EtoolsDashboard.Mixins.Pagination = (superClass) => class extends superClass {
     constructor() {
-      super()
+      super();
     }
 
     static get properties() {
@@ -29,16 +29,16 @@
           type: String,
           notify: true,
           observer: 'qChanged'
-        },
-      }
+        }
+      };
     }
 
     static get observers() {
       return [
-        'init(active)',
-      ]
+        'init(active)'
+      ];
     }
-    
+  
     ready() {
       this.addEventListener('sort-changed', this.sortOrderChanged);
       super.ready();
@@ -74,6 +74,7 @@
       return qs.join('&');
     }
 
+  
     qChanged(q) {
       this.set('debounceTime', 300);
       this.set('pageNumber', 1);
