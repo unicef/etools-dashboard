@@ -43,10 +43,10 @@
       exp: 6 * 60 * 60 * 1000, // 6h
       cacheTableName: 'partners'
     },
-    partnersDashboard: {
+    partnershipsDashboard: {
       url: '/api/v2/partners/dashboard',
       exp: 6 * 60 * 60 * 1000, // 6h
-      cacheTableName: 'partnersDashboard'
+      cachingKey: 'partnerships_dashboard'
     },
     partnerDetails: {
       template: '/api/v2/partners/<%=id%>/'

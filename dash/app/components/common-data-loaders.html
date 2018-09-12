@@ -144,6 +144,16 @@
             };
           },
 
+          setPartnershipsDashboard(data = []) {
+            return {
+              type: 'SET_PARTNERSHIPS_DASHBOARD',
+              partnerships: map(
+                pick(['id', 'name', 'sectors', 'locations', 'total_ct_cp', 'action_points', 'total_ct_ytd']),
+                data
+              )
+            };
+          },
+
           setTripsYears() {
             return {
               type: 'SET_TRIPS_YEARS',

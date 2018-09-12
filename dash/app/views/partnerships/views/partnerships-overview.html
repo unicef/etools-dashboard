@@ -357,7 +357,7 @@
 
     </style>
 
-    <!-- <partnership-data id="partnerships"
+    <partnership-data id="partnerships"
                       filtered-partnerships="{{filteredPartnerships}}"
                       fire-data-loaded
                       active="[[active]]"
@@ -365,7 +365,7 @@
                       on-partnerships-loaded="_requiredDataLoaded"
                       list-data-path="filteredPartnerships"
                       preset-filters="{{presetFilters}}">
-    </partnership-data> -->
+    </partnership-data>
 
     <div class="paper-material list-panel" elevation="1">
       <span class="alerts-title">Alerts </span><span class="alerts-comment">(click to filter the list)</span>
@@ -848,7 +848,7 @@
         return [
           '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate)',
           '_init(active, sectors, statuses, offices, requiredDataLoaded)',
-          '_tabChanged(routeData.partnershipsTab, active)'
+          // '_tabChanged(routeData.partnershipsTab, active)'
         ];
       }
 

@@ -42,9 +42,13 @@
        */
       static get properties() {
         return {
+          active: {
+            type: Boolean,
+            value: false
+          },
           endpointName: {
             type: String,
-            value: 'partnersDashboard'
+            value: 'partnershipsDashboard'
           },
           currentQuery: {
             type: Object,
@@ -62,7 +66,7 @@
           },
           dataLoadedEventName: {
             type: String,
-            value: 'partnerships-loaded'
+            value: 'partnerships-dashboard-loaded'
           },
           presetResults: {
             type: Array,
@@ -98,9 +102,14 @@
         };
       }
 
-      ready() {
-        super.ready();
-        if (!this.loadedInitially) {
+      static get observers() {
+        return [
+          'init(active)'
+        ]
+      }
+
+      init() {
+        if (this.active) {
           this.fireEvent('global-loading', { message: 'Loading partnerships dashboard data...', active: true, loadingSource: 'partnership-dashboard-data' });
           this.set('loadedInitially', true);
         }
@@ -125,9 +134,9 @@
         const predKeys = keys(this.predicates);
         EtoolsDashboard.DexieDb.transaction(
           'r',
-          EtoolsDashboard.DexieDb.partnersDashboard,
+          EtoolsDashboard.DexieDb.partnerships_dashboard,
           () => {
-            let queryResult = EtoolsDashboard.DexieDb.partnersDashboard.orderBy('partner_name');
+            let queryResult = EtoolsDashboard.DexieDb.partnerships_dashboard.orderBy('name');
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
@@ -143,23 +152,24 @@
             return Dexie.Promise.all([
               queryResult.count(),
               queryResult.clone().toArray(),
-              ...(this.presetResults.map((res) => res.toArray()))
+              // ...(this.presetResults.map((res) => res.toArray()))
             ]);
-          }).then((countAndResult) => {
+          }).then(countAndResult => {
+            log(countAndResult)
             this.fireEvent('global-loading', { loadingSource: 'partnership-dashboard-data' });
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnershipsDashboard(countAndResult[1]);
             // check if preset filters were populated already
-            if (!this.presetsLoaded) {
-              for (let i = 2; i < (this.presetResults.length + 2); i++) {
-                this.set(
-                  `presetFilters.${i-2}.filteredPartnerships`,
-                  countAndResult[i]
-                );
-                this.set(`presetFilters.${i-2}.total`, countAndResult[i].length);
-              }
-              this.set('presetsLoaded', true);
-            }
+            // if (!this.presetsLoaded) {
+            //   for (let i = 2; i < (this.presetResults.length + 2); i++) {
+            //     this.set(
+            //       `presetFilters.${i-2}.filteredPartnerships`,
+            //       countAndResult[i]
+            //     );
+            //     this.set(`presetFilters.${i-2}.total`, countAndResult[i].length);
+            //   }
+            //   this.set('presetsLoaded', true);
+            // }
           }).catch((err) => console.error('Error querying partnerships-dash: ', err));
       }
     }

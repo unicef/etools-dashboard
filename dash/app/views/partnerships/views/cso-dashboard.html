@@ -43,7 +43,7 @@
 
 <link rel="import" href="../data/partnership-dashboard-data.html">
 
-<dom-module id="partnerships-overview">
+<dom-module id="cso-dashboard">
   <template>
     <style include="shared-styles grid-layout-styles iron-flex page-layout-styles 
                     paper-material-styles list-styles filter-styles">
@@ -357,6 +357,17 @@
 
     </style>
 
+    <partnership-dashboard-data id="partnershipsDashboard"
+                                filtered-partnerships-dashboard="{{filteredPartnershipsDashboard}}"
+                                fire-data-loaded
+                                active="[[active]]"
+                                total-results="{{totalResults}}"
+                                on-partnerships-dashboard-loaded="_requiredDataLoaded"
+                                list-data-path="filteredPartnershipsDashboard"
+                                preset-filters="{{presetFilters}}"
+                                >
+    </partnership-dashboard-data>
+
     <div class="paper-material list-panel" elevation="1">
       <span class="alerts-title">Alerts </span><span class="alerts-comment">(click to filter the list)</span>
       <div class="alerts-panel">
@@ -496,9 +507,9 @@
         </data-table-column>
       </data-table-header>
 
-      <template id="csoListTemplate"
-                items="{{filteredPartnerships}}"
-                filter="{{computeFilter(currentFilter)}}"
+      <template id="partnerListTemplate"
+                items="{{filteredPartnershipsDashboard}}"
+                
                 is="dom-repeat"
                 as="row">
         <data-table-row no-collapse>
@@ -606,7 +617,7 @@
 
       static get properties() {
         return {
-          filteredPartnerships: {
+          filteredPartnershipsDashboard: {
             type: Array,
             notify: true,
             observer: 'rangeChanged'
@@ -638,41 +649,25 @@
             type: Array,
             statePath: 'sectors'
           },
-          statuses: {
-            type: Array,
-            statePath: 'static.intervention_status'
-          },
-          offices: {
-            type: Array,
-            statePath: 'offices'
+          costCentres: {
+            type: Array
           },
           selectedSectors: {
             type: Array,
             observer: 'filterChanged'
           },
-          selectedOffices: {
+          selectedPartner: {
+            type: String,
+            observer: 'filterChanged'
+          },
+          selectedCostCentres: {
             type: Array,
             observer: 'filterChanged'
           },
-          selectedStatuses: {
-            type: Array,
+          selectedOustanding: {
+            type: Boolean,
+            value: false,
             observer: 'filterChanged'
-          },
-          startAfterDate: {
-            type: String,
-            observer: 'dateChanged'
-          },
-          startBeforeDate: {
-            type: String,
-            observer: 'dateChanged'
-          },
-          endBeforeDate: {
-            type: String,
-            observer: 'dateChanged'
-          },
-          endAfterDate: {
-            type: String,
-            observer: 'dateChanged'
           },
           visibleRange: {
             type: Array,
@@ -703,36 +698,6 @@
                   propName: 'selectedSectors',
                   xf: compose(join('|'), map(prop('value')))
                 },
-                {
-                  qName: 'offices',
-                  propName: 'selectedOffices',
-                  xf: compose(join('|'), map(prop('id')))
-                },
-                {
-                  qName: 'status',
-                  propName: 'selectedStatuses',
-                  xf: compose(join('|'), map(prop('value')))
-                },
-                {
-                  qName: 'startAfter',
-                  propName: 'startAfterDate',
-                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
-                },
-                {
-                  qName: 'endBefore',
-                  propName: 'endBeforeDate',
-                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
-                },
-                {
-                  qName: 'startBefore',
-                  propName: 'startBeforeDate',
-                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
-                },
-                {
-                  qName: 'endAfter',
-                  propName: 'endAfterDate',
-                  xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
-                }
               ];
             }
           }
@@ -741,16 +706,16 @@
 
       static get observers() {
         return [
-          '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate)',
-          '_init(active, sectors, statuses, offices, requiredDataLoaded)',
-          '_tabChanged(routeData.partnershipsTab, active)'
+          '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors)',
+          '_init(active, sectors, requiredDataLoaded)',
+          // '_tabChanged(routeData.partnershipsTab, active)'
         ];
       }
 
 
-      _init(active, sectors, statuses, offices, requiredDataLoaded) {
+      _init(active, sectors, requiredDataLoaded) {
         let params = this.queryParams;
-        if (!active || !sectors || !statuses || !offices || !requiredDataLoaded) {
+        if (!active || !sectors || !requiredDataLoaded) {
           return;
         }
         this.set('initComplete', false);
@@ -759,30 +724,24 @@
         this.set('pageSize', params.size ? parseInt(params.size) : 10);
         this.set('sortOrder', params.sort ? params.sort : 'asc');
         this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
-        this.set('selectedOffices', params.offices ? this._setSelectedOffices(params.offices) : []);
-        this.set('selectedStatuses', params.status ? this._setSelectedStatuses(params.status) : this._setSelectedStatuses('signed|active|ended|suspended|terminated'));
-        this.set('startAfterDate', params.startAfter ? params.startAfter : '');
-        this.set('endBeforeDate', params.endBefore ? params.endBefore : '');
-        this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
-        this.set('endAfterDate', params.endAfter ? params.endAfter : '');
-        // the following should be removed when the final two preset filters are enabled
-        if (this.shadowRoot.querySelectorAll('.alert-row').length > 0) {
-          this.shadowRoot.querySelectorAll('.alert-row')[6].style.color = 'rgb(144,144,144)';
-          this.shadowRoot.querySelectorAll('.alert-row')[6].children[1].children[0].innerText = '-';
-          this.shadowRoot.querySelectorAll('.alert-row')[6].children[1].children[1].classList.remove('filter-name');
-          this.shadowRoot.querySelectorAll('.alert-row')[7].style.color = 'rgb(144,144,144)';
-          this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[0].innerText = '-';
-          this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[1].classList.remove('filter-name');
-        }
-
+        
         this._initListFilters();
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
-
       }
 
       _initListFilters() {
         this.initListFiltersData([
+          {
+            filterName: 'Partner Name',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            selectionOptions: this.filteredPartnershipsDashboard,
+            alreadySelected: [],
+            path: 'selectedPartner',
+            selected: false
+          },
           {
             filterName: 'Section/Cluster',
             type: 'esmm',
@@ -794,53 +753,25 @@
             selected: false
           },
           {
-            filterName: 'Field Office',
-            type: 'esmm',
-            optionValue: 'id',
-            optionLabel: 'name',
-            selectionOptions: this.offices,
-            alreadySelected: [],
-            path: 'selectedOffices',
-            selected: false
-          },
-          {
-            filterName: 'Status',
+            filterName: 'Cost Centre',
             type: 'esmm',
             optionValue: 'value',
             optionLabel: 'label',
-            selectionOptions: this.statuses.slice(1), // exclude closed status per business req.
+            selectionOptions: this.costCentres,
             alreadySelected: [],
-            path: 'selectedStatuses',
+            path: 'selectedCostCentres',
             selected: false
           },
-          {
-            filterName: 'Starts After',
-            type: 'datepicker', // etools-datepicker
-            path: 'startAfterDate',
-            dateSelected: '',
-            selected: false
-          },
-          {
-            filterName: 'Ends Before',
-            type: 'datepicker', // etools-datepicker
-            path: 'endBeforeDate',
-            dateSelected: '',
-            selected: false
-          },
-          {
-            filterName: 'Starts Before',
-            type: 'datepicker', // etools-datepicker
-            path: 'startBeforeDate',
-            dateSelected: '',
-            selected: false
-          },
-          {
-            filterName: 'Ends After',
-            type: 'datepicker', // etools-datepicker
-            path: 'endAfterDate',
-            dateSelected: '',
-            selected: false
-          }
+          // {
+          //   filterName: 'Outstanding DCT >9?',
+          //   type: 'esmm',
+          //   optionValue: 'value',
+          //   optionLabel: 'label',
+          //   selectionOptions: this.costCentres,
+          //   alreadySelected: [],
+          //   path: 'selectedOutstanding',
+          //   selected: false
+          // }
         ]);
 
       }
@@ -853,57 +784,20 @@
             {
               filterName: 'Section/Cluster',
               selectedValue: map(prop('value'), this.selectedSectors)
-            },
-            {
-              filterName: 'Field Office',
-              selectedValue: map(prop('id'), this.selectedOffices)
-            },
-            {
-              filterName: 'Status',
-              selectedValue: map(prop('value'), this.selectedStatuses)
-            },
-            {
-              filterName: 'Starts After',
-              selectedValue: this.startAfterDate
-            },
-            {
-              filterName: 'Starts Before',
-              selectedValue: this.startBeforeDate
-            },
-            {
-              filterName: 'Ends Before',
-              selectedValue: this.endBeforeDate
-            },
-            {
-              filterName: 'Ends After',
-              selectedValue: this.endAfterDate
             }
           ];
           this.updateShownFilters(filtersValues);
         });
       }
 
-      _tabChanged(tab, active) {
-        this.set('active', active);
-        if (!tab || !active) { return; }
-        if (tab === 'overview') {
-          this.$.overview.classList.add('dark-button');
-          this.$.csoDash.classList.add('light-button');
-        } else {
-          this.updateAppState(this.route.path);
-          this.$.overview.classList.remove('dark-button');
-          this.$.csoDash.classList.remove('light-button');
-        }
-      }
-
       rangeChanged() {
         if (this.currentFilter !== 'custom') {
-          this.$.csoListTemplate.items = this.presetFilters[this.currentFilter-1].filteredPartnerships.slice(
+          this.$.partnerListTemplate.items = this.presetFilters[this.currentFilter-1].filteredPartnershipsDashboard.slice(
               this.visibleRange[0]-1,
               this.visibleRange[1]
             );
-        } else if (this.filteredPartnerships) {
-          this.$.csoListTemplate.items = this.filteredPartnerships.slice(
+        } else if (this.filteredPartnershipsDashboard) {
+          this.$.partnerListTemplate.items = this.filteredPartnershipsDashboard.slice(
               this.visibleRange[0]-1,
               this.visibleRange[1]
             );
@@ -911,7 +805,7 @@
       }
 
       _updateUrl(query, pageNumber, pageSize, sortOrder, requiredDataLoaded,
-        initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate) {
+        initComplete, selectedSectors) {
           if (!this.initComplete || !this.requiredDataLoaded) {
           return;
         }
@@ -922,14 +816,14 @@
         if (qs !== null) {
           this.updateAppState(currentRoute, qs, true);
           if (this.requiredDataLoaded) {
-            this._filterPartnershipsData();
+            this._filterPartnershipsDashboardData();
           }
         } else {
           if (location.search === '') {
             this.updateAppState(currentRoute, qs, false);
           }
           if (this.forceDataRefresh && this.requiredDataLoaded) {
-            this._filterPartnershipsData();
+            this._filterPartnershipsDashboardData();
             this.set('forceDataRefresh', false);
           }
         }
@@ -941,19 +835,13 @@
             : `${acc}${qName}=${xf(this[propName])}&`;
         }, '');
         query = query.split('|').join(',');
-        return `${this.getEndpoint('cso_dashboard').url}/?${query}format=csv`;
+        return `${this.getEndpoint('partnershipsDashboard').url}/?${query}format=csv`;
       }
 
-      _filterPartnershipsData() {
-        this.$.partnerships.query({
+      _filterPartnershipsDashboardData() {
+        this.$.partnershipsDashboard.query({
           searchString: this.qs,
           sectors: map(prop('label'), this.selectedSectors),
-          offices: map(prop('name'), this.selectedOffices),
-          status: map(prop('value'), this.selectedStatuses),
-          startAfterDate: this.startAfterDate,
-          endBeforeDate: this.endBeforeDate,
-          startBeforeDate: this.startBeforeDate,
-          endAfterDate: this.endAfterDate,
           order: this.sortOrder,
           pageSize: this.pageSize,
           pageNumber: this.pageNumber
@@ -973,15 +861,6 @@
         this.set('requiredDataLoaded', true);
       }
 
-      _setSelectedOffices(officesStr) {
-        let officesIdsArr = officesStr.split('|');
-        if (!isEmpty(officesIdsArr)) {
-          officesIdsArr = officesIdsArr.map((n) => parseInt(n, 10));
-          return this.offices.filter((o) => officesIdsArr.includes(parseInt(o.id, 10)));
-        }
-        return [];
-      }
-
       _setSelectedSectors(sectorsStr) {
         const sectorsArr = sectorsStr.split('|');
         if (!isEmpty(sectorsArr)) {
@@ -991,16 +870,6 @@
           return selectedSectors;
         }
         return [];
-      }
-
-      _setSelectedStatuses(statuses) {
-        const statusesStrArr = statuses.split('|');
-        if (isEmpty(this.statuses)) {
-          return [];
-        }
-        return this.statuses.filter((status) => {
-          return statusesStrArr.indexOf(status.value) > -1;
-        });
       }
 
       _getDisbPercent(perc) {
@@ -1043,10 +912,6 @@
       _showPresetFilter(event) {
         let filterDiv = event.currentTarget.lastElementChild;
         let clickedFilter = event.model.__data.presets;
-        // temporarily disables last two filters until data is ready
-        if (clickedFilter.id === '7' || clickedFilter.id === '8') {
-          return;
-        }
 
         // reset styling for all filter buttons
         this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(
@@ -1095,27 +960,6 @@
             case '2':
               return ['active', 'ended', 'suspended'].some(eq)
                 && (row.unicef_cash !== row.frs_total_frs_amt);
-              break;
-            case '3':
-              return ['active', 'ended'].some(eq) && (parseInt(row.days_last_pv) > 180);
-              break;
-            case '4':
-              return ['active', 'suspended'].some(eq)
-                && (Date.parse(row.end) < (new Date().getTime() + 2592000000));
-              break;
-            case '5':
-              return row.status === 'ended' && (row.disbursement < row.frs_total_frs_amt);
-              break;
-            case '6':
-              return row.status === 'ended'
-                && !row.has_final_partnership_review
-                && parseInt(row.disbursement_usd) >= 100000;
-              break;
-            case '7':
-              return true;
-              break;
-            case '8':
-              return true;
               break;
           }
         };
