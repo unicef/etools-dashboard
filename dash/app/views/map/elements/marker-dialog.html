@@ -224,15 +224,11 @@
                   </div>
 
                   <!-- Pairs -->
-                  <template is="dom-repeat" items="[[item.frs]]" as="fr">
-
-                    <template is="dom-repeat" items="[[fr.line_item_details]]" as="detail">
+                  <template is="dom-repeat" items="[[_getUniqFrs(item.frs)]]" as="fr">
                       <div class="layout-horizontal">
-
-                        <span class="details-data donor">[[detail.donor]]</span>
-                        <span class="details-data">[[detail.grant_number]]</span>
+                        <span class="details-data donor">[[fr.donor]]</span>
+                        <span class="details-data">[[fr.grant_number]]</span>
                       </div>
-                    </template>
                   </template>
 
                 </div>
@@ -300,6 +296,11 @@
 
       _hasClusters(item) {
         return Array.isArray(item.clusters);
+      }
+
+      _getUniqFrs(frs) {
+        const uniqueList = map(compose( uniq, map(pick(['donor', 'grant_number'])), prop('line_item_details')))(frs);
+        return flatten(uniqueList);
       }
 
       _close() {
