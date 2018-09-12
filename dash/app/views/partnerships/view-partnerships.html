@@ -975,11 +975,20 @@
       }
 
       _buildCsvDownloadUrl() {
-        let query = this.params.reduce((acc, { qName, propName, xf }) => {
-          return isEmpty(this[propName]) ? acc
-            : `${acc}${qName}=${xf(this[propName])}&`;
-        }, '');
-        query = query.split('|').join(',');
+        let query
+        if (this.currentFilter === 'custom') {
+          query = this.params.reduce((acc, { qName, propName, xf }) => {
+            return isEmpty(this[propName]) ? acc
+              : `${acc}${qName}=${xf(this[propName])}&`;
+          }, '');
+          query = query.split('|').join(',');
+        } else {
+          let pks = this.presetFilters[this.currentFilter-1].filteredPartnerships.map(
+            partner => prop('intervention_id', partner)
+          )
+          pks.join(',')
+          query = `pk=${pks}&`
+        }
         return `${this.getEndpoint('cso_dashboard').url}/?${query}format=csv`;
       }
 
@@ -1098,6 +1107,7 @@
           filterDiv.children[1].style.color = '#0099FF';
           this.set('currentFilter', clickedFilter.id);
         }
+        this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
 
         // reset to first results page of new filter
         this.set('visibleRange', [1, 10]);
