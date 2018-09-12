@@ -81,7 +81,13 @@
           setCountryProgrammes(data = []) {
             return {
               type: 'SET_COUNTRY_PROGRAMMES',
-              countryProgrammes: map(pick(['id', 'name', 'active', 'special', 'invalid']), data)
+              countryProgrammes: map(
+                compose(({ id, name, active, special, invalid })=>({
+                active, special, invalid,
+                label: name,
+                value: id
+              }),
+              pick(['id', 'name', 'active', 'special', 'invalid'])), data)
             };
           },
 

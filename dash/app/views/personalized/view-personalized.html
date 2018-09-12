@@ -428,17 +428,17 @@
 
       _principal(tab) {
         switch(tab) {
-          case "myTrips":
-            return "Trip Supervisor"
+          case 'myTrips':
+            return 'Trip Supervisor';
             break;
-          case "tripsSupervised":
-            return "Traveler"
+          case 'tripsSupervised':
+            return 'Traveler';
             break;
-          case "actionPointsForMe":
-            return "Assigned By"
+          case 'actionPointsForMe':
+            return 'Assigned By';
             break;
-          case "actionPointsByMe":
-            return "Assignee"
+          case 'actionPointsByMe':
+            return 'Assignee';
             break;
         }
       }
@@ -470,7 +470,7 @@
       }
 
       _goToAddActionPoint() {
-        window.location.href = '/apd/action-points/new'
+        window.location.href = '/apd/action-points/new';
       }
 
       _goToAddTrip() {

@@ -810,9 +810,9 @@
         this.set('pageNumber', params.page ? parseInt(params.page) : 1);
         this.set('pageSize', params.size ? parseInt(params.size) : 10);
         this.set('sortOrder', params.sort ? params.sort : 'asc');
-        this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
-        this.set('selectedOffices', params.offices ? this._setSelectedOffices(params.offices) : []);
-        this.set('selectedStatuses', params.status ? this._setSelectedStatuses(params.status) : this._setSelectedStatuses('signed|active|ended|suspended|terminated'));
+        this.set('selectedSectors', this.paramStrParseToArray(params.sectors, this.sectors) || []);
+        this.set('selectedOffices', this.paramStrParseToArray(params.offices, this.offices, 'id') || []);
+        this.set('selectedStatuses', this.paramStrParseToArray(params.status, this.statuses) || this._setSelectedStatuses('signed|active|ended|suspended|terminated'));
         this.set('startAfterDate', params.startAfter ? params.startAfter : '');
         this.set('endBeforeDate', params.endBefore ? params.endBefore : '');
         this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
@@ -826,6 +826,7 @@
           this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[0].innerText = '-';
           this.shadowRoot.querySelectorAll('.alert-row')[7].children[1].children[1].classList.remove('filter-name');
         }
+
 
         this._initListFilters();
         this.set('initComplete', true);
@@ -954,10 +955,12 @@
           if (!this.initComplete || !this.requiredDataLoaded) {
           return;
         }
-
+      console.log(selectedSectors, selectedOffices, selectedStatuses);
         this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
         const qs = this.buildQueryString();
         const currentRoute = this.route.prefix + this.route.path;
+        // log(selectedSectors, selectedOffices, selectedStatuses);
+        // debugger;
         if (qs !== null) {
           this.updateAppState(currentRoute, qs, true);
           if (this.requiredDataLoaded) {
@@ -975,7 +978,7 @@
       }
 
       _buildCsvDownloadUrl() {
-        let query
+        let query;
         if (this.currentFilter === 'custom') {
           query = this.params.reduce((acc, { qName, propName, xf }) => {
             return isEmpty(this[propName]) ? acc
@@ -984,10 +987,10 @@
           query = query.split('|').join(',');
         } else {
           let pks = this.presetFilters[this.currentFilter-1].filteredPartnerships.map(
-            partner => prop('intervention_id', partner)
-          )
-          pks.join(',')
-          query = `pk=${pks}&`
+            (partner) => prop('intervention_id', partner)
+          );
+          pks.join(',');
+          query = `pk=${pks}&`;
         }
         return `${this.getEndpoint('cso_dashboard').url}/?${query}format=csv`;
       }
@@ -1019,26 +1022,6 @@
         }
         this.set('initComplete', false);
         this.set('requiredDataLoaded', true);
-      }
-
-      _setSelectedOffices(officesStr) {
-        let officesIdsArr = officesStr.split('|');
-        if (!isEmpty(officesIdsArr)) {
-          officesIdsArr = officesIdsArr.map((n) => parseInt(n, 10));
-          return this.offices.filter((o) => officesIdsArr.includes(parseInt(o.id, 10)));
-        }
-        return [];
-      }
-
-      _setSelectedSectors(sectorsStr) {
-        const sectorsArr = sectorsStr.split('|');
-        if (!isEmpty(sectorsArr)) {
-          const selectedSectors = this.sectors.filter((s) => {
-            return sectorsArr.indexOf(s.value) > -1;
-          });
-          return selectedSectors;
-        }
-        return [];
       }
 
       _setSelectedStatuses(statuses) {

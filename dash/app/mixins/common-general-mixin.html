@@ -154,8 +154,16 @@
       strippedSpace(str) {
         return str.split(',')
           .map((item) => {
-            return item[0]===' '? item.slice(1) : item;
+            return item[0] === ' ' ? item.slice(1) : item;
           });
+      }
+
+      paramStrParseToArray(str, optionsCollection, valueProp = 'value') {
+        if (!str) {
+          return null;
+        }
+        const arr = str.split('|').map((val) => Number(val) || val);
+        return optionsCollection.filter((option) => arr.indexOf(option[valueProp]) > -1);
       }
     }
   );
