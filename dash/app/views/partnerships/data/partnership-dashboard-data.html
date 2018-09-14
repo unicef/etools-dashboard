@@ -130,14 +130,13 @@
       }
 
       query(params) {
-        log(params)
-        const { order } = params;
+        const { order, orderBy } = params;
         const predKeys = keys(this.predicates);
         EtoolsDashboard.DexieDb.transaction(
           'r',
           EtoolsDashboard.DexieDb.partnerships_dashboard,
           () => {
-            let queryResult = EtoolsDashboard.DexieDb.partnerships_dashboard.orderBy('name');
+            let queryResult = EtoolsDashboard.DexieDb.partnerships_dashboard.orderBy(orderBy || 'name');
             let allPartners = queryResult.clone();
             if (order === 'desc') {
               queryResult = queryResult.reverse();

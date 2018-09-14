@@ -163,7 +163,6 @@
           EtoolsDashboard.DexieDb.cso_dashboard,
           () => {
             let queryResult = EtoolsDashboard.DexieDb.cso_dashboard.orderBy('partner_name');
-            // let allPartners = queryResult.clone();
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
@@ -179,14 +178,12 @@
             return Dexie.Promise.all([
               queryResult.count(),
               queryResult.clone().toArray(),
-              // allPartners.clone().toArray(),
               ...(this.presetResults.map((res) => res.toArray()))
             ]);
           }).then((countAndResult) => {
             this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
-            // this._setAllPartners(countAndResult[2]);
             // check if preset filters were populated already
             if (!this.presetsLoaded) {
               for (let i = 2; i < (this.presetResults.length + 2); i++) {

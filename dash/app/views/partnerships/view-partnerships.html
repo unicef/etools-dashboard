@@ -8,143 +8,7 @@
 
 <dom-module id="view-partnerships">
   <template>
-    <style include="shared-styles grid-layout-styles iron-flex page-layout-styles 
-        paper-material-styles list-styles filter-styles">
-      .no-header-line {
-        --header-bottom-line: none;
-      }
-  
-      .by-type {
-        padding: 0;
-        @apply --layout-horizontal;
-      }
-  
-      span.title {
-        color: var(--accent-color);
-        font-weight: 500;
-      }
-    
-      data-table-row span:not(:first-child),
-      data-table-header data-table-column:not(:first-child) data-table-header data-table-column data-table-column,
-      data-table-header div data-table-column data-table-column {
-        box-sizing: border-box;
-      }
-  
-      data-table-row div[slot="row-data"] div span,
-      data-table-header div data-table-column data-table-column {
-        padding-right: 8px;
-      }
-  
-      data-table-row div[slot="row-data"] div:not(:first-child) span,
-      data-table-header div data-table-column data-table-column {
-        justify-content: flex-end;
-      }
-  
-      data-table-row div[slot="row-data"] div span {
-        display: flex;
-      }
-
-      data-table-header {
-        height: 95px;
-      }
-
-      #query {
-        padding-left: 24px;
-      }
-  
-      .right-align {
-        text-align: right;
-      }
-  
-      div.sections,
-      span.sections {
-        height: 48px;
-        white-space: normal;
-        overflow-y: auto;
-        display: flex;
-        align-items: center;
-        -ms-overflow-style: -ms-autohiding-scrollbar;
-      }
-
-      div.sections span.pad-top-4 {
-        padding-right: 0;
-      }
-
-       paper-icon-item {
-        --paper-item-icon-width: 32px;
-      }
-
-      paper-menu-button {
-        padding: 0;
-      }
-  
-      div.sections>span {
-        vertical-align: middle;
-        line-height: normal
-      }
-  
-      div div span {
-        align-items: center;
-      }
-  
-      .justify-end {
-        justify-content: flex-end;
-      }
-  
-      .to-date {
-        background-image: -webkit-linear-gradient(135deg, rgb(222, 242, 254) 50%, rgb(237, 247, 223) 50%);
-        height: 48px;
-        max-width: 48px;
-      }
-  
-      data-table-row div div span.ip-pd {
-        display: block;
-        padding-top: 4px;
-        padding-right: 8px;
-      }
-  
-      .right-nudge {
-        padding-right: 8px;
-        box-sizing: border-box;
-      }
-  
-      .no-padding {
-        padding: 0;
-      }
-
-      div.display-flex {
-        display: flex;
-      }
-
-      data-table-row.alert-row,
-      .alert-row div[slot="row-data"],
-      .alert-row div[slot="row-data"] data-table-column {
-        height: 36px;
-        width: 100%;
-      }
-
-      .list-panel a {
-        padding-right: 0;
-      }
-
-      .title {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .cso-title {
-        display: block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding-right: 8px;
-      }
-
-      .partner-icons-group {
-        display: inline-flex;
-      }
-
+    <style include="paper-material-styles">
       .view-toggle {
         display: flex;
         justify-content: flex-end;
@@ -187,19 +51,8 @@
       iron-icon[name="csoDash"] {
         padding-right: 4px;
       }
-
-      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-        data-table-header {
-          height: 110px;
-          padding-bottom: 0;
-        }
-
-        div.paper-material.listControls {
-          height: 48px;
-        }
-      }
-
     </style>
+
     <app-route route="{{route}}"
                pattern="/dash/partnerships/:partnershipsTab"
                data="{{routeData}}"
@@ -229,6 +82,7 @@
                                list-data-path="filteredPartnerships"
                                query-params="{{queryParams}}"
                                route="{{route}}"
+                               csv-download-url="{{csvDownloadUrl}}"
         ></partnerships-overview>
       </div>
 
@@ -238,6 +92,7 @@
                        list-data-path="filteredPartnershipsDashboard"
                        query-params="{{queryParams}}"
                        route="{{route}}"
+                       csv-download-url="{{csvDownloadUrl}}"
         ></cso-dashboard>
       </div>
     </iron-pages>
@@ -257,11 +112,11 @@
      */
     const ViewPartnershipsMixins = compose(
       EtoolsDashboard.Mixins.CommonGeneral,
-      EtoolsDashboard.Mixins.ReduxStore,
-      EtoolsDashboard.Mixins.ListFilters,
-      EtoolsDashboard.Mixins.Endpoints,
-      EtoolsDashboard.Mixins.PaginationWithFilters,
-      EtoolsDashboard.Mixins.Date
+      // EtoolsDashboard.Mixins.ReduxStore,
+      // EtoolsDashboard.Mixins.ListFilters,
+      // EtoolsDashboard.Mixins.Endpoints,
+      // EtoolsDashboard.Mixins.PaginationWithFilters,
+      // EtoolsDashboard.Mixins.Date
       )(Polymer.Element);
     
     /**
@@ -274,152 +129,18 @@
     class ViewPartnerships extends ViewPartnershipsMixins {
       static get is() { return 'view-partnerships'; }
 
-      /**
-       * Object describing property-related metadata used by Polymer features
-       */
       static get properties() {
         return {
-        //   filteredPartnerships: {
-        //     type: Array,
-        //     notify: true,
-        //     observer: 'rangeChanged'
-        //   },
-        //   filteredPartnershipsDashboard: {
-        //     type: Array,
-        //     notify: true,
-        //     observer: 'rangeChanged'
-        //   },
-        //   currentFilter: {
-        //     type: String,
-        //     value: 'custom'
-        //   },
-        //   forceDataRefresh: {
-        //     type: Boolean,
-        //     value: false
-        //   },
-        //   requiredDataLoaded: {
-        //     type: Boolean,
-        //     value: false
-        //   },
-        //   initComplete: {
-        //     type: Boolean,
-        //     value: false
-        //   },
-        //   csvDownloadUrl: {
-        //     type: String,
-        //     notify: true
-        //   },
-        //   urlParams: {
-        //     type: Object
-        //   },
-        //   sectors: {
-        //     type: Array,
-        //     statePath: 'sectors'
-        //   },
-        //   statuses: {
-        //     type: Array,
-        //     statePath: 'static.intervention_status'
-        //   },
-        //   offices: {
-        //     type: Array,
-        //     statePath: 'offices'
-        //   },
-        //   selectedSectors: {
-        //     type: Array,
-        //     observer: 'filterChanged'
-        //   },
-        //   selectedOffices: {
-        //     type: Array,
-        //     observer: 'filterChanged'
-        //   },
-        //   selectedStatuses: {
-        //     type: Array,
-        //     observer: 'filterChanged'
-        //   },
-        //   startAfterDate: {
-        //     type: String,
-        //     observer: 'dateChanged'
-        //   },
-        //   startBeforeDate: {
-        //     type: String,
-        //     observer: 'dateChanged'
-        //   },
-        //   endBeforeDate: {
-        //     type: String,
-        //     observer: 'dateChanged'
-        //   },
-        //   endAfterDate: {
-        //     type: String,
-        //     observer: 'dateChanged'
-        //   },
-        //   visibleRange: {
-        //     type: Array,
-        //     observer: 'rangeChanged'
-        //   },
-        //   pageNumber: {
-        //     type: Number
-        //   },
-        //   route: {
-        //     type: Object
-        //   },
-        //   params: {
-        //     type: Array,
-        //     value: function() {
-        //       return [
-        //         {
-        //           qName: 'qs',
-        //           propName: 'qs',
-        //           xf: identity
-        //         },
-        //         {
-        //           qName: 'sort',
-        //           propName: 'sortOrder',
-        //           xf: identity
-        //         },
-        //         {
-        //           qName: 'sectors',
-        //           propName: 'selectedSectors',
-        //           xf: compose(join('|'), map(prop('value')))
-        //         },
-        //         {
-        //           qName: 'offices',
-        //           propName: 'selectedOffices',
-        //           xf: compose(join('|'), map(prop('id')))
-        //         },
-        //         {
-        //           qName: 'status',
-        //           propName: 'selectedStatuses',
-        //           xf: compose(join('|'), map(prop('value')))
-        //         },
-        //         {
-        //           qName: 'startAfter',
-        //           propName: 'startAfterDate',
-        //           xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
-        //         },
-        //         {
-        //           qName: 'endBefore',
-        //           propName: 'endBeforeDate',
-        //           xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
-        //         },
-        //         {
-        //           qName: 'startBefore',
-        //           propName: 'startBeforeDate',
-        //           xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
-        //         },
-        //         {
-        //           qName: 'endAfter',
-        //           propName: 'endAfterDate',
-        //           xf: (xs) => this.prettyDate(xs, 'YYYY-MM-DD')
-        //         }
-        //       ];
-        //     }
-        //   }
-        };
+          csvDownloadUrl: {
+            type: String,
+            notify: true
+          }
+        }
       }
 
       static get observers() {
         return [
-          '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate)',
+          // '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate)',
           '_tabChanged(routeData.partnershipsTab, active)'
         ];
       }
@@ -439,63 +160,49 @@
         }
       }
 
-      rangeChanged() {
-        if (this.currentFilter !== 'custom') {
-          this.$.csoListTemplate.items = this.presetFilters[this.currentFilter-1].filteredPartnerships.slice(
-              this.visibleRange[0]-1,
-              this.visibleRange[1]
-            );
-        } else if (this.filteredPartnerships) {
-          this.$.csoListTemplate.items = this.filteredPartnerships.slice(
-              this.visibleRange[0]-1,
-              this.visibleRange[1]
-            );
-        }
-      }
+      // _updateUrl(query, pageNumber, pageSize, sortOrder, requiredDataLoaded,
+      //   initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate) {
+      //     if (!this.initComplete || !this.requiredDataLoaded) {
+      //     return;
+      //   }
+      //   this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
+      //   const qs = this.buildQueryString();
+      //   const currentRoute = this.route.prefix + this.route.path;
+      //   // log(selectedSectors, selectedOffices, selectedStatuses);
+      //   // debugger;
+      //   if (qs !== null) {
+      //     this.updateAppState(currentRoute, qs, true);
+      //     if (this.requiredDataLoaded) {
+      //       this._filterPartnershipsData();
+      //     }
+      //   } else {
+      //     if (location.search === '') {
+      //       this.updateAppState(currentRoute, qs, false);
+      //     }
+      //     if (this.forceDataRefresh && this.requiredDataLoaded) {
+      //       this._filterPartnershipsData();
+      //       this.set('forceDataRefresh', false);
+      //     }
+      //   }
+      // }
 
-      _updateUrl(query, pageNumber, pageSize, sortOrder, requiredDataLoaded,
-        initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate) {
-          if (!this.initComplete || !this.requiredDataLoaded) {
-          return;
-        }
-        this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
-        const qs = this.buildQueryString();
-        const currentRoute = this.route.prefix + this.route.path;
-        // log(selectedSectors, selectedOffices, selectedStatuses);
-        // debugger;
-        if (qs !== null) {
-          this.updateAppState(currentRoute, qs, true);
-          if (this.requiredDataLoaded) {
-            this._filterPartnershipsData();
-          }
-        } else {
-          if (location.search === '') {
-            this.updateAppState(currentRoute, qs, false);
-          }
-          if (this.forceDataRefresh && this.requiredDataLoaded) {
-            this._filterPartnershipsData();
-            this.set('forceDataRefresh', false);
-          }
-        }
-      }
-
-      _buildCsvDownloadUrl() {
-        let query;
-        if (this.currentFilter === 'custom') {
-          query = this.params.reduce((acc, { qName, propName, xf }) => {
-            return isEmpty(this[propName]) ? acc
-              : `${acc}${qName}=${xf(this[propName])}&`;
-          }, '');
-          query = query.split('|').join(',');
-        } else {
-          let pks = this.presetFilters[this.currentFilter-1].filteredPartnerships.map(
-            (partner) => prop('intervention_id', partner)
-          );
-          pks.join(',');
-          query = `pk=${pks}&`;
-        }
-        return `${this.getEndpoint('cso_dashboard').url}/?${query}format=csv`;
-      }
+      // _buildCsvDownloadUrl() {
+      //   let query;
+      //   if (this.currentFilter === 'custom') {
+      //     query = this.params.reduce((acc, { qName, propName, xf }) => {
+      //       return isEmpty(this[propName]) ? acc
+      //         : `${acc}${qName}=${xf(this[propName])}&`;
+      //     }, '');
+      //     query = query.split('|').join(',');
+      //   } else {
+      //     let pks = this.presetFilters[this.currentFilter-1].filteredPartnerships.map(
+      //       (partner) => prop('intervention_id', partner)
+      //     );
+      //     pks.join(',');
+      //     query = `pk=${pks}&`;
+      //   }
+      //   return `${this.getEndpoint('cso_dashboard').url}/?${query}format=csv`;
+      // }
 
       _toggleDashView({ target }) {
         let pages = this.$.partnershipsPages;
