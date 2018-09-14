@@ -8,6 +8,7 @@
 <link rel="import" href="../../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../../styles/grid-layout-styles.html">
 <link rel="import" href="../../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
+<link rel="import" href="../../../../../bower_components/iron-icons/maps-icons.html">
 
 <link rel="import" href="../../../styles/dash-icons.html">
 
@@ -184,7 +185,7 @@
       data-table-row.alert-row,
       .alert-row div[slot="row-data"],
       .alert-row div[slot="row-data"] data-table-column {
-        height: 36px;
+        height: 12px;
         width: 100%;
       }
 
@@ -196,7 +197,7 @@
         display: flex;
         flex-wrap: wrap;
         flex-direction: column;
-        height: 148px;
+        height: 24px;
       }
 
       .filter-name {
@@ -338,6 +339,27 @@
         padding-right: 4px;
       }
 
+      .map-icon {
+        color: var(--dark-icon-color);
+        position: absolute;
+        right: 24px;
+        bottom: 24px;
+        display: none;
+        cursor: pointer;
+      }
+
+      data-table-row:hover .last-pv {
+        display: none;
+      }
+
+      data-table-row:hover .map-icon {
+        display: block;
+      }
+
+      .blue-text {
+        color: #24a0fc;
+      }
+
       /* paper-button.detailed-assurance {
         border-radius: 50px;
         background: rgb(255, 255, 255);
@@ -365,8 +387,8 @@
                                 on-partnerships-dashboard-loaded="_requiredDataLoaded"
                                 list-data-path="filteredPartnershipsDashboard"
                                 preset-filters="{{presetFilters}}"
-                                >
-    </partnership-dashboard-data>
+                                all-partners="{{allPartners}}"
+    ></partnership-dashboard-data>
 
     <div class="paper-material list-panel" elevation="1">
       <span class="alerts-title">Alerts </span><span class="alerts-comment">(click to filter the list)</span>
@@ -377,7 +399,7 @@
           <div on-tap="_showPresetFilter" class="alert-row" no-collapse>
             <div class="divider"></div>
             <div slot="row-data">
-              <div class="col-1 alerts-total">[[presets.filteredPartnerships.length]]</div>
+              <div class="col-1 alerts-total">[[presets.filteredPartnershipsDashboard.length]]</div>
               <div class="col-10 filter-name">[[presets.title]] <i>[[presets.status]]</i></div>
               <paper-icon-button class="remove-field remove red clear-button col-1"
                                 icon="clear">
@@ -509,7 +531,7 @@
 
       <template id="partnerListTemplate"
                 items="{{filteredPartnershipsDashboard}}"
-                
+                filter="{{computeFilter(currentFilter)}}"
                 is="dom-repeat"
                 as="row">
         <data-table-row no-collapse>
@@ -525,23 +547,24 @@
                   <paper-tooltip fit-to-visible-bounds>"Partner marked for deletion"</paper-tooltip>
                 </div>
               </div>
-              <a href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details"
+              <a href="[[baseSite]]/pmp/partners/[[row.id]]/details"
                 app-name="pmp"
                 page="partners"
-                id="[[row.partner_id]]/details"
+                id="[[row.id]]/details"
                 class="cso-title">
-                  [[row.partner_name]]
+                  [[row.name]]
                   <paper-tooltip fit-to-visible-bounds>
-                    [[row.partner_name]]
+                    [[row.name]]
                   </paper-tooltip>
               </a>
             </div>
             <div class="col-data col-1 sections">
-              <template is="dom-repeat"
-                        items="{{commaSplit(row.offices_names)}}">
+              <!-- <template is="dom-repeat"
+                        items="{{dividerSplit(row.locations)}}">
                 [[item]]
                 <br>
-              </template>
+              </template> -->
+              -
             </div>
             <div class="col-data col-1 sections">
               <span class="pad-top-4">
@@ -554,23 +577,32 @@
             </div>
             <div class="col-6 layout horizontal">
               <span class="col-3 right-align">
-                cash_current_cp
+                [[row.total_ct_cp]]
               </span>
               <span class="col-3 right-align">
-                cash_current_year
+                [[row.total_ct_ytd]]
               </span>
               <span class="col-3 right-align">
-                outstanding_DCT_6
+                -
+                <!-- [[row.outstanding_dct_amount_6_to_9_months_usd]] -->
               </span>
               <span class="col-3 right-align">
-                outstanding_DCT_9
+                -
+                <!-- [[row.outstanding_dct_amount_more_than_9_months_usd]] -->
               </span>
             </div>
-            <div class="col-1 right-align">
-              action_pts
+            <div class="col-1 right-align blue-text">
+              [[row.action_points]]
             </div>
-            <div class="col-1 col-data right-align">
+            <!-- <template is="dom-if" if="{{!mouseOver}}"></template> -->
+            <!-- <div class="col-1 col-data right-align">
               [[displayNonZero(row.days_last_pv)]]
+            </div> -->
+            <div class="col-1 col-data right-align">
+              <span class="last-pv">[[displayNonZero(row.days_last_pv)]]</span>
+              <iron-icon on-click="goToMaps"
+                             class="map-icon"
+                             icon="maps:map"></iron-icon>
             </div>
           </div>
         </data-table-row>
@@ -622,6 +654,15 @@
             notify: true,
             observer: 'rangeChanged'
           },
+          allPartners: {
+            type: Array,
+            value: [],
+            observer: '_initListFilters'
+          },
+          allPartnersSet: {
+            type: Boolean,
+            value: false
+          },
           currentFilter: {
             type: String,
             value: 'custom'
@@ -649,16 +690,23 @@
             type: Array,
             statePath: 'sectors'
           },
-          costCentres: {
-            type: Array
-          },
+          // offices: {
+          //   type: Array,
+          //   statePath: 'offices'
+          // },
+          // selectedOffices: {
+          //   type: Array,
+          //   observer: 'filterChanged',
+          //   value: []
+          // },
           selectedSectors: {
             type: Array,
             observer: 'filterChanged'
           },
-          selectedPartner: {
-            type: String,
-            observer: 'filterChanged'
+          selectedPartners: {
+            type: Array,
+            observer: 'filterChanged',
+            value: []
           },
           selectedCostCentres: {
             type: Array,
@@ -679,6 +727,10 @@
           route: {
             type: Object
           },
+          mouseOver: {
+            type: Boolean,
+            value: false
+          },
           params: {
             type: Array,
             value: function() {
@@ -698,6 +750,16 @@
                   propName: 'selectedSectors',
                   xf: compose(join('|'), map(prop('value')))
                 },
+                {
+                  qName: 'partners',
+                  propName: 'selectedPartners',
+                  xf: compose(join('|'), map(prop('value')))
+                },
+                // {
+                //   qName: 'offices',
+                //   propName: 'selectedOffices',
+                //   xf: compose(join('|'), map(prop('value')))
+                // },
               ];
             }
           }
@@ -706,11 +768,16 @@
 
       static get observers() {
         return [
-          '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors)',
+          '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedPartners, selectedOffices)',
           '_init(active, sectors, requiredDataLoaded)',
           // '_tabChanged(routeData.partnershipsTab, active)'
         ];
       }
+
+      // ready() {
+      //   super.ready()
+      //   row = document.
+      // }
 
 
       _init(active, sectors, requiredDataLoaded) {
@@ -724,6 +791,7 @@
         this.set('pageSize', params.size ? parseInt(params.size) : 10);
         this.set('sortOrder', params.sort ? params.sort : 'asc');
         this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
+        this.set('selectedPartners', params.partners ? this._setSelectedPartners(params.partners) : []);
         
         this._initListFilters();
         this.set('initComplete', true);
@@ -731,49 +799,53 @@
       }
 
       _initListFilters() {
-        this.initListFiltersData([
-          {
-            filterName: 'Partner Name',
-            type: 'esmm',
-            optionValue: 'value',
-            optionLabel: 'label',
-            selectionOptions: this.filteredPartnershipsDashboard,
-            alreadySelected: [],
-            path: 'selectedPartner',
-            selected: false
-          },
-          {
-            filterName: 'Section/Cluster',
-            type: 'esmm',
-            optionValue: 'value',
-            optionLabel: 'label',
-            selectionOptions: this.sectors,
-            alreadySelected: [],
-            path: 'selectedSectors',
-            selected: false
-          },
-          {
-            filterName: 'Cost Centre',
-            type: 'esmm',
-            optionValue: 'value',
-            optionLabel: 'label',
-            selectionOptions: this.costCentres,
-            alreadySelected: [],
-            path: 'selectedCostCentres',
-            selected: false
-          },
-          // {
-          //   filterName: 'Outstanding DCT >9?',
-          //   type: 'esmm',
-          //   optionValue: 'value',
-          //   optionLabel: 'label',
-          //   selectionOptions: this.costCentres,
-          //   alreadySelected: [],
-          //   path: 'selectedOutstanding',
-          //   selected: false
-          // }
-        ]);
-
+        if (!this.allPartnersSet) {
+          this.initListFiltersData([
+            {
+              filterName: 'Partner Name',
+              type: 'esmm',
+              optionValue: 'id',
+              optionLabel: 'name',
+              selectionOptions: this.allPartners,
+              alreadySelected: [],
+              path: 'selectedPartners',
+              selected: false
+            },
+            {
+              filterName: 'Section/Cluster',
+              type: 'esmm',
+              optionValue: 'value',
+              optionLabel: 'label',
+              selectionOptions: this.sectors,
+              alreadySelected: [],
+              path: 'selectedSectors',
+              selected: false
+            },
+            // {
+            //   filterName: 'Cost Centre',
+            //   type: 'esmm',
+            //   optionValue: 'id',
+            //   optionLabel: 'name',
+            //   selectionOptions: this.offices,
+            //   alreadySelected: [],
+            //   path: 'selectedOffices',
+            //   selected: false
+            // },
+            // {
+            //   filterName: 'Outstanding DCT >9?',
+            //   type: 'esmm',
+            //   optionValue: 'value',
+            //   optionLabel: 'label',
+            //   selectionOptions: this.costCentres,
+            //   alreadySelected: [],
+            //   path: 'selectedOutstanding',
+            //   selected: false
+            // },
+          ]);
+        }
+        if (this.allPartners.length) {
+          this.set('allPartnersSet', true)
+        }
       }
 
       _updateSelectedFiltersValues() {
@@ -784,6 +856,10 @@
             {
               filterName: 'Section/Cluster',
               selectedValue: map(prop('value'), this.selectedSectors)
+            },
+            {
+              filterName: 'Partner Name',
+              selectedValue: map(prop('name', this.selectedPartners))
             }
           ];
           this.updateShownFilters(filtersValues);
@@ -791,6 +867,7 @@
       }
 
       rangeChanged() {
+        this._initListFilters
         if (this.currentFilter !== 'custom') {
           this.$.partnerListTemplate.items = this.presetFilters[this.currentFilter-1].filteredPartnershipsDashboard.slice(
               this.visibleRange[0]-1,
@@ -805,7 +882,7 @@
       }
 
       _updateUrl(query, pageNumber, pageSize, sortOrder, requiredDataLoaded,
-        initComplete, selectedSectors) {
+        initComplete, selectedSectors, selectedPartners) {
           if (!this.initComplete || !this.requiredDataLoaded) {
           return;
         }
@@ -842,6 +919,8 @@
         this.$.partnershipsDashboard.query({
           searchString: this.qs,
           sectors: map(prop('label'), this.selectedSectors),
+          name: this.selectedPartners,
+          // costCentre: this.selectedOffices,
           order: this.sortOrder,
           pageSize: this.pageSize,
           pageNumber: this.pageNumber
@@ -872,6 +951,21 @@
         return [];
       }
 
+      // _setSelectedPartners(partnersStr) {
+      //   const partnersArr = partnersStr.split('|');
+      //   if (!isEmpty(partnersArr)) {
+      //     const selectedPartners = this.partners.filter(p => {
+      //       return partnersArr.indexOf(p.value) > -1;
+      //     });
+      //     return selectedPartners;
+      //   }
+      //   return [];
+      // }
+
+      goToMaps(event) {
+        let partnerId = event.model.__data.row.id
+        window.location = `/dash/map?&partners=${partnerId}`
+      }
       _getDisbPercent(perc) {
         return perc === '0.00' ? '0'
           : perc === '!Error! (currencies do not match)' ? 'N/A'
@@ -907,6 +1001,10 @@
       _toggleDashView({ target }) {
         let pages = this.$.partnershipsPages;
         pages.selectNext();
+      }
+
+      dividerSplit(string) {
+        return !!string ? string.split('|') : ['-']
       }
 
       _showPresetFilter(event) {
@@ -947,19 +1045,15 @@
 
       computeFilter(filter) {
         return function(row) {
-          let eq = (stts) => stts === row.status;
           switch(filter) {
             case 'custom':
               return true;
               break;
             case '1':
-              return row.status === 'signed'
-                && (Date.parse(row.start) < new Date().getTime())
-                && !row.frs_total_frs_amt;
+              return row.alert_no_recent_pv === true
               break;
             case '2':
-              return ['active', 'ended', 'suspended'].some(eq)
-                && (row.unicef_cash !== row.frs_total_frs_amt);
+              return row.alert_no_pv === true
               break;
           }
         };

@@ -227,7 +227,6 @@
                                active="[[overviewActive]]"
                                total-results="{{totalResults}}"
                                list-data-path="filteredPartnerships"
-                               preset-filters="{{presetFilters}}"
                                query-params="{{queryParams}}"
                                route="{{route}}"
         ></partnerships-overview>
@@ -239,7 +238,6 @@
                        list-data-path="filteredPartnershipsDashboard"
                        query-params="{{queryParams}}"
                        route="{{route}}"
-                       preset-filters="{{presetFilters}}"
         ></cso-dashboard>
       </div>
     </iron-pages>
@@ -460,10 +458,11 @@
           if (!this.initComplete || !this.requiredDataLoaded) {
           return;
         }
-
         this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
         const qs = this.buildQueryString();
         const currentRoute = this.route.prefix + this.route.path;
+        // log(selectedSectors, selectedOffices, selectedStatuses);
+        // debugger;
         if (qs !== null) {
           this.updateAppState(currentRoute, qs, true);
           if (this.requiredDataLoaded) {
@@ -481,11 +480,20 @@
       }
 
       _buildCsvDownloadUrl() {
-        let query = this.params.reduce((acc, { qName, propName, xf }) => {
-          return isEmpty(this[propName]) ? acc
-            : `${acc}${qName}=${xf(this[propName])}&`;
-        }, '');
-        query = query.split('|').join(',');
+        let query;
+        if (this.currentFilter === 'custom') {
+          query = this.params.reduce((acc, { qName, propName, xf }) => {
+            return isEmpty(this[propName]) ? acc
+              : `${acc}${qName}=${xf(this[propName])}&`;
+          }, '');
+          query = query.split('|').join(',');
+        } else {
+          let pks = this.presetFilters[this.currentFilter-1].filteredPartnerships.map(
+            (partner) => prop('intervention_id', partner)
+          );
+          pks.join(',');
+          query = `pk=${pks}&`;
+        }
         return `${this.getEndpoint('cso_dashboard').url}/?${query}format=csv`;
       }
 

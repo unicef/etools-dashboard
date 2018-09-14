@@ -184,7 +184,7 @@
       data-table-row.alert-row,
       .alert-row div[slot="row-data"],
       .alert-row div[slot="row-data"] data-table-column {
-        height: 36px;
+        height: 12px;
         width: 100%;
       }
 
@@ -364,7 +364,8 @@
                       total-results="{{totalResults}}"
                       on-partnerships-loaded="_requiredDataLoaded"
                       list-data-path="filteredPartnerships"
-                      preset-filters="{{presetFilters}}">
+                      preset-filters="{{presetFilters}}"
+                      all-partners="{{allPartners}}">
     </partnership-data>
 
     <div class="paper-material list-panel" elevation="1">
@@ -716,6 +717,10 @@
             notify: true,
             observer: 'rangeChanged'
           },
+          // allPartners: {
+          //   type: Array,
+          //   notify: true,
+          // },
           currentFilter: {
             type: String,
             value: 'custom'

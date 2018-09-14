@@ -64,6 +64,10 @@
             readOnly: true,
             notify: true
           },
+          allPartners: {
+            type: Array,
+            notify: true
+          },
           dataLoadedEventName: {
             type: String,
             value: 'partnerships-dashboard-loaded'
@@ -84,10 +88,9 @@
             type: Object,
             value: function() {
               return {
-                searchString: (qs, partner) => qs.length ? _.includes(partner.partner_name.toLowerCase(), qs.toLowerCase()) : true,
+                searchString: (qs, partner) => qs.length ? _.includes(partner.name.toLowerCase(), qs.toLowerCase()) : true,
                 sectors: (sectors, partner) => sectors.length ? !!_.intersection(sectors, [_.trim(partner.sections)]).length : true,
-                costCentre: (costCentre, partner) => costCentre.length ? _.includes(partner.cost_centre, costCentre) : true,
-                outstanding: (outstanding, partner) => outstanding ? !!partner.outstanding : true
+                name: (name, partner) => name.length ? any(equals(partner), name) : true,
               };
             }
           },
@@ -95,8 +98,8 @@
             type: Array,
             notify: true,
             value: [
-              { total: 0, id: '1', title: 'Partners with no recent Programmatic Visits (in the past 180 days)', status: '', filteredPartnerships: [] },
-              { total: 0, id: '2', title: 'Partners with no Programmatic Visits', status: '', filteredPartnerships: [] },
+              { total: 0, id: '1', title: 'Partners with no recent Programmatic Visits (in the past 180 days)', status: '', filteredPartnershipsDashboard: [] },
+              { total: 0, id: '2', title: 'Partners with no Programmatic Visits', status: '', filteredPartnershipsDashboard: [] },
             ]
           }
         };
@@ -118,18 +121,16 @@
       createPresetFilters(results) {
         return [
           results.clone().filter(
-            (partner) => (partner.status === 'signed')
-              && (Date.parse(partner.start) < new Date().getTime())
-              && !partner.frs_total_frs_amt
+            partner => partner.alert_no_recent_pv === true
           ),
           results.clone().filter(
-            (partner) => (partner.status === 'active' || partner.status === 'ended' || partner.status === 'suspended')
-              && (partner.unicef_cash !== partner.frs_total_frs_amt)
+            partner => partner.alert_no_pv === true
           ),
         ];
       }
 
       query(params) {
+        log(params)
         const { order } = params;
         const predKeys = keys(this.predicates);
         EtoolsDashboard.DexieDb.transaction(
@@ -137,6 +138,7 @@
           EtoolsDashboard.DexieDb.partnerships_dashboard,
           () => {
             let queryResult = EtoolsDashboard.DexieDb.partnerships_dashboard.orderBy('name');
+            let allPartners = queryResult.clone();
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
@@ -152,24 +154,25 @@
             return Dexie.Promise.all([
               queryResult.count(),
               queryResult.clone().toArray(),
-              // ...(this.presetResults.map((res) => res.toArray()))
+              allPartners.clone().toArray(),
+              ...(this.presetResults.map((res) => res.toArray()))
             ]);
           }).then(countAndResult => {
-            log(countAndResult)
             this.fireEvent('global-loading', { loadingSource: 'partnership-dashboard-data' });
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnershipsDashboard(countAndResult[1]);
+            this.set('allPartners', countAndResult[2]);
             // check if preset filters were populated already
-            // if (!this.presetsLoaded) {
-            //   for (let i = 2; i < (this.presetResults.length + 2); i++) {
-            //     this.set(
-            //       `presetFilters.${i-2}.filteredPartnerships`,
-            //       countAndResult[i]
-            //     );
-            //     this.set(`presetFilters.${i-2}.total`, countAndResult[i].length);
-            //   }
-            //   this.set('presetsLoaded', true);
-            // }
+            if (!this.presetsLoaded) {
+              for (let i = 3; i < (this.presetResults.length + 3); i++) {
+                this.set(
+                  `presetFilters.${i-3}.filteredPartnershipsDashboard`,
+                  countAndResult[i]
+                );
+                this.set(`presetFilters.${i-3}.total`, countAndResult[i].length);
+              }
+              this.set('presetsLoaded', true);
+            }
           }).catch((err) => console.error('Error querying partnerships-dash: ', err));
       }
     }
