@@ -4,6 +4,7 @@
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
 <link rel="import" href="../../../styles/filter-styles.html">
+<link rel="import" href="../../../styles/partnerships-styles.html">
 <link rel="import" href="../../../styles/page-layout-styles.html">
 <link rel="import" href="../../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../../styles/grid-layout-styles.html">
@@ -46,7 +47,7 @@
 <dom-module id="partnerships-overview">
   <template>
     <style include="shared-styles grid-layout-styles iron-flex page-layout-styles 
-                    paper-material-styles list-styles filter-styles">
+                    paper-material-styles list-styles filter-styles partnerships-styles">
   
       .no-header-line {
         --header-bottom-line: none;
@@ -79,45 +80,6 @@
 
       data-table-header {
         height: 95px;
-      }
-
-      #query {
-        padding-left: 24px;
-      }
-
-      .right-align {
-        text-align: right;
-      }
-
-      div.sections,
-      span.sections {
-        height: 48px;
-        white-space: normal;
-        overflow-y: auto;
-        display: flex;
-        align-items: center;
-        -ms-overflow-style: -ms-autohiding-scrollbar;
-      }
-
-      div.sections span.pad-top-4 {
-        padding-right: 0;
-      }
-
-      paper-icon-item {
-        --paper-item-icon-width: 32px;
-      }
-
-      paper-menu-button {
-        padding: 0;
-      }
-
-      div.sections>span {
-        vertical-align: middle;
-        line-height: normal
-      }
-
-      div div span {
-        align-items: center;
       }
 
       .blue-col {
@@ -163,19 +125,11 @@
         padding: 0;
       }
 
-      div.display-flex {
-        display: flex;
-      }
-
       .status {
         padding-left: 8px;
       }
 
-      .divider {
-        background-color: rgba(0, 0, 0, 0.3);
-        height: 1px;
-      }
-
+     
       data-table-row.alert-row,
       .alert-row div[slot="row-data"],
       .alert-row div[slot="row-data"] data-table-column {
@@ -282,10 +236,6 @@
         display: inline-flex;
       }
 
-      div[slot="row-data"] {
-        margin-top: 0;
-        margin-bottom: 0;
-      }
 
       @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
         data-table-header {
@@ -785,13 +735,13 @@
               ];
             }
           }
-        }
+        };
       }
 
       static get observers() {
         return [
           '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate, active)',
-          '_init(active, sectors, statuses, offices, requiredDataLoaded)',
+          '_init(active, sectors, statuses, offices, requiredDataLoaded)'
         ];
       }
 
@@ -1162,6 +1112,6 @@
       }
     }
 
-    window.customElements.define(PartnershipsOverview.is, PartnershipsOverview);  
+    window.customElements.define(PartnershipsOverview.is, PartnershipsOverview);
   </script>
 </dom-module>

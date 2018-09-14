@@ -4,6 +4,7 @@
 <link rel="import" href="../../../styles/shared-styles.html">
 <link rel="import" href="../../../styles/list-styles.html">
 <link rel="import" href="../../../styles/filter-styles.html">
+<link rel="import" href="../../../styles/partnerships-styles.html">
 <link rel="import" href="../../../styles/page-layout-styles.html">
 <link rel="import" href="../../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../../../styles/grid-layout-styles.html">
@@ -40,51 +41,9 @@
 <dom-module id="cso-dashboard">
   <template>
     <style include="shared-styles grid-layout-styles iron-flex page-layout-styles 
-                    paper-material-styles list-styles filter-styles">
+                    paper-material-styles list-styles filter-styles partnerships-styles">
 
-      #query {
-        padding-left: 24px;
-      }
-
-      .right-align {
-        text-align: right;
-      }
-
-      div.sections,
-      span.sections {
-        height: 48px;
-        white-space: normal;
-        overflow-y: auto;
-        display: flex;
-        align-items: center;
-        -ms-overflow-style: -ms-autohiding-scrollbar;
-      }
-
-      div.sections span.pad-top-4 {
-        padding-right: 0;
-      }
-
-      paper-icon-item {
-        --paper-item-icon-width: 32px;
-      }
-
-      paper-menu-button {
-        padding: 0;
-      }
-
-      div.sections>span {
-        vertical-align: middle;
-        line-height: normal
-      }
-
-      div div span {
-        align-items: center;
-      }
-
-      .divider {
-        background-color: rgba(0, 0, 0, 0.3);
-        height: 1px;
-      }
+     
 
       data-table-row.alert-row,
       .alert-row div[slot="row-data"],
@@ -152,7 +111,7 @@
         color: var(--dark-icon-color);
         position: absolute;
         right: 24px;
-        bottom: 24px;
+        transform: translateY(-50%);
         display: none;
         cursor: pointer;
       }
@@ -511,17 +470,17 @@
                   qName: 'name',
                   propName: 'selectedPartners',
                   xf: compose(join('|'), map(prop('name')))
-                },
+                }
               ];
             }
           }
-        }
+        };
       }
 
       static get observers() {
         return [
           '_updateUrl(qs, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded, initComplete, selectedSectors, selectedPartners, selectedOffices, active)',
-          '_init(active, sectors, requiredDataLoaded)',
+          '_init(active, sectors, requiredDataLoaded)'
         ];
       }
 
@@ -538,7 +497,7 @@
         this.set('orderBy', params.orderBy || '');
         this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
         this.set('selectedPartners', params.partners ? this._setSelectedPartners(params.partners) : []);
-        
+    
         this._initListFilters();
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
@@ -566,7 +525,7 @@
               alreadySelected: [],
               path: 'selectedSectors',
               selected: false
-            },
+            }
             // {
             //   filterName: 'Cost Centre',
             //   type: 'esmm',
@@ -590,7 +549,7 @@
           ]);
         }
         if (this.allPartners.length) {
-          this.set('allPartnersSet', true)
+          this.set('allPartnersSet', true);
         }
       }
 
@@ -613,7 +572,7 @@
       }
 
       rangeChanged() {
-        this._initListFilters
+        this._initListFilters;
         if (this.currentFilter !== 'custom') {
           this.$.partnerListTemplate.items = this.presetFilters[this.currentFilter-1].filteredPartnershipsDashboard.slice(
               this.visibleRange[0]-1,
@@ -627,7 +586,7 @@
         }
       }
 
-      _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy,requiredDataLoaded,
+      _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded,
         initComplete, selectedSectors, selectedPartners) {
           if (!this.initComplete || !this.requiredDataLoaded) {
           return;
@@ -699,12 +658,12 @@
       }
 
       goToMaps(event) {
-        let partnerId = event.model.__data.row.id
-        window.location = `/dash/map?&partners=${partnerId}`
+        let partnerId = event.model.__data.row.id;
+        window.location = `/dash/map?&partners=${partnerId}`;
       }
 
       dividerSplit(string) {
-        return !!string ? string.split('|') : ['-']
+        return string ? string.split('|') : ['-'];
       }
 
       _showPresetFilter(event) {
@@ -750,16 +709,16 @@
               return true;
               break;
             case '1':
-              return row.alert_no_recent_pv === true
+              return row.alert_no_recent_pv === true;
               break;
             case '2':
-              return row.alert_no_pv === true
+              return row.alert_no_pv === true;
               break;
           }
         };
       }
     }
 
-    window.customElements.define(CsoDashboard.is, CsoDashboard);  
+    window.customElements.define(CsoDashboard.is, CsoDashboard);
   </script>
 </dom-module>
