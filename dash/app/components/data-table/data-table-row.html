@@ -28,7 +28,7 @@
         @apply --layout-horizontal;
         @apply --layout-center;
         @apply --custom-style;
-        height: 48px;
+        /* height: 48px; */
         padding-right: 24px;
         font-size: 13px;
         color: var(--primary-text-color, rgba(0, 0, 0, 0.87));
@@ -56,6 +56,10 @@
         padding: 15px 24px 15px 72px;
         background-color: var(--medium-theme-background-color);
         border-top: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
+      }
+
+      *[slot="row-data-details"] {
+          @apply --row-data-details;
       }
     </style>
 
@@ -91,11 +95,11 @@
             type: Boolean,
             value: false
           },
-          noCollapse : {
+          noCollapse: {
             type: Boolean,
             observer: '_noCollapse'
           }
-        }
+        };
       }
 
       _toggleRowDetails() {
@@ -107,10 +111,10 @@
         this.$.details.style.display = 'none';
         this.$.wrapper.style.padding = '0 24px';
         this.$.iconWrapper.style.display = 'none';
-        this.updateStyles({['--hover-setting']: 'background : transparent'});
+        this.updateStyles({ ['--hover-setting']: 'background : transparent' });
       }
     }
 
-    window.customElements.define(DataTableRow.is, DataTableRow)
+    window.customElements.define(DataTableRow.is, DataTableRow);
   </script>
 </dom-module>

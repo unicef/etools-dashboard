@@ -81,7 +81,13 @@
           setCountryProgrammes(data = []) {
             return {
               type: 'SET_COUNTRY_PROGRAMMES',
-              countryProgrammes: map(pick(['id', 'name', 'active', 'special', 'invalid']), data)
+              countryProgrammes: map(
+                compose(({ id, name, active, special, invalid })=>({
+                active, special, invalid,
+                label: name,
+                value: id
+              }),
+              pick(['id', 'name', 'active', 'special', 'invalid'])), data)
             };
           },
 
@@ -139,6 +145,16 @@
               type: 'SET_PARTNERSHIPS',
               partnerships: map(
                 pick(['id', 'title', 'number', 'total_unicef_budget', 'budget_currency']),
+                data
+              )
+            };
+          },
+
+          setPartnershipsDashboard(data = []) {
+            return {
+              type: 'SET_PARTNERSHIPS_DASHBOARD',
+              partnerships: map(
+                pick(['id', 'name', 'sectors', 'locations', 'total_ct_cp', 'action_points', 'total_ct_ytd']),
                 data
               )
             };
