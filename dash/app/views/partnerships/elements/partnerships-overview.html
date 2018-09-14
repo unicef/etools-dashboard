@@ -52,11 +52,6 @@
         --header-bottom-line: none;
       }
 
-      .by-type {
-        padding: 0;
-        @apply --layout-horizontal;
-      }
-
       span.title {
         color: var(--accent-color);
         font-weight: 500;
@@ -283,59 +278,8 @@
         text-overflow: ellipsis;
       }
 
-      .cso-title {
-        display: block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding-right: 8px;
-      }
-
       .partner-icons-group {
         display: inline-flex;
-      }
-
-      .view-toggle {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        padding-bottom: 12px;
-      }
-
-      .curved-left {
-        border-radius: 50px 0 0 50px;
-        background: rgb(255, 255, 255);
-        height: 36px;
-        margin-right: 0;
-        padding-right: 1em;
-        padding-left: 16px;
-        cursor: pointer;
-      }
-
-      .curved-right {
-        border-radius: 0 50px 50px 0;
-        background: rgb(216, 216, 216);
-        height: 36px;
-        margin-left: 0;
-        padding-left: 1em;
-        padding-right: 16px;
-        cursor: pointer;
-        color: rgba(0, 0, 0, 0.54);
-      }
-
-      .dark-button {
-        background: rgb(216, 216, 216);
-        color: rgba(0, 0, 0, 0.54);
-      }
-
-      .light-button {
-        background: rgb(255, 255, 255);
-        color: rgba(0, 0, 0, 0.87);
-      }
-
-      iron-icon[name="overview"],
-      iron-icon[name="csoDash"] {
-        padding-right: 4px;
       }
 
       div[slot="row-data"] {
@@ -716,10 +660,6 @@
             notify: true,
             observer: 'rangeChanged'
           },
-          // allPartners: {
-          //   type: Array,
-          //   notify: true,
-          // },
           currentFilter: {
             type: String,
             value: 'custom'
@@ -852,7 +792,6 @@
         return [
           '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate, active)',
           '_init(active, sectors, statuses, offices, requiredDataLoaded)',
-          // '_tabChanged(routeData.partnershipsTab, active)'
         ];
       }
 
@@ -990,19 +929,6 @@
           ];
           this.updateShownFilters(filtersValues);
         });
-      }
-
-      _tabChanged(tab, active) {
-        this.set('active', active);
-        if (!tab || !active) { return; }
-        if (tab === 'overview') {
-          this.$.overview.classList.add('dark-button');
-          this.$.csoDash.classList.add('light-button');
-        } else {
-          this.updateAppState(this.route.path);
-          this.$.overview.classList.remove('dark-button');
-          this.$.csoDash.classList.remove('light-button');
-        }
       }
 
       rangeChanged() {
@@ -1151,11 +1077,6 @@
 
       _eitherTrue(flag1, flag2) {
         return flag1 || flag2 ? true : false;
-      }
-
-      _toggleDashView({ target }) {
-        let pages = this.$.partnershipsPages;
-        pages.selectNext();
       }
 
       _showPresetFilter(event) {

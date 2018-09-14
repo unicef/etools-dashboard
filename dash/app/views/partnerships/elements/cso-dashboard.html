@@ -10,8 +10,6 @@
 <link rel="import" href="../../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
 <link rel="import" href="../../../../../bower_components/iron-icons/maps-icons.html">
 
-<link rel="import" href="../../../styles/dash-icons.html">
-
 <link rel="import" href="../../../config/config.html">
 
 <link rel="import" href="../../../components/data-table/data-table-header.html">
@@ -20,18 +18,15 @@
 <link rel="import" href="../../../components/data-table/data-table-footer.html">
 
 <link rel="import" href="../../../../../bower_components/paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../../../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../../../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../../../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../../../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../../../../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../../../../../bower_components/app-route/app-route.html">
 
 <link rel="import"
       href="../../../../../bower_components/etools-dropdown/etools-dropdown-multi.html">
-<link rel="import" href="../../../../../bower_components/etools-datepicker/etools-datepicker-button.html">
-<link rel="import" href="../../../../../bower_components/etools-info-tooltip/etools-info-tooltip.html">
 
 <link rel="import" href="../../../mixins/date-mixin.html">
 <link rel="import" href="../../../mixins/common-general-mixin.html">
@@ -40,38 +35,12 @@
 <link rel="import" href="../../../mixins/redux-store-mixin.html">
 <link rel="import" href="../../../endpoints/endpoints-mixin.html">
 
-<link rel="import" href="../../../components/etools-date-input.html">
-
 <link rel="import" href="../data/partnership-dashboard-data.html">
 
 <dom-module id="cso-dashboard">
   <template>
     <style include="shared-styles grid-layout-styles iron-flex page-layout-styles 
                     paper-material-styles list-styles filter-styles">
-
-      data-table-row span:not(:first-child),
-      data-table-header data-table-column:not(:first-child) data-table-header data-table-column data-table-column,
-      data-table-header div data-table-column data-table-column {
-        box-sizing: border-box;
-      }
-
-      data-table-row div[slot="row-data"] div span,
-      data-table-header div data-table-column data-table-column {
-        padding-right: 8px;
-      }
-
-      data-table-row div[slot="row-data"] div:not(:first-child) span,
-      data-table-header div data-table-column data-table-column {
-        justify-content: flex-end;
-      }
-
-      data-table-row div[slot="row-data"] div span {
-        display: flex;
-      }
-
-      /* data-table-header {
-        height: 95px;
-      } */
 
       #query {
         padding-left: 24px;
@@ -171,68 +140,12 @@
         opacity: 0.0;
       }
 
-      .blocked-partner-container {
-        background-color: #FFA149;
-        @apply --layout-vertical;
-        @apply --layout-center-justified;
-        -webkit-border-radius: 50%;
-        -moz-border-radius: 50%;
-        border-radius: 50%;
-      }
-
       .cso-title {
         display: block;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         padding-right: 8px;
-      }
-
-      .partner-icons-group {
-        display: inline-flex;
-      }
-
-      .view-toggle {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        padding-bottom: 12px;
-      }
-
-      .curved-left {
-        border-radius: 50px 0 0 50px;
-        background: rgb(255, 255, 255);
-        height: 36px;
-        margin-right: 0;
-        padding-right: 1em;
-        padding-left: 16px;
-        cursor: pointer;
-      }
-
-      .curved-right {
-        border-radius: 0 50px 50px 0;
-        background: rgb(216, 216, 216);
-        height: 36px;
-        margin-left: 0;
-        padding-left: 1em;
-        padding-right: 16px;
-        cursor: pointer;
-        color: rgba(0, 0, 0, 0.54);
-      }
-
-      .dark-button {
-        background: rgb(216, 216, 216);
-        color: rgba(0, 0, 0, 0.54);
-      }
-
-      .light-button {
-        background: rgb(255, 255, 255);
-        color: rgba(0, 0, 0, 0.87);
-      }
-
-      iron-icon[name="overview"],
-      iron-icon[name="csoDash"] {
-        padding-right: 4px;
       }
 
       .map-icon {
@@ -259,17 +172,6 @@
       div[slot="row-data"] {
         margin-top: 0;
         margin-bottom: 0;
-      }
-
-      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-        data-table-header {
-          height: 110px;
-          padding-bottom: 0;
-        }
-
-        div.paper-material.listControls {
-          height: 48px;
-        }
       }
 
     </style>
@@ -338,24 +240,6 @@
                                     horizontal-align="left"
                                     no-dynamic-align>
               </etools-dropdown-multi>
-            </div>
-          </template>
-
-          <!-- date pickers -->
-          <template is="dom-if"
-                    if="[[filterTypeIs('datepicker', filter.type)]]">
-            <div class="filter">
-              <etools-date-input id$="datepicker_[[filter.path]]"
-                                label="[[filter.filterName]]"
-                                placeholder="&#8212;"
-                                value="{{filter.dateSelected}}"
-                                format="D MMM YYYY"
-                                on-date-has-changed="_filterDateHasChanged"
-                                data-filter-path$="[[filter.path]]"
-                                fire-date-has-changed
-                                no-init
-                                show-clear-btn>
-              </etools-date-input>
             </div>
           </template>
         </template>
@@ -479,10 +363,6 @@
             <div class="col-1 right-align blue-text">
               [[row.action_points]]
             </div>
-            <!-- <template is="dom-if" if="{{!mouseOver}}"></template> -->
-            <!-- <div class="col-1 col-data right-align">
-              [[displayNonZero(row.days_last_pv)]]
-            </div> -->
             <div class="col-1 col-data right-align">
               <span class="last-pv">[[displayNonZero(row.days_last_pv)]]</span>
               <iron-icon on-click="goToMaps"
@@ -584,15 +464,15 @@
             observer: 'filterChanged',
             value: []
           },
-          selectedCostCentres: {
-            type: Array,
-            observer: 'filterChanged'
-          },
-          selectedOustanding: {
-            type: Boolean,
-            value: false,
-            observer: 'filterChanged'
-          },
+          // selectedCostCentres: {
+          //   type: Array,
+          //   observer: 'filterChanged'
+          // },
+          // selectedOustanding: {
+          //   type: Boolean,
+          //   value: false,
+          //   observer: 'filterChanged'
+          // },
           visibleRange: {
             type: Array,
             observer: 'rangeChanged'
@@ -602,10 +482,6 @@
           },
           route: {
             type: Object
-          },
-          mouseOver: {
-            type: Boolean,
-            value: false
           },
           params: {
             type: Array,
@@ -821,17 +697,6 @@
         }
         return [];
       }
-
-      // _setSelectedPartners(partnersStr) {
-      //   const partnersArr = partnersStr.split('|');
-      //   if (!isEmpty(partnersArr)) {
-      //     const selectedPartners = this.partners.filter(p => {
-      //       return partnersArr.indexOf(p.value) > -1;
-      //     });
-      //     return selectedPartners;
-      //   }
-      //   return [];
-      // }
 
       goToMaps(event) {
         let partnerId = event.model.__data.row.id
