@@ -429,7 +429,6 @@
         if (!active || !sectors || !requiredDataLoaded) {
           return;
         }
-        debugger;
         this.set('initComplete', false);
         this.set('qs', params.qs ? params.qs : '');
         this.set('pageNumber', params.page ? parseInt(params.page) : 1);
@@ -530,7 +529,6 @@
       _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded,
         initComplete, selectedSectors, selectedPartners) {
           if (!this.initComplete || !this.requiredDataLoaded) {
-            debugger;
           return;
         }
 
@@ -585,7 +583,6 @@
           this.set('forceDataRefresh', true);
         }
         this.set('requiredDataLoaded', true);
-        debugger;
       }
 
       _setSelectedSectors(sectorsStr) {
