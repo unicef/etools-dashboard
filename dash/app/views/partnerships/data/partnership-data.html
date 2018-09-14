@@ -42,6 +42,10 @@
        */
       static get properties() {
         return {
+          active: {
+            type: Boolean,
+            value: false
+          },
           endpointName: {
             type: String,
             value: 'cso_dashboard'
@@ -112,9 +116,14 @@
         };
       }
 
-      ready() {
-        super.ready();
-        if (!this.loadedInitially) {
+      static get observers() {
+        return [
+          'init(active)'
+        ]
+      }
+
+      init() {
+        if (this.active) {
           this.fireEvent('global-loading', { message: 'Loading partnerships data...', active: true, loadingSource: 'partnership-data' });
           this.set('loadedInitially', true);
         }
