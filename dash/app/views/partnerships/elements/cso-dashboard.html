@@ -60,7 +60,7 @@
         cursor: pointer;
       }
 
-data-table-row:hover .last-pv {
+      data-table-row:hover .last-pv {
         display: none;
       }
 
@@ -227,6 +227,11 @@ data-table-row:hover .last-pv {
               </a>
             </div>
             <div class="col-data col-1 sections">
+              <!-- <template is="dom-repeat"
+                        items="{{dividerSplit(row.locations)}}">
+                [[item]]
+                <br>
+              </template> -->
               -
             </div>
             <div class="col-data col-1 sections">
@@ -421,9 +426,10 @@ data-table-row:hover .last-pv {
 
       _init(active, sectors, requiredDataLoaded) {
         let params = this.queryParams;
-        if (!active || !requiredDataLoaded) {
+        if (!active || !sectors || !requiredDataLoaded) {
           return;
         }
+        debugger;
         this.set('initComplete', false);
         this.set('qs', params.qs ? params.qs : '');
         this.set('pageNumber', params.page ? parseInt(params.page) : 1);
@@ -524,6 +530,7 @@ data-table-row:hover .last-pv {
       _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded,
         initComplete, selectedSectors, selectedPartners) {
           if (!this.initComplete || !this.requiredDataLoaded) {
+            debugger;
           return;
         }
 
@@ -577,8 +584,8 @@ data-table-row:hover .last-pv {
           (Array.isArray(list) && list.length === 0)) {
           this.set('forceDataRefresh', true);
         }
-        this.set('initComplete', false);
         this.set('requiredDataLoaded', true);
+        debugger;
       }
 
       _setSelectedSectors(sectorsStr) {
@@ -638,17 +645,14 @@ data-table-row:hover .last-pv {
       }
 
       computeFilter(filter) {
-        return function(row) {
-          switch(filter) {
+        return (row)=> {
+          switch (filter) {
             case 'custom':
               return true;
-              break;
             case '1':
               return row.alert_no_recent_pv === true;
-              break;
             case '2':
               return row.alert_no_pv === true;
-              break;
           }
         };
       }

@@ -22,7 +22,6 @@
     actionPointsByMe: null,
     actionPointsForMe: null,
     partnerships: [],
-    partnershipsDashboard: [],
     tripsYears: [],
     unicefUsers: [],
     static: null,
@@ -55,9 +54,6 @@
 
       case 'SET_PARTNERSHIPS':
         return merge(state, { partnerships: action.partnerships });
-
-      case 'SET_PARTNERSHIPS_DASHBOARD':
-        return merge(state, { partnershipsDashboard: action.partnershipsDashboard});
 
       case 'SET_TRIPS_YEARS':
         return merge(state, { tripsYears: action.tripsYears });
