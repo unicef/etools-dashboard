@@ -137,7 +137,6 @@
 
       static get observers() {
         return [
-          // '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate)',
           '_tabChanged(routeData.partnershipsTab, active)'
         ];
       }
@@ -156,50 +155,6 @@
           this.$.csoDash.classList.remove('light-button');
         }
       }
-
-      // _updateUrl(query, pageNumber, pageSize, sortOrder, requiredDataLoaded,
-      //   initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate) {
-      //     if (!this.initComplete || !this.requiredDataLoaded) {
-      //     return;
-      //   }
-      //   this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
-      //   const qs = this.buildQueryString();
-      //   const currentRoute = this.route.prefix + this.route.path;
-      //   // log(selectedSectors, selectedOffices, selectedStatuses);
-      //   // debugger;
-      //   if (qs !== null) {
-      //     this.updateAppState(currentRoute, qs, true);
-      //     if (this.requiredDataLoaded) {
-      //       this._filterPartnershipsData();
-      //     }
-      //   } else {
-      //     if (location.search === '') {
-      //       this.updateAppState(currentRoute, qs, false);
-      //     }
-      //     if (this.forceDataRefresh && this.requiredDataLoaded) {
-      //       this._filterPartnershipsData();
-      //       this.set('forceDataRefresh', false);
-      //     }
-      //   }
-      // }
-
-      // _buildCsvDownloadUrl() {
-      //   let query;
-      //   if (this.currentFilter === 'custom') {
-      //     query = this.params.reduce((acc, { qName, propName, xf }) => {
-      //       return isEmpty(this[propName]) ? acc
-      //         : `${acc}${qName}=${xf(this[propName])}&`;
-      //     }, '');
-      //     query = query.split('|').join(',');
-      //   } else {
-      //     let pks = this.presetFilters[this.currentFilter-1].filteredPartnerships.map(
-      //       (partner) => prop('intervention_id', partner)
-      //     );
-      //     pks.join(',');
-      //     query = `pk=${pks}&`;
-      //   }
-      //   return `${this.getEndpoint('cso_dashboard').url}/?${query}format=csv`;
-      // }
 
       _toggleDashView({ target }) {
         let pages = this.$.partnershipsPages;
