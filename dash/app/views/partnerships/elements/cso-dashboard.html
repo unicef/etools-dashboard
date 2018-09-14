@@ -43,63 +43,7 @@
     <style include="shared-styles grid-layout-styles iron-flex page-layout-styles 
                     paper-material-styles list-styles filter-styles partnerships-styles">
 
-     
-
-      data-table-row.alert-row,
-      .alert-row div[slot="row-data"],
-      .alert-row div[slot="row-data"] data-table-column {
-        height: 36px;
-        width: 100%;
-      }
-
-      paper-icon-button.remove-field.remove.red {
-        top: 0;
-      }
-
-      .alerts-panel {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: column;
-        height: 24px;
-      }
-
-      .filter-name {
-        cursor: pointer;
-        white-space: nowrap;
-      }
-
-      .filter-name:hover {
-        color: #0099FF;
-      }
-
-      .list-panel a {
-        padding-right: 0;
-      }
-
-      .alerts-title {
-        color: rgba(0,0,0,0.54);
-        font-size: 13px;
-        font-weight: 500;
-        line-height: 15px;
-      }
-      
-      .alerts-comment {
-        color: rgba(0,0,0,0.54);
-        font-size: 10px;
-        font-weight: 500;
-        line-height: 15px;
-      }
-
-      .alerts-total {
-        text-align: right;
-        padding-right: 16px;
-      }
-
-      .clear-button {
-        opacity: 0.0;
-      }
-
-      .cso-title {
+     .cso-title {
         display: block;
         white-space: nowrap;
         overflow: hidden;
@@ -123,15 +67,11 @@
       data-table-row:hover .map-icon {
         display: block;
       }
-
       .blue-text {
         color: #24a0fc;
       }
 
-      div[slot="row-data"] {
-        margin-top: 0;
-        margin-bottom: 0;
-      }
+      
 
     </style>
 
@@ -486,7 +426,7 @@
 
       _init(active, sectors, requiredDataLoaded) {
         let params = this.queryParams;
-        if (!active || !requiredDataLoaded) {
+        if (!active || !sectors || !requiredDataLoaded) {
           return;
         }
         this.set('initComplete', false);
@@ -642,7 +582,6 @@
           (Array.isArray(list) && list.length === 0)) {
           this.set('forceDataRefresh', true);
         }
-        this.set('initComplete', false);
         this.set('requiredDataLoaded', true);
       }
 
@@ -703,17 +642,14 @@
       }
 
       computeFilter(filter) {
-        return function(row) {
-          switch(filter) {
+        return (row)=> {
+          switch (filter) {
             case 'custom':
               return true;
-              break;
             case '1':
               return row.alert_no_recent_pv === true;
-              break;
             case '2':
               return row.alert_no_pv === true;
-              break;
           }
         };
       }
