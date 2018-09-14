@@ -69,9 +69,9 @@
         display: flex;
       }
 
-      data-table-header {
+      /* data-table-header {
         height: 95px;
-      }
+      } */
 
       #query {
         padding-left: 24px;
@@ -120,7 +120,7 @@
       data-table-row.alert-row,
       .alert-row div[slot="row-data"],
       .alert-row div[slot="row-data"] data-table-column {
-        height: 12px;
+        height: 36px;
         width: 100%;
       }
 
@@ -254,6 +254,11 @@
 
       .blue-text {
         color: #24a0fc;
+      }
+
+      div[slot="row-data"] {
+        margin-top: 0;
+        margin-bottom: 0;
       }
 
       @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
@@ -627,9 +632,9 @@
                   xf: compose(join('|'), map(prop('value')))
                 },
                 {
-                  qName: 'partners',
+                  qName: 'name',
                   propName: 'selectedPartners',
-                  xf: compose(join('|'), map(prop('value')))
+                  xf: compose(join('|'), map(prop('name')))
                 },
               ];
             }
@@ -639,14 +644,14 @@
 
       static get observers() {
         return [
-          '_updateUrl(qs, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded, initComplete, selectedSectors, selectedPartners, selectedOffices)',
+          '_updateUrl(qs, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded, initComplete, selectedSectors, selectedPartners, selectedOffices, active)',
           '_init(active, sectors, requiredDataLoaded)',
         ];
       }
 
       _init(active, sectors, requiredDataLoaded) {
         let params = this.queryParams;
-        if (!active || !sectors || !requiredDataLoaded) {
+        if (!active || !requiredDataLoaded) {
           return;
         }
         this.set('initComplete', false);

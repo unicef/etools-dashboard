@@ -184,7 +184,7 @@
       data-table-row.alert-row,
       .alert-row div[slot="row-data"],
       .alert-row div[slot="row-data"] data-table-column {
-        height: 12px;
+        height: 36px;
         width: 100%;
       }
 
@@ -338,11 +338,10 @@
         padding-right: 4px;
       }
 
-      /* paper-button.detailed-assurance {
-        border-radius: 50px;
-        background: rgb(255, 255, 255);
-        cursor: pointer;
-      } */
+      div[slot="row-data"] {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
 
       @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
         data-table-header {
@@ -851,7 +850,7 @@
 
       static get observers() {
         return [
-          '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate)',
+          '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate, active)',
           '_init(active, sectors, statuses, offices, requiredDataLoaded)',
           // '_tabChanged(routeData.partnershipsTab, active)'
         ];
@@ -1046,11 +1045,20 @@
       }
 
       _buildCsvDownloadUrl() {
-        let query = this.params.reduce((acc, { qName, propName, xf }) => {
-          return isEmpty(this[propName]) ? acc
-            : `${acc}${qName}=${xf(this[propName])}&`;
-        }, '');
-        query = query.split('|').join(',');
+        let query;
+        if (this.currentFilter === 'custom') {
+          query = this.params.reduce((acc, { qName, propName, xf }) => {
+            return isEmpty(this[propName]) ? acc
+              : `${acc}${qName}=${xf(this[propName])}&`;
+          }, '');
+          query = query.split('|').join(',');
+        } else {
+          let pks = this.presetFilters[this.currentFilter-1].filteredPartnerships.map(
+            (partner) => prop('intervention_id', partner)
+          );
+          pks.join(',');
+          query = `pk=${pks}&`;
+        }
         return `${this.getEndpoint('cso_dashboard').url}/?${query}format=csv`;
       }
 
@@ -1188,6 +1196,7 @@
           this.$.customFilterPanel.hidden = true;
           this.$.csoDashboardFooter.filteredTotalResults = clickedFilter.total;
         }
+        this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
       }
 
       computeFilter(filter) {

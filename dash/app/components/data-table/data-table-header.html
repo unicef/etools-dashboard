@@ -107,7 +107,6 @@
       }
 
       _sortOrderChanged(sortOrder) {
-        debugger
         var column = this.queryEffectiveChildren('*[field="' + sortOrder.field + '"]');
         this._clearSelected(column);
         column.set('selected', true);
