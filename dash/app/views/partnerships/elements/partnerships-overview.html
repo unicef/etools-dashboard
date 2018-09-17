@@ -76,6 +76,7 @@
 
       data-table-row div[slot="row-data"] div span {
         display: flex;
+        align-items: center;
       }
 
       data-table-header {
@@ -128,7 +129,6 @@
       .status {
         padding-left: 8px;
       }
-
      
       data-table-row.alert-row,
       .alert-row div[slot="row-data"],
@@ -236,6 +236,10 @@
         display: inline-flex;
       }
 
+
+      span.sections.col-data {
+        line-height: normal;
+      }
 
       @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
         data-table-header {

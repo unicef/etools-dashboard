@@ -67,11 +67,14 @@
       data-table-row:hover .map-icon {
         display: block;
       }
+
       .blue-text {
         color: #24a0fc;
       }
 
-      
+      div.sections.col-data {
+        line-height: normal;
+      }
 
     </style>
 
@@ -235,29 +238,29 @@
               -
             </div>
             <div class="col-data col-1 sections">
-              <span class="pad-top-4">
+              <div class="pad-top-4">
                 <template is="dom-repeat"
                           items="{{dividerSplit(row.sections)}}">
                   [[item]]
                   <br>
                 </template>
-              </span>
+              </div>
             </div>
             <div class="col-6 layout horizontal">
-              <span class="col-3 right-align">
+              <div class="col-3 right-align">
                 [[row.total_ct_cp]]
-              </span>
-              <span class="col-3 right-align">
+              </div>
+              <div class="col-3 right-align">
                 [[row.total_ct_ytd]]
-              </span>
-              <span class="col-3 right-align">
+              </div>
+              <div class="col-3 right-align">
                 -
                 <!-- [[row.outstanding_dct_amount_6_to_9_months_usd]] -->
-              </span>
-              <span class="col-3 right-align">
+              </div>
+              <div class="col-3 right-align">
                 -
                 <!-- [[row.outstanding_dct_amount_more_than_9_months_usd]] -->
-              </span>
+              </div>
             </div>
             <div class="col-1 right-align blue-text">
               [[row.action_points]]
