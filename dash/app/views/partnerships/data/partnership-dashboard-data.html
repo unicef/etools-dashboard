@@ -1,6 +1,5 @@
 <link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../../mixins/data-element-mixin.html">
-<link rel="import" href="../../../mixins/date-mixin.html">
 <link rel="import" href="../../../mixins/event-helper-mixin.html">
 <link rel="import" href="../../../config/dexie-db-config.html">
 
@@ -12,12 +11,10 @@
      * @polymer
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.DataElement
-     * @appliesMixin EtoolsDashboard.Mixins.Date
      * @appliesMixin EtoolsDashboard.Mixins.EventHelper
      */
      const PartnershipDashboardDataMixin = compose(
       EtoolsDashboard.Mixins.DataElement,
-      EtoolsDashboard.Mixins.Date,
       EtoolsDashboard.Mixins.EventHelper
     )(Polymer.Element);
     /**
@@ -27,7 +24,6 @@
      * @customElement
      * @polymer
      * @appliesMixin PartnershipDashboardDataMixin
-     * @extends {Polymer.Element}
      */
     class PartnershipDashboardData extends PartnershipDashboardDataMixin {
       /**

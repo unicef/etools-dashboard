@@ -29,7 +29,6 @@
 <link rel="import"
       href="../../../../../bower_components/etools-dropdown/etools-dropdown-multi.html">
 
-<link rel="import" href="../../../mixins/date-mixin.html">
 <link rel="import" href="../../../mixins/common-general-mixin.html">
 <link rel="import" href="../../../mixins/list-filters-mixin.html">
 <link rel="import" href="../../../mixins/pagination-with-filters-mixin.html">
@@ -70,10 +69,6 @@
 
       .blue-text {
         color: #24a0fc;
-      }
-
-      div.sections.col-data {
-        line-height: normal;
       }
 
     </style>
@@ -294,7 +289,6 @@
       * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
       * @appliesMixin EtoolsDashboard.Mixins.ListFilters
       * @appliesMixin EtoolsDashboard.Mixins.PaginationWithFilters
-      * @appliesMixin EtoolsDashboard.Mixins.Date
       * @appliesMixin EtoolsDashboard.Mixins.Endpoints
       */
       const CsoDashboardMixin = compose(
@@ -303,7 +297,6 @@
       EtoolsDashboard.Mixins.ListFilters,
       EtoolsDashboard.Mixins.Endpoints,
       EtoolsDashboard.Mixins.PaginationWithFilters,
-      EtoolsDashboard.Mixins.Date
       )(Polymer.Element);
 
     /**
@@ -315,6 +308,10 @@
 
       static get properties() {
         return {
+          active: {
+            type: Boolean,
+            value: false
+          },
           filteredPartnershipsDashboard: {
             type: Array,
             notify: true,
@@ -351,6 +348,9 @@
           },
           urlParams: {
             type: Object
+          },
+          totalResults: {
+            type: Array,
           },
           sectors: {
             type: Array,
