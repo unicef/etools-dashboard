@@ -40,15 +40,17 @@
         line-height: normal
       }
 
-      .divider {
-        background-color: rgba(0, 0, 0, 0.3);
-        height: 1px;
+      data-table-row.alert-row {
+        height: 36px;
       }
 
-      data-table-row.alert-row,
-      .alert-row div[slot="row-data"],
-      .alert-row div[slot="row-data"] data-table-column {
-        height: 36px;
+      div.alerts-panel div.alert-row {
+        width: 50%;
+      }
+
+      .alert-row div[slot="row-data"] {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+        box-sizing: border-box;
         width: 100%;
       }
 
@@ -60,7 +62,6 @@
         display: flex;
         flex-wrap: wrap;
         flex-direction: column;
-        height: 24px;
       }
 
       .filter-name {

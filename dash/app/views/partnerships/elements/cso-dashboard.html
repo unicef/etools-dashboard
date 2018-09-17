@@ -91,12 +91,11 @@
 
     <div class="paper-material list-panel" elevation="1">
       <span class="alerts-title">Alerts </span><span class="alerts-comment">(click to filter the list)</span>
-      <div class="alerts-panel">
+      <div class="alerts-panel" id="alertsPanel">
         <template is="dom-repeat"
                   items="[[presetFilters]]"
                   as="presets">
           <div on-tap="_showPresetFilter" class="alert-row" no-collapse>
-            <div class="divider"></div>
             <div slot="row-data">
               <div class="col-1 alerts-total">[[presets.filteredPartnershipsDashboard.length]]</div>
               <div class="col-10 filter-name">[[presets.title]] <i>[[presets.status]]</i></div>
@@ -440,6 +439,7 @@
         this.set('orderBy', params.orderBy || '');
         this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
         this.set('selectedPartners', params.partners ? this._setSelectedPartners(params.partners) : []);
+        this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px'
     
         this._initListFilters();
         this.set('initComplete', true);
