@@ -84,7 +84,7 @@
             type: Object,
             value: function() {
               return {
-                searchString: (qs, partner) => qs.length ? (partner.name.toLowerCase().indexOf(qs.toLowerCase()) > -1) : true,
+                searchString: (qs, partner) => qs.length ? contains(qs.toLowerCase(), partner.name.toLowerCase()) : true,
                 sectors: (sectors, partner) => sectors.length ? !!intersection(sectors, [trim(partner.sections)]).length : true,
                 name: (name, partner) => name.length ? any(equals(partner), name) : true,
               };
