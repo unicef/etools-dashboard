@@ -73,8 +73,7 @@
         fallback-selection="overview">
 
       <div name="overview">
-        <partnerships-overview filtered-partnerships="{{filteredPartnerships}}"
-                               active="[[overviewActive]]"
+        <partnerships-overview active="[[overviewActive]]"
                                total-results="{{totalResults}}"
                                list-data-path="filteredPartnerships"
                                query-params="{{queryParams}}"
@@ -102,18 +101,9 @@
      * @polymer
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
-     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
-     * @appliesMixin EtoolsDashboard.Mixins.ListFilters
-     * @appliesMixin EtoolsDashboard.Mixins.PaginationWithFilters
-     * @appliesMixin EtoolsDashboard.Mixins.Date
      */
     const ViewPartnershipsMixins = compose(
       EtoolsDashboard.Mixins.CommonGeneral,
-      // EtoolsDashboard.Mixins.ReduxStore,
-      // EtoolsDashboard.Mixins.ListFilters,
-      // EtoolsDashboard.Mixins.Endpoints,
-      // EtoolsDashboard.Mixins.PaginationWithFilters,
-      // EtoolsDashboard.Mixins.Date
       )(Polymer.Element);
     
     /**
@@ -131,6 +121,14 @@
           csvDownloadUrl: {
             type: String,
             notify: true
+          },
+          csoActive: {
+            type: Boolean,
+            value: false
+          },
+          overviewActive: {
+            type: Boolean,
+            value: false
           }
         }
       }
@@ -146,13 +144,13 @@
         if (!tab || !active) { return; }
         if (tab === 'overview') {
           this.set('overviewActive', active)
-          this.$.overview.classList.add('dark-button');
-          this.$.csoDash.classList.add('light-button');
+          this.$.overview.classList.remove('dark-button');
+          this.$.csoDash.classList.remove('light-button');
         } else {
           this.set('csoActive', active)
           this.updateAppState(this.route.path);
-          this.$.overview.classList.remove('dark-button');
-          this.$.csoDash.classList.remove('light-button');
+          this.$.overview.classList.add('dark-button');
+          this.$.csoDash.classList.add('light-button');
         }
       }
 

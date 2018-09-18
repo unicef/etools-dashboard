@@ -11,21 +11,17 @@
 
       .right-align {
         text-align: right;
+        padding-right: 8px;
       }
 
-      div.sections,
-      span.sections {
+      div.sections.col-data {
         height: 48px;
         white-space: normal;
         overflow-y: auto;
         display: flex;
         align-items: center;
+        line-height: normal;
         -ms-overflow-style: -ms-autohiding-scrollbar;
-      }
-
-      div.sections span.pad-top-4 {
-        padding-right: 0;
-        height: 100%;
       }
 
       paper-icon-item {
@@ -36,31 +32,24 @@
         padding: 0;
       }
 
-      div.sections>span {
-        line-height: normal
-      }
-
-      .divider {
-        background-color: rgba(0, 0, 0, 0.3);
-        height: 1px;
-      }
-
-      data-table-row.alert-row,
-      .alert-row div[slot="row-data"],
-      .alert-row div[slot="row-data"] data-table-column {
-        height: 36px;
-        width: 100%;
-      }
-
       paper-icon-button.remove-field.remove.red {
         top: 0;
+      }
+
+      div.alerts-panel div.alert-row {
+        width: 50%;
+      }
+
+      .alert-row div[slot="row-data"] {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+        box-sizing: border-box;
+        width: 100%;
       }
 
       .alerts-panel {
         display: flex;
         flex-wrap: wrap;
         flex-direction: column;
-        height: 24px;
       }
 
       .filter-name {
@@ -70,10 +59,6 @@
 
       .filter-name:hover {
         color: #0099FF;
-      }
-
-      .list-panel a {
-        padding-right: 0;
       }
 
       .alerts-title {

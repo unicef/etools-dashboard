@@ -29,7 +29,6 @@
 <link rel="import"
       href="../../../../../bower_components/etools-dropdown/etools-dropdown-multi.html">
 
-<link rel="import" href="../../../mixins/date-mixin.html">
 <link rel="import" href="../../../mixins/common-general-mixin.html">
 <link rel="import" href="../../../mixins/list-filters-mixin.html">
 <link rel="import" href="../../../mixins/pagination-with-filters-mixin.html">
@@ -67,11 +66,10 @@
       data-table-row:hover .map-icon {
         display: block;
       }
+
       .blue-text {
         color: #24a0fc;
       }
-
-      
 
     </style>
 
@@ -88,12 +86,11 @@
 
     <div class="paper-material list-panel" elevation="1">
       <span class="alerts-title">Alerts </span><span class="alerts-comment">(click to filter the list)</span>
-      <div class="alerts-panel">
+      <div class="alerts-panel" id="alertsPanel">
         <template is="dom-repeat"
                   items="[[presetFilters]]"
                   as="presets">
           <div on-tap="_showPresetFilter" class="alert-row" no-collapse>
-            <div class="divider"></div>
             <div slot="row-data">
               <div class="col-1 alerts-total">[[presets.filteredPartnershipsDashboard.length]]</div>
               <div class="col-10 filter-name">[[presets.title]] <i>[[presets.status]]</i></div>
@@ -235,29 +232,29 @@
               -
             </div>
             <div class="col-data col-1 sections">
-              <span class="pad-top-4">
+              <div class="pad-top-4">
                 <template is="dom-repeat"
-                          items="{{commaSplit(row.sections)}}">
+                          items="{{dividerSplit(row.sections)}}">
                   [[item]]
                   <br>
                 </template>
-              </span>
+              </div>
             </div>
             <div class="col-6 layout horizontal">
-              <span class="col-3 right-align">
+              <div class="col-3 right-align">
                 [[row.total_ct_cp]]
-              </span>
-              <span class="col-3 right-align">
+              </div>
+              <div class="col-3 right-align">
                 [[row.total_ct_ytd]]
-              </span>
-              <span class="col-3 right-align">
+              </div>
+              <div class="col-3 right-align">
                 -
                 <!-- [[row.outstanding_dct_amount_6_to_9_months_usd]] -->
-              </span>
-              <span class="col-3 right-align">
+              </div>
+              <div class="col-3 right-align">
                 -
                 <!-- [[row.outstanding_dct_amount_more_than_9_months_usd]] -->
-              </span>
+              </div>
             </div>
             <div class="col-1 right-align blue-text">
               [[row.action_points]]
@@ -292,7 +289,6 @@
       * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
       * @appliesMixin EtoolsDashboard.Mixins.ListFilters
       * @appliesMixin EtoolsDashboard.Mixins.PaginationWithFilters
-      * @appliesMixin EtoolsDashboard.Mixins.Date
       * @appliesMixin EtoolsDashboard.Mixins.Endpoints
       */
       const CsoDashboardMixin = compose(
@@ -301,7 +297,6 @@
       EtoolsDashboard.Mixins.ListFilters,
       EtoolsDashboard.Mixins.Endpoints,
       EtoolsDashboard.Mixins.PaginationWithFilters,
-      EtoolsDashboard.Mixins.Date
       )(Polymer.Element);
 
     /**
@@ -313,6 +308,10 @@
 
       static get properties() {
         return {
+          active: {
+            type: Boolean,
+            value: false
+          },
           filteredPartnershipsDashboard: {
             type: Array,
             notify: true,
@@ -349,6 +348,9 @@
           },
           urlParams: {
             type: Object
+          },
+          totalResults: {
+            type: Array,
           },
           sectors: {
             type: Array,
@@ -437,6 +439,7 @@
         this.set('orderBy', params.orderBy || '');
         this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
         this.set('selectedPartners', params.partners ? this._setSelectedPartners(params.partners) : []);
+        this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px'
     
         this._initListFilters();
         this.set('initComplete', true);
