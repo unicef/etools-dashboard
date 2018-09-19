@@ -29,7 +29,6 @@
 <link rel="import"
       href="../../../../../bower_components/etools-dropdown/etools-dropdown-multi.html">
 
-<link rel="import" href="../../../mixins/date-mixin.html">
 <link rel="import" href="../../../mixins/common-general-mixin.html">
 <link rel="import" href="../../../mixins/list-filters-mixin.html">
 <link rel="import" href="../../../mixins/pagination-with-filters-mixin.html">
@@ -43,63 +42,7 @@
     <style include="shared-styles grid-layout-styles iron-flex page-layout-styles 
                     paper-material-styles list-styles filter-styles partnerships-styles">
 
-     
-
-      data-table-row.alert-row,
-      .alert-row div[slot="row-data"],
-      .alert-row div[slot="row-data"] data-table-column {
-        height: 36px;
-        width: 100%;
-      }
-
-      paper-icon-button.remove-field.remove.red {
-        top: 0;
-      }
-
-      .alerts-panel {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: column;
-        height: 24px;
-      }
-
-      .filter-name {
-        cursor: pointer;
-        white-space: nowrap;
-      }
-
-      .filter-name:hover {
-        color: #0099FF;
-      }
-
-      .list-panel a {
-        padding-right: 0;
-      }
-
-      .alerts-title {
-        color: rgba(0,0,0,0.54);
-        font-size: 13px;
-        font-weight: 500;
-        line-height: 15px;
-      }
-      
-      .alerts-comment {
-        color: rgba(0,0,0,0.54);
-        font-size: 10px;
-        font-weight: 500;
-        line-height: 15px;
-      }
-
-      .alerts-total {
-        text-align: right;
-        padding-right: 16px;
-      }
-
-      .clear-button {
-        opacity: 0.0;
-      }
-
-      .cso-title {
+     .cso-title {
         display: block;
         white-space: nowrap;
         overflow: hidden;
@@ -128,11 +71,6 @@
         color: #24a0fc;
       }
 
-      div[slot="row-data"] {
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-
     </style>
 
     <partnership-dashboard-data id="partnershipsDashboard"
@@ -148,12 +86,11 @@
 
     <div class="paper-material list-panel" elevation="1">
       <span class="alerts-title">Alerts </span><span class="alerts-comment">(click to filter the list)</span>
-      <div class="alerts-panel">
+      <div class="alerts-panel" id="alertsPanel">
         <template is="dom-repeat"
                   items="[[presetFilters]]"
                   as="presets">
           <div on-tap="_showPresetFilter" class="alert-row" no-collapse>
-            <div class="divider"></div>
             <div slot="row-data">
               <div class="col-1 alerts-total">[[presets.filteredPartnershipsDashboard.length]]</div>
               <div class="col-10 filter-name">[[presets.title]] <i>[[presets.status]]</i></div>
@@ -295,32 +232,32 @@
               -
             </div>
             <div class="col-data col-1 sections">
-              <span class="pad-top-4">
+              <div class="pad-top-4">
                 <template is="dom-repeat"
-                          items="{{commaSplit(row.sections)}}">
+                          items="{{dividerSplit(row.sections)}}">
                   [[item]]
                   <br>
                 </template>
-              </span>
+              </div>
             </div>
             <div class="col-6 layout horizontal">
-              <span class="col-3 right-align">
-                [[row.total_ct_cp]]
-              </span>
-              <span class="col-3 right-align">
-                [[row.total_ct_ytd]]
-              </span>
-              <span class="col-3 right-align">
+              <div class="col-3 right-align">
+                [[currencyFormat(row.total_ct_cp)]]
+              </div>
+              <div class="col-3 right-align">
+                [[currencyFormat(row.total_ct_ytd)]]
+              </div>
+              <div class="col-3 right-align">
                 -
                 <!-- [[row.outstanding_dct_amount_6_to_9_months_usd]] -->
-              </span>
-              <span class="col-3 right-align">
+              </div>
+              <div class="col-3 right-align">
                 -
                 <!-- [[row.outstanding_dct_amount_more_than_9_months_usd]] -->
-              </span>
+              </div>
             </div>
-            <div class="col-1 right-align blue-text">
-              [[row.action_points]]
+            <div class="col-1 right-align">
+              <a href="[[baseSite]]/apd/">[[row.action_points]]</a>
             </div>
             <div class="col-1 col-data right-align">
               <span class="last-pv">[[displayNonZero(row.days_last_pv)]]</span>
@@ -352,7 +289,6 @@
       * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
       * @appliesMixin EtoolsDashboard.Mixins.ListFilters
       * @appliesMixin EtoolsDashboard.Mixins.PaginationWithFilters
-      * @appliesMixin EtoolsDashboard.Mixins.Date
       * @appliesMixin EtoolsDashboard.Mixins.Endpoints
       */
       const CsoDashboardMixin = compose(
@@ -361,7 +297,6 @@
       EtoolsDashboard.Mixins.ListFilters,
       EtoolsDashboard.Mixins.Endpoints,
       EtoolsDashboard.Mixins.PaginationWithFilters,
-      EtoolsDashboard.Mixins.Date
       )(Polymer.Element);
 
     /**
@@ -373,6 +308,10 @@
 
       static get properties() {
         return {
+          active: {
+            type: Boolean,
+            value: false
+          },
           filteredPartnershipsDashboard: {
             type: Array,
             notify: true,
@@ -409,6 +348,9 @@
           },
           urlParams: {
             type: Object
+          },
+          totalResults: {
+            type: Array,
           },
           sectors: {
             type: Array,
@@ -486,7 +428,7 @@
 
       _init(active, sectors, requiredDataLoaded) {
         let params = this.queryParams;
-        if (!active || !requiredDataLoaded) {
+        if (!active || !sectors || !requiredDataLoaded) {
           return;
         }
         this.set('initComplete', false);
@@ -497,6 +439,7 @@
         this.set('orderBy', params.orderBy || '');
         this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
         this.set('selectedPartners', params.partners ? this._setSelectedPartners(params.partners) : []);
+        this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px'
     
         this._initListFilters();
         this.set('initComplete', true);
@@ -642,7 +585,6 @@
           (Array.isArray(list) && list.length === 0)) {
           this.set('forceDataRefresh', true);
         }
-        this.set('initComplete', false);
         this.set('requiredDataLoaded', true);
       }
 
@@ -703,17 +645,14 @@
       }
 
       computeFilter(filter) {
-        return function(row) {
-          switch(filter) {
+        return (row)=> {
+          switch (filter) {
             case 'custom':
               return true;
-              break;
             case '1':
               return row.alert_no_recent_pv === true;
-              break;
             case '2':
               return row.alert_no_pv === true;
-              break;
           }
         };
       }
