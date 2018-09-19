@@ -242,10 +242,10 @@
             </div>
             <div class="col-6 layout horizontal">
               <div class="col-3 right-align">
-                [[row.total_ct_cp]]
+                [[currencyFormat(row.total_ct_cp)]]
               </div>
               <div class="col-3 right-align">
-                [[row.total_ct_ytd]]
+                [[currencyFormat(row.total_ct_ytd)]]
               </div>
               <div class="col-3 right-align">
                 -
@@ -256,8 +256,8 @@
                 <!-- [[row.outstanding_dct_amount_more_than_9_months_usd]] -->
               </div>
             </div>
-            <div class="col-1 right-align blue-text">
-              [[row.action_points]]
+            <div class="col-1 right-align">
+              <a href="[[baseSite]]/apd/">[[row.action_points]]</a>
             </div>
             <div class="col-1 col-data right-align">
               <span class="last-pv">[[displayNonZero(row.days_last_pv)]]</span>
