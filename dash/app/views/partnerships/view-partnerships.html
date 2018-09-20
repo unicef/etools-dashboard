@@ -128,14 +128,15 @@
           },
           overviewActive: {
             type: Boolean,
-            value: false
+            value: true //set to false when cso-dash reinstated
           }
         }
       }
 
       static get observers() {
         return [
-          '_tabChanged(routeData.partnershipsTab, active)'
+          // hidden temporarily due to business requirement
+          // '_tabChanged(routeData.partnershipsTab, active)'
         ];
       }
 
