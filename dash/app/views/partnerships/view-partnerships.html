@@ -140,17 +140,16 @@
       }
 
       _tabChanged(tab, active) {
-        this.set('active', active);
         if (!tab || !active) { return; }
         if (tab === 'overview') {
           this.set('overviewActive', active)
-          this.$.overview.classList.remove('dark-button');
-          this.$.csoDash.classList.remove('light-button');
+          // this.$.overview.classList.remove('dark-button');
+          // this.$.csoDash.classList.remove('light-button');
         } else {
           this.set('csoActive', active)
           this.updateAppState(this.route.path);
-          this.$.overview.classList.add('dark-button');
-          this.$.csoDash.classList.add('light-button');
+          // this.$.overview.classList.add('dark-button');
+          // this.$.csoDash.classList.add('light-button');
         }
       }
 
