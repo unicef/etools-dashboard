@@ -70,11 +70,11 @@
       }
     }
 
-    buildQueryString() {
+    buildQueryString(hasPagination=true) {
       return this.params.reduce((acc, { qName, propName, xf }) => {
         return isEmpty(this[propName]) ? acc
           : `${acc}&${qName}=${xf(this[propName])}`;
-      }, `page=${this.pageNumber}&size=${this.pageSize}`);
+      }, hasPagination ? `page=${this.pageNumber}&size=${this.pageSize}` : '');
     }
   };
 </script>

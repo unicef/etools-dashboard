@@ -42,6 +42,10 @@
        */
       static get properties() {
         return {
+          active: {
+            type: Boolean,
+            value: false
+          },
           endpointName: {
             type: String,
             value: 'cso_dashboard'
@@ -80,18 +84,18 @@
             type: Object,
             value: function() {
               return {
-                searchString: (qs, partner)=> qs.length ? _.includes(partner.partner_name.toLowerCase(), qs.toLowerCase()): true,
-                sectors: (sectors, partner)=> sectors.length ? !!_.intersection(sectors, [_.trim(partner.sections)]).length : true,
-                offices: (offices, partner)=> offices.length ? !!_.intersection(offices, partner.offices_names.split(',')).length : true,
-                status: (status, partner)=> status.length ? (_.includes(status, partner.status) ? true : false) : true,
-                startAfterDate: (date, partner)=> _.isEmpty(partner.start) ? true
-                : !_.isEmpty(date) ? this.prepareDate(partner.start) > this.prepareDate(date): true,
-                endBeforeDate: (date, partner)=> _.isEmpty(partner.end) ? true
-                  : !_.isEmpty(date) ? this.prepareDate(partner.end) < this.prepareDate(date) : true,
-                startBeforeDate: (date, partner)=> _.isEmpty(partner.start) ? true
-                  : !_.isEmpty(date) ? this.prepareDate(partner.start) < this.prepareDate(date) : true,
-                endAfterDate: (date, partner)=> _.isEmpty(partner.end) ? true
-                  : !_.isEmpty(date) ? this.prepareDate(partner.end) > this.prepareDate(date) : true
+                searchString: (qs, partner) => qs.length ? contains(qs.toLowerCase(), partner.partner_name.toLowerCase()) : true,
+                sectors: (sectors, partner)=> sectors.length ? !!intersection(sectors, [trim(partner.sections)]).length : true,
+                offices: (offices, partner)=> offices.length ? !!intersection(offices, partner.offices_names.split(',')).length : true,
+                status: (status, partner)=> status.length ? (contains(partner.status, status) ? true : false) : true,
+                startAfterDate: (date, partner)=> isEmpty(partner.start) ? true
+                : !isEmpty(date) ? this.prepareDate(partner.start) > this.prepareDate(date): true,
+                endBeforeDate: (date, partner)=> isEmpty(partner.end) ? true
+                  : !isEmpty(date) ? this.prepareDate(partner.end) < this.prepareDate(date) : true,
+                startBeforeDate: (date, partner)=> isEmpty(partner.start) ? true
+                  : !isEmpty(date) ? this.prepareDate(partner.start) < this.prepareDate(date) : true,
+                endAfterDate: (date, partner)=> isEmpty(partner.end) ? true
+                  : !isEmpty(date) ? this.prepareDate(partner.end) > this.prepareDate(date) : true
               };
             }
           },
@@ -112,9 +116,14 @@
         };
       }
 
-      ready() {
-        super.ready();
-        if (!this.loadedInitially) {
+      static get observers() {
+        return [
+          'init(active)'
+        ]
+      }
+
+      init() {
+        if (this.active) {
           this.fireEvent('global-loading', { message: 'Loading partnerships data...', active: true, loadingSource: 'partnership-data' });
           this.set('loadedInitially', true);
         }

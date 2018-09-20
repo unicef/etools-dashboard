@@ -1,0 +1,177 @@
+<link rel="import" href="../../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../mixins/data-element-mixin.html">
+<link rel="import" href="../../../mixins/event-helper-mixin.html">
+<link rel="import" href="../../../config/dexie-db-config.html">
+
+
+<dom-module id="partnership-dashboard-data">
+
+  <script>
+    /**
+     * @polymer
+     * @mixinFunction
+     * @appliesMixin EtoolsDashboard.Mixins.DataElement
+     * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+     */
+     const PartnershipDashboardDataMixin = compose(
+      EtoolsDashboard.Mixins.DataElement,
+      EtoolsDashboard.Mixins.EventHelper
+    )(Polymer.Element);
+    /**
+     * `partnership-dashboard-data` Description
+     *
+     * @summary ShortDescription.
+     * @customElement
+     * @polymer
+     * @appliesMixin PartnershipDashboardDataMixin
+     */
+    class PartnershipDashboardData extends PartnershipDashboardDataMixin {
+      /**
+       * String providing the tag name to register the element under.
+       */
+      static get is() {
+        return 'partnership-dashboard-data';
+      }
+
+      /**
+       * Object describing property-related metadata used by Polymer features
+       */
+      static get properties() {
+        return {
+          active: {
+            type: Boolean,
+            value: false
+          },
+          endpointName: {
+            type: String,
+            value: 'partnershipsDashboard'
+          },
+          currentQuery: {
+            type: Object,
+            value: null
+          },
+          filteredPartnershipsDashboard: {
+            type: Array,
+            readOnly: true,
+            notify: true
+          },
+          totalResults: {
+            type: Number,
+            readOnly: true,
+            notify: true
+          },
+          allPartners: {
+            type: Array,
+            notify: true
+          },
+          dataLoadedEventName: {
+            type: String,
+            value: 'partnerships-dashboard-loaded'
+          },
+          presetResults: {
+            type: Array,
+            value: []
+          },
+          loadedInitially: {
+            type: Boolean,
+            value: false
+          },
+          presetsLoaded: {
+            type: Boolean,
+            value: false
+          },
+          predicates: {
+            type: Object,
+            value: function() {
+              return {
+                searchString: (qs, partner) => qs.length ? contains(qs.toLowerCase(), partner.name.toLowerCase()) : true,
+                sectors: (sectors, partner) => sectors.length && partner.sections ? !!intersection(sectors, [trim(partner.sections)]).length : partner.sections ? true : false,
+                name: (name, partner) => name.length ? any(equals(partner), name) : true,
+              };
+            }
+          },
+          presetFilters: {
+            type: Array,
+            notify: true,
+            value: [
+              { total: 0, id: '1', title: 'Partners with no recent Programmatic Visits (in the past 180 days)', status: '', filteredPartnershipsDashboard: [] },
+              { total: 0, id: '2', title: 'Partners with no Programmatic Visits', status: '', filteredPartnershipsDashboard: [] },
+            ]
+          }
+        };
+      }
+
+      static get observers() {
+        return [
+          'init(active)'
+        ]
+      }
+
+      init() {
+        if (this.active) {
+          this.fireEvent('global-loading', { message: 'Loading partnerships dashboard data...', active: true, loadingSource: 'partnership-dashboard-data' });
+          this.set('loadedInitially', true);
+        }
+      }
+
+      createPresetFilters(results) {
+        return [
+          results.clone().filter(
+            partner => partner.alert_no_recent_pv === true
+          ),
+          results.clone().filter(
+            partner => partner.alert_no_pv === true
+          ),
+        ];
+      }
+
+      query(params) {
+        const { order, orderBy } = params;
+        const predKeys = keys(this.predicates);
+        EtoolsDashboard.DexieDb.transaction(
+          'r',
+          EtoolsDashboard.DexieDb.partnerships_dashboard,
+          () => {
+            let queryResult = EtoolsDashboard.DexieDb.partnerships_dashboard.orderBy(orderBy || 'name');
+            let allPartners = queryResult.clone();
+            if (order === 'desc') {
+              queryResult = queryResult.reverse();
+            }
+            // check if preset filters were populated already
+            if (!this.presetsLoaded) {
+              let queryResultCopy = queryResult.clone();
+              this.set('presetResults', this.createPresetFilters(queryResultCopy));
+            }
+            const callPred = (pred, partner) => this.predicates[pred](params[pred], partner);
+            queryResult = queryResult.filter(
+              (partner) => predKeys.reduce((acc, pred) => acc && callPred(pred, partner), true)
+            );
+            return Dexie.Promise.all([
+              queryResult.count(),
+              queryResult.clone().toArray(),
+              allPartners.clone().toArray(),
+              ...(this.presetResults.map((res) => res.toArray()))
+            ]);
+          }).then(countAndResult => {
+            this.fireEvent('global-loading', { loadingSource: 'partnership-dashboard-data' });
+            this._setTotalResults(countAndResult[0]);
+            this._setFilteredPartnershipsDashboard(countAndResult[1]);
+            this.set('allPartners', countAndResult[2]);
+            // check if preset filters were populated already
+            if (!this.presetsLoaded) {
+              for (let i = 3; i < (this.presetResults.length + 3); i++) {
+                this.set(
+                  `presetFilters.${i-3}.filteredPartnershipsDashboard`,
+                  countAndResult[i]
+                );
+                this.set(`presetFilters.${i-3}.total`, countAndResult[i].length);
+              }
+              this.set('presetsLoaded', true);
+            }
+          }).catch((err) => console.error('Error querying partnerships-dash: ', err));
+      }
+    }
+
+    window.customElements.define(PartnershipDashboardData.is, PartnershipDashboardData);
+  </script>
+</dom-module>

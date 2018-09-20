@@ -122,7 +122,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="top-content">
             <div class="top-content-row title-row">
               <h1 main-title>
-                [[pageTitle]]
+                Dashboard
               </h1>
 
               <div class="top-content-actions-wrapper">
@@ -177,7 +177,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </paper-tab>
 
                 <paper-tab name="partnerships" link>
-                  <a href="[[rootPath]]partnerships" class="tab-content">Partnerships</a>
+                  <a href="[[rootPath]]partnerships/overview" class="tab-content">Partnerships</a>
                 </paper-tab>
 
                 <paper-tab name="map" link>
@@ -285,10 +285,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             value: false,
             observer: '_assuranceSelected'
           },
-          pageTitle: {
-            type: String,
-            default: 'Dashboard'
-          },
           user: {
             type: Object
           },
@@ -320,7 +316,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // If no page was found in the route data, page will be an empty string.
         // Default to 'personalized' in that case.
         this.set('page', page || 'personalized');
-        this.pageTitle = page === 'partnerships' ? 'CSO Dashboard' : 'Dashboard';
       }
 
       _pageChanged(page) {
