@@ -559,7 +559,7 @@
             type: String,
             notify: true
           },
-          urlParams: {
+          queryParams: {
             type: Object
           },
           sectors: {
@@ -678,10 +678,10 @@
       }
 
       _init(active, sectors, statuses, offices, requiredDataLoaded) {
-        let params = this.queryParams;
         if (!active || !sectors || !statuses || !offices || !requiredDataLoaded) {
           return;
         }
+        let params = this.queryParams;
         this.set('initComplete', false);
         this.set('qs', params.qs ? params.qs : '');
         this.set('pageNumber', params.page ? parseInt(params.page) : 1);
@@ -708,7 +708,6 @@
         this._initListFilters();
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
-
       }
 
       _initListFilters() {
@@ -829,7 +828,7 @@
 
       _updateUrl(query, pageNumber, pageSize, sortOrder, requiredDataLoaded,
         initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate) {
-          if (!this.initComplete || !this.requiredDataLoaded) {
+          if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
           return;
         }
 

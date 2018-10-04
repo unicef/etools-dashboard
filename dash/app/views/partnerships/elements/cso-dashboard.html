@@ -81,6 +81,7 @@
                                 on-partnerships-dashboard-loaded="_requiredDataLoaded"
                                 list-data-path="filteredPartnershipsDashboard"
                                 preset-filters="{{presetFilters}}"
+                                presets-loaded="{{presetsLoaded}}"
                                 all-partners="{{allPartners}}"
     ></partnership-dashboard-data>
 
@@ -342,6 +343,11 @@
             type: Boolean,
             value: false
           },
+          presetsLoaded: {
+            type: Boolean,
+            value: false,
+            observer: 'rangeChanged'
+          },
           csvDownloadUrl: {
             type: String,
             notify: true
@@ -351,6 +357,9 @@
           },
           totalResults: {
             type: Array,
+          },
+          queryParams: {
+            type: String
           },
           sectors: {
             type: Array,
@@ -444,6 +453,7 @@
         this._initListFilters();
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
+        this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
       }
 
       _initListFilters() {
@@ -515,6 +525,9 @@
       }
 
       rangeChanged() {
+        if (this.presetsLoaded && this.filteredPartnershipsDashboard) {
+          this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
+        }
         this._initListFilters;
         if (this.currentFilter !== 'custom') {
           this.$.partnerListTemplate.items = this.presetFilters[this.currentFilter-1].filteredPartnershipsDashboard.slice(
@@ -531,11 +544,9 @@
 
       _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded,
         initComplete, selectedSectors, selectedPartners) {
-          if (!this.initComplete || !this.requiredDataLoaded) {
+        if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
           return;
         }
-
-        this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
         const qs = this.buildQueryString();
         const currentRoute = this.route.prefix + this.route.path;
         if (qs !== null) {
@@ -555,12 +566,18 @@
       }
 
       _buildCsvDownloadUrl() {
-        let query = this.params.reduce((acc, { qName, propName, xf }) => {
-          return isEmpty(this[propName]) ? acc
-            : `${acc}${qName}=${xf(this[propName])}&`;
-        }, '');
-        query = query.split('|').join(',');
-        return `${this.getEndpoint('partnershipsDashboard').url}/?${query}format=csv`;
+        if (this.filteredPartnershipsDashboard && this.active) {
+          let pks = [];
+          if (this.currentFilter === 'custom') {
+            pks = this.filteredPartnershipsDashboard.map(partner => prop('id', partner))
+          } else {
+            pks = this.presetFilters[this.currentFilter-1].filteredPartnershipsDashboard.map(
+              partner => prop('id', partner)
+            );
+          }
+          let pksString = pks.join(',');
+          return `${this.getEndpoint('partnershipsDashboard').url}/?pk=${pksString}format=csv`;
+        }
       }
 
       _filterPartnershipsDashboardData() {
