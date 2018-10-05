@@ -21,7 +21,7 @@
     "etools-info-tooltip": "2.0.0",
     "etools-piwik-analytics": "2.0.1",
     "google-chart": "^2.0.0",
-    "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.2",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.3",
     "iron-icons": "PolymerElements/iron-icons#^2.0.1",
     "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^2.1.1",
     "iron-media-query": "PolymerElements/iron-media-query#^2.0.0",
@@ -54,7 +54,8 @@
     "polymer": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "etools-dialog": "^2.1.0",
-    "etools-dropdown": "9e2fb79"
+    "etools-dropdown": "9e2fb79",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^2.0.3"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
