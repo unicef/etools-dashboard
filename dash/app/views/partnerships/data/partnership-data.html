@@ -108,9 +108,7 @@
               { total: 0, id: '3', title: 'PD with no recent programmatic visit', status: '(active, ended)', filteredPartnerships: [] },
               { total: 0, id: '4', title: 'PD/SSFA expiring in the next 30 days', status: '(active, suspended)', filteredPartnerships: [] },
               { total: 0, id: '5', title: 'PD/SSFA with  actual disbursement amount less than FR planned amount', status: '(ended)', filteredPartnerships: [] },
-              { total: 0, id: '6', title: 'PD/SSFA with missing Final Partnership Review', status: '(ended)', filteredPartnerships: [] },
-              { total: 0, id: '7', title: 'IPs requiring new PCA in the coming CP', status: '', filteredPartnerships: [] },
-              { total: 0, id: '8', title: 'IPs with active PD without a signed PCA', status: '', filteredPartnerships: [] }
+              { total: 0, id: '6', title: 'PD/SSFA with missing Final Partnership Review', status: '(ended)', filteredPartnerships: [] }
             ]
           }
         };
@@ -158,9 +156,6 @@
               && !partner.has_final_partnership_review
               && parseInt(partner.disbursement_usd) >= 100000
           )
-          // the following filters will be updated when specs are finalized
-          // results.clone().filter(partner => false),
-          // results.clone().filter(partner => false)
         ];
       }
 
