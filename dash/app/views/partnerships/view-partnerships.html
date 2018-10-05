@@ -124,11 +124,13 @@
           },
           csvDownloadUrlOverview: {
             type: String,
-            value: ''
+            value: '',
+            observer: '_setDownloadOverview'
           },
           csvDownloadUrlCso: {
             type: String,
-            value: ''
+            value: '',
+            observer: '_setDownloadCso'
           },
           csoActive: {
             type: Boolean,
@@ -143,8 +145,7 @@
 
       static get observers() {
         return [
-          '_tabChanged(routeData.partnershipsTab, active)',
-          '_setDownload(csvDownloadUrlOverview, csvDownloadUrlCso)'
+          '_tabChanged(routeData.partnershipsTab, active)'
         ];
       }
 
@@ -166,8 +167,12 @@
         }
       }
 
-      _setDownload(url) {
-        this.set('csvDownloadUrl', url);
+      _setDownloadOverview() {
+        this.set('csvDownloadUrl', this.csvDownloadUrlOverview);
+      }
+
+      _setDownloadCso() {
+        this.set('csvDownloadUrl', this.csvDownloadUrlCso);
       }
 
       _toggleDashView({ target }) {
