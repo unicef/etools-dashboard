@@ -291,22 +291,23 @@
         id="list"
         elevation="1">
       <data-table-header no-collapse>
-        <data-table-column class="col-5 no-header-line"
+        <data-table-column class="col-6 no-header-line"
                           group-heading="blank"
                           transparent>
-          <data-table-column class="col-4" sortable>
-            IP Name
-            <br>PD/SSFA Ref #
+          <data-table-column class="col-3" sortable>
+            Vendor No.
+            <br>IP Name
           </data-table-column>
-          <div class="col-6 layout horizontal">
-            <data-table-column class="col-5">
+          <div class="col-7 layout horizontal">
+            <data-table-column class="col-5 status">
+              PD/SSFA Ref #
+              <br>Status
+            </data-table-column>
+            <data-table-column class="col-3">
               Section
             </data-table-column>
             <data-table-column class="col-4">
               Field Office
-            </data-table-column>
-            <data-table-column class="col-3 status">
-              Status
             </data-table-column>
           </div>
           <data-table-column class="col-2">
@@ -314,8 +315,8 @@
             <br>End Date
           </data-table-column>
         </data-table-column>
-        <div class="col-7 layout horizontal">
-          <data-table-column class="col-5"
+        <div class="col-6 layout horizontal">
+          <data-table-column class="col-4"
                             group-heading="PLANNED BUDGET">
             <data-table-column class="col-2 right-align">
               PD Cur.
@@ -329,7 +330,7 @@
               <br>Cash
             </data-table-column>
           </data-table-column>
-          <data-table-column class="col-5"
+          <data-table-column class="col-6"
                             group-heading="FUNDS RESERVED & DISBURSED">
             <data-table-column class="col-3 right-align">
               FR Cur.
@@ -366,8 +367,8 @@
                 as="row">
         <data-table-row no-collapse>
           <div slot="row-data">
-            <div class="col-5 layout horizontal">
-              <span class="col-data layout-horizontal col-4 ip-pd">
+            <div class="col-6 layout horizontal">
+              <span class="col-data layout-horizontal col-3 ip-pd">
                 <div class="partner-icons-group" hidden="[[!_eitherTrue(row.partner_blocked, row.partner_marked_for_deletion)]]">
                   <div class="blocked-partner-container" hidden="[[!row.partner_blocked]]">
                     <iron-icon class="blocked-partner" icon="block"></iron-icon>
@@ -378,6 +379,7 @@
                     <paper-tooltip fit-to-visible-bounds>"Partner marked for deletion"</paper-tooltip>
                   </div>
                 </div>
+                [[row.partner_vendor_number]]<br>
                 <a href="[[baseSite]]/pmp/partners/[[row.partner_id]]/details"
                   app-name="pmp"
                   page="partners"
@@ -388,18 +390,20 @@
                       [[row.partner_name]]
                     </paper-tooltip>
                 </a>
-                <br>
-                <a href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details"
-                  app-name="pmp"
-                  page="interventions"
-                  id="[[row.intervention_id]]/details"
-                  class="title">
-                    [[row.number]]
-                    <paper-tooltip fit-to-visible-bounds>[[row.number]]</paper-tooltip>
-                </a>
               </span>
-              <span class="col-6">
-                <div class="col-data col-5 sections">
+              <span class="col-7">
+                <div class="col-data col-5 status">
+                  <a href="[[baseSite]]/pmp/interventions/[[row.intervention_id]]/details"
+                     app-name="pmp"
+                     page="interventions"
+                     id="[[row.intervention_id]]/details"
+                     class="title">
+                      [[row.number]]
+                    <paper-tooltip fit-to-visible-bounds>[[row.number]]</paper-tooltip>
+                  </a>
+                  <br>[[capitalizeWord(row.status)]]
+                </div>
+                <div class="col-data col-3 sections">
                   <template is="dom-repeat"
                             items="{{commaSplit(row.sections)}}">
                     [[item]]
@@ -413,17 +417,14 @@
                     <br>
                   </template>
                 </div>
-                <div class="col-data col-3 status">
-                  [[capitalizeWord(row.status)]]
-                </div>
               </span>
               <span class="col-data col-2 date">
                 [[prettyDate(row.start)]]
                 <br> [[prettyDate(row.end)]]
               </span>
             </div>
-            <div class="col-7 layout horizontal">
-              <div class="col-5 layout horizontal">
+            <div class="col-6 layout horizontal">
+              <div class="col-4 layout horizontal">
                 <span class="col-data col-2 right-align">
                   [[row.budget_currency]]
                 </span>
@@ -434,7 +435,7 @@
                   [[currencyFormat(row.unicef_cash)]]
                 </span>
               </div>
-              <div class="col-5 layout horizontal">
+              <div class="col-6 layout horizontal">
                 <span class="col-data col-3 right-align">
                   <iron-icon hidden="[[_checkSigned(row.status, row.all_currencies_are_consistent)]]"
                             icon="dash-custom-icons:not-equal"
