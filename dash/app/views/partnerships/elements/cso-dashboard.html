@@ -176,7 +176,8 @@
         elevation="1">
       <data-table-header no-collapse>
         <data-table-column class="col-2" field="name" sortable>
-          Partner
+          Vendor No.
+          <br>IP Name
         </data-table-column>
         <data-table-column class="col-1" sortable>
           Cost Centre
@@ -220,6 +221,7 @@
         <data-table-row no-collapse>
           <div slot="row-data">
             <div class="col-2">
+              [[row.vendor_number]]<br>
               <a href="[[baseSite]]/pmp/partners/[[row.id]]/details"
                 app-name="pmp"
                 page="partners"
