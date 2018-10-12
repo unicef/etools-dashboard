@@ -56,7 +56,7 @@
                active="{{active}}"
                query-params="{{queryParams}}"></app-route>
     <!-- hidden temporarily due to business requirements -->
-    <div class="view-toggle">
+    <!-- <div class="view-toggle">
       <paper-button id="overview" on-tap="_toggleDashView" name="csoOverview" noink class="curved-left">
         <iron-icon id="overviewIcon" name="overview" icon="reorder"></iron-icon>
         OVERVIEW
@@ -65,7 +65,7 @@
         <iron-icon id="csoIcon" name="csoDash" icon="list"></iron-icon>
         CSO DASHBOARD
       </paper-button>
-    </div>
+    </div> -->
 
     <iron-pages id="partnershipsPages"
         selected="{{routeData.partnershipsTab}}"
@@ -155,15 +155,15 @@
           this.set('overviewActive', true);
           this.set('csoActive', false);
           this.set('csvDownloadUrl', this.csvDownloadUrlOverview);
-          this.$.overview.classList.remove('dark-button');
-          this.$.csoDash.classList.remove('light-button');
+          // this.$.overview.classList.remove('dark-button');
+          // this.$.csoDash.classList.remove('light-button');
         } else {
           this.set('csoActive', true);
           this.set('overviewActive', false);
           this.set('csvDownloadUrl', this.csvDownloadUrlCso)
           this.updateAppState(this.route.path);
-          this.$.overview.classList.add('dark-button');
-          this.$.csoDash.classList.add('light-button');
+          // this.$.overview.classList.add('dark-button');
+          // this.$.csoDash.classList.add('light-button');
         }
       }
 
