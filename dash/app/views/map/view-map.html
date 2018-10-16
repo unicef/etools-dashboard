@@ -275,6 +275,10 @@
             type: Array,
             statePath: 'results'
           },
+          clusters: {
+            type: Array,
+            statePath: 'clusters'
+          },
           section: {
             type: String
           },
@@ -310,6 +314,9 @@
             observer: '_plotMarkers'
           },
           selectedPartners: {
+            type: Array
+          },
+          selectedClusters: {
             type: Array
           },
           partners: {
@@ -399,6 +406,11 @@
                   qName: 'results',
                   propName: 'selectedResults',
                   xf: compose(join('|'), map(prop('value')))
+                },
+                {
+                  qName: 'clusters',
+                  propName: 'selectedClusters',
+                  xf: compose(join('|'), map(prop('value')))
                 }
               ];
             }
@@ -413,8 +425,8 @@
 
       static get observers() {
         return [
-          '_init(active,userCountry, countryProgrammes, sections, statuses, offices, partners, donors, grants, interventions, unicefUsers, results)',
-          '_filterChanged(initComplete, selectedCps, selectedSections, selectedStatuses, selectedPartners, selectedDonors, selectedGrants, selectedInterventions, selectedFocalPoints, selectedOffices, selectedResults)',
+          '_init(active,userCountry, countryProgrammes, sections, statuses, offices, partners, donors, grants, interventions, clusters, unicefUsers, results)',
+          '_filterChanged(initComplete, selectedCps, selectedSections, selectedStatuses, selectedPartners, selectedDonors, selectedGrants, selectedInterventions, selectedFocalPoints, selectedOffices, selectedResults, selectedClusters)',
           '_setWarnings(country_programme, section, status, partner)'
         ];
       }
@@ -455,7 +467,7 @@
       }
 
       _init(active, userCountry, countryProgrammes, sections, statuses,
-       offices, partners, donors, grants, interventions, unicefUsers, results) {
+       offices, partners, donors, grants, interventions, clusters, unicefUsers, results) {
         const staticDataLoaded = [...arguments].reduce(
           (allLoaded, xs) => Boolean(xs) && allLoaded,
           true
@@ -558,6 +570,15 @@
             path: 'selectedGrants'
           },
           {
+            filterName: 'Clusters',
+            type: 'esmm',
+            optionValue: 'value',
+            optionLabel: 'label',
+            alreadySelected: [],
+            selectionOptions: this.clusters,
+            path: 'selectedClusters'
+          },
+          {
             filterName: 'Focal Points',
             type: 'esmm',
             optionValue: 'value',
@@ -567,7 +588,7 @@
             path: 'selectedFocalPoints'
           },
           {
-            filterName: 'Results',
+            filterName: 'CP Outputs',
             type: 'esmm',
             optionValue: 'value',
             optionLabel: 'label',
@@ -597,6 +618,7 @@
           selectedDonors: this.paramStrParseToArray(params.donors, this.donors, 'label') || [],
           selectedOffices: this.paramStrParseToArray(params.offices, this.offices.map((o)=>({ value: o.id, label: o.name }))) || [],
           selectedGrants: this.paramStrParseToArray(params.grants, this.grants) || [],
+          selectedClusters: this.paramStrParseToArray(params.clusters, this.clusters) || [],
           selectedFocalPoints: this.paramStrParseToArray(params.focalPoints, this.unicefUsers) || [],
           selectedInterventions: this.paramStrParseToArray(params.pdssfa, this.interventions) || [],
           selectedResults: this.paramStrParseToArray(params.results, this.results) || []
@@ -638,11 +660,15 @@
               selectedValue: map(prop('value'), this.selectedGrants)
             },
             {
+              filterName: 'Clusters',
+              selectedValue: map(prop('value'), this.selectedClusters)
+            },
+            {
               filterName: 'Focal Points',
               selectedValue: map(prop('value'), this.selectedFocalPoints)
             },
             {
-              filterName: 'Results',
+              filterName: 'CP Outouts',
               selectedValue: map(prop('value'), this.selectedResults)
             },
             {
@@ -672,7 +698,8 @@
           'interventions': map(prop('value')),
           'unicef_focal_points': map(prop('value')),
           'offices': map(prop('value')),
-          'results': map(prop('value'))
+          'results': map(prop('value')),
+          'clusters': map(prop('value'))
         };
         let newFilter = {};
         const fieldNames= keys(fieldToOptionMap);
