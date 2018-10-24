@@ -119,13 +119,13 @@
       createPresetFilters(results) {
         return [
           results.clone().filter(
-            partner => partner.alert_no_recent_pv === true
+            partner => partner.alert_no_recent_pv
           ),
           results.clone().filter(
-            partner => partner.alert_no_pv === true
+            partner => partner.alert_no_pv
           ),
+          results.clone().filter(partner => partner.alert_pca_required),
           // the following filters will be updated when specs are finalized
-          // results.clone().filter(partner => false),
           // results.clone().filter(partner => false)
         ];
       }
