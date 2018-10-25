@@ -155,15 +155,11 @@
           this.set('overviewActive', true);
           this.set('csoActive', false);
           this.set('csvDownloadUrl', this.csvDownloadUrlOverview);
-          // this.$.overview.classList.remove('dark-button');
-          // this.$.csoDash.classList.remove('light-button');
         } else {
           this.set('csoActive', true);
           this.set('overviewActive', false);
           this.set('csvDownloadUrl', this.csvDownloadUrlCso)
           this.updateAppState(this.route.path);
-          // this.$.overview.classList.add('dark-button');
-          // this.$.csoDash.classList.add('light-button');
         }
       }
 
