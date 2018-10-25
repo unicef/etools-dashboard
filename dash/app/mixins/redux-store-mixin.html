@@ -29,7 +29,8 @@
     hactGraphs: [],
     donors: [],
     grants: [],
-    results: []
+    results: [],
+    clusters: []
   };
 
   const reducer = (state, action) => {
@@ -96,6 +97,11 @@
       case 'SET_RESULTS':
         return merge(state, {
           results: action.results
+        });
+  
+      case 'SET_CLUSTERS':
+        return merge(state, {
+          clusters: action.clusters
         });
 
     }
