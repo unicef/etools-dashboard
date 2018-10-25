@@ -246,6 +246,15 @@
                 value: res.id
               }))
             };
+          },
+          setClusters(data=[]) {
+            return {
+              type: 'SET_CLUSTERS',
+              clusters: data.filter((f)=>!isEmpty(f.cluster_name)).map((cluster)=>({
+                label: cluster.cluster_name,
+                value: cluster.cluster_name
+                }))
+            };
           }
 
         };
@@ -288,8 +297,10 @@
 
           let actionObj = {
             handler: concat('set', capitalize(a.propName)),
-            endpoint: { endpoint }
+            endpoint: { endpoint },
+            type: `SET_${a.propName.toUpperCase()}`
           };
+    
           return actionObj;
         });
         this.set('toDispatch', mappedItems);

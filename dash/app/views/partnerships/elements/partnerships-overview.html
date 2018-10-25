@@ -398,7 +398,7 @@
                      page="interventions"
                      id="[[row.intervention_id]]/details"
                      class="title">
-                      ...[[_getTruncated(row.number)]]
+                      [[_getTruncated(row.number)]]
                     <paper-tooltip fit-to-visible-bounds>[[row.number]]</paper-tooltip>
                   </a>
                   <br>[[capitalizeWord(row.status)]]
@@ -962,7 +962,11 @@
       }
 
       _getTruncated(pdssfa){
-        return pdssfa.split('/').slice(-1)[0]
+        if (pdssfa.length > 16) {
+          return '...' + pdssfa.split('/').slice(-1)[0]
+        } else {
+          return '...' + pdssfa.slice(pdssfa.length - 9)
+        }
       }
 
       _showPresetFilter(event) {
