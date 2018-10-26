@@ -398,7 +398,7 @@
                      page="interventions"
                      id="[[row.intervention_id]]/details"
                      class="title">
-                      ...[[_getTruncated(row.number)]]
+                      [[_getTruncated(row.number)]]
                     <paper-tooltip fit-to-visible-bounds>[[row.number]]</paper-tooltip>
                   </a>
                   <br>[[capitalizeWord(row.status)]]
@@ -560,7 +560,7 @@
             type: String,
             notify: true
           },
-          urlParams: {
+          queryParams: {
             type: Object
           },
           sectors: {
@@ -679,10 +679,10 @@
       }
 
       _init(active, sectors, statuses, offices, requiredDataLoaded) {
-        let params = this.queryParams;
         if (!active || !sectors || !statuses || !offices || !requiredDataLoaded) {
           return;
         }
+        let params = this.queryParams;
         this.set('initComplete', false);
         this.set('qs', params.qs ? params.qs : '');
         this.set('pageNumber', params.page ? parseInt(params.page) : 1);
@@ -696,20 +696,10 @@
         this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
         this.set('endAfterDate', params.endAfter ? params.endAfter : '');
         this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px'
-        // the following should be removed when the final two preset filters are enabled
-        if (this.shadowRoot.querySelectorAll('.alert-row').length > 0) {
-          this.shadowRoot.querySelectorAll('.alert-row')[6].style.color = 'rgb(144,144,144)';
-          this.shadowRoot.querySelectorAll('.alert-row')[6].firstElementChild.firstElementChild.innerText = '-';
-          this.shadowRoot.querySelectorAll('.alert-row')[6].firstElementChild.children[1].classList.remove('filter-name');
-          this.shadowRoot.querySelectorAll('.alert-row')[7].style.color = 'rgb(144,144,144)';
-          this.shadowRoot.querySelectorAll('.alert-row')[7].firstElementChild.firstElementChild.innerText = '-';
-          this.shadowRoot.querySelectorAll('.alert-row')[7].firstElementChild.children[1].classList.remove('filter-name');
-        }
-
         this._initListFilters();
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
-
+        this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
       }
 
       _initListFilters() {
@@ -963,16 +953,16 @@
       }
 
       _getTruncated(pdssfa){
-        return pdssfa.split('/').slice(-1)[0]
+        if (pdssfa.length > 16) {
+          return '...' + pdssfa.split('/').slice(-1)[0]
+        } else {
+          return '...' + pdssfa.slice(pdssfa.length - 9)
+        }
       }
 
       _showPresetFilter(event) {
         let filterDiv = event.currentTarget.lastElementChild;
         let clickedFilter = event.model.__data.presets;
-        // temporarily disables last two filters until data is ready
-        if (clickedFilter.id === '7' || clickedFilter.id === '8') {
-          return;
-        }
 
         // reset styling for all filter buttons
         this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(
@@ -1037,12 +1027,6 @@
               return row.status === 'ended'
                 && !row.has_final_partnership_review
                 && parseInt(row.disbursement_usd) >= 100000;
-              break;
-            case '7':
-              return true;
-              break;
-            case '8':
-              return true;
               break;
           }
         };
