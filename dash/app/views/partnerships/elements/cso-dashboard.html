@@ -551,7 +551,7 @@
 
       _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded,
         initComplete, selectedSectors, selectedPartners, selectedOutstanding) {
-          if (!this.initComplete || !this.requiredDataLoaded) {
+        if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
           return;
         }
         const qs = this.buildQueryString();

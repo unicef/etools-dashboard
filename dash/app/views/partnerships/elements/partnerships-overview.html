@@ -709,6 +709,7 @@
         this._initListFilters();
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
+        this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
       }
 
       _initListFilters() {
@@ -829,7 +830,7 @@
 
       _updateUrl(query, pageNumber, pageSize, sortOrder, requiredDataLoaded,
         initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate) {
-          if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
+          if (!this.initComplete || !this.requiredDataLoaded) {
           return;
         }
 
