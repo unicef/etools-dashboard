@@ -78,7 +78,7 @@
                                list-data-path="filteredPartnerships"
                                query-params="{{queryParams}}"
                                route="{{route}}"
-                               csv-download-url="{{csvDownloadUrl}}"
+                               csv-download-url="{{csvDownloadUrlOverview}}"
         ></partnerships-overview>
       </div>
 
@@ -88,7 +88,7 @@
                        list-data-path="filteredPartnershipsDashboard"
                        query-params="{{queryParams}}"
                        route="{{route}}"
-                       csv-download-url="{{csvDownloadUrl}}"
+                       csv-download-url="{{csvDownloadUrlCso}}"
         ></cso-dashboard>
       </div>
     </iron-pages>
@@ -122,6 +122,16 @@
             type: String,
             notify: true
           },
+          csvDownloadUrlOverview: {
+            type: String,
+            value: '',
+            observer: '_setDownloadOverview'
+          },
+          csvDownloadUrlCso: {
+            type: String,
+            value: '',
+            observer: '_setDownloadCso'
+          },
           csoActive: {
             type: Boolean,
             value: false
@@ -142,14 +152,30 @@
       _tabChanged(tab, active) {
         if (!tab || !active) { return; }
         if (tab === 'overview') {
-          this.set('overviewActive', active)
+          this.set('overviewActive', true);
+          this.set('csoActive', false);
+          this.set('csvDownloadUrl', this.csvDownloadUrlOverview);
           this.$.overview.classList.remove('dark-button');
           this.$.csoDash.classList.remove('light-button');
         } else {
-          this.set('csoActive', active)
+          this.set('csoActive', true);
+          this.set('overviewActive', false);
+          this.set('csvDownloadUrl', this.csvDownloadUrlCso)
           this.updateAppState(this.route.path);
           this.$.overview.classList.add('dark-button');
           this.$.csoDash.classList.add('light-button');
+        }
+      }
+
+      _setDownloadOverview() {
+        if (this.overviewActive) {
+          this.set('csvDownloadUrl', this.csvDownloadUrlOverview);
+        }
+      }
+
+      _setDownloadCso() {
+        if (this.csoActive) {
+          this.set('csvDownloadUrl', this.csvDownloadUrlCso);
         }
       }
 
