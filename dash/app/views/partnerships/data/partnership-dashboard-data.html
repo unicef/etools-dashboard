@@ -98,6 +98,8 @@
             value: [
               { total: 0, id: '1', title: 'Partners with no recent Programmatic Visits (in the past 180 days)', status: '', filteredPartnershipsDashboard: [] },
               { total: 0, id: '2', title: 'Partners with no Programmatic Visits', status: '', filteredPartnershipsDashboard: [] },
+              { total: 0, id: '3', title: 'Partners requiring new PCA in the coming CP', status: '', filteredPartnershPartnersDashboard: [] },
+              { total: 0, id: '4', title: 'Partners with active PD without a signed PCA', status: '', filteredPartnershipsDashboard: [] }
             ]
           }
         };
@@ -119,11 +121,14 @@
       createPresetFilters(results) {
         return [
           results.clone().filter(
-            partner => partner.alert_no_recent_pv === true
+            partner => partner.alert_no_recent_pv
           ),
           results.clone().filter(
-            partner => partner.alert_no_pv === true
+            partner => partner.alert_no_pv
           ),
+          // the following filters will be updated when specs are finalized
+          // results.clone().filter(partner => partner.alert_pca_required),
+          // results.clone().filter(partner => false)
         ];
       }
 
