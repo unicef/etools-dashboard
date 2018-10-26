@@ -140,6 +140,11 @@
       template: '/api/v2/attachments/',
       exp: 6 * 60 * 60 * 1000,
       cacheTableName: 'attachments'
+    },
+    clusters: {
+      template: '/api/v2/reports/clusters/',
+      exp: 6 * 60 * 60 * 1000,
+      cachingKey: 'clusters'
     }
   };
 </script>

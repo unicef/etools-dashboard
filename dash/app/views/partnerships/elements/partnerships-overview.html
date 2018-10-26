@@ -398,7 +398,7 @@
                      page="interventions"
                      id="[[row.intervention_id]]/details"
                      class="title">
-                      ...[[_getTruncated(row.number)]]
+                      [[_getTruncated(row.number)]]
                     <paper-tooltip fit-to-visible-bounds>[[row.number]]</paper-tooltip>
                   </a>
                   <br>[[capitalizeWord(row.status)]]
@@ -560,7 +560,7 @@
             type: String,
             notify: true
           },
-          urlParams: {
+          queryParams: {
             type: Object
           },
           sectors: {
@@ -679,10 +679,10 @@
       }
 
       _init(active, sectors, statuses, offices, requiredDataLoaded) {
-        let params = this.queryParams;
         if (!active || !sectors || !statuses || !offices || !requiredDataLoaded) {
           return;
         }
+        let params = this.queryParams;
         this.set('initComplete', false);
         this.set('qs', params.qs ? params.qs : '');
         this.set('pageNumber', params.page ? parseInt(params.page) : 1);
@@ -699,6 +699,7 @@
         this._initListFilters();
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
+        this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
       }
 
       _initListFilters() {
@@ -952,7 +953,11 @@
       }
 
       _getTruncated(pdssfa){
-        return pdssfa.split('/').slice(-1)[0]
+        if (pdssfa.length > 16) {
+          return '...' + pdssfa.split('/').slice(-1)[0]
+        } else {
+          return '...' + pdssfa.slice(pdssfa.length - 9)
+        }
       }
 
       _showPresetFilter(event) {

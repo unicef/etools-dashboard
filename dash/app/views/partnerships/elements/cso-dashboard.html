@@ -24,11 +24,12 @@
 <link rel="import" href="../../../../../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../../../../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../../../../bower_components/iron-icon/iron-icon.html">
 
 <link rel="import"
       href="../../../../../bower_components/etools-dropdown/etools-dropdown-multi.html">
-
+      
 <link rel="import" href="../../../mixins/common-general-mixin.html">
 <link rel="import" href="../../../mixins/list-filters-mixin.html">
 <link rel="import" href="../../../mixins/pagination-with-filters-mixin.html">
@@ -81,6 +82,7 @@
                                 on-partnerships-dashboard-loaded="_requiredDataLoaded"
                                 list-data-path="filteredPartnershipsDashboard"
                                 preset-filters="{{presetFilters}}"
+                                presets-loaded="{{presetsLoaded}}"
                                 all-partners="{{allPartners}}"
     ></partnership-dashboard-data>
 
@@ -112,7 +114,7 @@
                     placeholder="Search"
                     always-float-label>
           <iron-icon icon="search"
-                    slot="prefix"></iron-icon>
+                     slot="prefix"></iron-icon>
         </paper-input>
 
         <template is="dom-repeat"
@@ -124,18 +126,25 @@
                     if="[[filterTypeIs('esmm', filter.type)]]">
             <div class="filter esmm">
               <etools-dropdown-multi label="[[filter.filterName]]"
-                                    placeholder="&#8212;"
-                                    disabled$="[[!filter.selectionOptions.length]]"
-                                    options="[[filter.selectionOptions]]"
-                                    option-value="[[filter.optionValue]]"
-                                    option-label="[[filter.optionLabel]]"
-                                    trigger-value-change-event
-                                    on-etools-selected-items-changed="esmmValueChanged"
-                                    data-filter-path$="[[filter.path]]"
-                                    min-width="300px"
-                                    horizontal-align="left"
-                                    no-dynamic-align>
+                                     placeholder="&#8212;"
+                                     disabled$="[[!filter.selectionOptions.length]]"
+                                     options="[[filter.selectionOptions]]"
+                                     option-value="[[filter.optionValue]]"
+                                     option-label="[[filter.optionLabel]]"
+                                     trigger-value-change-event
+                                     on-etools-selected-items-changed="esmmValueChanged"
+                                     data-filter-path$="[[filter.path]]"
+                                     min-width="300px"
+                                     horizontal-align="left"
+                                     no-dynamic-align>
               </etools-dropdown-multi>
+            </div>
+          </template>
+          <template is="dom-if"
+                    if="[[filterTypeIs('toggle', filter.type)]]">
+            <div id="hiddenToggle" class="filter">
+              Outstanding DCT &gt;9?
+              <paper-toggle-button checked={{selectedOutstanding}}></paper-toggle-button>
             </div>
           </template>
         </template>
@@ -143,7 +152,7 @@
       <div class="fixed-controls">
         <div class="filters-divider"></div>
         <paper-menu-button id="filterMenu"
-                          ignore-select
+                            ignore-select
                           dynamic-align>
           <paper-button class="button"
                         slot="dropdown-trigger">
@@ -226,12 +235,11 @@
               </a>
             </div>
             <div class="col-data col-1 sections">
-              <!-- <template is="dom-repeat"
+              <template is="dom-repeat"
                         items="{{dividerSplit(row.locations)}}">
                 [[item]]
                 <br>
-              </template> -->
-              -
+              </template>
             </div>
             <div class="col-data col-1 sections">
               <div class="pad-top-4">
@@ -250,33 +258,31 @@
                 [[currencyFormat(row.total_ct_ytd)]]
               </div>
               <div class="col-3 right-align">
-                -
-                <!-- [[row.outstanding_dct_amount_6_to_9_months_usd]] -->
+                [[_hasValue(row.outstanding_dct_amount_6_to_9_months_usd)]]
               </div>
               <div class="col-3 right-align">
-                -
-                <!-- [[row.outstanding_dct_amount_more_than_9_months_usd]] -->
+                [[_hasValue(row.outstanding_dct_amount_more_than_9_months_usd)]]
               </div>
             </div>
             <div class="col-1 right-align">
-              <a href="[[baseSite]]/apd/">[[row.action_points]]</a>
+              <a href="[[baseSite]]/apd/action-points/list?partner=[[row.id]]">[[row.action_points]]</a>
             </div>
             <div class="col-1 col-data right-align">
               <span class="last-pv">[[displayNonZero(row.days_last_pv)]]</span>
               <iron-icon on-click="goToMaps"
-                             class="map-icon"
-                             icon="maps:map"></iron-icon>
+                         class="map-icon"
+                         icon="maps:map"></iron-icon>
             </div>
           </div>
         </data-table-row>
       </template>
       <data-table-footer id="csoDashboardFooter"
-                        page-size="[[pageSize]]"
-                        page-number="[[pageNumber]]"
-                        visible-range="{{visibleRange}}"
-                        on-page-size-changed="pageSizeChanged"
-                        filtered-total-results="[[totalResults]]"
-                        on-page-number-changed="pageNumberChanged">
+                         page-size="[[pageSize]]"
+                         page-number="[[pageNumber]]"
+                         visible-range="{{visibleRange}}"
+                         on-page-size-changed="pageSizeChanged"
+                         filtered-total-results="[[totalResults]]"
+                         on-page-number-changed="pageNumberChanged">
       </data-table-footer>
     </div>
   </template>
@@ -344,6 +350,11 @@
             type: Boolean,
             value: false
           },
+          presetsLoaded: {
+            type: Boolean,
+            value: false,
+            observer: 'rangeChanged'
+          },
           csvDownloadUrl: {
             type: String,
             notify: true
@@ -353,6 +364,9 @@
           },
           totalResults: {
             type: Array,
+          },
+          queryParams: {
+            type: String
           },
           sectors: {
             type: Array,
@@ -371,11 +385,10 @@
           //   type: Array,
           //   observer: 'filterChanged'
           // },
-          // selectedOustanding: {
-          //   type: Boolean,
-          //   value: false,
-          //   observer: 'filterChanged'
-          // },
+          selectedOutstanding: {
+            type: Boolean,
+            value: false
+          },
           visibleRange: {
             type: Array,
             observer: 'rangeChanged'
@@ -414,6 +427,11 @@
                   qName: 'name',
                   propName: 'selectedPartners',
                   xf: compose(join('|'), map(prop('name')))
+                },
+                {
+                  qName: 'outstanding',
+                  propName: 'selectedOutstanding',
+                  xf: identity
                 }
               ];
             }
@@ -423,7 +441,7 @@
 
       static get observers() {
         return [
-          '_updateUrl(qs, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded, initComplete, selectedSectors, selectedPartners, selectedOffices, active)',
+          '_updateUrl(qs, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded, initComplete, selectedSectors, selectedPartners, selectedOffices, selectedOutstanding, active)',
           '_init(active, sectors, requiredDataLoaded)'
         ];
       }
@@ -452,6 +470,7 @@
         this._initListFilters();
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
+        this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
       }
 
       _initListFilters() {
@@ -476,7 +495,7 @@
               alreadySelected: [],
               path: 'selectedSectors',
               selected: false
-            }
+            },
             // {
             //   filterName: 'Cost Centre',
             //   type: 'esmm',
@@ -487,16 +506,12 @@
             //   path: 'selectedOffices',
             //   selected: false
             // },
-            // {
-            //   filterName: 'Outstanding DCT >9?',
-            //   type: 'esmm',
-            //   optionValue: 'value',
-            //   optionLabel: 'label',
-            //   selectionOptions: this.costCentres,
-            //   alreadySelected: [],
-            //   path: 'selectedOutstanding',
-            //   selected: false
-            // },
+            {
+              filterName: 'Outstanding DCT >9?',
+              type: 'toggle',
+              path: 'selectedOutstanding',
+              selected: false
+            },
           ]);
         }
         if (this.allPartners.length) {
@@ -515,7 +530,7 @@
             },
             {
               filterName: 'Partner Name',
-              selectedValue: map(prop('name', this.selectedPartners))
+              selectedValue: map(prop('name'), this.selectedPartners)
             }
           ];
           this.updateShownFilters(filtersValues);
@@ -523,6 +538,9 @@
       }
 
       rangeChanged() {
+        if (this.presetsLoaded && this.filteredPartnershipsDashboard) {
+          this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
+        }
         this._initListFilters;
         if (this.currentFilter !== 'custom') {
           this.$.partnerListTemplate.items = this.presetFilters[this.currentFilter-1].filteredPartnershipsDashboard.slice(
@@ -538,12 +556,10 @@
       }
 
       _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded,
-        initComplete, selectedSectors, selectedPartners) {
-          if (!this.initComplete || !this.requiredDataLoaded) {
+        initComplete, selectedSectors, selectedPartners, selectedOutstanding) {
+        if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
           return;
         }
-
-        this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
         const qs = this.buildQueryString();
         const currentRoute = this.route.prefix + this.route.path;
         if (qs !== null) {
@@ -563,12 +579,18 @@
       }
 
       _buildCsvDownloadUrl() {
-        let query = this.params.reduce((acc, { qName, propName, xf }) => {
-          return isEmpty(this[propName]) ? acc
-            : `${acc}${qName}=${xf(this[propName])}&`;
-        }, '');
-        query = query.split('|').join(',');
-        return `${this.getEndpoint('partnershipsDashboard').url}/?${query}format=csv`;
+        if (this.filteredPartnershipsDashboard && this.active) {
+          let pks = [];
+          if (this.currentFilter === 'custom') {
+            pks = this.filteredPartnershipsDashboard.map(partner => prop('id', partner))
+          } else {
+            pks = this.presetFilters[this.currentFilter-1].filteredPartnershipsDashboard.map(
+              partner => prop('id', partner)
+            );
+          }
+          let pksString = pks.join(',');
+          return `${this.getEndpoint('partnershipsDashboard').url}/?pk=${pksString}format=csv`;
+        }
       }
 
       _filterPartnershipsDashboardData() {
@@ -577,6 +599,7 @@
           sectors: map(prop('label'), this.selectedSectors),
           name: this.selectedPartners,
           // costCentre: this.selectedOffices,
+          outstanding: this.selectedOutstanding,
           orderBy: this.orderBy,
           order: this.sortOrder,
           pageSize: this.pageSize,
@@ -599,7 +622,7 @@
       _setSelectedSectors(sectorsStr) {
         const sectorsArr = sectorsStr.split('|');
         if (!isEmpty(sectorsArr)) {
-          const selectedSectors = this.sectors.filter((s) => {
+          const selectedSectors = this.sectors.filter(s => {
             return sectorsArr.indexOf(s.value) > -1;
           });
           return selectedSectors;
@@ -655,6 +678,10 @@
           this.$.customFilterPanel.hidden = true;
           this.$.csoDashboardFooter.filteredTotalResults = clickedFilter.total;
         }
+      }
+
+      _hasValue(field) {
+        return field ? field : '-'
       }
 
       computeFilter(filter) {
