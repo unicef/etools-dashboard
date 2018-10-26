@@ -462,6 +462,9 @@
         this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px'
         // the following should be removed when the final two preset filters are enabled
         if (this.shadowRoot.querySelectorAll('.alert-row').length > 0) {
+          this.shadowRoot.querySelectorAll('.alert-row')[2].style.color = 'rgb(144,144,144)';
+          this.shadowRoot.querySelectorAll('.alert-row')[2].firstElementChild.firstElementChild.innerText = '-';
+          this.shadowRoot.querySelectorAll('.alert-row')[2].firstElementChild.children[1].classList.remove('filter-name');
           this.shadowRoot.querySelectorAll('.alert-row')[3].style.color = 'rgb(144,144,144)';
           this.shadowRoot.querySelectorAll('.alert-row')[3].firstElementChild.firstElementChild.innerText = '-';
           this.shadowRoot.querySelectorAll('.alert-row')[3].firstElementChild.children[1].classList.remove('filter-name');
@@ -644,7 +647,7 @@
         let clickedFilter = event.model.__data.presets;
 
         // temporarily disables last two filters until data is ready
-        if (clickedFilter.id === '4') {
+        if (clickedFilter.id === '3' || clickedFilter.id === '4') {
           return;
         }
 
@@ -694,7 +697,8 @@
             case '2':
               return row.alert_no_pv;
             case '3':
-              return row.alert_pca_required;
+              // return row.alert_pca_required;
+              return true;
               break;
             case '4':
               return true;
