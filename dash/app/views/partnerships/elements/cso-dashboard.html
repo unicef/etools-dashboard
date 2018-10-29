@@ -459,17 +459,7 @@
         this.set('orderBy', params.orderBy || '');
         this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
         this.set('selectedPartners', params.partners ? this._setSelectedPartners(params.partners) : []);
-        this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px'
-        // the following should be removed when the final two preset filters are enabled
-        if (this.shadowRoot.querySelectorAll('.alert-row').length > 0) {
-          this.shadowRoot.querySelectorAll('.alert-row')[2].style.color = 'rgb(144,144,144)';
-          this.shadowRoot.querySelectorAll('.alert-row')[2].firstElementChild.firstElementChild.innerText = '-';
-          this.shadowRoot.querySelectorAll('.alert-row')[2].firstElementChild.children[1].classList.remove('filter-name');
-          this.shadowRoot.querySelectorAll('.alert-row')[3].style.color = 'rgb(144,144,144)';
-          this.shadowRoot.querySelectorAll('.alert-row')[3].firstElementChild.firstElementChild.innerText = '-';
-          this.shadowRoot.querySelectorAll('.alert-row')[3].firstElementChild.children[1].classList.remove('filter-name');
-        }
-    
+        this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px';    
         this._initListFilters();
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
@@ -646,11 +636,6 @@
         let filterDiv = event.currentTarget.lastElementChild;
         let clickedFilter = event.model.__data.presets;
 
-        // temporarily disables last two filters until data is ready
-        if (clickedFilter.id === '3' || clickedFilter.id === '4') {
-          return;
-        }
-
         // reset styling for all filter buttons
         this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(
           (b) => b.style.opacity = '0'
@@ -697,11 +682,10 @@
             case '2':
               return row.alert_no_pv;
             case '3':
-              // return row.alert_pca_required;
-              return true;
+              return row.alert_pca_required;
               break;
             case '4':
-              return true;
+              return row.alert_active_pd_for_ended_pca;
               break;
           }
         };
