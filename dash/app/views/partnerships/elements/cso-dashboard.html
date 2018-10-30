@@ -176,13 +176,13 @@
         id="list"
         elevation="1">
       <data-table-header no-collapse>
-        <data-table-column class="col-2" field="name" sortable>
+        <data-table-column class="col-3" field="name" sortable>
           Vendor No.
           <br>IP Name
         </data-table-column>
-        <data-table-column class="col-1" sortable>
+        <!-- <data-table-column class="col-1" sortable>
           Cost Centre
-        </data-table-column>
+        </data-table-column> -->
         <data-table-column class="col-1" sortable>
           Section
         </data-table-column>
@@ -221,7 +221,7 @@
                 as="row">
         <data-table-row no-collapse>
           <div slot="row-data">
-            <div class="col-2">
+            <div class="col-3">
               [[row.vendor_number]]<br>
               <a href="[[baseSite]]/pmp/partners/[[row.id]]/details"
                 app-name="pmp"
@@ -234,13 +234,13 @@
                   </paper-tooltip>
               </a>
             </div>
-            <div class="col-data col-1 sections">
+            <!-- <div class="col-data col-1 sections">
               <template is="dom-repeat"
                         items="{{dividerSplit(row.locations)}}">
                 [[item]]
                 <br>
               </template>
-            </div>
+            </div> -->
             <div class="col-data col-1 sections">
               <div class="pad-top-4">
                 <template is="dom-repeat"
