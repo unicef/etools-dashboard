@@ -57,25 +57,25 @@
                query-params="{{queryParams}}"></app-route>
 
     <div class="view-toggle">
-      <paper-button id="overview" on-tap="_toggleDashView" name="csoOverview" noink class="curved-left">
+      <paper-button id="overview" on-tap="_toggleDashView" name="overview" noink class="curved-left">
         <iron-icon id="overviewIcon" name="overview" icon="reorder"></iron-icon>
         OVERVIEW
       </paper-button>
-      <paper-button id="csoDash" on-tap="_toggleDashView"  name="csoDash" noink class="curved-right">
+      <paper-button id="csoDash" on-tap="_toggleDashView"  name="cso" noink class="curved-right">
         <iron-icon id="csoIcon" name="csoDash" icon="list"></iron-icon>
         CSO DASHBOARD
       </paper-button>
     </div>
 
     <iron-pages id="partnershipsPages"
-        selected="{{routeData.partnershipsTab}}"
-        attr-for-selected="name"
-        fallback-selection="overview">
+                selected="{{routeData.partnershipsTab}}"
+                attr-for-selected="name"
+                fallback-selection="overview">
 
       <div name="overview">
         <partnerships-overview active="[[overviewActive]]"
                                total-results="{{totalResults}}"
-                               list-data-path="filteredPartnerships"
+                               list-data-path="filteredPartnershipsOverview"
                                query-params="{{queryParams}}"
                                route="{{route}}"
                                csv-download-url="{{csvDownloadUrlOverview}}"

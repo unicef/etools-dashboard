@@ -48,7 +48,7 @@
           },
           endpointName: {
             type: String,
-            value: 'cso_dashboard'
+            value: 'csoDashboard'
           },
           currentQuery: {
             type: Object,
@@ -164,9 +164,9 @@
         const predKeys = keys(this.predicates);
         EtoolsDashboard.DexieDb.transaction(
           'r',
-          EtoolsDashboard.DexieDb.cso_dashboard,
+          EtoolsDashboard.DexieDb.csoDashboard,
           () => {
-            let queryResult = EtoolsDashboard.DexieDb.cso_dashboard.orderBy('partner_name');
+            let queryResult = EtoolsDashboard.DexieDb.csoDashboard.orderBy('partner_name');
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
