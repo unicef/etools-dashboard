@@ -4,7 +4,7 @@
 <link rel="import" href="../../../config/dexie-db-config.html">
 
 
-<dom-module id="partnership-dashboard-data">
+<dom-module id="partnership-overview-data">
 
   <script>
     /**
@@ -13,24 +13,24 @@
      * @appliesMixin EtoolsDashboard.Mixins.DataElement
      * @appliesMixin EtoolsDashboard.Mixins.EventHelper
      */
-     const PartnershipDashboardDataMixin = compose(
+     const PartnershipOverviewDataMixin = compose(
       EtoolsDashboard.Mixins.DataElement,
       EtoolsDashboard.Mixins.EventHelper
     )(Polymer.Element);
     /**
-     * `partnership-dashboard-data` Description
+     * `partnership-overview-data` Description
      *
      * @summary ShortDescription.
      * @customElement
      * @polymer
-     * @appliesMixin PartnershipDashboardDataMixin
+     * @appliesMixin PartnershipOverviewDataMixin
      */
-    class PartnershipDashboardData extends PartnershipDashboardDataMixin {
+    class PartnershipOverviewData extends PartnershipOverviewDataMixin {
       /**
        * String providing the tag name to register the element under.
        */
       static get is() {
-        return 'partnership-dashboard-data';
+        return 'partnership-overview-data';
       }
 
       /**
@@ -44,13 +44,13 @@
           },
           endpointName: {
             type: String,
-            value: 'partnershipsDashboard'
+            value: 'partnershipsOverview'
           },
           currentQuery: {
             type: Object,
             value: null
           },
-          filteredPartnershipsDashboard: {
+          filteredPartnershipsOverview: {
             type: Array,
             readOnly: true,
             notify: true
@@ -66,7 +66,7 @@
           },
           dataLoadedEventName: {
             type: String,
-            value: 'partnerships-dashboard-loaded'
+            value: 'partnerships-overview-loaded'
           },
           presetResults: {
             type: Array,
@@ -96,10 +96,10 @@
             type: Array,
             notify: true,
             value: [
-              { total: 0, id: '1', title: 'Partners with no recent Programmatic Visits (in the past 180 days)', status: '', filteredPartnershipsDashboard: [] },
-              { total: 0, id: '2', title: 'Partners with no Programmatic Visits', status: '', filteredPartnershipsDashboard: [] },
-              { total: 0, id: '3', title: 'Partners requiring new PCA in the coming CP', status: '', filteredPartnershPartnersDashboard: [] },
-              { total: 0, id: '4', title: 'Partners with active PD without a signed PCA', status: '', filteredPartnershipsDashboard: [] }
+              { total: 0, id: '1', title: 'Partners with no recent Programmatic Visits (in the past 180 days)', status: '', filteredPartnershipsOverview: [] },
+              { total: 0, id: '2', title: 'Partners with no Programmatic Visits', status: '', filteredPartnershipsOverview: [] },
+              { total: 0, id: '3', title: 'Partners requiring new PCA in the coming CP', status: '', filteredPartnershipsOverview: [] },
+              { total: 0, id: '4', title: 'Partners with active PD without a signed PCA', status: '', filteredPartnershipsOverview: [] }
             ]
           }
         };
@@ -113,7 +113,7 @@
 
       init() {
         if (this.active) {
-          this.fireEvent('global-loading', { message: 'Loading partnerships dashboard data...', active: true, loadingSource: 'partnership-dashboard-data' });
+          this.fireEvent('global-loading', { message: 'Loading partnership overview data...', active: true, loadingSource: 'partnership-overview-data' });
           this.set('loadedInitially', true);
         }
       }
@@ -132,9 +132,9 @@
         const predKeys = keys(this.predicates);
         EtoolsDashboard.DexieDb.transaction(
           'r',
-          EtoolsDashboard.DexieDb.partnerships_dashboard,
+          EtoolsDashboard.DexieDb.partnershipsOverview,
           () => {
-            let queryResult = EtoolsDashboard.DexieDb.partnerships_dashboard.orderBy(orderBy || 'name');
+            let queryResult = EtoolsDashboard.DexieDb.partnershipsOverview.orderBy(orderBy || 'name');
             let allPartners = queryResult.clone();
             if (order === 'desc') {
               queryResult = queryResult.reverse();
@@ -155,15 +155,15 @@
               ...(this.presetResults.map((res) => res.toArray()))
             ]);
           }).then(countAndResult => {
-            this.fireEvent('global-loading', { loadingSource: 'partnership-dashboard-data' });
+            this.fireEvent('global-loading', { loadingSource: 'partnership-overview-data' });
             this._setTotalResults(countAndResult[0]);
-            this._setFilteredPartnershipsDashboard(countAndResult[1]);
+            this._setFilteredPartnershipsOverview(countAndResult[1]);
             this.set('allPartners', countAndResult[2]);
             // check if preset filters were populated already
             if (!this.presetsLoaded) {
               for (let i = 3; i < (this.presetResults.length + 3); i++) {
                 this.set(
-                  `presetFilters.${i-3}.filteredPartnershipsDashboard`,
+                  `presetFilters.${i-3}.filteredPartnershipsOverview`,
                   countAndResult[i]
                 );
                 this.set(`presetFilters.${i-3}.total`, countAndResult[i].length);
@@ -174,6 +174,6 @@
       }
     }
 
-    window.customElements.define(PartnershipDashboardData.is, PartnershipDashboardData);
+    window.customElements.define(PartnershipOverviewData.is, PartnershipOverviewData);
   </script>
 </dom-module>
