@@ -139,11 +139,8 @@
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
-            // check if preset filters were populated already
-            if (!this.presetsLoaded) {
-              let queryResultCopy = queryResult;
-              this.set('presetResults', this.createPresetFilters(queryResultCopy));
-            }
+            let queryResultCopy = queryResult;
+            this.set('presetResults', this.createPresetFilters(queryResultCopy));
             const callPred = (pred, partner) => this.predicates[pred](params[pred], partner);
             queryResult = queryResult.filter(
               (partner) => predKeys.reduce((acc, pred) => acc && callPred(pred, partner), true)
@@ -152,24 +149,21 @@
               queryResult.count(),
               queryResult.sortBy(sortBy || 'name'),
               allPartners.clone().toArray(),
-              ...(this.presetResults.map((res) => res.toArray()))
+              ...(this.presetResults.map((res) => res.sortBy(sortBy || 'name')))
             ]);
           }).then(countAndResult => {
             this.fireEvent('global-loading', { loadingSource: 'partnership-overview-data' });
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnershipsOverview(countAndResult[1]);
             this.set('allPartners', countAndResult[2]);
-            // check if preset filters were populated already
-            if (!this.presetsLoaded) {
-              for (let i = 3; i < (this.presetResults.length + 3); i++) {
-                this.set(
-                  `presetFilters.${i-3}.filteredPartnershipsOverview`,
-                  countAndResult[i]
-                );
-                this.set(`presetFilters.${i-3}.total`, countAndResult[i].length);
-              }
-              this.set('presetsLoaded', true);
+            for (let i = 3; i < (this.presetResults.length + 3); i++) {
+              this.set(
+                `presetFilters.${i-3}.filteredPartnershipsOverview`,
+                countAndResult[i]
+              );
+              this.set(`presetFilters.${i-3}.total`, countAndResult[i].length);
             }
+            this.set('presetsLoaded', true);
           }).catch((err) => console.error('Error querying partnerships-dash: ', err));
       }
     }
