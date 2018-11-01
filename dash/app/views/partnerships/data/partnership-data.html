@@ -170,11 +170,8 @@
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
-            // check if preset filters were populated already
-            if (!this.presetsLoaded) {
-              let queryResultCopy = queryResult.clone();
-              this.set('presetResults', this.createPresetFilters(queryResultCopy));
-            }
+            let queryResultCopy = queryResult.clone();
+            this.set('presetResults', this.createPresetFilters(queryResultCopy));
             const callPred = (pred, partner) => this.predicates[pred](params[pred], partner);
             queryResult = queryResult.filter(
               (partner) => predKeys.reduce((acc, pred) => acc && callPred(pred, partner), true)
@@ -188,17 +185,14 @@
             this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
-            // check if preset filters were populated already
-            if (!this.presetsLoaded) {
-              for (let i = 2; i < (this.presetResults.length + 2); i++) {
-                this.set(
-                  `presetFilters.${i-2}.filteredPartnerships`,
-                  countAndResult[i]
-                );
-                this.set(`presetFilters.${i-2}.total`, countAndResult[i].length);
-              }
-              this.set('presetsLoaded', true);
+            for (let i = 2; i < (this.presetResults.length + 2); i++) {
+              this.set(
+                `presetFilters.${i-2}.filteredPartnerships`,
+                countAndResult[i]
+              );
+              this.set(`presetFilters.${i-2}.total`, countAndResult[i].length);
             }
+            this.set('presetsLoaded', true);
           }).catch((err) => console.error('Error querying partnerships-dash: ', err));
       }
     }
