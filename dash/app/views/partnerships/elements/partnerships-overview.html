@@ -234,13 +234,6 @@
                   </paper-tooltip>
               </a>
             </div>
-            <!-- <div class="col-data col-1 sections">
-              <template is="dom-repeat"
-                        items="{{dividerSplit(row.locations)}}">
-                [[item]]
-                <br>
-              </template>
-            </div> -->
             <div class="col-data col-1 sections">
               <div class="pad-top-4">
                 <template is="dom-repeat"
@@ -629,7 +622,7 @@
       }
 
       dividerSplit(string) {
-        return string ? string.split('|') : ['-'];
+        return string ? string.split('|') : [''];
       }
 
       _showPresetFilter(event) {
