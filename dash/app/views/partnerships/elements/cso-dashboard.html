@@ -186,7 +186,8 @@
                       total-results="{{totalResults}}"
                       on-partnerships-loaded="_requiredDataLoaded"
                       list-data-path="filteredPartnerships"
-                      preset-filters="{{presetFilters}}">
+                      preset-filters="{{presetFilters}}"
+                      presets-loaded="{{presetsLoaded}}">
     </partnership-data>
 
     <div class="paper-material list-panel" elevation="1">
@@ -556,6 +557,11 @@
             type: Boolean,
             value: false
           },
+          presetsLoaded: {
+            type: Boolean,
+            value: false,
+            observer: 'rangeChanged'
+          },
           csvDownloadUrl: {
             type: String,
             notify: true
@@ -631,6 +637,11 @@
                   xf: identity
                 },
                 {
+                  qName: 'sortBy',
+                  propName: 'orderBy',
+                  xf: identity
+                },
+                {
                   qName: 'sectors',
                   propName: 'selectedSectors',
                   xf: compose(join('|'), map(prop('value')))
@@ -673,7 +684,7 @@
 
       static get observers() {
         return [
-          '_updateUrl(qs, pageNumber, pageSize, sortOrder, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate, active)',
+          '_updateUrl(qs, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded, initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate, active)',
           '_init(active, sectors, statuses, offices, requiredDataLoaded)'
         ];
       }
@@ -688,6 +699,7 @@
         this.set('pageNumber', params.page ? parseInt(params.page) : 1);
         this.set('pageSize', params.size ? parseInt(params.size) : 10);
         this.set('sortOrder', params.sort ? params.sort : 'asc');
+        this.set('orderBy', params.sortBy || '');
         this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
         this.set('selectedOffices', params.offices ? this._setSelectedOffices(params.offices) : []);
         this.set('selectedStatuses', params.status ? this._setSelectedStatuses(params.status) : this._setSelectedStatuses('signed|active|ended|suspended|terminated'));
@@ -818,7 +830,7 @@
         }
       }
 
-      _updateUrl(query, pageNumber, pageSize, sortOrder, requiredDataLoaded,
+      _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded,
         initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate) {
           if (!this.initComplete || !this.requiredDataLoaded) {
           return;
@@ -871,6 +883,7 @@
           endBeforeDate: this.endBeforeDate,
           startBeforeDate: this.startBeforeDate,
           endAfterDate: this.endAfterDate,
+          sortBy: this.orderBy,
           order: this.sortOrder,
           pageSize: this.pageSize,
           pageNumber: this.pageNumber
