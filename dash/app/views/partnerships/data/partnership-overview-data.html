@@ -81,6 +81,10 @@
             value: false,
             notify: true
           },
+          displayOrder: {
+            type: String,
+            value: 'asc'
+          },
           predicates: {
             type: Object,
             value: function() {
@@ -139,7 +143,7 @@
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
-            let queryResultCopy = queryResult;
+            let queryResultCopy = queryResult.clone();
             this.set('presetResults', this.createPresetFilters(queryResultCopy));
             const callPred = (pred, partner) => this.predicates[pred](params[pred], partner);
             queryResult = queryResult.filter(
@@ -149,21 +153,23 @@
               queryResult.count(),
               queryResult.sortBy(sortBy || 'name'),
               allPartners.clone().toArray(),
-              ...(this.presetResults.map((res) => res.sortBy(sortBy || 'name')))
+              ...this.presetResults.map(res => res.sortBy(sortBy || 'name'))
             ]);
           }).then(countAndResult => {
             this.fireEvent('global-loading', { loadingSource: 'partnership-overview-data' });
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnershipsOverview(countAndResult[1]);
             this.set('allPartners', countAndResult[2]);
-            for (let i = 3; i < (this.presetResults.length + 3); i++) {
-              this.set(
-                `presetFilters.${i-3}.filteredPartnershipsOverview`,
-                countAndResult[i]
-              );
-              this.set(`presetFilters.${i-3}.total`, countAndResult[i].length);
-            }
-            this.set('presetsLoaded', true);
+            let presetFilterResults = countAndResult.slice(3)
+            presetFilterResults.forEach((elem, indx) => {
+              this.set(`presetFilters.${indx}.filteredPartnershipsOverview`, elem);
+              this.set(`presetFilters.${indx}.total`, elem.length);
+            })
+            if (this.presetsLoaded) {
+              this.set('presetsLoaded', false)
+            } else {
+              this.set('presetsLoaded', true)
+            };
           }).catch((err) => console.error('Error querying partnerships-dash: ', err));
       }
     }

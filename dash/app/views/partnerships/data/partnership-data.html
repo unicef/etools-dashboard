@@ -78,7 +78,8 @@
           },
           presetsLoaded: {
             type: Boolean,
-            value: false
+            value: false,
+            notify: true
           },
           predicates: {
             type: Object,
@@ -160,7 +161,7 @@
       }
 
       query(params) {
-        const { order } = params;
+        const { order, sortBy } = params;
         const predKeys = keys(this.predicates);
         EtoolsDashboard.DexieDb.transaction(
           'r',
@@ -178,21 +179,23 @@
             );
             return Dexie.Promise.all([
               queryResult.count(),
-              queryResult.clone().toArray(),
-              ...(this.presetResults.map((res) => res.toArray()))
+              queryResult.sortBy(sortBy || 'partner_name'),
+              ...(this.presetResults.map((res) => res.sortBy(sortBy || 'partner_name')))
             ]);
           }).then((countAndResult) => {
             this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
-            for (let i = 2; i < (this.presetResults.length + 2); i++) {
-              this.set(
-                `presetFilters.${i-2}.filteredPartnerships`,
-                countAndResult[i]
-              );
-              this.set(`presetFilters.${i-2}.total`, countAndResult[i].length);
-            }
-            this.set('presetsLoaded', true);
+            let presetFilterResults = countAndResult.slice(2)
+            presetFilterResults.forEach((elem, indx) => {
+              this.set(`presetFilters.${indx}.filteredPartnerships`, elem);
+              this.set(`presetFilters.${indx}.total`, elem.length);
+            })
+            if (this.presetsLoaded) {
+              this.set('presetsLoaded', false)
+            } else {
+              this.set('presetsLoaded', true)
+            };
           }).catch((err) => console.error('Error querying partnerships-dash: ', err));
       }
     }
