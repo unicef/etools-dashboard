@@ -183,7 +183,7 @@
         <!-- <data-table-column class="col-1" sortable>
           Cost Centre
         </data-table-column> -->
-        <data-table-column class="col-1" sortable>
+        <data-table-column class="col-1">
           Section
         </data-table-column>
         <div class="col-6 layout horizontal">
@@ -234,13 +234,6 @@
                   </paper-tooltip>
               </a>
             </div>
-            <!-- <div class="col-data col-1 sections">
-              <template is="dom-repeat"
-                        items="{{dividerSplit(row.locations)}}">
-                [[item]]
-                <br>
-              </template>
-            </div> -->
             <div class="col-data col-1 sections">
               <div class="pad-top-4">
                 <template is="dom-repeat"
@@ -258,17 +251,17 @@
                 [[currencyFormat(row.total_ct_ytd)]]
               </div>
               <div class="col-3 right-align">
-                [[_hasValue(row.outstanding_dct_amount_6_to_9_months_usd)]]
+                [[row.outstanding_dct_amount_6_to_9_months_usd]]
               </div>
               <div class="col-3 right-align">
-                [[_hasValue(row.outstanding_dct_amount_more_than_9_months_usd)]]
+                [[row.outstanding_dct_amount_more_than_9_months_usd]]
               </div>
             </div>
             <div class="col-1 right-align">
               <a href="[[baseSite]]/apd/action-points/list?partner=[[row.id]]">[[row.action_points]]</a>
             </div>
             <div class="col-1 col-data right-align">
-              <span class="last-pv">[[displayNonZero(row.days_last_pv)]]</span>
+              <span class="last-pv">[[row.days_last_pv]]</span>
               <iron-icon on-click="goToMaps"
                          class="map-icon"
                          icon="maps:map"></iron-icon>
@@ -456,7 +449,7 @@
         this.set('pageNumber', params.page ? parseInt(params.page) : 1);
         this.set('pageSize', params.size ? parseInt(params.size) : 10);
         this.set('sortOrder', params.sort ? params.sort : 'asc');
-        this.set('orderBy', params.orderBy || '');
+        this.set('orderBy', params.sortBy || '');
         this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
         this.set('selectedPartners', params.partners ? this._setSelectedPartners(params.partners) : []);
         this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px';    
@@ -593,7 +586,7 @@
           name: this.selectedPartners,
           // costCentre: this.selectedOffices,
           outstanding: this.selectedOutstanding,
-          orderBy: this.orderBy,
+          sortBy: this.orderBy,
           order: this.sortOrder,
           pageSize: this.pageSize,
           pageNumber: this.pageNumber
@@ -629,7 +622,7 @@
       }
 
       dividerSplit(string) {
-        return string ? string.split('|') : ['-'];
+        return string ? string.split('|') : [''];
       }
 
       _showPresetFilter(event) {
