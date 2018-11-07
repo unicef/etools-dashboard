@@ -63,20 +63,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     'use strict';
-    var UserVoice = window.UserVoice || [];
-    (function() {
-      let uv = document.createElement('script');
-      uv.type = 'text/javascript';
-      uv.async = true;
-      uv.src = '//widget.uservoice.com/s74dylVlP3CUCbVw6famA.js';
-      let s = document.getElementsByTagName('script')[0];
-      s.parentNode.insertBefore(uv, s);
-    })();
-    UserVoice.push(['addTrigger', {}]);
-    UserVoice.push(['set', {
-      target: 'self',
-      screenshot_enabled: false
-    }]);
     /**
      * [polymer-root-path]
      *
@@ -115,6 +101,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         document.head.appendChild(appShellImport);
       })();
   </script>
+  
+  <!-- Start of prphelp Zendesk Widget script -->
+
+  <script id="ze-snippet"
+        src="https://static.zdassets.com/ekr/snippet.js?key=fd275a17-bb04-499b-bc03-ffe711fa1ba8"> </script>
+
+  <!-- End of prphelp Zendesk Widget script -->
 
   <!-- Add any global styles for body, document, etc. -->
   <style>
