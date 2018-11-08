@@ -48,7 +48,7 @@
           },
           endpointName: {
             type: String,
-            value: 'cso_dashboard'
+            value: 'csoDashboard'
           },
           currentQuery: {
             type: Object,
@@ -78,13 +78,14 @@
           },
           presetsLoaded: {
             type: Boolean,
-            value: false
+            value: false,
+            notify: true
           },
           predicates: {
             type: Object,
             value: function() {
               return {
-                searchString: (qs, partner) => qs.length ? contains(qs.toLowerCase(), partner.partner_name.toLowerCase()) : true,
+                searchString: (qs, partner) => qs.length ? contains(qs.toLowerCase(), partner.partner_name.toLowerCase()) || contains(qs.toLowerCase(), partner.partner_vendor_number) : true,
                 sectors: (sectors, partner)=> sectors.length ? !!intersection(sectors, [trim(partner.sections)]).length : true,
                 offices: (offices, partner)=> offices.length ? !!intersection(offices, partner.offices_names.split(',')).length : true,
                 status: (status, partner)=> status.length ? (contains(partner.status, status) ? true : false) : true,
@@ -108,9 +109,7 @@
               { total: 0, id: '3', title: 'PD with no recent programmatic visit', status: '(active, ended)', filteredPartnerships: [] },
               { total: 0, id: '4', title: 'PD/SSFA expiring in the next 30 days', status: '(active, suspended)', filteredPartnerships: [] },
               { total: 0, id: '5', title: 'PD/SSFA with  actual disbursement amount less than FR planned amount', status: '(ended)', filteredPartnerships: [] },
-              { total: 0, id: '6', title: 'PD/SSFA with missing Final Partnership Review', status: '(ended)', filteredPartnerships: [] },
-              { total: 0, id: '7', title: 'IPs requiring new PCA in the coming CP', status: '', filteredPartnerships: [] },
-              { total: 0, id: '8', title: 'IPs with active PD without a signed PCA', status: '', filteredPartnerships: [] }
+              { total: 0, id: '6', title: 'PD/SSFA with missing Final Partnership Review', status: '(ended)', filteredPartnerships: [] }
             ]
           }
         };
@@ -158,52 +157,45 @@
               && !partner.has_final_partnership_review
               && parseInt(partner.disbursement_usd) >= 100000
           )
-          // the following filters will be updated when specs are finalized
-          // results.clone().filter(partner => false),
-          // results.clone().filter(partner => false)
         ];
       }
 
       query(params) {
-        const { order } = params;
+        const { order, sortBy } = params;
         const predKeys = keys(this.predicates);
         EtoolsDashboard.DexieDb.transaction(
           'r',
-          EtoolsDashboard.DexieDb.cso_dashboard,
+          EtoolsDashboard.DexieDb.csoDashboard,
           () => {
-            let queryResult = EtoolsDashboard.DexieDb.cso_dashboard.orderBy('partner_name');
+            let queryResult = EtoolsDashboard.DexieDb.csoDashboard.orderBy('partner_name');
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
-            // check if preset filters were populated already
-            if (!this.presetsLoaded) {
-              let queryResultCopy = queryResult.clone();
-              this.set('presetResults', this.createPresetFilters(queryResultCopy));
-            }
+            let queryResultCopy = queryResult.clone();
+            this.set('presetResults', this.createPresetFilters(queryResultCopy));
             const callPred = (pred, partner) => this.predicates[pred](params[pred], partner);
             queryResult = queryResult.filter(
               (partner) => predKeys.reduce((acc, pred) => acc && callPred(pred, partner), true)
             );
             return Dexie.Promise.all([
               queryResult.count(),
-              queryResult.clone().toArray(),
-              ...(this.presetResults.map((res) => res.toArray()))
+              queryResult.sortBy(sortBy || 'partner_name'),
+              ...(this.presetResults.map((res) => res.sortBy(sortBy || 'partner_name')))
             ]);
           }).then((countAndResult) => {
             this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
-            // check if preset filters were populated already
-            if (!this.presetsLoaded) {
-              for (let i = 2; i < (this.presetResults.length + 2); i++) {
-                this.set(
-                  `presetFilters.${i-2}.filteredPartnerships`,
-                  countAndResult[i]
-                );
-                this.set(`presetFilters.${i-2}.total`, countAndResult[i].length);
-              }
-              this.set('presetsLoaded', true);
-            }
+            let presetFilterResults = countAndResult.slice(2)
+            presetFilterResults.forEach((elem, indx) => {
+              this.set(`presetFilters.${indx}.filteredPartnerships`, elem);
+              this.set(`presetFilters.${indx}.total`, elem.length);
+            })
+            if (this.presetsLoaded) {
+              this.set('presetsLoaded', false)
+            } else {
+              this.set('presetsLoaded', true)
+            };
           }).catch((err) => console.error('Error querying partnerships-dash: ', err));
       }
     }

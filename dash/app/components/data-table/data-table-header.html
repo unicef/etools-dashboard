@@ -88,6 +88,11 @@
         super();
       }
 
+      ready() {
+        super.ready();
+        this.addEventListener('sort-changed', this._handleSortChanged);
+      }
+
       connectedCallback() {
         super.connectedCallback();
         //detect if any column is a group of columns with heading

@@ -43,10 +43,10 @@
       exp: 6 * 60 * 60 * 1000, // 6h
       cacheTableName: 'partners'
     },
-    partnershipsDashboard: {
+    partnershipsOverview: {
       template: '/api/v2/partners/dashboard',
       exp: 6 * 60 * 60 * 1000, // 6h
-      cacheTableName: 'partnerships_dashboard'
+      cacheTableName: 'partnershipsOverview'
     },
     partnerDetails: {
       template: '/api/v2/partners/<%=id%>/'
@@ -104,10 +104,10 @@
       exp: 10*60000,
       cachingKey: 'results'
     },
-    cso_dashboard: {
+    csoDashboard: {
       template: '/api/v2/interventions/partnership-dash',
       exp: 6 * 60 * 60 * 1000, // 6h
-      cacheTableName: 'cso_dashboard'
+      cacheTableName: 'csoDashboard'
     },
     trips: {
       template: '/api/t2f/travels/?f_traveler=<%=id%>',
@@ -140,6 +140,11 @@
       template: '/api/v2/attachments/',
       exp: 6 * 60 * 60 * 1000,
       cacheTableName: 'attachments'
+    },
+    clusters: {
+      template: '/api/v2/reports/clusters/',
+      exp: 6 * 60 * 60 * 1000,
+      cachingKey: 'clusters'
     }
   };
 </script>
