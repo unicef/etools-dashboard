@@ -16,6 +16,7 @@
   "dependencies": {
     "express": "^4.16.3",
     "prpl-server": "^1.0.0",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "deep-extend": ">=0.5.1"
   }
 }
