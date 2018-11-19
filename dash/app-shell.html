@@ -84,6 +84,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       iron-pages {
         display: flex;
+        padding-bottom: 60px;
       }
 
       paper-menu-button {
@@ -193,7 +194,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
         </div>
         
-        <iron-pages selected="[[page]]"
+        <iron-pages 
+                    selected="[[page]]"
                     attr-for-selected="name"
                     fallback-selection="personalized"
                     role="main">
