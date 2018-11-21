@@ -52,6 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="app/components/common-data-loaders.html">
 <link rel="import" href="app/components/page-header.html">
+<link rel="import" href="app/components/page-footer.html">
 
 
 <dom-module id="app-shell">
@@ -84,7 +85,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       iron-pages {
         display: flex;
-        padding-bottom: 60px;
       }
 
       paper-menu-button {
@@ -224,6 +224,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             class="page"
                             name="attachments"></view-attachments>
         </iron-pages>
+        <page-footer></page-footer>
       </app-header-layout>
     </app-drawer-layout>
   </template>
