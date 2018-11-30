@@ -19,8 +19,7 @@
 <link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../../bower_components/iron-icons/maps-icons.html">
-<link rel="import" href="../../../../bower_components/iron-icons/av-icons.html">
-<link rel="import" href="../../../../bower_components/iron-icons/social-icons.html">
+
 <link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../../../bower_components/moment-element/moment-import.html">
 
@@ -29,6 +28,9 @@
 <link rel="import" href="../../endpoints/endpoints-mixin.html">
 <link rel="import" href="../../config/config.html">
 <link rel="import" href="../../../../bower_components/etools-loading/etools-loading.html">
+<link rel="import" href="../../config/dexie-db-config.html">
+<link rel="import" href="../../mixins/event-helper-mixin.html">
+<link rel="import" href="../../mixins/data-element-mixin.html">
 
 <dom-module id="view-personalized">
   <template>
@@ -63,6 +65,19 @@
           @apply --layout;
           @apply --layout-center-justified;
           @apply --layout-center;
+        }
+
+        .map-icon {
+          color: var(--dark-icon-color);
+          position: absolute;
+          right: 24px;
+          transform: translateY(-50%);
+          display: none;
+          cursor: pointer;
+        }
+
+        data-table-row:hover .map-icon {
+          display: block;
         }
 
         .trip-management {
@@ -143,61 +158,66 @@
     <!--MY PARTNERSHIPS-->
     <div class="paper-material list-panel clear-pad" elevation="1">
       <div no-title no-collapse class="list-title layout horizontal center main trips-ap">
-        <div class="flex-2 title">My Partnerships</div>
-        <div class="partnership-buttons">
-          <paper-button class="button toolbar-item">
-            <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/list" app-name="pmp" page="partners">
-              <iron-icon icon="social:people"></iron-icon>
-              Partners
-            </a>
-          </paper-button>
-          <paper-button class="button toolbar-item">
-            <a on-tap="goToPage" href="[[baseSite]]/pmp/agreements" app-name="pmp" page="agreements">
-              <iron-icon icon="av:playlist-add-check"></iron-icon>
-              Agreements
-            </a>
-          </paper-button>
-          <paper-button class="button toolbar-item">
-            <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions" app-name="pmp"
-              page="interventions">
-              <iron-icon icon="icons:description"></iron-icon>
-              PD/SSFA
-            </a>
-          </paper-button>
-          <paper-button class="button toolbar-item">
-            <a on-tap="goToPage" href="[[baseSite]]/pmp/government-partners" app-name="pmp"
-              page="government-partners">
-              <iron-icon icon="icons:account-balance"></iron-icon>
-              Government
-            </a>
-          </paper-button>
-        </div>
+        <div class="flex-2 title">My PD/SSFAs</div>
       </div>
       <template is="dom-if" if="[[!partnershipsLoaded]]">
         <etools-loading active></etools-loading>
       </template>
+
       <data-table-header class="single">
-        <div class="col-data small-text col-2">PD/SSFA Reference No.</div>
-        <div class="col-data small-text flex-3">PD/SSFA Title</div>
-        <div class="col-data small-text col-2 end-justified">UNICEF Cash Amount</div>
+        <div class="col-data small-text col-1">Partner</div>
+        <div class="col-data small-text col-1">PD/SSFA Reference No. <br> Status</div>
+        <div class="col-data small-text col-1">Status of PD/SSFA</div>
+        <div class="col-data small-text col-2">Start - End Dates</div>
+        <div class="col-data small-text col-1">FR Flags</div>
+        <div class="col-data small-text col-2">Disbursement to Date / <br> UNICEF Cash</div>
+        <div class="col-data small-text col-1">Outstanding DCT</div>
+        <div class="col-data small-text col-1">Action Points</div>
+        <div class="col-data small-text col-1">Days Since Last PV</div>
+        <div class="col-data small-text col-1">Status of Last Report</div>
       </data-table-header>
+
       <div class="list-content">
-        <template is="dom-if" if="[[!partnerships.length]]">
+        <template is="dom-if" if="[[!pdSSFAs.length]]">
           <div class="paper-material inherit-width">No results to show.</div>
         </template>
-        <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden="[[!partnershipsLoaded]]">
+        <template is="dom-repeat" items="[[pdSSFAs]]" as="pd" hidden="[[!pdSSFAsLoaded]]">
           <data-table-row no-collapse>
             <div slot="row-data">
-              <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[partnership.id]]/details" app-name="pmp"
-                page="interventions" id="[[partnership.id]]/details"
-                class="col-data col-2">
-                [[partnership.number]]
+              <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[pd.id]]/details" app-name="pmp"
+                page="interventions" id="[[pd.id]]/details"
+                class="col-data col-1">
+                [[pd.name]]
               </a>
-              <span class="description description-size flex-3 col-data">
-                [[partnership.title]]
+              <span class="description description-size col-1 col-data">
+                
               </span>
-              <span class="col-data col-2 layout horizontal end-justified">
-                [[partnership.budget_currency]] [[currencyFormat(partnership.total_unicef_budget)]]</span>
+              <span class="col-data col-1 layout horizontal">
+                
+              </span>
+              <span class="col-data col-2">
+
+              </span>
+              <span class="col-data col-1">
+
+              </span>
+              <span class="col-data col-2">
+
+              </span>
+              <span class="col-data col-1">
+                [[pd.outstanding_dct_amount_6_to_9_months_usd]]
+              </span>
+              <span class="col-data col-1">
+                <a href="[[baseSite]]/apd/action-points/list?partner=[[pd.id]]&status=open">[[pd.action_points]]</a>
+              </span>
+              <span class="col-data col-1">
+                [[pd.days_last_pv]]
+              </span>
+              <span class="col-data col-1">
+                  <iron-icon on-click="goToMaps"
+                             class="map-icon"
+                             icon="maps:map"></iron-icon>
+              </span>
             </div>
           </data-table-row>
         </template>
@@ -312,11 +332,15 @@
      * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
      * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
      * @appliesMixin EtoolsDashboard.Mixins.Endpoints
+     * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+     * @appliesMixin EtoolsDashboard.Mixins.DataElement
      */
     const ViewPersonalizedMixins = compose(
       EtoolsDashboard.Mixins.ReduxStore,
       EtoolsDashboard.Mixins.CommonGeneral,
-      EtoolsDashboard.Mixins.Endpoints
+      EtoolsDashboard.Mixins.Endpoints,
+      EtoolsDashboard.Mixins.EventHelper,
+      EtoolsDashboard.Mixins.DataElement
     )(Polymer.Element);
 
     /**
@@ -340,6 +364,21 @@
        */
       static get properties() {
         return {
+          pdSSFAs: {
+            type: Array,
+            observer: '_checkPdSSFAsData'
+          },
+            partners: {
+              type: Array,
+              // observer: '_checkPdSSFAsData'
+            },
+          endpointName: {
+            type: String,
+            value: 'partnershipsOverview'
+          },
+          totalPdSSFAs: {
+            type: Number
+          },
           tripsItems: {
             type: Array,
             notify: true
@@ -363,11 +402,11 @@
             type: Array,
             statePath: 'actionPointsForMe'
           },
-          partnerships: {
-            statePath: 'partnerships',
-            observer: '_checkPartnershipsData'
-          },
-          partnershipsLoaded: {
+          // partnerships: {
+          //   statePath: 'partnerships',
+          //   observer: '_checkPartnershipsData'
+          // },
+          pdSSFAsLoaded: {
             type: Boolean,
             value: false
           },
@@ -382,6 +421,7 @@
 
       static get observers() {
         return [
+          // 'init(active)',
           '_updateUrl(active)',
           '_updateTrips(tripsTab,myTrips)',
           '_updateActionPoints(actionsTab,actionPointsForMe)',
@@ -398,6 +438,12 @@
         super();
       }
 
+      ready() {
+        super.ready();
+        this.queryPartnershipsOverview();
+        // this.queryCsoDashboard();
+      }
+
       _updateTrips() {
         this._setItems(this.tripsTab, 'tripsItems');
       }
@@ -406,9 +452,9 @@
         this._setItems(this.actionsTab, 'actionPointsItems');
       }
 
-      _checkPartnershipsData(data) {
+      _checkPdSSFAsData(data) {
         if ((data && data.length) || !data.length) {
-          this.set('partnershipsLoaded', true);
+          this.set('pdSSFAsLoaded', true);
         }
       }
 
@@ -482,6 +528,38 @@
         const path = origin + '/t2f/action-point/' + e.model.action.id;
         this.manageClickEvent(e, path);
       }
+
+      queryPartnershipsOverview() {
+        EtoolsDashboard.DexieDb.transaction(
+          'r',
+          EtoolsDashboard.DexieDb.partnershipsOverview,
+          () => {
+            let queryResult = EtoolsDashboard.DexieDb.partnershipsOverview.orderBy('name');
+            return Dexie.Promise.all([
+              queryResult.toArray()
+            ]);
+          }).then(countAndResult => {
+            this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
+            this.set('pdSSFAs', countAndResult[0]);
+            log(this.pdSSFAs)
+          }).catch(err => console.error('Error querying partnerships-dash: ', err));
+      }
+
+      // queryCsoDashboard() {
+      //   EtoolsDashboard.DexieDb.transaction(
+      //     'r',
+      //     EtoolsDashboard.DexieDb.csoDashboard,
+      //     () => {
+      //       let queryResult = EtoolsDashboard.DexieDb.csoDashboard.orderBy('partner_name');
+      //       return Dexie.Promise.all([
+      //         queryResult.toArray()
+      //       ]);
+      //     }).then(countAndResult => {
+      //       this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
+      //       this.set('partners', countAndResult[0]);
+      //       log(this.partners)
+      //     }).catch(err => console.error('Error querying partnerships-dash: ', err));
+      // }
     }
 
     window.customElements.define(ViewPersonalized.is, ViewPersonalized);
