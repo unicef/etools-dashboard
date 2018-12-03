@@ -83,6 +83,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding-top: 12px;
       }
 
+      .action-button {
+        color: var(--secondary-text-color);
+        font-weight: 500;
+      }
+
       iron-pages {
         display: flex;
       }
@@ -127,9 +132,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </h1>
 
               <div class="top-content-actions-wrapper">
+                <div class="top-content-action" hidden$="[[!_isActive(page,'personalized')]]">
+                  <paper-button class="action-button" on-tap="_print">
+                    <iron-icon class="dark" icon="print"></iron-icon>
+                    Print
+                  </paper-button>
+                </div>
+
                 <div class="top-content-action" hidden$="[[!_isActive(page,'partnerships')]]">
                   <a target="_blank" href="[[csvUrl]]">
-                    <paper-button>
+                    <paper-button class="action-button">
                       <iron-icon class="dark" icon="file-download"></iron-icon>
                       Export
                     </paper-button>
@@ -138,7 +150,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 <div class="top-content-action" hidden$="[[!_isActive(page,'hact')]]">
                   <paper-menu-button>
-                    <paper-button icon="file-download" slot="dropdown-trigger">
+                    <paper-button class="action-button" icon="file-download" slot="dropdown-trigger">
                       <iron-icon class="dark" icon="file-download"></iron-icon>
                       Export
                     </paper-button>
@@ -362,6 +374,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           `${endpoint}`,
           '_blank'
         );
+      }
+
+      _print() {
+        window.print()
       }
   
       // sets export endpoints based on assurance view (detailed/general)

@@ -6,6 +6,7 @@
 <link rel="import" href="../../styles/grid-layout-styles.html">
 <link rel="import" href="../../styles/buttons-styles.html">
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
 
 <link rel="import" href="../../../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../../../bower_components/paper-tabs/paper-tabs.html">
@@ -150,6 +151,13 @@
         div.inherit-width {
           width: inherit;
         }
+
+        @media print {
+          .list-content {
+            max-height: 100%;
+            overflow: visible;
+          }
+        }
       </style>
     </custom-style>
 
@@ -160,7 +168,7 @@
       <div no-title no-collapse class="list-title layout horizontal center main trips-ap">
         <div class="flex-2 title">My PD/SSFAs</div>
       </div>
-      <template is="dom-if" if="[[!partnershipsLoaded]]">
+      <template is="dom-if" if="[[!pdSSFAsLoaded]]">
         <etools-loading active></etools-loading>
       </template>
 
@@ -188,7 +196,9 @@
                 page="interventions" id="[[pd.id]]/details"
                 class="col-data col-1">
                 [[pd.name]]
+                <paper-tooltip position="right">[[pd.name]]</paper-tooltip>
               </a>
+
               <span class="description description-size col-1 col-data">
                 
               </span>
