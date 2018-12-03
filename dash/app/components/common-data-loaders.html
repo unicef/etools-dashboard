@@ -221,9 +221,9 @@
           setGrants(data = []) {
             return {
               type: 'SET_GRANTS',
-              grants: data.map((grant)=>({
-                label: grant.description,
-                value: grant.id
+              grants: data.grants.map((grant)=>({
+                label: grant.label,
+                value: grant.value
               }))
             };
           },
