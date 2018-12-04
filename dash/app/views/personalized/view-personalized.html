@@ -16,10 +16,12 @@
 <link rel="import" href="../../components/data-table/data-table-row.html">
 
 <link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
+<link rel="import" href="../../../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../../styles/dash-icons.html">
 
 <link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../../../bower_components/moment-element/moment-import.html">
@@ -32,6 +34,7 @@
 <link rel="import" href="../../config/dexie-db-config.html">
 <link rel="import" href="../../mixins/event-helper-mixin.html">
 <link rel="import" href="../../mixins/data-element-mixin.html">
+<link rel="import" href="../../components/etools-progress-bar.html">
 
 <dom-module id="view-personalized">
   <template>
@@ -106,6 +109,18 @@
           font-size: 18px;
         }
 
+        .capitalize {
+          text-transform: capitalize;
+        }
+
+        .red-icon {
+          fill: rgb(231, 66, 45);
+        }
+
+        .blue-icon {
+          fill: rgb(26, 154, 250);
+        }
+
         .end-justified {
           justify-content: flex-end;
           text-align: right;
@@ -176,9 +191,9 @@
         <div class="col-data small-text col-1">Partner</div>
         <div class="col-data small-text col-1">PD/SSFA Reference No. <br> Status</div>
         <div class="col-data small-text col-1">Status of PD/SSFA</div>
-        <div class="col-data small-text col-2">Start - End Dates</div>
+        <div class="col-data small-text flex-2">Start - End Dates</div>
         <div class="col-data small-text col-1">FR Flags</div>
-        <div class="col-data small-text col-2">Disbursement to Date / <br> UNICEF Cash</div>
+        <div class="col-data small-text flex-2">Disbursement to Date / <br> UNICEF Cash</div>
         <div class="col-data small-text col-1">Outstanding DCT</div>
         <div class="col-data small-text col-1">Action Points</div>
         <div class="col-data small-text col-1">Days Since Last PV</div>
@@ -195,27 +210,59 @@
               <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[pd.id]]/details" app-name="pmp"
                 page="interventions" id="[[pd.id]]/details"
                 class="col-data col-1">
-                [[pd.name]]
-                <paper-tooltip position="right">[[pd.name]]</paper-tooltip>
+                [[pd.partner_name]]
+                <paper-tooltip position="right">[[pd.partner_name]]</paper-tooltip>
               </a>
 
-              <span class="description description-size col-1 col-data">
-                
-              </span>
-              <span class="col-data col-1 layout horizontal">
-                
-              </span>
-              <span class="col-data col-2">
-
+              <span class="col-1 col-data">
+                <a on-tap="goToPage" href="[[basesSite]]/pmp/interventions/[[pd.id]]/details" app-name="pmp">
+                  [[pd.number]]
+                </a><br>
+                <span class="capitalize">[[pd.status]]</span>
               </span>
               <span class="col-data col-1">
-
+                
               </span>
-              <span class="col-data col-2">
-
+              <span class="col-data flex-2">
+                <etools-progress-bar value="[[_getPercentFromDate(pd.start, pd.end)]]" label-start="[[pd.start]]" label-end="[[pd.end]]"></etools-progress-bar>
               </span>
               <span class="col-data col-1">
-                [[pd.outstanding_dct_amount_6_to_9_months_usd]]
+                <span>
+                  <iron-icon hidden="[[_checkSigned(pd.status, pd.all_currencies_are_consistent)]]"
+                            icon="dash-custom-icons:not-equal"
+                            class="blue-icon"></iron-icon>
+                  <paper-tooltip hidden="[[_checkSigned(pd.status, pd.all_currencies_are_consistent)]]">
+                    FR currency does not match PD currency.
+                    <br> Disbursement to date % cannot calculate.
+                  </paper-tooltip>
+                  <iron-icon hidden="[[_checkAllCurrenciesConsistent(pd.status, pd.all_currencies_are_consistent, pd.fr_currencies_are_consistent)]]"
+                
+                            icon="dash-custom-icons:1+"
+                            class="blue-icon">
+                  </iron-icon>
+                  <paper-tooltip hidden="[[_checkSigned(pd.status, pd.fr_currencies_are_consistent)]]">
+                    More than 1 FR currency is available. FR Amount
+                    <br> and Actual Disbursements cannot be displayed.
+                  </paper-tooltip>
+                </span>
+                <span>
+                  <iron-icon hidden="[[_isEqual(pd.status, pd.unicef_cash, pd.frs_total_frs_amt)]]"
+                            icon="dash-custom-icons:not-equal"
+                            class="red-icon">
+                  </iron-icon>
+                  <paper-tooltip hidden="[[_isEqual(pd.status, pd.unicef_cash, pd.frs_total_frs_amt)]]">
+                    FR amount does not equal to planned UNICEF cash
+                  </paper-tooltip>
+                </span>
+              </span>
+              <span class="col-data flex-2">
+                <etools-progress-bar value="[[_getPercent(pd.disbursement, pd.unicef_cash)]]" 
+                                     label-start="[[pd.budget_currency]] [[currencyFormat(pd.disbursement)]]" 
+                                     label-end="[[currencyFormat(pd.unicef_cash)]]">
+                </etools-progress-bar>
+              </span>
+              <span class="col-data col-1">
+                [[pd.outstanding_dct]]
               </span>
               <span class="col-data col-1">
                 <a href="[[baseSite]]/apd/action-points/list?partner=[[pd.id]]&status=open">[[pd.action_points]]</a>
@@ -376,15 +423,16 @@
         return {
           pdSSFAs: {
             type: Array,
-            observer: '_checkPdSSFAsData'
+            observer: '_checkPdSSFAsData',
+            // statePath: 'interventions'
           },
-            partners: {
-              type: Array,
-              // observer: '_checkPdSSFAsData'
-            },
+          partners: {
+            type: Array,
+            // observer: '_checkPdSSFAsData'
+          },
           endpointName: {
             type: String,
-            value: 'partnershipsOverview'
+            value: 'csoDashboard'
           },
           totalPdSSFAs: {
             type: Number
@@ -450,8 +498,8 @@
 
       ready() {
         super.ready();
-        this.queryPartnershipsOverview();
-        // this.queryCsoDashboard();
+        // this.queryPartnershipsOverview();
+        this.queryCsoDashboard();
       }
 
       _updateTrips() {
@@ -539,37 +587,69 @@
         this.manageClickEvent(e, path);
       }
 
-      queryPartnershipsOverview() {
+      _displayDisbursement(val, multiCurrFlag) {
+        if (multiCurrFlag) {
+            return '';
+          }
+        let nonZero = this.displayNonZero(val);
+        return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
+      }
+
+      _isEqual(status, first, second) {
+        return status === 'signed' ? true : (first === second);
+      }
+
+      _checkAllCurrenciesConsistent(status, all_currencies_are_consistent, fr_currencies_are_consistent) {
+        return status === 'signed' ? true :
+          (!all_currencies_are_consistent) ? true :
+            (!fr_currencies_are_consistent) ? false : true;
+      }
+
+      _checkSigned(status, value) {
+        return status === 'signed' ? true : value;
+      }
+
+      _getPercentFromDate(start, end) {
+        let baseMS = Date.parse(new Date(start))
+        let todayMS = Date.now() - baseMS
+        let endMS = Date.parse(new Date(end)) - baseMS
+        return (todayMS / endMS) * 100
+      }
+
+      _getPercent(first, second) {
+        return (first / second) * 100
+      }
+
+      // queryPartnershipsOverview() {
+      //   EtoolsDashboard.DexieDb.transaction(
+      //     'r',
+      //     EtoolsDashboard.DexieDb.partnershipsOverview,
+      //     () => {
+      //       let queryResult = EtoolsDashboard.DexieDb.partnershipsOverview.orderBy('name');
+      //       return Dexie.Promise.all([
+      //         queryResult.toArray()
+      //       ]);
+      //     }).then(countAndResult => {
+      //       this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
+      //       this.set('pdSSFAs', countAndResult[0]);
+      //       log(this.pdSSFAs)
+      //     }).catch(err => console.error('Error querying partnerships-dash: ', err));
+      // }
+
+      queryCsoDashboard() {
         EtoolsDashboard.DexieDb.transaction(
           'r',
-          EtoolsDashboard.DexieDb.partnershipsOverview,
+          EtoolsDashboard.DexieDb.csoDashboard,
           () => {
-            let queryResult = EtoolsDashboard.DexieDb.partnershipsOverview.orderBy('name');
+            let queryResult = EtoolsDashboard.DexieDb.csoDashboard.orderBy('partner_name');
             return Dexie.Promise.all([
               queryResult.toArray()
             ]);
           }).then(countAndResult => {
             this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
             this.set('pdSSFAs', countAndResult[0]);
-            log(this.pdSSFAs)
           }).catch(err => console.error('Error querying partnerships-dash: ', err));
       }
-
-      // queryCsoDashboard() {
-      //   EtoolsDashboard.DexieDb.transaction(
-      //     'r',
-      //     EtoolsDashboard.DexieDb.csoDashboard,
-      //     () => {
-      //       let queryResult = EtoolsDashboard.DexieDb.csoDashboard.orderBy('partner_name');
-      //       return Dexie.Promise.all([
-      //         queryResult.toArray()
-      //       ]);
-      //     }).then(countAndResult => {
-      //       this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
-      //       this.set('partners', countAndResult[0]);
-      //       log(this.partners)
-      //     }).catch(err => console.error('Error querying partnerships-dash: ', err));
-      // }
     }
 
     window.customElements.define(ViewPersonalized.is, ViewPersonalized);
