@@ -16,7 +16,6 @@
 <link rel="import" href="../../components/data-table/data-table-row.html">
 
 <link rel="import" href="../../../../bower_components/paper-styles/element-styles/paper-material-styles.html">
-<link rel="import" href="../../../../bower_components/google-chart/google-chart.html">
 <link rel="import" href="../../../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
@@ -144,6 +143,40 @@
           margin-right: 0;
         }
 
+        .list-content {
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+
+        .grouping {
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+        
+        .group {
+          display: flex;
+          align-items: center;
+          border-bottom: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
+        }
+
+        data-table-row.pdssfa-row {
+          border-left: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
+        }
+
+        .pdssfa-row > *[slot="row-data"] {
+          margin-top: inherit;
+          margin-block-end: inherit;
+        }
+
+        .bold {
+          font-weight: 500;
+        }
+
+        .number-column {
+          text-align: right;
+          padding-right: 8px;
+        }
+
         .trips-ap {
           display: flex;
           justify-content: space-between;
@@ -160,7 +193,6 @@
 
         data-table-header.single {
           --paper-material-padding: 18px 24px;
-          height: 56px;
         }
 
         div.inherit-width {
@@ -189,94 +221,104 @@
 
       <data-table-header class="single">
         <div class="col-data small-text col-1">Partner</div>
-        <div class="col-data small-text col-1">PD/SSFA Reference No. <br> Status</div>
-        <div class="col-data small-text col-1">Status of PD/SSFA</div>
-        <div class="col-data small-text flex-2">Start - End Dates</div>
-        <div class="col-data small-text col-1">FR Flags</div>
-        <div class="col-data small-text flex-2">Disbursement to Date / <br> UNICEF Cash</div>
-        <div class="col-data small-text col-1">Outstanding DCT</div>
-        <div class="col-data small-text col-1">Action Points</div>
-        <div class="col-data small-text col-1">Days Since Last PV</div>
-        <div class="col-data small-text col-1">Status of Last Report</div>
+        <div class="grouping col-11 layout-horizontal">
+          <div class="col-data small-text col-2">PD/SSFA Reference No. <br> Status</div>
+          <div class="col-data small-text col-1">Status of PD/SSFA</div>
+          <div class="col-data small-text flex-2">Start - End Dates</div>
+          <div class="col-data small-text col-1">FR Flags</div>
+          <div class="col-data small-text flex-2">Disbursement to Date / <br> UNICEF Cash</div>
+          <div class="col-data small-text number-column col-1">Outstanding DCT</div>
+          <div class="col-data small-text number-column col-1">Action Points</div>
+          <div class="col-data small-text number-column col-1">Days Since Last PV</div>
+          <div class="col-data small-text col-1">Status of Last Report</div>
+        </div>
       </data-table-header>
 
       <div class="list-content">
         <template is="dom-if" if="[[!pdSSFAs.length]]">
           <div class="paper-material inherit-width">No results to show.</div>
         </template>
-        <template is="dom-repeat" items="[[pdSSFAs]]" as="pd" hidden="[[!pdSSFAsLoaded]]">
-          <data-table-row no-collapse>
-            <div slot="row-data">
-              <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[pd.id]]/details" app-name="pmp"
-                page="interventions" id="[[pd.id]]/details"
-                class="col-data col-1">
-                [[pd.partner_name]]
+        <template is="dom-repeat" items="[[reorganizedData]]" as="partner" hidden="[[!pdSSFAsLoaded]]">
+          <div class="layout-horizontal group">
+            <data-table-column class="col-data col-1 partner-name">
+              <a class="bold" on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[getPartnerId(partner)]]/details" app-name="pmp"
+                page="interventions" id="[[getPartnerId(partner)]]/details">
+                [[getName(partner)]]
                 <paper-tooltip position="right">[[pd.partner_name]]</paper-tooltip>
               </a>
+            </data-table-column>
 
-              <span class="col-1 col-data">
-                <a on-tap="goToPage" href="[[basesSite]]/pmp/interventions/[[pd.id]]/details" app-name="pmp">
-                  [[pd.number]]
-                </a><br>
-                <span class="capitalize">[[pd.status]]</span>
-              </span>
-              <span class="col-data col-1">
-                
-              </span>
-              <span class="col-data flex-2">
-                <etools-progress-bar value="[[_getPercentFromDate(pd.start, pd.end)]]" label-start="[[pd.start]]" label-end="[[pd.end]]"></etools-progress-bar>
-              </span>
-              <span class="col-data col-1">
-                <span>
-                  <iron-icon hidden="[[_checkSigned(pd.status, pd.all_currencies_are_consistent)]]"
-                            icon="dash-custom-icons:not-equal"
-                            class="blue-icon"></iron-icon>
-                  <paper-tooltip hidden="[[_checkSigned(pd.status, pd.all_currencies_are_consistent)]]">
-                    FR currency does not match PD currency.
-                    <br> Disbursement to date % cannot calculate.
-                  </paper-tooltip>
-                  <iron-icon hidden="[[_checkAllCurrenciesConsistent(pd.status, pd.all_currencies_are_consistent, pd.fr_currencies_are_consistent)]]"
-                
-                            icon="dash-custom-icons:1+"
-                            class="blue-icon">
-                  </iron-icon>
-                  <paper-tooltip hidden="[[_checkSigned(pd.status, pd.fr_currencies_are_consistent)]]">
-                    More than 1 FR currency is available. FR Amount
-                    <br> and Actual Disbursements cannot be displayed.
-                  </paper-tooltip>
-                </span>
-                <span>
-                  <iron-icon hidden="[[_isEqual(pd.status, pd.unicef_cash, pd.frs_total_frs_amt)]]"
-                            icon="dash-custom-icons:not-equal"
-                            class="red-icon">
-                  </iron-icon>
-                  <paper-tooltip hidden="[[_isEqual(pd.status, pd.unicef_cash, pd.frs_total_frs_amt)]]">
-                    FR amount does not equal to planned UNICEF cash
-                  </paper-tooltip>
-                </span>
-              </span>
-              <span class="col-data flex-2">
-                <etools-progress-bar value="[[_getPercent(pd.disbursement, pd.unicef_cash)]]" 
-                                     label-start="[[pd.budget_currency]] [[currencyFormat(pd.disbursement)]]" 
-                                     label-end="[[currencyFormat(pd.unicef_cash)]]">
-                </etools-progress-bar>
-              </span>
-              <span class="col-data col-1">
-                [[pd.outstanding_dct]]
-              </span>
-              <span class="col-data col-1">
-                <a href="[[baseSite]]/apd/action-points/list?partner=[[pd.id]]&status=open">[[pd.action_points]]</a>
-              </span>
-              <span class="col-data col-1">
-                [[pd.days_last_pv]]
-              </span>
-              <span class="col-data col-1">
-                  <iron-icon on-click="goToMaps"
-                             class="map-icon"
-                             icon="maps:map"></iron-icon>
-              </span>
+              <div class="col-11">
+                <template is="dom-repeat" items="[[getValues(partner)]]" as="pd">
+                  <data-table-row class="pdssfa-row" no-collapse>
+                    <div slot="row-data">
+                      <span class="col-2 col-data">
+                        <a class="bold" on-tap="goToPage" href="[[basesSite]]/pmp/interventions/[[pd.intervention_id]]/details" app-name="pmp">
+                          [[pd.number]]
+                        </a><br>
+                        <span class="capitalize">[[pd.status]]</span>
+                      </span>
+                      <span class="col-data col-1">
+                        
+                      </span>
+                      <span class="col-data flex-2">
+                        <etools-progress-bar value="[[_getPercentFromDate(pd.start, pd.end)]]" label-start="[[formatDate(pd.start)]]" label-end="[[formatDate(pd.end)]]"></etools-progress-bar>
+                      </span>
+                      <span class="col-data col-1">
+                        <span>
+                          <iron-icon hidden="[[_checkSigned(pd.status, pd.all_currencies_are_consistent)]]"
+                                    icon="dash-custom-icons:not-equal"
+                                    class="blue-icon"></iron-icon>
+                          <paper-tooltip hidden="[[_checkSigned(pd.status, pd.all_currencies_are_consistent)]]">
+                            FR currency does not match PD currency.
+                            <br> Disbursement to date % cannot calculate.
+                          </paper-tooltip>
+                          <iron-icon hidden="[[_checkAllCurrenciesConsistent(pd.status, pd.all_currencies_are_consistent, pd.fr_currencies_are_consistent)]]"
+                        
+                                    icon="dash-custom-icons:1+"
+                                    class="blue-icon">
+                          </iron-icon>
+                          <paper-tooltip hidden="[[_checkSigned(pd.status, pd.fr_currencies_are_consistent)]]">
+                            More than 1 FR currency is available. FR Amount
+                            <br> and Actual Disbursements cannot be displayed.
+                          </paper-tooltip>
+                        </span>
+                        <span>
+                          <iron-icon hidden="[[_isEqual(pd.status, pd.unicef_cash, pd.frs_total_frs_amt)]]"
+                                    icon="dash-custom-icons:not-equal"
+                                    class="red-icon">
+                          </iron-icon>
+                          <paper-tooltip hidden="[[_isEqual(pd.status, pd.unicef_cash, pd.frs_total_frs_amt)]]">
+                            FR amount does not equal to planned UNICEF cash
+                          </paper-tooltip>
+                        </span>
+                      </span>
+                      <span class="col-data flex-2">
+                        <etools-progress-bar value="[[_getPercent(pd.disbursement, pd.unicef_cash)]]" 
+                                            label-start="[[pd.budget_currency]] [[currencyFormat(pd.disbursement)]]" 
+                                            label-end="[[currencyFormat(pd.unicef_cash)]]">
+                        </etools-progress-bar>
+                      </span>
+                      <span class="col-data number-column col-1">
+                        [[currencyFormat(pd.outstanding_dct)]]
+                      </span>
+                      <span class="col-data number-column col-1">
+                        <a href="[[baseSite]]/apd/action-points/list?partner=[[pd.partner_id]]&status=open">[[pd.action_points]]</a>
+                      </span>
+                      <span class="col-data number-column col-1">
+                        [[pd.days_last_pv]]
+                      </span>
+                      <span class="col-data col-1">
+                          <iron-icon on-click="goToMaps"
+                                    class="map-icon"
+                                    icon="maps:map"></iron-icon>
+                      </span>
+                    </div>
+                  </data-table-row>
+                </template>
+              </div>
+
             </div>
-          </data-table-row>
         </template>
       </div>
     </div>
@@ -421,14 +463,15 @@
        */
       static get properties() {
         return {
+          reorganizedData: {
+            type: Array
+          },
           pdSSFAs: {
             type: Array,
             observer: '_checkPdSSFAsData',
-            // statePath: 'interventions'
           },
           partners: {
             type: Array,
-            // observer: '_checkPdSSFAsData'
           },
           endpointName: {
             type: String,
@@ -460,10 +503,6 @@
             type: Array,
             statePath: 'actionPointsForMe'
           },
-          // partnerships: {
-          //   statePath: 'partnerships',
-          //   observer: '_checkPartnershipsData'
-          // },
           pdSSFAsLoaded: {
             type: Boolean,
             value: false
@@ -498,7 +537,6 @@
 
       ready() {
         super.ready();
-        // this.queryPartnershipsOverview();
         this.queryCsoDashboard();
       }
 
@@ -513,6 +551,7 @@
       _checkPdSSFAsData(data) {
         if ((data && data.length) || !data.length) {
           this.set('pdSSFAsLoaded', true);
+          this.reorganizeData(data)
         }
       }
 
@@ -620,22 +659,6 @@
         return (first / second) * 100
       }
 
-      // queryPartnershipsOverview() {
-      //   EtoolsDashboard.DexieDb.transaction(
-      //     'r',
-      //     EtoolsDashboard.DexieDb.partnershipsOverview,
-      //     () => {
-      //       let queryResult = EtoolsDashboard.DexieDb.partnershipsOverview.orderBy('name');
-      //       return Dexie.Promise.all([
-      //         queryResult.toArray()
-      //       ]);
-      //     }).then(countAndResult => {
-      //       this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
-      //       this.set('pdSSFAs', countAndResult[0]);
-      //       log(this.pdSSFAs)
-      //     }).catch(err => console.error('Error querying partnerships-dash: ', err));
-      // }
-
       queryCsoDashboard() {
         EtoolsDashboard.DexieDb.transaction(
           'r',
@@ -648,7 +671,41 @@
           }).then(countAndResult => {
             this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
             this.set('pdSSFAs', countAndResult[0]);
+            log(this.pdSSFAs)
           }).catch(err => console.error('Error querying partnerships-dash: ', err));
+      }
+
+      reorganizeData(data) {
+        let names = uniq(data.map(pd => pd.partner_name))
+        let newDataArray = names.map(name => {
+          let obj = {};
+          obj[name] = data.filter(pd => pd.partner_name === name)
+                          .sort((a, b) => Date.parse(a.end) - Date.parse(b.end))
+          return obj
+        })
+        this.set('reorganizedData', newDataArray)
+      }
+
+      getName(partner) {
+        return Object.keys(partner);
+      }
+
+      getValues(partner) {
+        return Object.values(partner)[0];
+      }
+
+      formatDate(date) {
+        let m = moment(date, 'YYYY-MM-DD')
+        return m.format('DD MMM YY')
+      }
+
+      goToMaps(event) {
+        let partnerId = event.model.__data.pd.partner_id;
+        window.location = `/dash/map?&partners=${partnerId}`;
+      }
+
+      getPartnerId(partner) {
+        return Object.values(partner)[0][0].partner_id;
       }
     }
 
