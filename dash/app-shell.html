@@ -136,7 +136,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   </a>
                 </div>
 
-                <div class="top-content-action" hidden$="[[!_isActive(page,'hact')]]">
+                <div class="top-content-action" hidden$="[[!_isActive(subroute.path, '/charts')]]">
+                  <a target="_blank" href="[[chartsExport]]">
+                    <paper-button>
+                      <iron-icon class="dark" icon="file-download"></iron-icon>
+                      Export
+                    </paper-button>
+                  </a>
+                </div>
+
+                <div class="top-content-action" hidden$="[[!_isActive(subroute.path, '/assurance')]]">
                   <paper-menu-button>
                     <paper-button icon="file-download" slot="dropdown-trigger">
                       <iron-icon class="dark" icon="file-download"></iron-icon>
@@ -283,6 +292,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             ]
           },
+          chartsExport: {
+            type: String,
+            value: '/api/v2/hact/graph/2018/export&format=csv'
+          },
           displayDetail: {
             type: Boolean,
             value: false,
@@ -307,7 +320,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       static get observers() {
         return [
-          '_routePageChanged(routeData.page)'
+          '_routePageChanged(routeData.page)',
         ];
       }
 
