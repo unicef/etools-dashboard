@@ -177,6 +177,24 @@
           padding-right: 8px;
         }
 
+        .partner-name > a {
+          white-space: normal;
+        }
+
+        .pd-ref {
+          line-height: 24px;
+        }
+
+        .repeat-group > :nth-last-child(2) {
+          border-bottom: none;
+        }
+
+        data-table-column.partner-name,
+        data-table-row.pdssfa-row,
+        .repeat-group > data-table-row:first-of-type:last-of-type {
+          height: 48px;
+        }
+
         .trips-ap {
           display: flex;
           justify-content: space-between;
@@ -220,9 +238,9 @@
       </template>
 
       <data-table-header class="single">
-        <div class="col-data small-text col-1">Partner</div>
-        <div class="grouping col-11 layout-horizontal">
-          <div class="col-data small-text col-2">PD/SSFA Reference No. <br> Status</div>
+        <div class="col-data small-text col-2">Partner</div>
+        <div class="grouping col-10 layout-horizontal">
+          <div class="col-data small-text col-1">PD/SSFA<br>Status</div>
           <div class="col-data small-text col-1">Status of PD/SSFA</div>
           <div class="col-data small-text flex-2">Start - End Dates</div>
           <div class="col-data small-text col-1">FR Flags</div>
@@ -240,7 +258,7 @@
         </template>
         <template is="dom-repeat" items="[[reorganizedData]]" as="partner" hidden="[[!pdSSFAsLoaded]]">
           <div class="layout-horizontal group">
-            <data-table-column class="col-data col-1 partner-name">
+            <data-table-column class="col-data col-2 partner-name">
               <a class="bold" on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[getPartnerId(partner)]]/details" app-name="pmp"
                 page="interventions" id="[[getPartnerId(partner)]]/details">
                 [[getName(partner)]]
@@ -248,13 +266,13 @@
               </a>
             </data-table-column>
 
-              <div class="col-11">
+              <div class="col-10 repeat-group">
                 <template is="dom-repeat" items="[[getValues(partner)]]" as="pd">
                   <data-table-row class="pdssfa-row" no-collapse>
                     <div slot="row-data">
-                      <span class="col-2 col-data">
-                        <a class="bold" on-tap="goToPage" href="[[basesSite]]/pmp/interventions/[[pd.intervention_id]]/details" app-name="pmp">
-                          [[pd.number]]
+                      <span class="col-1">
+                        <a class="bold pd-ref" on-tap="goToPage" href="[[basesSite]]/pmp/interventions/[[pd.intervention_id]]/details" app-name="pmp">
+                          [[_getTruncated(pd.number)]]
                         </a><br>
                         <span class="capitalize">[[pd.status]]</span>
                       </span>
@@ -706,6 +724,14 @@
 
       getPartnerId(partner) {
         return Object.values(partner)[0][0].partner_id;
+      }
+
+      _getTruncated(pdssfa){
+        if (pdssfa.length > 16) {
+          return '...' + pdssfa.split('/').slice(-1)[0]
+        } else {
+          return '...' + pdssfa.slice(pdssfa.length - 9)
+        }
       }
     }
 
