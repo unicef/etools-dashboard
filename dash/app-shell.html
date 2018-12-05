@@ -52,6 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="app/components/common-data-loaders.html">
 <link rel="import" href="app/components/page-header.html">
+<link rel="import" href="app/components/page-footer.html">
 
 
 <dom-module id="app-shell">
@@ -72,10 +73,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .top-content-action paper-button {
         padding-bottom: 4px
-      }
-
-      .padding-bottom-60 {
-        padding-bottom: 60px;
       }
 
       etools-dropdown {
@@ -197,7 +194,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
         </div>
         
-        <iron-pages class="padding-bottom-60"
+        <iron-pages 
                     selected="[[page]]"
                     attr-for-selected="name"
                     fallback-selection="personalized"
@@ -227,6 +224,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             class="page"
                             name="attachments"></view-attachments>
         </iron-pages>
+        <page-footer></page-footer>
       </app-header-layout>
     </app-drawer-layout>
   </template>

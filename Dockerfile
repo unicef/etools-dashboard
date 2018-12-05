@@ -7,7 +7,7 @@ RUN apk add git
 RUN npm i -g npm@5.6.0
 RUN npm install -g --unsafe-perm bower polymer-cli
 
-
+ENV NODE_OPTIONS --max-old-space-size=3072
 WORKDIR /tmp
 ADD bower.json /tmp/
 ADD package.json /tmp/
