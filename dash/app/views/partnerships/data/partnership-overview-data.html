@@ -92,7 +92,8 @@
                 searchString: (qs, partner) => qs.length ? contains(qs.toLowerCase(), partner.name.toLowerCase()) || contains(qs.toLowerCase(), partner.vendor_number) : true,
                 sectors: (sectors, partner) => sectors.length && partner.sections ? !!intersection(sectors, partner.sections.split('|')).length : true,
                 name: (name, partner) => name.length ? any(equals(partner), name) : true,
-                outstanding: (outstanding, partner) => outstanding ? !!parseInt(partner.outstanding_dct_amount_more_than_9_months_usd) : true
+                outstanding: (outstanding, partner) => outstanding ? !!parseInt(partner.outstanding_dct_amount_more_than_9_months_usd) : true,
+                partnerType: (type, partner) => type.length ? !!intersection(type, partner.partner_type).length : true
               };
             }
           },
