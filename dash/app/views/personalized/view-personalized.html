@@ -190,7 +190,7 @@
         }
 
         data-table-column.partner-name,
-        data-table-row.pdssfa-row,
+        data-table-row.pdssfa-row > [slot="row-data"],
         .repeat-group > data-table-row:first-of-type:last-of-type {
           height: 48px;
         }
@@ -215,6 +215,23 @@
 
         div.inherit-width {
           width: inherit;
+        }
+
+        .bar-info-container {
+          display: flex;
+        }
+
+        .bar-info {
+          width: 100px;
+          font-size: 10px;
+        }
+
+        .bar-info.right {
+          text-align: right;
+        }
+
+        .bar-info.left {
+          text-align: left;
         }
 
         @media print {
@@ -262,7 +279,7 @@
               <a class="bold" on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[getPartnerId(partner)]]/details" app-name="pmp"
                 page="interventions" id="[[getPartnerId(partner)]]/details">
                 [[getName(partner)]]
-                <paper-tooltip position="right">[[pd.partner_name]]</paper-tooltip>
+                <paper-tooltip position="right">[[getName(partner)]]</paper-tooltip>
               </a>
             </data-table-column>
 
@@ -273,6 +290,7 @@
                       <span class="col-1">
                         <a class="bold pd-ref" on-tap="goToPage" href="[[basesSite]]/pmp/interventions/[[pd.intervention_id]]/details" app-name="pmp">
                           [[_getTruncated(pd.number)]]
+                          <paper-tooltip position="right">[[pd.number]]</paper-tooltip>
                         </a><br>
                         <span class="capitalize">[[pd.status]]</span>
                       </span>
@@ -280,7 +298,11 @@
                         
                       </span>
                       <span class="col-data flex-2">
-                        <etools-progress-bar value="[[_getPercentFromDate(pd.start, pd.end)]]" label-start="[[formatDate(pd.start)]]" label-end="[[formatDate(pd.end)]]"></etools-progress-bar>
+                        <etools-progress-bar value="[[_getPercentFromDate(pd.start, pd.end)]]"></etools-progress-bar>
+                        <div class="bar-info-container">
+                          <div class="bar-info left">[[formatDate(pd.start)]]</div>
+                          <div class="bar-info right">[[formatDate(pd.end)]]</div>
+                        </div>
                       </span>
                       <span class="col-data col-1">
                         <span>
@@ -312,10 +334,11 @@
                         </span>
                       </span>
                       <span class="col-data flex-2">
-                        <etools-progress-bar value="[[_getPercent(pd.disbursement, pd.unicef_cash)]]" 
-                                            label-start="[[pd.budget_currency]] [[currencyFormat(pd.disbursement)]]" 
-                                            label-end="[[currencyFormat(pd.unicef_cash)]]">
-                        </etools-progress-bar>
+                        <etools-progress-bar value="[[_getPercent(pd.disbursement, pd.unicef_cash)]]"></etools-progress-bar>
+                        <div class="bar-info-container">
+                          <div class="bar-info left">[[pd.budget_currency]] [[currencyFormat(pd.disbursement)]]</div>
+                          <div class="bar-info right">[[currencyFormat(pd.unicef_cash)]]</div>
+                        </div>
                       </span>
                       <span class="col-data number-column col-1">
                         [[currencyFormat(pd.outstanding_dct)]]
@@ -689,7 +712,6 @@
           }).then(countAndResult => {
             this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
             this.set('pdSSFAs', countAndResult[0]);
-            log(this.pdSSFAs)
           }).catch(err => console.error('Error querying partnerships-dash: ', err));
       }
 

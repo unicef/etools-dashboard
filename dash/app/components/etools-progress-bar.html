@@ -23,16 +23,8 @@
         width: var(--etools-progress-bar-width, 200px);
       }
 
-      .space-between {
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .space-between > span {
-        font-size: 10px;
-      }
-
       @media print {
+
         paper-progress {
           position: relative;
         }
@@ -55,7 +47,7 @@
 
         paper-progress::after {
           z-index: 1;
-          border-bottom: 10px solid var(--primary-color);
+          border-bottom: 10px solid #72C300;
           width: var(--etools-progress-width-on-print, 0%);
         }
       }
@@ -63,10 +55,6 @@
     <div>
       <paper-progress value="[[progressValue]]"
                       secondary-progress="[[_getSecondaryProgress(progressValue)]]"></paper-progress>
-      <div class="layout-horizontal space-between">
-        <span>[[labelStart]]</span>
-        <span>[[labelEnd]]</span>
-      </div>
     </div>
   </template>
 
@@ -97,12 +85,6 @@
           noDecimals: {
             type: Boolean,
             value: false
-          },
-          labelStart: {
-            type: String
-          },
-          labelEnd: {
-            type: String
           }
         };
       }
