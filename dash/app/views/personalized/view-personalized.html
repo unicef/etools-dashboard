@@ -6,6 +6,7 @@
 <link rel="import" href="../../styles/grid-layout-styles.html">
 <link rel="import" href="../../styles/buttons-styles.html">
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../../../bower_components/paper-tooltip/paper-tooltip.html">
 
 <link rel="import" href="../../../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../../../bower_components/paper-tabs/paper-tabs.html">
@@ -19,8 +20,8 @@
 <link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../../../bower_components/iron-icons/maps-icons.html">
-<link rel="import" href="../../../../bower_components/iron-icons/av-icons.html">
-<link rel="import" href="../../../../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../../styles/dash-icons.html">
+
 <link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../../../bower_components/moment-element/moment-import.html">
 
@@ -29,6 +30,10 @@
 <link rel="import" href="../../endpoints/endpoints-mixin.html">
 <link rel="import" href="../../config/config.html">
 <link rel="import" href="../../../../bower_components/etools-loading/etools-loading.html">
+<link rel="import" href="../../config/dexie-db-config.html">
+<link rel="import" href="../../mixins/event-helper-mixin.html">
+<link rel="import" href="../../mixins/data-element-mixin.html">
+<link rel="import" href="../../components/etools-progress-bar.html">
 
 <dom-module id="view-personalized">
   <template>
@@ -65,6 +70,19 @@
           @apply --layout-center;
         }
 
+        .map-icon {
+          color: var(--dark-icon-color);
+          position: absolute;
+          right: 24px;
+          transform: translateY(-50%);
+          display: none;
+          cursor: pointer;
+        }
+
+        data-table-row:hover .map-icon {
+          display: block;
+        }
+
         .trip-management {
           background: rgba(0, 97, 233, 1.0); /* Temporary until design confirmed */
         }
@@ -90,6 +108,18 @@
           font-size: 18px;
         }
 
+        .capitalize {
+          text-transform: capitalize;
+        }
+
+        .red-icon {
+          fill: rgb(231, 66, 45);
+        }
+
+        .blue-icon {
+          fill: rgb(26, 154, 250);
+        }
+
         .end-justified {
           justify-content: flex-end;
           text-align: right;
@@ -113,6 +143,58 @@
           margin-right: 0;
         }
 
+        .list-content {
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+
+        .grouping {
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+        
+        .group {
+          display: flex;
+          align-items: center;
+          border-bottom: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
+        }
+
+        data-table-row.pdssfa-row {
+          border-left: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
+        }
+
+        .pdssfa-row > *[slot="row-data"] {
+          margin-top: inherit;
+          margin-block-end: inherit;
+        }
+
+        .bold {
+          font-weight: 500;
+        }
+
+        .number-column {
+          text-align: right;
+          padding-right: 8px;
+        }
+
+        .partner-name > a {
+          white-space: normal;
+        }
+
+        .pd-ref {
+          line-height: 24px;
+        }
+
+        .repeat-group > :nth-last-child(2) {
+          border-bottom: none;
+        }
+
+        data-table-column.partner-name,
+        data-table-row.pdssfa-row > [slot="row-data"],
+        .repeat-group > data-table-row:first-of-type:last-of-type {
+          height: 48px;
+        }
+
         .trips-ap {
           display: flex;
           justify-content: space-between;
@@ -129,11 +211,38 @@
 
         data-table-header.single {
           --paper-material-padding: 18px 24px;
-          height: 56px;
         }
 
         div.inherit-width {
           width: inherit;
+        }
+
+        .bar-info-container {
+          display: flex;
+        }
+
+        .bar-info {
+          width: 100px;
+          font-size: 10px;
+        }
+
+        .bar-info.right {
+          text-align: right;
+        }
+
+        .bar-info.left {
+          text-align: left;
+        }
+
+        @media print {
+          .list-content {
+            max-height: 100%;
+            overflow: visible;
+          }
+
+          .partner-name > a {
+            white-space: normal
+          }
         }
       </style>
     </custom-style>
@@ -143,63 +252,118 @@
     <!--MY PARTNERSHIPS-->
     <div class="paper-material list-panel clear-pad" elevation="1">
       <div no-title no-collapse class="list-title layout horizontal center main trips-ap">
-        <div class="flex-2 title">My Partnerships</div>
-        <div class="partnership-buttons">
-          <paper-button class="button toolbar-item">
-            <a on-tap="goToPage" href="[[baseSite]]/pmp/partners/list" app-name="pmp" page="partners">
-              <iron-icon icon="social:people"></iron-icon>
-              Partners
-            </a>
-          </paper-button>
-          <paper-button class="button toolbar-item">
-            <a on-tap="goToPage" href="[[baseSite]]/pmp/agreements" app-name="pmp" page="agreements">
-              <iron-icon icon="av:playlist-add-check"></iron-icon>
-              Agreements
-            </a>
-          </paper-button>
-          <paper-button class="button toolbar-item">
-            <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions" app-name="pmp"
-              page="interventions">
-              <iron-icon icon="icons:description"></iron-icon>
-              PD/SSFA
-            </a>
-          </paper-button>
-          <paper-button class="button toolbar-item">
-            <a on-tap="goToPage" href="[[baseSite]]/pmp/government-partners" app-name="pmp"
-              page="government-partners">
-              <iron-icon icon="icons:account-balance"></iron-icon>
-              Government
-            </a>
-          </paper-button>
-        </div>
+        <div class="flex-2 title">My PD/SSFAs</div>
       </div>
-      <template is="dom-if" if="[[!partnershipsLoaded]]">
+      <template is="dom-if" if="[[!pdSSFAsLoaded]]">
         <etools-loading active></etools-loading>
       </template>
+
       <data-table-header class="single">
-        <div class="col-data small-text col-2">PD/SSFA Reference No.</div>
-        <div class="col-data small-text flex-3">PD/SSFA Title</div>
-        <div class="col-data small-text col-2 end-justified">UNICEF Cash Amount</div>
+        <div class="col-data small-text col-2">Partner</div>
+        <div class="grouping col-10 layout-horizontal">
+          <div class="col-data small-text col-1">PD/SSFA<br>Status</div>
+          <div class="col-data small-text col-1">Status of PD/SSFA</div>
+          <div class="col-data small-text flex-2">Start - End Dates</div>
+          <div class="col-data small-text col-1">FR Flags</div>
+          <div class="col-data small-text flex-2">Disbursement to Date / <br> UNICEF Cash</div>
+          <div class="col-data small-text number-column col-1">Outstanding DCT</div>
+          <div class="col-data small-text number-column col-1">Action Points</div>
+          <div class="col-data small-text number-column col-1">Days Since Last PV</div>
+          <div class="col-data small-text col-1">Status of Last Report</div>
+        </div>
       </data-table-header>
+
       <div class="list-content">
-        <template is="dom-if" if="[[!partnerships.length]]">
+        <template is="dom-if" if="[[!pdSSFAs.length]]">
           <div class="paper-material inherit-width">No results to show.</div>
         </template>
-        <template is="dom-repeat" items="[[partnerships]]" as="partnership" hidden="[[!partnershipsLoaded]]">
-          <data-table-row no-collapse>
-            <div slot="row-data">
-              <a on-tap="goToPage" href="[[baseSite]]/pmp/interventions/[[partnership.id]]/details" app-name="pmp"
-                page="interventions" id="[[partnership.id]]/details"
-                class="col-data col-2">
-                [[partnership.number]]
+        <template is="dom-repeat" items="[[reorganizedData]]" as="partner" hidden="[[!pdSSFAsLoaded]]">
+          <div class="layout-horizontal group">
+            <data-table-column class="col-data col-2 partner-name">
+              <a class="bold" on-tap="goToPage" href="[[baseSite]]/pmp/partners/[[getPartnerId(partner)]]/details" app-name="pmp"
+                page="interventions" id="[[getPartnerId(partner)]]/details">
+                [[getName(partner)]]
+                <paper-tooltip position="right">[[getName(partner)]]</paper-tooltip>
               </a>
-              <span class="description description-size flex-3 col-data">
-                [[partnership.title]]
-              </span>
-              <span class="col-data col-2 layout horizontal end-justified">
-                [[partnership.budget_currency]] [[currencyFormat(partnership.total_unicef_budget)]]</span>
+            </data-table-column>
+
+              <div class="col-10 repeat-group">
+                <template is="dom-repeat" items="[[getValues(partner)]]" as="pd">
+                  <data-table-row class="pdssfa-row" no-collapse>
+                    <div slot="row-data">
+                      <span class="col-1">
+                        <a class="bold pd-ref" on-tap="goToPage" href="[[basesSite]]/pmp/interventions/[[pd.intervention_id]]/details" app-name="pmp">
+                          [[_getTruncated(pd.number)]]
+                          <paper-tooltip position="right">[[pd.number]]</paper-tooltip>
+                        </a><br>
+                        <span class="capitalize">[[pd.status]]</span>
+                      </span>
+                      <span class="col-data col-1">
+                        
+                      </span>
+                      <span class="col-data flex-2">
+                        <etools-progress-bar value="[[_getPercentFromDate(pd.start, pd.end)]]"></etools-progress-bar>
+                        <div class="bar-info-container">
+                          <div class="bar-info left">[[formatDate(pd.start)]]</div>
+                          <div class="bar-info right">[[formatDate(pd.end)]]</div>
+                        </div>
+                      </span>
+                      <span class="col-data col-1">
+                        <span>
+                          <iron-icon hidden="[[_checkSigned(pd.status, pd.all_currencies_are_consistent)]]"
+                                    icon="dash-custom-icons:not-equal"
+                                    class="blue-icon"></iron-icon>
+                          <paper-tooltip hidden="[[_checkSigned(pd.status, pd.all_currencies_are_consistent)]]">
+                            FR currency does not match PD currency.
+                            <br> Disbursement to date % cannot calculate.
+                          </paper-tooltip>
+                          <iron-icon hidden="[[_checkAllCurrenciesConsistent(pd.status, pd.all_currencies_are_consistent, pd.fr_currencies_are_consistent)]]"
+                        
+                                    icon="dash-custom-icons:1+"
+                                    class="blue-icon">
+                          </iron-icon>
+                          <paper-tooltip hidden="[[_checkSigned(pd.status, pd.fr_currencies_are_consistent)]]">
+                            More than 1 FR currency is available. FR Amount
+                            <br> and Actual Disbursements cannot be displayed.
+                          </paper-tooltip>
+                        </span>
+                        <span>
+                          <iron-icon hidden="[[_isEqual(pd.status, pd.unicef_cash, pd.frs_total_frs_amt)]]"
+                                    icon="dash-custom-icons:not-equal"
+                                    class="red-icon">
+                          </iron-icon>
+                          <paper-tooltip hidden="[[_isEqual(pd.status, pd.unicef_cash, pd.frs_total_frs_amt)]]">
+                            FR amount does not equal to planned UNICEF cash
+                          </paper-tooltip>
+                        </span>
+                      </span>
+                      <span class="col-data flex-2">
+                        <etools-progress-bar value="[[_getPercent(pd.disbursement, pd.unicef_cash)]]"></etools-progress-bar>
+                        <div class="bar-info-container">
+                          <div class="bar-info left">[[pd.budget_currency]] [[currencyFormat(pd.disbursement)]]</div>
+                          <div class="bar-info right">[[currencyFormat(pd.unicef_cash)]]</div>
+                        </div>
+                      </span>
+                      <span class="col-data number-column col-1">
+                        [[currencyFormat(pd.outstanding_dct)]]
+                      </span>
+                      <span class="col-data number-column col-1">
+                        <a href="[[baseSite]]/apd/action-points/list?partner=[[pd.partner_id]]&status=open">[[pd.action_points]]</a>
+                      </span>
+                      <span class="col-data number-column col-1">
+                        [[pd.days_last_pv]]
+                      </span>
+                      <span class="col-data col-1">
+                          <iron-icon on-click="goToMaps"
+                                    class="map-icon"
+                                    icon="maps:map"></iron-icon>
+                      </span>
+                    </div>
+                  </data-table-row>
+                </template>
+              </div>
+
             </div>
-          </data-table-row>
         </template>
       </div>
     </div>
@@ -312,11 +476,15 @@
      * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
      * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
      * @appliesMixin EtoolsDashboard.Mixins.Endpoints
+     * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+     * @appliesMixin EtoolsDashboard.Mixins.DataElement
      */
     const ViewPersonalizedMixins = compose(
       EtoolsDashboard.Mixins.ReduxStore,
       EtoolsDashboard.Mixins.CommonGeneral,
-      EtoolsDashboard.Mixins.Endpoints
+      EtoolsDashboard.Mixins.Endpoints,
+      EtoolsDashboard.Mixins.EventHelper,
+      EtoolsDashboard.Mixins.DataElement
     )(Polymer.Element);
 
     /**
@@ -340,6 +508,24 @@
        */
       static get properties() {
         return {
+          reorganizedData: {
+            type: Array
+          },
+          pdSSFAs: {
+            type: Array,
+            notify: true,
+            observer: '_checkPdSSFAsData',
+          },
+          partners: {
+            type: Array,
+          },
+          endpointName: {
+            type: String,
+            value: 'csoDashboard'
+          },
+          totalPdSSFAs: {
+            type: Number
+          },
           tripsItems: {
             type: Array,
             notify: true
@@ -363,13 +549,10 @@
             type: Array,
             statePath: 'actionPointsForMe'
           },
-          partnerships: {
-            statePath: 'partnerships',
-            observer: '_checkPartnershipsData'
-          },
-          partnershipsLoaded: {
+          pdSSFAsLoaded: {
             type: Boolean,
-            value: false
+            value: false,
+            notify: true
           },
           route: {
             type: Object
@@ -382,7 +565,6 @@
 
       static get observers() {
         return [
-          '_updateUrl(active)',
           '_updateTrips(tripsTab,myTrips)',
           '_updateActionPoints(actionsTab,actionPointsForMe)',
           '_staticDataLoaded(myTrips,tripsSupervised, actionPointsItems, actionPointsForMe)'
@@ -398,6 +580,11 @@
         super();
       }
 
+      ready() {
+        super.ready();
+        setTimeout(() => this.queryCsoDashboard(), 10000)
+      }
+
       _updateTrips() {
         this._setItems(this.tripsTab, 'tripsItems');
       }
@@ -406,9 +593,10 @@
         this._setItems(this.actionsTab, 'actionPointsItems');
       }
 
-      _checkPartnershipsData(data) {
+      _checkPdSSFAsData(data) {
         if ((data && data.length) || !data.length) {
-          this.set('partnershipsLoaded', true);
+          this.set('pdSSFAsLoaded', true);
+          this.reorganizeData(data)
         }
       }
 
@@ -481,6 +669,94 @@
         var origin = window.location.origin;
         const path = origin + '/t2f/action-point/' + e.model.action.id;
         this.manageClickEvent(e, path);
+      }
+
+      _displayDisbursement(val, multiCurrFlag) {
+        if (multiCurrFlag) {
+            return '';
+          }
+        let nonZero = this.displayNonZero(val);
+        return Number(nonZero) ? this.currencyFormat(nonZero) : nonZero;
+      }
+
+      _isEqual(status, first, second) {
+        return status === 'signed' ? true : (first === second);
+      }
+
+      _checkAllCurrenciesConsistent(status, all_currencies_are_consistent, fr_currencies_are_consistent) {
+        return status === 'signed' ? true :
+          (!all_currencies_are_consistent) ? true :
+            (!fr_currencies_are_consistent) ? false : true;
+      }
+
+      _checkSigned(status, value) {
+        return status === 'signed' ? true : value;
+      }
+
+      _getPercentFromDate(start, end) {
+        let baseMS = Date.parse(new Date(start))
+        let todayMS = Date.now() - baseMS
+        let endMS = Date.parse(new Date(end)) - baseMS
+        return (todayMS / endMS) * 100
+      }
+
+      _getPercent(first, second) {
+        return (first / second) * 100
+      }
+
+      queryCsoDashboard() {
+        EtoolsDashboard.DexieDb.transaction(
+          'r',
+          EtoolsDashboard.DexieDb.csoDashboard,
+          () => {
+            let queryResult = EtoolsDashboard.DexieDb.csoDashboard.orderBy('partner_name');
+            queryResult = queryResult.filter(int => any(equals(this.user.user))(int.unicef_focal_points));
+            return Dexie.Promise.all([queryResult.toArray()]);
+          }).then(countAndResult => {
+            this.fireEvent('global-loading', { loadingSource: 'view-personalized' });
+            this.set('pdSSFAs', countAndResult[0]);
+          }).catch(err => console.error('Error querying partnerships: ', err));
+      }
+
+      reorganizeData(data) {
+        let names = uniq(data.map(pd => pd.partner_name))
+        let newDataArray = names.map(name => {
+          let obj = {};
+          obj[name] = data.filter(pd => pd.partner_name === name)
+                          .sort((a, b) => Date.parse(a.end) - Date.parse(b.end))
+          return obj
+        })
+        this.set('reorganizedData', newDataArray)
+      }
+
+      getName(partner) {
+        return Object.keys(partner);
+      }
+
+      getValues(partner) {
+        return Object.values(partner)[0];
+      }
+
+      formatDate(date) {
+        let m = moment(date, 'YYYY-MM-DD')
+        return m.format('DD MMM YY')
+      }
+
+      goToMaps(event) {
+        let partnerId = event.model.__data.pd.partner_id;
+        window.location = `/dash/map?&partners=${partnerId}`;
+      }
+
+      getPartnerId(partner) {
+        return Object.values(partner)[0][0].partner_id;
+      }
+
+      _getTruncated(pdssfa){
+        if (pdssfa.length > 16) {
+          return '...' + pdssfa.split('/').slice(-1)[0]
+        } else {
+          return '...' + pdssfa.slice(pdssfa.length - 9)
+        }
       }
     }
 
