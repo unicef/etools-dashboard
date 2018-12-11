@@ -239,6 +239,10 @@
             max-height: 100%;
             overflow: visible;
           }
+
+          .partner-name > a {
+            white-space: normal
+          }
         }
       </style>
     </custom-style>
@@ -509,6 +513,7 @@
           },
           pdSSFAs: {
             type: Array,
+            notify: true,
             observer: '_checkPdSSFAsData',
           },
           partners: {
@@ -546,7 +551,8 @@
           },
           pdSSFAsLoaded: {
             type: Boolean,
-            value: false
+            value: false,
+            notify: true
           },
           route: {
             type: Object
@@ -559,8 +565,6 @@
 
       static get observers() {
         return [
-          // 'init(active)',
-          '_updateUrl(active)',
           '_updateTrips(tripsTab,myTrips)',
           '_updateActionPoints(actionsTab,actionPointsForMe)',
           '_staticDataLoaded(myTrips,tripsSupervised, actionPointsItems, actionPointsForMe)'
@@ -578,7 +582,7 @@
 
       ready() {
         super.ready();
-        this.queryCsoDashboard();
+        setTimeout(() => this.queryCsoDashboard(), 10000)
       }
 
       _updateTrips() {
@@ -707,13 +711,11 @@
           () => {
             let queryResult = EtoolsDashboard.DexieDb.csoDashboard.orderBy('partner_name');
             queryResult = queryResult.filter(int => any(equals(this.user.user))(int.unicef_focal_points));
-            return Dexie.Promise.all([
-              queryResult.toArray()
-            ]);
+            return Dexie.Promise.all([queryResult.toArray()]);
           }).then(countAndResult => {
-            this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
+            this.fireEvent('global-loading', { loadingSource: 'view-personalized' });
             this.set('pdSSFAs', countAndResult[0]);
-          }).catch(err => console.error('Error querying partnerships-dash: ', err));
+          }).catch(err => console.error('Error querying partnerships: ', err));
       }
 
       reorganizeData(data) {
