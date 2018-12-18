@@ -450,19 +450,19 @@
                             icon="dash-custom-icons:1+"
                             class="blue-icon">
                   </iron-icon>
-                  <paper-tooltip hidden="[[_checkSigned(row.status, row.fr_currencies_are_consistent)]]">
+                  <paper-tooltip hidden="[[_checkAllCurrenciesConsistent(row.status, row.all_currencies_are_consistent, row.fr_currencies_are_consistent)]]">
                     More than 1 FR currency is available. FR Amount
                     <br> and Actual Disbursements cannot be displayed.
                   </paper-tooltip>
                   [[row.fr_currency]]
                 </span>
                 <span class="col-data col-5 right-align">
-                  <iron-icon hidden="[[_isEqual(row.status, row.unicef_cash, row.frs_total_frs_amt)]]"
+                  <iron-icon hidden="[[_hideRedIcon(row)]]"
                             icon="dash-custom-icons:not-equal"
                             class="red-icon">
                     [[_displayDisbursement(row.disbursement)]]
                   </iron-icon>
-                  <paper-tooltip hidden="[[_isEqual(row.status, row.unicef_cash, row.frs_total_frs_amt)]]">
+                  <paper-tooltip hidden="[[_hideRedIcon(row)]]">
                     FR amount does not equal to planned UNICEF cash
                   </paper-tooltip>
                   [[currencyFormat(row.frs_total_frs_amt)]]
@@ -959,6 +959,17 @@
 
       _checkSigned(status, value) {
         return status === 'signed' ? true : value;
+      }
+
+      _hideRedIcon(row) {
+        if (
+          this._checkSigned(row.status, row.all_currencies_are_consistent) &&
+          this._checkAllCurrenciesConsistent(row.status, row.all_currencies_are_consistent, row.fr_currencies_are_consistent)
+        ) {
+          return this._isEqual(row.status, row.unicef_cash, row.frs_total_frs_amt);
+        } else {
+          return true;
+        }
       }
 
       _eitherTrue(flag1, flag2) {
