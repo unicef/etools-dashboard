@@ -498,7 +498,7 @@
       _getDefaultFilter(filterName) {
         switch (filterName) {
           case 'cp':
-            return this.countryProgrammes.filter((cp) => cp.id === this.currentCp.id);
+            return this.countryProgrammes.filter((cp) => cp.value === this.currentCp.value);
           case 'status':
             return this.statuses.filter((s)=>s.value==='active');
         }

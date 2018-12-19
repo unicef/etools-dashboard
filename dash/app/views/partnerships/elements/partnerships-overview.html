@@ -195,11 +195,11 @@
             Cash in the<br>
             Current Year (USD)
           </data-table-column>
-          <data-table-column class="col-3 right-align">
+          <data-table-column class="col-3 right-align" field="outstanding_dct_amount_6_to_9_months_usd" sortable>
             Outstanding<br>
             DCT >6 Months
           </data-table-column>
-          <data-table-column class="col-3 right-align">
+          <data-table-column class="col-3 right-align" field="outstanding_dct_amount_more_than_9_months_usd" sortable>
             Outstanding<br>
             DCT >9 Months
           </data-table-column>
@@ -374,6 +374,15 @@
             observer: 'filterChanged',
             value: []
           },
+          partnerTypes: {
+            type: Array,
+            statePath: 'static.partner_types',
+          },
+          selectedTypes: {
+            type: Array,
+            value: [],
+            observer: 'filterChanged'
+          },
           // selectedCostCentres: {
           //   type: Array,
           //   observer: 'filterChanged'
@@ -425,6 +434,11 @@
                   qName: 'outstanding',
                   propName: 'selectedOutstanding',
                   xf: identity
+                },
+                {
+                  qName: 'partner_types',
+                  propName: 'selectedTypes',
+                  xf: compose(join('|'), map(prop('value')))
                 }
               ];
             }
@@ -434,7 +448,7 @@
 
       static get observers() {
         return [
-          '_updateUrl(qs, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded, initComplete, selectedSectors, selectedPartners, selectedOffices, selectedOutstanding, active)',
+          '_updateUrl(qs, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded, initComplete, selectedSectors, selectedPartners, selectedOffices, selectedOutstanding, selectedTypes, active)',
           '_init(active, sectors, requiredDataLoaded)'
         ];
       }
@@ -452,6 +466,7 @@
         this.set('orderBy', params.sortBy || '');
         this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
         this.set('selectedPartners', params.partners ? this._setSelectedPartners(params.partners) : []);
+        this.set('selectedTypes', params.partner_types ? this._setSelectedTypes(params.partner_types) : []);
         this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px';    
         this._initListFilters();
         this.set('initComplete', true);
@@ -498,6 +513,16 @@
               path: 'selectedOutstanding',
               selected: false
             },
+            {
+              filterName: 'Partner Type',
+              type: 'esmm',
+              optionValue: 'value',
+              optionLabel: 'label',
+              selectionOptions: this.partnerTypes,
+              alreadySelected: [],
+              path: 'selectedTypes',
+              selected: false
+            }
           ]);
         }
         if (this.allPartners.length) {
@@ -517,6 +542,10 @@
             {
               filterName: 'Partner Name',
               selectedValue: map(prop('name'), this.selectedPartners)
+            },
+            {
+              filterName: 'Partner Type',
+              selectedValue: map(prop('value'), this.selectedTypes)  
             }
           ];
           this.updateShownFilters(filtersValues);
@@ -542,7 +571,7 @@
       }
 
       _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded,
-        initComplete, selectedSectors, selectedPartners, selectedOutstanding) {
+        initComplete, selectedSectors, selectedPartners, selectedOutstanding, selectedTypes) {
         if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
           return;
         }
@@ -589,7 +618,8 @@
           sortBy: this.orderBy,
           order: this.sortOrder,
           pageSize: this.pageSize,
-          pageNumber: this.pageNumber
+          pageNumber: this.pageNumber,
+          partnerType: map(prop('label'), this.selectedTypes)
         });
       }
 
@@ -608,10 +638,15 @@
       _setSelectedSectors(sectorsStr) {
         const sectorsArr = sectorsStr.split('|');
         if (!isEmpty(sectorsArr)) {
-          const selectedSectors = this.sectors.filter(s => {
-            return sectorsArr.indexOf(s.value) > -1;
-          });
-          return selectedSectors;
+          return this.sectors.filter(s => sectorsArr.indexOf(s.value) > -1);
+        }
+        return [];
+      }
+
+      _setSelectedTypes(typesStr) {
+        const typesArr = typesStr.split('|');
+        if (!isEmpty(typesArr)) {
+          return this.partnerTypes.filter(s => typesArr.indexOf(s.value) > -1);
         }
         return [];
       }

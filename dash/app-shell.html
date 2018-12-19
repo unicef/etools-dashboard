@@ -83,6 +83,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding-top: 12px;
       }
 
+      .action-button {
+        color: var(--secondary-text-color);
+        font-weight: 500;
+      }
+
       iron-pages {
         display: flex;
       }
@@ -127,18 +132,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </h1>
 
               <div class="top-content-actions-wrapper">
+                <div class="top-content-action" hidden$="[[!_isActive(page,'personalized')]]">
+                  <paper-button class="action-button" on-tap="_print">
+                    <iron-icon class="dark" icon="print"></iron-icon>
+                    Print
+                  </paper-button>
+                </div>
+
                 <div class="top-content-action" hidden$="[[!_isActive(page,'partnerships')]]">
                   <a target="_blank" href="[[csvUrl]]">
-                    <paper-button>
+                    <paper-button class="action-button">
                       <iron-icon class="dark" icon="file-download"></iron-icon>
                       Export
                     </paper-button>
                   </a>
                 </div>
 
-                <div class="top-content-action" hidden$="[[!_isActive(page,'hact')]]">
+                <div class="top-content-action" hidden$="[[!_isActive(subroute.path, '/charts')]]">
                   <paper-menu-button>
-                    <paper-button icon="file-download" slot="dropdown-trigger">
+                    <paper-button class="action-button" icon="file-download" slot="dropdown-trigger">
+                      <iron-icon class="dark" icon="file-download"></iron-icon>
+                      Export
+                    </paper-button>
+                    <paper-listbox slot="dropdown-content">
+                      <template is="dom-repeat" items="[[chartsExport]]">
+                        <paper-item on-tap="_export">{{item.name}}</paper-item>
+                      </template>
+                    </paper-listbox>
+                  </paper-menu-button>
+                </div>
+
+                <div class="top-content-action" hidden$="[[!_isActive(subroute.path, '/assurance')]]">
+                  <paper-menu-button>
+                    <paper-button class="action-button" icon="file-download" slot="dropdown-trigger">
                       <iron-icon class="dark" icon="file-download"></iron-icon>
                       Export
                     </paper-button>
@@ -273,14 +299,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: Array,
             value: [
               { name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv' },
-              { name: '2018', endpoint: '/api/v2/partners/hact?&format=csv' }
+              { name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv' },
+              { name: '2019', endpoint: '/api/v2/partners/hact?&format=csv' }
             ]
           },
           availableGeneralYears: {
             type: Array,
             value: [
-              { name: '2018', endpoint: '/api/v2/partners/hact/simple?&format=csv' }
-
+              { name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv' },
+              { name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv' }
+            ]
+          },
+          chartsExport: {
+            type: Array,
+            value: [
+              { name: '2018', endpoint: '/api/v2/hact/graph/2018/export' },
+              { name: '2019', endpoint: '/api/v2/hact/graph/2019/export' }
             ]
           },
           displayDetail: {
@@ -307,7 +341,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       static get observers() {
         return [
-          '_routePageChanged(routeData.page)'
+          '_routePageChanged(routeData.page)',
         ];
       }
 
@@ -362,6 +396,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           `${endpoint}`,
           '_blank'
         );
+      }
+
+      _print() {
+        window.print()
       }
   
       // sets export endpoints based on assurance view (detailed/general)

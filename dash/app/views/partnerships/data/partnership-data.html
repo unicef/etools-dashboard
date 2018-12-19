@@ -85,18 +85,18 @@
             type: Object,
             value: function() {
               return {
-                searchString: (qs, partner) => qs.length ? contains(qs.toLowerCase(), partner.partner_name.toLowerCase()) || contains(qs.toLowerCase(), partner.partner_vendor_number) : true,
+                searchString: (qs, partner) => {
+                  return qs.length && partner.partner_vendor_number ? 
+                    contains(qs.toLowerCase(), partner.partner_name.toLowerCase()) || contains(qs.toLowerCase(), partner.partner_vendor_number) : 
+                      qs.length ? contains(qs.toLowerCase(), partner.partner_name.toLowerCase()) : true
+                },
                 sectors: (sectors, partner)=> sectors.length ? !!intersection(sectors, [trim(partner.sections)]).length : true,
                 offices: (offices, partner)=> offices.length ? !!intersection(offices, partner.offices_names.split(',')).length : true,
                 status: (status, partner)=> status.length ? (contains(partner.status, status) ? true : false) : true,
-                startAfterDate: (date, partner)=> isEmpty(partner.start) ? true
-                : !isEmpty(date) ? this.prepareDate(partner.start) > this.prepareDate(date): true,
-                endBeforeDate: (date, partner)=> isEmpty(partner.end) ? true
-                  : !isEmpty(date) ? this.prepareDate(partner.end) < this.prepareDate(date) : true,
-                startBeforeDate: (date, partner)=> isEmpty(partner.start) ? true
-                  : !isEmpty(date) ? this.prepareDate(partner.start) < this.prepareDate(date) : true,
-                endAfterDate: (date, partner)=> isEmpty(partner.end) ? true
-                  : !isEmpty(date) ? this.prepareDate(partner.end) > this.prepareDate(date) : true
+                startAfterDate: (date, partner)=> isEmpty(partner.start) ? true : !isEmpty(date) ? this.prepareDate(partner.start) > this.prepareDate(date): true,
+                endBeforeDate: (date, partner)=> isEmpty(partner.end) ? true : !isEmpty(date) ? this.prepareDate(partner.end) < this.prepareDate(date) : true,
+                startBeforeDate: (date, partner)=> isEmpty(partner.start) ? true : !isEmpty(date) ? this.prepareDate(partner.start) < this.prepareDate(date) : true,
+                endAfterDate: (date, partner)=> isEmpty(partner.end) ? true : !isEmpty(date) ? this.prepareDate(partner.end) > this.prepareDate(date) : true
               };
             }
           },
@@ -180,9 +180,9 @@
             return Dexie.Promise.all([
               queryResult.count(),
               queryResult.sortBy(sortBy || 'partner_name'),
-              ...(this.presetResults.map((res) => res.sortBy(sortBy || 'partner_name')))
+              ...this.presetResults.map(res => res.sortBy(sortBy || 'partner_name'))
             ]);
-          }).then((countAndResult) => {
+          }).then(countAndResult => {
             this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
@@ -196,7 +196,7 @@
             } else {
               this.set('presetsLoaded', true)
             };
-          }).catch((err) => console.error('Error querying partnerships-dash: ', err));
+          }).catch(err => console.error('Error querying partnerships-dash: ', err));
       }
     }
 
