@@ -430,16 +430,23 @@
       }
 
       _setFilter() {
+        // console.log(this.tripsOffice)
+        // let officeIds = this.tripsOffice ? this.tripsOffice.forEach(off => off.id)
         this.set('fetchDisabled', true);
         if (!this.year) {
           this._setInvalid('tripsYear');
           return;
         }
-        var filter = { year: this.year, office_id: this.tripsOffice };
+        var filter = { year: this.year };
         if (this.month) {
           var monthObj = { months: this.month.join(',') };
           _.assign(filter, monthObj);
         }
+        if (this.tripsOffice) {
+          var officeObj = { office_id: this.tripsOffice.map(off => off.id).join(',') };
+          _.assign(filter, officeObj);
+        }
+        log(filter)
         this.set('tripsFilter', filter);
       }
 
