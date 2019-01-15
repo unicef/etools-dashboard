@@ -444,7 +444,6 @@
           var officeObj = { office_id: this.tripsOffice.map(off => off.id).join(',') };
           _.assign(filter, officeObj);
         }
-        log(filter)
         this.set('tripsFilter', filter);
       }
 
