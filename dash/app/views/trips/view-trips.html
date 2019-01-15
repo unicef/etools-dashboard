@@ -551,11 +551,11 @@
           if (!actionPoints.length && this.active) {
             this._setNoData('actionPointsChart');
           } else {
-            var formatted = [['Action Points', 'Closed', 'Total']];
+            var formatted = [['Action Points', 'Closed', 'Open']];
             actionPoints.forEach((ap) => {
               formatted.push([ap.section_name,
                 ap.completed_action_points,
-                ap.total_action_points
+                (ap.total_action_points - ap.completed_action_points)
               ]);
             });
             this._formatChartData(formatted, 'actionPointsChart');
