@@ -435,10 +435,14 @@
           this._setInvalid('tripsYear');
           return;
         }
-        var filter = { year: this.year, office_id: this.tripsOffice };
+        var filter = { year: this.year };
         if (this.month) {
           var monthObj = { months: this.month.join(',') };
           _.assign(filter, monthObj);
+        }
+        if (this.tripsOffice) {
+          var officeObj = { office_id: this.tripsOffice.map(off => off.id).join(',') };
+          _.assign(filter, officeObj);
         }
         this.set('tripsFilter', filter);
       }
@@ -551,11 +555,11 @@
           if (!actionPoints.length && this.active) {
             this._setNoData('actionPointsChart');
           } else {
-            var formatted = [['Action Points', 'Closed', 'Total']];
+            var formatted = [['Action Points', 'Closed', 'Open']];
             actionPoints.forEach((ap) => {
               formatted.push([ap.section_name,
                 ap.completed_action_points,
-                ap.total_action_points
+                (ap.total_action_points - ap.completed_action_points)
               ]);
             });
             this._formatChartData(formatted, 'actionPointsChart');

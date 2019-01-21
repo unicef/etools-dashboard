@@ -4,5 +4,6 @@ bower_components/
 dist/
 .tmp
 .idea
+.vscode
 *.sublime-project
 *.sublime-workspace
