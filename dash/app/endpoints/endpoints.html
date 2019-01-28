@@ -7,11 +7,11 @@
       exp: 60 * 60 * 1000, // 1h
       cachingKey: 'unicefUsers'
     },
-    user: {
-      url: '/users/api/profile/',
-      exp: 30 * 60 * 1000, // 30min
-      cachingKey: 'user'
-    },
+    // user: {
+    //   url: '/users/api/profile/',
+    //   exp: 30 * 60 * 1000, // 30min
+    //   cachingKey: 'user'
+    // },
     countryProgrammes: {
       url: '/api/v2/reports/countryprogramme/',
       exp: 6 * 60 * 60 * 1000,
@@ -28,7 +28,7 @@
       cachingKey: 'countries'
     },
     userCountry: {
-      url: '/api/v2/users/country'
+      url: '/api/v2/users/country/'
     },
     changeCountry: {
       url: '/users/api/changecountry/'
@@ -39,12 +39,12 @@
       cachingKey: 'agreements'
     },
     partners: {
-      url: '/api/v2/partners/hact',
+      url: '/api/v2/partners/hact/',
       exp: 6 * 60 * 60 * 1000, // 6h
       cacheTableName: 'partners'
     },
     partnershipsOverview: {
-      template: '/api/v2/partners/dashboard',
+      template: '/api/v2/partners/dashboard/',
       exp: 6 * 60 * 60 * 1000, // 6h
       cacheTableName: 'partnershipsOverview'
     },
@@ -57,12 +57,12 @@
       cachingKey: 'partnersDropdown'
     },
     static: {
-      url: '/api/v2/dropdowns/static',
+      url: '/api/v2/dropdowns/static/',
       exp: 6 * 60 * 60 * 1000, // 6h
       cachingKey: 'static'
     },
     sectors: {
-      url: '/api/reports/sectors',
+      url: '/api/reports/sectors/',
       exp: 6 * 60 * 60 * 1000,
       cachingKey: 'sectors'
     },
@@ -77,7 +77,7 @@
       cachingKey: 'actionPointsForMe'
     },
     mapInterventions: {
-      url: '/api/v2/interventions/map'
+      url: '/api/v2/interventions/map/'
     },
     interventions: {
       url: '/api/v2/interventions/',
@@ -90,12 +90,12 @@
       cachingKey: 'donors'
     },
     grants: {
-      url: '/api/v2/dropdowns/pmp',
+      url: '/api/v2/dropdowns/pmp/',
       exp: 10*60000,
       cachingKey: 'grants'
     },
     partnerships: {
-      template: '/api/v2/interventions/dash',
+      template: '/api/v2/interventions/dash/',
       exp: 6 * 60 * 60 * 1000,
       cacheTableName: 'partnerships'
     },
@@ -105,7 +105,7 @@
       cachingKey: 'results'
     },
     csoDashboard: {
-      template: '/api/v2/interventions/partnership-dash',
+      template: '/api/v2/interventions/partnership-dash/',
       exp: 6 * 60 * 60 * 1000, // 6h
       cacheTableName: 'csoDashboard'
     },

@@ -52,10 +52,6 @@
 
       let errorMessage = response.message || this.globalMessage;
       
-      if (response.response.detail === "Authentication credentials were not provided.") {
-        errorMessage = response.response.detail + " Please ensure you are logged in."
-      }
-
       if (!ajaxMethod) {
         ajaxMethod = 'GET';
       }
