@@ -100,7 +100,7 @@
 
           // next 4 actions destructure data due to corresponding format from backend
 
-          setTrips({ data } = []) {
+          setTrips({ data= [] } ) {
             return {
               type: 'SET_TRIPS',
               trips: map(
@@ -110,7 +110,7 @@
             };
           },
 
-          setTripsSupervised({ data } = []) {
+          setTripsSupervised({ data = [] }) {
             return {
               type: 'SET_TRIPS_SUPERVISED',
               tripsSupervised: map(
@@ -120,7 +120,8 @@
             };
           },
 
-          setActionPointsByMe({ results } = []) {
+          setActionPointsByMe({ results = [] }) {
+            console.log('checkingg0', results);
             return {
               type: 'SET_ACTION_PTS_BY_ME',
               actionPointsByMe: map(
@@ -130,7 +131,7 @@
             };
           },
 
-          setActionPointsForMe({ results } = []) {
+          setActionPointsForMe({ results = [] } ) {
             return {
               type: 'SET_ACTION_PTS_FOR_ME',
               actionPointsForMe: map(
@@ -319,7 +320,10 @@
             this._callNext();
           } else {
             this.sendRequest(next.endpoint).then((res) => this._handleResponse(res))
-              .catch((err) => log(err));
+              .catch((err) => {
+                log('error loading assets from common data loader: ', err);
+                this._handleResponse([]);
+              });
           }
         }
       }
