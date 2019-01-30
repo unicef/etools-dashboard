@@ -33,6 +33,7 @@
       EtoolsDashboard.Mixins.Endpoints,
       EtoolsDashboard.Mixins.ReduxStore,
       EtoolsDashboard.Mixins.AjaxServerErrors,
+      EtoolsDashboard.Mixins.ToastNotifications,
       EtoolsAjaxRequestMixin
     )(Polymer.Element);
 
@@ -319,11 +320,8 @@
             this.dispatch(next.handler, null);
             this._callNext();
           } else {
-            this.sendRequest(next.endpoint).then((res) => this._handleResponse(res))
-              .catch((err) => {
-                log('error loading assets from common data loader: ', err);
-                this._handleResponse([]);
-              });
+            this.sendRequest(next.endpoint).then((res)=>this._handleResponse(res))
+            .catch((err)=>this._handleError(err, next));
           }
         }
       }
@@ -331,6 +329,11 @@
       _handleResponse(response) {
         this.dispatch(this.nextAction.handler, response);
         this._callNext();
+      }
+
+      _handleError(err, requestDetail) {
+        this.fireEvent('toast', { text: `Error ${err.status} failed request for url, ${requestDetail.endpoint.endpoint.url}. ${err.response.detail}`, showCloseBtn: true });
+        this._handleResponse([]);
       }
 
     }
