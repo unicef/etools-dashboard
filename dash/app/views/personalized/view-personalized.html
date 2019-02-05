@@ -27,12 +27,10 @@
 
 <link rel="import" href="../../mixins/common-general-mixin.html">
 <link rel="import" href="../../mixins/redux-store-mixin.html">
-<link rel="import" href="../../endpoints/endpoints-mixin.html">
 <link rel="import" href="../../config/config.html">
 <link rel="import" href="../../../../bower_components/etools-loading/etools-loading.html">
 <link rel="import" href="../../config/dexie-db-config.html">
 <link rel="import" href="../../mixins/event-helper-mixin.html">
-<link rel="import" href="../../mixins/data-element-mixin.html">
 <link rel="import" href="../../components/etools-progress-bar.html">
 
 <dom-module id="view-personalized">
@@ -475,16 +473,12 @@
      * @mixinFunction
      * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
      * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
-     * @appliesMixin EtoolsDashboard.Mixins.Endpoints
      * @appliesMixin EtoolsDashboard.Mixins.EventHelper
-     * @appliesMixin EtoolsDashboard.Mixins.DataElement
      */
     const ViewPersonalizedMixins = compose(
       EtoolsDashboard.Mixins.ReduxStore,
       EtoolsDashboard.Mixins.CommonGeneral,
-      EtoolsDashboard.Mixins.Endpoints,
       EtoolsDashboard.Mixins.EventHelper,
-      EtoolsDashboard.Mixins.DataElement
     )(Polymer.Element);
 
     /**
@@ -509,19 +503,15 @@
       static get properties() {
         return {
           reorganizedData: {
-            type: Array
-          },
-          pdSSFAs: {
             type: Array,
-            notify: true,
-            observer: '_checkPdSSFAsData',
+            notify: true
+          },
+          allPDSSFAs: {
+            statePath: 'pdssfas',
+            observer: 'queryCsoDashboard'
           },
           partners: {
             type: Array,
-          },
-          endpointName: {
-            type: String,
-            value: 'csoDashboard'
           },
           totalPdSSFAs: {
             type: Number
@@ -582,7 +572,6 @@
 
       ready() {
         super.ready();
-        setTimeout(() => this.queryCsoDashboard(), 10000)
       }
 
       _updateTrips() {
@@ -725,7 +714,7 @@
             return Dexie.Promise.all([queryResult.toArray()]);
           }).then(countAndResult => {
             this.fireEvent('global-loading', { loadingSource: 'view-personalized' });
-            this.set('pdSSFAs', countAndResult[0]);
+            this._checkPdSSFAsData(countAndResult[0]);
           }).catch(err => console.error('Error querying partnerships: ', err));
       }
 

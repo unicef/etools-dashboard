@@ -30,7 +30,8 @@
     donors: [],
     grants: [],
     results: [],
-    clusters: []
+    clusters: [],
+    pdssfas: []
   };
 
   const reducer = (state, action) => {
@@ -52,6 +53,9 @@
 
       case 'SET_ACTION_PTS_FOR_ME':
         return merge(state, { actionPointsForMe: action.actionPointsForMe });
+
+      case 'SET_PDSSFAS':
+        return merge(state, { pdssfas: action.pdssfas })
 
       case 'SET_PARTNERSHIPS':
         return merge(state, { partnerships: action.partnerships });

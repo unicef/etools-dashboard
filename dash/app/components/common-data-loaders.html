@@ -150,6 +150,13 @@
             };
           },
 
+          setPdssfas(data = []) {
+            return {
+              type: 'SET_PDSSFAS',
+              pdssfas: data
+            }
+          },
+
           setTripsYears() {
             return {
               type: 'SET_TRIPS_YEARS',
