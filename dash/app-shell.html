@@ -367,13 +367,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _onForbidden() {
         let redirectNotification = document.createElement('etools-loading');
-        redirectNotification.loadingText = 'You are not currently logged in. You will be redirected to the login page.'
+        redirectNotification.loadingText = 'Your login session has expired, you are being redirected to login.'
         redirectNotification.absolute = true;
         redirectNotification.active = true;
         document.querySelector('body').appendChild(redirectNotification);
         setTimeout(() => {
           window.location.href = EtoolsDashboard.Config.loginPath;
-        }, 6000)
+        }, 3000)
       }
 
       _routePageChanged(page) {
