@@ -21,6 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/etools-dropdown/etools-dropdown.html">
+<link rel="import" href="../bower_components/etools-loading/etools-loading.html">
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
@@ -347,6 +348,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       ready() {
         super.ready();
+        this._initListeners();
+      }
+
+      _initListeners() {
+        this._onForbidden = this._onForbidden.bind(this);
+        this.addEventListener('forbidden', this._onForbidden);
+      }
+
+      _removeListeners() {
+        this.removeEventListener('forbidden', this._onForbidden);
+      }
+
+      disconnectedCallback() {
+        super.disconnectedCallback();
+        this._removeListeners();
+      }
+
+      _onForbidden() {
+        let redirectNotification = document.createElement('etools-loading');
+        redirectNotification.loadingText = 'Your login session has expired, you are being redirected to login.'
+        redirectNotification.absolute = true;
+        redirectNotification.active = true;
+        document.querySelector('body').appendChild(redirectNotification);
+        setTimeout(() => {
+          window.location.href = EtoolsDashboard.Config.loginPath;
+        }, 3000)
       }
 
       _routePageChanged(page) {

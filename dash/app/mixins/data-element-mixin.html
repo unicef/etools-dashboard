@@ -83,6 +83,9 @@
           .then((resp) => {
             this._handleMyResponse(resp);
           }).catch((err) => {
+            if (this.options.endpoint.template.indexOf('profile') && err.status === 403) {
+              this.fireEvent('forbidden', {bubbles: true, composed: true});
+            }
             this.handleErrorResponse(err);
           });
       }
