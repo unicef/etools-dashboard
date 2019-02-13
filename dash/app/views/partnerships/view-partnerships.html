@@ -50,11 +50,12 @@
       }
     </style>
 
-    <app-route route="{{route}}"
-               pattern="/dash/partnerships/:partnershipsTab"
+    <app-route route="[[route]]"
+               pattern="/:partnershipsTab"
                data="{{routeData}}"
                active="{{active}}"
-               query-params="{{queryParams}}"></app-route>
+               query-params="{{queryParams}}"
+               tail="{{subroute}}"></app-route>
 
     <div class="view-toggle">
       <paper-button id="overview" on-tap="_toggleDashView" name="overview" noink class="curved-left">
@@ -134,11 +135,17 @@
           },
           csoActive: {
             type: Boolean,
-            value: false
+            value: false,
+            notify: true
           },
           overviewActive: {
             type: Boolean,
-            value: false
+            value: false,
+            notify: true
+          },
+          route: {
+            type: Object,
+            notify: true
           }
         }
       }
@@ -157,11 +164,10 @@
           this.set('csvDownloadUrl', this.csvDownloadUrlOverview);
           this.$.overview.classList.remove('dark-button');
           this.$.csoDash.classList.remove('light-button');
-        } else {
+        } else if (tab === 'cso') {
           this.set('csoActive', true);
           this.set('overviewActive', false);
           this.set('csvDownloadUrl', this.csvDownloadUrlCso)
-          this.updateAppState(this.route.path);
           this.$.overview.classList.add('dark-button');
           this.$.csoDash.classList.add('light-button');
         }
