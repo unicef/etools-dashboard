@@ -870,7 +870,7 @@
           pks.join(',');
           query = `pk=${pks}&`;
         }
-        return `${this.getEndpoint('csoDashboard').url}/?${query}format=csv`;
+        return `${this.getEndpoint('csoDashboard').url}?${query}format=csv`;
       }
 
       _filterPartnershipsData() {
