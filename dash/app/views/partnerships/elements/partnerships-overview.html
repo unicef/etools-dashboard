@@ -454,10 +454,10 @@
       }
 
       _init(active, sectors, requiredDataLoaded) {
-        let params = this.queryParams;
         if (!active || !sectors || !requiredDataLoaded) {
           return;
         }
+        let params = this.queryParams;
         this.set('initComplete', false);
         this.set('qs', params.qs ? params.qs : '');
         this.set('pageNumber', params.page ? parseInt(params.page) : 1);
@@ -544,6 +544,10 @@
               selectedValue: map(prop('name'), this.selectedPartners)
             },
             {
+              filterName: 'Outstanding DCT >9?',
+              selectedValue: this.selectedOutstanding
+            },
+            {
               filterName: 'Partner Type',
               selectedValue: map(prop('value'), this.selectedTypes)  
             }
@@ -572,7 +576,7 @@
 
       _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded,
         initComplete, selectedSectors, selectedPartners, selectedOutstanding, selectedTypes) {
-        if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
+        if ( !this.active || !this.initComplete || !this.requiredDataLoaded) {
           return;
         }
         const qs = this.buildQueryString();

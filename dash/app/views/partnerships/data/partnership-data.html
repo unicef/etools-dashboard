@@ -4,7 +4,6 @@
 <link rel="import" href="../../../mixins/event-helper-mixin.html">
 <link rel="import" href="../../../config/dexie-db-config.html">
 
-
 <dom-module id="partnership-data">
 
   <script>
@@ -125,6 +124,8 @@
         if (this.active) {
           this.fireEvent('global-loading', { message: 'Loading partnerships data...', active: true, loadingSource: 'partnership-data' });
           this.set('loadedInitially', true);
+        } else {
+          this.fireEvent('global-loading', { active: false, loadingSource: 'partnership-data' })
         }
       }
 
@@ -183,7 +184,6 @@
               ...this.presetResults.map(res => res.sortBy(sortBy || 'partner_name'))
             ]);
           }).then(countAndResult => {
-            this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
             let presetFilterResults = countAndResult.slice(2)
@@ -196,6 +196,7 @@
             } else {
               this.set('presetsLoaded', true)
             };
+            this.fireEvent('global-loading', {loadingSource: 'partnership-data'});
           }).catch(err => console.error('Error querying partnerships-dash: ', err));
       }
     }

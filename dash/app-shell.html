@@ -117,6 +117,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                data="{{routeData}}"
                tail="{{subroute}}">
     </app-route>
+    <app-route route="{{subroute}}"
+               pattern="/:tab"
+               data="{{subrouteData}}"></app-route>
 
     <app-drawer-layout id="layout" force-narrow fullbleed>
       <!-- Main content -->
@@ -235,19 +238,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                      display-detail="{{displayDetail}}"
                      user="[[user]]"
                      name="hact"></view-hact>
-          <view-partnerships route="{{route}}"
+          <view-partnerships route="{{subroute}}"
                              class="page"
                              name="partnerships"
                              csv-download-url="{{csvUrl}}"></view-partnerships>
-          <view-trips route="{{route}}"
+          <view-trips route="{{subroute}}"
                       class="page"
                       name="trips"
                       user="[[user]]"></view-trips>
-          <view-map route="{{route}}"
+          <view-map route="{{subroute}}"
                     user="[[user]]"
                     class="page"
                     name="map"></view-map>
-          <view-attachments route="{{route}}"
+          <view-attachments route="{{subroute}}"
                             class="page"
                             name="attachments"></view-attachments>
         </iron-pages>
@@ -289,7 +292,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             observer: '_pageChanged'
           },
           routeData: Object,
-          subroute: Object,
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,

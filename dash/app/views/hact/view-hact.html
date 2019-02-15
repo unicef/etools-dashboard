@@ -130,7 +130,7 @@
       }
     </style>
 
-    <app-route route="{{route}}"
+    <app-route route="[[route]]"
                pattern="/:hactTab"
                data="{{routeData}}"
                active="{{hactActive}}"
@@ -296,7 +296,8 @@
             notify: true
           },
           route: {
-            type: Object
+            type: Object,
+            notify: true
           },
           user: {
             type: Object
@@ -304,7 +305,6 @@
           hactActive: {
             type: Boolean
           }
-
         };
       }
 
@@ -355,7 +355,7 @@
           this.updateAppState(this.route.prefix+this.route.path);
           this.$.assurancePlan.classList.add('dark-button');
           this.$.dashboardCharts.classList.add('light-button');
-        } else {
+        } else if (tab === 'assurance') {
           this.updateAppState(this.route.prefix+this.route.path+'?'+this.buildQueryString());
           this.$.assurancePlan.classList.remove('dark-button');
           this.$.dashboardCharts.classList.remove('light-button');
