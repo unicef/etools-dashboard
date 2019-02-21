@@ -232,7 +232,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <view-personalized user="[[user]]"
                              class="page"
                              name="personalized"
-                             route="{{subroute}}"></view-personalized>
+                             route="{{route}}"></view-personalized>
           <view-hact route="{{subroute}}"
                      class="page"
                      display-detail="{{displayDetail}}"
@@ -242,15 +242,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                              class="page"
                              name="partnerships"
                              csv-download-url="{{csvUrl}}"></view-partnerships>
-          <view-trips route="{{subroute}}"
+          <view-trips route="{{route}}"
                       class="page"
                       name="trips"
                       user="[[user]]"></view-trips>
-          <view-map route="{{subroute}}"
+          <view-map route="{{route}}"
                     user="[[user]]"
                     class="page"
                     name="map"></view-map>
-          <view-attachments route="{{subroute}}"
+          <view-attachments route="{{route}}"
                             class="page"
                             name="attachments"></view-attachments>
         </iron-pages>
