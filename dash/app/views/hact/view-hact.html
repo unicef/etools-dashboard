@@ -130,7 +130,7 @@
       }
     </style>
 
-    <app-route route="[[route]]"
+    <app-route route="{{route}}"
                pattern="/:hactTab"
                data="{{routeData}}"
                active="{{hactActive}}"
@@ -352,11 +352,11 @@
         this.set('active', hactActive);
         if (!tab || !hactActive) { return; }
         if (tab === 'charts') {
-          this.updateAppState(this.route.prefix+this.route.path);
+          this.updateAppState(this.route.prefix+this.route.path, '', true);
           this.$.assurancePlan.classList.add('dark-button');
           this.$.dashboardCharts.classList.add('light-button');
         } else if (tab === 'assurance') {
-          this.updateAppState(this.route.prefix+this.route.path+'?'+this.buildQueryString());
+          this.updateAppState(this.route.prefix+this.route.path+'?'+this.buildQueryString(), '', true);
           this.$.assurancePlan.classList.remove('dark-button');
           this.$.dashboardCharts.classList.remove('light-button');
         }
