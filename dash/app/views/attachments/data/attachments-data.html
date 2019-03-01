@@ -76,9 +76,9 @@
                   agreement_reference_number = agreement_reference_number.toLowerCase();
                   query = query.toLowerCase();
                   return contains(query, partner)
-                  || contains(query, vendor_number)
-                  || contains(query, pd_ssfa_number)
-                  || contains(query, agreement_reference_number);
+                    || contains(query, vendor_number)
+                    || contains(query, pd_ssfa_number)
+                    || contains(query, agreement_reference_number);
                 },
                 attachmentType: ({ file_type }, type) => contains(file_type, type),
                 pca: ({ agreement_reference_number }, selectedPCA) => contains(agreement_reference_number, selectedPCA),
@@ -89,20 +89,12 @@
         };
       }
 
-      ready() {
-        super.ready();
-        if (!this.loadedInitially) {
-          this.fireEvent('global-loading', { message: 'Loading documents...', active: true, loadingSource: 'attachments-data' });
-          this.set('loadedInitially', true);
-        }
-      }
-
       query(params) {
         if (equals(params, this.currentParams)) {
           return;
         }
+        this.fireEvent('global-loading', { active: true, loadingSource: 'attachments-data' });
         this.set('currentParams', params);
-        this.fireEvent('global-loading', { active: true });
         const { pageNumber, pageSize, order, orderBy } = params;
         EtoolsDashboard.DexieDb.transaction('r', EtoolsDashboard.DexieDb.attachments, () => {
           let queryResult = EtoolsDashboard.DexieDb.attachments;
@@ -128,22 +120,23 @@
               .toArray(),
             allResults.toArray()
           ]).then((countAndResult) => {
-              this._setFilteredTotal(countAndResult[0]);
-              this._setFilteredAttachments(countAndResult[1]);
-              countAndResult[2].forEach((file)=> {
-                  if (!this.orderedResults.some((item) => item.keys === `${file.partner} - ${file.vendor_number}`)) {
-                    let obj = {};
-                    let vend = countAndResult[2].filter((file2) => file2.vendor_number === file.vendor_number);
-                    vend = sortBy(prop('created'))(vend);
-                    let key = `${file.partner} - ${file.vendor_number}`;
-                    obj['label'] = key;
-                    obj['value'] = vend;
-                    this.orderedResults.push(obj);
-                  }
-                });
-                this.orderedResults = uniq(this.orderedResults);
-              this.fireEvent('global-loading', { loadingSource: 'attachments-data' });
+            this.fireEvent('global-loading', { loadingSource: 'attachments-data' });
+
+            this._setFilteredTotal(countAndResult[0]);
+            this._setFilteredAttachments(countAndResult[1]);
+            countAndResult[2].forEach((file) => {
+              if (!this.orderedResults.some((item) => item.keys === `${file.partner} - ${file.vendor_number}`)) {
+                let obj = {};
+                let vend = countAndResult[2].filter((file2) => file2.vendor_number === file.vendor_number);
+                vend = sortBy(prop('created'))(vend);
+                let key = `${file.partner} - ${file.vendor_number}`;
+                obj['label'] = key;
+                obj['value'] = vend;
+                this.orderedResults.push(obj);
+              }
             });
+            this.orderedResults = uniq(this.orderedResults);
+          });
         });
       }
     }
