@@ -825,7 +825,7 @@
       _init(active) {
         if (active && this.chartData) {
           if (isEmpty(this.chartData)) {
-            this.fireEvent('global-loading', { message: 'Loading chart data...', active: true });
+            this.fireEvent('global-loading', { loadingSource: 'hact-charts', active: true });
           } else {
             this.fireEvent('global-loading', { loadingSource: 'hact-charts' });
             this._drawCharts();

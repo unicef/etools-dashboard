@@ -3,6 +3,7 @@
 <link rel="import" href="../mixins/ajax-server-errors-mixin.html">
 <link rel="import" href="../mixins/event-helper-mixin.html">
 <link rel="import" href="../scripts/ramda-utils.html">
+<link rel="import" href="../scripts/shortid.html">
 
 <script>
   'use strict';
@@ -81,15 +82,20 @@
       }
 
       _requestData() {
+        const sourceId = shortid.gen();
+				console.log('TCL: extends -> _requestData -> sourceId', sourceId);
         this.fireEvent('global-loading', {
           active: true,
-          loadingSource: 'data-element'
+          loadingSource: sourceId
         });
 
         this.sendRequest(this.options)
           .then((resp) => {
-            this._handleMyResponse(resp);
+            this._handleMyResponse(resp, sourceId);
           }).catch((err) => {
+            this.fireEvent('global-loading', {
+              loadingSource: sourceId
+            });
             if (this.options.endpoint.template.indexOf('profile') && err.status === 403) {
               this.fireEvent('forbidden', { bubbles: true, composed: true });
             }
@@ -97,9 +103,9 @@
           });
       }
 
-      _handleMyResponse(res) {
+      _handleMyResponse(res, sourceId) {
         this.fireEvent('global-loading', {
-          loadingSource: 'data-element'
+          loadingSource: sourceId
         });
         this._setData(res);
         if (this.fireDataLoaded) {

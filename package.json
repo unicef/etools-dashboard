@@ -14,9 +14,9 @@
     "test:integration": "polymer build # test that psk builds without error with the CLI"
   },
   "dependencies": {
+    "deep-extend": ">=0.5.1",
     "express": "^4.16.3",
     "prpl-server": "^1.0.0",
-    "redux": "^3.7.2",
-    "deep-extend": ">=0.5.1"
+    "redux": "^3.7.2"
   }
 }

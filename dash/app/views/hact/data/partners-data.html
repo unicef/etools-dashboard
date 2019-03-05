@@ -69,23 +69,24 @@
         };
       }
 
-      constructor() {
-        super();
-      }
+      // constructor() {
+      //   super();
+      // }
 
-      ready() {
-        super.ready();
-          if (!this.loadedInitially) {
-          this.fireEvent('global-loading', { message: 'Loading partners data...', active: true, loadingSource: 'partners-data' });
-          this.set('loadedInitially', true);
-        }
-      }
+      // ready() {
+      //   super.ready();
+      //     if (!this.loadedInitially) {
+      //     this.fireEvent('global-loading', { message: 'Loading partners data...', active: true, loadingSource: 'partners-data' });
+      //     this.set('loadedInitially', true);
+      //   }
+      // }
 
       refreshList() {
         this._requestData();
       }
     
       query(searchString, order, pageSize, pageNumber) {
+        this.fireEvent('global-loading', { message: 'Loading partners data...', active: true, loadingSource: 'partners-data' });
         EtoolsDashboard.DexieDb.partners.toArray().then((res) => {
           this._setTotals(this._computeTotals(res));
           this._setTotalResults(res.length);

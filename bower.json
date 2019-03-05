@@ -48,7 +48,8 @@
     "paper-toggle-button": "^2.0.0",
     "polymer-redux": "^1.0.5",
     "ramda": "^0.25.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
+    "js-shortid": "^0.1.1"
   },
   "resolutions": {
     "lodash": "^4.17.5",

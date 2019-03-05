@@ -85,9 +85,9 @@
             value: function() {
               return {
                 searchString: (qs, partner) => {
-                  return qs.length && partner.partner_vendor_number ? 
-                    contains(qs.toLowerCase(), partner.partner_name.toLowerCase()) || contains(qs.toLowerCase(), partner.partner_vendor_number) : 
-                      qs.length ? contains(qs.toLowerCase(), partner.partner_name.toLowerCase()) : true
+                  return qs.length && partner.partner_vendor_number ?
+                    contains(qs.toLowerCase(), partner.partner_name.toLowerCase()) || contains(qs.toLowerCase(), partner.partner_vendor_number) :
+                      qs.length ? contains(qs.toLowerCase(), partner.partner_name.toLowerCase()) : true;
                 },
                 sectors: (sectors, partner)=> sectors.length ? !!intersection(sectors, [trim(partner.sections)]).length : true,
                 offices: (offices, partner)=> offices.length ? !!intersection(offices, partner.offices_names.split(',')).length : true,
@@ -113,21 +113,7 @@
           }
         };
       }
-
-      static get observers() {
-        return [
-          'init(active)'
-        ]
-      }
-
-      init() {
-        if (this.active) {
-          this.fireEvent('global-loading', { message: 'Loading partnerships data...', active: true, loadingSource: 'partnership-data' });
-          this.set('loadedInitially', true);
-        } else {
-          this.fireEvent('global-loading', { active: false, loadingSource: 'partnership-data' })
-        }
-      }
+    
 
       createPresetFilters(results) {
         return [
@@ -164,6 +150,7 @@
       query(params) {
         const { order, sortBy } = params;
         const predKeys = keys(this.predicates);
+        this.fireEvent('global-loading', { active: true, loadingSource: 'partnership-data' });
         EtoolsDashboard.DexieDb.transaction(
           'r',
           EtoolsDashboard.DexieDb.csoDashboard,
@@ -181,23 +168,27 @@
             return Dexie.Promise.all([
               queryResult.count(),
               queryResult.sortBy(sortBy || 'partner_name'),
-              ...this.presetResults.map(res => res.sortBy(sortBy || 'partner_name'))
+              ...this.presetResults.map((res) => res.sortBy(sortBy || 'partner_name'))
             ]);
-          }).then(countAndResult => {
+          }).then((countAndResult) => {
+
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnerships(countAndResult[1]);
-            let presetFilterResults = countAndResult.slice(2)
+            let presetFilterResults = countAndResult.slice(2);
             presetFilterResults.forEach((elem, indx) => {
               this.set(`presetFilters.${indx}.filteredPartnerships`, elem);
               this.set(`presetFilters.${indx}.total`, elem.length);
-            })
+            });
             if (this.presetsLoaded) {
-              this.set('presetsLoaded', false)
+              this.set('presetsLoaded', false);
             } else {
-              this.set('presetsLoaded', true)
-            };
-            this.fireEvent('global-loading', {loadingSource: 'partnership-data'});
-          }).catch(err => console.error('Error querying partnerships-dash: ', err));
+              this.set('presetsLoaded', true);
+            }
+            this.fireEvent('global-loading', { loadingSource: 'partnership-data' });
+          }).catch((err) => {
+            console.error('Error querying partnerships-dash: ', err);
+            this.fireEvent('global-loading', { active: false, loadingSource: 'partnership-data' });
+          });
       }
     }
 
