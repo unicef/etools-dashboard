@@ -561,19 +561,7 @@
         ];
       }
 
-      /**
-       * Instance of the element is created/upgraded. Use: initializing state,
-       * set up event listeners, create shadow dom.
-       * @constructor
-       */
-      constructor() {
-        super();
-      }
-
-      ready() {
-        super.ready();
-      }
-
+      
       _updateTrips() {
         this._setItems(this.tripsTab, 'tripsItems');
       }
@@ -594,10 +582,9 @@
           return;
         }
         if (this.myTrips && this.tripsSupervised && this.actionPointsItems && this.actionPointsForMe) {
-          this.fire('global-loading');
+          this.fireEvent('global-loading', {});
         } else {
-          this.fire('global-loading', {
-            message: 'Loading data...',
+          this.fireEvent('global-loading', {
             active: true
           });
         }
@@ -705,6 +692,8 @@
       }
 
       queryCsoDashboard() {
+        this.fireEvent('global-loading', { active:true, loadingSource: 'view-personalized' });
+        
         EtoolsDashboard.DexieDb.transaction(
           'r',
           EtoolsDashboard.DexieDb.csoDashboard,
@@ -713,9 +702,9 @@
             queryResult = queryResult.filter(int => any(equals(this.user.user))(int.unicef_focal_points));
             return Dexie.Promise.all([queryResult.toArray()]);
           }).then(countAndResult => {
-            this.fireEvent('global-loading', { loadingSource: 'view-personalized' });
             this._checkPdSSFAsData(countAndResult[0]);
-          }).catch(err => console.error('Error querying partnerships: ', err));
+          }).catch(err => console.error('Error querying partnerships: ', err))
+          .finally(() => this.fireEvent('global-loading', {  loadingSource: 'view-personalized' }));
       }
 
       reorganizeData(data) {

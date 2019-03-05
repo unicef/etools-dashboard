@@ -403,7 +403,7 @@
         ];
       }
 
-      _init(active) {
+         _init(active) {
         if (active) {
           if (!this.staticDataLoaded) {
             this.fireEvent('global-loading', { message: 'Loading page data...', active: true });
@@ -442,7 +442,7 @@
           _.assign(filter, monthObj);
         }
         if (this.tripsOffice) {
-          var officeObj = { office_id: this.tripsOffice.map(off => off.id).join(',') };
+          var officeObj = { office_id: this.tripsOffice.map((off) => off.id).join(',') };
           _.assign(filter, officeObj);
         }
         this.set('tripsFilter', filter);
@@ -517,7 +517,7 @@
         if (!isEmpty(data) && data != null) {
           var travels = prop('travels_by_section', data);
           if (!travels.length && this.active) {
-            this.fireEvent('global-loading', { active: false });
+            this.fireEvent('global-loading', {});
             this._setNoData('tripsChart');
           } else {
             var formatted = [

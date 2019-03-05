@@ -34,13 +34,13 @@
         };
       }
 
-      ready() {
-        super.ready();
-        if (!this.loadedInitially) {
-          this.fireEvent('global-loading', { message: 'Loading partners data...', active: true, loadingSource: 'partners-dropdown' });
-          this.set('loadedInitially', true);
-        }
-      }
+      // ready() {
+      //   super.ready();
+      //   if (!this.loadedInitially) {
+      //     this.fireEvent('global-loading', { message: 'Loading partners data...', active: true, loadingSource: 'partners-dropdown' });
+      //     this.set('loadedInitially', true);
+      //   }
+      // }
 
       _handleMyResponse(data) {
         const filteredPartners = data.reduce(
@@ -57,7 +57,7 @@
         );
   
         this._setPartners(filteredPartners);
-        this.fireEvent('global-loading', { active: false, loadingSource: 'partners-dropdown' });
+        this.fireEvent('global-loading', { active: false });
       }
 
     };

@@ -122,7 +122,6 @@
           },
 
           setActionPointsByMe({ results = [] }) {
-            console.log('checkingg0', results);
             return {
               type: 'SET_ACTION_PTS_BY_ME',
               actionPointsByMe: map(
@@ -156,7 +155,7 @@
             return {
               type: 'SET_PDSSFAS',
               pdssfas: data
-            }
+            };
           },
 
           setTripsYears() {

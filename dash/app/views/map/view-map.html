@@ -442,9 +442,7 @@
 
       connectedCallback() {
         super.connectedCallback();
-        this.fireEvent('global-loading', {
-          active: true
-        });
+    
       }
 
       /**
@@ -679,7 +677,7 @@
           ];
 
           this.updateShownFilters(filtersValues);
-          this.fireEvent('global-loading', {});
+          // this.fireEvent('global-loading', {});
         });
       }
 
