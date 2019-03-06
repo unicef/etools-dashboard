@@ -404,6 +404,7 @@
       }
 
          _init(active) {
+           console.log('zzzzz', this.constructor.properties);
         if (active) {
           if (!this.staticDataLoaded) {
             this.fireEvent('global-loading', { message: 'Loading page data...', active: true });
