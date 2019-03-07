@@ -26,6 +26,7 @@
 <link rel="import" href="../../../../bower_components/moment-element/moment-import.html">
 
 <link rel="import" href="../../mixins/common-general-mixin.html">
+<link rel="import" href="../../mixins/fetch-assets-mixin.html">
 <link rel="import" href="../../mixins/redux-store-mixin.html">
 <link rel="import" href="../../config/config.html">
 <link rel="import" href="../../../../bower_components/etools-loading/etools-loading.html">
@@ -479,6 +480,7 @@
       EtoolsDashboard.Mixins.ReduxStore,
       EtoolsDashboard.Mixins.CommonGeneral,
       EtoolsDashboard.Mixins.EventHelper,
+      EtoolsDashboard.Mixins.FetchAsset
     )(Polymer.Element);
 
     /**
@@ -511,7 +513,7 @@
             observer: 'queryCsoDashboard'
           },
           partners: {
-            type: Array,
+            type: Array
           },
           totalPdSSFAs: {
             type: Number
@@ -520,7 +522,7 @@
             type: Array,
             notify: true
           },
-          requiredAssets:{
+          requiredAssets: {
             type: Array,
             value: ['tripsSupervised']
           },
@@ -557,6 +559,10 @@
         };
       }
 
+      ready() {
+        super.ready();
+      }
+
       static get observers() {
         return [
           '_updateTrips(tripsTab,myTrips)',
@@ -565,7 +571,7 @@
         ];
       }
 
-      
+    
       _updateTrips() {
         this._setItems(this.tripsTab, 'tripsItems');
       }
@@ -577,7 +583,7 @@
       _checkPdSSFAsData(data) {
         if ((data && data.length) || !data.length) {
           this.set('pdSSFAsLoaded', true);
-          this.reorganizeData(data)
+          this.reorganizeData(data);
         }
       }
 
@@ -685,41 +691,41 @@
       }
 
       _getPercentFromDate(start, end) {
-        let baseMS = Date.parse(new Date(start))
-        let todayMS = Date.now() - baseMS
-        let endMS = Date.parse(new Date(end)) - baseMS
-        return (todayMS / endMS) * 100
+        let baseMS = Date.parse(new Date(start));
+        let todayMS = Date.now() - baseMS;
+        let endMS = Date.parse(new Date(end)) - baseMS;
+        return (todayMS / endMS) * 100;
       }
 
       _getPercent(first, second) {
-        return (first / second) * 100
+        return (first / second) * 100;
       }
 
       queryCsoDashboard() {
-        this.fireEvent('global-loading', { active:true, loadingSource: 'view-personalized' });
-        
+        this.fireEvent('global-loading', { active: true, loadingSource: 'view-personalized' });
+    
         EtoolsDashboard.DexieDb.transaction(
           'r',
           EtoolsDashboard.DexieDb.csoDashboard,
           () => {
             let queryResult = EtoolsDashboard.DexieDb.csoDashboard.orderBy('partner_name');
-            queryResult = queryResult.filter(int => any(equals(this.user.user))(int.unicef_focal_points));
+            queryResult = queryResult.filter((int) => any(equals(this.user.user))(int.unicef_focal_points));
             return Dexie.Promise.all([queryResult.toArray()]);
-          }).then(countAndResult => {
+          }).then((countAndResult) => {
             this._checkPdSSFAsData(countAndResult[0]);
-          }).catch(err => console.error('Error querying partnerships: ', err))
-          .finally(() => this.fireEvent('global-loading', {  loadingSource: 'view-personalized' }));
+          }).catch((err) => console.error('Error querying partnerships: ', err))
+          .finally(() => this.fireEvent('global-loading', { loadingSource: 'view-personalized' }));
       }
 
       reorganizeData(data) {
-        let names = uniq(data.map(pd => pd.partner_name))
-        let newDataArray = names.map(name => {
+        let names = uniq(data.map((pd) => pd.partner_name));
+        let newDataArray = names.map((name) => {
           let obj = {};
-          obj[name] = data.filter(pd => pd.partner_name === name)
-                          .sort((a, b) => Date.parse(a.end) - Date.parse(b.end))
-          return obj
-        })
-        this.set('reorganizedData', newDataArray)
+          obj[name] = data.filter((pd) => pd.partner_name === name)
+                          .sort((a, b) => Date.parse(a.end) - Date.parse(b.end));
+          return obj;
+        });
+        this.set('reorganizedData', newDataArray);
       }
 
       getName(partner) {
@@ -731,8 +737,8 @@
       }
 
       formatDate(date) {
-        let m = moment(date, 'YYYY-MM-DD')
-        return m.format('DD MMM YY')
+        let m = moment(date, 'YYYY-MM-DD');
+        return m.format('DD MMM YY');
       }
 
       goToMaps(event) {
@@ -744,11 +750,11 @@
         return Object.values(partner)[0][0].partner_id;
       }
 
-      _getTruncated(pdssfa){
+      _getTruncated(pdssfa) {
         if (pdssfa.length > 16) {
-          return '...' + pdssfa.split('/').slice(-1)[0]
+          return '...' + pdssfa.split('/').slice(-1)[0];
         } else {
-          return '...' + pdssfa.slice(pdssfa.length - 9)
+          return '...' + pdssfa.slice(pdssfa.length - 9);
         }
       }
     }

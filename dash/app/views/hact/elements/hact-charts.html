@@ -15,6 +15,7 @@
 <link rel="import" href="../../../config/config.html">
 
 <link rel="import" href="../../../mixins/redux-store-mixin.html">
+<link rel="import" href="../../../mixins/fetch-assets-mixin.html">
 <link rel="import" href="../../../config/config.html">
 <link rel="import" href="../../../mixins/event-helper-mixin.html">
 
@@ -504,7 +505,8 @@
      */
     const ChartsMixin = compose(
       EtoolsDashboard.Mixins.ReduxStore,
-      EtoolsDashboard.Mixins.EventHelper
+      EtoolsDashboard.Mixins.EventHelper,
+      EtoolsDashboard.Mixins.FetchAsset
       )(Polymer.Element);
     const { baseSite } = EtoolsDashboard.Config;
     /**
