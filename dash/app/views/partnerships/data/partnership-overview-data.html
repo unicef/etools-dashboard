@@ -3,7 +3,6 @@
 <link rel="import" href="../../../mixins/event-helper-mixin.html">
 <link rel="import" href="../../../config/dexie-db-config.html">
 
-
 <dom-module id="partnership-overview-data">
 
   <script>
@@ -157,7 +156,6 @@
               ...this.presetResults.map(res => res.sortBy(sortBy || 'name'))
             ]);
           }).then(countAndResult => {
-            this.fireEvent('global-loading', { loadingSource: 'partnership-overview-data' });
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnershipsOverview(countAndResult[1]);
             this.set('allPartners', countAndResult[2]);
@@ -171,6 +169,7 @@
             } else {
               this.set('presetsLoaded', true)
             };
+            this.fireEvent('global-loading', {loadingSource: 'partnership-overview-data'});
           }).catch(err => console.error('Error querying partnerships-overview: ', err));
       }
     }

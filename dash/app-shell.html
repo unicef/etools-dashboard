@@ -117,6 +117,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                data="{{routeData}}"
                tail="{{subroute}}">
     </app-route>
+    <app-route route="{{subroute}}"
+               pattern="/:tab"
+               data="{{subrouteData}}"></app-route>
 
     <app-drawer-layout id="layout" force-narrow fullbleed>
       <!-- Main content -->
@@ -229,13 +232,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <view-personalized user="[[user]]"
                              class="page"
                              name="personalized"
-                             route="{{subroute}}"></view-personalized>
+                             route="{{route}}"></view-personalized>
           <view-hact route="{{subroute}}"
                      class="page"
                      display-detail="{{displayDetail}}"
                      user="[[user]]"
                      name="hact"></view-hact>
-          <view-partnerships route="{{route}}"
+          <view-partnerships route="{{subroute}}"
                              class="page"
                              name="partnerships"
                              csv-download-url="{{csvUrl}}"></view-partnerships>
@@ -289,7 +292,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             observer: '_pageChanged'
           },
           routeData: Object,
-          subroute: Object,
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,
@@ -342,7 +344,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       static get observers() {
         return [
-          '_routePageChanged(routeData.page)',
+          '_routePageChanged(routeData.page)'
         ];
       }
 

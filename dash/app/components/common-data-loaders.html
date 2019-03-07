@@ -33,6 +33,7 @@
       EtoolsDashboard.Mixins.Endpoints,
       EtoolsDashboard.Mixins.ReduxStore,
       EtoolsDashboard.Mixins.AjaxServerErrors,
+      EtoolsDashboard.Mixins.ToastNotifications,
       EtoolsAjaxRequestMixin
     )(Polymer.Element);
 
@@ -100,7 +101,7 @@
 
           // next 4 actions destructure data due to corresponding format from backend
 
-          setTrips({ data } = []) {
+          setTrips({ data= [] } ) {
             return {
               type: 'SET_TRIPS',
               trips: map(
@@ -110,7 +111,7 @@
             };
           },
 
-          setTripsSupervised({ data } = []) {
+          setTripsSupervised({ data = [] }) {
             return {
               type: 'SET_TRIPS_SUPERVISED',
               tripsSupervised: map(
@@ -120,7 +121,8 @@
             };
           },
 
-          setActionPointsByMe({ results } = []) {
+          setActionPointsByMe({ results = [] }) {
+            console.log('checkingg0', results);
             return {
               type: 'SET_ACTION_PTS_BY_ME',
               actionPointsByMe: map(
@@ -130,7 +132,7 @@
             };
           },
 
-          setActionPointsForMe({ results } = []) {
+          setActionPointsForMe({ results = [] } ) {
             return {
               type: 'SET_ACTION_PTS_FOR_ME',
               actionPointsForMe: map(
@@ -325,8 +327,8 @@
             this.dispatch(next.handler, null);
             this._callNext();
           } else {
-            this.sendRequest(next.endpoint).then((res) => this._handleResponse(res))
-              .catch((err) => log(err));
+            this.sendRequest(next.endpoint).then((res)=>this._handleResponse(res))
+            .catch((err)=>this._handleError(err, next));
           }
         }
       }
@@ -334,6 +336,11 @@
       _handleResponse(response) {
         this.dispatch(this.nextAction.handler, response);
         this._callNext();
+      }
+
+      _handleError(err, requestDetail) {
+        this.fireEvent('toast', { text: `Error ${err.status} failed request for url, ${requestDetail.endpoint.endpoint.url}. ${err.response.detail}`, showCloseBtn: true });
+        this._handleResponse([]);
       }
 
     }
