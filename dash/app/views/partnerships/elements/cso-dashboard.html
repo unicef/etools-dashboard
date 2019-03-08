@@ -34,6 +34,7 @@
 <link rel="import" href="../../../../../bower_components/etools-info-tooltip/etools-info-tooltip.html">
 
 <link rel="import" href="../../../mixins/date-mixin.html">
+<link rel="import" href="../../../mixins/fetch-assets-mixin.html">
 <link rel="import" href="../../../mixins/common-general-mixin.html">
 <link rel="import" href="../../../mixins/list-filters-mixin.html">
 <link rel="import" href="../../../mixins/pagination-with-filters-mixin.html">
@@ -520,7 +521,8 @@
       EtoolsDashboard.Mixins.ListFilters,
       EtoolsDashboard.Mixins.Endpoints,
       EtoolsDashboard.Mixins.PaginationWithFilters,
-      EtoolsDashboard.Mixins.Date
+      EtoolsDashboard.Mixins.Date,
+      EtoolsDashboard.Mixins.FetchAsset
       )(Polymer.Element);
 
     /**
@@ -582,7 +584,7 @@
             statePath: 'offices'
           },
           totalResults: {
-            type: Array,
+            type: Array
           },
           selectedSectors: {
             type: Array,
@@ -707,7 +709,7 @@
         this.set('endBeforeDate', params.endBefore ? params.endBefore : '');
         this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
         this.set('endAfterDate', params.endAfter ? params.endAfter : '');
-        this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px'
+        this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px';
         this._initListFilters();
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
@@ -975,11 +977,11 @@
         return flag1 || flag2 ? true : false;
       }
 
-      _getTruncated(pdssfa){
+      _getTruncated(pdssfa) {
         if (pdssfa.length > 16) {
-          return '...' + pdssfa.split('/').slice(-1)[0]
+          return '...' + pdssfa.split('/').slice(-1)[0];
         } else {
-          return '...' + pdssfa.slice(pdssfa.length - 9)
+          return '...' + pdssfa.slice(pdssfa.length - 9);
         }
       }
 

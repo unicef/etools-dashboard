@@ -19,7 +19,7 @@
       EtoolsDashboard.Mixins.EventHelper,
       EtoolsAjaxRequestMixin,
       EtoolsDashboard.Mixins.Endpoints
-    )(Polymer.Element)
+    )(Polymer.Element);
 
     /**
      * @polymer
@@ -27,7 +27,7 @@
      * @appliesmixin TripsDashboardDataMixin
      */
     class TripsDashboardData extends TripsDashboardDataMixin {
-      static get is() { return 'trips-dashboard-data' }
+      static get is() { return 'trips-dashboard-data'; }
 
       static get properties() {
         return {
@@ -47,28 +47,28 @@
             type: Object,
             observer: '_filterChanged'
           }
-        }
+        };
       }
 
       _filterChanged(filter) {
         if (!isEmpty(filter)) {
-          var endpointParams = keys(filter).filter(key => {
+          var endpointParams = keys(filter).filter((key) => {
             return filter[key];
           }).
-          map(k => {
+          map((k) => {
             return k + '=' + filter[k];
           }).
           join('&');
           var endpoint = this.getEndpoint('tripsDashboard');
           endpoint.url += endpointParams;
-          if (!equals(endpoint, this.endpoint)){
-            this.fireEvent('global-loading', {message: 'Loading trips chart data...', active: true});
+          if (!equals(endpoint, this.endpoint)) {
+            this.fireEvent('global-loading', { message: 'Loading trips chart data...', loadingSource: 'trips-dashboard-data', active: true });
             this.set('reqOptions.endpoint', endpoint);
           }
         } else {
           this.reqOptions.endpoint.url = null;
         }
-        this.sendRequest(this.reqOptions).then(response => this._handleResponse(response))
+        this.sendRequest(this.reqOptions).then((response) => this._handleResponse(response));
       }
 
       _handleResponse(response) {

@@ -43,6 +43,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/etools-loading/etools-loading-mixin.html">
 
 <link rel="import" href="app/scripts/ramda-utils.html">
+<link rel="import" href="app/scripts/es6-polyfills.html">
 <!-- lazy imports -->
 <link rel="lazy-import" href="app/views/hact/view-hact.html">
 <link rel="lazy-import" href="app/views/personalized/view-personalized.html">
@@ -51,7 +52,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="app/views/trips/view-trips.html">
 <link rel="lazy-import" href="app/views/map/view-map.html">
 
-<link rel="import" href="app/components/common-data-loaders.html">
 <link rel="import" href="app/components/page-header.html">
 <link rel="import" href="app/components/page-footer.html">
 
@@ -105,8 +105,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <etools-piwik-analytics page="[[subroute.prefix]]"
                             user="[[user]]"
                             toast="[[currentToastMessage]]"></etools-piwik-analytics>
-
-    <common-data-loaders user="[[user]]"></common-data-loaders>
 
     <app-location route="{{route}}"
                   url-space-regex="^[[rootPath]]">
@@ -369,13 +367,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _onForbidden() {
         let redirectNotification = document.createElement('etools-loading');
-        redirectNotification.loadingText = 'Your login session has expired, you are being redirected to login.'
+        redirectNotification.loadingText = 'Your login session has expired, you are being redirected to login.';
         redirectNotification.absolute = true;
         redirectNotification.active = true;
         document.querySelector('body').appendChild(redirectNotification);
         setTimeout(() => {
           window.location.href = EtoolsDashboard.Config.loginPath;
-        }, 3000)
+        }, 3000);
       }
 
       _routePageChanged(page) {
@@ -428,7 +426,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _print() {
-        window.print()
+        window.print();
       }
   
       // sets export endpoints based on assurance view (detailed/general)

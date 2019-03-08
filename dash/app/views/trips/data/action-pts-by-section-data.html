@@ -18,7 +18,7 @@
       EtoolsDashboard.Mixins.EventHelper,
       EtoolsAjaxRequestMixin,
       EtoolsDashboard.Mixins.Endpoints
-    )(Polymer.Element)
+    )(Polymer.Element);
 
     /**
      * @polymer
@@ -26,7 +26,7 @@
      * @appliesMixin ActionPtsBySectionMixin
      */
     class ActionPtsBySection extends ActionPtsBySectionMixin {
-      static get is() { return 'action-pts-by-section-data' }
+      static get is() { return 'action-pts-by-section-data'; }
 
       static get properties() {
         return {
@@ -47,27 +47,26 @@
             notify: true,
             observer: '_filterChanged'
           }
-        }
+        };
       }
-      
+    
       _filterChanged(filter) {
+        this.fireEvent('global-loading', { message: 'Loading chart data...', active: true });
         if (isEmpty(filter)) {
-          this.fireEvent('global-loading', {message: 'Loading chart data...', active: true});
           this.set('reqOptions.endpoint', this.getEndpoint('actionPointsBySection'));
         } else {
-          this.fireEvent('global-loading', {message: 'Loading chart data...', active: true});
           this.set('reqOptions.endpoint', this.getEndpoint('actionPointsBySectionOffice',
               {
                 office: filter.office.join(',')
               }
           ));
         }
-        this.sendRequest(this.reqOptions).then(response => this._handleResponse(response))
+        this.sendRequest(this.reqOptions).then((response) => this._handleResponse(response));
       }
 
       _handleResponse(response) {
         this._setActionPointsData(response);
-        this.fireEvent('global-loading', { loadingSource: 'action-pts-by-section-data' });
+        this.fireEvent('global-loading', {});
       }
     }
 

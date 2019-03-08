@@ -36,6 +36,7 @@
     "EtoolsMixins": true,
     "EtoolsLogsMixin": true,
     "_": true,
-    "ShadyCSS": true
+    "ShadyCSS": true,
+    "shortid":true
   }
 }
