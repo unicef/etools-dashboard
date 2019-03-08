@@ -52,7 +52,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="app/views/trips/view-trips.html">
 <link rel="lazy-import" href="app/views/map/view-map.html">
 
-<link rel="import" href="app/components/common-data-loaders.html">
 <link rel="import" href="app/components/page-header.html">
 <link rel="import" href="app/components/page-footer.html">
 
@@ -106,8 +105,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <etools-piwik-analytics page="[[subroute.prefix]]"
                             user="[[user]]"
                             toast="[[currentToastMessage]]"></etools-piwik-analytics>
-
-    <!-- <common-data-loaders user="[[user]]"></common-data-loaders> -->
 
     <app-location route="{{route}}"
                   url-space-regex="^[[rootPath]]">
