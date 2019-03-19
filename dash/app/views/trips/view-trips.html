@@ -21,8 +21,8 @@
 <link rel="import" href="../../mixins/dropdown-mixin.html">
 <link rel="import" href="../../mixins/redux-store-mixin.html">
 <link rel="import" href="../../mixins/event-helper-mixin.html">
+<link rel="import" href="../../mixins/fetch-assets-mixin.html">
 
-<link rel="import" href="data/trips-data.html">
 <link rel="import" href="data/trips-dashboard-data.html">
 <link rel="import" href="data/action-pts-by-section-data.html">
 
@@ -64,7 +64,6 @@
                  active="{{active}}"
                  query-params="{{queryParams}}"></app-route>
       <trips-dashboard-data trips-data="{{tripsData}}" active="[[active]]" filter="[[tripsFilter]]"></trips-dashboard-data>
-      <trips-data user="[[user]]"></trips-data>
       <action-pts-by-section-data action-points-data="{{actionPointsData}}"
                                   filter="[[actionPtsFilter]]"></action-pts-by-section-data>
       <google-chart-loader id="google"></google-chart-loader>
@@ -192,7 +191,8 @@
     const ViewTripsMixins = compose(
       EtoolsDashboard.Mixins.ReduxStore,
       EtoolsDashboard.Mixins.Dropdown,
-      EtoolsDashboard.Mixins.EventHelper
+      EtoolsDashboard.Mixins.EventHelper,
+      EtoolsDashboard.Mixins.FetchAsset
     )(Polymer.Element);
     
     /**
@@ -442,7 +442,7 @@
           _.assign(filter, monthObj);
         }
         if (this.tripsOffice) {
-          var officeObj = { office_id: this.tripsOffice.map(off => off.id).join(',') };
+          var officeObj = { office_id: this.tripsOffice.map((off) => off.id).join(',') };
           _.assign(filter, officeObj);
         }
         this.set('tripsFilter', filter);
@@ -517,7 +517,7 @@
         if (!isEmpty(data) && data != null) {
           var travels = prop('travels_by_section', data);
           if (!travels.length && this.active) {
-            this.fireEvent('global-loading', { active: false });
+            this.fireEvent('global-loading', {});
             this._setNoData('tripsChart');
           } else {
             var formatted = [

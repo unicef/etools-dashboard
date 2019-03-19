@@ -89,21 +89,18 @@
         };
 
         this.sendRequest(config).then((resp) => {
-          this._handleResponse(resp);
+          this._handleMyResponse(resp);
         }).catch((err) => {
           this.parseRequestErrorsAndShowAsToastMsgs(error);
           this._hideProfileSaveLoadingMsg();
         });
       }
 
-      _handleResponse(response) {
-        this.set('user', response);
-        this._hideProfileSaveLoadingMsg();
-      }
-
+  
       // called after profile get request on initial load
       _handleMyResponse(resp) {
-        this._handleResponse(resp);
+        this.set('user', resp);
+        this._hideProfileSaveLoadingMsg();
       }
 
       _hideProfileSaveLoadingMsg() {

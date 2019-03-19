@@ -1,6 +1,7 @@
 <link rel="import" href="../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
 <link rel="import" href="../../app/endpoints/endpoints-mixin.html">
 <link rel="import" href="../mixins/ajax-server-errors-mixin.html">
+<link rel="import" href="../mixins/event-helper-mixin.html">
 <link rel="import" href="../scripts/ramda-utils.html">
 
 <script>
@@ -12,6 +13,7 @@
   const RequiredMixin = compose(
     EtoolsDashboard.Mixins.Endpoints,
     EtoolsDashboard.Mixins.AjaxServerErrors,
+    EtoolsDashboard.Mixins.EventHelper,
     EtoolsAjaxRequestMixin
   );
   /**
@@ -79,14 +81,25 @@
       }
 
       _requestData() {
+        this.fireEvent('global-loading', {
+          active: true,
+          loadingSource: this.endpointName
+        });
+  
         this.sendRequest(this.options)
           .then((resp) => {
             this._handleMyResponse(resp);
           }).catch((err) => {
             if (this.options.endpoint.template.indexOf('profile') && err.status === 403) {
-              this.fireEvent('forbidden', {bubbles: true, composed: true});
+              this.fireEvent('forbidden', { bubbles: true, composed: true });
             }
             this.handleErrorResponse(err);
+          })
+          .finally(() => {
+            this.fireEvent('global-loading', {
+              active: false,
+              loadingSource: this.endpointName
+            });
           });
       }
 
