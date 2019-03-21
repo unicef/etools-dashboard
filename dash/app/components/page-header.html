@@ -116,12 +116,10 @@
       <div class="titlebar content-align">
         <etools-app-selector id="selector"></etools-app-selector>
         <img id="second-logo"
-             src$="[[importPath]]../../../images/etools-logo-color-white.svg">
-          <dom-if id="envWarningIf">
-            <template>
-              <div class="envWarning"> - STAGING TESTING ENVIRONMENT</div>
-            </template>
-          </dom-if>
+        src$="[[importPath]]../../../images/etools-logo-color-white.svg">
+        <template is="dom-if" if="[[environment]]">
+          <div class="envWarning"> - [[environment]] TESTING ENVIRONMENT</div>
+        </template>
       </div>
       <div class="content-align">
         <countries-dropdown id="countries"
@@ -193,6 +191,10 @@
             type: Array,
             statePath: 'unicefUsers'
           },
+          environment: {
+            type: String,
+            value: () => EtoolsDashboard.Config._checkEnvironment()
+          },
           userProfileDialog: Object
         };
       }
@@ -215,14 +217,7 @@
        */
       ready() {
         super.ready();
-        this._isStaging();
         this._setBgColor();
-      }
-
-      _isStaging() {
-        if (EtoolsDashboard.Config.isStagingServer()) {
-          this.$.envWarningIf.if = true;
-        }
       }
 
       openDrawer() {
@@ -282,7 +277,7 @@
 
       _setBgColor() {
         // If not production environment, changing header color to red
-        if (!EtoolsDashboard.Config.isProductionServer()) {
+        if (this.environment) {
           this.updateStyles({'--header-bg-color': 'var(--nonprod-header-color)'});
         }
       }
