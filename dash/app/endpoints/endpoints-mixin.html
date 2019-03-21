@@ -1,4 +1,5 @@
 <link rel="import" href="../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
+<link rel="import" href="../mixins/redux-store-mixin.html">
 <link rel="import" href="../config/config.html">
 <link rel="import" href="endpoints.html">
 <link rel="import" href="../scripts/lodash.html">
@@ -15,7 +16,7 @@
   * @polymer
   * @mixinFunction
   * @appliesMixin EtoolsAjaxRequestMixin
-  // * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
+  * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
   */
   EtoolsDashboard.Mixins.Endpoints = Polymer.dedupingMixin(
     (superClass) => class extends EtoolsAjaxRequestMixin(EtoolsDashboard.Mixins.ReduxStore(superClass)) {
