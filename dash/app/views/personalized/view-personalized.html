@@ -509,8 +509,7 @@
             notify: true
           },
           allPDSSFAs: {
-            statePath: 'pdssfas',
-            observer: 'queryCsoDashboard'
+            statePath: 'pdssfas'
           },
           partners: {
             type: Array
@@ -567,7 +566,8 @@
         return [
           '_updateTrips(tripsTab,myTrips)',
           '_updateActionPoints(actionsTab,actionPointsForMe)',
-          '_staticDataLoaded(myTrips,tripsSupervised, actionPointsItems, actionPointsForMe)'
+          '_staticDataLoaded(myTrips,tripsSupervised, actionPointsItems, actionPointsForMe)',
+          'queryCsoDashboard(allPDSSFAs, user)'
         ];
       }
 
@@ -702,6 +702,9 @@
       }
 
       queryCsoDashboard() {
+        if (!this.allPDSSFAs || !this.user) {
+          return;
+        }
         this.fireEvent('global-loading', { active: true, loadingSource: 'view-personalized' });
     
         EtoolsDashboard.DexieDb.transaction(

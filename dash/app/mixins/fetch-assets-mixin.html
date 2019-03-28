@@ -226,9 +226,14 @@
         };
       }
 
+      static get observers() {
+        return [
+          '_handleRequiredAssets(user)'
+        ]
+      }
+
       ready() {
         super.ready();
-        this._handleRequiredAssets();
       }
 
       _handleRequiredAssets() {
