@@ -1,0 +1,45 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/iron-icons/communication-icons.html">
+
+<dom-module id="support-btn">
+  <template>
+    <style>
+      :host(:hover) {
+        cursor: pointer;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+        font-size: 16px;
+      }
+
+      iron-icon {
+        margin-right: 4px;
+      }
+    </style>
+
+    <a href="https://unicef.service-now.com/cc/?id=sc_cat_item&sys_id=35b00b1bdb255f00085184735b9619e6&sysparm_category=c6ab1444db5b5700085184735b961920"
+       target="_blank">
+      <iron-icon icon="communication:textsms"></iron-icon>
+      Support
+    </a>
+
+  </template>
+
+  <script>
+    'use strict';
+
+    /**
+     *
+     * @polymer
+     * @customElement
+     */
+    class SupportBtn extends Polymer.Element {
+      static get is() {
+        return 'support-btn';
+      }
+    }
+    window.customElements.define(SupportBtn.is, SupportBtn);
+  </script>
+</dom-module>
