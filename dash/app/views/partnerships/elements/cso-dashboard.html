@@ -572,11 +572,9 @@
             type: Object
           },
           sectors: {
-            type: Array,
             statePath: 'sectors'
           },
           statuses: {
-            type: Array,
             statePath: 'static.intervention_status'
           },
           offices: {
@@ -692,6 +690,7 @@
       }
 
       _init(active, sectors, statuses, offices, requiredDataLoaded) {
+    
         if (!active || !sectors || !statuses || !offices || !requiredDataLoaded) {
           return;
         }
@@ -715,6 +714,8 @@
         this._updateSelectedFiltersValues();
         this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
       }
+
+      _allHaveValues() {}
 
       _initListFilters() {
         this.initListFiltersData([
@@ -834,7 +835,8 @@
 
       _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded,
         initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate) {
-          if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
+
+        if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
           return;
         }
         this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
@@ -875,6 +877,7 @@
       }
 
       _filterPartnershipsData() {
+        console.log('QUERY');
         this.$.partnerships.query({
           searchString: this.qs,
           sectors: map(prop('label'), this.selectedSectors),
@@ -895,12 +898,10 @@
         event.stopImmediatePropagation();
         const listDataPath = event.target.getAttribute('list-data-path');
         const list = this.get(listDataPath);
-
         if (typeof list === 'undefined' ||
           (Array.isArray(list) && list.length === 0)) {
           this.set('forceDataRefresh', true);
         }
-        this.set('initComplete', false);
         this.set('requiredDataLoaded', true);
       }
 
@@ -1028,31 +1029,24 @@
           switch(filter) {
             case 'custom':
               return true;
-              break;
             case '1':
               return row.status === 'signed'
                 && (Date.parse(row.start) < new Date().getTime())
                 && !row.frs_total_frs_amt;
-              break;
             case '2':
               return ['active', 'ended', 'suspended'].some(eq)
                 && (row.unicef_cash !== row.frs_total_frs_amt);
-              break;
             case '3':
               return ['active', 'ended'].some(eq) && (parseInt(row.days_last_pv) > 180);
-              break;
             case '4':
               return ['active', 'suspended'].some(eq)
                 && (Date.parse(row.end) < (new Date().getTime() + 2592000000));
-              break;
             case '5':
               return row.status === 'ended' && (row.disbursement < row.frs_total_frs_amt);
-              break;
             case '6':
               return row.status === 'ended'
                 && !row.has_final_partnership_review
                 && parseInt(row.disbursement_usd) >= 100000;
-              break;
           }
         };
       }

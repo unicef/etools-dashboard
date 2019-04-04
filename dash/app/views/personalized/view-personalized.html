@@ -509,8 +509,8 @@
             notify: true
           },
           allPDSSFAs: {
-            statePath: 'pdssfas',
-            observer: 'queryCsoDashboard'
+            statePath: 'pdssfas'
+            // observer: 'queryCsoDashboard'
           },
           partners: {
             type: Array
@@ -567,7 +567,8 @@
         return [
           '_updateTrips(tripsTab,myTrips)',
           '_updateActionPoints(actionsTab,actionPointsForMe)',
-          '_staticDataLoaded(myTrips,tripsSupervised, actionPointsItems, actionPointsForMe)'
+          '_staticDataLoaded(myTrips,tripsSupervised, actionPointsItems, actionPointsForMe)',
+          'queryCsoDashboard(allPDSSFAs, user)'
         ];
       }
 
@@ -701,7 +702,10 @@
         return (first / second) * 100;
       }
 
-      queryCsoDashboard() {
+      queryCsoDashboard(allPDSSFAs, user) {
+        if (isEmpty(allPDSSFAs) || isEmpty(user)) {
+          return;
+        }
         this.fireEvent('global-loading', { active: true, loadingSource: 'view-personalized' });
     
         EtoolsDashboard.DexieDb.transaction(
@@ -709,7 +713,7 @@
           EtoolsDashboard.DexieDb.csoDashboard,
           () => {
             let queryResult = EtoolsDashboard.DexieDb.csoDashboard.orderBy('partner_name');
-            queryResult = queryResult.filter((int) => any(equals(this.user.user))(int.unicef_focal_points));
+            queryResult = queryResult.filter((int) => any(equals(user.user))(int.unicef_focal_points));
             return Dexie.Promise.all([queryResult.toArray()]);
           }).then((countAndResult) => {
             this._checkPdSSFAsData(countAndResult[0]);
