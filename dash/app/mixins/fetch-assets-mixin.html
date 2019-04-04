@@ -229,14 +229,17 @@
       static get observers() {
         return [
           '_handleRequiredAssets(user)'
-        ]
+        ];
       }
 
       ready() {
         super.ready();
       }
 
-      _handleRequiredAssets() {
+      _handleRequiredAssets(user) {
+        if (isEmpty(user)) {
+          return;
+        }
         const props = this.constructor.properties;
   
         const requiredAssets = keys(props)
