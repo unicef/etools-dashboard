@@ -34,6 +34,7 @@
 <link rel="import" href="../../../../../bower_components/etools-info-tooltip/etools-info-tooltip.html">
 
 <link rel="import" href="../../../mixins/date-mixin.html">
+<link rel="import" href="../../../mixins/fetch-assets-mixin.html">
 <link rel="import" href="../../../mixins/common-general-mixin.html">
 <link rel="import" href="../../../mixins/list-filters-mixin.html">
 <link rel="import" href="../../../mixins/pagination-with-filters-mixin.html">
@@ -520,7 +521,8 @@
       EtoolsDashboard.Mixins.ListFilters,
       EtoolsDashboard.Mixins.Endpoints,
       EtoolsDashboard.Mixins.PaginationWithFilters,
-      EtoolsDashboard.Mixins.Date
+      EtoolsDashboard.Mixins.Date,
+      EtoolsDashboard.Mixins.FetchAsset
       )(Polymer.Element);
 
     /**
@@ -570,11 +572,9 @@
             type: Object
           },
           sectors: {
-            type: Array,
             statePath: 'sectors'
           },
           statuses: {
-            type: Array,
             statePath: 'static.intervention_status'
           },
           offices: {
@@ -582,7 +582,7 @@
             statePath: 'offices'
           },
           totalResults: {
-            type: Array,
+            type: Array
           },
           selectedSectors: {
             type: Array,
@@ -690,6 +690,7 @@
       }
 
       _init(active, sectors, statuses, offices, requiredDataLoaded) {
+    
         if (!active || !sectors || !statuses || !offices || !requiredDataLoaded) {
           return;
         }
@@ -707,12 +708,14 @@
         this.set('endBeforeDate', params.endBefore ? params.endBefore : '');
         this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
         this.set('endAfterDate', params.endAfter ? params.endAfter : '');
-        this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px'
+        this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px';
         this._initListFilters();
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
         this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
       }
+
+      _allHaveValues() {}
 
       _initListFilters() {
         this.initListFiltersData([
@@ -832,7 +835,8 @@
 
       _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded,
         initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate) {
-          if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
+
+        if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
           return;
         }
         this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
@@ -873,6 +877,7 @@
       }
 
       _filterPartnershipsData() {
+        console.log('QUERY');
         this.$.partnerships.query({
           searchString: this.qs,
           sectors: map(prop('label'), this.selectedSectors),
@@ -893,12 +898,10 @@
         event.stopImmediatePropagation();
         const listDataPath = event.target.getAttribute('list-data-path');
         const list = this.get(listDataPath);
-
         if (typeof list === 'undefined' ||
           (Array.isArray(list) && list.length === 0)) {
           this.set('forceDataRefresh', true);
         }
-        this.set('initComplete', false);
         this.set('requiredDataLoaded', true);
       }
 
@@ -975,11 +978,11 @@
         return flag1 || flag2 ? true : false;
       }
 
-      _getTruncated(pdssfa){
+      _getTruncated(pdssfa) {
         if (pdssfa.length > 16) {
-          return '...' + pdssfa.split('/').slice(-1)[0]
+          return '...' + pdssfa.split('/').slice(-1)[0];
         } else {
-          return '...' + pdssfa.slice(pdssfa.length - 9)
+          return '...' + pdssfa.slice(pdssfa.length - 9);
         }
       }
 
@@ -1026,31 +1029,24 @@
           switch(filter) {
             case 'custom':
               return true;
-              break;
             case '1':
               return row.status === 'signed'
                 && (Date.parse(row.start) < new Date().getTime())
                 && !row.frs_total_frs_amt;
-              break;
             case '2':
               return ['active', 'ended', 'suspended'].some(eq)
                 && (row.unicef_cash !== row.frs_total_frs_amt);
-              break;
             case '3':
               return ['active', 'ended'].some(eq) && (parseInt(row.days_last_pv) > 180);
-              break;
             case '4':
               return ['active', 'suspended'].some(eq)
                 && (Date.parse(row.end) < (new Date().getTime() + 2592000000));
-              break;
             case '5':
               return row.status === 'ended' && (row.disbursement < row.frs_total_frs_amt);
-              break;
             case '6':
               return row.status === 'ended'
                 && !row.has_final_partnership_review
                 && parseInt(row.disbursement_usd) >= 100000;
-              break;
           }
         };
       }

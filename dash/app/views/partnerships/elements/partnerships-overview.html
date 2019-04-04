@@ -32,6 +32,7 @@
       
 <link rel="import" href="../../../mixins/common-general-mixin.html">
 <link rel="import" href="../../../mixins/list-filters-mixin.html">
+<link rel="import" href="../../../mixins/fetch-assets-mixin.html">
 <link rel="import" href="../../../mixins/pagination-with-filters-mixin.html">
 <link rel="import" href="../../../mixins/redux-store-mixin.html">
 <link rel="import" href="../../../endpoints/endpoints-mixin.html">
@@ -298,6 +299,7 @@
       EtoolsDashboard.Mixins.ListFilters,
       EtoolsDashboard.Mixins.Endpoints,
       EtoolsDashboard.Mixins.PaginationWithFilters,
+      EtoolsDashboard.Mixins.FetchAsset
       )(Polymer.Element);
 
     /**
@@ -356,7 +358,7 @@
             type: Object
           },
           totalResults: {
-            type: Array,
+            type: Array
           },
           queryParams: {
             type: String
@@ -376,7 +378,7 @@
           },
           partnerTypes: {
             type: Array,
-            statePath: 'static.partner_types',
+            statePath: 'static.partner_types'
           },
           selectedTypes: {
             type: Array,
@@ -467,7 +469,7 @@
         this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
         this.set('selectedPartners', params.partners ? this._setSelectedPartners(params.partners) : []);
         this.set('selectedTypes', params.partner_types ? this._setSelectedTypes(params.partner_types) : []);
-        this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px';    
+        this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px';
         this._initListFilters();
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
@@ -549,7 +551,7 @@
             },
             {
               filterName: 'Partner Type',
-              selectedValue: map(prop('value'), this.selectedTypes)  
+              selectedValue: map(prop('value'), this.selectedTypes)
             }
           ];
           this.updateShownFilters(filtersValues);
@@ -601,10 +603,10 @@
         if (this.filteredPartnershipsOverview && this.active) {
           let pks = [];
           if (this.currentFilter === 'custom') {
-            pks = this.filteredPartnershipsOverview.map(partner => prop('id', partner))
+            pks = this.filteredPartnershipsOverview.map((partner) => prop('id', partner));
           } else {
             pks = this.presetFilters[this.currentFilter-1].filteredPartnershipsOverview.map(
-              partner => prop('id', partner)
+              (partner) => prop('id', partner)
             );
           }
           let pksString = pks.join(',');
@@ -642,7 +644,7 @@
       _setSelectedSectors(sectorsStr) {
         const sectorsArr = sectorsStr.split('|');
         if (!isEmpty(sectorsArr)) {
-          return this.sectors.filter(s => sectorsArr.indexOf(s.value) > -1);
+          return this.sectors.filter((s) => sectorsArr.indexOf(s.value) > -1);
         }
         return [];
       }
@@ -650,7 +652,7 @@
       _setSelectedTypes(typesStr) {
         const typesArr = typesStr.split('|');
         if (!isEmpty(typesArr)) {
-          return this.partnerTypes.filter(s => typesArr.indexOf(s.value) > -1);
+          return this.partnerTypes.filter((s) => typesArr.indexOf(s.value) > -1);
         }
         return [];
       }

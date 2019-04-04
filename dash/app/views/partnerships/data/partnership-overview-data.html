@@ -109,29 +109,31 @@
         };
       }
 
-      static get observers() {
-        return [
-          'init(active)'
-        ]
-      }
+      // static get observers() {
+      //   return [
+      //     'init(active)'
+      //   ]
+      // }
 
-      init() {
-        if (this.active) {
-          this.fireEvent('global-loading', { message: 'Loading partnership overview data...', active: true, loadingSource: 'partnership-overview-data' });
-          this.set('loadedInitially', true);
-        }
-      }
+      // init() {
+      //   if (this.active) {
+      //     this.fireEvent('global-loading', { message: 'Loading partnership overview data...', active: true, loadingSource: 'partnership-overview-data' });
+      //     this.set('loadedInitially', true);
+      //   }
+      // }
 
       createPresetFilters(results) {
         return [
-          results.clone().filter(partner => partner.alert_no_recent_pv),
-          results.clone().filter(partner => partner.alert_no_pv),
-          results.clone().filter(partner => partner.alert_pca_required),
-          results.clone().filter(partner => partner.alert_active_pd_for_ended_pca)
+          results.clone().filter((partner) => partner.alert_no_recent_pv),
+          results.clone().filter((partner) => partner.alert_no_pv),
+          results.clone().filter((partner) => partner.alert_pca_required),
+          results.clone().filter((partner) => partner.alert_active_pd_for_ended_pca)
         ];
       }
 
       query(params) {
+        this.fireEvent('global-loading', { active: true, loadingSource: 'partnership-overview-data' });
+
         const { order, sortBy } = params;
         const predKeys = keys(this.predicates);
         EtoolsDashboard.DexieDb.transaction(
@@ -139,7 +141,7 @@
           EtoolsDashboard.DexieDb.partnershipsOverview,
           () => {
             let queryResult = EtoolsDashboard.DexieDb.partnershipsOverview.orderBy('name');
-            let allPartners = queryResult.clone()
+            let allPartners = queryResult.clone();
             if (order === 'desc') {
               queryResult = queryResult.reverse();
             }
@@ -153,24 +155,27 @@
               queryResult.count(),
               queryResult.sortBy(sortBy || 'name'),
               allPartners.clone().toArray(),
-              ...this.presetResults.map(res => res.sortBy(sortBy || 'name'))
+              ...this.presetResults.map((res) => res.sortBy(sortBy || 'name'))
             ]);
-          }).then(countAndResult => {
+          }).then((countAndResult) => {
             this._setTotalResults(countAndResult[0]);
             this._setFilteredPartnershipsOverview(countAndResult[1]);
             this.set('allPartners', countAndResult[2]);
-            let presetFilterResults = countAndResult.slice(3)
+            let presetFilterResults = countAndResult.slice(3);
             presetFilterResults.forEach((elem, indx) => {
               this.set(`presetFilters.${indx}.filteredPartnershipsOverview`, elem);
               this.set(`presetFilters.${indx}.total`, elem.length);
-            })
+            });
             if (this.presetsLoaded) {
-              this.set('presetsLoaded', false)
+              this.set('presetsLoaded', false);
             } else {
-              this.set('presetsLoaded', true)
-            };
-            this.fireEvent('global-loading', {loadingSource: 'partnership-overview-data'});
-          }).catch(err => console.error('Error querying partnerships-overview: ', err));
+              this.set('presetsLoaded', true);
+            }
+          }).catch((err) => console.error('Error querying partnerships-overview: ', err))
+          .finally(() => {
+            this.fireEvent('global-loading', { loadingSource: 'partnership-overview-data' });
+
+          });
       }
     }
 

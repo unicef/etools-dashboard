@@ -1,81 +1,37 @@
-<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../scripts/ramda.html">
-
 <link rel="import" href="../mixins/redux-store-mixin.html">
+<link rel="import" href="../mixins/event-helper-mixin.html">
 <link rel="import" href="../mixins/ajax-server-errors-mixin.html">
 <link rel="import" href="../endpoints/endpoints-mixin.html">
 <link rel="import" href="../../../bower_components/etools-ajax/etools-ajax-request-mixin.html">
+<link rel="import" href="../components/reduxProps.html">
 
-<link rel="import" href="../config/dexie-db-config.html">
-<link rel="import" href="reduxProps.html">
+<link rel="import" href="../scripts/ramda.html">
+<script>
+  'use strict';
 
-<dom-module id="common-data-loaders">
-  <template>
-    <style>
-      :host {
-        display: block
+  window.EtoolsDashboard = window.EtoolsDashboard || {};
+  window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+  
+    const falsy = (x) => isEmpty(x) || !x;
+
+  const FetchAssetsMixins = compose(
+    EtoolsDashboard.Mixins.Endpoints,
+    EtoolsDashboard.Mixins.ReduxStore,
+    EtoolsDashboard.Mixins.AjaxServerErrors,
+    EtoolsDashboard.Mixins.ToastNotifications,
+    EtoolsDashboard.Mixins.EventHelper,
+    EtoolsAjaxRequestMixin
+  );
+  /**
+   * @polymer
+   * @mixinFunction
+   */
+  EtoolsDashboard.Mixins.FetchAsset = (superClass) =>
+    class extends FetchAssetsMixins(superClass) {
+      constructor() {
+        super();
       }
-    </style>
-
-  </template>
-
-  <script>
-
-    /**
-     * @polymer
-     * @mixinFunction
-     * @appliesMixin EtoolsDashboard.Mixins.Endpoints
-     * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
-     * @appliesMixin EtoolsDashboard.Mixins.AjaxServerErrors
-     * @appliesMixin EtoolsAjaxRequestMixin
-     */
-    const CommonDataMixin = compose(
-      EtoolsDashboard.Mixins.Endpoints,
-      EtoolsDashboard.Mixins.ReduxStore,
-      EtoolsDashboard.Mixins.AjaxServerErrors,
-      EtoolsDashboard.Mixins.ToastNotifications,
-      EtoolsAjaxRequestMixin
-    )(Polymer.Element);
-
-    /**
-     * `common-data-loaders` Description
-     *
-     * @summary ShortDescription.
-     * @customElement
-     * @polymer
-     * @extends {Polymer.Element}
-     */
-    class CommonDataLoaders extends CommonDataMixin {
-      /**
-       * String providing the tag name to register the element under.
-       */
-      static get is() {
-        return 'common-data-loaders';
-      }
-
-      /**
-       * Object describing property-related metadata used by Polymer features
-       */
-      static get properties() {
-        return {
-          nextAction: {
-            type: Object
-          },
-          _reduxActions: {
-            type: Object,
-            value: {}
-          },
-          toDispatch: {
-            type: Array,
-            value: []
-          },
-          user: {
-            type: Object,
-            observer: '_init'
-          }
-        };
-      }
-
+  
       static get actions() {
         return {
 
@@ -102,12 +58,14 @@
           // next 4 actions destructure data due to corresponding format from backend
 
           setTrips({ data= [] } ) {
-            return {
-              type: 'SET_TRIPS',
-              trips: map(
+            const payload = map(
                 pick(['id', 'start_date', 'purpose', 'reference_number', 'supervisor_name']),
                 data
-              )
+              );
+
+            return {
+              type: 'SET_TRIPS',
+              trips: payload
             };
           },
 
@@ -215,7 +173,7 @@
               }))
             };
           },
-    
+  
           setInterventions(data = []) {
             return {
               type: 'SET_INTERVENTIONS',
@@ -235,7 +193,7 @@
               }))
             };
           },
-    
+  
           setDonors(data = []) {
             return {
               type: 'SET_DONORS',
@@ -245,7 +203,7 @@
               }))
             };
           },
-    
+  
           setResults(data = []) {
             return {
               type: 'SET_RESULTS',
@@ -268,73 +226,96 @@
         };
       }
 
-      /**
-       * Instance of the element is created/upgraded. Use: initializing state,
-       * set up event listeners, create shadow dom.
-       * @constructor
-       */
-      constructor() {
-        super();
+      static get observers() {
+        return [
+          '_handleRequiredAssets(user)'
+        ];
       }
 
-      /**
-       * Use for one-time configuration of your component after local DOM is initialized.
-       */
       ready() {
         super.ready();
       }
 
-      _init(user) {
-        if (!user) {
+      _handleRequiredAssets(user) {
+        if (isEmpty(user)) {
           return;
         }
-        this.actionsToDispatch();
-        this._callNext();
+        const props = this.constructor.properties;
+  
+        const requiredAssets = keys(props)
+          .filter((key)=> props[key].statePath)
+          .map((key)=>props[key].statePath);
+
+        map(this._handleAssetState.bind(this), requiredAssets);
       }
 
-      actionsToDispatch() {
-        const { ReduxProps } = EtoolsDashboard;
-        let mappedItems = ReduxProps.map((a) => {
-          let endpoint = a.endpointProps;
-          if (typeof endpoint === 'function') {
-            endpoint = endpoint.bind(this)();
-          }
-          endpoint = isEmpty(endpoint) ? endpoint
-            : isEmpty(endpoint.templateProps) ? this.getEndpoint(endpoint.name)
-              : this.getEndpoint(endpoint.name, endpoint.templateProps);
+      _handleAssetState(asset) {
+        asset = asset.split('.')[0];
 
-          let actionObj = {
-            handler: concat('set', capitalize(a.propName)),
-            endpoint: { endpoint },
-            type: `SET_${a.propName.toUpperCase()}`
-          };
-    
-          return actionObj;
-        });
-        this.set('toDispatch', mappedItems);
-      }
-
-      _callNext() {
-        if (this.toDispatch.length) {
-          let next = this.shift('toDispatch');
-          let action = {};
-          action[next.type] = next.action;
-          this.set('nextAction', next);
-          this.set('_reduxActions', Object.assign({}, this._reduxActions, action));
-          if (isEmpty(next.endpoint.endpoint)) {
-            // for items without api calls
-            this.dispatch(next.handler, null);
-            this._callNext();
-          } else {
-            this.sendRequest(next.endpoint).then((res)=>this._handleResponse(res))
-            .catch((err)=>this._handleError(err, next));
-          }
+        const state = this.getState();
+        if (falsy(state[asset])) {
+          this._fetchData(asset);
         }
       }
 
-      _handleResponse(response) {
-        this.dispatch(this.nextAction.handler, response);
-        this._callNext();
+      _createConfigObject(data) {
+        let endpoint = data.endpointProps;
+        if (typeof endpoint === 'function') {
+          endpoint = endpoint.bind(this)();
+        }
+
+        endpoint = isEmpty(endpoint) ? endpoint
+            : isEmpty(endpoint.templateProps) ? this.getEndpoint(endpoint.name)
+              : this.getEndpoint(endpoint.name, endpoint.templateProps);
+          let { propName } = data;
+          return {
+            handler: concat('set', capitalize(propName)),
+            endpoint: { endpoint },
+            type: `SET_${propName.toUpperCase()}`
+          };
+  
+      }
+
+      _fetchData(asset, isNested) {
+        const { ReduxProps } = EtoolsDashboard;
+        const endpointData = ReduxProps.find((collection)=>collection.propName === asset);
+        if (!endpointData) {throw new Error(`Could not find endpoint data for prop ${asset}`); }
+  
+        const assetConfig = this._createConfigObject(endpointData);
+
+        this._performRequest(assetConfig);
+      }
+
+      _performRequest(config) {
+  
+        this.fireEvent('global-loading', {
+          active: true,
+          loadingSource: config.handler
+        });
+  
+        if(isEmpty(config.endpoint.endpoint)) {
+          // for items without api calls
+          this.dispatch(config.handler, null);
+          this.fireEvent('global-loading', {
+              active: false,
+              loadingSource: config.handler
+            });
+        }else {
+          this.sendRequest(config.endpoint).then(
+            (res)=>this._handleResponse(res, config)
+          )
+          .catch((err)=>this._handleError(err, config))
+          .finally(()=>{
+            this.fireEvent('global-loading', {
+              active: false,
+              loadingSource: config.handler
+            });
+          });
+        }
+      }
+
+      _handleResponse(res, config) {
+        this.dispatch(config.handler, res);
       }
 
       _handleError(err, requestDetail) {
@@ -342,8 +323,6 @@
         this._handleResponse([]);
       }
 
-    }
 
-    window.customElements.define(CommonDataLoaders.is, CommonDataLoaders);
-  </script>
-</dom-module>
+    };
+</script>
