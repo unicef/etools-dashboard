@@ -510,7 +510,6 @@
           },
           allPDSSFAs: {
             statePath: 'pdssfas'
-            // observer: 'queryCsoDashboard'
           },
           partners: {
             type: Array
@@ -572,7 +571,6 @@
         ];
       }
 
-    
       _updateTrips() {
         this._setItems(this.tripsTab, 'tripsItems');
       }
@@ -703,7 +701,7 @@
       }
 
       queryCsoDashboard(allPDSSFAs, user) {
-        if (isEmpty(allPDSSFAs) || isEmpty(user)) {
+        if (!allPDSSFAs || isEmpty(user)) {
           return;
         }
         this.fireEvent('global-loading', { active: true, loadingSource: 'view-personalized' });
