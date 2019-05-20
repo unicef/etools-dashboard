@@ -877,6 +877,7 @@
       }
 
       _filterPartnershipsData() {
+        console.log('QUERY');
         this.$.partnerships.query({
           searchString: this.qs,
           sectors: map(prop('label'), this.selectedSectors),

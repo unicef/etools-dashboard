@@ -380,69 +380,69 @@
 
       _reorganizeData() {
         // separate assessments/audits from files with agreement_reference_number and from those without
-        let assessmentsAudits = []
-        let pDFiles = []
-        let otherFiles = []
+        let assessmentsAudits = [];
+        let pDFiles = [];
+        let otherFiles = [];
         this.selectedPartner.forEach(file => {
           if (file.file_type.indexOf('Assessment') > -1 || file.file_type.indexOf('Audit') > -1) {
-            assessmentsAudits.push(file)
+            assessmentsAudits.push(file);
           } else if (isEmpty(file.agreement_reference_number)) {
-            otherFiles.push(file)
+            otherFiles.push(file);
           } else {
-            pDFiles.push(file)
+            pDFiles.push(file);
           }
         })
-        this.set('otherFiles', otherFiles)
-        this.set('assessmentsAudits', assessmentsAudits)
+        this.set('otherFiles', otherFiles);
+        this.set('assessmentsAudits', assessmentsAudits);
 
         // get unique agreement_reference_numbers
-        let aRNKeys = uniq(pDFiles.map(file => file.agreement_reference_number))
+        let aRNKeys = uniq(pDFiles.map(file => file.agreement_reference_number));
         // create nested group object for each agreement_reference_number
         let nestedGroups = aRNKeys.map(k => {
           pDFiles = sortWith([
             ascend(prop('agreement_reference_number')),
             descend(prop('created'))
           ])(pDFiles)
-          let obj = {}
-          let obj2 = {}
-          let relevantFiles = pDFiles.filter(file => file.agreement_reference_number === k)
-          let pdssfaKeys = uniq(relevantFiles.map(file => file.pd_ssfa_number))
-          obj["agreementReference"] = k
-          obj["pdssfas"] = []
+          let obj = {};
+          let obj2 = {};
+          let relevantFiles = pDFiles.filter(file => file.agreement_reference_number === k);
+          let pdssfaKeys = uniq(relevantFiles.map(file => file.pd_ssfa_number));
+          obj["agreementReference"] = k;
+          obj["pdssfas"] = [];
           pdssfaKeys.forEach(r => {
-            obj2 = {}
-            obj2["pdssfa"] = r
-            obj2["files"] = relevantFiles.filter(file => file.pd_ssfa_number === r)
-            obj["pdssfas"].push(obj2)
+            obj2 = {};
+            obj2["pdssfa"] = r;
+            obj2["files"] = relevantFiles.filter(file => file.pd_ssfa_number === r);
+            obj["pdssfas"].push(obj2);
           })
-          return obj
+          return obj;
         })
-        this.set('pDSSFA', nestedGroups)
+        this.set('pDSSFA', nestedGroups);
       }
 
       _appendAssessmentChip() {
-        this.$.docSelector.selected = "assessments"
-        let header = this.$.superHeader
+        this.$.docSelector.selected = "assessments";
+        let header = this.$.superHeader;
         // create a paper-chip for assessments and audits
-        let assessments = document.createElement('paper-chip')
-        assessments.className = "selected"
-        assessments.innerText = 'Assessments & Audits'
-        assessments.selectable = true
+        let assessments = document.createElement('paper-chip');
+        assessments.className = 'selected';
+        assessments.innerText = 'Assessments & Audits';
+        assessments.selectable = true;
         assessments.addEventListener('tap', () => {
           for(let i = 0; i < header.children.length; i++) {
             header.children[i].classList.remove('selected')
-          }
+          };
           assessments.className = 'selected';
           if (this.$.docSelector.selected != "assessments") {
             this.$.docSelector.selected = "assessments"
-          }
+          };
         });
-        header.innerHTML = ""
-        header.appendChild(assessments)
+        header.innerHTML = "";
+        header.appendChild(assessments);
       }
 
       _createPDChips() {
-        let header = this.$.superHeader
+        let header = this.$.superHeader;
         // create a paper-chip for each agreement_reference_number
         this.pDSSFA.forEach(pd => {
           let pdChip = document.createElement('paper-chip');
@@ -451,41 +451,41 @@
           pdChip.addEventListener('tap', () => {
             for(let i = 0; i < header.children.length; i++) {
               header.children[i].classList.remove('selected')
-            }
+            };
             pdChip.className = 'selected';
             this.selectedPDSSFA = pd.pdssfas;
             if (this.$.docSelector.selected != "pdssfa") {
               this.$.docSelector.selected = "pdssfa"
-            }
+            };
           });
           header.appendChild(pdChip);
         })
       }
 
       _handleOtherFiles() {
-        let header = this.$.superHeader
+        let header = this.$.superHeader;
         if (!this.otherFiles.length) {
-          return
+          return;
         }
-        let otherFilesChip = document.createElement('paper-chip')
-        otherFilesChip.innerText = 'Other Documents'
-        otherFilesChip.selectable = true
+        let otherFilesChip = document.createElement('paper-chip');
+        otherFilesChip.innerText = 'Other Documents';
+        otherFilesChip.selectable = true;
         otherFilesChip.addEventListener('tap', () => {
           for(let i = 0; i < header.children.length; i++) {
-            header.children[i].classList.remove('selected')
+            header.children[i].classList.remove('selected');
           } 
           otherFilesChip.className = 'selected';
           if (this.$.docSelector.selected != "otherFilesChip") {
-            this.$.docSelector.selected = "otherFilesChip"
+            this.$.docSelector.selected = "otherFilesChip";
           }
         });
-        header.appendChild(otherFilesChip)
+        header.appendChild(otherFilesChip);
       }
 
        _appendChips() {
-        this._appendAssessmentChip()
-        this._createPDChips()
-        this._handleOtherFiles()
+        this._appendAssessmentChip();
+        this._createPDChips();
+        this._handleOtherFiles();
       }
 
     }
