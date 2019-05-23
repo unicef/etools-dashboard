@@ -277,7 +277,7 @@
           </template>
         </div>
 
-        <div name="older">
+        <div name="otherFilesChip">
           <data-table-header no-collapse>
             <data-table-column class="related-group">
               PD/SSFA Number
@@ -298,7 +298,7 @@
           </data-table-header>
 
           <template is="dom-repeat"
-                    items="[[olderFiles]]">
+                    items="[[otherFiles]]">
             <data-table-row no-collapse>
               <div slot="row-data">
                 <data-table-column class="related-group">
@@ -363,124 +363,129 @@
           selectedPDSSFA: {
             type: Array
           },
-          olderFiles: {
-            type: Array
+          otherFiles: {
+            type: Array,
+            value: [],
+            notify: true
           }
         };
       }
 
       static get observers() {
         return [
-          '_appendAssessmentChip(selectedPartner)',
           '_reorganizeData(selectedPartner)',
           '_appendChips(pDSSFA)'
         ]
       }
 
+      _reorganizeData() {
+        // separate assessments/audits from files with agreement_reference_number and from those without
+        let assessmentsAudits = [];
+        let pDFiles = [];
+        let otherFiles = [];
+        this.selectedPartner.forEach(file => {
+          if (file.file_type.indexOf('Assessment') > -1 || file.file_type.indexOf('Audit') > -1) {
+            assessmentsAudits.push(file);
+          } else if (isEmpty(file.agreement_reference_number)) {
+            otherFiles.push(file);
+          } else {
+            pDFiles.push(file);
+          }
+        })
+        this.set('otherFiles', otherFiles);
+        this.set('assessmentsAudits', assessmentsAudits);
+
+        // get unique agreement_reference_numbers
+        let aRNKeys = uniq(pDFiles.map(file => file.agreement_reference_number));
+        // create nested group object for each agreement_reference_number
+        let nestedGroups = aRNKeys.map(k => {
+          pDFiles = sortWith([
+            ascend(prop('agreement_reference_number')),
+            descend(prop('created'))
+          ])(pDFiles)
+          let obj = {};
+          let obj2 = {};
+          let relevantFiles = pDFiles.filter(file => file.agreement_reference_number === k);
+          let pdssfaKeys = uniq(relevantFiles.map(file => file.pd_ssfa_number));
+          obj["agreementReference"] = k;
+          obj["pdssfas"] = [];
+          pdssfaKeys.forEach(r => {
+            obj2 = {};
+            obj2["pdssfa"] = r;
+            obj2["files"] = relevantFiles.filter(file => file.pd_ssfa_number === r);
+            obj["pdssfas"].push(obj2);
+          })
+          return obj;
+        })
+        this.set('pDSSFA', nestedGroups);
+      }
+
       _appendAssessmentChip() {
-        this.$.docSelector.selected = "assessments"
-        let header = this.$.superHeader
+        this.$.docSelector.selected = "assessments";
+        let header = this.$.superHeader;
         // create a paper-chip for assessments and audits
-        let assessments = document.createElement('paper-chip')
-        assessments.className = "selected"
-        assessments.innerText = 'Assessments & Audits'
-        assessments.selectable = true
+        let assessments = document.createElement('paper-chip');
+        assessments.className = 'selected';
+        assessments.innerText = 'Assessments & Audits';
+        assessments.selectable = true;
         assessments.addEventListener('tap', () => {
           for(let i = 0; i < header.children.length; i++) {
             header.children[i].classList.remove('selected')
-          }
+          };
           assessments.className = 'selected';
           if (this.$.docSelector.selected != "assessments") {
             this.$.docSelector.selected = "assessments"
-          }
+          };
         });
-        header.innerHTML = ""
-        header.appendChild(assessments)
-        this.set('assessmentsAudits', this.selectedPartner.filter(
-          file => file.file_type.indexOf('Assessment') > -1 || file.file_type.indexOf('Audit') > -1
-        ))
-      }
-
-      // select and reorganize data from endpoint for grouping
-      _reorganizeData() {
-        let pDFiles = this.selectedPartner.filter(
-          file => !!file.pd_ssfa_number && file.pd_ssfa_number.split('/').length - 1 === 2
-        )
-        let pDKeys = uniq(pDFiles.map(file => file.pd_ssfa_number))
-        let pDRefs = uniq(pDKeys.map(file => file.split('/').slice(0, 2).join("/")))
-        let nestedGroups = pDRefs.map(k => {
-          pDFiles = sortWith([
-            ascend(prop('pd_ssfa_number')),
-            descend(prop('created'))
-          ])(pDFiles)
-          let obj = {}
-          let obj2 = {}
-          let pdrefs = pDFiles.filter(file => file.pd_ssfa_number.indexOf(k) > -1)
-          let pdKeyMatch = pDKeys.filter(key => key.indexOf(k) > -1)
-          obj["pdReference"] = k
-          obj["pd"] = []
-          pdKeyMatch.forEach(r => {
-            obj2 = {}
-            obj2["pdssfa"] = r
-            obj2["files"] = pdrefs.filter(file => file.pd_ssfa_number.indexOf(r) > -1)
-            obj["pd"].push(obj2)
-          })
-          return obj
-        })
-        this.set('pDSSFA', nestedGroups)
+        header.innerHTML = "";
+        header.appendChild(assessments);
       }
 
       _createPDChips() {
-        let header = this.$.superHeader
-        // create a paper-chip for each PD Reference
+        let header = this.$.superHeader;
+        // create a paper-chip for each agreement_reference_number
         this.pDSSFA.forEach(pd => {
           let pdChip = document.createElement('paper-chip');
-          pdChip.innerText = pd.pdReference;
+          pdChip.innerText = pd.agreementReference;
           pdChip.selectable = true;
           pdChip.addEventListener('tap', () => {
             for(let i = 0; i < header.children.length; i++) {
               header.children[i].classList.remove('selected')
-            }
+            };
             pdChip.className = 'selected';
-            this.selectedPDSSFA = pd.pd;
+            this.selectedPDSSFA = pd.pdssfas;
             if (this.$.docSelector.selected != "pdssfa") {
               this.$.docSelector.selected = "pdssfa"
-            }
+            };
           });
           header.appendChild(pdChip);
         })
       }
 
-      _handleOlderPDs() {
-        let header = this.$.superHeader
-        // create a paper-chip for the older PD/SSFA files that can't be grouped
-        let olderFiles = this.selectedPartner.filter(
-          file => (file.file_type.indexOf('Assessment') === -1) 
-                  && (file.file_type.indexOf('Audit') === -1) 
-                  && (file.pd_ssfa_number.split('/').length - 1 != 2 || !file.pd_ssfa_number)
-        )
-        if (!olderFiles.length) {
-          return
+      _handleOtherFiles() {
+        let header = this.$.superHeader;
+        if (!this.otherFiles.length) {
+          return;
         }
-        let oldFiles = document.createElement('paper-chip')
-        oldFiles.innerText = 'Older Documents'
-        oldFiles.selectable = true
-        oldFiles.addEventListener('tap', () => {
+        let otherFilesChip = document.createElement('paper-chip');
+        otherFilesChip.innerText = 'Other Documents';
+        otherFilesChip.selectable = true;
+        otherFilesChip.addEventListener('tap', () => {
           for(let i = 0; i < header.children.length; i++) {
-            header.children[i].classList.remove('selected')
+            header.children[i].classList.remove('selected');
           } 
-          oldFiles.className = 'selected';
-          if (this.$.docSelector.selected != "older") {
-            this.$.docSelector.selected = "older"
+          otherFilesChip.className = 'selected';
+          if (this.$.docSelector.selected != "otherFilesChip") {
+            this.$.docSelector.selected = "otherFilesChip";
           }
         });
-        header.appendChild(oldFiles)
-        this.set('olderFiles', olderFiles)
+        header.appendChild(otherFilesChip);
       }
 
        _appendChips() {
-        this._createPDChips()
-        this._handleOlderPDs()
+        this._appendAssessmentChip();
+        this._createPDChips();
+        this._handleOtherFiles();
       }
 
     }
