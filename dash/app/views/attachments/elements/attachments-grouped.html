@@ -183,9 +183,10 @@
 
     <div class="paper-material list-panel listControls"
          elevation="1">
-      <etools-dropdown label="Partner - Vendor No." 
-                  options="[[orderedResults]]"
-                  selected="{{selectedPartner}}">
+      <etools-dropdown label="Partner - Vendor No."
+                       options="[[orderedResults]]"
+                       selected="{{selectedIndex}}"
+                       selected-item="{{selectedPartner}}">
       <etools-dropdown>
     </div>
     <div class="paper-material list" elevation="1">
@@ -345,14 +346,14 @@
       static get properties() {
         return {
           orderedResults: {
-            type: Object
+            type: Array
           },
           selectedPartner: {
-            type: Object,
+            type: Object
           },
           groupView: {
             type: String,
-            value: "Assessments & Audits"
+            value: 'Assessments & Audits'
           },
           assessmentsAudits: {
             type: Array
@@ -379,11 +380,14 @@
       }
 
       _reorganizeData() {
+        if (!this.selectedPartner) {
+          return;
+        }
         // separate assessments/audits from files with agreement_reference_number and from those without
         let assessmentsAudits = [];
         let pDFiles = [];
         let otherFiles = [];
-        this.selectedPartner.forEach(file => {
+        this.selectedPartner.files.forEach(file => {
           if (file.file_type.indexOf('Assessment') > -1 || file.file_type.indexOf('Audit') > -1) {
             assessmentsAudits.push(file);
           } else if (isEmpty(file.agreement_reference_number)) {
