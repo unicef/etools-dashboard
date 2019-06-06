@@ -130,8 +130,9 @@
                 let vend = countAndResult[2].filter((file2) => file2.vendor_number === file.vendor_number);
                 vend = sortBy(prop('created'))(vend);
                 let key = `${file.partner} - ${file.vendor_number}`;
+                obj['value'] = file.vendor_number;
                 obj['label'] = key;
-                obj['value'] = vend;
+                obj['files'] = vend;
                 this.orderedResults.push(obj);
               }
             });
