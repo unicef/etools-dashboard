@@ -260,8 +260,7 @@
       <data-table-header class="single">
         <div class="col-data small-text col-2">Partner</div>
         <div class="grouping col-10 layout-horizontal">
-          <div class="col-data small-text col-1">PD/SSFA<br>Status</div>
-          <div class="col-data small-text col-1">Status of PD/SSFA</div>
+          <div class="col-data small-text col-2">PD/SSFA<br>Status</div>
           <div class="col-data small-text flex-2">Start - End Dates</div>
           <div class="col-data small-text col-1">FR Flags</div>
           <div class="col-data small-text flex-2">Disbursement to Date / <br> UNICEF Cash</div>
@@ -290,15 +289,12 @@
                 <template is="dom-repeat" items="[[getValues(partner)]]" as="pd">
                   <data-table-row class="pdssfa-row" no-collapse>
                     <div slot="row-data">
-                      <span class="col-1">
+                      <span class="col-2">
                         <a class="bold pd-ref" on-tap="goToPage" href="[[basesSite]]/pmp/interventions/[[pd.intervention_id]]/details" app-name="pmp">
                           [[_getTruncated(pd.number)]]
                           <paper-tooltip position="right">[[pd.number]]</paper-tooltip>
                         </a><br>
                         <span class="capitalize">[[pd.status]]</span>
-                      </span>
-                      <span class="col-data col-1">
-                        
                       </span>
                       <span class="col-data flex-2">
                         <etools-progress-bar value="[[_getPercentFromDate(pd.start, pd.end)]]"></etools-progress-bar>
