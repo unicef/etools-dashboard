@@ -191,7 +191,8 @@
         <data-table-column class="col-1">
           Section
         </data-table-column>
-        <div class="col-5 layout horizontal">
+        <!-- <div class="col-5 layout horizontal"> -->
+        <div class="col-6 layout horizontal">
           <data-table-column class="col-3 right-align" field="total_ct_cp" sortable>
             Cash in the<br>
             Current CP Cycle (USD)
@@ -213,9 +214,9 @@
           Action<br>
           Points
         </data-table-column>
-        <data-table-column class="col-1 right-align" field="alert_core_value_assessment" sortable>
+        <!-- <data-table-column class="col-1 right-align" field="alert_core_value_assessment" sortable>
           Flags
-        </data-table-column>
+        </data-table-column> -->
         <data-table-column class="col-1 right-align" field="days_last_pv" sortable>
           Days Since<br>
           Last PV
@@ -251,7 +252,8 @@
                 </template>
               </div>
             </div>
-            <div class="col-5 layout horizontal">
+            <!-- <div class="col-5 layout horizontal"> -->
+            <div class="col-6 layout horizontal">
               <div class="col-3 right-align">
                 [[currencyFormat(row.total_ct_cp)]]
               </div>
@@ -268,7 +270,7 @@
             <div class="col-1 right-align">
               <a href="[[baseSite]]/apd/action-points/list?partner=[[row.id]]&status=open">[[row.action_points]]</a>
             </div>
-            <div class="col-1 right-align">
+            <!-- <div class="col-1 right-align">
               <template is="dom-if" if="[[row.alert_core_value_assessment]]">
                 <iron-icon class="clock-icon"
                            icon="device:access-time">
@@ -276,7 +278,7 @@
                 <paper-tooltip>The Core Values Assessment will expire in [[row.core_value_assessment_expiring]] Days.</paper-tooltip>
               </template>
               [[row.core_value_assessment_expiring]]
-            </div>
+            </div> -->
             <div class="col-1 col-data right-align">
               <span class="last-pv">[[row.days_last_pv]]</span>
               <iron-icon on-click="goToMaps"
