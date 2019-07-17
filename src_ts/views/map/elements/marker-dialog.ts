@@ -7,7 +7,7 @@ import '../../../styles/grid-layout-styles';
 import '../../../styles/list-styles';
 import '../../../styles/shared-styles';
 import '../../../styles/page-layout-styles';
-import { values, map, compose, uniq, pick, prop, flatten } from '../../../scripts/ramda-utils';
+import { values, map, compose, uniq, pick, prop, flatten } from 'ramda';
 
 /**
  * `marker-dialog` Description

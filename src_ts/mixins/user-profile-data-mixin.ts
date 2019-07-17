@@ -1,20 +1,10 @@
 // import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
-import { compose, isEmpty} from '../scripts/ramda-utils';
+import { isEmpty } from 'ramda';
 import './data-element-mixin';
 import './user-permissions-mixin';
 import { Mixins as Mixins$0 } from './redux-store-mixin';
 export const Mixins = Mixins$0 || {};
 
-/**
-   * @polymer
-   * @mixinFunction
-   * @appliesMixin EtoolsDashboard.Mixins.DataElement
-   * @appliesMixin EtoolsDashboard.Mixins.UserPermissions
-   */
-const EtoolsProfileBaseMixin = compose(
-  Mixins$0.DataElement,
-  Mixins$0.UserPermissions
-);
 /**
  * `user-data` Description
  *
@@ -22,10 +12,13 @@ const EtoolsProfileBaseMixin = compose(
  * @customElement
  * @polymer
  * @extends {PolymerElement}
+ * @appliesMixin EtoolsDashboard.Mixins.DataElement
+ * @appliesMixin EtoolsDashboard.Mixins.UserPermissions
  */
 
 Mixins$0.UserProfileData = (baseClass) =>
-  class extends EtoolsProfileBaseMixin(baseClass) {
+  class extends Mixins$0.DataElement(
+    Mixins$0.UserPermissions(baseClass)) {
 
     /**
      * Object describing property-related metadata used by Polymer features
@@ -86,7 +79,7 @@ Mixins$0.UserProfileData = (baseClass) =>
       this.sendRequest(config).then((resp) => {
         this._handleMyResponse(resp);
       }).catch((err) => {
-        this.parseRequestErrorsAndShowAsToastMsgs(error);
+        this.parseRequestErrorsAndShowAsToastMsgs(err);
         this._hideProfileSaveLoadingMsg();
       });
     }

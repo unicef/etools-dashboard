@@ -1,4 +1,4 @@
-import '@polymer/promise-polyfill/dist/polyfill.min';
+// import '@polymer/promise-polyfill/dist/polyfill.min';
 
 /* Promise polyfill */
 /*

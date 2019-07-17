@@ -2,7 +2,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element';
 import '@polymer/iron-icons/iron-icons';
 import '@polymer/paper-input/paper-input';
 import { IronValidatableBehavior } from '@polymer/iron-validatable-behavior/iron-validatable-behavior';
-import 'etools-datepicker/etools-datepicker-button';
+// import 'etools-datepicker/etools-datepicker-button';
 import '../mixins/date-mixin';
 import '../styles/shared-styles';
 import { Mixins } from '../mixins/redux-store-mixin';

@@ -1,6 +1,5 @@
-<script type="module">
 import { Mixins as Mixins$0 } from './redux-store-mixin';
-export const EtoolsDashboard = EtoolsDashboard || {};
+// export const EtoolsDashboard = window.EtoolsDashboard || {};
 export const Mixins = Mixins$0 || {};
 /**
 * @polymer
@@ -41,4 +40,3 @@ Mixins$0.AppNavigationHelper = (baseClass) => class extends baseClass {
   }
 
 };
-</script>

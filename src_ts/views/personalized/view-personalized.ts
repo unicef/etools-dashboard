@@ -25,11 +25,11 @@ import '../../mixins/common-general-mixin';
 import '../../mixins/fetch-assets-mixin';
 import { Mixins } from '../../mixins/redux-store-mixin';
 import '../../config/config';
-import 'etools-loading/etools-loading';
-import { DexieDb } from '../../config/dexie-db-config';
+// import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading';
+import { db } from '../../config/dexie-db-config';
 import '../../mixins/event-helper-mixin';
 import '../../components/etools-progress-bar';
-import { prop, isEmpty, equals, uniq, any } from '../../scripts/ramda-utils';
+import { prop, isEmpty, equals, uniq, any } from 'ramda';
 /**
  * @polymer
  * @mixinFunction
@@ -41,7 +41,8 @@ const ViewPersonalizedMixins = EtoolsMixinFactory.combineMixins([
   Mixins.ReduxStore,
   Mixins.CommonGeneral,
   Mixins.EventHelper,
-  Mixins.FetchAsset
+  Mixins.FetchAsset,
+  // LoadingMixin
 ], PolymerElement);
 
 /**
@@ -576,7 +577,7 @@ class ViewPersonalized extends ViewPersonalizedMixins {
     }
   }
 
-  _principal(tab) {
+  _principal(tab: string) {
     switch(tab) {
       case 'myTrips':
         return 'Trip Supervisor';
@@ -590,6 +591,8 @@ class ViewPersonalized extends ViewPersonalizedMixins {
       case 'actionPointsByMe':
         return 'Assignee';
         break;
+      default:
+        return '';
     }
   }
 
@@ -685,11 +688,11 @@ class ViewPersonalized extends ViewPersonalizedMixins {
     }
     this.fireEvent('global-loading', { active: true, loadingSource: 'view-personalized' });
 
-    DexieDb.transaction(
+    db.transaction(
       'r',
-      DexieDb.csoDashboard,
+      db.csoDashboard,
       () => {
-        let queryResult = DexieDb.csoDashboard.orderBy('partner_name');
+        let queryResult = db.csoDashboard.orderBy('partner_name');
         queryResult = queryResult.filter((int) => any(equals(user.user))(int.unicef_focal_points));
         return Dexie.Promise.all([queryResult.toArray()]);
       }).then((countAndResult) => {

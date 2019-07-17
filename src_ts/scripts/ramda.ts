@@ -1,1 +1,2 @@
-// import 'ramda/dist/ramda.min';
+// import R from 'ramda/index';
+// export default R;

@@ -2,10 +2,10 @@ import { PolymerElement } from '@polymer/polymer/polymer-element';
 import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import '../../../mixins/data-element-mixin';
 import '../../../mixins/event-helper-mixin';
-import { DexieDb } from '../../../config/dexie-db-config';
+import { db } from '../../../config/dexie-db-config';
 import Dexie from 'dexie';
 import { Mixins } from '../../../mixins/redux-store-mixin';
-import { isEmpty, contains } from '../../../scripts/ramda-utils';
+import { isEmpty, contains } from 'ramda';
 // import * as _ from 'lodash-es';
 
 /**
@@ -89,16 +89,17 @@ class PartnersData extends PartnersDataMixin {
 
   query(searchString, order, pageSize, pageNumber) {
     this.fireEvent('global-loading', { message: 'Loading partners data...', active: true, loadingSource: 'partners-data' });
-    DexieDb.partners.toArray().then((res) => {
+    db.partners.toArray().then((res) => {
       this._setTotals(this._computeTotals(res));
       this._setTotalResults(res.length);
     });
-    DexieDb.transaction('r', DexieDb.partners, () => {
-      let queryResult = DexieDb.partners.orderBy('name');
+    db.transaction('r', db.partners, () => {
+      let queryResult = db.partners.orderBy('name');
       if (order === 'desc') {
         queryResult = queryResult.reverse();
       }
       if (!isEmpty(searchString)) {
+        // @ts-ignore
         queryResult = queryResult.filter((partner) => {
           return contains(searchString.toLowerCase(), partner.name.toLowerCase()) ||
             contains(searchString, partner.vendor_number);
@@ -137,8 +138,10 @@ class PartnersData extends PartnersDataMixin {
       }
       return toReturn;
     };
-    this.resultsTotals = true;
+    this.set('resultsTotals', true);
+    // @ts-ignore
     return _(results).reduce((sum, obj)=> {
+      // @ts-ignore
       let picked = _(obj).pick([
         'shared_with',
         'total_ct_ytd',
@@ -149,8 +152,10 @@ class PartnersData extends PartnersDataMixin {
         'reported_cy',
         'planned_engagement'
       ]).value();
+      // @ts-ignore
       picked = _flattenObject(picked);
       picked['shared_with'] = obj['shared_with'];
+      // @ts-ignore
       _(picked).each((val, key)=> {
         let currValue = sum[key] ? sum[key] : 0;
         if (key === 'shared_with') {

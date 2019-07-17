@@ -1,12 +1,12 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element';
+import '@polymer/paper-tooltip/paper-tooltip';
 import '../../../components/data-table/data-table-column';
 import '../../../components/data-table/data-table-header';
 import '../../../components/data-table/data-table-row';
-import '@polymer/paper-tooltip/paper-tooltip';
 import '../../../styles/shared-styles';
 import '../../../styles/list-styles';
 import '../../../styles/grid-layout-styles';
-import { html } from '@polymer/polymer/lib/utils/html-tag';
+
 class SubAttachments extends PolymerElement {
   static get template() {
     return html`

@@ -3,22 +3,19 @@ import '../../../endpoints/endpoints-mixin';
 import '../../../mixins/event-helper-mixin';
 import '../../../mixins/ajax-server-errors-mixin';
 import { Mixins as Mixins$0 } from '../../../mixins/redux-store-mixin';
-import {compose, assoc, isEmpty, prop, map, pick, filter, uniq, flatten, merge, reduce } from '../../../scripts/ramda-utils';
+import {compose, assoc, isEmpty, prop, map, pick, filter, uniq, flatten, merge, reduce } from 'ramda';
 export const Mixins = Mixins$0 || {};
 
-const EtoolsMapDataMixin = compose(
-  Mixins$0.EventHelper,
-  Mixins$0.Endpoints,
-  Mixins$0.AjaxServerErrors,
-  EtoolsAjaxRequestMixin
-);
 /**
  *
  * @polymerMixin
  * @mixinFunction
  */
 Mixins$0.MapInterventionsData = (superclass) =>
-  class extends EtoolsMapDataMixin(superclass) {
+  class extends Mixins$0.EventHelper(
+    Mixins$0.Endpoints(
+      Mixins$0.AjaxServerErrors(
+        EtoolsAjaxRequestMixin(superclass)))) {
     static get properties() {
       return {
         reqOptions: {

@@ -99,13 +99,17 @@ class DataTableRow extends PolymerElement {
   }
 
   _toggleRowDetails() {
+    // @ts-ignore
     this.$.details.toggle();
   }
 
   // disables collapsable content when no-collapse attribute set
   _noCollapse() {
+    // @ts-ignore
     this.$.details.style.display = 'none';
+    // @ts-ignore
     this.$.wrapper.style.padding = '0 24px';
+    // @ts-ignore
     this.$.iconWrapper.style.display = 'none';
     this.updateStyles({ ['--hover-setting']: 'background : transparent' });
   }

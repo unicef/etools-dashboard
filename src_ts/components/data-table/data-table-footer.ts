@@ -5,13 +5,16 @@ import '@polymer/paper-item/paper-item';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 import '@polymer/paper-styles/element-styles/paper-material-styles';
+import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
+
+const DataTableFooterMixin = EtoolsMixinFactory.combineMixins([], PolymerElement);
 
 /**
 * @polymer
 * @customElement
 * @extends PolymerElement
 */
-class DataTableFooter extends PolymerElement {
+class DataTableFooter extends DataTableFooterMixin {
   static get template() {
     return html`
       <style include="paper-material-styles">

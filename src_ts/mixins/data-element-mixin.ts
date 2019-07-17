@@ -2,22 +2,19 @@ import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-requ
 import '../endpoints/endpoints-mixin';
 import './ajax-server-errors-mixin';
 import './event-helper-mixin';
-import {compose} from '../scripts/ramda-utils';
 import { Mixins as Mixins$0 } from './redux-store-mixin';
 export const Mixins = Mixins$0 || {};
 
-const RequiredMixin = compose(
-  Mixins$0.Endpoints,
-  Mixins$0.AjaxServerErrors,
-  Mixins$0.EventHelper,
-  EtoolsAjaxRequestMixin
-);
 /**
  * @polymer
  * @mixinFunction
  */
 Mixins$0.DataElement = (superClass) =>
-  class extends RequiredMixin(superClass) {
+  class extends Mixins$0.Endpoints(
+    Mixins$0.AjaxServerErrors(
+      Mixins$0.EventHelper(
+        EtoolsAjaxRequestMixin(superClass)))) {
+
     constructor() {
       super();
     }
@@ -131,8 +128,8 @@ Mixins$0.DataElement = (superClass) =>
     }
 
     _setAutomaticDataRefreshLoop(newEndpoint) {
-      this._refreshInterval = setInterval(() => {
+      this.set('_refreshInterval', setInterval(() => {
         this._requestData();
-      }, newEndpoint.exp);
+      }, newEndpoint.exp));
     }
   };

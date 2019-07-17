@@ -3,7 +3,7 @@ import { Mixins as Mixins$0 } from '../mixins/redux-store-mixin';
 import { Config } from '../config/config';
 import { Endpoints as Endpoints$0 } from './endpoints';
 import {template} from 'lodash-es';
-import {isEmpty} from '../scripts/ramda-utils';
+import {isEmpty} from 'ramda';
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin';
 // const { template } = _;
 

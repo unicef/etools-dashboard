@@ -1,7 +1,7 @@
 import '@polymer/polymer/polymer-element';
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin';
 import './date-mixin';
-import { isEmpty } from '../scripts/ramda-utils';
+import { isEmpty } from 'ramda';
 import { Mixins as Mixins$0 } from './redux-store-mixin';
 export const Mixins = Mixins$0 || {};
 

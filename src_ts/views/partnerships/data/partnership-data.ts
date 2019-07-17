@@ -3,10 +3,10 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
 import '../../../mixins/data-element-mixin';
 import '../../../mixins/date-mixin';
 import '../../../mixins/event-helper-mixin';
-import { DexieDb } from '../../../config/dexie-db-config';
+import { db } from '../../../config/dexie-db-config';
 import Dexie from 'dexie';
 import { Mixins } from '../../../mixins/redux-store-mixin';
-import { contains, intersection, trim, isEmpty, keys } from '../../../scripts/ramda-utils';
+import { contains, intersection, trim, isEmpty, keys } from 'ramda';
 
 /**
  * @polymer
@@ -152,11 +152,11 @@ class PartnershipData extends PartnershipDataMixin {
     const { order, sortBy } = params;
     const predKeys = keys(this.predicates);
     this.fireEvent('global-loading', { active: true, loadingSource: 'partnership-data' });
-    DexieDb.transaction(
+    db.transaction(
       'r',
-      DexieDb.csoDashboard,
+      db.csoDashboard,
       () => {
-        let queryResult = DexieDb.csoDashboard.orderBy('partner_name');
+        let queryResult = db.csoDashboard.orderBy('partner_name');
         if (order === 'desc') {
           queryResult = queryResult.reverse();
         }

@@ -1,6 +1,6 @@
 import { Mixins as Mixins$0 } from './redux-store-mixin';
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin';
-import { intersection, map, prop } from '../scripts/ramda-utils';
+import { intersection, map, prop } from 'ramda';
 export const Mixins = Mixins$0 || {};
 
 /**
@@ -10,6 +10,7 @@ export const Mixins = Mixins$0 || {};
 Mixins$0.UserPermissions = dedupingMixin((superClass) => class extends superClass {
   constructor() {
     super();
+    // @ts-ignore
     this.groups = {
       'editPartner': ['UNICEF Audit Focal Point', 'Partnership Manager', 'Senior Management Team']
     };

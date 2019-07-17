@@ -1,12 +1,15 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 import '@polymer/paper-progress/paper-progress';
+import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
+
+const EtoolsProgressBarMixin = EtoolsMixinFactory.combineMixins([], PolymerElement);
 
 /**
  * @polymer
  * @customElement
  */
-class EtoolsProgressBar extends PolymerElement {
+class EtoolsProgressBar extends EtoolsProgressBarMixin {
   static get template() {
     return html`
     <style>

@@ -4,7 +4,7 @@ import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-requ
 import '../../../mixins/event-helper-mixin';
 import '../../../endpoints/endpoints-mixin';
 import { Mixins } from '../../../mixins/redux-store-mixin';
-import { isEmpty } from '../../../scripts/ramda-utils';
+import { isEmpty } from 'ramda';
 
 /**
  * @polymer

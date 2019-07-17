@@ -3,11 +3,10 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
 import '../../../mixins/data-element-mixin';
 import '../../../mixins/date-mixin';
 import '../../../mixins/event-helper-mixin';
-import { DexieDb } from '../../../config/dexie-db-config';
+import { db } from '../../../config/dexie-db-config';
 import { Mixins } from '../../../mixins/redux-store-mixin';
-import { contains, equals, without, keys, isEmpty, sortBy, prop, uniq } from '../../../scripts/ramda-utils';
+import { contains, equals, without, keys, isEmpty, sortBy, prop, uniq } from 'ramda';
 
-// import {compose} from '../../../scripts/ramda-utils';
 const AttachmentsDataMixin = EtoolsMixinFactory.combineMixins([
   Mixins.DataElement,
   Mixins.Date,
@@ -96,10 +95,9 @@ class AttachmentsData extends AttachmentsDataMixin {
     this.fireEvent('global-loading', { active: true, loadingSource: 'attachments-data' });
     this.set('currentParams', params);
     const { pageNumber, pageSize, order, orderBy } = params;
-    DexieDb.transaction('r', DexieDb.attachments, () => {
-      let queryResult = DexieDb.attachments;
-      let allResults = queryResult.orderBy('partner');
-      queryResult = queryResult.orderBy(orderBy || 'created');
+    db.transaction('r', db.attachments, () => {
+      let queryResult = db.attachments.orderBy(orderBy || 'created');
+      let allResults = db.attachments.orderBy('partner');
       if (order === 'asc') {
         queryResult = queryResult.reverse();
       }
@@ -111,7 +109,7 @@ class AttachmentsData extends AttachmentsDataMixin {
       );
       queryResult = queryResult.filter((file) => !isEmpty(file.filename));
 
-      return Dexie.Promise.all([
+      return Promise.all([
         queryResult.count(),
         // Use clone() as offset() and limit() otherwise mutates the same query this is counted
         queryResult.clone()
@@ -136,7 +134,7 @@ class AttachmentsData extends AttachmentsDataMixin {
             this.orderedResults.push(obj);
           }
         });
-        this.orderedResults = uniq(this.orderedResults);
+        this.set('orderedResults', uniq(this.orderedResults));
       });
     });
   }

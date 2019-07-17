@@ -1,4 +1,4 @@
-import { isEmpty } from '../scripts/ramda-utils';
+import { isEmpty } from 'ramda';
 import moment from 'moment';
 import { Mixins as Mixins$0 } from './redux-store-mixin';
 import { dom } from '@polymer/polymer/lib/legacy/polymer.dom';
@@ -110,6 +110,7 @@ Mixins$0.ListFilters = (superClass) => class extends superClass {
 
   // 'esmm' (etools-searchable-multiselection-menu) filter value changed
   esmmValueChanged(event) {
+    // @ts-ignore
     let filterPath = dom(event).localTarget.getAttribute('data-filter-path');
     let filterVal = event.detail.selectedItems;
     this.set(filterPath, filterVal);
@@ -117,7 +118,9 @@ Mixins$0.ListFilters = (superClass) => class extends superClass {
 
   // for esmm on pages without url params
   esmmValueChangedForValues(event) {
+    // @ts-ignore
     let filterPath = dom(event).localTarget.getAttribute('data-filter-path');
+    // @ts-ignore
     const valueProp = dom(event).localTarget.getAttribute('option-value');
 
     let filterVal = event.detail.selectedItems;

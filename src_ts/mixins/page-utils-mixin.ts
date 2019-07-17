@@ -1,6 +1,6 @@
-<script type="module">
 import { Mixins as Mixins$0 } from './redux-store-mixin';
-export const EtoolsDashboard = EtoolsDashboard || {};
+import isEmpty from 'lodash-es/isEmpty';
+// export const EtoolsDashboard = EtoolsDashboard || {};
 export const Mixins = Mixins$0 || {};
 
 /**
@@ -22,9 +22,8 @@ Mixins$0.PageUtils = (superClass) => class extends superClass {
   }
 
   _handleQueryParams(params) {
-    if (!_.isEmpty(params)) {
+    if (!isEmpty(params)) {
       this.set('listQueryParams', params);
     }
   }
 };
-</script>    

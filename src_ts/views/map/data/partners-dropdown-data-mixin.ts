@@ -1,20 +1,16 @@
 import '../../../mixins/data-element-mixin';
 import '../../../mixins/event-helper-mixin';
 import { Mixins as Mixins$0 } from '../../../mixins/redux-store-mixin';
-import { compose } from '../../../scripts/ramda-utils';
 export const Mixins = Mixins$0 || {};
 
-const EtoolsPartnersDropdownMixin = compose(
-  Mixins$0.EventHelper,
-  Mixins$0.DataElement
-);
 /**
  *
  * @polymerMixin
  * @mixinFunction
  */
 Mixins$0.PartnersDropdownData = (superclass) =>
-  class extends EtoolsPartnersDropdownMixin(superclass) {
+  class extends Mixins$0.EventHelper(
+    Mixins$0.DataElement(superclass)) {
     static get properties() {
       return {
         endpointName: {

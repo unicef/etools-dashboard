@@ -1,13 +1,18 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element';
 import '@polymer/paper-styles/element-styles/paper-material-styles';
 import {LegacyElementMixin} from '@polymer/polymer/lib/legacy/legacy-element-mixin';
+import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
+
+const DataTableHeaderMixin = EtoolsMixinFactory.combineMixins([
+  LegacyElementMixin
+], PolymerElement);
 
 /**
 * @polymer
 * @customElement
 * @extends PolymerElement
 */
-class DataTableHeader extends LegacyElementMixin(PolymerElement) {
+class DataTableHeader extends DataTableHeaderMixin {
   static get template() {
     return html`
       <custom-style>
@@ -92,7 +97,7 @@ class DataTableHeader extends LegacyElementMixin(PolymerElement) {
 
   connectedCallback() {
     super.connectedCallback();
-    //detect if any column is a group of columns with heading
+    // detect if any column is a group of columns with heading
     Array.prototype.slice.call(this.children).map(col => {
       if (col.attributes.getNamedItem('group-heading')) {
         this._noHeight();
@@ -119,7 +124,7 @@ class DataTableHeader extends LegacyElementMixin(PolymerElement) {
     if (this._lastSelectedCol && this._lastSelectedCol !== column) {
       this._lastSelectedCol.set('selected', null);
     }
-    this._lastSelectedCol = column;
+    this.set('_lastSelectedCol', column);
   }
 
   _noTitle() {

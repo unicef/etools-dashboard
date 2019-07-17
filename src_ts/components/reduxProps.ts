@@ -1,4 +1,4 @@
-import 'moment-element/moment-element';
+// import moment from 'moment';
 
 export const ReduxProps = [
   {

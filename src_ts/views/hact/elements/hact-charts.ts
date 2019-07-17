@@ -7,15 +7,15 @@ import '../../../styles/shared-styles';
 import '../../../styles/list-styles';
 import '../../../styles/grid-layout-styles';
 import '../../../styles/hact-graphs-styles';
-import 'google-chart/google-chart';
-import 'google-chart/google-chart-loader';
-import 'google-chart/charts-loader';
+import GoogleChart from 'google-charts';
+// import 'google-chart/google-chart-loader';
+// import 'google-chart/charts-loader';
 // import { Config } from '../../../config/config';
 import { Mixins } from '../../../mixins/redux-store-mixin';
 import '../../../mixins/fetch-assets-mixin';
 import { Config as Config$0 } from '../../../config/config';
 import '../../../mixins/event-helper-mixin';
-import { isEmpty, keys, capitalize, tail, last } from '../../../scripts/ramda-utils'
+import { isEmpty, keys, tail, last } from 'ramda';
 
 /**
  * @polymer
@@ -798,6 +798,7 @@ class HactCharts extends ChartsMixin {
 
   _onChartDataChange(data) {
     if (!isEmpty(data)) {
+      // @ts-ignore
       const riskRatings = tail(data.charts.cash_transfers_risk_ratings).map((r) => last(r));
       this.set('riskRatings', riskRatings);
       this._init(this.active);
@@ -807,7 +808,7 @@ class HactCharts extends ChartsMixin {
   _formatChartData(data, chartName, options) {
     this.$.google.dataTable(data).then((dt) => {
       if (chartName==='coverageCashChart') {
-        let formatter = new google.visualization.NumberFormat({
+        let formatter = new GoogleChart.visualization.NumberFormat({
           prefix: '$' });
         formatter.format(dt, 1);
       }
@@ -864,8 +865,8 @@ class HactCharts extends ChartsMixin {
     return highlighted ? 'financial-highlight' : '';
   }
 
-  _dashCapital(string) {
-    return `- ${capitalize(string)}`;
+  _dashCapital(string: string) {
+    return `- ${string.charAt(0).toUpperCase() + string.slice(1)}`;
   }
 
   _numWithCommas(number) {

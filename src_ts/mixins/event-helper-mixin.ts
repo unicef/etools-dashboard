@@ -16,3 +16,5 @@ Mixins$0.EventHelper = dedupingMixin((baseClass) => class extends baseClass {
     }));
   }
 });
+
+window.Mixins.EventHelper = Mixins$0.EventHelper;

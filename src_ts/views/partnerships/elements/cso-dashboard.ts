@@ -12,7 +12,7 @@ import '@polymer/iron-icon/iron-icon';
 import '@polymer/iron-pages/iron-pages';
 import '@polymer/app-route/app-route';
 import '@unicef-polymer/etools-dropdown/etools-dropdown-multi';
-import '@unicef-polymer/etools-datepicker/etools-datepicker-button';
+// import '@unicef-polymer/etools-datepicker/etools-datepicker-button';
 import '@unicef-polymer/etools-info-tooltip/etools-info-tooltip';
 import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import '../../../styles/shared-styles';
@@ -36,7 +36,7 @@ import { Mixins } from '../../../mixins/redux-store-mixin';
 import '../../../endpoints/endpoints-mixin';
 import '../../../components/etools-date-input';
 import '../data/partnership-data';
-import { identity, compose, join, map, prop, isEmpty } from '../../../scripts/ramda-utils';
+import { identity, compose, join, map, prop, isEmpty } from 'ramda';
 
 /**
  * @polymer
@@ -741,8 +741,7 @@ class CsoDashboard extends CsoDashboardMixin {
     }
   }
 
-  _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded,
-    initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate) {
+  _updateUrl() {
 
     if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
       return;
@@ -954,6 +953,8 @@ class CsoDashboard extends CsoDashboardMixin {
           return row.status === 'ended'
             && !row.has_final_partnership_review
             && parseInt(row.disbursement_usd) >= 100000;
+        default:
+          return '';
       }
     };
   }

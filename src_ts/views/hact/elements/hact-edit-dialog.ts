@@ -7,7 +7,7 @@ import '../data/partner-item-data';
 import '../../../mixins/event-helper-mixin';
 import '../../../styles/grid-layout-styles';
 import { Mixins } from '../../../mixins/redux-store-mixin';
-import { compose, pick, merge, clone, map, prop, filter, contains } from '../../../scripts/ramda-utils';
+import { compose, pick, merge, clone, map, prop, filter, contains } from 'ramda';
 import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 /**
  * `hact-edit-dialog` Description

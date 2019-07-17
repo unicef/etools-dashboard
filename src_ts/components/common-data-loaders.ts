@@ -1,12 +1,13 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
-import * as R from '../scripts/ramda-utils';
+import moment from 'moment';
+import * as R from 'ramda';
 import {Mixins} from '../mixins/redux-store-mixin';
 import '../mixins/ajax-server-errors-mixin';
 import '../endpoints/endpoints-mixin';
 import '../config/dexie-db-config';
-import './reduxProps';
+import { ReduxProps } from './reduxProps';
 
 /**
  * @polymer
@@ -223,7 +224,7 @@ class CommonDataLoaders extends CommonDataMixin {
         };
       },
 
-      setGrants(data = []) {
+      setGrants(data) {
         return {
           type: 'SET_GRANTS',
           grants: data.grants.map((grant)=>({
@@ -290,10 +291,11 @@ class CommonDataLoaders extends CommonDataMixin {
   }
 
   actionsToDispatch() {
-    const { ReduxProps } = EtoolsDashboard;
+    // const { ReduxProps } = EtoolsDashboard;
     let mappedItems = ReduxProps.map((a) => {
       let endpoint = a.endpointProps;
       if (typeof endpoint === 'function') {
+        // @ts-ignore
         endpoint = endpoint.bind(this)();
       }
       endpoint = R.isEmpty(endpoint) ? endpoint
@@ -301,7 +303,7 @@ class CommonDataLoaders extends CommonDataMixin {
           : this.getEndpoint(endpoint.name, endpoint.templateProps);
 
       let actionObj = {
-        handler: R.concat('set', R.capitalize(a.propName)),
+        handler: R.concat('set', a.propName.charAt(0).toUpperCase() + a.propName.slice(1)),
         endpoint: { endpoint },
         type: `SET_${a.propName.toUpperCase()}`
       };
@@ -318,7 +320,7 @@ class CommonDataLoaders extends CommonDataMixin {
       action[next.type] = next.action;
       this.set('nextAction', next);
       this.set('_reduxActions', Object.assign({}, this._reduxActions, action));
-      if (isEmpty(next.endpoint.endpoint)) {
+      if (R.isEmpty(next.endpoint.endpoint)) {
         // for items without api calls
         this.dispatch(next.handler, null);
         this._callNext();

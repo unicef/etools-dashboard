@@ -1,3 +1,6 @@
+// This file will be dedicated to theming
+// variables used throughout the app
+
 import '@polymer/polymer/polymer-element';
 import '@webcomponents/shadycss/entrypoints/apply-shim';
 import '@polymer/polymer/lib/elements/custom-style';
@@ -7,9 +10,7 @@ const $_documentContainer = document.createElement('template');
 
 $_documentContainer.innerHTML = `<custom-style>
   <style>
-
     html {
-
       --primary-background-color: #FFFFFF;
       --primary-color: #0099ff;
       --secondary-color: #0099FF;
@@ -73,8 +74,6 @@ $_documentContainer.innerHTML = `<custom-style>
         width: 100%;
         margin: 0;
       };
-
-      
     }
   </style>
 
@@ -82,11 +81,4 @@ $_documentContainer.innerHTML = `<custom-style>
 
 document.head.appendChild($_documentContainer.content);
 
-/* This file will be dedicated to theming
-     variables used throughout the app */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
 ;

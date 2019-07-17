@@ -1,3 +1,5 @@
+// Mixins used all over the app. This will prevent duplicating css rules
+
 import '@polymer/polymer/polymer-element';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 import '@polymer/polymer/lib/elements/custom-style';
@@ -52,11 +54,3 @@ $_documentContainer.innerHTML = `<custom-style>
 </custom-style>`;
 
 document.head.appendChild($_documentContainer.content);
-
-/* Mixins used all over the app. This will prevent duplicating css rules */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
-;

@@ -2,7 +2,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element';
 import '@polymer/app-layout/app-toolbar/app-toolbar';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@polymer/iron-flex-layout/iron-flex-layout';
-import 'etools-app-selector/etools-app-selector';
+import '@unicef-polymer/etools-app-selector/etools-app-selector';
 import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown';
 import '@polymer/paper-icon-button/paper-icon-button';
@@ -11,10 +11,10 @@ import '../mixins/event-helper-mixin';
 import { Mixins } from '../mixins/redux-store-mixin';
 import '../mixins/user-profile-data-mixin';
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin';
-import { DexieDb } from '../config/dexie-db-config';
+import { db } from '../config/dexie-db-config';
 import '../styles/shared-styles';
 import { Config } from '../config/config';
-import {sortBy} from '../scripts/ramda-utils';
+import {sortBy} from 'ramda';
 
 const RequiredMixins = EtoolsMixinFactory.combineMixins([
   EtoolsPageRefreshMixin,
@@ -230,6 +230,7 @@ class PageHeader extends RequiredMixins {
         imgClass: this._getFlagIconClass(arrayItem.business_area_code)
       };
     });
+    // @ts-ignore
     arrayObj = sortBy((c) => { c.name; })(arrayObj);
     this.set('countries', arrayObj);
   }
@@ -251,7 +252,7 @@ class PageHeader extends RequiredMixins {
   }
 
   _clearDexieDbs() {
-    DexieDb.delete();
+    db.delete();
   }
 
   _clearLocalStorage() {

@@ -1,6 +1,6 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element';
 import '@polymer/app-route/app-route';
-import 'etools-dropdown/etools-dropdown-multi';
+import '@unicef-polymer/etools-dropdown/etools-dropdown-multi';
 import '@polymer/paper-tooltip/paper-tooltip';
 import '@polymer/paper-input/paper-input';
 import '@polymer/paper-item/paper-item';
@@ -14,7 +14,7 @@ import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce';
 import { timeOut } from '@polymer/polymer/lib/utils/async';
 import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
-import '@unicef-polymer/etools-datepicker/etools-datepicker-button';
+// import '@unicef-polymer/etools-datepicker/etools-datepicker-button';
 import '../../styles/dash-icons';
 import './data/attachments-data';
 import '../../styles/shared-styles';
@@ -33,7 +33,7 @@ import '../../mixins/pagination-with-filters-mixin';
 import { Mixins } from '../../mixins/redux-store-mixin';
 import '../../mixins/fetch-assets-mixin';
 import './elements/attachments-grouped';
-import { compose, identity, join, map, prop, isEmpty, union, merge, reject } from '../../scripts/ramda-utils';
+import { compose, identity, join, map, prop, isEmpty, union, merge, reject } from 'ramda';
 
 /**
  * @polymer
@@ -546,7 +546,7 @@ class ViewAttachments extends AttachmentsMixin {
   }
 
   _updateSelectedFiltersValues() {
-    this.updateFiltersDebouncer = Debouncer.debounce(
+    this.set('updateFiltersDebouncer', Debouncer.debounce(
       this.updateFiltersDebouncer,
       timeOut.after(20), () => {
         let filtersValues = [
@@ -564,7 +564,7 @@ class ViewAttachments extends AttachmentsMixin {
           }
         ];
         this.updateShownFilters(filtersValues);
-      });
+      }));
   }
 
   _filterDocuments() {
@@ -604,7 +604,7 @@ class ViewAttachments extends AttachmentsMixin {
     return [];
   }
 
-  _toggleDocsView({ target }) {
+  _toggleDocsView() {
     let pages = this.$.docPages;
     pages.selectNext();
     this.$.allDocs.classList.toggle('light-button');

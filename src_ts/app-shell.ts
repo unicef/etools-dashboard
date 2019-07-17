@@ -7,14 +7,8 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
-/* lazy imports */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
-import { PolymerElement } from '@polymer/polymer/polymer-element';
 
+import { PolymerElement, html } from '@polymer/polymer/polymer-element';
 import '@polymer/app-layout/app-drawer/app-drawer';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout';
 import '@polymer/app-layout/app-header/app-header';
@@ -27,23 +21,24 @@ import '@polymer/iron-pages/iron-pages';
 import '@polymer/iron-selector/iron-selector';
 import '@polymer/paper-icon-button/paper-icon-button';
 import '@unicef-polymer/etools-dropdown/etools-dropdown';
-import '@unicef-polymer/etools-loading/etools-loading';
+// import '@unicef-polymer/etools-loading/etools-loading';
 import '@polymer/paper-menu-button/paper-menu-button';
 import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/paper-button/paper-button';
 import '@polymer/paper-tabs/paper-tabs';
 import '@polymer/paper-tabs/paper-tab';
-import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin';
+// import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin';
+import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 import 'etools-piwik-analytics/etools-piwik-analytics';
-import '.styles/buttons-styles';
-import '.styles/page-layout-styles';
-import '.styles/shared-styles';
-import '.styles/app-theme';
-import '.components/toast/toast-notifications-mixin';
-import '.mixins/event-helper-mixin';
-import '.mixins/user-profile-data-mixin';
-import '.config/dexie-db-config';
-import * as R from './scripts/ramda-utils';
+import './styles/buttons-styles';
+import './styles/page-layout-styles';
+import './styles/shared-styles';
+import './styles/app-theme';
+import './components/toast/toast-notifications-mixin';
+import './mixins/event-helper-mixin';
+import './mixins/user-profile-data-mixin';
+import './config/dexie-db-config';
+// import R from 'ramda';
 import './scripts/es6-polyfills';
 import './views/hact/view-hact';
 import './views/personalized/view-personalized';
@@ -54,10 +49,7 @@ import './views/map/view-map';
 import './components/page-header';
 import './components/page-footer';
 import { Mixins } from './mixins/redux-store-mixin';
-import { html } from '@polymer/polymer/lib/utils/html-tag';
 import { Config } from './config/config';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
-// import { importHref } from '@polymer/polymer/lib/utils/import-href';
 
 /**
    * @polymer
@@ -70,7 +62,7 @@ const EtoolsShellMixin = EtoolsMixinFactory.combineMixins([
   Mixins.EventHelper,
   Mixins.ToastNotifications,
   Mixins.UserProfileData,
-  LoadingMixin
+  // LoadingMixin
 ], (PolymerElement));
 /**
 * @customElement
@@ -317,6 +309,7 @@ class AppShell extends EtoolsShellMixin {
 
   ready() {
     super.ready();
+    debugger
     this._initListeners();
   }
 
@@ -336,8 +329,10 @@ class AppShell extends EtoolsShellMixin {
 
   _onForbidden() {
     let redirectNotification = document.createElement('etools-loading');
+    // @ts-ignore
     redirectNotification.loadingText = 'Your login session has expired, you are being redirected to login.';
     // redirectNotification.absolute = true;
+    // @ts-ignore
     redirectNotification.active = true;
     document.querySelector('body').appendChild(redirectNotification);
     setTimeout(() => {

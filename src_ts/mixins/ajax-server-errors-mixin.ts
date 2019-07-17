@@ -57,7 +57,7 @@ Mixins$0.AjaxServerErrors = (baseClass) => class extends
     if (['POST', 'PATCH', 'DELETE'].indexOf(ajaxMethod) > -1) {
       this.set('serverErrors', this._getErrorsArray(errors, this.useToastEvent));
     }
-    this.serverErrors = this.serverErrors ? this.serverErrors : [];
+    this.set('serverErrors', this.serverErrors ? this.serverErrors : []);
     if (this.useToastEvent) {
       if (this.serverErrors.length > 1) {
         errorMessage = this.serverErrors.join('\n');

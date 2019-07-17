@@ -32,7 +32,7 @@ import '../../../mixins/pagination-with-filters-mixin';
 import { Mixins } from '../../../mixins/redux-store-mixin';
 import '../../../endpoints/endpoints-mixin';
 import '../data/partnership-overview-data';
-import { identity, compose, join, map, prop, isEmpty } from '../../../scripts/ramda-utils';
+import { identity, compose, join, map, prop, isEmpty } from 'ramda';
 
 /**
   * @polymer

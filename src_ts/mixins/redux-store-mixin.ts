@@ -1,8 +1,8 @@
-import 'polymer-redux/polymer-redux';
-import { merge } from '../scripts/ramda-utils';
+import 'polymer-redux-typescript';
+import { merge } from 'ramda';
 import '../scripts/redux';
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin';
-export const Mixins = Mixins || {};
+export const Mixins = window.Mixins || {};
 
 // shuts up the linting script
 var Redux = Redux || {}; // eslint-disable-line
@@ -123,4 +123,4 @@ const store = Redux.createStore(
 * @polymer
 * @mixinFunction
 */
-Mixins.ReduxStore = dedupingMixin(PolymerRedux(store));
+window.Mixins.ReduxStore = dedupingMixin(PolymerRedux(store));

@@ -2,7 +2,7 @@ import '@polymer/paper-toast/paper-toast';
 import '@polymer/paper-button/paper-button';
 import '../../mixins/event-helper-mixin';
 import { html } from '@polymer/polymer/lib/utils/html-tag';
-import { Mixins } from '../../mixins/redux-store-mixin';
+// import { Mixins } from '../../mixins/redux-store-mixin';
 import { PolymerElement } from '@polymer/polymer/polymer-element';
 
 /**
@@ -10,7 +10,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element';
  * @customElement
  * @appliesMixin EtoolsDashboard.Mixins.EventHelper
  */
-class EtoolsToast extends Mixins.EventHelper(PolymerElement) {
+class EtoolsToast extends window.Mixins.EventHelper(PolymerElement) {
   static get template() {
     return html`
     <style>

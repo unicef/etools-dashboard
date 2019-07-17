@@ -3,27 +3,25 @@ import { Mixins as Mixins$0 } from './redux-store-mixin';
 import './event-helper-mixin';
 import './ajax-server-errors-mixin';
 import '../endpoints/endpoints-mixin';
-import '../components/reduxProps';
+import { ReduxProps } from '../components/reduxProps';
 import moment from 'moment';
-import { isEmpty, compose, map, pick, range, head, propOr, keys, concat, capitalize } from '../scripts/ramda-utils';
+import { isEmpty, compose, map, pick, range, head, propOr, keys, concat } from 'ramda';
 export const Mixins = Mixins$0 || {};
 
 const falsy = (x) => isEmpty(x) || !x;
 
-const FetchAssetsMixins = compose(
-  Mixins$0.Endpoints,
-  Mixins$0.ReduxStore,
-  Mixins$0.AjaxServerErrors,
-  Mixins$0.ToastNotifications,
-  Mixins$0.EventHelper,
-  EtoolsAjaxRequestMixin
-);
 /**
  * @polymer
  * @mixinFunction
  */
 Mixins$0.FetchAsset = (superClass) =>
-  class extends FetchAssetsMixins(superClass) {
+  class extends Mixins$0.Endpoints(
+    Mixins$0.ReduxStore(
+      Mixins$0.AjaxServerErrors(
+        Mixins$0.ToastNotifications(
+          Mixins$0.EventHelper(
+            EtoolsAjaxRequestMixin(superClass)))))) {
+
     constructor() {
       super();
     }
@@ -180,7 +178,7 @@ Mixins$0.FetchAsset = (superClass) =>
           };
         },
 
-        setGrants(data = []) {
+        setGrants(data) {
           return {
             type: 'SET_GRANTS',
             grants: data.grants.map((grant)=>({
@@ -236,6 +234,7 @@ Mixins$0.FetchAsset = (superClass) =>
       if (isEmpty(user)) {
         return;
       }
+      // @ts-ignore
       const props = this.constructor.properties;
 
       const requiredAssets = keys(props)
@@ -265,16 +264,16 @@ Mixins$0.FetchAsset = (superClass) =>
             : this.getEndpoint(endpoint.name, endpoint.templateProps);
         let { propName } = data;
         return {
-          handler: concat('set', capitalize(propName)),
+          handler: concat('set', propName.charAt(0).toUpperCase() + propName.slice(1)),
           endpoint: { endpoint },
           type: `SET_${propName.toUpperCase()}`
         };
 
     }
 
-    _fetchData(asset: String[], isNested?: Boolean) {
-      const { ReduxProps } = EtoolsDashboard;
-      const endpointData = ReduxProps.find((collection)=>collection.propName === asset);
+    _fetchData(asset: string) {
+      // const { ReduxProps } = EtoolsDashboard;
+      const endpointData = ReduxProps.find((collection) => collection.propName === asset);
       if (!endpointData) {throw new Error(`Could not find endpoint data for prop ${asset}`); }
 
       const assetConfig = this._createConfigObject(endpointData);
@@ -316,7 +315,7 @@ Mixins$0.FetchAsset = (superClass) =>
 
     _handleError(err, requestDetail) {
       this.fireEvent('toast', { text: `Error ${err.status} failed request for url, ${requestDetail.endpoint.endpoint.url}. ${err.response.detail}`, showCloseBtn: true });
-      this._handleResponse([]);
+      this._handleResponse([], []);
     }
 
 

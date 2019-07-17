@@ -8,7 +8,7 @@ import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-requ
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin';
 import '../mixins/event-helper-mixin';
 import '../endpoints/endpoints-mixin';
-import * as R from '../scripts/ramda-utils';
+import * as R from 'ramda';
 import { Mixins } from '../mixins/redux-store-mixin';
 import { html } from '@polymer/polymer/lib/utils/html-tag';
 import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
