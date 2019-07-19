@@ -15,7 +15,7 @@ import { values, map, compose, uniq, pick, prop, flatten } from 'ramda';
  * @summary ShortDescription.
  * @customElement
  * @polymer
- * @extends {Polymer.Element}
+ * @extends {PolymerElement}
  */
 class MarkerDialog extends PolymerElement {
   static get template() {

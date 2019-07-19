@@ -6,14 +6,14 @@
 */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import moment from 'moment';
-import { Mixins as Mixins$0 } from './redux-store-mixin';
-export const Mixins = Mixins$0 || {};
+// import { Mixins } from './redux-store-mixin';
+// export const Mixins = Mixins || {};
 
 /**
  * @polymer
  * @mixinFunction
  */
-Mixins$0.Date = dedupingMixin((baseClass) => class extends baseClass {
+window.EtoolsDashboard.Mixins.Date = dedupingMixin((baseClass) => class extends baseClass {
 
   /**
    * Format date string to any format supported by momentjs

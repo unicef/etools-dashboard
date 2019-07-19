@@ -23,7 +23,7 @@ import '../../components/data-table/data-table-row';
 import '../../styles/dash-icons';
 import '../../mixins/common-general-mixin';
 import '../../mixins/fetch-assets-mixin';
-import { Mixins } from '../../mixins/redux-store-mixin';
+// import { Mixins } from '../../mixins/redux-store-mixin';
 import '../../config/config';
 // import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading';
 import { db } from '../../config/dexie-db-config';
@@ -33,15 +33,15 @@ import { prop, isEmpty, equals, uniq, any } from 'ramda';
 /**
  * @polymer
  * @mixinFunction
- * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
- * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
- * @appliesMixin EtoolsDashboard.Mixins.EventHelper
+ * @appliesMixin window.EtoolsDashboard.Mixins.ReduxStore
+ * @appliesMixin window.EtoolsDashboard.Mixins.CommonGeneral
+ * @appliesMixin window.EtoolsDashboard.Mixins.EventHelper
  */
 const ViewPersonalizedMixins = EtoolsMixinFactory.combineMixins([
-  Mixins.ReduxStore,
-  Mixins.CommonGeneral,
-  Mixins.EventHelper,
-  Mixins.FetchAsset,
+  window.EtoolsDashboard.Mixins.ReduxStore,
+  window.EtoolsDashboard.Mixins.CommonGeneral,
+  window.EtoolsDashboard.Mixins.EventHelper,
+  window.EtoolsDashboard.Mixins.FetchAsset,
   // LoadingMixin
 ], PolymerElement);
 

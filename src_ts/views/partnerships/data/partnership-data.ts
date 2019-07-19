@@ -5,7 +5,7 @@ import '../../../mixins/date-mixin';
 import '../../../mixins/event-helper-mixin';
 import { db } from '../../../config/dexie-db-config';
 import Dexie from 'dexie';
-import { Mixins } from '../../../mixins/redux-store-mixin';
+// import { Mixins } from '../../../mixins/redux-store-mixin';
 import { contains, intersection, trim, isEmpty, keys } from 'ramda';
 
 /**
@@ -16,9 +16,9 @@ import { contains, intersection, trim, isEmpty, keys } from 'ramda';
  * @appliesMixin EtoolsDashboard.Mixins.EventHelper
  */
 const PartnershipDataMixin = EtoolsMixinFactory.combineMixins([
- Mixins.DataElement,
- Mixins.Date,
- Mixins.EventHelper
+ window.EtoolsDashboard.Mixins.DataElement,
+ window.EtoolsDashboard.Mixins.Date,
+ window.EtoolsDashboard.Mixins.EventHelper
 ], PolymerElement);
 /**
  * `partnership-data` Description
@@ -27,7 +27,7 @@ const PartnershipDataMixin = EtoolsMixinFactory.combineMixins([
  * @customElement
  * @polymer
  * @appliesMixin PartnershipDataMixin
- * @extends {Polymer.Element}
+ * @extends {PolymerElement}
  */
 class PartnershipData extends PartnershipDataMixin {
   /**

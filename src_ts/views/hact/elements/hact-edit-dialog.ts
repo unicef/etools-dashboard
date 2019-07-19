@@ -7,7 +7,7 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
 import '../data/partner-item-data';
 import '../../../mixins/event-helper-mixin';
 import '../../../styles/grid-layout-styles';
-import { Mixins } from '../../../mixins/redux-store-mixin';
+// import { Mixins } from '../../../mixins/redux-store-mixin';
 import { compose, pick, merge, clone, map, prop, filter, contains } from 'ramda';
 /**
  * `hact-edit-dialog` Description
@@ -19,8 +19,8 @@ import { compose, pick, merge, clone, map, prop, filter, contains } from 'ramda'
  */
 
 const EtoolsHactEditBaseMixin = EtoolsMixinFactory.combineMixins([
-  Mixins.EventHelper,
-  Mixins.PartnerItemData
+  window.EtoolsDashboard.Mixins.EventHelper,
+  window.EtoolsDashboard.Mixins.PartnerItemData
 ], PolymerElement);
 
 class HactEditDialog extends EtoolsHactEditBaseMixin {

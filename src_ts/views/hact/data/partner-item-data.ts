@@ -4,16 +4,19 @@ import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-requ
 import '../../../mixins/event-helper-mixin';
 import '../../../mixins/ajax-server-errors-mixin';
 import '../../../endpoints/endpoints-mixin';
-import { Mixins as Mixins$0 } from '../../../mixins/redux-store-mixin';
+// import { Mixins } from '../../../mixins/redux-store-mixin';
 import { db } from '../../../config/dexie-db-config';
-export const Mixins = Mixins$0 || {};
+// export const Mixins = Mixins || {};
 
-Mixins$0.PartnerItemData = dedupingMixin((base) =>
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+
+window.EtoolsDashboard.Mixins.PartnerItemData = dedupingMixin((base) =>
 
   class extends EtoolsAjaxRequestMixin(
-    Mixins$0.EventHelper(
-      Mixins$0.AjaxServerErrors(
-        Mixins$0.Endpoints(base)))) {
+    window.EtoolsDashboard.Mixins.EventHelper(
+      window.EtoolsDashboard.Mixins.AjaxServerErrors(
+        window.EtoolsDashboard.Mixins.Endpoints(base)))) {
 
     static get properties() {
       return {

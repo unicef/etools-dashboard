@@ -7,7 +7,6 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
 /**
  * @polymer
  * @mixinFunction
- * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
  */
 const ViewPartnershipsMixins = EtoolsMixinFactory.combineMixins([
   // Mixins.CommonGeneral,

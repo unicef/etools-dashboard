@@ -3,7 +3,7 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import '../../../mixins/event-helper-mixin';
 import '../../../endpoints/endpoints-mixin';
-import { Mixins } from '../../../mixins/redux-store-mixin';
+// import { Mixins } from '../../../mixins/redux-store-mixin';
 import { isEmpty } from 'ramda';
 
 /**
@@ -14,9 +14,9 @@ import { isEmpty } from 'ramda';
  * @appliesMixin EtoolsAjaxRequestMixin
  */
 const ActionPtsBySectionMixin = EtoolsMixinFactory.combineMixins([
-  Mixins.EventHelper,
+  window.EtoolsDashboard.Mixins.EventHelper,
   EtoolsAjaxRequestMixin,
-  Mixins.Endpoints
+  window.EtoolsDashboard.Mixins.Endpoints
 ], PolymerElement);
 
 /**

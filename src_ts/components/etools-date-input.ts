@@ -6,13 +6,13 @@ import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 // import 'etools-datepicker/etools-datepicker-button.js';
 import '../mixins/date-mixin';
 import '../styles/shared-styles';
-import { Mixins } from '../mixins/redux-store-mixin';
+// import { Mixins } from '../mixins/redux-store-mixin';
 
 /**
  * @polymer
  * @mixinFunction
  */
-const EtoolsDateInputRequiredMixins = Mixins.Date(PolymerElement);
+const EtoolsDateInputRequiredMixins = window.EtoolsDashboard.Mixins.Date(PolymerElement);
 /**
  * @polymer
  * @customElement

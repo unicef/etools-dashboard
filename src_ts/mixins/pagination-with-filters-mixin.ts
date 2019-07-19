@@ -1,12 +1,15 @@
 import { isEmpty } from 'ramda';
-import { Mixins as Mixins$0 } from './redux-store-mixin';
-export const Mixins = Mixins$0 || {};
+// import { Mixins } from './redux-store-mixin';
+// export const Mixins = Mixins || {};
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 /**
 * @polymer
 * @mixinFunction
 */
-Mixins$0.PaginationWithFilters = (superClass) => class extends superClass {
+window.EtoolsDashboard.Mixins.PaginationWithFilters = (superClass) => class extends superClass {
   constructor() {
     super();
   }

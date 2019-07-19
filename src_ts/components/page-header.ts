@@ -9,7 +9,7 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
 import './countries-dropdown';
 import '../mixins/event-helper-mixin';
-import { Mixins } from '../mixins/redux-store-mixin';
+// import { Mixins } from '../mixins/redux-store-mixin';
 import '../mixins/user-profile-data-mixin';
 import { db } from '../config/dexie-db-config';
 import '../styles/shared-styles';
@@ -18,7 +18,7 @@ import {sortBy} from 'ramda';
 
 const RequiredMixins = EtoolsMixinFactory.combineMixins([
   EtoolsPageRefreshMixin,
-  Mixins.ReduxStore
+  window.EtoolsDashboard.Mixins.ReduxStore
 ], (PolymerElement));
 /**
  * `page-header` Description
@@ -26,9 +26,9 @@ const RequiredMixins = EtoolsMixinFactory.combineMixins([
  * @summary ShortDescription.
  * @customElement
  * @polymer
- * @extends {Polymer.Element}
+ * @extends {PolymerElement}
  */
-class PageHeader extends RequiredMixins {
+export class PageHeader extends RequiredMixins {
   static get template() {
     return html`
     <style include="shared-styles">

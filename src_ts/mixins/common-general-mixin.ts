@@ -2,16 +2,19 @@ import '@polymer/polymer/polymer-element.js';
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import './date-mixin';
 import { isEmpty } from 'ramda';
-import { Mixins as Mixins$0 } from './redux-store-mixin';
-export const Mixins = Mixins$0 || {};
+// import { Mixins } from './redux-store-mixin';
+// export const Mixins = Mixins || {};
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 /**
  * @polymer
  * @mixinFunction
  * @appliesMixin EtoolsDashboard.Mixins.Date
  */
-Mixins$0.CommonGeneral = dedupingMixin(
-  (superClass) => class extends Mixins$0.Date(superClass) {
+window.EtoolsDashboard.Mixins.CommonGeneral = dedupingMixin(
+  (superClass) => class extends window.EtoolsDashboard.Mixins.Date(superClass) {
     constructor() {
       super();
     }

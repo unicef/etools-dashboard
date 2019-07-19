@@ -32,7 +32,7 @@ import '../../../mixins/fetch-assets-mixin';
 import '../../../mixins/common-general-mixin';
 import '../../../mixins/list-filters-mixin';
 import '../../../mixins/pagination-with-filters-mixin';
-import { Mixins } from '../../../mixins/redux-store-mixin';
+// import { Mixins } from '../../../mixins/redux-store-mixin';
 import '../../../endpoints/endpoints-mixin';
 import '../../../components/etools-date-input';
 import '../data/partnership-data';
@@ -49,13 +49,13 @@ import { identity, compose, join, map, prop, isEmpty } from 'ramda';
  * @appliesMixin EtoolsDashboard.Mixins.Endpoints
  */
 const CsoDashboardMixin = EtoolsMixinFactory.combineMixins([
- Mixins.CommonGeneral,
- Mixins.ReduxStore,
- Mixins.ListFilters,
- Mixins.Endpoints,
- Mixins.PaginationWithFilters,
- Mixins.Date,
- Mixins.FetchAsset
+ window.EtoolsDashboard.Mixins.CommonGeneral,
+ window.EtoolsDashboard.Mixins.ReduxStore,
+ window.EtoolsDashboard.Mixins.ListFilters,
+ window.EtoolsDashboard.Mixins.Endpoints,
+ window.EtoolsDashboard.Mixins.PaginationWithFilters,
+ window.EtoolsDashboard.Mixins.Date,
+ window.EtoolsDashboard.Mixins.FetchAsset
 ], PolymerElement);
 
 /**

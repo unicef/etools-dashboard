@@ -1,5 +1,5 @@
 declare global {
-  interface Window {EtoolsLogsLevel: string, EtoolsRequestCacheDb: any, devToolsExtension: any, Mixins: any}
+  interface Window {EtoolsLogsLevel: string, EtoolsRequestCacheDb: any, devToolsExtension: any, EtoolsDashboard: any}
 }
 
 window.EtoolsLogsLevel = 'INFO';

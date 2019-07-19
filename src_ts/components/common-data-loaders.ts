@@ -3,7 +3,7 @@ import {EtoolsMixinFactory} from '@unicef-polymer/etools-behaviors/etools-mixin-
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import moment from 'moment';
 import * as R from 'ramda';
-import {Mixins} from '../mixins/redux-store-mixin';
+// import {Mixins} from '../mixins/redux-store-mixin';
 import '../mixins/ajax-server-errors-mixin';
 import '../endpoints/endpoints-mixin';
 import '../config/dexie-db-config';
@@ -18,10 +18,10 @@ import { ReduxProps } from './reduxProps';
  * @appliesMixin EtoolsAjaxRequestMixin
  */
 const CommonDataMixin = EtoolsMixinFactory.combineMixins([
-  Mixins.Endpoints,
-  Mixins.ReduxStore,
-  Mixins.AjaxServerErrors,
-  Mixins.ToastNotifications,
+  window.EtoolsDashboard.Mixins.Endpoints,
+  window.EtoolsDashboard.Mixins.ReduxStore,
+  window.EtoolsDashboard.Mixins.AjaxServerErrors,
+  window.EtoolsDashboard.Mixins.ToastNotifications,
   EtoolsAjaxRequestMixin
 ], PolymerElement);
 
@@ -31,7 +31,7 @@ const CommonDataMixin = EtoolsMixinFactory.combineMixins([
  * @summary ShortDescription.
  * @customElement
  * @polymer
- * @extends {Polymer.Element}
+ * @extends {PolymerElement}
  */
 class CommonDataLoaders extends CommonDataMixin {
   static get template() {

@@ -1,16 +1,19 @@
 import './ajax-errors-parser-mixin';
 import './event-helper-mixin';
-import { Mixins as Mixins$0 } from './redux-store-mixin';
-export const Mixins = Mixins$0 || {};
+// import { Mixins } from './redux-store-mixin';
+// export const Mixins = Mixins || {};
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 /**
 * @polymer
 * @mixinFunction
 * @appliesMixin EtoolsDashboard.Mixins.EventHelper
 * @appliesMixin EtoolsDashboard.Mixins.AjaxErrorsParser
 */
-Mixins$0.AjaxServerErrors = (baseClass) => class extends
-    Mixins$0.AjaxErrorsParser(
-      Mixins$0.EventHelper(baseClass)
+window.EtoolsDashboard.Mixins.AjaxServerErrors = (baseClass) => class extends
+    window.EtoolsDashboard.Mixins.AjaxErrorsParser(
+      window.EtoolsDashboard.Mixins.EventHelper(baseClass)
     ) {
 
   static get properties() {

@@ -2,8 +2,11 @@
 import { isEmpty } from 'ramda';
 import './data-element-mixin';
 import './user-permissions-mixin';
-import { Mixins as Mixins$0 } from './redux-store-mixin';
-export const Mixins = Mixins$0 || {};
+// import { Mixins } from './redux-store-mixin';
+// export const Mixins = Mixins || {};
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 /**
  * `user-data` Description
@@ -16,9 +19,9 @@ export const Mixins = Mixins$0 || {};
  * @appliesMixin EtoolsDashboard.Mixins.UserPermissions
  */
 
-Mixins$0.UserProfileData = (baseClass) =>
-  class extends Mixins$0.DataElement(
-    Mixins$0.UserPermissions(baseClass)) {
+window.EtoolsDashboard.Mixins.UserProfileData = (baseClass) =>
+  class extends window.EtoolsDashboard.Mixins.DataElement(
+    window.EtoolsDashboard.Mixins.UserPermissions(baseClass)) {
 
     /**
      * Object describing property-related metadata used by Polymer features

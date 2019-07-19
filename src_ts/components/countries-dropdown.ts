@@ -10,11 +10,11 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
 import '../mixins/event-helper-mixin';
 import '../endpoints/endpoints-mixin';
 import * as R from 'ramda';
-import { Mixins } from '../mixins/redux-store-mixin';
+// import { Mixins } from '../mixins/redux-store-mixin';
 
 const CountriesMixin = EtoolsMixinFactory.combineMixins([
-  Mixins.Endpoints,
-  Mixins.EventHelper,
+  window.EtoolsDashboard.Mixins.Endpoints,
+  window.EtoolsDashboard.Mixins.EventHelper,
   EtoolsPageRefreshMixin,
   EtoolsAjaxRequestMixin
 ], (PolymerElement));

@@ -1,16 +1,19 @@
 import '../../../mixins/data-element-mixin';
 import '../../../mixins/event-helper-mixin';
-import { Mixins as Mixins$0 } from '../../../mixins/redux-store-mixin';
-export const Mixins = Mixins$0 || {};
+// import { Mixins } from '../../../mixins/redux-store-mixin';
+// export const Mixins = Mixins || {};
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 /**
  *
  * @polymerMixin
  * @mixinFunction
  */
-Mixins$0.PartnersDropdownData = (superclass) =>
-  class extends Mixins$0.EventHelper(
-    Mixins$0.DataElement(superclass)) {
+window.EtoolsDashboard.Mixins.PartnersDropdownData = (superclass) =>
+  class extends window.EtoolsDashboard.Mixins.EventHelper(
+    window.EtoolsDashboard.Mixins.DataElement(superclass)) {
     static get properties() {
       return {
         endpointName: {

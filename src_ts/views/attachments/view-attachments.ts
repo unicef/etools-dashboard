@@ -30,7 +30,7 @@ import '../../mixins/dropdown-mixin';
 import '../../mixins/date-mixin';
 import '../../mixins/common-general-mixin';
 import '../../mixins/pagination-with-filters-mixin';
-import { Mixins } from '../../mixins/redux-store-mixin';
+// import { Mixins } from '../../mixins/redux-store-mixin';
 import '../../mixins/fetch-assets-mixin';
 import './elements/attachments-grouped';
 import { compose, identity, join, map, prop, isEmpty, union, merge, reject } from 'ramda';
@@ -46,13 +46,13 @@ import { compose, identity, join, map, prop, isEmpty, union, merge, reject } fro
  * @appliesMixin EtoolsDashboard.Mixins.Date
  */
 const AttachmentsMixin = EtoolsMixinFactory.combineMixins([
-  Mixins.ListFilters,
-  Mixins.Date,
-  Mixins.CommonGeneral,
-  Mixins.PaginationWithFilters,
-  Mixins.ReduxStore,
-  Mixins.Dropdown,
-  Mixins.FetchAsset
+  window.EtoolsDashboard.Mixins.ListFilters,
+  window.EtoolsDashboard.Mixins.Date,
+  window.EtoolsDashboard.Mixins.CommonGeneral,
+  window.EtoolsDashboard.Mixins.PaginationWithFilters,
+  window.EtoolsDashboard.Mixins.ReduxStore,
+  window.EtoolsDashboard.Mixins.Dropdown,
+  window.EtoolsDashboard.Mixins.FetchAsset
 ], PolymerElement);
 /**
  * `view-attachments` Description

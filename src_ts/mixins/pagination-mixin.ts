@@ -4,15 +4,18 @@
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
-import { Mixins as Mixins$0 } from './redux-store-mixin';
+// import { Mixins } from './redux-store-mixin';
 
-export const Mixins = Mixins$0 || {};
+// export const Mixins = Mixins || {};
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 /**
  * @polymer
  * @mixinFunction
  */
-Mixins$0.Pagination = (superClass) => class extends superClass {
+window.EtoolsDashboard.Mixins.Pagination = (superClass) => class extends superClass {
   constructor() {
     super();
   }

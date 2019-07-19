@@ -1,11 +1,14 @@
-import { Mixins as Mixins$0 } from './redux-store-mixin';
+// import { Mixins } from './redux-store-mixin';
 // export const EtoolsDashboard = window.EtoolsDashboard || {};
-export const Mixins = Mixins$0 || {};
+// export const Mixins = Mixins || {};
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 /**
 * @polymer
 * @mixinFunction
 */
-Mixins$0.AppNavigationHelper = (baseClass) => class extends baseClass {
+window.EtoolsDashboard.Mixins.AppNavigationHelper = (baseClass) => class extends baseClass {
   static get properties() {
     return {
       disableLoadingAfterAppStateChanged: Boolean

@@ -2,14 +2,16 @@ import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import './etools-toast';
-import { Mixins as Mixins$0 } from '../../mixins/redux-store-mixin';
-export const Mixins = Mixins$0 || {};
+// import { Mixins } from '../../mixins/redux-store-mixin';
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 /**
 * @polymer
 * @mixinFunction
 */
-Mixins$0.ToastNotifications = dedupingMixin(
+window.EtoolsDashboard.Mixins.ToastNotifications = dedupingMixin(
   superClass => class extends EtoolsLogsMixin(superClass) {
     static get properties() {
       return {

@@ -4,7 +4,7 @@ import '../../../mixins/data-element-mixin';
 import '../../../mixins/event-helper-mixin';
 import { db } from '../../../config/dexie-db-config';
 import Dexie from 'dexie';
-import { Mixins } from '../../../mixins/redux-store-mixin';
+// import { Mixins } from '../../../mixins/redux-store-mixin';
 import { isEmpty, contains } from 'ramda';
 // import * as _ from 'lodash-es';
 
@@ -15,8 +15,8 @@ import { isEmpty, contains } from 'ramda';
 * @appliesMixin EtoolsDashboard.Mixins.EventHelper
 */
 const PartnersDataMixin = EtoolsMixinFactory.combineMixins([
-  Mixins.DataElement,
-  Mixins.EventHelper
+  window.EtoolsDashboard.Mixins.DataElement,
+  window.EtoolsDashboard.Mixins.EventHelper
 ], PolymerElement);
 /**
 * @polymer

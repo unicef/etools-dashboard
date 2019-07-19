@@ -4,13 +4,13 @@ import '../../../mixins/data-element-mixin';
 import '../../../mixins/date-mixin';
 import '../../../mixins/event-helper-mixin';
 import { db } from '../../../config/dexie-db-config';
-import { Mixins } from '../../../mixins/redux-store-mixin';
+// import { Mixins } from '../../../mixins/redux-store-mixin';
 import { contains, equals, without, keys, isEmpty, sortBy, prop, uniq } from 'ramda';
 
 const AttachmentsDataMixin = EtoolsMixinFactory.combineMixins([
-  Mixins.DataElement,
-  Mixins.Date,
-  Mixins.EventHelper
+  window.EtoolsDashboard.Mixins.DataElement,
+  window.EtoolsDashboard.Mixins.Date,
+  window.EtoolsDashboard.Mixins.EventHelper
 ], (PolymerElement));
 /**
  * `attachments-data` Description
@@ -18,7 +18,7 @@ const AttachmentsDataMixin = EtoolsMixinFactory.combineMixins([
  * @summary ShortDescription.
  * @customElement
  * @polymer
- * @extends {Polymer.Element}
+ * @extends {PolymerElement}
  */
 class AttachmentsData extends AttachmentsDataMixin {
   /**

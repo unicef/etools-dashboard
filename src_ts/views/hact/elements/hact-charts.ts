@@ -11,7 +11,7 @@ import GoogleChart from 'google-charts';
 // import 'google-chart/google-chart-loader';
 // import 'google-chart/charts-loader';
 // import { Config } from '../../../config/config';
-import { Mixins } from '../../../mixins/redux-store-mixin';
+// import { Mixins } from '../../../mixins/redux-store-mixin';
 import '../../../mixins/fetch-assets-mixin';
 import { Config as Config$0 } from '../../../config/config';
 import '../../../mixins/event-helper-mixin';
@@ -24,9 +24,9 @@ import { isEmpty, keys, tail, last } from 'ramda';
  * @appliesMixin EtoolsDashboard.Mixins.EventHelper
  */
 const ChartsMixin = EtoolsMixinFactory.combineMixins([
-  Mixins.ReduxStore,
-  Mixins.EventHelper,
-  Mixins.FetchAsset
+  window.EtoolsDashboard.Mixins.ReduxStore,
+  window.EtoolsDashboard.Mixins.EventHelper,
+  window.EtoolsDashboard.Mixins.FetchAsset
 ], PolymerElement);
 
 const { baseSite } = Config$0;

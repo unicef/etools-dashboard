@@ -1,13 +1,16 @@
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import { Mixins as Mixins$0 } from '../mixins/redux-store-mixin';
+// import { Mixins } from '../mixins/redux-store-mixin';
 import { Config } from '../config/config';
 import { Endpoints as Endpoints$0 } from './endpoints';
 import {template} from 'lodash-es';
 import {isEmpty} from 'ramda';
 // const { template } = _;
 
-export const Mixins = Mixins$0 || {};
+// export const Mixins = Mixins || {};
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 /**
 * @polymer
@@ -15,8 +18,8 @@ export const Mixins = Mixins$0 || {};
 * @appliesMixin EtoolsAjaxRequestMixin
 * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
 */
-Mixins$0.Endpoints = dedupingMixin(
-  (superClass) => class extends EtoolsAjaxRequestMixin(Mixins$0.ReduxStore(superClass)) {
+window.EtoolsDashboard.Mixins.Endpoints = dedupingMixin(
+  (superClass) => class extends EtoolsAjaxRequestMixin(window.EtoolsDashboard.Mixins.ReduxStore(superClass)) {
 
     getEndpoint(endpointName, data) {
       let endpoint = JSON.parse(JSON.stringify(Endpoints$0[endpointName]));

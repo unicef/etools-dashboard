@@ -1,7 +1,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '../../mixins/event-helper-mixin';
-import { Mixins } from '../../mixins/redux-store-mixin';
+// import { Mixins } from '../../mixins/redux-store-mixin';
 import * as _ from 'lodash-es';
 
 /**
@@ -10,7 +10,7 @@ import * as _ from 'lodash-es';
 * @extends Polymer.Element
 * @appliesMixin EtoolsDashboard.Mixins.EventHelper
 */
-class DataTableColumn extends Mixins.EventHelper(PolymerElement) {
+class DataTableColumn extends window.EtoolsDashboard.Mixins.EventHelper(PolymerElement) {
   static get template() {
     return html`
     <style>

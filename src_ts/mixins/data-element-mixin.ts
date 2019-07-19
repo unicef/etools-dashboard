@@ -2,17 +2,20 @@ import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-requ
 import '../endpoints/endpoints-mixin';
 import './ajax-server-errors-mixin';
 import './event-helper-mixin';
-import { Mixins as Mixins$0 } from './redux-store-mixin';
-export const Mixins = Mixins$0 || {};
+// import { Mixins } from './redux-store-mixin';
+// export const Mixins = Mixins || {};
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 /**
  * @polymer
  * @mixinFunction
  */
-Mixins$0.DataElement = (superClass) =>
-  class extends Mixins$0.Endpoints(
-    Mixins$0.AjaxServerErrors(
-      Mixins$0.EventHelper(
+window.EtoolsDashboard.Mixins.DataElement = (superClass) =>
+  class extends window.EtoolsDashboard.Mixins.Endpoints(
+    window.EtoolsDashboard.Mixins.AjaxServerErrors(
+      window.EtoolsDashboard.Mixins.EventHelper(
         EtoolsAjaxRequestMixin(superClass)))) {
 
     constructor() {

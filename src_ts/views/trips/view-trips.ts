@@ -28,9 +28,6 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
 /**
 * @polymer
 * @mixinFunction
-* @appliesMixin EtoolsDashboard.Mixins.ReduxStore
-* @appliesMixin EtoolsDashboard.Mixins.Dropdown
-* @appliesMixin EtoolsDashboard.Mixins.EventHelper
 */
 const ViewTripsMixins = EtoolsMixinFactory.combineMixins([
   // Mixins.ReduxStore,

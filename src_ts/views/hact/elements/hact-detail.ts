@@ -18,7 +18,7 @@ import '../data/partners-data';
 import '../../../mixins/common-general-mixin';
 import '../../../mixins/pagination-mixin';
 import '../mixins/edit-partner-mixin';
-import { Mixins } from '../../../mixins/redux-store-mixin';
+// import { Mixins } from '../../../mixins/redux-store-mixin';
 
 /**
  * @polymer
@@ -27,9 +27,9 @@ import { Mixins } from '../../../mixins/redux-store-mixin';
  * @appliesMixin EtoolsDashboard.Mixins.Pagination
  */
 const HactDetailMixins = EtoolsMixinFactory.combineMixins([
-  Mixins.CommonGeneral,
-  Mixins.Pagination,
-  Mixins.HactEditPartner
+  window.EtoolsDashboard.Mixins.CommonGeneral,
+  window.EtoolsDashboard.Mixins.Pagination,
+  window.EtoolsDashboard.Mixins.HactEditPartner
 ], PolymerElement);
 
 /**

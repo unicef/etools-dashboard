@@ -1,12 +1,15 @@
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import { Mixins as Mixins$0 } from './redux-store-mixin';
+// import { Mixins } from './redux-store-mixin';
 import './event-helper-mixin';
 import './ajax-server-errors-mixin';
 import '../endpoints/endpoints-mixin';
 import { ReduxProps } from '../components/reduxProps';
 import moment from 'moment';
 import { isEmpty, compose, map, pick, range, head, propOr, keys, concat } from 'ramda';
-export const Mixins = Mixins$0 || {};
+// export const Mixins = Mixins || {};
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 const falsy = (x) => isEmpty(x) || !x;
 
@@ -14,12 +17,12 @@ const falsy = (x) => isEmpty(x) || !x;
  * @polymer
  * @mixinFunction
  */
-Mixins$0.FetchAsset = (superClass) =>
-  class extends Mixins$0.Endpoints(
-    Mixins$0.ReduxStore(
-      Mixins$0.AjaxServerErrors(
-        Mixins$0.ToastNotifications(
-          Mixins$0.EventHelper(
+window.EtoolsDashboard.Mixins.FetchAsset = (superClass) =>
+  class extends window.EtoolsDashboard.Mixins.Endpoints(
+    window.EtoolsDashboard.Mixins.ReduxStore(
+      window.EtoolsDashboard.Mixins.AjaxServerErrors(
+        window.EtoolsDashboard.Mixins.ToastNotifications(
+          window.EtoolsDashboard.Mixins.EventHelper(
             EtoolsAjaxRequestMixin(superClass)))))) {
 
     constructor() {

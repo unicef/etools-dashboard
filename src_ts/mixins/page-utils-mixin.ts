@@ -1,13 +1,16 @@
-import { Mixins as Mixins$0 } from './redux-store-mixin';
+// import { Mixins } from './redux-store-mixin';
 import isEmpty from 'lodash-es/isEmpty';
 // export const EtoolsDashboard = EtoolsDashboard || {};
-export const Mixins = Mixins$0 || {};
+// export const Mixins = Mixins || {};
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 /**
 * @polymer
 * @mixinFunction
 */
-Mixins$0.PageUtils = (superClass) => class extends superClass {
+window.EtoolsDashboard.Mixins.PageUtils = (superClass) => class extends superClass {
   constructor() {
     super()
   }

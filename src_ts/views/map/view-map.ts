@@ -31,11 +31,6 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
 /**
  * @polymer
  * @mixinFunction
- * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
- * @appliesMixin EtoolsDashboard.Mixins.PartnersDropdownData
- * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
- * @appliesMixin EtoolsDashboard.Mixins.MapInterventionsData
- * @appliesMixin EtoolsDashboard.Mixins.ListFilters
  */
 const EtoolsMapMixin = EtoolsMixinFactory.combineMixins([
   // Mixins.ReduxStore,

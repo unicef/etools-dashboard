@@ -9,7 +9,7 @@ import '../../mixins/event-helper-mixin';
  * @customElement
  * @appliesMixin EtoolsDashboard.Mixins.EventHelper
  */
-class EtoolsToast extends window.Mixins.EventHelper(PolymerElement) {
+class EtoolsToast extends window.EtoolsDashboard.Mixins.EventHelper(PolymerElement) {
   static get template() {
     return html`
     <style>

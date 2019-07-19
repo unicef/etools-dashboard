@@ -48,7 +48,7 @@ import './views/trips/view-trips';
 import './views/map/view-map';
 import './components/page-header';
 import './components/page-footer';
-import { Mixins } from './mixins/redux-store-mixin';
+// import { Mixins } from './mixins/redux-store-mixin';
 import { Config } from './config/config';
 
 /**
@@ -67,9 +67,9 @@ import { Config } from './config/config';
 /**
 * @customElement
 * @polymer
-* @extends {Polymer.Element}
+* @extends {PolymerElement}
 */
-class AppShell extends Mixins.EventHelper(Mixins.ToastNotifications(Mixins.UserProfileData(PolymerElement))) {
+export class AppShell extends window.EtoolsDashboard.Mixins.EventHelper(window.EtoolsDashboard.Mixins.ToastNotifications(window.EtoolsDashboard.Mixins.UserProfileData(PolymerElement))) {
   static get template() {
     return html`
     <style include="page-layout-styles shared-styles buttons-styles">

@@ -1,12 +1,15 @@
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { Mixins as Mixins$0 } from './redux-store-mixin';
-export const Mixins = Mixins$0 || {};
+// import { Mixins } from './redux-store-mixin';
+// export const Mixins = Mixins || {};
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 /**
 * @polymer
 * @mixinFunction
 */
-Mixins$0.EventHelper = dedupingMixin((baseClass) => class extends baseClass {
+window.EtoolsDashboard.Mixins.EventHelper = dedupingMixin((baseClass) => class extends baseClass {
 
   fireEvent(eventName, eventDetail) {
     this.dispatchEvent(new CustomEvent(eventName, {
@@ -17,4 +20,4 @@ Mixins$0.EventHelper = dedupingMixin((baseClass) => class extends baseClass {
   }
 });
 
-window.Mixins.EventHelper = Mixins$0.EventHelper;
+// window.Mixins.EventHelper = Mixins.EventHelper;

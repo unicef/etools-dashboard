@@ -1,18 +1,21 @@
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import '../../../mixins/event-helper-mixin';
 import '../../../mixins/user-permissions-mixin';
-import { Mixins as Mixins$0 } from '../../../mixins/redux-store-mixin';
-export const Mixins = Mixins$0 || {};
+// import { Mixins } from '../../../mixins/redux-store-mixin';
+// export const Mixins = Mixins || {};
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 /**
  *
  * @polymerMixin
  * @mixinFunction
  */
-Mixins$0.HactEditPartner = dedupingMixin((base) =>
+window.EtoolsDashboard.Mixins.HactEditPartner = dedupingMixin((base) =>
 
-  class extends Mixins$0.EventHelper(
-    Mixins$0.UserPermissions(base)) {
+  class extends window.EtoolsDashboard.Mixins.EventHelper(
+    window.EtoolsDashboard.Mixins.UserPermissions(base)) {
     constructor() {
       super();
     }

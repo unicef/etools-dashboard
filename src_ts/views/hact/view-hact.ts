@@ -34,9 +34,6 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
 /**
  * @polymer
  * @mixinFunction
- * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
- * @appliesMixin EtoolsDashboard.Mixins.Pagination
- * @appliesMixin EtoolsDashboard.Mixins.Endpoints
  */
 const ViewHactMixins = EtoolsMixinFactory.combineMixins([
   // Mixins.Endpoints,
