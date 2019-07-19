@@ -77,6 +77,9 @@
         color: #24a0fc;
       }
 
+      iron-icon.clock-icon.warning {
+        color: var(--error-color);
+      }
     </style>
 
     <partnership-overview-data id="partnershipsOverview"
@@ -191,8 +194,7 @@
         <data-table-column class="col-1">
           Section
         </data-table-column>
-        <!-- <div class="col-5 layout horizontal"> -->
-        <div class="col-6 layout horizontal">
+        <div class="col-5 layout horizontal">
           <data-table-column class="col-3 right-align" field="total_ct_cp" sortable>
             Cash in the<br>
             Current CP Cycle (USD)
@@ -214,9 +216,9 @@
           Action<br>
           Points
         </data-table-column>
-        <!-- <data-table-column class="col-1 right-align" field="alert_core_value_assessment" sortable>
+        <data-table-column class="col-1 right-align" field="alert_core_value_assessment" sortable>
           Flags
-        </data-table-column> -->
+        </data-table-column>
         <data-table-column class="col-1 right-align" field="days_last_pv" sortable>
           Days Since<br>
           Last PV
@@ -252,8 +254,7 @@
                 </template>
               </div>
             </div>
-            <!-- <div class="col-5 layout horizontal"> -->
-            <div class="col-6 layout horizontal">
+            <div class="col-5 layout horizontal">
               <div class="col-3 right-align">
                 [[currencyFormat(row.total_ct_cp)]]
               </div>
@@ -270,15 +271,22 @@
             <div class="col-1 right-align">
               <a href="[[baseSite]]/apd/action-points/list?partner=[[row.id]]&status=open">[[row.action_points]]</a>
             </div>
-            <!-- <div class="col-1 right-align">
-              <template is="dom-if" if="[[row.alert_core_value_assessment]]">
-                <iron-icon class="clock-icon"
+            <div class="col-1 right-align">
+              <template is="dom-if" if="[[_checkCoreValuesAssessmentAlert(row.core_value_assessment_expiring)]]">
+                <iron-icon class="clock-icon [[_checkWarning(row.core_value_assessment_expiring)]]"
+                           id="clockIcon"
                            icon="device:access-time">
                 </iron-icon>
-                <paper-tooltip>The Core Values Assessment will expire in [[row.core_value_assessment_expiring]] Days.</paper-tooltip>
+                <paper-tooltip>The Core Values Assessment will expire in [[_getCoreValueAssessmentDays(row.core_value_assessment_expiring)]] days.</paper-tooltip>
               </template>
-              [[row.core_value_assessment_expiring]]
-            </div> -->
+              <template is="dom-if" if="[[_checkCoreValuesAssessmentWarning(row.core_value_assessment_expiring)]]">
+                <iron-icon class="clock-icon warning"
+                            id="clockIcon"
+                            icon="device:access-time">
+                </iron-icon>
+                <paper-tooltip>The Core Values Assessment expired [[_getCoreValueAssessmentDays(row.core_value_assessment_expiring, 'absolute')]] days ago.</paper-tooltip>
+              </template>
+            </div>
             <div class="col-1 col-data right-align">
               <span class="last-pv">[[row.days_last_pv]]</span>
               <iron-icon on-click="goToMaps"
@@ -682,6 +690,39 @@
 
       dividerSplit(string) {
         return string ? string.split('|') : [''];
+      }
+
+      _getCoreValueAssessmentDays(days, absolute) {
+        days = days.split(' ')[0];
+        let originalDate = moment().subtract(days, 'days');
+        let expirationDate = moment(originalDate).add(60, 'months').subtract(1, 'days');
+        if (absolute) {
+          return Math.abs(expirationDate.diff(moment(), 'days'));
+        }
+        return expirationDate.diff(moment(), 'days');
+      }
+
+      _checkCoreValuesAssessmentAlert(days) {
+        if (days) {
+          let numberOfDays = this._getCoreValueAssessmentDays(days);
+          return numberOfDays < 60 && numberOfDays > 0;
+        }
+        return false;
+      }
+
+      _checkCoreValuesAssessmentWarning(days) {
+        if (days) {
+          let numberOfDays = this._getCoreValueAssessmentDays(days);
+          return numberOfDays < 1;
+        }
+        return false;
+      }
+
+      _checkWarning(days) {
+        if (this._getCoreValueAssessmentDays(days) < 1) {
+          return 'warning';
+        }
+        return '';
       }
 
       _showPresetFilter(event) {
