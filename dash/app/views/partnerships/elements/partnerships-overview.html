@@ -274,14 +274,12 @@
             <div class="col-1 right-align">
               <template is="dom-if" if="[[_checkCoreValuesAssessmentAlert(row.core_value_assessment_expiring)]]">
                 <iron-icon class="clock-icon [[_checkWarning(row.core_value_assessment_expiring)]]"
-                           id="clockIcon"
                            icon="device:access-time">
                 </iron-icon>
                 <paper-tooltip>The Core Values Assessment will expire in [[_getCoreValueAssessmentDays(row.core_value_assessment_expiring)]] days.</paper-tooltip>
               </template>
               <template is="dom-if" if="[[_checkCoreValuesAssessmentWarning(row.core_value_assessment_expiring)]]">
                 <iron-icon class="clock-icon warning"
-                            id="clockIcon"
                             icon="device:access-time">
                 </iron-icon>
                 <paper-tooltip>The Core Values Assessment expired [[_getCoreValueAssessmentDays(row.core_value_assessment_expiring, 'absolute')]] days ago.</paper-tooltip>
