@@ -1,8 +1,8 @@
-import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status';
+import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import './etools-toast';
 import { Mixins as Mixins$0 } from '../../mixins/redux-store-mixin';
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin';
 export const Mixins = Mixins$0 || {};
 
 /**

@@ -1,5 +1,5 @@
-import '@polymer/polymer/polymer-element';
-import '@polymer/iron-flex-layout/iron-flex-layout';
+import '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import './app-mixins';
 const $_documentContainer = document.createElement('template');
 

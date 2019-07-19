@@ -4,9 +4,9 @@
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
+import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import moment from 'moment';
 import { Mixins as Mixins$0 } from './redux-store-mixin';
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin';
 export const Mixins = Mixins$0 || {};
 
 /**

@@ -1,7 +1,7 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element';
-import '@polymer/paper-dialog/paper-dialog';
-import '@polymer/paper-icon-button/paper-icon-button';
-import '@polymer/iron-icons/communication-icons';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-dialog/paper-dialog.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/iron-icons/communication-icons.js';
 import '../../../components/data-table/data-table-row';
 import '../../../styles/grid-layout-styles';
 import '../../../styles/list-styles';

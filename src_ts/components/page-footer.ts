@@ -1,6 +1,6 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element';
-import '@polymer/iron-flex-layout/iron-flex-layout';
-import { html } from '@polymer/polymer/lib/utils/html-tag';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+
 /**
  * @polymer
  * @customElement

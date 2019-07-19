@@ -1,10 +1,10 @@
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
+import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import { Mixins as Mixins$0 } from '../mixins/redux-store-mixin';
 import { Config } from '../config/config';
 import { Endpoints as Endpoints$0 } from './endpoints';
 import {template} from 'lodash-es';
 import {isEmpty} from 'ramda';
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin';
 // const { template } = _;
 
 export const Mixins = Mixins$0 || {};

@@ -1,4 +1,4 @@
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
+import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import { Mixins as Mixins$0 } from './redux-store-mixin';
 import './event-helper-mixin';
 import './ajax-server-errors-mixin';

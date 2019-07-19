@@ -1,7 +1,7 @@
+import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import '../../../mixins/event-helper-mixin';
 import '../../../mixins/user-permissions-mixin';
 import { Mixins as Mixins$0 } from '../../../mixins/redux-store-mixin';
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin';
 export const Mixins = Mixins$0 || {};
 
 /**

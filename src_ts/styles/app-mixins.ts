@@ -1,8 +1,8 @@
 // Mixins used all over the app. This will prevent duplicating css rules
 
-import '@polymer/polymer/polymer-element';
-import '@polymer/iron-flex-layout/iron-flex-layout';
-import '@polymer/polymer/lib/elements/custom-style';
+import '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import '@polymer/polymer/lib/elements/custom-style.js';
 const $_documentContainer = document.createElement('template');
 
 $_documentContainer.innerHTML = `<custom-style>

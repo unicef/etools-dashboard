@@ -1,6 +1,6 @@
-import { Mixins as Mixins$0 } from './redux-store-mixin';
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin';
+import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { intersection, map, prop } from 'ramda';
+import { Mixins as Mixins$0 } from './redux-store-mixin';
 export const Mixins = Mixins$0 || {};
 
 /**

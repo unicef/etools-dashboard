@@ -1,10 +1,10 @@
-import '@polymer/polymer/polymer-element';
+import '@polymer/polymer/polymer-element.js';
+import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import '../../../mixins/event-helper-mixin';
 import '../../../mixins/ajax-server-errors-mixin';
 import '../../../endpoints/endpoints-mixin';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
 import { Mixins as Mixins$0 } from '../../../mixins/redux-store-mixin';
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin';
 import { db } from '../../../config/dexie-db-config';
 export const Mixins = Mixins$0 || {};
 

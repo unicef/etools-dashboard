@@ -1,7 +1,7 @@
+import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
 import { isEmpty } from 'ramda';
 import moment from 'moment';
 import { Mixins as Mixins$0 } from './redux-store-mixin';
-import { dom } from '@polymer/polymer/lib/legacy/polymer.dom';
 export const Mixins = Mixins$0 || {};
 
 /**

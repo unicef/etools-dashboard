@@ -1,5 +1,5 @@
-import '@polymer/polymer/polymer-element';
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin';
+import '@polymer/polymer/polymer-element.js';
+import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import './date-mixin';
 import { isEmpty } from 'ramda';
 import { Mixins as Mixins$0 } from './redux-store-mixin';

@@ -1,7 +1,7 @@
-// import { PolymerElement } from '@polymer/polymer/polymer-element';
-// import '@polymer/polymer/lib/utils/async';
-// import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
-// import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
+// import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+// import '@polymer/polymer/lib/utils/async.js';
+// import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
+// import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 // import '../../../endpoints/endpoints-mixin';
 // import '../../../mixins/event-helper-mixin';
 // import { Mixins } from '../../../mixins/redux-store-mixin';

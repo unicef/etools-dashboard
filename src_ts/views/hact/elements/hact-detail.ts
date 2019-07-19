@@ -1,10 +1,10 @@
 // import '@polymer/polymer/polymer-legacy';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element';
-import '@polymer/paper-styles/element-styles/paper-material-styles';
-import '@polymer/paper-tooltip/paper-tooltip';
-import '@polymer/iron-icon/iron-icon';
-import '@polymer/iron-icons/editor-icons';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-styles/element-styles/paper-material-styles.js';
+import '@polymer/paper-tooltip/paper-tooltip.js';
+import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/iron-icons/editor-icons.js';
+import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import '../../../styles/shared-styles';
 import '../../../styles/list-styles';
 import '../../../styles/grid-layout-styles';

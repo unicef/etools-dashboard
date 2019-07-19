@@ -1,13 +1,12 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element';
-import '@polymer/iron-icons/iron-icons';
-import '@polymer/paper-input/paper-input';
-import { IronValidatableBehavior } from '@polymer/iron-validatable-behavior/iron-validatable-behavior';
-// import 'etools-datepicker/etools-datepicker-button';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/paper-input/paper-input.js';
+import { IronValidatableBehavior } from '@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
+import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
+// import 'etools-datepicker/etools-datepicker-button.js';
 import '../mixins/date-mixin';
 import '../styles/shared-styles';
 import { Mixins } from '../mixins/redux-store-mixin';
-import { html } from '@polymer/polymer/lib/utils/html-tag';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class';
 
 /**
  * @polymer

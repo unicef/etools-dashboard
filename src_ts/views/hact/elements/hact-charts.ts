@@ -1,8 +1,8 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes';
-import '@polymer/paper-styles/element-styles/paper-material-styles';
-import '@polymer/iron-icon/iron-icon';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
+import '@polymer/paper-styles/element-styles/paper-material-styles.js';
+import '@polymer/iron-icon/iron-icon.js';
+import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import '../../../styles/shared-styles';
 import '../../../styles/list-styles';
 import '../../../styles/grid-layout-styles';

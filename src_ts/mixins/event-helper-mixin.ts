@@ -1,5 +1,5 @@
+import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { Mixins as Mixins$0 } from './redux-store-mixin';
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin';
 export const Mixins = Mixins$0 || {};
 
 /**

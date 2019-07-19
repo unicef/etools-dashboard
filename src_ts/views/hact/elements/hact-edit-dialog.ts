@@ -1,14 +1,14 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element';
-import '@unicef-polymer/etools-dialog/etools-dialog';
-import '@polymer/paper-input/paper-input';
-import '@polymer/paper-button/paper-button';
-import '@unicef-polymer/etools-dropdown/etools-dropdown-multi';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@unicef-polymer/etools-dialog/etools-dialog.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-button/paper-button.js';
+import '@unicef-polymer/etools-dropdown/etools-dropdown-multi.js';
+import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import '../data/partner-item-data';
 import '../../../mixins/event-helper-mixin';
 import '../../../styles/grid-layout-styles';
 import { Mixins } from '../../../mixins/redux-store-mixin';
 import { compose, pick, merge, clone, map, prop, filter, contains } from 'ramda';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
 /**
  * `hact-edit-dialog` Description
  *

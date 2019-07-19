@@ -1,7 +1,6 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element';
-import '@polymer/iron-icon/iron-icon';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-icon/iron-icon.js';
 import '../../mixins/event-helper-mixin';
-import { html } from '@polymer/polymer/lib/utils/html-tag';
 import { Mixins } from '../../mixins/redux-store-mixin';
 import * as _ from 'lodash-es';
 

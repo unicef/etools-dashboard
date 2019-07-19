@@ -1,11 +1,11 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element';
-import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
-import '@polymer/paper-listbox/paper-listbox';
-import '@polymer/paper-item/paper-item';
-import '@polymer/paper-icon-button/paper-icon-button';
-import '@polymer/iron-flex-layout/iron-flex-layout-classes';
-import '@polymer/paper-styles/element-styles/paper-material-styles';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
+import '@polymer/paper-listbox/paper-listbox.js';
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
+import '@polymer/paper-styles/element-styles/paper-material-styles.js';
+import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 
 const DataTableFooterMixin = EtoolsMixinFactory.combineMixins([], PolymerElement);
 

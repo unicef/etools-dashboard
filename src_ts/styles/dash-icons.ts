@@ -1,4 +1,4 @@
-import '@polymer/iron-iconset-svg/iron-iconset-svg';
+import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
 const $_documentContainer = document.createElement('template');
 
 $_documentContainer.innerHTML = `<iron-iconset-svg name="dash-custom-icons" size="24">

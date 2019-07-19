@@ -1,9 +1,8 @@
-import '@polymer/paper-toast/paper-toast';
-import '@polymer/paper-button/paper-button';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/paper-toast/paper-toast.js';
+import '@polymer/paper-button/paper-button.js';
 import '../../mixins/event-helper-mixin';
-import { html } from '@polymer/polymer/lib/utils/html-tag';
 // import { Mixins } from '../../mixins/redux-store-mixin';
-import { PolymerElement } from '@polymer/polymer/polymer-element';
 
 /**
  * @polymer

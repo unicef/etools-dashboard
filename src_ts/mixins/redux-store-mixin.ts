@@ -1,12 +1,12 @@
-import 'polymer-redux-typescript';
+import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
+import { element } from 'polymer-redux-typescript';
 import { merge } from 'ramda';
-import '../scripts/redux';
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin';
-export const Mixins = window.Mixins || {};
+// import '../scripts/redux';
+// @ts-ignore
+export const Mixins;
 
-// shuts up the linting script
-var Redux = Redux || {}; // eslint-disable-line
-var PolymerRedux = PolymerRedux || {}; // eslint-disable-line
+var Redux = Redux || {};
+var PolymerRedux = PolymerRedux || {};
 
 const initial = {
   countryProgrammes: [],
@@ -123,4 +123,4 @@ const store = Redux.createStore(
 * @polymer
 * @mixinFunction
 */
-window.Mixins.ReduxStore = dedupingMixin(PolymerRedux(store));
+Mixins.ReduxStore = dedupingMixin(element(store));

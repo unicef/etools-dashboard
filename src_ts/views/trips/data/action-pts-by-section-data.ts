@@ -1,6 +1,6 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import '../../../mixins/event-helper-mixin';
 import '../../../endpoints/endpoints-mixin';
 import { Mixins } from '../../../mixins/redux-store-mixin';

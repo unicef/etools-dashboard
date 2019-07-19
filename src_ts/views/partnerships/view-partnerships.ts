@@ -1,5 +1,5 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 // import './elements/cso-dashboard';
 // import './elements/partnerships-overview';
 // import { Mixins } from '../../mixins/redux-store-mixin';

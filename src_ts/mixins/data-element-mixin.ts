@@ -1,4 +1,4 @@
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
+import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import '../endpoints/endpoints-mixin';
 import './ajax-server-errors-mixin';
 import './event-helper-mixin';

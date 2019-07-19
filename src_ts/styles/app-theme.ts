@@ -1,11 +1,11 @@
 // This file will be dedicated to theming
 // variables used throughout the app
 
-import '@polymer/polymer/polymer-element';
-import '@webcomponents/shadycss/entrypoints/apply-shim';
-import '@polymer/polymer/lib/elements/custom-style';
-import '@polymer/paper-styles/typography';
-import '@polymer/paper-styles/color';
+import '@polymer/polymer/polymer-element.js';
+import '@webcomponents/shadycss/entrypoints/apply-shim.js';
+import '@polymer/polymer/lib/elements/custom-style.js';
+import '@polymer/paper-styles/typography.js';
+import '@polymer/paper-styles/color.js';
 const $_documentContainer = document.createElement('template');
 
 $_documentContainer.innerHTML = `<custom-style>

@@ -8,28 +8,28 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
-import { PolymerElement, html } from '@polymer/polymer/polymer-element';
-import '@polymer/app-layout/app-drawer/app-drawer';
-import '@polymer/app-layout/app-drawer-layout/app-drawer-layout';
-import '@polymer/app-layout/app-header/app-header';
-import '@polymer/app-layout/app-header-layout/app-header-layout';
-import '@polymer/app-layout/app-scroll-effects/app-scroll-effects';
-import '@polymer/app-layout/app-toolbar/app-toolbar';
-import '@polymer/app-route/app-location';
-import '@polymer/app-route/app-route';
-import '@polymer/iron-pages/iron-pages';
-import '@polymer/iron-selector/iron-selector';
-import '@polymer/paper-icon-button/paper-icon-button';
-import '@unicef-polymer/etools-dropdown/etools-dropdown';
-// import '@unicef-polymer/etools-loading/etools-loading';
-import '@polymer/paper-menu-button/paper-menu-button';
-import '@polymer/paper-listbox/paper-listbox';
-import '@polymer/paper-button/paper-button';
-import '@polymer/paper-tabs/paper-tabs';
-import '@polymer/paper-tabs/paper-tab';
-// import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory';
-import 'etools-piwik-analytics/etools-piwik-analytics';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/app-layout/app-drawer/app-drawer.js';
+import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
+import '@polymer/app-layout/app-header/app-header.js';
+import '@polymer/app-layout/app-header-layout/app-header-layout.js';
+import '@polymer/app-layout/app-scroll-effects/app-scroll-effects.js';
+import '@polymer/app-layout/app-toolbar/app-toolbar.js';
+import '@polymer/app-route/app-location.js';
+import '@polymer/app-route/app-route.js';
+import '@polymer/iron-pages/iron-pages.js';
+import '@polymer/iron-selector/iron-selector.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
+// import '@unicef-polymer/etools-loading/etools-loading.js';
+import '@polymer/paper-menu-button/paper-menu-button.js';
+import '@polymer/paper-listbox/paper-listbox.js';
+import '@polymer/paper-button/paper-button.js';
+import '@polymer/paper-tabs/paper-tabs.js';
+import '@polymer/paper-tabs/paper-tab.js';
+// import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
+// import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+import 'etools-piwik-analytics/etools-piwik-analytics.js';
 import './styles/buttons-styles';
 import './styles/page-layout-styles';
 import './styles/shared-styles';
@@ -58,18 +58,18 @@ import { Config } from './config/config';
    * @appliesMixin EtoolsDashboard.Mixins.ToastNotifications
    * @appliesMixin EtoolsMixins.LoadingMixin
    */
-const EtoolsShellMixin = EtoolsMixinFactory.combineMixins([
-  Mixins.EventHelper,
-  Mixins.ToastNotifications,
-  Mixins.UserProfileData,
-  // LoadingMixin
-], (PolymerElement));
+// const EtoolsShellMixin = EtoolsMixinFactory.combineMixins([
+//   Mixins.EventHelper,
+//   Mixins.ToastNotifications,
+//   Mixins.UserProfileData,
+//   // LoadingMixin
+// ], (PolymerElement));
 /**
 * @customElement
 * @polymer
 * @extends {Polymer.Element}
 */
-class AppShell extends EtoolsShellMixin {
+class AppShell extends Mixins.EventHelper(Mixins.ToastNotifications(Mixins.UserProfileData(PolymerElement))) {
   static get template() {
     return html`
     <style include="page-layout-styles shared-styles buttons-styles">
@@ -368,7 +368,7 @@ class AppShell extends EtoolsShellMixin {
   }
 
   _isActive(page, tab) {
-    return R.equals(page, tab);
+    return page === tab;
   }
 
   _updateUrlTab(tab) {

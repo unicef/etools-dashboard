@@ -1,8 +1,8 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element';
-import '@polymer/iron-flex-layout/iron-flex-layout';
-import '@polymer/paper-styles/element-styles/paper-material-styles';
-import '@polymer/iron-icon/iron-icon';
-import '@polymer/iron-collapse/iron-collapse';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import '@polymer/iron-flex-layout/iron-flex-layout.js';
+import '@polymer/paper-styles/element-styles/paper-material-styles.js';
+import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/iron-collapse/iron-collapse.js';
 
 /**
 * @polymer
