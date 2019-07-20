@@ -26,16 +26,13 @@ import '../../mixins/fetch-assets-mixin';
 // import { Mixins } from '../../mixins/redux-store-mixin';
 import '../../config/config';
 // import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading';
-import { db } from '../../config/dexie-db-config';
+// import { db } from '../../config/dexie-db-config';
 import '../../mixins/event-helper-mixin';
 import '../../components/etools-progress-bar';
 import { prop, isEmpty, equals, uniq, any } from 'ramda';
 /**
  * @polymer
  * @mixinFunction
- * @appliesMixin window.EtoolsDashboard.Mixins.ReduxStore
- * @appliesMixin window.EtoolsDashboard.Mixins.CommonGeneral
- * @appliesMixin window.EtoolsDashboard.Mixins.EventHelper
  */
 const ViewPersonalizedMixins = EtoolsMixinFactory.combineMixins([
   window.EtoolsDashboard.Mixins.ReduxStore,
@@ -688,11 +685,11 @@ class ViewPersonalized extends ViewPersonalizedMixins {
     }
     this.fireEvent('global-loading', { active: true, loadingSource: 'view-personalized' });
 
-    db.transaction(
+    window.EtoolsDashboard.DexieDb.transaction(
       'r',
-      db.csoDashboard,
+      window.EtoolsDashboard.DexieDb.csoDashboard,
       () => {
-        let queryResult = db.csoDashboard.orderBy('partner_name');
+        let queryResult = window.EtoolsDashboard.DexieDb.csoDashboard.orderBy('partner_name');
         queryResult = queryResult.filter((int) => any(equals(user.user))(int.unicef_focal_points));
         return Dexie.Promise.all([queryResult.toArray()]);
       }).then((countAndResult) => {

@@ -5,7 +5,7 @@ import '../../../mixins/event-helper-mixin';
 import '../../../mixins/ajax-server-errors-mixin';
 import '../../../endpoints/endpoints-mixin';
 // import { Mixins } from '../../../mixins/redux-store-mixin';
-import { db } from '../../../config/dexie-db-config';
+// import { db } from '../../../config/dexie-db-config';
 // export const Mixins = Mixins || {};
 
 window.EtoolsDashboard = window.EtoolsDashboard || {};
@@ -38,7 +38,7 @@ window.EtoolsDashboard.Mixins.PartnerItemData = dedupingMixin((base) =>
       };
       this.sendRequest(params)
       .then((resp)=>{
-        db.partners.put(resp)
+        window.EtoolsDashboard.DexieDb.partners.put(resp)
         .then(()=>cb());
       })
       .catch((err)=> this.handleErrorResponse(err));

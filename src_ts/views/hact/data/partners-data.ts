@@ -2,7 +2,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import '../../../mixins/data-element-mixin';
 import '../../../mixins/event-helper-mixin';
-import { db } from '../../../config/dexie-db-config';
+// import { db } from '../../../config/dexie-db-config';
 import Dexie from 'dexie';
 // import { Mixins } from '../../../mixins/redux-store-mixin';
 import { isEmpty, contains } from 'ramda';
@@ -11,8 +11,6 @@ import { isEmpty, contains } from 'ramda';
 /**
 * @polymer
 * @mixinFunction
-* @appliesMixin EtoolsDashboard.Mixins.DataElement
-* @appliesMixin EtoolsDashboard.Mixins.EventHelper
 */
 const PartnersDataMixin = EtoolsMixinFactory.combineMixins([
   window.EtoolsDashboard.Mixins.DataElement,
@@ -89,12 +87,12 @@ class PartnersData extends PartnersDataMixin {
 
   query(searchString, order, pageSize, pageNumber) {
     this.fireEvent('global-loading', { message: 'Loading partners data...', active: true, loadingSource: 'partners-data' });
-    db.partners.toArray().then((res) => {
+    window.EtoolsDashboard.DexieDb.partners.toArray().then((res) => {
       this._setTotals(this._computeTotals(res));
       this._setTotalResults(res.length);
     });
-    db.transaction('r', db.partners, () => {
-      let queryResult = db.partners.orderBy('name');
+    window.EtoolsDashboard.DexieDb.transaction('r', window.EtoolsDashboard.DexieDb.partners, () => {
+      let queryResult = window.EtoolsDashboard.DexieDb.partners.orderBy('name');
       if (order === 'desc') {
         queryResult = queryResult.reverse();
       }

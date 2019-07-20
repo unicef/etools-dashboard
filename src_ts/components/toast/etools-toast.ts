@@ -7,7 +7,6 @@ import '../../mixins/event-helper-mixin';
 /**
  * @polymer
  * @customElement
- * @appliesMixin EtoolsDashboard.Mixins.EventHelper
  */
 class EtoolsToast extends window.EtoolsDashboard.Mixins.EventHelper(PolymerElement) {
   static get template() {

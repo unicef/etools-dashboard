@@ -54,10 +54,6 @@ import { Config } from './config/config';
 /**
    * @polymer
    * @mixinFunction
-   * @appliesMixin EtoolsDashboard.Mixins.EventHelper
-   * @appliesMixin EtoolsDashboard.Mixins.ToastNotifications
-   * @appliesMixin EtoolsMixins.LoadingMixin
-   */
 // const EtoolsShellMixin = EtoolsMixinFactory.combineMixins([
 //   Mixins.EventHelper,
 //   Mixins.ToastNotifications,

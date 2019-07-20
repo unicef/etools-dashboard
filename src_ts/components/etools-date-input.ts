@@ -16,7 +16,6 @@ const EtoolsDateInputRequiredMixins = window.EtoolsDashboard.Mixins.Date(Polymer
 /**
  * @polymer
  * @customElement
- * @appliesMixin EtoolsDashboard.Mixins.Date
  */
 class EtoolsDateInput extends
     mixinBehaviors([IronValidatableBehavior], EtoolsDateInputRequiredMixins) {

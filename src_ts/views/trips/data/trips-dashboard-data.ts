@@ -10,9 +10,6 @@
 // /**
 // * @polymer
 // * @mixinFunction
-// * @appliesMixin EtoolsDashboard.Mixins.EventHelper
-// * @appliesMixin EtoolsDashboard.Mixins.Endpoints
-// * @appliesMixin EtoolsAjaxRequestMixin
 // */
 // const TripsDashboardDataMixin = EtoolsMixinFactory.combineMixins([
 //   Mixins.EventHelper,

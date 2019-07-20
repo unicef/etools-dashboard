@@ -8,6 +8,7 @@ const EtoolsProgressBarMixin = EtoolsMixinFactory.combineMixins([], PolymerEleme
 /**
  * @polymer
  * @customElement
+ * @extends {PolymerElement}
  */
 class EtoolsProgressBar extends EtoolsProgressBarMixin {
   static get template() {

@@ -37,11 +37,6 @@ import { identity, compose, join, map, prop, isEmpty } from 'ramda';
 /**
   * @polymer
   * @mixinFunction
-  * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
-  * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
-  * @appliesMixin EtoolsDashboard.Mixins.ListFilters
-  * @appliesMixin EtoolsDashboard.Mixins.PaginationWithFilters
-  * @appliesMixin EtoolsDashboard.Mixins.Endpoints
   */
 const PartnershipsOverviewMixin = EtoolsMixinFactory.combineMixins([
 window.EtoolsDashboard.Mixins.CommonGeneral,

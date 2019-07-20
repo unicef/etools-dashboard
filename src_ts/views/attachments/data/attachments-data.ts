@@ -3,7 +3,7 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
 import '../../../mixins/data-element-mixin';
 import '../../../mixins/date-mixin';
 import '../../../mixins/event-helper-mixin';
-import { db } from '../../../config/dexie-db-config';
+// import { db } from '../../../config/dexie-db-config';
 // import { Mixins } from '../../../mixins/redux-store-mixin';
 import { contains, equals, without, keys, isEmpty, sortBy, prop, uniq } from 'ramda';
 
@@ -95,9 +95,9 @@ class AttachmentsData extends AttachmentsDataMixin {
     this.fireEvent('global-loading', { active: true, loadingSource: 'attachments-data' });
     this.set('currentParams', params);
     const { pageNumber, pageSize, order, orderBy } = params;
-    db.transaction('r', db.attachments, () => {
-      let queryResult = db.attachments.orderBy(orderBy || 'created');
-      let allResults = db.attachments.orderBy('partner');
+    window.EtoolsDashboard.DexieDb.transaction('r', window.EtoolsDashboard.DexieDb.attachments, () => {
+      let queryResult = window.EtoolsDashboard.DexieDb.attachments.orderBy(orderBy || 'created');
+      let allResults = window.EtoolsDashboard.DexieDb.attachments.orderBy('partner');
       if (order === 'asc') {
         queryResult = queryResult.reverse();
       }

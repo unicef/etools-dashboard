@@ -23,8 +23,6 @@ import '../mixins/edit-partner-mixin';
 /**
  * @polymer
  * @mixinFunction
- * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
- * @appliesMixin EtoolsDashboard.Mixins.Pagination
  */
 const HactDetailMixins = EtoolsMixinFactory.combineMixins([
   window.EtoolsDashboard.Mixins.CommonGeneral,

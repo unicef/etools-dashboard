@@ -12,10 +12,6 @@ import { ReduxProps } from './reduxProps';
 /**
  * @polymer
  * @mixinFunction
- * @appliesMixin EtoolsDashboard.Mixins.Endpoints
- * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
- * @appliesMixin EtoolsDashboard.Mixins.AjaxServerErrors
- * @appliesMixin EtoolsAjaxRequestMixin
  */
 const CommonDataMixin = EtoolsMixinFactory.combineMixins([
   window.EtoolsDashboard.Mixins.Endpoints,

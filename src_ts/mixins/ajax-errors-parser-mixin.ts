@@ -8,7 +8,6 @@ window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 /**
 * @polymer
 * @mixinFunction
-* @appliesMixin EtoolsDashboard.Mixins.EventHelper
 */
 window.EtoolsDashboard.Mixins.AjaxErrorsParser = (baseClass) => class extends window.EtoolsDashboard.Mixins.EventHelper(baseClass) {
   static get properties() {

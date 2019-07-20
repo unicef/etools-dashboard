@@ -11,7 +11,7 @@ import './countries-dropdown';
 import '../mixins/event-helper-mixin';
 // import { Mixins } from '../mixins/redux-store-mixin';
 import '../mixins/user-profile-data-mixin';
-import { db } from '../config/dexie-db-config';
+// import { db } from '../config/dexie-db-config';
 import '../styles/shared-styles';
 import { Config } from '../config/config';
 import {sortBy} from 'ramda';
@@ -252,7 +252,7 @@ export class PageHeader extends RequiredMixins {
   }
 
   _clearDexieDbs() {
-    db.delete();
+    window.EtoolsDashboard.DexieDb.delete();
   }
 
   _clearLocalStorage() {

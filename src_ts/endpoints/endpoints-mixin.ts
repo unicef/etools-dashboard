@@ -15,8 +15,6 @@ window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 /**
 * @polymer
 * @mixinFunction
-* @appliesMixin EtoolsAjaxRequestMixin
-* @appliesMixin EtoolsDashboard.Mixins.ReduxStore
 */
 window.EtoolsDashboard.Mixins.Endpoints = dedupingMixin(
   (superClass) => class extends EtoolsAjaxRequestMixin(window.EtoolsDashboard.Mixins.ReduxStore(superClass)) {

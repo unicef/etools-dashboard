@@ -15,8 +15,6 @@ window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
  * @customElement
  * @polymer
  * @extends {PolymerElement}
- * @appliesMixin EtoolsDashboard.Mixins.DataElement
- * @appliesMixin EtoolsDashboard.Mixins.UserPermissions
  */
 
 window.EtoolsDashboard.Mixins.UserProfileData = (baseClass) =>

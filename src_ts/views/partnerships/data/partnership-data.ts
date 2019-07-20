@@ -3,7 +3,7 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
 import '../../../mixins/data-element-mixin';
 import '../../../mixins/date-mixin';
 import '../../../mixins/event-helper-mixin';
-import { db } from '../../../config/dexie-db-config';
+// import { db } from '../../../config/dexie-db-config';
 import Dexie from 'dexie';
 // import { Mixins } from '../../../mixins/redux-store-mixin';
 import { contains, intersection, trim, isEmpty, keys } from 'ramda';
@@ -11,9 +11,6 @@ import { contains, intersection, trim, isEmpty, keys } from 'ramda';
 /**
  * @polymer
  * @mixinFunction
- * @appliesMixin EtoolsDashboard.Mixins.DataElement
- * @appliesMixin EtoolsDashboard.Mixins.Date
- * @appliesMixin EtoolsDashboard.Mixins.EventHelper
  */
 const PartnershipDataMixin = EtoolsMixinFactory.combineMixins([
  window.EtoolsDashboard.Mixins.DataElement,
@@ -152,11 +149,11 @@ class PartnershipData extends PartnershipDataMixin {
     const { order, sortBy } = params;
     const predKeys = keys(this.predicates);
     this.fireEvent('global-loading', { active: true, loadingSource: 'partnership-data' });
-    db.transaction(
+    window.EtoolsDashboard.DexieDb.transaction(
       'r',
-      db.csoDashboard,
+      window.EtoolsDashboard.DexieDb.csoDashboard,
       () => {
-        let queryResult = db.csoDashboard.orderBy('partner_name');
+        let queryResult = window.EtoolsDashboard.DexieDb.csoDashboard.orderBy('partner_name');
         if (order === 'desc') {
           queryResult = queryResult.reverse();
         }

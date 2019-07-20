@@ -9,9 +9,6 @@ import { isEmpty } from 'ramda';
 /**
  * @polymer
  * @mixinFunction
- * @appliesMixin EtoolsDashboard.Mixins.EventHelper
- * @appliesMixin EtoolsDashboard.Mixins.Endpoints
- * @appliesMixin EtoolsAjaxRequestMixin
  */
 const ActionPtsBySectionMixin = EtoolsMixinFactory.combineMixins([
   window.EtoolsDashboard.Mixins.EventHelper,

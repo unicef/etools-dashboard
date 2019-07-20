@@ -1,9 +1,13 @@
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { element } from 'polymer-redux-typescript';
 import { merge } from 'ramda';
+import 'redux';
 // import '../scripts/redux';
 // @ts-ignore
-export const Mixins;
+// export const Mixins;
+
+window.EtoolsDashboard = window.EtoolsDashboard || {};
+window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 var Redux = Redux || {};
 var PolymerRedux = PolymerRedux || {};
@@ -123,4 +127,4 @@ const store = Redux.createStore(
 * @polymer
 * @mixinFunction
 */
-Mixins.ReduxStore = dedupingMixin(element(store));
+window.EtoolsDashboard.Mixins.ReduxStore = dedupingMixin(element(store));

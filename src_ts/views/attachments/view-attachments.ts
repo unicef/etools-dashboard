@@ -38,12 +38,6 @@ import { compose, identity, join, map, prop, isEmpty, union, merge, reject } fro
 /**
  * @polymer
  * @mixinFunction
- * @appliesMixin EtoolsDashboard.Mixins.CommonGeneral
- * @appliesMixin EtoolsDashboard.Mixins.Dropdown
- * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
- * @appliesMixin EtoolsDashboard.Mixins.ListFilters
- * @appliesMixin EtoolsDashboard.Mixins.PaginationWithFilters
- * @appliesMixin EtoolsDashboard.Mixins.Date
  */
 const AttachmentsMixin = EtoolsMixinFactory.combineMixins([
   window.EtoolsDashboard.Mixins.ListFilters,
@@ -60,7 +54,6 @@ const AttachmentsMixin = EtoolsMixinFactory.combineMixins([
  * @summary ShortDescription.
  * @customElement
  * @polymer
- * @appliesMixin AttachmentsMixin
  */
 class ViewAttachments extends AttachmentsMixin {
   static get template() {

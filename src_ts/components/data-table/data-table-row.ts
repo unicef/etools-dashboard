@@ -7,7 +7,7 @@ import '@polymer/iron-collapse/iron-collapse.js';
 /**
 * @polymer
 * @customElement
-* @extends Polymer.Element
+* @extends {PolymerElement}
 */
 class DataTableRow extends PolymerElement {
   static get template() {

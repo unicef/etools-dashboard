@@ -11,7 +11,6 @@ window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 /**
  * @polymer
  * @mixinFunction
- * @appliesMixin EtoolsDashboard.Mixins.Date
  */
 window.EtoolsDashboard.Mixins.CommonGeneral = dedupingMixin(
   (superClass) => class extends window.EtoolsDashboard.Mixins.Date(superClass) {

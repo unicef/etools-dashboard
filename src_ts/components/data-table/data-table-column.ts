@@ -7,8 +7,7 @@ import * as _ from 'lodash-es';
 /**
 * @polymer
 * @customElement
-* @extends Polymer.Element
-* @appliesMixin EtoolsDashboard.Mixins.EventHelper
+* @extends {PolymerElement}
 */
 class DataTableColumn extends window.EtoolsDashboard.Mixins.EventHelper(PolymerElement) {
   static get template() {

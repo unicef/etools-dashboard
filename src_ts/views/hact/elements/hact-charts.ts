@@ -20,8 +20,6 @@ import { isEmpty, keys, tail, last } from 'ramda';
 /**
  * @polymer
  * @mixinFunction
- * @appliesMixin EtoolsDashboard.Mixins.ReduxStore
- * @appliesMixin EtoolsDashboard.Mixins.EventHelper
  */
 const ChartsMixin = EtoolsMixinFactory.combineMixins([
   window.EtoolsDashboard.Mixins.ReduxStore,
