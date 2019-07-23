@@ -206,13 +206,13 @@
 
       openDialog() {
         this.$.editPartnersDialog.opened = true;
-        this.set('isGovPartner', this.partner.partner_type_slug === "Gov")
       }
 
       _partnerChanged(partner) {
         if (!partner) {
           return;
         }
+        this.set('isGovPartner', this.partner.partner_type_slug === "Gov");
         const planned = clone(partner.hact_values.programmatic_visits.planned);
         const planned_visits = {
           'programmatic_q1': planned.q1,
