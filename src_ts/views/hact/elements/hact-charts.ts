@@ -22,7 +22,7 @@ import { isEmpty, keys, tail, last } from 'ramda';
  * @mixinFunction
  */
 const ChartsMixin = EtoolsMixinFactory.combineMixins([
-  window.EtoolsDashboard.Mixins.ReduxStore,
+  // window.EtoolsDashboard.Mixins.ReduxStore,
   window.EtoolsDashboard.Mixins.EventHelper,
   window.EtoolsDashboard.Mixins.FetchAsset
 ], PolymerElement);

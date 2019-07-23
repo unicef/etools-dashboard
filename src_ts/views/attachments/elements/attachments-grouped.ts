@@ -4,8 +4,9 @@ import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
 import '@polymer/paper-styles/element-styles/paper-material-styles.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
+import { property, customElement } from '@polymer/decorators'
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+// import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import '@collaborne/paper-chip/dist/paper-chip.js';
 import '../../../styles/shared-styles';
 import '../../../styles/list-styles';
@@ -17,7 +18,7 @@ import '../../../components/data-table/data-table-footer';
 import './sub-attachments';
 import { isEmpty, uniq, sortWith, ascend, prop, descend } from 'ramda';
 
-const AttachmentsGroupedMixin = EtoolsMixinFactory.combineMixins([], PolymerElement);
+// const AttachmentsGroupedMixin = EtoolsMixinFactory.combineMixins([], PolymerElement);
 
 /**
  * `attachments-grouped` Description
@@ -25,9 +26,10 @@ const AttachmentsGroupedMixin = EtoolsMixinFactory.combineMixins([], PolymerElem
  * @summary ShortDescription.
  * @customElement
  * @polymer
- * @extends PolymerElement
+ * @extends {PolymerElement}
  */
-class AttachmentsGrouped extends AttachmentsGroupedMixin {
+@customElement('attachments-grouped')
+export class AttachmentsGrouped extends PolymerElement {
   static get template() {
     return html`
       <style include="shared-styles grid-layout-styles page-layout-styles paper-material-styles list-styles">
@@ -331,34 +333,55 @@ class AttachmentsGrouped extends AttachmentsGroupedMixin {
     return 'attachments-grouped';
   }
 
-  static get properties() {
-    return {
-      orderedResults: {
-        type: Array
-      },
-      selectedPartner: {
-        type: Object
-      },
-      groupView: {
-        type: String,
-        value: 'Assessments & Audits'
-      },
-      assessmentsAudits: {
-        type: Array
-      },
-      pDSSFA: {
-        type: Array
-      },
-      selectedPDSSFA: {
-        type: Array
-      },
-      otherFiles: {
-        type: Array,
-        value: [],
-        notify: true
-      }
-    };
-  }
+  @property({type: Array})
+  orderedResults: object[];
+
+  @property({type: Object})
+  selectedPartner: any;
+
+  @property({type: String})
+  groupView: string = 'Assessments & Audits';
+
+  @property({type: Array})
+  assessmentsAudits: string[];
+  
+  @property({type: Array})
+  pDSSFA: object[];
+
+  @property({type: Array})
+  selectedPDSSFA: object[]
+
+  @property({type: Array, notify: true})
+  otherFiles: string[] = [];
+
+  // static get properties() {
+  //   return {
+  //     orderedResults: {
+  //       type: Array
+  //     },
+  //     selectedPartner: {
+  //       type: Object
+  //     },
+  //     groupView: {
+  //       type: String,
+  //       value: 'Assessments & Audits'
+  //     },
+  //     assessmentsAudits: {
+  //       type: Array
+  //     },
+  //     pDSSFA: {
+  //       type: Array
+  //     },
+  //     selectedPDSSFA: {
+  //       type: Array
+  //     },
+  //     otherFiles: {
+  //       type: Array,
+  //       value: [],
+  //       notify: true
+  //     }
+  //   };
+  // }
 
   static get observers() {
     return [
@@ -396,8 +419,8 @@ class AttachmentsGrouped extends AttachmentsGroupedMixin {
         // @ts-ignore
         descend(prop('created'))
       ])(pDFiles)
-      let obj = {};
-      let obj2 = {};
+      let obj: any = {};
+      let obj2: any = {};
       let relevantFiles = pDFiles.filter(file => file.agreement_reference_number === k);
       let pdssfaKeys = uniq(relevantFiles.map(file => file.pd_ssfa_number));
       obj["agreementReference"] = k;
@@ -438,7 +461,7 @@ class AttachmentsGrouped extends AttachmentsGroupedMixin {
   _createPDChips() {
     let header = this.$.superHeader;
     // create a paper-chip for each agreement_reference_number
-    this.pDSSFA.forEach(pd => {
+    this.pDSSFA.forEach((pd: any) => {
       let pdChip = document.createElement('paper-chip');
       pdChip.innerText = pd.agreementReference;
       // @ts-ignore
@@ -485,4 +508,4 @@ class AttachmentsGrouped extends AttachmentsGroupedMixin {
   }
 }
 
-window.customElements.define(AttachmentsGrouped.is, AttachmentsGrouped);
+// window.customElements.define(AttachmentsGrouped.is, AttachmentsGrouped);

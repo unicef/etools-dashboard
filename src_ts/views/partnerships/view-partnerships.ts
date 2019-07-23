@@ -1,5 +1,5 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+// import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 // import './elements/cso-dashboard';
 // import './elements/partnerships-overview';
 // import { Mixins } from '../../mixins/redux-store-mixin';
@@ -8,9 +8,9 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
  * @polymer
  * @mixinFunction
  */
-const ViewPartnershipsMixins = EtoolsMixinFactory.combineMixins([
+// const ViewPartnershipsMixins = EtoolsMixinFactory.combineMixins([
   // Mixins.CommonGeneral,
-], PolymerElement);
+// ], PolymerElement);
 
 /**
  * `view-partnerships` Description
@@ -19,7 +19,7 @@ const ViewPartnershipsMixins = EtoolsMixinFactory.combineMixins([
  * @customElement
  * @polymer
  */
-class ViewPartnerships extends ViewPartnershipsMixins {
+class ViewPartnerships extends PolymerElement {
 //   static get template() {
 //     return html`
 //     <style include="paper-material-styles">
@@ -93,7 +93,7 @@ class ViewPartnerships extends ViewPartnershipsMixins {
 // `;
 //   }
 
-//   static get is() { return 'view-partnerships'; }
+  static get is() { return 'view-partnerships'; }
 
 //   static get properties() {
 //     return {

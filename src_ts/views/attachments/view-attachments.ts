@@ -44,7 +44,7 @@ const AttachmentsMixin = EtoolsMixinFactory.combineMixins([
   window.EtoolsDashboard.Mixins.Date,
   window.EtoolsDashboard.Mixins.CommonGeneral,
   window.EtoolsDashboard.Mixins.PaginationWithFilters,
-  window.EtoolsDashboard.Mixins.ReduxStore,
+  // window.EtoolsDashboard.Mixins.ReduxStore,
   window.EtoolsDashboard.Mixins.Dropdown,
   window.EtoolsDashboard.Mixins.FetchAsset
 ], PolymerElement);

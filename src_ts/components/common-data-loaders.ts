@@ -15,7 +15,7 @@ import { ReduxProps } from './reduxProps';
  */
 const CommonDataMixin = EtoolsMixinFactory.combineMixins([
   window.EtoolsDashboard.Mixins.Endpoints,
-  window.EtoolsDashboard.Mixins.ReduxStore,
+  // window.EtoolsDashboard.Mixins.ReduxStore,
   window.EtoolsDashboard.Mixins.AjaxServerErrors,
   window.EtoolsDashboard.Mixins.ToastNotifications,
   EtoolsAjaxRequestMixin

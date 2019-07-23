@@ -35,7 +35,7 @@ import { prop, isEmpty, equals, uniq, any } from 'ramda';
  * @mixinFunction
  */
 const ViewPersonalizedMixins = EtoolsMixinFactory.combineMixins([
-  window.EtoolsDashboard.Mixins.ReduxStore,
+  // window.EtoolsDashboard.Mixins.ReduxStore,
   window.EtoolsDashboard.Mixins.CommonGeneral,
   window.EtoolsDashboard.Mixins.EventHelper,
   window.EtoolsDashboard.Mixins.FetchAsset,

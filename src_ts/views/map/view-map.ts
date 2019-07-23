@@ -11,7 +11,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 // import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 // import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 // import '@unicef-polymer/etools-dropdown/etools-dropdown-multi.js';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+// import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 // import '../../mixins/common-general-mixin';
 // import '../../mixins/list-filters-mixin';
 // import '../../mixins/pagination-with-filters-mixin';
@@ -32,7 +32,7 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
  * @polymer
  * @mixinFunction
  */
-const EtoolsMapMixin = EtoolsMixinFactory.combineMixins([
+// const EtoolsMapMixin = EtoolsMixinFactory.combineMixins([
   // Mixins.ReduxStore,
   // Mixins.PartnersDropdownData,
   // Mixins.MapInterventionsData,
@@ -41,7 +41,7 @@ const EtoolsMapMixin = EtoolsMixinFactory.combineMixins([
   // Mixins.CommonGeneral,
   // Mixins.EventHelper,
   // Mixins.FetchAsset
-], PolymerElement);
+// ], PolymerElement);
 
 /**
  * `view-map` Description
@@ -50,7 +50,7 @@ const EtoolsMapMixin = EtoolsMixinFactory.combineMixins([
  * @customElement
  * @polymer
  */
-class ViewMap extends EtoolsMapMixin {
+class ViewMap extends PolymerElement {
 //   static get template() {
 //     return html`
 //     <style include="shared-styles paper-material-styles list-styles page-layout-styles filter-styles">
@@ -163,9 +163,9 @@ class ViewMap extends EtoolsMapMixin {
 //   /**
 //    * String providing the tag name to register the element under.
 //    */
-//   static get is() {
-//     return 'view-map';
-//   }
+  static get is() {
+    return 'view-map';
+  }
 
 //   /**
 //    * Object describing property-related metadata used by Polymer features

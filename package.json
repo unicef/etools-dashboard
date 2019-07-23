@@ -27,6 +27,7 @@
     "@collaborne/paper-chip": "^4.0.6",
     "@polymer/app-layout": "^3.0.0-pre.18",
     "@polymer/app-route": "^3.0.0-pre.18",
+    "@polymer/decorators": "^3.0.0",
     "@polymer/iron-flex-layout": "^3.0.0-pre.18",
     "@polymer/iron-icons": "^3.0.0-pre.18",
     "@polymer/iron-iconset-svg": "^3.0.0-pre.18",
@@ -73,9 +74,12 @@
     "gulp-rename": "^1.4.0",
     "gulp-replace": "^1.0.0",
     "moment": "^2.24.0",
+    "polymer-redux": "^2.0.0-beta.2",
     "polymer-redux-typescript": "0.0.5",
+    "pwa-helpers": "^0.9.1",
     "ramda": "^0.26.1",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.12.0",

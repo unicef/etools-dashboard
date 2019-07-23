@@ -8,7 +8,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 // import '@polymer/paper-button/paper-button.js';
 // import '@polymer/paper-item/paper-item.js';
 // import '@unicef-polymer/etools-dropdown/etools-dropdown-multi.js';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+// import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 // import moment from 'moment';
 // import '../../styles/shared-styles';
 // import '../../styles/list-styles';
@@ -29,12 +29,12 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
 * @polymer
 * @mixinFunction
 */
-const ViewTripsMixins = EtoolsMixinFactory.combineMixins([
+// const ViewTripsMixins = EtoolsMixinFactory.combineMixins([
   // Mixins.ReduxStore,
   // Mixins.Dropdown,
   // Mixins.EventHelper,
   // Mixins.FetchAsset
-], PolymerElement);
+// ], PolymerElement);
 
 /**
  * `view-trips` Description
@@ -42,9 +42,9 @@ const ViewTripsMixins = EtoolsMixinFactory.combineMixins([
  * @summary ShortDescription.
  * @customElement
  * @polymer
- * @extends ViewTripsMixins
+ * @extends {PolymerElement}
  */
-class ViewTrips extends ViewTripsMixins {
+class ViewTrips extends PolymerElement {
 //   static get template() {
 //     return html`
 //     <custom-style>
@@ -165,9 +165,9 @@ class ViewTrips extends ViewTripsMixins {
 //   /**
 //    * String providing the tag name to register the element under.
 //    */
-//   static get is() {
-//     return 'view-trips';
-//   }
+  static get is() {
+    return 'view-trips';
+  }
 
 //   /**
 //    * Object describing property-related metadata used by Polymer features

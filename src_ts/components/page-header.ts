@@ -18,7 +18,7 @@ import {sortBy} from 'ramda';
 
 const RequiredMixins = EtoolsMixinFactory.combineMixins([
   EtoolsPageRefreshMixin,
-  window.EtoolsDashboard.Mixins.ReduxStore
+  // window.EtoolsDashboard.Mixins.ReduxStore
 ], (PolymerElement));
 /**
  * `page-header` Description
@@ -124,7 +124,7 @@ export class PageHeader extends RequiredMixins {
       <paper-icon-button id="menuButton" class="light" icon="menu" on-tap="openDrawer"></paper-icon-button>
       <div class="titlebar content-align">
         <etools-app-selector id="selector" user="[[user]]"></etools-app-selector>
-        <img id="second-logo" src\$="[[importPath]]../../../images/etools-logo-color-white.svg">
+        <img id="second-logo" src\$="[[importPath]]images/etools-logo-color-white.svg">
         <template is="dom-if" if="[[environment]]">
           <div class="envWarning"> - [[environment]] TESTING ENVIRONMENT</div>
         </template>

@@ -17,7 +17,7 @@ window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 * @mixinFunction
 */
 window.EtoolsDashboard.Mixins.Endpoints = dedupingMixin(
-  (superClass) => class extends EtoolsAjaxRequestMixin(window.EtoolsDashboard.Mixins.ReduxStore(superClass)) {
+  (superClass) => class extends EtoolsAjaxRequestMixin(superClass) {
 
     getEndpoint(endpointName, data) {
       let endpoint = JSON.parse(JSON.stringify(Endpoints$0[endpointName]));

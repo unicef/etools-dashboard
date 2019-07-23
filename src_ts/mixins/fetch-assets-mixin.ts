@@ -4,6 +4,7 @@ import './event-helper-mixin';
 import './ajax-server-errors-mixin';
 import '../endpoints/endpoints-mixin';
 import { ReduxProps } from '../components/reduxProps';
+// import { ReduxStoreMixin } from './redux-store-mixin';
 import moment from 'moment';
 import { isEmpty, compose, map, pick, range, head, propOr, keys, concat } from 'ramda';
 // export const Mixins = Mixins || {};
@@ -19,11 +20,11 @@ const falsy = (x) => isEmpty(x) || !x;
  */
 window.EtoolsDashboard.Mixins.FetchAsset = (superClass) =>
   class extends window.EtoolsDashboard.Mixins.Endpoints(
-    window.EtoolsDashboard.Mixins.ReduxStore(
+    // window.EtoolsDashboard.Mixins.ReduxStore(
       window.EtoolsDashboard.Mixins.AjaxServerErrors(
         window.EtoolsDashboard.Mixins.ToastNotifications(
           window.EtoolsDashboard.Mixins.EventHelper(
-            EtoolsAjaxRequestMixin(superClass)))))) {
+            EtoolsAjaxRequestMixin(superClass))))) {
 
     constructor() {
       super();

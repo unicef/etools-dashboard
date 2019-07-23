@@ -40,7 +40,7 @@ import { identity, compose, join, map, prop, isEmpty } from 'ramda';
   */
 const PartnershipsOverviewMixin = EtoolsMixinFactory.combineMixins([
 window.EtoolsDashboard.Mixins.CommonGeneral,
-window.EtoolsDashboard.Mixins.ReduxStore,
+// window.EtoolsDashboard.Mixins.ReduxStore,
 window.EtoolsDashboard.Mixins.ListFilters,
 window.EtoolsDashboard.Mixins.Endpoints,
 window.EtoolsDashboard.Mixins.PaginationWithFilters,

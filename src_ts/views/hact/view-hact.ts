@@ -12,7 +12,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 // import '@polymer/iron-pages/iron-pages.js';
 // import '@polymer/paper-button/paper-button.js';
 // import { timeOut } from '@polymer/polymer/lib/utils/async.js';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+// import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 // import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 // import '../../styles/shared-styles';
 // import '../../styles/list-styles';
@@ -35,12 +35,12 @@ import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixi
  * @polymer
  * @mixinFunction
  */
-const ViewHactMixins = EtoolsMixinFactory.combineMixins([
+// const ViewHactMixins = EtoolsMixinFactory.combineMixins([
   // Mixins.Endpoints,
   // Mixins.CommonGeneral,
   // Mixins.Pagination,
   // Mixins.FetchAsset
-], PolymerElement);
+// ], PolymerElement);
 
 /**
  * `hact` Description
@@ -50,7 +50,7 @@ const ViewHactMixins = EtoolsMixinFactory.combineMixins([
  * @polymer
  * @appliesmixin ViewHactMixins
  */
-class ViewHact extends ViewHactMixins {
+class ViewHact extends PolymerElement {
   static get template() {
     return html``;
     // return html`
