@@ -289,7 +289,7 @@
                 <paper-tooltip>The Core Values Assessment expired [[_getCoreValueAssessmentDays(row.core_value_assessment_expiring, 'absolute')]] days ago.</paper-tooltip>
               </template>
             </div>
-            <div class="col-1 col-data text-right last-col">
+            <div class="col-1 col-data text-right">
               <span class="last-pv">[[row.days_last_pv]]</span>
               <iron-icon on-click="goToMaps"
                          class="map-icon"
@@ -587,7 +587,6 @@
       }
 
       rangeChanged() {
-        console.log(this.filteredPartnershipsOverview)
         if (this.presetsLoaded && this.filteredPartnershipsOverview) {
           this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
         }
