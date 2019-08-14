@@ -195,31 +195,31 @@
           Section
         </data-table-column>
         <div class="col-5 layout horizontal">
-          <data-table-column class="col-3 right-align" field="total_ct_cp" sortable>
+          <data-table-column class="col-3 text-right" field="total_ct_cp" sortable>
             Cash in the<br>
             Current CP Cycle (USD)
           </data-table-column>
-          <data-table-column class="col-3 right-align" field="total_ct_ytd" sortable>
+          <data-table-column class="col-3 text-right" field="total_ct_ytd" sortable>
             Cash in the<br>
             Current Year (USD)
           </data-table-column>
-          <data-table-column class="col-3 right-align" field="outstanding_dct_amount_6_to_9_months_usd" sortable>
+          <data-table-column class="col-3 text-right" field="outstanding_dct_amount_6_to_9_months_usd" sortable>
             Outstanding<br>
             DCT >6 Months
           </data-table-column>
-          <data-table-column class="col-3 right-align" field="outstanding_dct_amount_more_than_9_months_usd" sortable>
+          <data-table-column class="col-3 text-right" field="outstanding_dct_amount_more_than_9_months_usd" sortable>
             Outstanding<br>
             DCT >9 Months
           </data-table-column>
         </div>
-        <data-table-column class="col-1 right-align" field="action_points" sortable>
+        <data-table-column class="col-1 text-right" field="action_points" sortable>
           Action<br>
           Points
         </data-table-column>
-        <data-table-column class="col-1 right-align" field="alert_core_value_assessment" sortable>
+        <data-table-column class="col-1 text-right" field="alert_core_value_assessment" sortable>
           Flags
         </data-table-column>
-        <data-table-column class="col-1 right-align" field="days_last_pv" sortable>
+        <data-table-column class="col-1 text-right" field="days_last_pv" sortable>
           Days Since<br>
           Last PV
         </data-table-column>
@@ -255,23 +255,23 @@
               </div>
             </div>
             <div class="col-5 layout horizontal">
-              <div class="col-3 right-align">
+              <div class="col-3 text-right">
                 [[currencyFormat(row.total_ct_cp)]]
               </div>
-              <div class="col-3 right-align">
+              <div class="col-3 text-right">
                 [[currencyFormat(row.total_ct_ytd)]]
               </div>
-              <div class="col-3 right-align">
+              <div class="col-3 text-right">
                 [[currencyFormat(row.outstanding_dct_amount_6_to_9_months_usd)]]
               </div>
-              <div class="col-3 right-align">
+              <div class="col-3 text-right">
                 [[currencyFormat(row.outstanding_dct_amount_more_than_9_months_usd)]]
               </div>
             </div>
-            <div class="col-1 right-align">
+            <div class="col-1 text-right">
               <a href="[[baseSite]]/apd/action-points/list?partner=[[row.id]]&status=open">[[row.action_points]]</a>
             </div>
-            <div class="col-1 right-align">
+            <div class="col-1 text-right">
               <template is="dom-if" if="[[_checkCoreValuesAssessmentAlert(row.core_value_assessment_expiring)]]">
                 <iron-icon class="clock-icon [[_checkWarning(row.core_value_assessment_expiring)]]"
                            icon="device:access-time">
@@ -285,7 +285,7 @@
                 <paper-tooltip>The Core Values Assessment expired [[_getCoreValueAssessmentDays(row.core_value_assessment_expiring, 'absolute')]] days ago.</paper-tooltip>
               </template>
             </div>
-            <div class="col-1 col-data right-align">
+            <div class="col-1 col-data text-right">
               <span class="last-pv">[[row.days_last_pv]]</span>
               <iron-icon on-click="goToMaps"
                          class="map-icon"
