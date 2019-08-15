@@ -1,10 +1,11 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-button/paper-button.js';
+import { IronPagesElement } from '@polymer/iron-pages/iron-pages.js';
 import '@polymer/iron-pages/iron-pages.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
 import '@polymer/paper-styles/element-styles/paper-material-styles.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
-import { property, customElement } from '@polymer/decorators'
+import { property, customElement, query, observe } from '@polymer/decorators';
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 // import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import '@collaborne/paper-chip/dist/paper-chip.js';
@@ -329,9 +330,9 @@ export class AttachmentsGrouped extends PolymerElement {
     `;
   }
 
-  static get is() {
-    return 'attachments-grouped';
-  }
+  // static get is() {
+  //   return 'attachments-grouped';
+  // }
 
   @property({type: Array})
   orderedResults: object[];
@@ -353,6 +354,9 @@ export class AttachmentsGrouped extends PolymerElement {
 
   @property({type: Array, notify: true})
   otherFiles: string[] = [];
+
+  @query('docSelector')
+  docSelector: IronPagesElement;
 
   // static get properties() {
   //   return {
@@ -383,13 +387,16 @@ export class AttachmentsGrouped extends PolymerElement {
   //   };
   // }
 
-  static get observers() {
-    return [
-      '_reorganizeData(selectedPartner)',
-      '_appendChips(pDSSFA)'
-    ]
-  }
-
+  // private _reorganizeData(selectedPartner: object)
+  
+  // static get observers() {
+  //   return [
+  //     '_reorganizeData(selectedPartner)',
+  //     '_appendChips(pDSSFA)'
+  //   ]
+  // }
+  
+  @observe('selectedPartner')
   _reorganizeData() {
     if (!this.selectedPartner) {
       return;
@@ -437,7 +444,7 @@ export class AttachmentsGrouped extends PolymerElement {
   }
 
   _appendAssessmentChip() {
-    this.$.docSelector.selected = "assessments";
+    this.docSelector.selected = "assessments";
     let header = this.$.superHeader;
     // create a paper-chip for assessments and audits
     let assessments = document.createElement('paper-chip');
@@ -450,8 +457,8 @@ export class AttachmentsGrouped extends PolymerElement {
         header.children[i].classList.remove('selected')
       };
       assessments.className = 'selected';
-      if (this.$.docSelector.selected != "assessments") {
-        this.$.docSelector.selected = "assessments"
+      if (this.docSelector.selected != "assessments") {
+        this.docSelector.selected = "assessments"
       };
     });
     header.innerHTML = "";
@@ -472,8 +479,8 @@ export class AttachmentsGrouped extends PolymerElement {
         };
         pdChip.className = 'selected';
         this.set('selectedPDSSFA', pd.pdssfas);
-        if (this.$.docSelector.selected != "pdssfa") {
-          this.$.docSelector.selected = "pdssfa"
+        if (this.docSelector.selected != "pdssfa") {
+          this.docSelector.selected = "pdssfa"
         };
       });
       header.appendChild(pdChip);
@@ -494,13 +501,14 @@ export class AttachmentsGrouped extends PolymerElement {
         header.children[i].classList.remove('selected');
       } 
       otherFilesChip.className = 'selected';
-      if (this.$.docSelector.selected != "otherFilesChip") {
-        this.$.docSelector.selected = "otherFilesChip";
+      if (this.docSelector.selected != "otherFilesChip") {
+        this.docSelector.selected = "otherFilesChip";
       }
     });
     header.appendChild(otherFilesChip);
   }
 
+  @observe('pDSSFA')
   _appendChips() {
    this._appendAssessmentChip();
    this._createPDChips();

@@ -1,7 +1,7 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import '../../../mixins/data-element-mixin';
-import '../../../mixins/event-helper-mixin';
+import { fireEvent } from '../../../components/utils/fire-custom-event';
 // import { db } from '../../../config/dexie-db-config';
 import Dexie from 'dexie';
 // import { Mixins } from '../../../mixins/redux-store-mixin';
@@ -12,8 +12,7 @@ import { contains, intersection, equals, keys, any } from 'ramda';
  * @mixinFunction
  */
 const PartnershipOverviewDataMixin = EtoolsMixinFactory.combineMixins([
- window.EtoolsDashboard.Mixins.DataElement,
- window.EtoolsDashboard.Mixins.EventHelper
+ window.EtoolsDashboard.Mixins.DataElement
 ], PolymerElement);
 /**
  * `partnership-overview-data` Description
@@ -116,7 +115,7 @@ class PartnershipOverviewData extends PartnershipOverviewDataMixin {
 
   // init() {
   //   if (this.active) {
-  //     this.fireEvent('global-loading', { message: 'Loading partnership overview data...', active: true, loadingSource: 'partnership-overview-data' });
+  //     fireEvent(this, 'global-loading', { message: 'Loading partnership overview data...', active: true, loadingSource: 'partnership-overview-data' });
   //     this.set('loadedInitially', true);
   //   }
   // }
@@ -131,7 +130,7 @@ class PartnershipOverviewData extends PartnershipOverviewDataMixin {
   }
 
   query(params) {
-    this.fireEvent('global-loading', { active: true, loadingSource: 'partnership-overview-data' });
+    fireEvent(this, 'global-loading', { active: true, loadingSource: 'partnership-overview-data' });
 
     const { order, sortBy } = params;
     const predKeys = keys(this.predicates);
@@ -172,7 +171,7 @@ class PartnershipOverviewData extends PartnershipOverviewDataMixin {
         }
       }).catch((err) => console.error('Error querying partnerships-overview: ', err))
       .finally(() => {
-        this.fireEvent('global-loading', { loadingSource: 'partnership-overview-data' });
+        fireEvent(this, 'global-loading', { loadingSource: 'partnership-overview-data' });
 
       });
   }

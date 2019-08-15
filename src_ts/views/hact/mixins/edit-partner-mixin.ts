@@ -1,5 +1,5 @@
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import '../../../mixins/event-helper-mixin';
+import { fireEvent } from '../../../components/utils/fire-custom-event';
 import '../../../mixins/user-permissions-mixin';
 // import { Mixins } from '../../../mixins/redux-store-mixin';
 // export const Mixins = Mixins || {};
@@ -14,8 +14,7 @@ window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
  */
 window.EtoolsDashboard.Mixins.HactEditPartner = dedupingMixin((base) =>
 
-  class extends window.EtoolsDashboard.Mixins.EventHelper(
-    window.EtoolsDashboard.Mixins.UserPermissions(base)) {
+  class extends window.EtoolsDashboard.Mixins.UserPermissions(base) {
     constructor() {
       super();
     }
@@ -30,6 +29,6 @@ window.EtoolsDashboard.Mixins.HactEditPartner = dedupingMixin((base) =>
     }
 
     dispatchEditRequest({ model }) {
-      this.fireEvent('edit-partner', model.partner);
+      fireEvent(this, 'edit-partner', model.partner);
     }
   });

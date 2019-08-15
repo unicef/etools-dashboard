@@ -7,14 +7,13 @@ import '@polymer/paper-item/paper-item.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
 import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
-import '../mixins/event-helper-mixin';
-import '../endpoints/endpoints-mixin';
+import { fireEvent } from '../components/utils/fire-custom-event';
+import { EndpointsMixin } from '../endpoints/endpoints-mixin';
 import * as R from 'ramda';
 // import { Mixins } from '../mixins/redux-store-mixin';
 
 const CountriesMixin = EtoolsMixinFactory.combineMixins([
-  window.EtoolsDashboard.Mixins.Endpoints,
-  window.EtoolsDashboard.Mixins.EventHelper,
+  EndpointsMixin,
   EtoolsPageRefreshMixin,
   EtoolsAjaxRequestMixin
 ], (PolymerElement));
@@ -155,7 +154,7 @@ class CountriesDropdown extends CountriesMixin {
   }
 
   _triggerCountryChangeRequest(countryId) {
-    this.fireEvent('global-loading', {
+    fireEvent(this, 'global-loading', {
       message: 'Please wait while country is changing...',
       active: true,
       loadingSource: 'country-change'
@@ -172,7 +171,7 @@ class CountriesDropdown extends CountriesMixin {
   }
 
   _handleResponse() {
-    this.fireEvent('update-main-path', { path: '' });
+    fireEvent(this, 'update-main-path', { path: '' });
     this.refresh();
   }
 
@@ -186,8 +185,8 @@ class CountriesDropdown extends CountriesMixin {
     this.logError('Country change failed!', 'countries-dropdown', error);
     // TODO: this should be a larger alert.
     this.$.countriesListbox.selected = this.currentCountry;
-    this.fireEvent('toast', { text: 'Something went wrong changing your workspace. Please try again' });
-    this.fireEvent('global-loading', { active: false, loadingSource: 'country-change' });
+    fireEvent(this, 'toast', { text: 'Something went wrong changing your workspace. Please try again' });
+    fireEvent(this, 'global-loading', { active: false, loadingSource: 'country-change' });
   }
 }
 

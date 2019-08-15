@@ -5,6 +5,7 @@ import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@polymer/paper-styles/element-styles/paper-material-styles.js';
+import { property, customElement } from '@polymer/decorators'
 // import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 
 // const DataTableFooterMixin = EtoolsMixinFactory.combineMixins([], PolymerElement);
@@ -14,7 +15,8 @@ import '@polymer/paper-styles/element-styles/paper-material-styles.js';
 * @customElement
 * @extends {PolymerElement}
 */
-class DataTableFooter extends PolymerElement {
+@customElement('data-table-footer')
+export class DataTableFooter extends PolymerElement {
   static get template() {
     return html`
       <style include="paper-material-styles">
@@ -83,32 +85,47 @@ class DataTableFooter extends PolymerElement {
     `;
   }
 
-  static get is() { return 'data-table-footer'; }
+  // static get is() { return 'data-table-footer'; }
 
-  static get properties() {
-    return {
-      pageSize: {
-        type: String,
-        notify: true
-      },
-      pageNumber: {
-        type: Number,
-        notify: true
-      },
-      filteredTotalResults: {
-        type: Number
-      },
-      totalPages: {
-        type: Number,
-        computed: '_computeTotalPages(pageSize, filteredTotalResults)',
-      },
-      visibleRange: {
-        type: Array,
-        notify: true,
-        computed: '_computeVisibleRange(pageNumber, pageSize, filteredTotalResults, totalPages)'
-      }
-    }
-  }
+  @property({type: String, notify: true})
+  pageSize: string;
+
+  @property({type: Number, notify: true})
+  pageNumber: number;
+
+  @property({type: Number})
+  filteredTotalResults: number;
+
+  @property({type: Number})
+  totalPages: number;
+
+  @property({type: Array, notify: true})
+  visibleRange: string[];
+
+  // static get properties() {
+  //   return {
+  //     pageSize: {
+  //       type: String,
+  //       notify: true
+  //     },
+  //     pageNumber: {
+  //       type: Number,
+  //       notify: true
+  //     },
+  //     filteredTotalResults: {
+  //       type: Number
+  //     },
+  //     totalPages: {
+  //       type: Number,
+  //       computed: '_computeTotalPages(pageSize, filteredTotalResults)',
+  //     },
+  //     visibleRange: {
+  //       type: Array,
+  //       notify: true,
+  //       computed: '_computeVisibleRange(pageNumber, pageSize, filteredTotalResults, totalPages)'
+  //     }
+  //   }
+  // }
 
   _pageLeft() {
     if (this.pageNumber > 1) {
@@ -134,6 +151,7 @@ class DataTableFooter extends PolymerElement {
     }
   }
 
+  // @computed('pageSize', 'filteredTotalResults')
   _computeTotalPages(pageSize, filteredTotalResults) {
     var result = 1;
     if (pageSize < filteredTotalResults) {
@@ -142,6 +160,7 @@ class DataTableFooter extends PolymerElement {
     return result;
   }
 
+  // @computed('pageNumber', 'pageSize', 'filteredTotalResults', 'totalPages')
   _computeVisibleRange(pageNumber, pageSize, filteredTotalResults, totalPages) {
     var start = !filteredTotalResults ? 0 : 1;
     var end = filteredTotalResults;
@@ -163,4 +182,4 @@ class DataTableFooter extends PolymerElement {
   }
 }
 
-window.customElements.define(DataTableFooter.is, DataTableFooter)
+// window.customElements.define(DataTableFooter.is, DataTableFooter)

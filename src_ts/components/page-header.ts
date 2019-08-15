@@ -8,13 +8,14 @@ import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
 import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
 import './countries-dropdown';
-import '../mixins/event-helper-mixin';
+// import { fireEvent } from '../components/utils/fire-custom-event';
 // import { Mixins } from '../mixins/redux-store-mixin';
 import '../mixins/user-profile-data-mixin';
 // import { db } from '../config/dexie-db-config';
 import '../styles/shared-styles';
 import { Config } from '../config/config';
 import {sortBy} from 'ramda';
+import { fireEvent } from '../components/utils/fire-custom-event';
 
 const RequiredMixins = EtoolsMixinFactory.combineMixins([
   EtoolsPageRefreshMixin,
@@ -204,7 +205,7 @@ export class PageHeader extends RequiredMixins {
   }
 
   openDrawer() {
-    this.fireEvent('drawer');
+    fireEvent(this, 'drawer');
   }
 
   _getFlagIconClass(id) {

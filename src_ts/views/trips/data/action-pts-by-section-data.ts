@@ -1,8 +1,8 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import '../../../mixins/event-helper-mixin';
-import '../../../endpoints/endpoints-mixin';
+import { fireEvent } from '../../../components/utils/fire-custom-event';
+import { EndpointsMixin } from '../../../endpoints/endpoints-mixin';
 // import { Mixins } from '../../../mixins/redux-store-mixin';
 import { isEmpty } from 'ramda';
 
@@ -11,9 +11,8 @@ import { isEmpty } from 'ramda';
  * @mixinFunction
  */
 const ActionPtsBySectionMixin = EtoolsMixinFactory.combineMixins([
-  window.EtoolsDashboard.Mixins.EventHelper,
   EtoolsAjaxRequestMixin,
-  window.EtoolsDashboard.Mixins.Endpoints
+  EndpointsMixin
 ], PolymerElement);
 
 /**
@@ -47,7 +46,7 @@ class ActionPtsBySection extends ActionPtsBySectionMixin {
   }
 
   _filterChanged(filter) {
-    this.fireEvent('global-loading', { message: 'Loading chart data...', active: true });
+    fireEvent(this, 'global-loading', { message: 'Loading chart data...', active: true });
     if (isEmpty(filter)) {
       this.set('reqOptions.endpoint', this.getEndpoint('actionPointsBySection'));
     } else {
@@ -62,7 +61,7 @@ class ActionPtsBySection extends ActionPtsBySectionMixin {
 
   _handleResponse(response) {
     this._setActionPointsData(response);
-    this.fireEvent('global-loading', {});
+    fireEvent(this, 'global-loading', {});
   }
 }
 

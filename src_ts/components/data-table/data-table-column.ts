@@ -1,15 +1,16 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-icon/iron-icon.js';
-import '../../mixins/event-helper-mixin';
+import { fireEvent } from '../../components/utils/fire-custom-event';
 // import { Mixins } from '../../mixins/redux-store-mixin';
 import * as _ from 'lodash-es';
+import { property, observe } from '@polymer/decorators';
 
 /**
 * @polymer
 * @customElement
 * @extends {PolymerElement}
 */
-class DataTableColumn extends window.EtoolsDashboard.Mixins.EventHelper(PolymerElement) {
+class DataTableColumn extends (PolymerElement) {
   static get template() {
     return html`
     <style>
@@ -113,41 +114,62 @@ class DataTableColumn extends window.EtoolsDashboard.Mixins.EventHelper(PolymerE
 
   static get is() { return 'data-table-column'; }
 
-  static get properties() {
-    return {
-      selected: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
-      field: {
-        type: String,
-      },
-      direction: {
-        type: String,
-        reflectToAttribute: true
-      },
-      groupHeading: {
-        type: String,
-        observer: '_isGroup',
-      },
-      headingAlign: {
-        type: String,
-        default: "center",
-        observer: '_changeHeadingAlign',
-      },
-      spaceAround: {
-        type: Boolean,
-        value: false,
-        observer: '_isGroup'
-      },
-      transparent: {
-        type: Boolean,
-        value: false,
-        observer: '_makeTransparent'
-      }
-    }
-  }
+  @property({type: Boolean, reflectToAttribute: true})
+  selected: boolean = false;
+
+  @property({type: String})
+  field: string
+
+  @property({type: String, reflectToAttribute: true})
+  direction: string
+
+  @property({type: String})
+  groupHeading: string;
+  
+  @property({type: String})
+  headingAlign: string = 'center';
+
+  @property({type: Boolean})
+  spaceAround: boolean = false;
+
+  @property({type: Boolean})
+  transparent: boolean = false;
+
+  // static get properties() {
+  //   return {
+  //     selected: {
+  //       type: Boolean,
+  //       value: false,
+  //       reflectToAttribute: true
+  //     },
+  //     field: {
+  //       type: String,
+  //     },
+  //     direction: {
+  //       type: String,
+  //       reflectToAttribute: true
+  //     },
+  //     groupHeading: {
+  //       type: String,
+  //       observer: '_isGroup',
+  //     },
+  //     headingAlign: {
+  //       type: String,
+  //       default: "center",
+  //       observer: '_changeHeadingAlign',
+  //     },
+  //     spaceAround: {
+  //       type: Boolean,
+  //       value: false,
+  //       observer: '_isGroup'
+  //     },
+  //     transparent: {
+  //       type: Boolean,
+  //       value: false,
+  //       observer: '_makeTransparent'
+  //     }
+  //   }
+  // }
 
   constructor() {
     super();
@@ -175,15 +197,18 @@ class DataTableColumn extends window.EtoolsDashboard.Mixins.EventHelper(PolymerE
     } else {
       this.set('direction', this.direction === 'asc' ? 'desc' : 'asc');
     }
-    this.fireEvent('sort-changed', {field: this.field, direction: this.direction});
+    fireEvent(this, 'sort-changed', {field: this.field, direction: this.direction});
   }
 
+  @observe('headingAlign')
   _changeHeadingAlign() {
     if (!_.isEmpty(this.groupHeading)) {
+      // @ts-ignore
       this.$.heading.updateStyles({['group-heading.text-align']: this.headingAlign})
     }
   }
 
+  @observe('groupHeading', 'spaceAround')
   _isGroup() {
     if (!_.isEmpty(this.groupHeading)) {
       this.$.label.classList.add('is-group');
@@ -195,6 +220,7 @@ class DataTableColumn extends window.EtoolsDashboard.Mixins.EventHelper(PolymerE
   _makeTransparent() {
     if (this.transparent) {
       let x = this.$.groupWrapper
+      // @ts-ignore
       x.style.color = "transparent"
     }
   }

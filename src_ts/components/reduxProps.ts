@@ -1,13 +1,13 @@
 // import moment from 'moment';
 
 export const ReduxProps = [
-  {
-    propName: 'clusters',
-    endpointProps: {
-      name: 'clusters',
-      templateProps: {}
-    }
-  },
+  // {
+  //   propName: 'clusters',
+  //   endpointProps: {
+  //     name: 'clusters',
+  //     templateProps: {}
+  //   }
+  // },
   {
     propName: 'countryProgrammes',
     endpointProps: {
@@ -52,17 +52,17 @@ export const ReduxProps = [
       templateProps: {}
     }
   },
-  {
-    propName: 'partnerships',
-    endpointProps: {
-      name: 'partnerships',
-      templateProps: {}
-    }
-  },
-  {
-    propName: 'tripsYears',
-    endpointProps: {}
-  },
+  // {
+  //   propName: 'partnerships',
+  //   endpointProps: {
+  //     name: 'partnerships',
+  //     templateProps: {}
+  //   }
+  // },
+  // {
+  //   propName: 'tripsYears',
+  //   endpointProps: {}
+  // },
   {
     propName: 'sectors',
     endpointProps: {
@@ -91,13 +91,13 @@ export const ReduxProps = [
       templateProps: {}
     }
   },
-  {
-    propName: 'hactGraphs',
-    endpointProps: {
-      name: 'hactGraphs',
-      templateProps: {}
-    }
-  },
+  // {
+  //   propName: 'hactGraphs',
+  //   endpointProps: {
+  //     name: 'hactGraphs',
+  //     templateProps: {}
+  //   }
+  // },
   {
     propName: 'agreements',
     endpointProps: {
@@ -112,27 +112,27 @@ export const ReduxProps = [
       templateProps: {}
     }
   },
-  {
-    propName: 'donors',
-    endpointProps: {
-      name: 'donors',
-      templateProps: {}
-    }
-  },
-  {
-    propName: 'grants',
-    endpointProps: {
-      name: 'grants',
-      templateProps: {}
-    }
-  },
-  {
-    propName: 'results',
-    endpointProps: {
-      name: 'results',
-      templateProps: {}
-    }
-  }
+  // {
+  //   propName: 'donors',
+  //   endpointProps: {
+  //     name: 'donors',
+  //     templateProps: {}
+  //   }
+  // },
+  // {
+  //   propName: 'grants',
+  //   endpointProps: {
+  //     name: 'grants',
+  //     templateProps: {}
+  //   }
+  // },
+  // {
+  //   propName: 'results',
+  //   endpointProps: {
+  //     name: 'results',
+  //     templateProps: {}
+  //   }
+  // }
 
 
 ];

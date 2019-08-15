@@ -13,7 +13,7 @@ import '@polymer/paper-styles/element-styles/paper-material-styles.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+// import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 // import '@unicef-polymer/etools-datepicker/etools-datepicker-button.js';
 import '../../styles/dash-icons';
 import './data/attachments-data';
@@ -25,29 +25,16 @@ import '../../components/data-table/data-table-header';
 import '../../components/data-table/data-table-row';
 import '../../components/data-table/data-table-footer';
 import '../../config/config';
-import '../../mixins/list-filters-mixin';
-import '../../mixins/dropdown-mixin';
-import '../../mixins/date-mixin';
-import '../../mixins/common-general-mixin';
-import '../../mixins/pagination-with-filters-mixin';
+import { ListFilters } from '../../mixins/list-filters-mixin';
+import { DropdownMixin } from '../../mixins/dropdown-mixin';
+import { DateMixin} from '../../mixins/date-mixin';
+import { CommonGeneralMixin } from '../../mixins/common-general-mixin';
+import { PaginationWithFiltersMixin } from '../../mixins/pagination-with-filters-mixin';
+// import { FetchAssetMixin } from '../../mixins/fetch-assets-mixin';
 // import { Mixins } from '../../mixins/redux-store-mixin';
-import '../../mixins/fetch-assets-mixin';
 import './elements/attachments-grouped';
 import { compose, identity, join, map, prop, isEmpty, union, merge, reject } from 'ramda';
 
-/**
- * @polymer
- * @mixinFunction
- */
-const AttachmentsMixin = EtoolsMixinFactory.combineMixins([
-  window.EtoolsDashboard.Mixins.ListFilters,
-  window.EtoolsDashboard.Mixins.Date,
-  window.EtoolsDashboard.Mixins.CommonGeneral,
-  window.EtoolsDashboard.Mixins.PaginationWithFilters,
-  // window.EtoolsDashboard.Mixins.ReduxStore,
-  window.EtoolsDashboard.Mixins.Dropdown,
-  window.EtoolsDashboard.Mixins.FetchAsset
-], PolymerElement);
 /**
  * `view-attachments` Description
  *
@@ -55,7 +42,12 @@ const AttachmentsMixin = EtoolsMixinFactory.combineMixins([
  * @customElement
  * @polymer
  */
-class ViewAttachments extends AttachmentsMixin {
+//@ts-ignore
+class ViewAttachments extends ListFilters(
+  DateMixin(
+    CommonGeneralMixin(
+      PaginationWithFiltersMixin(
+        DropdownMixin(PolymerElement))))) {
   static get template() {
     return html`
     <style include="shared-styles grid-layout-styles page-layout-styles paper-material-styles list-styles">

@@ -17,7 +17,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 // import '../../mixins/pagination-with-filters-mixin';
 // import { Mixins } from '../../mixins/redux-store-mixin';
 // import '../../mixins/fetch-assets-mixin';
-// import '../../mixins/event-helper-mixin';
+// import '../../components/utils/fire-custom-event';
 // import './data/partners-dropdown-data-mixin';
 // import './data/map-interventions-data';
 // import 'leaflet-map/leaflet-map';
@@ -641,7 +641,7 @@ class ViewMap extends PolymerElement {
 //       ];
 
 //       this.updateShownFilters(filtersValues);
-//       // this.fireEvent('global-loading', {});
+//       // fireEvent(this, 'global-loading', {});
 //     }))
 //   }
 

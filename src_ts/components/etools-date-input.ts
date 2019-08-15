@@ -4,7 +4,7 @@ import '@polymer/paper-input/paper-input.js';
 import { IronValidatableBehavior } from '@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 // import 'etools-datepicker/etools-datepicker-button.js';
-import '../mixins/date-mixin';
+import { DateMixin } from '../mixins/date-mixin';
 import '../styles/shared-styles';
 // import { Mixins } from '../mixins/redux-store-mixin';
 
@@ -12,7 +12,7 @@ import '../styles/shared-styles';
  * @polymer
  * @mixinFunction
  */
-const EtoolsDateInputRequiredMixins = window.EtoolsDashboard.Mixins.Date(PolymerElement);
+const EtoolsDateInputRequiredMixins = DateMixin(PolymerElement);
 /**
  * @polymer
  * @customElement

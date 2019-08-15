@@ -1,322 +1,322 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import '@polymer/paper-dialog/paper-dialog.js';
-import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@polymer/iron-icons/communication-icons.js';
-import '../../../components/data-table/data-table-row';
-import '../../../styles/grid-layout-styles';
-import '../../../styles/list-styles';
-import '../../../styles/shared-styles';
-import '../../../styles/page-layout-styles';
-import { values, map, compose, uniq, pick, prop, flatten } from 'ramda';
+// import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+// import '@polymer/paper-dialog/paper-dialog.js';
+// import '@polymer/paper-icon-button/paper-icon-button.js';
+// import '@polymer/iron-icons/communication-icons.js';
+// import '../../../components/data-table/data-table-row';
+// import '../../../styles/grid-layout-styles';
+// import '../../../styles/list-styles';
+// import '../../../styles/shared-styles';
+// import '../../../styles/page-layout-styles';
+// import { values, map, compose, uniq, pick, prop, flatten } from 'ramda';
 
-/**
- * `marker-dialog` Description
- *
- * @summary ShortDescription.
- * @customElement
- * @polymer
- * @extends {PolymerElement}
- */
-class MarkerDialog extends PolymerElement {
-  static get template() {
-    return html`
-    <style include="shared-styles page-layout-styles list-styles grid-layout-styles">
-      :host {
-        --item-margin: {
-          margin-left: 24px;
-        }
+// /**
+//  * `marker-dialog` Description
+//  *
+//  * @summary ShortDescription.
+//  * @customElement
+//  * @polymer
+//  * @extends {PolymerElement}
+//  */
+// class MarkerDialog extends PolymerElement {
+//   static get template() {
+//     return html`
+//     <style include="shared-styles page-layout-styles list-styles grid-layout-styles">
+//       :host {
+//         --item-margin: {
+//           margin-left: 24px;
+//         }
 
-        @apply --layout-vertical;
+//         @apply --layout-vertical;
 
-        --row-data-details: {
-          flex-direction: column;
-          font-size: 12px;
-        }
-      }
+//         --row-data-details: {
+//           flex-direction: column;
+//           font-size: 12px;
+//         }
+//       }
 
-      .marker {
-        width: 960px;
-        min-height: 86px;
-        overflow: hidden;
-        top: 320px;
-        max-height: 50%;
-      }
+//       .marker {
+//         width: 960px;
+//         min-height: 86px;
+//         overflow: hidden;
+//         top: 320px;
+//         max-height: 50%;
+//       }
 
-      .wrapper {
-        height: 100%;
-        overflow: auto;
-        padding: 0;
-        margin-bottom: 0;
-      }
+//       .wrapper {
+//         height: 100%;
+//         overflow: auto;
+//         padding: 0;
+//         margin-bottom: 0;
+//       }
 
-      paper-dialog paper-icon-button.close {
-        position: absolute;
-        top: 24px;
-        right: 24px;
-        margin: 0 !important;
-        padding: 0;
-      }
+//       paper-dialog paper-icon-button.close {
+//         position: absolute;
+//         top: 24px;
+//         right: 24px;
+//         margin: 0 !important;
+//         padding: 0;
+//       }
 
-      paper-icon-button {
-        width: 25px;
-        height: 25px;
-        padding: 0;
-        margin-right: 8px;
-        color: var(--dark-secondary-text-color);
-      }
+//       paper-icon-button {
+//         width: 25px;
+//         height: 25px;
+//         padding: 0;
+//         margin-right: 8px;
+//         color: var(--dark-secondary-text-color);
+//       }
 
-      h2.expanded-title {
-        color: var(--dark-secondary-text-color);
-        line-height: 24px;
-        font-weight: 500;
-        margin: 0;
-        font-size: inherit;
-      }
+//       h2.expanded-title {
+//         color: var(--dark-secondary-text-color);
+//         line-height: 24px;
+//         font-weight: 500;
+//         margin: 0;
+//         font-size: inherit;
+//       }
 
-      .donor {
-        width: 40%;
-      }
+//       .donor {
+//         width: 40%;
+//       }
 
-      paper-dialog h2.type {
-        margin-top: 8px;
-        font-size: 14px;
-      }
+//       paper-dialog h2.type {
+//         margin-top: 8px;
+//         font-size: 14px;
+//       }
 
-      paper-dialog h2.partner-name {
-        font-size: 14px;
-        text-transform: uppercase;
-        line-height: 14px;
-        font-weight: 500;
-        color: var(--gray-light);
-        margin: 0 20px 0 0;
-      }
+//       paper-dialog h2.partner-name {
+//         font-size: 14px;
+//         text-transform: uppercase;
+//         line-height: 14px;
+//         font-weight: 500;
+//         color: var(--gray-light);
+//         margin: 0 20px 0 0;
+//       }
 
-      paper-dialog a.partner-number {
-        color: var(--accent-color);
-        text-transform: uppercase;
-        font-size: 14px;
-        font-weight: bold;
-      }
+//       paper-dialog a.partner-number {
+//         color: var(--accent-color);
+//         text-transform: uppercase;
+//         font-size: 14px;
+//         font-weight: bold;
+//       }
 
-      paper-dialog span.partner-data {
-        @apply --item-margin;
-        white-space: normal;
-      }
+//       paper-dialog span.partner-data {
+//         @apply --item-margin;
+//         white-space: normal;
+//       }
 
-      paper-dialog .partner {
-        padding-top: 8px;
-      }
+//       paper-dialog .partner {
+//         padding-top: 8px;
+//       }
 
-      data-table-row {
-        padding: 0;
-        margin-top: 0;
-      }
+//       data-table-row {
+//         padding: 0;
+//         margin-top: 0;
+//       }
 
-      .table-row {
-        width: 100%;
-      }
+//       .table-row {
+//         width: 100%;
+//       }
 
-      .partner-sections {
-        margin-bottom: 12px;
-      }
+//       .partner-sections {
+//         margin-bottom: 12px;
+//       }
 
-      .chip {
-        height: 18px;
-        border-radius: 2px;
-        color: #fff;
-        font-size: 13px;
-        font-weight: 500;
-        padding: 2px 4px;
-      }
+//       .chip {
+//         height: 18px;
+//         border-radius: 2px;
+//         color: #fff;
+//         font-size: 13px;
+//         font-weight: 500;
+//         padding: 2px 4px;
+//       }
 
-      .chip:not(:first-of-type) {
-        margin: 0 0 5px 5px;
-      }
+//       .chip:not(:first-of-type) {
+//         margin: 0 0 5px 5px;
+//       }
 
-      .section {
-        background-color: var(--primary-color);
-      }
+//       .section {
+//         background-color: var(--primary-color);
+//       }
 
-      .cluster {
-        background-color: var(--trip-color-four);
-      }
+//       .cluster {
+//         background-color: var(--trip-color-four);
+//       }
 
 
-      .focal-points {
-        margin-bottom: 16px;
-      }
+//       .focal-points {
+//         margin-bottom: 16px;
+//       }
 
-      span.details-data {
-        font-size: 12px;
-        line-height: 24px;
-      }
-    </style>
-    <paper-dialog class="marker layout-vertical" opened="{{opened}}" with-backdrop="">
-      <paper-icon-button class="close" icon="close" on-tap="_close"></paper-icon-button>
-      <div class="layout-horizontal start-align list-panel title-row">
-        <paper-icon-button icon="communication:location-on"></paper-icon-button>
-        <div class="layout-vertical">
-          <h1 sub-title="">[[data.name]]</h1>
-        </div>
-      </div>
+//       span.details-data {
+//         font-size: 12px;
+//         line-height: 24px;
+//       }
+//     </style>
+//     <paper-dialog class="marker layout-vertical" opened="{{opened}}" with-backdrop="">
+//       <paper-icon-button class="close" icon="close" on-tap="_close"></paper-icon-button>
+//       <div class="layout-horizontal start-align list-panel title-row">
+//         <paper-icon-button icon="communication:location-on"></paper-icon-button>
+//         <div class="layout-vertical">
+//           <h1 sub-title="">[[data.name]]</h1>
+//         </div>
+//       </div>
 
-      <div class="wrapper">
-        <template is="dom-repeat" items="[[data.interventions]]">
-          <data-table-row>
+//       <div class="wrapper">
+//         <template is="dom-repeat" items="[[data.interventions]]">
+//           <data-table-row>
 
-            <!-- Collapse Row -->
-            <div slot="row-data">
-              <div class="layout-vertical table-row">
+//             <!-- Collapse Row -->
+//             <div slot="row-data">
+//               <div class="layout-vertical table-row">
 
-                <!-- Partner Name & Sections -->
-                <div class="layout-horizontal space-between align-baseline partner-sections">
-                  <h2 class="partner-name">[[item.partner_name]]</h2>
-                  <div class="layout-horizontal wrap justify-end">
-                    <template is="dom-repeat" items="[[_getSlicedChips(item.sections)]]" as="section">
-                      <span class="chip section">[[section]]</span>
-                    </template>
-                    <template is="dom-if" if="[[_hasMoreThan3(item.sections)]]">
-                      <span class="chip section">+[[_getNumRemaining(item.sections)]]</span>
-                    </template>
+//                 <!-- Partner Name & Sections -->
+//                 <div class="layout-horizontal space-between align-baseline partner-sections">
+//                   <h2 class="partner-name">[[item.partner_name]]</h2>
+//                   <div class="layout-horizontal wrap justify-end">
+//                     <template is="dom-repeat" items="[[_getSlicedChips(item.sections)]]" as="section">
+//                       <span class="chip section">[[section]]</span>
+//                     </template>
+//                     <template is="dom-if" if="[[_hasMoreThan3(item.sections)]]">
+//                       <span class="chip section">+[[_getNumRemaining(item.sections)]]</span>
+//                     </template>
 
-                    <template is="dom-if" if="[[_hasClusters(item)]]">
-                      <template is="dom-repeat" items="[[_getSlicedChips(item.clusters)]]" as="cluster">
-                        <span class="chip cluster">[[cluster]]</span>
-                      </template>
-                      <template is="dom-if" if="[[_hasMoreThan3(item.clusters)]]">
-                        <span class="chip cluster">+[[_getNumRemaining(item.sections)]]</span>
-                      </template>
-                    </template>
+//                     <template is="dom-if" if="[[_hasClusters(item)]]">
+//                       <template is="dom-repeat" items="[[_getSlicedChips(item.clusters)]]" as="cluster">
+//                         <span class="chip cluster">[[cluster]]</span>
+//                       </template>
+//                       <template is="dom-if" if="[[_hasMoreThan3(item.clusters)]]">
+//                         <span class="chip cluster">+[[_getNumRemaining(item.sections)]]</span>
+//                       </template>
+//                     </template>
 
-                  </div>
+//                   </div>
 
-                </div>
+//                 </div>
 
-                <!-- Intervention & Description -->
-                <div class="layout-horizontal">
-                  <a class="partner-number" href="[[_getHref(item.id)]]" target="_blank">[[item.number]]:</a>
-                  <span class="partner-data">[[item.title]]</span>
-                </div>
-              </div>
-            </div>
+//                 <!-- Intervention & Description -->
+//                 <div class="layout-horizontal">
+//                   <a class="partner-number" href="[[_getHref(item.id)]]" target="_blank">[[item.number]]:</a>
+//                   <span class="partner-data">[[item.title]]</span>
+//                 </div>
+//               </div>
+//             </div>
 
-            <!-- Expanded Details -->
-            <div slot="row-data-details">
-              <div class="layout-horizontal table-row">
+//             <!-- Expanded Details -->
+//             <div slot="row-data-details">
+//               <div class="layout-horizontal table-row">
 
-                <!-- Focal Points & Offices -->
-                <div class="layout-vertical col-6">
+//                 <!-- Focal Points & Offices -->
+//                 <div class="layout-vertical col-6">
 
-                  <div class="focal-points">
-                    <h2 class="expanded-title">Unicef Focal Point(s)</h2>
-                    <span class="details-data">
-                      [[_commaJoin(item.unicef_focal_points)]]
-                    </span>
-                  </div>
+//                   <div class="focal-points">
+//                     <h2 class="expanded-title">Unicef Focal Point(s)</h2>
+//                     <span class="details-data">
+//                       [[_commaJoin(item.unicef_focal_points)]]
+//                     </span>
+//                   </div>
 
-                  <h2 class="expanded-title">Office</h2>
-                  <template is="dom-repeat" items="[[item.offices]]" as="office">
-                    <span class="details-data">[[office]]</span>
-                  </template>
+//                   <h2 class="expanded-title">Office</h2>
+//                   <template is="dom-repeat" items="[[item.offices]]" as="office">
+//                     <span class="details-data">[[office]]</span>
+//                   </template>
 
-                </div>
+//                 </div>
 
-                <!-- Donor & Grants -->
-                <div class="layout-vertical col-6">
-                  <!-- Titles -->
-                  <div class="layout-horizontal">
-                    <h2 class="expanded-title donor">Donor</h2>
-                    <h2 class="expanded-title">Grant</h2>
-                  </div>
+//                 <!-- Donor & Grants -->
+//                 <div class="layout-vertical col-6">
+//                   <!-- Titles -->
+//                   <div class="layout-horizontal">
+//                     <h2 class="expanded-title donor">Donor</h2>
+//                     <h2 class="expanded-title">Grant</h2>
+//                   </div>
 
-                  <!-- Pairs -->
-                  <template is="dom-repeat" items="[[_getUniqFrs(item.frs)]]" as="fr">
-                      <div class="layout-horizontal">
-                        <span class="details-data donor">[[fr.donor]]</span>
-                        <span class="details-data">[[fr.grant_number]]</span>
-                      </div>
-                  </template>
+//                   <!-- Pairs -->
+//                   <template is="dom-repeat" items="[[_getUniqFrs(item.frs)]]" as="fr">
+//                       <div class="layout-horizontal">
+//                         <span class="details-data donor">[[fr.donor]]</span>
+//                         <span class="details-data">[[fr.grant_number]]</span>
+//                       </div>
+//                   </template>
 
-                </div>
-              </div>
-            </div>
-          </data-table-row>
+//                 </div>
+//               </div>
+//             </div>
+//           </data-table-row>
 
-        </template>
+//         </template>
 
-      </div>
-    </paper-dialog>
-`;
-  }
+//       </div>
+//     </paper-dialog>
+// `;
+//   }
 
-  /**
-   * String providing the tag name to register the element under.
-   */
-  static get is() {
-    return 'marker-dialog';
-  }
+//   /**
+//    * String providing the tag name to register the element under.
+//    */
+//   static get is() {
+//     return 'marker-dialog';
+//   }
 
-  /**
-   * Object describing property-related metadata used by Polymer features
-   */
-  static get properties() {
-    return {
-      data: {
-        type: Object
-      },
-      interventions: {
-        type: Array
-      },
-      opened: {
-        type: Boolean,
-        value: false
-      }
-    };
-  }
+//   /**
+//    * Object describing property-related metadata used by Polymer features
+//    */
+//   static get properties() {
+//     return {
+//       data: {
+//         type: Object
+//       },
+//       interventions: {
+//         type: Array
+//       },
+//       opened: {
+//         type: Boolean,
+//         value: false
+//       }
+//     };
+//   }
 
-  _values(obj) {
-    return values(obj);
-  }
+//   _values(obj) {
+//     return values(obj);
+//   }
 
-  _getSlicedChips(list) {
-    return list.slice(0, 3).sort((a, b)=>{
-      if (a<b) {
-        return -1;
-      } else if(a>b) {
-        return 1;
-      }
-      return 0;
-    });
-  }
+//   _getSlicedChips(list) {
+//     return list.slice(0, 3).sort((a, b)=>{
+//       if (a<b) {
+//         return -1;
+//       } else if(a>b) {
+//         return 1;
+//       }
+//       return 0;
+//     });
+//   }
 
-  _getNumRemaining(list) {
-    return list.length - 3;
-  }
+//   _getNumRemaining(list) {
+//     return list.length - 3;
+//   }
 
-  _hasMoreThan3(list) {
-    return list.length > 3;
-  }
+//   _hasMoreThan3(list) {
+//     return list.length > 3;
+//   }
 
-  _hasClusters(item) {
-    return Array.isArray(item.clusters);
-  }
+//   _hasClusters(item) {
+//     return Array.isArray(item.clusters);
+//   }
 
-  _getUniqFrs(frs) {
-    const uniqueList = map(compose( uniq, map(pick(['donor', 'grant_number'])), prop('line_item_details')))(frs);
-    return flatten(uniqueList);
-  }
+//   _getUniqFrs(frs) {
+//     const uniqueList = map(compose( uniq, map(pick(['donor', 'grant_number'])), prop('line_item_details')))(frs);
+//     return flatten(uniqueList);
+//   }
 
-  _close() {
-    this.set('opened', false);
-  }
+//   _close() {
+//     this.set('opened', false);
+//   }
 
-  _getHref(id) {
-    return '/pmp/interventions/' + id + '/details';
-  }
+//   _getHref(id) {
+//     return '/pmp/interventions/' + id + '/details';
+//   }
 
-  _commaJoin(list) {
-    return list.join(', ');
-  }
-}
+//   _commaJoin(list) {
+//     return list.join(', ');
+//   }
+// }
 
-window.customElements.define(MarkerDialog.is, MarkerDialog);
+// window.customElements.define(MarkerDialog.is, MarkerDialog);

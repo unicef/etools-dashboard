@@ -41,7 +41,7 @@ class PageFooter extends PolymerElement {
     <footer>
       <div id="footer-content">
         <span id="unicef-logo">
-          <img src\$="[[importPath]]../../../images/UNICEF_logo.png" alt="UNICEF logo">
+          <img src\$="[[importPath]]images/UNICEF_logo.png" alt="UNICEF logo">
         </span>
       </div>
     </footer>

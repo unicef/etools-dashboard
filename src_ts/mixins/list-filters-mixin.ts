@@ -4,14 +4,14 @@ import moment from 'moment';
 // import { Mixins } from './redux-store-mixin';
 // export const Mixins = Mixins || {};
 
-window.EtoolsDashboard = window.EtoolsDashboard || {};
-window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+// window.EtoolsDashboard = window.EtoolsDashboard || {};
+// window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 /**
 * @polymer
 * @mixinFunction
 */
-window.EtoolsDashboard.Mixins.ListFilters = (superClass) => class extends superClass {
+export const ListFilters = (superClass) => class extends superClass {
   constructor() {
     super();
   }

@@ -18,7 +18,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 // import 'google-chart/google-chart-loader';
 // import '../../mixins/dropdown-mixin';
 // import { Mixins } from '../../mixins/redux-store-mixin';
-// import '../../mixins/event-helper-mixin';
+// import '../../components/utils/fire-custom-event';
 // import '../../mixins/fetch-assets-mixin';
 // import './data/trips-dashboard-data';
 // import './data/action-pts-by-section-data';
@@ -364,7 +364,7 @@ class ViewTrips extends PolymerElement {
 //   _init(active) {
 //     if (active) {
 //       if (!this.staticDataLoaded) {
-//         this.fireEvent('global-loading', { message: 'Loading page data...', active: true });
+//         fireEvent(this, 'global-loading', { message: 'Loading page data...', active: true });
 //       }
 //       this._initTripsChart();
 //       if (!this.actionPtsFilter) {
@@ -428,7 +428,7 @@ class ViewTrips extends PolymerElement {
 //     }, true);
 //     if (allHaveValues) {
 //       this.set('staticDataLoaded', true);
-//       this.fireEvent('global-loading', {});
+//       fireEvent(this, 'global-loading', {});
 //     }
 //   }
 
@@ -476,7 +476,7 @@ class ViewTrips extends PolymerElement {
 //     if (!isEmpty(data) && data != null) {
 //       var travels = prop('travels_by_section', data);
 //       if (!travels.length && this.active) {
-//         this.fireEvent('global-loading', {});
+//         fireEvent(this, 'global-loading', {});
 //         this._setNoData('tripsChart');
 //       } else {
 //         var formatted = [

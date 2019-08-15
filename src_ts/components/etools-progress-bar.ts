@@ -1,93 +1,104 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/paper-progress/paper-progress.js';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+import { property, customElement } from '@polymer/decorators';
+// import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 
-const EtoolsProgressBarMixin = EtoolsMixinFactory.combineMixins([], PolymerElement);
+// const EtoolsProgressBarMixin = EtoolsMixinFactory.combineMixins([], PolymerElement);
 
 /**
  * @polymer
  * @customElement
  * @extends {PolymerElement}
  */
-class EtoolsProgressBar extends EtoolsProgressBarMixin {
+@customElement('etools-progress-bar')
+export class EtoolsProgressBar extends PolymerElement {
   static get template() {
     return html`
-    <style>
-      :host {
-        @apply --layout-horizontal;
-        @apply --layout-center;
+      <style>
+        :host {
+          @apply --layout-horizontal;
+          @apply --layout-center;
 
-        --paper-progress-active-color: #72C300;
-        --paper-progress-secondary-color: var(--primary-background-color);
-        --paper-progress-height: 10px;
-      }
+          --paper-progress-active-color: #72C300;
+          --paper-progress-secondary-color: var(--primary-background-color);
+          --paper-progress-height: 10px;
+        }
 
-      /* #progress-percent {
-        margin-left: 16px;
-        min-width: 56px;
-      } */
-
-      paper-progress {
-        width: var(--etools-progress-bar-width, 200px);
-      }
-
-      @media print {
+        /* #progress-percent {
+          margin-left: 16px;
+          min-width: 56px;
+        } */
 
         paper-progress {
-          position: relative;
+          width: var(--etools-progress-bar-width, 200px);
         }
 
-        paper-progress::before,
-        paper-progress::after {
-          content: ' ';
-          display: inline-block;
-          position: absolute;
-          top: 0;
-          left: 0;
-          height: 0;
-        }
+        @media print {
 
-        paper-progress::before {
-          z-index: 1;
-          right: 0;
-          border-bottom: 10px solid var(--paper-progress-container-color, var(--google-grey-300));
-        }
+          paper-progress {
+            position: relative;
+          }
 
-        paper-progress::after {
-          z-index: 1;
-          border-bottom: 10px solid #72C300;
-          width: var(--etools-progress-width-on-print, 0%);
+          paper-progress::before,
+          paper-progress::after {
+            content: ' ';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 0;
+          }
+
+          paper-progress::before {
+            z-index: 1;
+            right: 0;
+            border-bottom: 10px solid var(--paper-progress-container-color, var(--google-grey-300));
+          }
+
+          paper-progress::after {
+            z-index: 1;
+            border-bottom: 10px solid #72C300;
+            width: var(--etools-progress-width-on-print, 0%);
+          }
         }
-      }
-    </style>
-    <div>
-      <paper-progress value="[[progressValue]]" secondary-progress="[[_getSecondaryProgress(progressValue)]]"></paper-progress>
-    </div>
-`;
+      </style>
+      <div>
+        <paper-progress value="[[progressValue]]" secondary-progress="[[_getSecondaryProgress(progressValue)]]"></paper-progress>
+      </div>
+    `;
   }
 
-  static get is() {
-    return 'etools-progress-bar';
-  }
+  // static get is() {
+  //   return 'etools-progress-bar';
+  // }
 
-  static get properties() {
-    return {
-      value: {
-        type: Number,
-        value: 0
-      },
-      progressValue: {
-        type: Number,
-        readOnly: true,
-        computed: '_getProgress(value)'
-      },
-      noDecimals: {
-        type: Boolean,
-        value: false
-      }
-    };
-  }
+  @property({type: Number})
+  value: number = 0;
+
+  @property({type: Number, readOnly: true})
+  progressValue: number = this._getProgress(this.value);
+
+  @property({type: Boolean})
+  noDecimals: boolean = false;
+
+  // static get properties() {
+  //   return {
+  //     value: {
+  //       type: Number,
+  //       value: 0
+  //     },
+  //     progressValue: {
+  //       type: Number,
+  //       readOnly: true,
+  //       computed: '_getProgress(value)'
+  //     },
+  //     noDecimals: {
+  //       type: Boolean,
+  //       value: false
+  //     }
+  //   };
+  // }
 
   _getProgress(value) {
     value = parseFloat(parseFloat(value).toFixed(2));
@@ -117,4 +128,4 @@ class EtoolsProgressBar extends EtoolsProgressBarMixin {
   }
 }
 
-window.customElements.define(EtoolsProgressBar.is, EtoolsProgressBar);
+// window.customElements.define(EtoolsProgressBar.is, EtoolsProgressBar);

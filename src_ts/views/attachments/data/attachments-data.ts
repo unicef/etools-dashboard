@@ -1,17 +1,13 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
-import '../../../mixins/data-element-mixin';
-import '../../../mixins/date-mixin';
-import '../../../mixins/event-helper-mixin';
+// import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+import { DataElementMixin } from '../../../mixins/data-element-mixin';
+import { DateMixin } from '../../../mixins/date-mixin';
+import { fireEvent } from '../../../components/utils/fire-custom-event';
 // import { db } from '../../../config/dexie-db-config';
 // import { Mixins } from '../../../mixins/redux-store-mixin';
 import { contains, equals, without, keys, isEmpty, sortBy, prop, uniq } from 'ramda';
+import { property } from '@polymer/decorators';
 
-const AttachmentsDataMixin = EtoolsMixinFactory.combineMixins([
-  window.EtoolsDashboard.Mixins.DataElement,
-  window.EtoolsDashboard.Mixins.Date,
-  window.EtoolsDashboard.Mixins.EventHelper
-], (PolymerElement));
 /**
  * `attachments-data` Description
  *
@@ -20,7 +16,10 @@ const AttachmentsDataMixin = EtoolsMixinFactory.combineMixins([
  * @polymer
  * @extends {PolymerElement}
  */
-class AttachmentsData extends AttachmentsDataMixin {
+// @ts-ignore
+class AttachmentsData extends 
+  DataElementMixin(
+    DateMixin(PolymerElement)) {
   /**
    * String providing the tag name to register the element under.
    */
@@ -28,71 +27,113 @@ class AttachmentsData extends AttachmentsDataMixin {
     return 'attachments-data';
   }
 
+  @property({type: String})
+  endpointName: string = 'attachments';
+
+  @property({type: Number, readOnly: true, notify: true})
+  filteredTotal: number;
+
+  @property({type: Array, readOnly: true, notify: true})
+  filteredAttachments: object[];
+
+  @property({type: Array, notify: true})
+  orderedResults: object[] = [];
+
+  @property({type: String})
+  dataLoadedEventName: string = 'attachments-loaded';
+
+  @property({type: Boolean})
+  loadedInitially: boolean = false;
+
+  @property({type: Object})
+  currentParams: object = {};
+
+  @property({type: Object})
+  predicates: object = function() {
+    return {
+      searchString: ({ partner, vendor_number, pd_ssfa_number, agreement_reference_number }, query) => {
+        partner = partner.toLowerCase();
+        vendor_number = vendor_number.toLowerCase();
+        pd_ssfa_number = pd_ssfa_number.toLowerCase();
+        agreement_reference_number = agreement_reference_number.toLowerCase();
+        query = query.toLowerCase();
+        return contains(query, partner)
+          || contains(query, vendor_number)
+          || contains(query, pd_ssfa_number)
+          || contains(query, agreement_reference_number);
+      },
+      attachmentType: ({ file_type }, type) => contains(file_type, type),
+      pca: ({ agreement_reference_number }, selectedPCA) => contains(agreement_reference_number, selectedPCA),
+      pd: ({ pd_ssfa_number }, selectedPD) => contains(pd_ssfa_number, selectedPD)
+    };
+  }
+
   /**
    * Object describing property-related metadata used by Polymer features
    */
-  static get properties() {
-    return {
-      endpointName: {
-        type: String,
-        value: 'attachments'
-      },
-      filteredTotal: {
-        type: Number,
-        readOnly: true,
-        notify: true
-      },
-      filteredAttachments: {
-        type: Array,
-        readOnly: true,
-        notify: true
-      },
-      orderedResults: {
-        type: Array,
-        value: [],
-        notify: true
-      },
-      dataLoadedEventName: {
-        type: String,
-        value: 'attachments-loaded'
-      },
-      loadedInitially: {
-        type: Boolean,
-        value: false
-      },
-      currentParams: {
-        type: Object,
-        value: {}
-      },
-      predicates: {
-        type: Object,
-        value: function() {
-          return {
-            searchString: ({ partner, vendor_number, pd_ssfa_number, agreement_reference_number }, query) => {
-              partner = partner.toLowerCase();
-              vendor_number = vendor_number.toLowerCase();
-              pd_ssfa_number = pd_ssfa_number.toLowerCase();
-              agreement_reference_number = agreement_reference_number.toLowerCase();
-              query = query.toLowerCase();
-              return contains(query, partner)
-                || contains(query, vendor_number)
-                || contains(query, pd_ssfa_number)
-                || contains(query, agreement_reference_number);
-            },
-            attachmentType: ({ file_type }, type) => contains(file_type, type),
-            pca: ({ agreement_reference_number }, selectedPCA) => contains(agreement_reference_number, selectedPCA),
-            pd: ({ pd_ssfa_number }, selectedPD) => contains(pd_ssfa_number, selectedPD)
-          };
-        }
-      }
-    };
-  }
+  // static get properties() {
+  //   return {
+  //     endpointName: {
+  //       type: String,
+  //       value: 'attachments'
+  //     },
+  //     filteredTotal: {
+  //       type: Number,
+  //       readOnly: true,
+  //       notify: true
+  //     },
+  //     filteredAttachments: {
+  //       type: Array,
+  //       readOnly: true,
+  //       notify: true
+  //     },
+  //     orderedResults: {
+  //       type: Array,
+  //       value: [],
+  //       notify: true
+  //     },
+  //     dataLoadedEventName: {
+  //       type: String,
+  //       value: 'attachments-loaded'
+  //     },
+  //     loadedInitially: {
+  //       type: Boolean,
+  //       value: false
+  //     },
+  //     currentParams: {
+  //       type: Object,
+  //       value: {}
+  //     },
+  //     predicates: {
+  //       type: Object,
+  //       value: function() {
+  //         return {
+  //           searchString: ({ partner, vendor_number, pd_ssfa_number, agreement_reference_number }, query) => {
+  //             partner = partner.toLowerCase();
+  //             vendor_number = vendor_number.toLowerCase();
+  //             pd_ssfa_number = pd_ssfa_number.toLowerCase();
+  //             agreement_reference_number = agreement_reference_number.toLowerCase();
+  //             query = query.toLowerCase();
+  //             return contains(query, partner)
+  //               || contains(query, vendor_number)
+  //               || contains(query, pd_ssfa_number)
+  //               || contains(query, agreement_reference_number);
+  //           },
+  //           attachmentType: ({ file_type }, type) => contains(file_type, type),
+  //           pca: ({ agreement_reference_number }, selectedPCA) => contains(agreement_reference_number, selectedPCA),
+  //           pd: ({ pd_ssfa_number }, selectedPD) => contains(pd_ssfa_number, selectedPD)
+  //         };
+  //       }
+  //     }
+  //   };
+  // }
 
   query(params) {
     if (equals(params, this.currentParams)) {
       return;
     }
-    this.fireEvent('global-loading', { active: true, loadingSource: 'attachments-data' });
+    // @ts-ignore
+    fireEvent(this, 'global-loading', { active: true, loadingSource: 'attachments-data' });
     this.set('currentParams', params);
     const { pageNumber, pageSize, order, orderBy } = params;
     window.EtoolsDashboard.DexieDb.transaction('r', window.EtoolsDashboard.DexieDb.attachments, () => {
@@ -118,11 +159,14 @@ class AttachmentsData extends AttachmentsDataMixin {
           .toArray(),
         allResults.toArray()
       ]).then((countAndResult) => {
-        this.fireEvent('global-loading', { loadingSource: 'attachments-data' });
-
+        // @ts-ignore
+        fireEvent(this, 'global-loading', { loadingSource: 'attachments-data' });
+        // @ts-ignore
         this._setFilteredTotal(countAndResult[0]);
+        // @ts-ignore
         this._setFilteredAttachments(countAndResult[1]);
         countAndResult[2].forEach((file) => {
+          // @ts-ignore
           if (!this.orderedResults.some((item) => item.keys === `${file.partner} - ${file.vendor_number}`)) {
             let obj = {};
             let vend = countAndResult[2].filter((file2) => file2.vendor_number === file.vendor_number);

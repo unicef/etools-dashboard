@@ -1,19 +1,20 @@
-import '@polymer/polymer/polymer-element.js';
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import './date-mixin';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { Constructor } from '../typings/globals.types';
+// import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { isEmpty } from 'ramda';
+import { DateMixin } from './date-mixin';
 // import { Mixins } from './redux-store-mixin';
 // export const Mixins = Mixins || {};
 
-window.EtoolsDashboard = window.EtoolsDashboard || {};
-window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
+// window.EtoolsDashboard = window.EtoolsDashboard || {};
+// window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
 
 /**
  * @polymer
  * @mixinFunction
  */
-window.EtoolsDashboard.Mixins.CommonGeneral = dedupingMixin(
-  (superClass) => class extends window.EtoolsDashboard.Mixins.Date(superClass) {
+export function CommonGeneralMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
+  class CommonGeneralMixinClass extends DateMixin(baseClass as Constructor<PolymerElement>) {
     constructor() {
       super();
     }
@@ -22,7 +23,7 @@ window.EtoolsDashboard.Mixins.CommonGeneral = dedupingMixin(
      * Prepare and return the string value we have to display on the interface.
      * Ex: partners and agreements lists data values.
      */
-    getDisplayValue(value, isDate, separator) {
+    publicgetDisplayValue(value, isDate, separator) {
       if (typeof value === 'string' && value !== '') {
         if (isDate) {
           return this.prettyDate(value);
@@ -43,7 +44,7 @@ window.EtoolsDashboard.Mixins.CommonGeneral = dedupingMixin(
     /**
      * Update URL params
      */
-    updateAppState(routePath, qs, dispatchLocationChange) {
+    public updateAppState(routePath, qs, dispatchLocationChange) {
       // Using replace state to change the URL here ensures the browser's
       // back button doesn't take you through every query
       var currentState = window.history.state;
@@ -99,7 +100,7 @@ window.EtoolsDashboard.Mixins.CommonGeneral = dedupingMixin(
      * Reset field validation
      */
     fieldValidationReset(selector) {
-      var field = this.$$(selector);
+      var field = this.shadowRoot.querySelector(selector);
       if (field) {
         field.invalid = false;
       }
@@ -129,6 +130,7 @@ window.EtoolsDashboard.Mixins.CommonGeneral = dedupingMixin(
     }
 
     goToPage(e) {
+      // @ts-ignore
       var path = [this.baseSite, e.target.getAttribute('app-name'),
         e.target.getAttribute('page')].join('/') + '/' + e.target.id;
       this.manageClickEvent(e, path);
@@ -165,4 +167,5 @@ window.EtoolsDashboard.Mixins.CommonGeneral = dedupingMixin(
       return optionsCollection.filter((option) => arr.indexOf(option[valueProp]) > -1);
     }
   }
-);
+  return CommonGeneralMixinClass;
+}

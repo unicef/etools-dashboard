@@ -27,10 +27,10 @@ import '../../../components/data-table/data-table-row';
 import '../../../components/data-table/data-table-footer';
 import '../../../mixins/common-general-mixin';
 import '../../../mixins/list-filters-mixin';
-import '../../../mixins/fetch-assets-mixin';
+// import '../../../mixins/fetch-assets-mixin';
 import '../../../mixins/pagination-with-filters-mixin';
 // import { Mixins } from '../../../mixins/redux-store-mixin';
-import '../../../endpoints/endpoints-mixin';
+import { EndpointsMixin } from '../../../endpoints/endpoints-mixin';
 import '../data/partnership-overview-data';
 import { identity, compose, join, map, prop, isEmpty } from 'ramda';
 
@@ -42,9 +42,9 @@ const PartnershipsOverviewMixin = EtoolsMixinFactory.combineMixins([
 window.EtoolsDashboard.Mixins.CommonGeneral,
 // window.EtoolsDashboard.Mixins.ReduxStore,
 window.EtoolsDashboard.Mixins.ListFilters,
-window.EtoolsDashboard.Mixins.Endpoints,
+EndpointsMixin,
 window.EtoolsDashboard.Mixins.PaginationWithFilters,
-window.EtoolsDashboard.Mixins.FetchAsset
+// window.EtoolsDashboard.Mixins.FetchAsset
 ], PolymerElement);
 
 /**

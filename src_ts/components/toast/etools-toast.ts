@@ -1,14 +1,15 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-toast/paper-toast.js';
 import '@polymer/paper-button/paper-button.js';
-import '../../mixins/event-helper-mixin';
+import { fireEvent } from '../../components/utils/fire-custom-event';
 // import { Mixins } from '../../mixins/redux-store-mixin';
+import { property } from '@polymer/decorators';
 
 /**
  * @polymer
  * @customElement
  */
-class EtoolsToast extends window.EtoolsDashboard.Mixins.EventHelper(PolymerElement) {
+export class EtoolsToast extends (PolymerElement) {
   static get template() {
     return html`
     <style>
@@ -58,37 +59,43 @@ class EtoolsToast extends window.EtoolsDashboard.Mixins.EventHelper(PolymerEleme
     return 'etools-toast';
   }
 
-  static get properties() {
-    return {
-      fitInto: Object
-    };
-  }
+  @property({type: Object})
+  fitInto: object
+
+  // static get properties() {
+  //   return {
+  //     fitInto: Object
+  //   };
+  // }
   ready() {
     super.ready();
   }
   show(details) {
+    // @ts-ignore
     return this.$.toast.show(details);
   }
 
   toggle() {
+    // @ts-ignore
     return this.$.toast.toggle();
   }
 
   confirmToast() {
-    this.fireEvent('toast-confirm', {
+    fireEvent(this, 'toast-confirm', {
       bubbles: true,
       composed: true
     });
   }
 
   toastClosed() {
-    this.fireEvent('toast-closed', {
+    fireEvent(this, 'toast-closed', {
       bubbles: true,
       composed: true
     });
   }
 
   getMessageWrapper() {
+    // @ts-ignore
     return this.$.toast.$.label;
   }
 
@@ -116,6 +123,7 @@ class EtoolsToast extends window.EtoolsDashboard.Mixins.EventHelper(PolymerEleme
       closeToastBtn.classList.remove('toast-dismiss-btn-multi-line');
       closeToastBtn.classList.add('toast-dismiss-btn');
     }
+    // @ts-ignore
     closeToastBtn.updateStyles();
 
     // clone detail obj
@@ -126,6 +134,7 @@ class EtoolsToast extends window.EtoolsDashboard.Mixins.EventHelper(PolymerEleme
       if (detail.showCloseBtn === true) {
         closeToastBtn.removeAttribute('hidden');
       } else {
+        // @ts-ignore
         closeToastBtn.setAttribute('hidden', true);
         if (!detail.duration) {
           toastProperties.duration = 5000;
@@ -133,6 +142,7 @@ class EtoolsToast extends window.EtoolsDashboard.Mixins.EventHelper(PolymerEleme
       }
       delete toastProperties.showCloseBtn;
     } else {
+      // @ts-ignore
       closeToastBtn.setAttribute('hidden', true);
     }
 

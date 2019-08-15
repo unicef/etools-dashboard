@@ -1,67 +1,50 @@
-// import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { Constructor } from '../typings/globals.types';
+import { property } from '@polymer/decorators';
+import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
 import { isEmpty } from 'ramda';
-import './data-element-mixin';
-import './user-permissions-mixin';
-// import { Mixins } from './redux-store-mixin';
-// export const Mixins = Mixins || {};
+import { AjaxErrorsParserMixin } from './ajax-errors-parser-mixin';
+import { DataElementMixin } from './data-element-mixin';
+import { UserPermissionsMixin } from './user-permissions-mixin';
+import { EndpointsMixin } from '../endpoints/endpoints-mixin';
+import { fireEvent } from '../components/utils/fire-custom-event';
 
-window.EtoolsDashboard = window.EtoolsDashboard || {};
-window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
-
-/**
- * `user-data` Description
- *
- * @summary ShortDescription.
- * @customElement
- * @polymer
- * @extends {PolymerElement}
- */
-
-window.EtoolsDashboard.Mixins.UserProfileData = (baseClass) =>
-  class extends window.EtoolsDashboard.Mixins.DataElement(
-    window.EtoolsDashboard.Mixins.UserPermissions(baseClass)) {
+export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
+  class UserProfileDataMixinClass extends AjaxErrorsParserMixin(
+    DataElementMixin(
+      EtoolsAjaxRequestMixin(
+        EndpointsMixin(
+          UserPermissionsMixin(baseClass as Constructor<PolymerElement>))))) {
+    [x: string]: any;
 
     /**
      * Object describing property-related metadata used by Polymer features
      */
-    static get properties() {
-      return {
-        endpointName: {
-          type: String,
-          value: 'myProfile'
-        },
+    @property({type: String})
+    endpointName: string = 'myProfile';
 
-        user: {
-          type: Object,
-          notify: true
-        },
+    @property({type: Object, notify: true})
+    user: object;
 
-        permissions: {
-          type: Object,
-          readOnly: true,
-          notify: true
-        },
+    @property({type: Object, readOnly: true, notify: true})
+    permissions: object;
 
-         _saveActionInProgress: Boolean,
+    @property({type: Boolean})
+    _saveActionInProgress: boolean;
 
-        profileSaveLoadingMsgSource: {
-          type: String,
-          value: 'profile-modal'
-        }
-
-      };
-    }
+    @property({type: String})
+    profileSaveLoadingMsgSource: string = 'profile-modal';
 
     saveProfile(profile) {
       if (isEmpty(profile)) {
         // empty profile means no changes found
-        this.fireEvent('toast', {
+        fireEvent(this, 'toast', {
           text: 'There is nothing to save. No change detected on your profile.',
           showCloseBtn: true
         });
         return;
       }
-      this.fireEvent('global-loading', {
+      fireEvent(this, 'global-loading', {
         message: 'Saving profile data...',
         active: true,
         loadingSource: this.profileSaveLoadingMsgSource
@@ -76,10 +59,10 @@ window.EtoolsDashboard.Mixins.UserProfileData = (baseClass) =>
         method: 'PATCH',
         body: profile
       };
-
       this.sendRequest(config).then((resp) => {
         this._handleMyResponse(resp);
       }).catch((err) => {
+        // @ts-ignore
         this.parseRequestErrorsAndShowAsToastMsgs(err);
         this._hideProfileSaveLoadingMsg();
       });
@@ -94,11 +77,13 @@ window.EtoolsDashboard.Mixins.UserProfileData = (baseClass) =>
 
     _hideProfileSaveLoadingMsg() {
       if (this._saveActionInProgress) {
-        this.fireEvent('global-loading', {
+        fireEvent(this, 'global-loading', {
           active: false,
           loadingSource: this.profileSaveLoadingMsgSource
         });
         this.set('_saveActionInProgress', false);
       }
     }
-  };
+  }
+  return UserProfileDataMixinClass
+}

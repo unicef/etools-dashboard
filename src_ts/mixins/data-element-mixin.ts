@@ -1,58 +1,41 @@
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { Constructor } from '../typings/globals.types';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import '../endpoints/endpoints-mixin';
-import './ajax-server-errors-mixin';
-import './event-helper-mixin';
-// import { Mixins } from './redux-store-mixin';
-// export const Mixins = Mixins || {};
+import { EndpointsMixin } from '../endpoints/endpoints-mixin';
+import { AjaxServerErrorsMixin } from './ajax-server-errors-mixin';
+import { fireEvent } from '../components/utils/fire-custom-event';
+import { property } from '@polymer/decorators';
 
-window.EtoolsDashboard = window.EtoolsDashboard || {};
-window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
-
-/**
- * @polymer
- * @mixinFunction
- */
-window.EtoolsDashboard.Mixins.DataElement = (superClass) =>
-  class extends window.EtoolsDashboard.Mixins.Endpoints(
-    window.EtoolsDashboard.Mixins.AjaxServerErrors(
-      window.EtoolsDashboard.Mixins.EventHelper(
-        EtoolsAjaxRequestMixin(superClass)))) {
+export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
+  class DataElementMixinClass extends 
+    EndpointsMixin(
+      AjaxServerErrorsMixin(
+        EtoolsAjaxRequestMixin(baseClass))) {
 
     constructor() {
       super();
     }
 
-    static get properties() {
-      return {
-        options: {
-          type: Object,
-          value: {
-            endpoint: null,
-            csrf: true
-          }
-        },
-        data: {
-          type: Array,
-          readOnly: true,
-          notify: true
-        },
-        globalMessage: {
-          type: String,
-          value: 'An error occurred while trying to fetch the data!'
-        },
-        fireDataLoaded: {
-          type: Boolean,
-          value: false
-        },
-        _refreshInterval: {
-          type: Object,
-          value: null
-        },
-        endpointName: {
-          type: String
-        }
-      };
-    }
+    @property({type: Object})
+    options: object | any = {
+      endpoint: null,
+      csrf: true
+    };
+
+    @property({type: Array, notify: true, readOnly: true})
+    data: object[];
+
+    @property({type: Array})
+    globalMessage: string = 'An error occurred while trying to fetch the data!';
+
+    @property({type: Boolean})
+    fireDataLoaded: boolean = false;
+
+    @property({type: Object})
+    _refreshInterval: object = null;
+
+    @property({type: String})
+    endpointName: string;
 
     static get observers() {
       return [
@@ -80,7 +63,7 @@ window.EtoolsDashboard.Mixins.DataElement = (superClass) =>
     }
 
     _requestData() {
-      this.fireEvent('global-loading', {
+      fireEvent(this, 'global-loading', {
         active: true,
         loadingSource: this.endpointName
       });
@@ -90,12 +73,13 @@ window.EtoolsDashboard.Mixins.DataElement = (superClass) =>
           this._handleMyResponse(resp);
         }).catch((err) => {
           if (this.options.endpoint.template.indexOf('profile') && err.status === 403) {
-            this.fireEvent('forbidden', { bubbles: true, composed: true });
+            fireEvent(this, 'forbidden', { bubbles: true, composed: true });
           }
+          // @ts-ignore
           this.handleErrorResponse(err);
         })
         .finally(() => {
-          this.fireEvent('global-loading', {
+          fireEvent(this, 'global-loading', {
             active: false,
             loadingSource: this.endpointName
           });
@@ -103,12 +87,15 @@ window.EtoolsDashboard.Mixins.DataElement = (superClass) =>
     }
 
     _handleMyResponse(res) {
+      // @ts-ignore
       this._setData(res);
       if (this.fireDataLoaded) {
+        // @ts-ignore
         if (!this.dataLoadedEventName) {
           console.warn('Please specify data loaded event name(dataLoadedEventName property)');
         } else {
-          this.fireEvent(this.dataLoadedEventName);
+          // @ts-ignore
+          fireEvent(this, this.dataLoadedEventName);
         }
       }
     }
@@ -125,6 +112,7 @@ window.EtoolsDashboard.Mixins.DataElement = (superClass) =>
 
     _removeAutomaticDataRefreshLoop() {
       if (this._refreshInterval !== null) {
+        // @ts-ignore
         clearInterval(this._refreshInterval);
         this.set('_refreshInterval', null);
       }
@@ -135,4 +123,6 @@ window.EtoolsDashboard.Mixins.DataElement = (superClass) =>
         this._requestData();
       }, newEndpoint.exp));
     }
-  };
+  }
+  return DataElementMixinClass
+}

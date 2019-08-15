@@ -3,7 +3,7 @@
 // import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 // import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 // import '../../../endpoints/endpoints-mixin';
-// import '../../../mixins/event-helper-mixin';
+// import '../../../components/utils/fire-custom-event';
 // import { Mixins } from '../../../mixins/redux-store-mixin';
 // import { isEmpty, keys, equals } from 'ramda';
 
@@ -58,7 +58,7 @@
 //       var endpoint = this.getEndpoint('tripsDashboard');
 //       endpoint.url += endpointParams;
 //       if (!equals(endpoint, this.endpoint)) {
-//         this.fireEvent('global-loading', { message: 'Loading trips chart data...', loadingSource: 'trips-dashboard-data', active: true });
+//         fireEvent(this, 'global-loading', { message: 'Loading trips chart data...', loadingSource: 'trips-dashboard-data', active: true });
 //         this.set('reqOptions.endpoint', endpoint);
 //       }
 //     } else {
@@ -69,7 +69,7 @@
 
 //   _handleResponse(response) {
 //     this._setTripsData(response);
-//     this.fireEvent('global-loading', { loadingSource: 'trips-dashboard-data' });
+//     fireEvent(this, 'global-loading', { loadingSource: 'trips-dashboard-data' });
 //   }
 // }
 
