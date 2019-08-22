@@ -84,6 +84,15 @@
       refreshList() {
         this._requestData();
       }
+
+      _getSpotCheckRequired({
+        planned_engagement_spot_check_follow_up,
+        planned_engagement_spot_check_required,
+        hact_values_audits_completed
+      }) {
+          // eslint-disable-next-line
+          return planned_engagement_spot_check_required + planned_engagement_spot_check_follow_up - hact_values_audits_completed;
+      }
     
       query(searchString, order, pageSize, pageNumber) {
         this.fireEvent('global-loading', { message: 'Loading partners data...', active: true, loadingSource: 'partners-data' });
@@ -136,7 +145,7 @@
           return toReturn;
         };
         this.resultsTotals = true;
-        return _(results).reduce((sum, obj)=> {
+        const res = _(results).reduce((sum, obj)=> {
           let picked = _(obj).pick([
             'shared_with',
             'total_ct_ytd',
@@ -147,18 +156,26 @@
             'reported_cy',
             'planned_engagement'
           ]).value();
-          picked = _flattenObject(picked);
-          picked['shared_with'] = obj['shared_with'];
-          _(picked).each((val, key)=> {
+
+         let flattened = _flattenObject(picked);
+          flattened['shared_with'] = obj['shared_with'];
+          _(flattened).each((val, key)=> {
             let currValue = sum[key] ? sum[key] : 0;
+    
             if (key === 'shared_with') {
               sum[key] = currValue + (val === null ? 0 : 1);
-            } else {
+            }
+            else {
               sum[key] = currValue + Number(val);
             }
           });
+    
+          sum['planned_engagement_spot_check_required'] = this._getSpotCheckRequired(sum);
+    
           return sum;
         }, {});
+    
+        return res;
       }
     }
 

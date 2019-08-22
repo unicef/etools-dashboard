@@ -252,7 +252,7 @@
             </div>
             <div class="flex-1 layout-horizontal">
               <div class="assurance-data">
-                <div class="completed">[[chartData.assurance_coverage.table.0.value]]
+                <div class="completed">[[chartData.assurance_coverage.table.1.value]]
                   <a target="_blank"
                      href="[[notProgVisitsUrl]]">
                     <iron-icon class="dark"
@@ -262,7 +262,7 @@
                 <div class="subheading assurance-color">Programmatic Visits (PV)</div>
               </div>
               <div class="assurance-data">
-                <div class="completed">[[chartData.assurance_coverage.table.1.value]]
+                <div class="completed">[[chartData.assurance_coverage.table.2.value]]
                   <a target="_blank"
                      href="[[notSpotChecksUrl]]">
                     <iron-icon class="dark"
@@ -272,7 +272,7 @@
                 <div class="subheading assurance-color">Spot Checks (SC)</div>
               </div>
               <div class="assurance-data">
-                  <div class="completed">[[chartData.assurance_coverage.table.2.value]]
+                  <div class="completed">[[chartData.assurance_coverage.table.3.value]]
                     <a target="_blank"
                        href="[[notAssuranceUrl]]">
                       <iron-icon class="dark"
@@ -877,19 +877,21 @@
         }
       }
 
-      getAssuranceActivitiesBars(entity) {
+      getAssuranceActivitiesBars(entity, spotChecks) {
+        const reqString = spotChecks? 'Required' : 'Minimum Required';
+        const requiredValue = spotChecks? entity.required : entity.min_required;
         return [
           ['Data', 'Text', { role: 'annotation' }, 'Count', { role: 'style' }, { role: 'annotation' }],
           ['', 0, 'Completed', entity.completed,
-            entity.completed >= entity.min_required ? '#1B9C5C' : '#F05454', entity.completed],
-          ['', 0, 'Minimum Required', entity.min_required, '#A7A7A7', entity.min_required]
+            entity.completed >= requiredValue ? '#1B9C5C' : '#F05454', entity.completed],
+          ['', 0, reqString, requiredValue, '#A7A7A7', requiredValue]
         ];
       }
 
       drawProgVisitsChart() {
           const { programmatic_visits: progVisits, spot_checks: spotChecks } = this.chartData.assurance_activities;
           const progVisitsData = this.getAssuranceActivitiesBars(progVisits);
-          const spotChecksData = this.getAssuranceActivitiesBars(spotChecks);
+          const spotChecksData = this.getAssuranceActivitiesBars(spotChecks, true);
           this._formatChartData(progVisitsData, 'progVisitsChart', this.assuranceChartOptions);
           this._formatChartData(spotChecksData, 'spotChecksChart', this.assuranceChartOptions);
       }
