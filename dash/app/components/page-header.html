@@ -15,6 +15,7 @@
 <link rel="import" href="../config/dexie-db-config.html">
 
 <link rel="import" href="../styles/shared-styles.html">
+<link rel="import" href="support-btn.html">
 
 <dom-module id="page-header">
   <template>
@@ -36,6 +37,7 @@
         color: var(--light-primary-text-color);
       }
 
+      support-btn,
       #refresh,
       #profile {
         color: var(--title-toolbar-secondary-text-color);
@@ -62,6 +64,7 @@
         @apply --layout-center;
       }
 
+      support-btn,
       etools-page-refresh {
         margin-left: 24px;
       }
@@ -125,6 +128,7 @@
         <countries-dropdown id="countries"
                             countries="[[countries]]"
                             current="[[user.country]]"></countries-dropdown>
+        <support-btn></support-btn>
         <etools-profile-dropdown sections="[[allSections]]"
                                  offices="[[allOffices]]"
                                  users="[[allUsers]]"
@@ -172,7 +176,8 @@
             type: Array
           },
           user: {
-            type: Object
+            type: Object,
+            observer: 'thing'
           },
           allOffices: {
             type: Object,
@@ -222,6 +227,10 @@
 
       openDrawer() {
         this.fireEvent('drawer');
+      }
+
+      thing(){
+        console.log(this.user)
       }
 
       _getFlagIconClass(id) {
