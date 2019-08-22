@@ -176,8 +176,7 @@
             type: Array
           },
           user: {
-            type: Object,
-            observer: 'thing'
+            type: Object
           },
           allOffices: {
             type: Object,
@@ -227,10 +226,6 @@
 
       openDrawer() {
         this.fireEvent('drawer');
-      }
-
-      thing(){
-        console.log(this.user)
       }
 
       _getFlagIconClass(id) {
