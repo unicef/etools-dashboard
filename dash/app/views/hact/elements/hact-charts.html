@@ -105,11 +105,21 @@
       .viz {
         @apply --assuranceChart;
       }
+
+      iron-icon.warn {
+        margin: 0 8px 0 16px;
+        --iron-icon-fill-color: var(--warn-color);
+      }
+
+      span.warn{
+        color: var(--warn-color);
+        margin:0;
+      } 
     </style>
   
     <google-chart-loader id="google"></google-chart-loader>
-  
-    <!--Assurance Activities-->
+
+     <!--Assurance Activities-->
     <div class="paper-material list-panel hact-paper layout  center-center"
          elevation="1">
       <div class="hact-title component">
@@ -210,7 +220,7 @@
     <!--Assurance Coverage -->
     <div class="paper-material list-panel hact-paper layout center-center"
          elevation="1">
-      <div class="hact-title component">
+      <div class="hact-title component layout-horizontal">
         Assurance Coverage
       </div>
       <div class="divider"></div>
@@ -281,9 +291,9 @@
     <!--Financial Findings -->
     <div class="paper-material list-panel hact-paper layout center-center"
          elevation="1">
-      <div class="hact-title component">
-        Financial Findings
-      </div>
+         <div class="hact-title component layout-horizontal">
+          Financial Findings
+        </div>
       <div class="divider"></div>
       <div class="layout-horizontal">
         <div class="financial-col label flex-1 layout-vertical">
