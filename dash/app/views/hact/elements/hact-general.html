@@ -221,7 +221,7 @@
             <div class="layout-horizontal group flex-1">
               <span class="right-side flex-1">[[totals.planned_engagement_required_audit]]</span>
               <span class="right-side flex-1">[[totals.hact_values_audits_completed]]</span>
-              <span class="right-side flex-1 last-col">$[[totals.hact_values_outstanding_findings]]</span>
+              <span class="right-side flex-1 last-col">$[[fix(totals.hact_values_outstanding_findings)]]</span>
             </div>
           </div>
         </div>
@@ -321,6 +321,18 @@
           filteredPartners: {
             type: Array,
             notify: true
+          },
+          totals: {
+            type: Object
+          },
+          totalResults: {
+            type: Number
+          },
+          baseSite: {
+            type: String
+          },
+          canEditPartner: {
+            type: Boolean
           }
         };
       }
@@ -331,6 +343,13 @@
 
       _checkForValueYesBlank(val) {
         return val ? 'Yes' : '';
+      }
+
+      fix(num) {
+        if (num) {
+          return num.toFixed(2);
+        }
+        return num;
       }
     }
 
