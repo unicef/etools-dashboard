@@ -84,15 +84,6 @@
       refreshList() {
         this._requestData();
       }
-
-      _getSpotCheckRequired({
-        planned_engagement_spot_check_follow_up,
-        planned_engagement_spot_check_required,
-        hact_values_audits_completed
-      }) {
-          // eslint-disable-next-line
-          return planned_engagement_spot_check_required + planned_engagement_spot_check_follow_up - hact_values_audits_completed;
-      }
     
       query(searchString, order, pageSize, pageNumber) {
         this.fireEvent('global-loading', { message: 'Loading partners data...', active: true, loadingSource: 'partners-data' });
@@ -156,7 +147,6 @@
             'reported_cy',
             'planned_engagement'
           ]).value();
-
          let flattened = _flattenObject(picked);
           flattened['shared_with'] = obj['shared_with'];
           _(flattened).each((val, key)=> {
@@ -169,8 +159,6 @@
               sum[key] = currValue + Number(val);
             }
           });
-    
-          sum['planned_engagement_spot_check_required'] = this._getSpotCheckRequired(sum);
     
           return sum;
         }, {});
