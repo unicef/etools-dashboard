@@ -347,7 +347,7 @@
 
       fix(num) {
         if (num) {
-          return num.toFixed(2);
+          return Math.round(num);
         }
         return num;
       }
