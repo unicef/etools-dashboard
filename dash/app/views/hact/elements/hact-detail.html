@@ -322,7 +322,7 @@
             <div class="col-225-px layout-horizontal">
               <div class="col-75-px right-side center layout-horizontal align-center">[[totals.planned_engagement_required_audit]]</div>
               <div class="col-75-px right-side center layout-horizontal align-center">[[totals.hact_values_audits_completed]]</div>
-              <div class="col-75-px right-side center layout-horizontal align-center last-col">$[[totals.hact_values_outstanding_findings]]</div>
+              <div class="col-75-px right-side center layout-horizontal align-center last-col">$[[fix(totals.hact_values_outstanding_findings)]]</div>
             </div>
           </div>
         </data-table-row>
@@ -441,6 +441,13 @@
 
       _checkForValueYesBlank(val) {
         return val ? 'Yes' : '';
+      }
+
+      fix(num) {
+        if (num) {
+          return Math.round(num);
+        }
+        return num;
       }
     }
 
