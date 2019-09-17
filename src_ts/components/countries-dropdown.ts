@@ -9,7 +9,7 @@ import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page
 import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
 import { fireEvent } from '../components/utils/fire-custom-event';
 import { EndpointsMixin } from '../endpoints/endpoints-mixin';
-import * as R from 'ramda';
+import {path} from 'ramda';
 // import { Mixins } from '../mixins/redux-store-mixin';
 
 const CountriesMixin = EtoolsMixinFactory.combineMixins([
@@ -146,7 +146,7 @@ class CountriesDropdown extends CountriesMixin {
   _countrySelected(e) {
       if (e.detail.item.countryId !== this.current.id) {
         // send post request to change_coutry endpoint
-        let selectedCountryId = R.path(['detail', 'item', 'countryId'], e);
+        let selectedCountryId = path(['detail', 'item', 'countryId'], e);
         if(selectedCountryId) {
           this._triggerCountryChangeRequest(selectedCountryId);
         }

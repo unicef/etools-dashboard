@@ -4,7 +4,7 @@ import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-requ
 // import { Mixins } from '../mixins/redux-store-mixin';
 import { Config } from '../config/config';
 import { Endpoints } from './endpoints';
-import {template} from 'lodash-es';
+import template from 'lodash-es/template';
 import {isEmpty} from 'ramda';
 
 export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass: T) {

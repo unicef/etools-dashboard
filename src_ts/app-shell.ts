@@ -8,7 +8,7 @@ import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/iron-pages/iron-pages.js';
-import '@polymer/iron-selector/iron-selector.js';
+// import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 // import '@unicef-polymer/etools-loading/etools-loading.js';
@@ -107,8 +107,7 @@ class AppShell extends connect(store)(
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
       </app-location>
 
-      <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}">
-      </app-route>
+      <app-route route="{{route}}" pattern="[[rootPath]]:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
       <app-route route="{{subroute}}" pattern="/:tab" data="{{subrouteData}}"></app-route>
 
       <app-drawer-layout id="layout" force-narrow="" fullbleed="">
@@ -183,29 +182,34 @@ class AppShell extends connect(store)(
                 <paper-tabs selected="{{page}}" attr-for-selected="name" noink="" bottom-item="">
 
                   <paper-tab name="personalized" link="">
-                    <a href="[[rootPath]]personalized" class="tab-content">My Dashboard</a>
+                    <span class="tab-content">My Dashboard</span>
+                    <!-- <a href="[[rootPath]]personalized" class="tab-content">My Dashboard</a> -->
                   </paper-tab>
 
                   <paper-tab name="hact" link="">
-                    <a href="[[rootPath]]hact/assurance" class="tab-content">HACT</a>
+                    <span class="tab-content">HACT</span>
+                    <!-- <a href="[[rootPath]]hact" class="tab-content">HACT</a> -->
                   </paper-tab>
 
                   <paper-tab name="trips" link="">
-                    <a href="[[rootPath]]trips" class="tab-content">Trips</a>
+                    <span class="tab-content">Trips</span>
+                    <!-- <a href="[[rootPath]]trips" class="tab-content">Trips</a> -->
                   </paper-tab>
 
                   <paper-tab name="partnerships" link="">
-                    <a href="[[rootPath]]partnerships/overview" class="tab-content">Partnerships</a>
+                    <span class="tab-content">Partnerships</span>
+                    <!-- <a href="[[rootPath]]partnerships/overview" class="tab-content">Partnerships</a> -->
                   </paper-tab>
 
                   <paper-tab name="map" link="">
-                    <a href="[[rootPath]]map" class="tab-content">Map</a>
+                    <span class="tab-content">Map</span>
+                    <!-- <a href="[[rootPath]]map" class="tab-content">Map</a> -->
                   </paper-tab>
 
                   <paper-tab name="attachments" link="">
-                    <a href="[[rootPath]]attachments" class="tab-content">Document Library</a>
+                    <span class="tab-content">Document Library</span>
+                    <!-- <a href="[[rootPath]]attachments" class="tab-content">Document Library</a> -->
                   </paper-tab>
-
                 </paper-tabs>
               </div>
             </div>
@@ -213,7 +217,7 @@ class AppShell extends connect(store)(
           
           <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="personalized" role="main">
             <view-personalized user="[[user]]" class="page" name="personalized" route="{{route}}"></view-personalized>
-            <view-hact route="{{subroute}}" class="page" display-detail="{{displayDetail}}" user="[[user]]" name="hact"></view-hact>
+            <view-hact name="hact" user="[[user]]"></view-hact>
             <view-partnerships route="{{subroute}}" class="page" user="[[user]]" name="partnerships" csv-download-url="{{csvUrl}}"></view-partnerships>
             <view-trips route="{{route}}" class="page" name="trips" user="[[user]]"></view-trips>
             <view-map route="{{route}}" user="[[user]]" class="page" name="map"></view-map>

@@ -8,7 +8,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 // import '@polymer/iron-icons/av-icons.js';
 // import '@polymer/iron-meta/iron-meta.js';
 // import '@polymer/paper-dialog/paper-dialog.js';
-// import '@polymer/app-route/app-route.js';
+import '@polymer/app-route/app-route.js';
 // import '@polymer/iron-pages/iron-pages.js';
 // import '@polymer/paper-button/paper-button.js';
 // import { timeOut } from '@polymer/polymer/lib/utils/async.js';
@@ -30,6 +30,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 // import '../../endpoints/endpoints-mixin';
 // import { Mixins } from '../../mixins/redux-store-mixin';
 // import { prop, propOr, isEmpty } from 'ramda';
+import {customElement, property} from '@polymer/decorators';
 
 /**
  * @polymer
@@ -50,9 +51,25 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
  * @polymer
  * @appliesmixin ViewHactMixins
  */
-class ViewHact extends PolymerElement {
+@customElement('view-hact')
+export class ViewHact extends PolymerElement {
   static get template() {
-    return html``;
+    return html`
+      <style>
+        div.container {
+          height: 100vh;
+          width: 100vw
+        }
+      </style>
+      <div class="container">
+        <iframe width="100%"
+                height="100%"
+                src="[[embedSource]]"
+                frameborder="0"
+                allowFullScreen="true">
+        </iframe>
+      </div>
+    `;
     // return html`
 //     <style include="shared-styles list-styles paper-material-styles">
 //       :host {
@@ -209,10 +226,46 @@ class ViewHact extends PolymerElement {
 //   /**
 //    * String providing the tag name to register the element under.
 //    */
-  static get is() {
-    return 'view-hact';
-  }
+  // static get is() {
+  //   return 'view-hact';
+  // }
+@property({type: String})
+embedSource: string
 
+@property({type: Object})
+user: object
+
+static get observers() {
+  return [
+    'setEmbedSource(user)'
+  ];
+}
+
+connectedCallback() {
+  super.connectedCallback();
+
+  
+}
+
+setEmbedSource() {
+  let country = this.user.country.name;
+
+  let embedSource = "https://app.powerbi.com/reportEmbed" +
+    "?reportId=cb3c63d4-8cf7-42c7-b94d-0950082c68de&appId=2c83563f-d6fc-4ade-9c10-bbca57ed1ece" +
+    "&autoAuth=true" +
+    "&ctid=77410195-14e1-4fb8-904b-ab1892023667" +
+    "&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldCJ9" +
+    `&$filter=actionpoints/country_name eq '${country}'` +
+    ` and engagement/country_name eq '${country}'` +
+    ` and interventions/country_name eq '${country}'` +
+    ` and interventions_offices_sections/country_name eq '${country}'` +
+    ` and partners/country_name eq '${country}'` +
+    ` and partners_interventions/country_name eq '${country}'` +
+    ` and travelactivities/country_name eq '${country}'` +
+    ` and travels/country_name eq '${country}'`;
+    console.log(embedSource)
+  this.set('embedSource', embedSource);
+}
 //   /**
 //    * Object describing property-related metadata used by Polymer features
 //    */
@@ -419,4 +472,4 @@ class ViewHact extends PolymerElement {
 //   }
 }
 
-window.customElements.define(ViewHact.is, ViewHact);
+// window.customElements.define(ViewHact.is, ViewHact);

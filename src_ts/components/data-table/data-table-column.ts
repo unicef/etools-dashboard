@@ -2,7 +2,8 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-icon/iron-icon.js';
 import { fireEvent } from '../../components/utils/fire-custom-event';
 // import { Mixins } from '../../mixins/redux-store-mixin';
-import * as _ from 'lodash-es';
+// import * as _ from 'lodash-es';
+import isEmpty from 'lodash-es/isEmpty';
 import { property, observe } from '@polymer/decorators';
 
 /**
@@ -202,7 +203,7 @@ class DataTableColumn extends (PolymerElement) {
 
   @observe('headingAlign')
   _changeHeadingAlign() {
-    if (!_.isEmpty(this.groupHeading)) {
+    if (!isEmpty(this.groupHeading)) {
       // @ts-ignore
       this.$.heading.updateStyles({['group-heading.text-align']: this.headingAlign})
     }
@@ -210,7 +211,7 @@ class DataTableColumn extends (PolymerElement) {
 
   @observe('groupHeading', 'spaceAround')
   _isGroup() {
-    if (!_.isEmpty(this.groupHeading)) {
+    if (!isEmpty(this.groupHeading)) {
       this.$.label.classList.add('is-group');
       this.updateStyles({['--column-height']: 'height: auto'});
     }
