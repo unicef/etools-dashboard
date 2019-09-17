@@ -80,10 +80,6 @@ class AppShell extends connect(store)(
           max-width: 100px;
         }
 
-        .page[name="hact"] {
-          padding-top: 12px;
-        }
-
         .action-button {
           color: var(--secondary-text-color);
           font-weight: 500;

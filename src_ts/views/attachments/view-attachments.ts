@@ -25,7 +25,7 @@ import '../../components/data-table/data-table-header';
 import '../../components/data-table/data-table-row';
 import '../../components/data-table/data-table-footer';
 import '../../config/config';
-import { ListFilters } from '../../mixins/list-filters-mixin';
+import { ListFiltersMixin } from '../../mixins/list-filters-mixin';
 import { DropdownMixin } from '../../mixins/dropdown-mixin';
 import { DateMixin} from '../../mixins/date-mixin';
 import { CommonGeneralMixin } from '../../mixins/common-general-mixin';
@@ -34,20 +34,16 @@ import { PaginationWithFiltersMixin } from '../../mixins/pagination-with-filters
 // import { Mixins } from '../../mixins/redux-store-mixin';
 import './elements/attachments-grouped';
 import { compose, identity, join, map, prop, isEmpty, union, merge, reject } from 'ramda';
+import { customElement, property } from '@polymer/decorators';
 
-/**
- * `view-attachments` Description
- *
- * @summary ShortDescription.
- * @customElement
- * @polymer
- */
-//@ts-ignore
-class ViewAttachments extends ListFilters(
-  DateMixin(
-    CommonGeneralMixin(
-      PaginationWithFiltersMixin(
-        DropdownMixin(PolymerElement))))) {
+@customElement('view-attachments')
+export class ViewAttachments extends DateMixin(CommonGeneralMixin(PaginationWithFiltersMixin(DropdownMixin(ListFiltersMixin(PolymerElement))))) {
+//  ListFilters(
+//   DateMixin(
+//     CommonGeneralMixin(
+//       PaginationWithFiltersMixin(
+//         DropdownMixin(PolymerElement))))) {
+
   static get template() {
     return html`
     <style include="shared-styles grid-layout-styles page-layout-styles paper-material-styles list-styles">
@@ -337,14 +333,7 @@ class ViewAttachments extends ListFilters(
         </attachments-grouped>
       </div>
     </iron-pages>
-`;
-  }
-
-  /**
-   * String providing the tag name to register the element under.
-   */
-  static get is() {
-    return 'view-attachments';
+  `;
   }
 
   static get observers() {
@@ -358,96 +347,104 @@ class ViewAttachments extends ListFilters(
   /**
    * Object describing property-related metadata used by Polymer features
    */
-  static get properties() {
-    return {
-      filteredAttachments: {
-        type: Array,
-        value: []
-      },
-      filteredTotal: {
-        type: Number
-      },
-      qs: {
-        type: String
-      },
-      attachmentTypes: {
-        type: Array,
-        statePath: 'static.attachment_types'
-      },
-      static: {
-        type: Object,
-        statePath: 'static'
-      },
-      agreements: {
-        type: Array,
-        statePath: 'agreements'
-      },
-      interventions: {
-        type: Array,
-        statePath: 'interventions'
-      },
-      selectedAttachmentTypes: {
-        type: Array,
-        observer: 'filterChanged'
-      },
-      requiredDataLoaded: {
-        type: Boolean,
-        value: false
-      },
-      formattedTypes: {
-        type: Array,
-        value: []
-      },
-      params: {
-        type: Array,
-        value: function() {
-          return [
-            {
-              qName: 'qs',
-              propName: 'qs',
-              xf: identity
-            },
-            {
-              qName: 'sort',
-              propName: 'sortOrder',
-              xf: identity
-            },
-            {
-              qName: 'sortBy',
-              propName: 'orderBy',
-              xf: identity
-            },
-            {
-              qName: 'type',
-              propName: 'selectedAttachmentTypes',
-              xf: compose(join('|'), map(prop('value')))
-            },
-            {
-              qName: 'pca',
-              propName: 'selectedPCAs',
-              xf: compose(join('|'), map(prop('value')))
-            },
-            {
-              qName: 'pd',
-              propName: 'selectedPDs',
-              xf: compose(join('|'), map(prop('value')))
-            }
-          ];
-        }
-      },
-      route: {
-        type: Object
-      },
-      docsPage: {
-        type: String,
-        notify: true
-      },
-      docsActive: {
-        type: Boolean
-      },
+  @property({type: Array})
+  filteredAttachments: object[] = [];
 
-    };
-  }
+  @property({type: Number})
+  filteredTotal: number;
+
+  @property({type: Array})
+  qs: string;
+
+  @property({type: Array})
+  attachmentTypes: any
+
+  @property({type: Object})
+  static: object
+
+  @property({type: Array})
+  agreements: object[]
+
+  @property({type: Array})
+  interventions: object[]
+
+  @property({type: Array})
+  selectedAttachmentTypes: object[]
+
+  @property({type: Boolean})
+  requiredDataLoaded: boolean = false;
+
+  @property({type: Array})
+  formattedTypes: any = [];
+
+  @property({type: Array})
+  params: object[] = function() {
+    return [
+      {
+        qName: 'qs',
+        propName: 'qs',
+        xf: identity
+      },
+      {
+        qName: 'sort',
+        propName: 'sortOrder',
+        xf: identity
+      },
+      {
+        qName: 'sortBy',
+        propName: 'orderBy',
+        xf: identity
+      },
+      {
+        qName: 'type',
+        propName: 'selectedAttachmentTypes',
+        xf: compose(join('|'), map(prop('value')))
+      },
+      {
+        qName: 'pca',
+        propName: 'selectedPCAs',
+        xf: compose(join('|'), map(prop('value')))
+      },
+      {
+        qName: 'pd',
+        propName: 'selectedPDs',
+        xf: compose(join('|'), map(prop('value')))
+      }
+    ];
+  }();
+
+  @property({type: Object})
+  route: object;
+
+  @property({type: Array, notify: true})
+  docsPage: string;
+
+  @property({type: Boolean})
+  docsActive: boolean;
+  
+  @property({type: Object})
+  queryParams: object;
+
+  @property({type: Object})
+  updateFiltersDebouncer: any;
+
+  @property({type: Object})
+  selectedPDs: object;
+
+  @property({type: Object})
+  selectedPCAs: object;
+
+  @property({type: String})
+  orderBy: string;
+
+  @property({type: String})
+  pageNumber: string;
+
+  @property({type: String})
+  pageSize: string;
+
+  @property({type: String})
+  sortOrder: string;
 
   // static get observers() {
   //   return [
@@ -464,19 +461,28 @@ class ViewAttachments extends ListFilters(
         this._formatAttachmentTypes();
       }
       this.set('initComplete', false);
+      // @ts-ignore
       this.set('qs', params.qs || '');
+      // @ts-ignore
       this.set('pageNumber', params.page ? parseInt(params.page) : 1);
+      // @ts-ignore
       this.set('pageSize', params.size ? parseInt(params.size) : 10);
+      // @ts-ignore
       this.set('sortOrder', params.sort || 'desc');
+      // @ts-ignore
       this.set('orderBy', params.sortBy || '');
+      // @ts-ignore
       this.set('selectedAttachmentTypes', params.type ? this._setSelectedFromCollection(params.type, this.formattedTypes) : []);
+      // @ts-ignore
       this.set('selectedPCAs', params.pca ? this._setSelectedFromCollection(params.pca, this.agreements): [] );
+      // @ts-ignore
       this.set('selectedPDs', params.pd ? this._setSelectedFromCollection(params.pd, this.interventions): [] );
       this.set('initComplete', true);
       this._updateSelectedFiltersValues();
   }
 
   _formatAttachmentTypes() {
+    // @ts-ignore
     const formattedTypes = union(this.attachmentTypes, this.static.partner_file_types).map((type) => ({
       label: type,
       value: type
@@ -493,6 +499,7 @@ class ViewAttachments extends ListFilters(
     if (!attachmentTypes || !agreements || !interventions) {
       return;
     }
+    // @ts-ignore
     this.initListFiltersData([
       {
         filterName: 'Document Type',
@@ -500,6 +507,7 @@ class ViewAttachments extends ListFilters(
         optionValue: 'value',
         optionLabel: 'label',
         path: 'selectedAttachmentTypes',
+        // @ts-ignore
         selectionOptions: union(this.attachmentTypes, this.static.partner_file_types).map((type) => ({
           label: type,
           value: type
@@ -548,6 +556,7 @@ class ViewAttachments extends ListFilters(
             selectedValue: map(prop('value'), this.selectedPCAs)
           }
         ];
+        // @ts-ignore
         this.updateShownFilters(filtersValues);
       }));
   }
@@ -565,14 +574,18 @@ class ViewAttachments extends ListFilters(
       pageSize: this.pageSize,
       order: this.sortOrder
     });
+    // @ts-ignore
     this.$.attachments.query(query);
   }
 
   _updateUrl() {
+    // @ts-ignore
     if (!this.initComplete || !this.requiredDataLoaded) {
       return;
     }
+    // @ts-ignore
     const currentRoute = this.route.prefix + this.route.path;
+    // @ts-ignore
     const qs = this.buildQueryString();
     this.updateAppState(currentRoute, qs, true);
     if (this.requiredDataLoaded) {
@@ -591,6 +604,7 @@ class ViewAttachments extends ListFilters(
 
   _toggleDocsView() {
     let pages = this.$.docPages;
+    // @ts-ignore
     pages.selectNext();
     this.$.allDocs.classList.toggle('light-button');
     this.$.allDocs.classList.toggle('dark-button');
@@ -598,5 +612,3 @@ class ViewAttachments extends ListFilters(
     this.$.grouped.classList.toggle('light-button');
   }
 }
-
-window.customElements.define(ViewAttachments.is, ViewAttachments);

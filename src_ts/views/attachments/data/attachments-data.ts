@@ -6,18 +6,10 @@ import { fireEvent } from '../../../components/utils/fire-custom-event';
 // import { db } from '../../../config/dexie-db-config';
 // import { Mixins } from '../../../mixins/redux-store-mixin';
 import { contains, equals, without, keys, isEmpty, sortBy, prop, uniq } from 'ramda';
-import { property } from '@polymer/decorators';
+import { customElement, property } from '@polymer/decorators';
 
-/**
- * `attachments-data` Description
- *
- * @summary ShortDescription.
- * @customElement
- * @polymer
- * @extends {PolymerElement}
- */
-// @ts-ignore
-class AttachmentsData extends 
+@customElement('attachments-data')
+export class AttachmentsData extends 
   DataElementMixin(
     DateMixin(PolymerElement)) {
   /**
@@ -66,7 +58,7 @@ class AttachmentsData extends
       pca: ({ agreement_reference_number }, selectedPCA) => contains(agreement_reference_number, selectedPCA),
       pd: ({ pd_ssfa_number }, selectedPD) => contains(pd_ssfa_number, selectedPD)
     };
-  }
+  }();
 
   /**
    * Object describing property-related metadata used by Polymer features
@@ -132,7 +124,7 @@ class AttachmentsData extends
     if (equals(params, this.currentParams)) {
       return;
     }
-    // @ts-ignore
+
     fireEvent(this, 'global-loading', { active: true, loadingSource: 'attachments-data' });
     this.set('currentParams', params);
     const { pageNumber, pageSize, order, orderBy } = params;
@@ -159,7 +151,6 @@ class AttachmentsData extends
           .toArray(),
         allResults.toArray()
       ]).then((countAndResult) => {
-        // @ts-ignore
         fireEvent(this, 'global-loading', { loadingSource: 'attachments-data' });
         // @ts-ignore
         this._setFilteredTotal(countAndResult[0]);
@@ -183,5 +174,3 @@ class AttachmentsData extends
     });
   }
 }
-
-window.customElements.define(AttachmentsData.is, AttachmentsData);
