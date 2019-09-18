@@ -13,22 +13,7 @@ export const Config = {
   devDomain: 'etools-dev.unicef.org',
   localDomain: 'localhost',
   loginPath: window.location.origin + '/login/',
-
-  // TODO:is this needed ?
-  // endpointsDomainConfig: {
-  //   tokenEndpointsHost: {
-  //     dash: window.location.port === '8082' ? 'http://127.0.0.1:8080' : 'https://etools-test.unicef.org'
-  //   },
-
-  //   tokenStorageKeys: {
-  //     dash: 'etoolsDashToken'
-  //   },
-
-  //   getTokenEndpoints: {
-  //     dash: 'dashToken'
-  //   }
-  // },
-
+  
   _checkEnvironment: function() {
     let location = window.location.href;
     if (location.indexOf(this.stagingDomain) > -1) {

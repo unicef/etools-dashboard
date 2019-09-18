@@ -1,23 +1,15 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-styles/element-styles/paper-material-styles.js';
 import {LegacyElementMixin} from '@polymer/polymer/lib/legacy/legacy-element-mixin.js';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+import {property, observe, customElement} from '@polymer/decorators';
+import {GenericObject} from '../../typings/globals.types';
 
-const DataTableHeaderMixin = EtoolsMixinFactory.combineMixins([
-  LegacyElementMixin
-], PolymerElement);
-
-/**
-* @polymer
-* @customElement
-* @extends PolymerElement
-*/
-class DataTableHeader extends DataTableHeaderMixin {
+@customElement('data-table-header')
+export class DataTableHeader extends LegacyElementMixin(PolymerElement) {
   static get template() {
     return html`
       <custom-style>
         <style include="iron-flex iron-flex-factors paper-material-styles">
-
           :host {
             display: block;
             border-bottom: 1px solid var(--dark-divider-color, rgba(0, 0, 0, 0.12));
@@ -40,8 +32,6 @@ class DataTableHeader extends DataTableHeaderMixin {
           #columns {
             @apply --layout-horizontal;
             @apply --layout-center;
-            /* margin-left: 48px; */
-            /* height: 56px; */
             @apply --header-columns;
             @apply --header-height;
           }
@@ -64,31 +54,17 @@ class DataTableHeader extends DataTableHeaderMixin {
     `;
   }
 
-  static get is() { return 'data-table-header' }
+  @property({type: Object})
+  sortOrder: object;
 
-  static get properties() {
-    return {
-      sortOrder: {
-        type: Object,
-        observer: '_sortOrderChanged',
-      },
-      _lastSelectedCol: {
-        type: Object,
-      },
-      noTitle: {
-        type: Boolean,
-        observer: '_noTitle',
-      },
-      noCollapse: {
-        type: Boolean,
-        observer: '_noCollapse'
-      },
-    }
-  }
+  @property({type: Object})
+  _lastSelectedCol: GenericObject;
 
-  constructor() {
-    super();
-  }
+  @property({type: Object})
+  noTitle: Boolean;
+
+  @property({type: Object})
+  noCollapse: Boolean;
 
   ready() {
     super.ready();
@@ -113,8 +89,9 @@ class DataTableHeader extends DataTableHeaderMixin {
     this.set('sortOrder.direction', e.detail.field);
   }
 
+  @observe('sortOrder')
   _sortOrderChanged(sortOrder) {
-    var column = this.queryEffectiveChildren('*[field="' + sortOrder.field + '"]');
+    var column: GenericObject = this.queryEffectiveChildren('*[field="' + sortOrder.field + '"]');
     this._clearSelected(column);
     column.selected = true;
     column.direction = sortOrder.direction;
@@ -127,6 +104,7 @@ class DataTableHeader extends DataTableHeaderMixin {
     this.set('_lastSelectedCol', column);
   }
 
+  @observe('noTitle')
   _noTitle() {
     this.updateStyles({
       '--data-table-header': 'height: auto',
@@ -134,6 +112,7 @@ class DataTableHeader extends DataTableHeaderMixin {
     });
   }
 
+  @observe('noCollapse')
   _noCollapse() {
     this.updateStyles({['--header-columns']: 'margin-left : 0; flex: 1'});
   }
@@ -143,5 +122,3 @@ class DataTableHeader extends DataTableHeaderMixin {
     this.updateStyles({['--data-table-header']: 'height: auto'});
   }
 }
-
-window.customElements.define(DataTableHeader.is, DataTableHeader)

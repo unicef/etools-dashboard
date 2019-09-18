@@ -1,4 +1,4 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/app-route/app-route.js';
 import '@unicef-polymer/etools-dropdown/etools-dropdown-multi.js';
 import '@polymer/paper-tooltip/paper-tooltip.js';
@@ -69,7 +69,6 @@ export class ViewAttachments extends DateMixin(CommonGeneralMixin(PaginationWith
         --esmm-external-wrapper: {
           width: 280px;
         }
-
       }
 
       /* Table Columns Start */
@@ -120,7 +119,6 @@ export class ViewAttachments extends DateMixin(CommonGeneralMixin(PaginationWith
         @apply --col-1;
       }
 
-
       /* Table Columns End */
 
       #filterMenu paper-icon-item {
@@ -140,7 +138,6 @@ export class ViewAttachments extends DateMixin(CommonGeneralMixin(PaginationWith
         padding: 0;
       }
       
-
       data-table-column:not(:first-child),data-table-row >div > div:not(:first-child) {
         padding-left: 24px;
       }
@@ -197,9 +194,19 @@ export class ViewAttachments extends DateMixin(CommonGeneralMixin(PaginationWith
       }
     </style>
   
-    <app-route route="{{route}}" pattern="/dash/attachments" active="{{active}}" query-params="{{queryParams}}"></app-route>
+    <app-route route="{{route}}"
+               pattern="/dash/attachments"
+               active="{{active}}"
+               query-params="{{queryParams}}">
+    </app-route>
   
-    <attachments-data id="attachments" filtered-total="{{filteredTotal}}" filtered-attachments="{{filteredAttachments}}" ordered-results="{{orderedResults}}" fire-data-loaded="" on-attachments-loaded="_attachmentsLoaded"></attachments-data>
+    <attachments-data id="attachments"
+                      filtered-total="{{filteredTotal}}"
+                      filtered-attachments="{{filteredAttachments}}"
+                      ordered-results="{{orderedResults}}"
+                      fire-data-loaded=""
+                      on-attachments-loaded="_attachmentsLoaded">
+    </attachments-data>
 
     <div class="view-toggle">
       <paper-button id="allDocs" on-tap="_toggleDocsView" name="allDocs" noink="" class="curved-left light-button">
@@ -224,7 +231,18 @@ export class ViewAttachments extends DateMixin(CommonGeneralMixin(PaginationWith
               <!-- dropdown filters  -->
               <template is="dom-if" if="[[filterTypeIs('esmm', filter.type)]]">
                 <div class="filter esmm">
-                  <etools-dropdown-multi label="[[filter.filterName]]" placeholder="—" disabled\$="[[!filter.selectionOptions.length]]" options="[[filter.selectionOptions]]" option-value="[[filter.optionValue]]" option-label="[[filter.optionLabel]]" selected-values="[[filter.alreadySelected]]" trigger-value-change-event="" on-etools-selected-items-changed="esmmValueChanged" data-filter-path\$="[[filter.path]]" min-width="300px" horizontal-align="left" no-dynamic-align="">
+                  <etools-dropdown-multi label="[[filter.filterName]]"
+                                         placeholder="—" disabled\$="[[!filter.selectionOptions.length]]"
+                                         options="[[filter.selectionOptions]]"
+                                         option-value="[[filter.optionValue]]"
+                                         option-label="[[filter.optionLabel]]"
+                                         selected-values="[[filter.alreadySelected]]"
+                                         trigger-value-change-event=""
+                                         on-etools-selected-items-changed="esmmValueChanged"
+                                         data-filter-path\$="[[filter.path]]"
+                                         min-width="300px"
+                                         horizontal-align="left"
+                                         no-dynamic-align="">
                   </etools-dropdown-multi>
                 </div>
               </template>

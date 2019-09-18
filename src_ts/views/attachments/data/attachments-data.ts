@@ -7,17 +7,10 @@ import { fireEvent } from '../../../components/utils/fire-custom-event';
 // import { Mixins } from '../../../mixins/redux-store-mixin';
 import { contains, equals, without, keys, isEmpty, sortBy, prop, uniq } from 'ramda';
 import { customElement, property } from '@polymer/decorators';
+import { GenericObject } from '../../../typings/globals.types';
 
 @customElement('attachments-data')
-export class AttachmentsData extends 
-  DataElementMixin(
-    DateMixin(PolymerElement)) {
-  /**
-   * String providing the tag name to register the element under.
-   */
-  static get is() {
-    return 'attachments-data';
-  }
+export class AttachmentsData extends DataElementMixin(DateMixin(PolymerElement)) {
 
   @property({type: String})
   endpointName: string = 'attachments';
@@ -60,66 +53,6 @@ export class AttachmentsData extends
     };
   }();
 
-  /**
-   * Object describing property-related metadata used by Polymer features
-   */
-  // static get properties() {
-  //   return {
-  //     endpointName: {
-  //       type: String,
-  //       value: 'attachments'
-  //     },
-  //     filteredTotal: {
-  //       type: Number,
-  //       readOnly: true,
-  //       notify: true
-  //     },
-  //     filteredAttachments: {
-  //       type: Array,
-  //       readOnly: true,
-  //       notify: true
-  //     },
-  //     orderedResults: {
-  //       type: Array,
-  //       value: [],
-  //       notify: true
-  //     },
-  //     dataLoadedEventName: {
-  //       type: String,
-  //       value: 'attachments-loaded'
-  //     },
-  //     loadedInitially: {
-  //       type: Boolean,
-  //       value: false
-  //     },
-  //     currentParams: {
-  //       type: Object,
-  //       value: {}
-  //     },
-  //     predicates: {
-  //       type: Object,
-  //       value: function() {
-  //         return {
-  //           searchString: ({ partner, vendor_number, pd_ssfa_number, agreement_reference_number }, query) => {
-  //             partner = partner.toLowerCase();
-  //             vendor_number = vendor_number.toLowerCase();
-  //             pd_ssfa_number = pd_ssfa_number.toLowerCase();
-  //             agreement_reference_number = agreement_reference_number.toLowerCase();
-  //             query = query.toLowerCase();
-  //             return contains(query, partner)
-  //               || contains(query, vendor_number)
-  //               || contains(query, pd_ssfa_number)
-  //               || contains(query, agreement_reference_number);
-  //           },
-  //           attachmentType: ({ file_type }, type) => contains(file_type, type),
-  //           pca: ({ agreement_reference_number }, selectedPCA) => contains(agreement_reference_number, selectedPCA),
-  //           pd: ({ pd_ssfa_number }, selectedPD) => contains(pd_ssfa_number, selectedPD)
-  //         };
-  //       }
-  //     }
-  //   };
-  // }
-
   query(params) {
     if (equals(params, this.currentParams)) {
       return;
@@ -152,13 +85,10 @@ export class AttachmentsData extends
         allResults.toArray()
       ]).then((countAndResult) => {
         fireEvent(this, 'global-loading', { loadingSource: 'attachments-data' });
-        // @ts-ignore
-        this._setFilteredTotal(countAndResult[0]);
-        // @ts-ignore
-        this._setFilteredAttachments(countAndResult[1]);
+        this.set('filteredTotal', countAndResult[0]);
+        this.set('filteredAttachments', countAndResult[1]);
         countAndResult[2].forEach((file) => {
-          // @ts-ignore
-          if (!this.orderedResults.some((item) => item.keys === `${file.partner} - ${file.vendor_number}`)) {
+          if (!this.orderedResults.some((item: GenericObject) => item.keys === `${file.partner} - ${file.vendor_number}`)) {
             let obj = {};
             let vend = countAndResult[2].filter((file2) => file2.vendor_number === file.vendor_number);
             vend = sortBy(prop('created'))(vend);

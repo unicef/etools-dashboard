@@ -1,20 +1,7 @@
-/* <link rel="import" href="../../bower_components/polymer/polymer.html"> */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
-// import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { Constructor } from '../typings/globals.types';
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {Constructor} from '../typings/globals.types';
 import moment from 'moment';
-// import { Mixins } from './redux-store-mixin';
-// export const Mixins = Mixins || {};
 
-/**
- * @polymer
- * @mixinFunction
- */
 export function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
   class DateMixinClass extends baseClass {
 
@@ -34,7 +21,6 @@ export function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
     _utcDate(date, format) {
       return (!date) ? '' : moment.utc(date).format(format ? format : 'D MMM YYYY');
     }
-
 
     _convertDate(dateString: string, noZTimezoneOffset?: Boolean) {
       if (typeof dateString === 'string' && dateString !== '') {
@@ -87,9 +73,8 @@ export function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
     openDatePicker(event) {
       let id = event.target.getAttribute('data-selector');
       if (id) {
-        let datePicker = this.shadowRoot.querySelector('#' + id);
+        let datePicker: any = this.shadowRoot.querySelector('#' + id);
         if (datePicker) {
-          // @ts-ignore
           datePicker.open = true;
         }
       }

@@ -1,50 +1,39 @@
-import { isEmpty } from 'ramda';
-import {Constructor} from '../typings/globals.types';
+import {isEmpty} from 'ramda';
+import {Constructor, GenericObject} from '../typings/globals.types';
 import {PolymerElement} from '@polymer/polymer/polymer-element';
-// import {property} from '@polymer/decorators';
-// import { Mixins } from './redux-store-mixin';
-// export const Mixins = Mixins || {};
+import {property} from '@polymer/decorators';
 
-// window.EtoolsDashboard = window.EtoolsDashboard || {};
-// window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
-
-/**
-* @polymer
-* @mixinFunction
-*/
 export function PaginationWithFiltersMixin<T extends Constructor<PolymerElement>>(superClass: T) {
   class PaginationWithFiltersMixinClass extends (superClass as Constructor<PolymerElement>) {
-    constructor() {
-      super();
-    }
 
+    @property({type: Number})
+    pageNumber: number;
 
+    @property({type: Number})
+    pageSize: number;
 
-    static get properties() {
-      return {
-        pageNumber: {
-          type: Number
-        },
-        pageSize: {
-          type: Number
-        },
-        sortOrder: {
-          type: String
-        },
-        qs: {
-          type: String
-        },
-        debounceTime: {
-          type: Number,
-          value: 100
-        }
-      };
-    }
+    @property({type: String})
+    sortOrder: string;
 
-    ready() {
+    @property({type: String})
+    qs: string;
+
+    @property({type: Number})
+    debounceTime: number = 100;
+
+    @property({type: Object})
+    params: GenericObject;
+
+    connectedCallback() {
+      super.connectedCallback();
       // @ts-ignore
       this.addEventListener('sort-changed', this.sortOrderChanged);
-      super.ready();
+    }
+
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      // @ts-ignore
+      this.removeEventListener('sort-changed', this.sortOrderChanged);
     }
 
     filterChanged() {
@@ -76,11 +65,9 @@ export function PaginationWithFiltersMixin<T extends Constructor<PolymerElement>
     }
 
     buildQueryString(hasPagination=true) {
-      // @ts-ignore
       return this.params.reduce((acc, { qName, propName, xf }) => {
         return isEmpty(this[propName]) ? acc
           : `${acc}&${qName}=${xf(this[propName])}`;
-          // @ts-ignore
       }, hasPagination ? `page=${this.pageNumber}&size=${this.pageSize}` : '');
     }
   }

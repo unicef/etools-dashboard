@@ -1,4 +1,4 @@
-// import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+// import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 // import '@unicef-polymer/etools-dialog/etools-dialog.js';
 // import '@polymer/paper-input/paper-input.js';
 // import '@polymer/paper-button/paper-button.js';

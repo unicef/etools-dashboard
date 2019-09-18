@@ -1,4 +1,4 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';

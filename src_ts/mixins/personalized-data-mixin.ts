@@ -1,13 +1,14 @@
-import { store } from '../store';
+import {store} from '../store';
 import * as personalizedDataActions from '../actions/personalized-data';
-import { EndpointsMixin } from '../endpoints/endpoints-mixin';
-import { logError } from '@unicef-polymer/etools-behaviors/etools-logging.js';
-import { Constructor } from '../typings/globals.types';
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { property } from '@polymer/decorators';
+import {EndpointsMixin} from '../endpoints/endpoints-mixin';
+import {logError} from '@unicef-polymer/etools-behaviors/etools-logging.js';
+import {Constructor} from '../typings/globals.types';
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {property} from '@polymer/decorators';
 
 function PersonalizedDataMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
   class PersonalizedDataClass extends EndpointsMixin(baseClass) {
+    
     @property({type: Array})
     personalizedDataEndpoints: string[] = [
       'actionPointsByMe', 'actionPointsForMe', 'trips', 'tripsSupervised'

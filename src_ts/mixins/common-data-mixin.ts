@@ -1,18 +1,15 @@
-import { store } from '../store';
+import {store} from '../store';
 import * as commonDataActions from '../actions/common-data';
-
-import { EndpointsMixin } from '../endpoints/endpoints-mixin';
-// import {isEmptyObject} from '../utils/utils';
-import { logError } from '@unicef-polymer/etools-behaviors/etools-logging.js';
-import { Constructor } from '../typings/globals.types';
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { UserProfileDataMixin } from './user-profile-data-mixin';
-// import { Endpoints } from '../endpoints/endpoints';
-// import EnvironmentFlagsMixin from '../environment-flags/environment-flags-mixin';
-import { property } from '@polymer/decorators';
+import {EndpointsMixin} from '../endpoints/endpoints-mixin';
+import {logError} from '@unicef-polymer/etools-behaviors/etools-logging.js';
+import {Constructor} from '../typings/globals.types';
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {UserProfileDataMixin} from './user-profile-data-mixin';
+import {property} from '@polymer/decorators';
 
 function CommonDataMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
   class CommonDataClass extends UserProfileDataMixin(EndpointsMixin(baseClass)) {
+
     @property({type: Array})
     commonDataEndpoints: string[] = [
       'userCountry', 'staticData', 'pdssfas', 'countryProgrammes'
@@ -83,6 +80,8 @@ function CommonDataMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
           return this._handleTripsResponse;
         case 'tripsSupervised':
           return this._handleTripsSupervisedResponse;
+        case 'attachments':
+          return this._handleAttachmentsResponse;
         // case 'myProfile':
         //   return this._handleMyProfileResponse;
         default:
@@ -118,11 +117,11 @@ function CommonDataMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
       }
     }
 
-    // protected _handleAttachmentsResponse(response: any) {
-    //   if (this._validReqResponseData(response)) {
-    //     store.dispatch(commonDataActions.setAttachments(response));
-    //   }
-    // }
+    protected _handleAttachmentsResponse(response: any) {
+      if (this._validReqResponseData(response)) {
+        store.dispatch(commonDataActions.setAttachments(response));
+      }
+    }
 
     protected _handleStaticDataResponse(response: any) {
       if (this._validReqResponseData(response)) {

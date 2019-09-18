@@ -1,5 +1,5 @@
 // // import '@polymer/polymer/polymer-legacy';
-// import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+// import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 // import '@polymer/paper-styles/element-styles/paper-material-styles.js';
 // import '@polymer/paper-tooltip/paper-tooltip.js';
 // import '@polymer/iron-icon/iron-icon.js';

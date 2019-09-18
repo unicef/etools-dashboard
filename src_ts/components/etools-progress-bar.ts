@@ -1,16 +1,8 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/paper-progress/paper-progress.js';
-import { property, customElement } from '@polymer/decorators';
-// import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+import {property, customElement, computed} from '@polymer/decorators';
 
-// const EtoolsProgressBarMixin = EtoolsMixinFactory.combineMixins([], PolymerElement);
-
-/**
- * @polymer
- * @customElement
- * @extends {PolymerElement}
- */
 @customElement('etools-progress-bar')
 export class EtoolsProgressBar extends PolymerElement {
   static get template() {
@@ -24,11 +16,6 @@ export class EtoolsProgressBar extends PolymerElement {
           --paper-progress-secondary-color: var(--primary-background-color);
           --paper-progress-height: 10px;
         }
-
-        /* #progress-percent {
-          margin-left: 16px;
-          min-width: 56px;
-        } */
 
         paper-progress {
           width: var(--etools-progress-bar-width, 200px);
@@ -69,39 +56,18 @@ export class EtoolsProgressBar extends PolymerElement {
     `;
   }
 
-  // static get is() {
-  //   return 'etools-progress-bar';
-  // }
-
-  @property({type: Number})
-  value: number = 0;
+  @property({type: String})
+  value: string = '';
 
   @property({type: Number, readOnly: true})
-  progressValue: number = this._getProgress(this.value);
+  progressValue: number;
 
   @property({type: Boolean})
   noDecimals: boolean = false;
-
-  // static get properties() {
-  //   return {
-  //     value: {
-  //       type: Number,
-  //       value: 0
-  //     },
-  //     progressValue: {
-  //       type: Number,
-  //       readOnly: true,
-  //       computed: '_getProgress(value)'
-  //     },
-  //     noDecimals: {
-  //       type: Boolean,
-  //       value: false
-  //     }
-  //   };
-  // }
-
-  _getProgress(value) {
-    value = parseFloat(parseFloat(value).toFixed(2));
+  
+  @computed('value')
+  get _getProgress() {
+    let value = parseFloat(parseFloat(this.value).toFixed(2));
     if (isNaN(value)) {
       return 0;
     }
@@ -127,5 +93,3 @@ export class EtoolsProgressBar extends PolymerElement {
     return parseFloat(value).toFixed(this.noDecimals ? 0 : 2);
   }
 }
-
-// window.customElements.define(EtoolsProgressBar.is, EtoolsProgressBar);

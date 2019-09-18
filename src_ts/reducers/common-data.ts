@@ -25,7 +25,8 @@ import {
   SET_STATIC_DATA,
   // SET_TRIPS_YEARS,
   // SET_UNICEF_USERS,
-  SET_USER_COUNTRY
+  SET_USER_COUNTRY,
+  SET_ATTACHMENTS
 } from '../actions/common-data'
 
 export class CommonDataState {
@@ -46,6 +47,7 @@ export class CommonDataState {
   // grants: object[] = []
   // results: object[] = []
   // clusters: object[] = []
+  attachments: object[] = []
   pdssfas: object[] = []
 }
 
@@ -79,6 +81,8 @@ const commonData: Reducer<CommonDataState> = (state = INITIAL_STATE, action) => 
       return merge(state, { staticData: action.staticData });
     case SET_USER_COUNTRY:
       return merge(state, { userCountry: action.userCountry });
+    case SET_ATTACHMENTS:
+      return merge(state, { attachments: action.attachments })
     // case SET_HACT_GRAPHS:
     //   return merge(state, { hactGraphs: action.hactGraphs });
 

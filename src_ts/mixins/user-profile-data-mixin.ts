@@ -1,13 +1,13 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { Constructor } from '../typings/globals.types';
-import { property } from '@polymer/decorators';
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {Constructor} from '../typings/globals.types';
+import {property} from '@polymer/decorators';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
-import { isEmpty } from 'ramda';
-import { AjaxErrorsParserMixin } from './ajax-errors-parser-mixin';
-import { DataElementMixin } from './data-element-mixin';
-import { UserPermissionsMixin } from './user-permissions-mixin';
-import { EndpointsMixin } from '../endpoints/endpoints-mixin';
-import { fireEvent } from '../components/utils/fire-custom-event';
+import {isEmpty} from 'ramda';
+import {AjaxErrorsParserMixin} from './ajax-errors-parser-mixin';
+import {DataElementMixin} from './data-element-mixin';
+import {UserPermissionsMixin} from './user-permissions-mixin';
+import {EndpointsMixin} from '../endpoints/endpoints-mixin';
+import {fireEvent} from '../components/utils/fire-custom-event';
 
 export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
   class UserProfileDataMixinClass extends AjaxErrorsParserMixin(
@@ -62,12 +62,10 @@ export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(base
       this.sendRequest(config).then((resp) => {
         this._handleMyResponse(resp);
       }).catch((err) => {
-        // @ts-ignore
         this.parseRequestErrorsAndShowAsToastMsgs(err);
         this._hideProfileSaveLoadingMsg();
       });
     }
-
 
     // called after profile get request on initial load
     _handleMyResponse(resp) {

@@ -58,29 +58,16 @@ export const Endpoints = {
     exp: 6 * 60 * 60 * 1000,
     cachingKey: 'tripsSupervised'
   },
-  // unicefUsers: {
-  //   url: '/api/v3/users/',
-  //   exp: 60 * 60 * 1000, // 1h
-  //   cachingKey: 'unicefUsers'
-  // },
   countryProgrammes: {
     url: '/api/v2/reports/countryprogramme/',
     exp: 6 * 60 * 60 * 1000,
     cachingKey: 'countryProgrammes'
   },
-  // offices: {
-  //   url: '/api/offices/',
-  //   exp: 6 * 60 * 60 * 1000,
-  //   cachingkey: 'offices'
-  // },
   countries: {
     url: '/api/countries/',
     exp: 6 * 60 * 60 * 1000, // 6h
     cachingKey: 'countries'
   },
-  // userCountry: {
-  //   url: '/api/v3/users/country/'
-  // },
   changeCountry: {
     url: '/api/v3/users/changecountry/'
   },
@@ -160,19 +147,6 @@ export const Endpoints = {
     exp: 6 * 60 * 60 * 1000, // 6h
     cacheTableName: 'pdssfas'
   },
-  // trips: {
-  //   template: '/api/t2f/travels/?f_traveler=<%=id%>',
-  //   exp: 6 * 60 * 60 * 1000,
-  //   cachingKey: 'trips'
-  // },
-  // tripsSupervised: {
-  //   template: '/api/t2f/travels/?f_supervisor=<%=id%>',
-  //   exp: 6 * 60 * 60 * 1000,
-  //   cachingKey: 'tripsSupervised'
-  // },
-  // tripsDashboard: {
-  //   template: '/api/t2f/travels/dashboard/?'
-  // },
   // actionPointsBySection: {
   //   template: '/api/t2f/action_points/dashboard/'
   // },
@@ -182,19 +156,9 @@ export const Endpoints = {
   myProfile: {
     template: '/api/v3/users/profile/'
   },
-  // hactGraphs: {
-  //   template: '/api/v2/hact/graph/2019/',
-  //   exp: 6 * 60 * 60 * 1000,
-  //   cachingKey: 'hactGraphs'
-  // },
   attachments: {
     template: '/api/v2/attachments/',
     exp: 6 * 60 * 60 * 1000,
     cacheTableName: 'attachments'
-  },
-  // clusters: {
-  //   template: '/api/v2/reports/clusters/',
-  //   exp: 6 * 60 * 60 * 1000,
-  //   cachingKey: 'clusters'
-  // }
+  }
 };

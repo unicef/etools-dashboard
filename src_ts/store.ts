@@ -18,8 +18,8 @@ import {lazyReducerEnhancer} from 'pwa-helpers/lazy-reducer-enhancer.js';
 
 import {CommonDataState} from './reducers/common-data';
 import {CommonDataAction} from './actions/common-data';
-import { PersonalizedDataState } from './reducers/personalized-data';
-import { PersonalizedDataAction } from './actions/personalized-data';
+import {PersonalizedDataState} from './reducers/personalized-data';
+import {PersonalizedDataAction} from './actions/personalized-data';
 
 // import {reducer, initial} from './mixins/redux-store-mixin';
 
@@ -39,9 +39,7 @@ export type RootAction = CommonDataAction | PersonalizedDataAction | any;
 // Sets up a Chrome extension for time travel debugging.
 // See https://github.com/zalmoxisus/redux-devtools-extension for more information.
 const devCompose: <Ext0, Ext1, StateExt0, StateExt1>(
-  //@ts-ignore
   f1: StoreEnhancer<Ext0, StateExt0>, f2: StoreEnhancer<Ext1, StateExt1>
-  //@ts-ignore
 ) => StoreEnhancer<Ext0 & Ext1, StateExt0 & StateExt1> =
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

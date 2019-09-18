@@ -1,24 +1,13 @@
-import { dom } from '@polymer/polymer/lib/legacy/polymer.dom.js';
-import { isEmpty } from 'ramda';
-import moment from 'moment';
-import { PolymerElement } from '@polymer/polymer';
-import {Constructor} from '../typings/globals.types';
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {dom} from '@polymer/polymer/lib/legacy/polymer.dom.js';
 import {property} from '@polymer/decorators';
-// import { Mixins } from './redux-store-mixin';
-// export const Mixins = Mixins || {};
+import {isEmpty} from 'ramda';
+import moment from 'moment';
+import {Constructor} from '../typings/globals.types';
 
-// window.EtoolsDashboard = window.EtoolsDashboard || {};
-// window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
-
-/**
-* @polymer
-* @mixinFunction
-*/
 export function ListFiltersMixin<T extends Constructor<PolymerElement>>(superClass: T) {
   class ListFiltersMixinClass extends (superClass as Constructor<PolymerElement>) {
-    constructor() {
-      super();
-    }
+
     @property({type: Array})
     listFilterOptions: any;
 

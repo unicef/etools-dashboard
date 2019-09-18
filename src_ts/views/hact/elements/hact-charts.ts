@@ -1,4 +1,4 @@
-// import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+// import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 // import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 // import '@polymer/paper-styles/element-styles/paper-material-styles.js';
 // import '@polymer/iron-icon/iron-icon.js';

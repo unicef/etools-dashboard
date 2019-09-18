@@ -1,20 +1,12 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
 import '@polymer/paper-styles/element-styles/paper-material-styles.js';
-import { property, customElement } from '@polymer/decorators'
-// import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
+import {property, customElement, computed} from '@polymer/decorators';
 
-// const DataTableFooterMixin = EtoolsMixinFactory.combineMixins([], PolymerElement);
-
-/**
-* @polymer
-* @customElement
-* @extends {PolymerElement}
-*/
 @customElement('data-table-footer')
 export class DataTableFooter extends PolymerElement {
   static get template() {
@@ -85,10 +77,8 @@ export class DataTableFooter extends PolymerElement {
     `;
   }
 
-  // static get is() { return 'data-table-footer'; }
-
-  @property({type: String, notify: true})
-  pageSize: string;
+  @property({type: Number, notify: true})
+  pageSize: number;
 
   @property({type: Number, notify: true})
   pageNumber: number;
@@ -101,31 +91,6 @@ export class DataTableFooter extends PolymerElement {
 
   @property({type: Array, notify: true})
   visibleRange: string[];
-
-  // static get properties() {
-  //   return {
-  //     pageSize: {
-  //       type: String,
-  //       notify: true
-  //     },
-  //     pageNumber: {
-  //       type: Number,
-  //       notify: true
-  //     },
-  //     filteredTotalResults: {
-  //       type: Number
-  //     },
-  //     totalPages: {
-  //       type: Number,
-  //       computed: '_computeTotalPages(pageSize, filteredTotalResults)',
-  //     },
-  //     visibleRange: {
-  //       type: Array,
-  //       notify: true,
-  //       computed: '_computeVisibleRange(pageNumber, pageSize, filteredTotalResults, totalPages)'
-  //     }
-  //   }
-  // }
 
   _pageLeft() {
     if (this.pageNumber > 1) {
@@ -151,24 +116,24 @@ export class DataTableFooter extends PolymerElement {
     }
   }
 
-  // @computed('pageSize', 'filteredTotalResults')
-  _computeTotalPages(pageSize, filteredTotalResults) {
+  @computed('pageSize', 'filteredTotalResults')
+  get _computeTotalPages() {
     var result = 1;
-    if (pageSize < filteredTotalResults) {
-      result = Math.ceil(filteredTotalResults / pageSize);
+    if (this.pageSize < this.filteredTotalResults) {
+      result = Math.ceil(this.filteredTotalResults / this.pageSize);
     }
     return result;
   }
 
-  // @computed('pageNumber', 'pageSize', 'filteredTotalResults', 'totalPages')
-  _computeVisibleRange(pageNumber, pageSize, filteredTotalResults, totalPages) {
-    var start = !filteredTotalResults ? 0 : 1;
-    var end = filteredTotalResults;
-    if (pageNumber !== 1) {
-      start = (pageNumber - 1) * pageSize + 1;
+  @computed('pageNumber', 'pageSize', 'filteredTotalResults', 'totalPages')
+  get _computeVisibleRange() {
+    var start = !this.filteredTotalResults ? 0 : 1;
+    var end = this.filteredTotalResults;
+    if (this.pageNumber !== 1) {
+      start = (this.pageNumber - 1) * this.pageSize + 1;
     }
-    if (pageNumber !== totalPages) {
-      end = start + pageSize - 1;
+    if (this.pageNumber !== this.totalPages) {
+      end = start + this.pageSize - 1;
     }
     return [start, end];
   }
@@ -182,4 +147,3 @@ export class DataTableFooter extends PolymerElement {
   }
 }
 
-// window.customElements.define(DataTableFooter.is, DataTableFooter)

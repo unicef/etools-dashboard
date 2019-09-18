@@ -1,20 +1,16 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { Constructor } from '../typings/globals.types';
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {Constructor} from '../typings/globals.types';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import { EndpointsMixin } from '../endpoints/endpoints-mixin';
-import { AjaxServerErrorsMixin } from './ajax-server-errors-mixin';
-import { fireEvent } from '../components/utils/fire-custom-event';
-import { property } from '@polymer/decorators';
+import {EndpointsMixin} from '../endpoints/endpoints-mixin';
+import {AjaxServerErrorsMixin} from './ajax-server-errors-mixin';
+import {fireEvent} from '../components/utils/fire-custom-event';
+import {property} from '@polymer/decorators';
 
 export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
   class DataElementMixinClass extends 
     EndpointsMixin(
       AjaxServerErrorsMixin(
         EtoolsAjaxRequestMixin(baseClass))) {
-
-    constructor() {
-      super();
-    }
 
     @property({type: Object})
     options: object | any = {
@@ -87,8 +83,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
     }
 
     _handleMyResponse(res) {
-      // @ts-ignore
-      this._setData(res);
+      this.set('data', res);
       if (this.fireDataLoaded) {
         // @ts-ignore
         if (!this.dataLoadedEventName) {

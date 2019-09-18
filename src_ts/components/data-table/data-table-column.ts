@@ -1,119 +1,114 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-icon/iron-icon.js';
 import { fireEvent } from '../../components/utils/fire-custom-event';
 // import { Mixins } from '../../mixins/redux-store-mixin';
 // import * as _ from 'lodash-es';
 import isEmpty from 'lodash-es/isEmpty';
-import { property, observe } from '@polymer/decorators';
+import { customElement, property, observe } from '@polymer/decorators';
+import { GenericObject } from '../../typings/globals.types';
 
-/**
-* @polymer
-* @customElement
-* @extends {PolymerElement}
-*/
-class DataTableColumn extends (PolymerElement) {
+@customElement('data-table-column')
+export class DataTableColumn extends (PolymerElement) {
   static get template() {
     return html`
-    <style>
-      :host {
-        @apply --layout-horizontal;
-        @apply --layout-center;
-        height: 56px;
-        font-size: 12px;
-        color: var(--secondary-text-color);
-        font-weight: 500;
-        white-space: nowrap;
-        @apply --column-height;
-      }
+      <style>
+        :host {
+          @apply --layout-horizontal;
+          @apply --layout-center;
+          height: 56px;
+          font-size: 12px;
+          color: var(--secondary-text-color);
+          font-weight: 500;
+          white-space: nowrap;
+          @apply --column-height;
+        }
 
-      :host([sortable]) {
-        cursor: pointer;
-      }
+        :host([sortable]) {
+          cursor: pointer;
+        }
 
-      #label {
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-      }
+        #label {
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
 
-      #icon-wrapper, iron-icon {
-        width: 16px;
-        height: 16px;
-        @apply --icon-display;
-      }
+        #icon-wrapper, iron-icon {
+          width: 16px;
+          height: 16px;
+          @apply --icon-display;
+        }
 
-      #up, #down {
-        display: none;
-      }
+        #up, #down {
+          display: none;
+        }
 
-      .group-wrapper {
-        @apply --layout-vertical;
-        @apply --layout-flex;
-      }
+        .group-wrapper {
+          @apply --layout-vertical;
+          @apply --layout-flex;
+        }
 
-      #label.is-group {
-        @apply --layout-horizontal;
-        @apply --layout-center;
-        @apply --layout-justified;
-        @apply --custom-style;
-        padding-top: 0;
-        margin-right: 0;
-      }
+        #label.is-group {
+          @apply --layout-horizontal;
+          @apply --layout-center;
+          @apply --layout-justified;
+          @apply --custom-style;
+          padding-top: 0;
+          margin-right: 0;
+        }
 
-      .group-heading {
-        /* border-bottom: 1px solid rgba(0, 0, 0, 0.12); */
-        border-bottom: var(--header-bottom-line, 1px solid rgba(0, 0, 0, 0.12));
-        padding-bottom: 10px;
-        padding-top: 10px;
-        width: 100%;
-        text-align: center;
-        white-space: nowrap;
-      }
+        .group-heading {
+          /* border-bottom: 1px solid rgba(0, 0, 0, 0.12); */
+          border-bottom: var(--header-bottom-line, 1px solid rgba(0, 0, 0, 0.12));
+          padding-bottom: 10px;
+          padding-top: 10px;
+          width: 100%;
+          text-align: center;
+          white-space: nowrap;
+        }
 
-      :host(:not([selected]):hover[sortable]) #up {
-        display: block;
-      }
+        :host(:not([selected]):hover[sortable]) #up {
+          display: block;
+        }
 
-      :host([selected]) #label,
-      :host(:not([selected]):hover[sortable]) #label {
-        color: var(--primary-text-color, rgba(0, 0, 0, 0.87));
-      }
+        :host([selected]) #label,
+        :host(:not([selected]):hover[sortable]) #label {
+          color: var(--primary-text-color, rgba(0, 0, 0, 0.87));
+        }
 
-      :host([selected][direction="asc"]) #up {
-        display: block;
-      }
+        :host([selected][direction="asc"]) #up {
+          display: block;
+        }
 
-      :host([selected][direction="desc"]) #down {
-        display: block;
-      }
+        :host([selected][direction="desc"]) #down {
+          display: block;
+        }
 
-      :host(:not([selected])) iron-icon {
-        color: var(--sort-icon-hover-color, rgba(0, 0, 0, 0.38));
-      }
+        :host(:not([selected])) iron-icon {
+          color: var(--sort-icon-hover-color, rgba(0, 0, 0, 0.38));
+        }
 
-      :host([selected]) iron-icon {
-        color: var(--sort-icon-color, rgba(0, 0, 0, 0.87));
-      }
-    </style>
+        :host([selected]) iron-icon {
+          color: var(--sort-icon-color, rgba(0, 0, 0, 0.87));
+        }
+      </style>
 
-    <div id="groupWrapper" class="group-wrapper">
-      <template is="dom-if" if="[[groupHeading]]">
-        <span class="group-heading">[[groupHeading]]</span>
-      </template>
-      <span id="label">
-          <slot></slot>
-        </span>
-    </div>
+      <div id="groupWrapper" class="group-wrapper">
+        <template is="dom-if" if="[[groupHeading]]">
+          <span class="group-heading">[[groupHeading]]</span>
+        </template>
+        <span id="label">
+            <slot></slot>
+          </span>
+      </div>
 
-    <div id="iconWrapper" class="icon-wrapper">
-      <iron-icon id="up" icon="arrow-upward"></iron-icon>
-      <iron-icon id="down" icon="arrow-downward"></iron-icon>
-    </div>
-`;
+      <div id="iconWrapper" class="icon-wrapper">
+        <iron-icon id="up" icon="arrow-upward"></iron-icon>
+        <iron-icon id="down" icon="arrow-downward"></iron-icon>
+      </div>
+    `;
   }
-
-  static get is() { return 'data-table-column'; }
 
   @property({type: Boolean, reflectToAttribute: true})
   selected: boolean = false;
@@ -135,46 +130,6 @@ class DataTableColumn extends (PolymerElement) {
 
   @property({type: Boolean})
   transparent: boolean = false;
-
-  // static get properties() {
-  //   return {
-  //     selected: {
-  //       type: Boolean,
-  //       value: false,
-  //       reflectToAttribute: true
-  //     },
-  //     field: {
-  //       type: String,
-  //     },
-  //     direction: {
-  //       type: String,
-  //       reflectToAttribute: true
-  //     },
-  //     groupHeading: {
-  //       type: String,
-  //       observer: '_isGroup',
-  //     },
-  //     headingAlign: {
-  //       type: String,
-  //       default: "center",
-  //       observer: '_changeHeadingAlign',
-  //     },
-  //     spaceAround: {
-  //       type: Boolean,
-  //       value: false,
-  //       observer: '_isGroup'
-  //     },
-  //     transparent: {
-  //       type: Boolean,
-  //       value: false,
-  //       observer: '_makeTransparent'
-  //     }
-  //   }
-  // }
-
-  constructor() {
-    super();
-  }
 
   ready() {
     this.addEventListener('tap', this._sort);
@@ -220,11 +175,8 @@ class DataTableColumn extends (PolymerElement) {
   // allows for including headings that are not part of a group without altering spacing
   _makeTransparent() {
     if (this.transparent) {
-      let x = this.$.groupWrapper
-      // @ts-ignore
-      x.style.color = "transparent"
+      let x: GenericObject = this.$.groupWrapper;
+      x.style.color = "transparent";
     }
   }
 }
-
-window.customElements.define(DataTableColumn.is, DataTableColumn)

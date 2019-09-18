@@ -1,4 +1,4 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-if.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
@@ -6,142 +6,106 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
-import { EtoolsMixinFactory } from '@unicef-polymer/etools-behaviors/etools-mixin-factory.js';
-import { fireEvent } from '../components/utils/fire-custom-event';
-import { EndpointsMixin } from '../endpoints/endpoints-mixin';
+import {logError} from '@unicef-polymer/etools-behaviors/etools-logging.js';
+import {fireEvent} from '../components/utils/fire-custom-event';
 import {path} from 'ramda';
-// import { Mixins } from '../mixins/redux-store-mixin';
+import {customElement, property, observe} from '@polymer/decorators';
+import {GenericObject} from '../typings/globals.types';
+import {EndpointsMixin} from '../endpoints/endpoints-mixin';
 
-const CountriesMixin = EtoolsMixinFactory.combineMixins([
-  EndpointsMixin,
-  EtoolsPageRefreshMixin,
-  EtoolsAjaxRequestMixin
-], (PolymerElement));
-/**
- * `countries-dropdown` Description
- *
- * @summary ShortDescription.
- * @customElement
- * @polymer
- * @extends {PolymerElement}
- */
-class CountriesDropdown extends CountriesMixin {
+@customElement('countries-dropdown')
+export class CountriesDropdown extends EtoolsPageRefreshMixin(EndpointsMixin(EtoolsAjaxRequestMixin(PolymerElement))) {
   static get template() {
     return html`
-    <style>
-      :host {
-        display: block;
-      }
+      <style>
+        :host {
+          display: block;
+        }
 
-      :host(:hover) {
-        cursor: pointer;
-      }
-
-      paper-dropdown-menu {
-        width: 160px;
-        --paper-input-container-color: var(--light-secondary-text-color);
-        --paper-input-container-focus-color: var(--light-secondary-text-color);
-        --paper-input-container-underline: {
-          display: none;
-        };
-
-        --paper-input-container-underline-focus: {
-          display: none;
-        };
-
-        --paper-input-container-underline-disabled: {
-          display: none;
-        };
-
-        --paper-input-container-input: {
-          color: var(--light-primary-text-color);
-        };
-
-        --paper-dropdown-menu-icon: {
-          color: var(--light-icon-color);
-        };
-
-        --paper-input-container-label: {
-          top: 4px;
-        };
-
-        --paper-input-container-input: {
-          margin-bottom: 2px;
-          color: var(--light-primary-text-color);
+        :host(:hover) {
           cursor: pointer;
         }
-      }
 
-      paper-item {
-        font-size: 15px;
-        white-space: nowrap;
-        cursor: pointer;
-      }
+        paper-dropdown-menu {
+          width: 160px;
+          --paper-input-container-color: var(--light-secondary-text-color);
+          --paper-input-container-focus-color: var(--light-secondary-text-color);
+          --paper-input-container-underline: {
+            display: none;
+          };
 
-      iron-icon {
-        bottom: 2px;
-        min-width: 24px;
-        min-height: 20px;
-        margin-right: 8px;
-      }
+          --paper-input-container-underline-focus: {
+            display: none;
+          };
 
-      paper-item iron-icon {
-        margin-right: 16px;
-      }
-    </style>
+          --paper-input-container-underline-disabled: {
+            display: none;
+          };
 
-    <template is="dom-if" if="[[countrySelectorVisible]]">
+          --paper-input-container-input: {
+            color: var(--light-primary-text-color);
+          };
 
-      <paper-dropdown-menu id="menu" label="Country" noink="" no-label-float="">
-        <paper-listbox slot="dropdown-content" id="countriesListbox" attr-for-selected="countryId" selected="[[current.id]]" on-iron-select="_countrySelected">
-          <template id="repeat" is="dom-repeat" items="[[countries]]">
-            <paper-item country-id="[[item.id]]">
-              [[item.name]]
-            </paper-item>
-          </template>
-        </paper-listbox>
+          --paper-dropdown-menu-icon: {
+            color: var(--light-icon-color);
+          };
 
-      </paper-dropdown-menu>
-    </template>
-`;
+          --paper-input-container-label: {
+            top: 4px;
+          };
+
+          --paper-input-container-input: {
+            margin-bottom: 2px;
+            color: var(--light-primary-text-color);
+            cursor: pointer;
+          }
+        }
+
+        paper-item {
+          font-size: 15px;
+          white-space: nowrap;
+          cursor: pointer;
+        }
+
+        iron-icon {
+          bottom: 2px;
+          min-width: 24px;
+          min-height: 20px;
+          margin-right: 8px;
+        }
+
+        paper-item iron-icon {
+          margin-right: 16px;
+        }
+      </style>
+
+      <template is="dom-if" if="[[countrySelectorVisible]]">
+
+        <paper-dropdown-menu id="menu" label="Country" noink="" no-label-float="">
+          <paper-listbox slot="dropdown-content" id="countriesListbox" attr-for-selected="countryId" selected="[[current.id]]" on-iron-select="_countrySelected">
+            <template id="repeat" is="dom-repeat" items="[[countries]]">
+              <paper-item country-id="[[item.id]]">
+                [[item.name]]
+              </paper-item>
+            </template>
+          </paper-listbox>
+
+        </paper-dropdown-menu>
+      </template>
+    `;
   }
 
-  /**
-   * String providing the tag name to register the element under.
-   */
-  static get is() {
-    return 'countries-dropdown';
-  }
+  @property({type: Object})
+  current: GenericObject;
 
-  /**
-   * Object describing property-related metadata used by Polymer features
-   */
-  static get properties() {
-    return {
-      current: Number,
-      country: {
-        type: Object
-      },
-      countries: {
-        type: Array,
-        observer: '_countrySelectorUpdate'
-      },
-      countrySelectorVisible: Boolean
-    };
-  }
+  @property({type: Object})
+  country: object;
 
-  /**
-   * Instance of the element is created/upgraded. Use: initializing state,
-   * set up event listeners, create shadow dom.
-   * @constructor
-   */
-  constructor() {
-    super();
-  }
+  @property({type: Array})
+  countries: object[];
 
-  /**
-   * Use for one-time configuration of your component after local DOM is initialized.
-   */
+  @property({type: Boolean})
+  countrySelectorVisible: Boolean;
 
   _countrySelected(e) {
       if (e.detail.item.countryId !== this.current.id) {
@@ -171,10 +135,11 @@ class CountriesDropdown extends CountriesMixin {
   }
 
   _handleResponse() {
-    fireEvent(this, 'update-main-path', { path: '' });
+    fireEvent(this, 'update-main-path', {path: '' });
     this.refresh();
   }
 
+  @observe('countries')
   _countrySelectorUpdate(countries) {
     if (Array.isArray(countries) && (countries.length > 1)) {
       this.set('countrySelectorVisible', true);
@@ -182,12 +147,11 @@ class CountriesDropdown extends CountriesMixin {
   }
 
   _handleError(error) {
-    this.logError('Country change failed!', 'countries-dropdown', error);
+    logError('Country change failed!', 'countries-dropdown', error);
     // TODO: this should be a larger alert.
-    this.$.countriesListbox.selected = this.currentCountry;
+    let countriesListbox: any = this.$.countriesListbox;
+    countriesListbox.selected = this.current;
     fireEvent(this, 'toast', { text: 'Something went wrong changing your workspace. Please try again' });
     fireEvent(this, 'global-loading', { active: false, loadingSource: 'country-change' });
   }
 }
-
-window.customElements.define(CountriesDropdown.is, CountriesDropdown);

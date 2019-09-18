@@ -1,24 +1,10 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { Constructor } from '../typings/globals.types';
-// import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { isEmpty } from 'ramda';
-import { DateMixin } from './date-mixin';
-// import { Mixins } from './redux-store-mixin';
-// export const Mixins = Mixins || {};
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {Constructor} from '../typings/globals.types';
+import {isEmpty} from 'ramda';
+import {DateMixin} from './date-mixin';
 
-// window.EtoolsDashboard = window.EtoolsDashboard || {};
-// window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
-
-/**
- * @polymer
- * @mixinFunction
- */
 export function CommonGeneralMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
   class CommonGeneralMixinClass extends DateMixin(baseClass as Constructor<PolymerElement>) {
-    constructor() {
-      super();
-    }
-
     /**
      * Prepare and return the string value we have to display on the interface.
      * Ex: partners and agreements lists data values.

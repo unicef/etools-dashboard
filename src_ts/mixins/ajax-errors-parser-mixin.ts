@@ -1,11 +1,6 @@
-// import { fireEvent } from '../components/utils/fire-custom-event';
 import {PolymerElement} from '@polymer/polymer/polymer-element';
 import {Constructor} from '../typings/globals.types'
-import { property } from '@polymer/decorators';
-// interface AjaxErrorsParserType {
-  // globalMessage: string
-  // httpStatus413Msg: string
-// }
+import {property} from '@polymer/decorators';
 
 export function AjaxErrorsParserMixin<T extends Constructor<PolymerElement>>(superClass: T) {
   class AjaxErrorsParserClass extends (superClass as Constructor<PolymerElement>) {
@@ -131,7 +126,7 @@ export function AjaxErrorsParserMixin<T extends Constructor<PolymerElement>>(sup
       return errors;
     }
 
-    parseRequestErrorsAndShowAsToastMsgs(error, source, redirectOn404) {
+    parseRequestErrorsAndShowAsToastMsgs(error, source?, redirectOn404?) {
       if (redirectOn404 && error.status === 404) {
         if (!source) {
           source = this;

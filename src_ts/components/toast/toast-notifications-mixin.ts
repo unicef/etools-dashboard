@@ -1,24 +1,16 @@
-import { PolymerElement } from '@polymer/polymer/polymer-element';
-import { Constructor } from '../../typings/globals.types';
+import {PolymerElement} from '@polymer/polymer/polymer-element';
+import {Constructor} from '../../typings/globals.types';
 import EtoolsLogsMixin from '@unicef-polymer/etools-behaviors/etools-logs-mixin.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import {afterNextRender} from '@polymer/polymer/lib/utils/render-status.js';
 import {property} from '@polymer/decorators';
-// import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import './etools-toast';
-// import { Mixins } from '../../mixins/redux-store-mixin';
+import {EtoolsToast} from './etools-toast';
 
-// window.EtoolsDashboard = window.EtoolsDashboard || {};
-// window.EtoolsDashboard.Mixins = window.EtoolsDashboard.Mixins || {};
-
-/**
-* @polymer
-* @mixinFunction
-*/
 export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(superClass: T) {
   class ToastNotificationsClass extends EtoolsLogsMixin(superClass as Constructor<PolymerElement>) {
     
     @property({type: Object})
-    _toast: object = null;
+    _toast: EtoolsToast = null;
 
     @property({type: Array})
     _toastQueue: object[] = [];
@@ -26,9 +18,14 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
     @property({type: String})
     currentToastMessage: string = '';
 
-    ready() {
-      super.ready();
+    connectedCallback() {
+      super.connectedCallback();
       this.addEventListener('toast', this.queueToast);
+    }
+
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this.removeEventListener('toast', this.queueToast);
     }
 
     queueToast(e) {
@@ -40,7 +37,6 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
 
       if (!this._toastQueue.length) {
         this.push('_toastQueue', detail);
-        // @ts-ignore
         let toastProperties = this._toast.prepareToastAndGetShowProperties(detail);
         this._showToast(toastProperties);
       } else {
@@ -55,11 +51,8 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
 
     _createToastElement() {
       this.set('_toast', document.createElement('etools-toast'));
-      // @ts-ignore
       this._toast.set('fitInto', this.$.appHeadLayout);
-      // @ts-ignore
       this._toast.addEventListener('toast-confirm', this._toggleToast.bind(this, this._toast));
-      // @ts-ignore
       document.querySelector('body').appendChild(this._toast);
 
       this._toastAfterRenderSetup();
@@ -68,13 +61,11 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
     _toastAfterRenderSetup() {
       afterNextRender(this._toast, () => {
         // alter message wrapper css
-        // @ts-ignore
         let messageWrapper = this._toast.getMessageWrapper();
         if (messageWrapper) {
           messageWrapper.style.whiteSpace = 'pre-wrap';
         }
         // add close listener
-        // @ts-ignore
         this._toast.addEventListener('toast-closed', this.dequeueToast.bind(this));
       });
     }
@@ -82,7 +73,6 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
     dequeueToast() {
       this.shift('_toastQueue');
       if (this._toastQueue.length) {
-        // @ts-ignore
         let toastProperties = this._toast.prepareToastAndGetShowProperties(this._toastQueue[0]);
         this._showToast(toastProperties);
       }
@@ -96,10 +86,8 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
 
     _showToast(toastProperties) {
       this.set('currentToastMessage', toastProperties.text);
-      // @ts-ignore
       this._toast.show(toastProperties);
     }
-
   }
   return ToastNotificationsClass
 }

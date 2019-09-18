@@ -34,6 +34,7 @@ export const SET_STATIC_DATA = 'SET_STATIC_DATA';
 export const SET_USER_COUNTRY = 'SET_USER_COUNTRY';
 export const SET_AGREEMENTS = 'SET_AGREEMENTS';
 export const SET_INTERVENTIONS = 'SET_INTERVENTIONS';
+export const SET_ATTACHMENTS = 'SET_ATTACHMENTS';
 
 export interface PersonalizedDataSetTrips extends Action<'SET_TRIPS'> {
   trips: object[]
@@ -95,16 +96,16 @@ export interface CommonDataActionSetInterventions extends Action<'SET_INTERVENTI
   interventions: object[]
 }
 
-// export interface CommonDataActionSetAttachments extends Action<'SET_ATTACHMENTS'> {
-//   attachments: object[]
-// }
+export interface CommonDataActionSetAttachments extends Action<'SET_ATTACHMENTS'> {
+  attachments: object[]
+}
 
 export type CommonDataAction = CommonDataActionSetCountryProgrammes | CommonDataActionSetOffices |
                                CommonDataActionSetPdssfas | CommonDataActionSetPartnerships | 
                               //  CommonDataActionSetTripsYears |
                                CommonDataActionSetSectors | CommonDataActionSetUnicefUsers | CommonDataActionSetStaticData |
-                               CommonDataActionSetUserCountry | CommonDataActionSetAgreements | CommonDataActionSetInterventions 
-                              //  CommonDataActionSetAttachments;
+                               CommonDataActionSetUserCountry | CommonDataActionSetAgreements | CommonDataActionSetInterventions |
+                               CommonDataActionSetAttachments;
 
 // @ts-ignore - for now
 type ThunkResult = ThunkAction<void, RootState, undefined, CommonDataAction>;
@@ -288,6 +289,13 @@ export const setActionPointsForMe: ActionCreator<PersonalizedDataSetActionPoints
       pick(['status', 'description', 'created_at', 'assigned_by_name', 'id', 'due_date']),
       data.results
     )
+  };
+}
+
+export const setAttachments: ActionCreator<CommonDataActionSetAttachments> = (data: any ) => {
+  return {
+    type: 'SET_ATTACHMENTS',
+    attachments: data.results
   };
 }
 

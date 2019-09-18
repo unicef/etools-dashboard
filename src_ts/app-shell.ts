@@ -1,4 +1,4 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-header/app-header.js';
@@ -8,27 +8,25 @@ import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/iron-pages/iron-pages.js';
-// import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
-// import '@unicef-polymer/etools-loading/etools-loading.js';
 import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-tabs/paper-tab.js';
-import { connect } from 'pwa-helpers/connect-mixin.js';
+import {connect} from 'pwa-helpers/connect-mixin.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
 import 'etools-piwik-analytics/etools-piwik-analytics.js';
-import { store } from './store';
+import {store} from './store';
 import commonData from './reducers/common-data';
 import './styles/buttons-styles';
 import './styles/page-layout-styles';
 import './styles/shared-styles';
 import './styles/app-theme';
-import { ToastNotificationsMixin } from './components/toast/toast-notifications-mixin';
-import { fireEvent } from './components/utils/fire-custom-event';
-import { UserProfileDataMixin } from './mixins/user-profile-data-mixin';
+import {ToastNotificationsMixin} from './components/toast/toast-notifications-mixin';
+import {fireEvent} from './components/utils/fire-custom-event';
+import {UserProfileDataMixin} from './mixins/user-profile-data-mixin';
 import CommonDataMixin from './mixins/common-data-mixin';
 import './config/dexie-db-config';
 import './scripts/es6-polyfills';
@@ -40,17 +38,16 @@ import './views/trips/view-trips';
 import './views/map/view-map';
 import './components/page-header';
 import './components/page-footer';
-// import { Mixins } from './mixins/redux-store-mixin';
-// import {property} from '@polymer/decorators';
-import { Config } from './config/config';
-import { query, property, observe } from '@polymer/decorators';
-import { DomRepeatEvent } from './typings/globals.types';
+import {Config} from './config/config';
+import {query, property, observe, customElement} from '@polymer/decorators';
+import {DomRepeatEvent} from './typings/globals.types';
 
 store.addReducers({
   commonData
 });
 
-class AppShell extends connect(store)(
+@customElement('app-shell')
+export class AppShell extends connect(store)(
   LoadingMixin(
     CommonDataMixin(
       ToastNotificationsMixin(
@@ -63,7 +60,6 @@ class AppShell extends connect(store)(
           display: block;
           --paper-tab-content: {
             height: auto;
-          }
         }
 
         .top-content-actions-wrapper {
@@ -98,7 +94,10 @@ class AppShell extends connect(store)(
         }
       </style>
 
-      <etools-piwik-analytics page="[[subroute.prefix]]" user="[[user]]" toast="[[currentToastMessage]]"></etools-piwik-analytics>
+      <etools-piwik-analytics page="[[subroute.prefix]]"
+                              user="[[user]]"
+                              toast="[[currentToastMessage]]">
+      </etools-piwik-analytics>
 
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
       </app-location>
@@ -214,7 +213,12 @@ class AppShell extends connect(store)(
           <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="personalized" role="main">
             <view-personalized user="[[user]]" class="page" name="personalized" route="{{route}}"></view-personalized>
             <view-hact name="hact" user="[[user]]"></view-hact>
-            <view-partnerships route="{{subroute}}" class="page" user="[[user]]" name="partnerships" csv-download-url="{{csvUrl}}"></view-partnerships>
+            <view-partnerships route="{{subroute}}"
+                               class="page"
+                               user="[[user]]"
+                               name="partnerships"
+                               csv-download-url="{{csvUrl}}">
+            </view-partnerships>
             <view-trips route="{{route}}" class="page" name="trips" user="[[user]]"></view-trips>
             <view-map route="{{route}}" user="[[user]]" class="page" name="map"></view-map>
             <view-attachments route="{{route}}" class="page" user="[[user]]" name="attachments"></view-attachments>
@@ -225,10 +229,6 @@ class AppShell extends connect(store)(
     `;
   }
 
-  static get is() {
-    return 'app-shell';
-  }
-
   @property({type: String, reflectToAttribute: true})
   page: string;
 
@@ -237,27 +237,27 @@ class AppShell extends connect(store)(
 
   @property({type: String})
   rootPath: string;
-  
+
   @property({type: Boolean})
   hideExport: boolean;
 
   @property({type: Array})
   availableDetailYears: object[] = [
-    { name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv' },
-    { name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv' },
-    { name: '2019', endpoint: '/api/v2/partners/hact?&format=csv' }
+    {name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv'},
+    {name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv'},
+    {name: '2019', endpoint: '/api/v2/partners/hact?&format=csv'}
   ]
 
   @property({type: Array})
   availableGeneralYears: object[] = [
-    { name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv' },
-    { name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv' }
+    {name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv'},
+    {name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv'}
   ]
 
   @property({type: Array})
   chartsExport: object[] = [
-    { name: '2018', endpoint: '/api/v2/hact/graph/2018/export' },
-    { name: '2019', endpoint: '/api/v2/hact/graph/2019/export' }
+    {name: '2018', endpoint: '/api/v2/hact/graph/2018/export'},
+    {name: '2019', endpoint: '/api/v2/hact/graph/2019/export'}
   ]
 
   @property({type: Boolean})
@@ -268,61 +268,6 @@ class AppShell extends connect(store)(
 
   @property({type: String})
   currentToastMessage: string;
-
- 
-  // static get properties() {
-  //   return {
-  //     page: {
-  //       type: String,
-  //       reflectToAttribute: true,
-  //       observer: '_pageChanged'
-  //     },
-  //     routeData: Object,
-  //     // This shouldn't be neccessary, but the Analyzer isn't picking up
-  //     // Polymer.Element#rootPath
-  //     rootPath: String,
-
-  //     hideExport: Boolean,
-
-  //     availableDetailYears: {
-  //       type: Array,
-  //       value: [
-  //         { name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv' },
-  //         { name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv' },
-  //         { name: '2019', endpoint: '/api/v2/partners/hact?&format=csv' }
-  //       ]
-  //     },
-  //     availableGeneralYears: {
-  //       type: Array,
-  //       value: [
-  //         { name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv' },
-  //         { name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv' }
-  //       ]
-  //     },
-  //     chartsExport: {
-  //       type: Array,
-  //       value: [
-  //         { name: '2018', endpoint: '/api/v2/hact/graph/2018/export' },
-  //         { name: '2019', endpoint: '/api/v2/hact/graph/2019/export' }
-  //       ]
-  //     },
-  //     displayDetail: {
-  //       type: Boolean,
-  //       value: false,
-  //       observer: '_assuranceSelected'
-  //     },
-  //     user: {
-  //       type: Object
-  //     },
-  //     currentToastMessage: {
-  //       type: String
-  //     }
-  //   };
-  // }
-
-  constructor() {
-    super();
-  }
 
   connectedCallback() {
     super.connectedCallback();
@@ -379,12 +324,12 @@ class AppShell extends connect(store)(
 
   _onPageLoad(page) {
     return () => {
-      fireEvent(this, 'page-changed-hact', { page });};
+      fireEvent(this, 'page-changed-hact', {page});};
   }
 
   _showPage404() {
     this.set('page', 'view404');
-    fireEvent(this, 'toast', { text: 'Oops you hit a 404!', showCloseBtn: true });
+    fireEvent(this, 'toast', {text: 'Oops you hit a 404!', showCloseBtn: true});
   }
 
   _isActive(page, tab) {
@@ -394,7 +339,7 @@ class AppShell extends connect(store)(
   _updateUrlTab(tab) {
     this.set('hideHactExport', tab === 'hact' ? false : true);
     this.set('hidePartnershipExport', tab === 'partnerships' ? false : true);
-    if (!tab) { return; }
+    if (!tab) {return;}
     this.set('hideExport', !(tab === 'hact' || tab === 'partnerships'));
   }
 
@@ -403,7 +348,7 @@ class AppShell extends connect(store)(
   }
 
   _export(event) {
-    var endpoint = event.model.item.endpoint;
+    let endpoint = event.model.item.endpoint;
     window.open(
       `${endpoint}`,
       '_blank'
@@ -421,5 +366,3 @@ class AppShell extends connect(store)(
     this.hactExport.items = this.displayDetail ? this.availableDetailYears : this.availableGeneralYears;
   }
 }
-
-window.customElements.define(AppShell.is, AppShell);
