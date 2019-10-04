@@ -697,7 +697,7 @@
       }
 
       queryCsoDashboard(allPDSSFAs, user) {
-        if (!allPDSSFAs || isEmpty(user)) {
+        if (!allPDSSFAs || isEmpty(user) || !user) {
           return;
         }
         this.fireEvent('global-loading', { active: true, loadingSource: 'view-personalized' });
