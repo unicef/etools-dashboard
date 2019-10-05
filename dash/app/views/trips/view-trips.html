@@ -64,8 +64,8 @@
                  active="{{active}}"
                  query-params="{{queryParams}}"></app-route>
       <trips-dashboard-data trips-data="{{tripsData}}" active="[[active]]" filter="[[tripsFilter]]"></trips-dashboard-data>
-      <action-pts-by-section-data action-points-data="{{actionPointsData}}"
-                                  filter="[[actionPtsFilter]]"></action-pts-by-section-data>
+      <!-- <action-pts-by-section-data action-points-data="{{actionPointsData}}"
+                                  filter="[[actionPtsFilter]]"></action-pts-by-section-data> -->
       <google-chart-loader id="google"></google-chart-loader>
 
       <div class="paper-material list-panel listControls" elevation="1">
@@ -237,10 +237,10 @@
             notify: true,
             value: []
           },
-          actionPointsData: {
-            type: Object,
-            observer: '_actionPointsDataChanged'
-          },
+          // actionPointsData: {
+          //   type: Object,
+          //   observer: '_actionPointsDataChanged'
+          // },
           apOffice: {
             type: String,
             notify: true,
@@ -548,25 +548,25 @@
         this.set('actionPtsFilter', filter);
       }
     
-      _actionPointsDataChanged(data) {
-        if (!isEmpty(data)) {
-          var actionPoints = prop('action_points_by_section', data).filter((ap) => {
-            return prop('total_action_points', ap);
-          });
-          if (!actionPoints.length && this.active) {
-            this._setNoData('actionPointsChart');
-          } else {
-            var formatted = [['Action Points', 'Closed', 'Open']];
-            actionPoints.forEach((ap) => {
-              formatted.push([ap.section_name,
-                ap.completed_action_points,
-                (ap.total_action_points - ap.completed_action_points)
-              ]);
-            });
-            this._formatChartData(formatted, 'actionPointsChart');
-          }
-        }
-      }
+      // _actionPointsDataChanged(data) {
+      //   if (!isEmpty(data)) {
+      //     var actionPoints = prop('action_points_by_section', data).filter((ap) => {
+      //       return prop('total_action_points', ap);
+      //     });
+      //     if (!actionPoints.length && this.active) {
+      //       this._setNoData('actionPointsChart');
+      //     } else {
+      //       var formatted = [['Action Points', 'Closed', 'Open']];
+      //       actionPoints.forEach((ap) => {
+      //         formatted.push([ap.section_name,
+      //           ap.completed_action_points,
+      //           (ap.total_action_points - ap.completed_action_points)
+      //         ]);
+      //       });
+      //       this._formatChartData(formatted, 'actionPointsChart');
+      //     }
+      //   }
+      // }
 
       _setNoData(chartName) {
         this.$.google.dataTable(this.noDataMessage).then((dt) => {
