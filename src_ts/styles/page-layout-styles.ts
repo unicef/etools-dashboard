@@ -24,8 +24,7 @@ $_documentContainer.innerHTML = `<dom-module id="page-layout-styles">
         width: calc(100vw - 48px)
       }
 
-      .page[name="personalized"],
-      .page[name="attachments"] {
+      .page[name="personalized"] {
         @apply --layout;
         @apply --layout-vertical;
         box-sizing: border-box;

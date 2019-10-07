@@ -39,18 +39,12 @@ export class ViewHact extends PolymerElement {
     let country = this.user.country.name;
 
     let embedSource = "https://app.powerbi.com/reportEmbed" +
-      "?reportId=cb3c63d4-8cf7-42c7-b94d-0950082c68de&appId=2c83563f-d6fc-4ade-9c10-bbca57ed1ece" +
-      "&autoAuth=true" +
-      "&ctid=77410195-14e1-4fb8-904b-ab1892023667" +
-      "&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldCJ9" +
-      `&$filter=actionpoints/country_name eq '${country}'` +
-      ` and engagement/country_name eq '${country}'` +
-      ` and interventions/country_name eq '${country}'` +
-      ` and interventions_offices_sections/country_name eq '${country}'` +
-      ` and partners/country_name eq '${country}'` +
-      ` and partners_interventions/country_name eq '${country}'` +
-      ` and travelactivities/country_name eq '${country}'` +
-      ` and travels/country_name eq '${country}'`;
+    "?reportId=849d1c17-e666-4278-8388-000bb03f1d0c" +
+    "&appId=56089b5f-f2cc-4121-8705-58f981db340f" +
+    "&autoAuth=true" +
+    "&ctid=77410195-14e1-4fb8-904b-ab1892023667" +
+    "&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldCJ9" +
+    `&$filter=partners/country_name eq '${country}'`;
 
     this.set('embedSource', embedSource);
   }
