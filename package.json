@@ -9,7 +9,7 @@
   },
   "description": "Dashboard for UNICEF eTools",
   "scripts": {
-    "build": "export NODE_OPTIONS=--max_old_space_size=4096 && npm run tsToJs && npm run build:static",
+    "build": "export NODE_OPTIONS=--max_old_space_size=8192 && npm run tsToJs && npm run build:static",
     "tsToJs": "tsc --skipLibCheck",
     "tsEslint": "eslint src_ts/**",
     "start": "gulp prpl-server serve",

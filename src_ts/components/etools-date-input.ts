@@ -4,14 +4,16 @@ import '@polymer/paper-input/paper-input.js';
 import { IronValidatableBehavior } from '@polymer/iron-validatable-behavior/iron-validatable-behavior.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 // import 'etools-datepicker/etools-datepicker-button.js';
-import { DateMixin } from '../mixins/date-mixin';
+// import { DateMixin } from '../mixins/date-mixin';
 import '../styles/shared-styles';
 // import { customElement } from '@polymer/decorators';
 // import { Mixins } from '../mixins/redux-store-mixin';
 
 // @customElement('etools-date-input')
 export class EtoolsDateInput extends
-    mixinBehaviors([IronValidatableBehavior], DateMixin(PolymerElement)) {
+    mixinBehaviors([IronValidatableBehavior], 
+      // DateMixin
+      (PolymerElement)) {
   static get template() {
     return html`
     <style include="shared-styles">

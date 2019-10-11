@@ -24,13 +24,6 @@ $_documentContainer.innerHTML = `<dom-module id="page-layout-styles">
         width: calc(100vw - 48px)
       }
 
-      .page[name="personalized"] {
-        @apply --layout;
-        @apply --layout-vertical;
-        box-sizing: border-box;
-        padding: 24px;
-      }
-
       #pageContent {
         @apply --layout-flex;
       }
@@ -49,7 +42,6 @@ $_documentContainer.innerHTML = `<dom-module id="page-layout-styles">
         padding: 0 24px;
         min-height: 85px;
       }
-
 
       .top-content {
         @apply --layout-vertical;
