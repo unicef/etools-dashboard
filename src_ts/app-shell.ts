@@ -69,7 +69,7 @@ export class AppShell extends connect(store)(
         }
 
         .top-content-action paper-button {
-          padding-bottom: 4px
+          padding-bottom: 4px;
         }
 
         etools-dropdown {
@@ -79,6 +79,10 @@ export class AppShell extends connect(store)(
         .action-button {
           color: var(--secondary-text-color);
           font-weight: 500;
+        }
+
+        paper-button.action-button {
+          padding: inherit;
         }
 
         iron-pages {

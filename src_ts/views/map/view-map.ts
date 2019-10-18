@@ -7,7 +7,7 @@ export class ViewMap extends PolymerElement {
     return html`
       <style>
         div.container {
-          height: 100vh;
+          height: calc(100vh - 160px);
           width: 100vw
         }
       </style>
