@@ -22,8 +22,7 @@ jobs:
           command: npm run build
       - run:
           name: Run Tests
-          command: |
-            xvfb-run polymer test --skip-selenium-install
+          command: ./node_modules/.bin/gulp test --pc
 
   build_and_deploy:
     working_directory: ~/code
