@@ -88,19 +88,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }, (err) => console.log('Service Worker registration failed: ', err));
       });
     }
-    // (function() {
-    //     // Load webcomponents-loader.js to check and load any polyfills your browser needs
-    //     const webcomponentsLoaderScript = document.createElement('script');
-    //     webcomponentsLoaderScript.async = true;
-    //     webcomponentsLoaderScript.src = BASEURL + 'bower_components/webcomponentsjs/webcomponents-loader.js';
-    //     document.head.appendChild(webcomponentsLoaderScript);
-    //     // Load application shell
-    //     const appShellImport = document.createElement('link');
-    //     appShellImport.rel = 'import';
-
-    //     appShellImport.href = BASEURL + 'dash/app-shell.js';
-    //     document.head.appendChild(appShellImport);
-    //   })();
   </script>
 
 <script>
@@ -144,7 +131,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
   <script src="node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
   <script src="node_modules/moment/min/moment.min.js"></script>
-  <script src="node_modules/ramda/dist/ramda.js"></script>
 
   <script type="module" src="src/app-shell.js"></script>
 </body>

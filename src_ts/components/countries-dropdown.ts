@@ -8,7 +8,8 @@ import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-requ
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
 import {logError} from '@unicef-polymer/etools-behaviors/etools-logging.js';
 import {fireEvent} from '../components/utils/fire-custom-event';
-import {path} from 'ramda';
+// import {path} from 'ramda';
+// import * as R from 'ramda';
 import {customElement, property, observe} from '@polymer/decorators';
 import {GenericObject} from '../typings/globals.types';
 import {EndpointsMixin} from '../endpoints/endpoints-mixin';
@@ -110,7 +111,7 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EndpointsMixin(Eto
   _countrySelected(e) {
       if (e.detail.item.countryId !== this.current.id) {
         // send post request to change_coutry endpoint
-        let selectedCountryId = path(['detail', 'item', 'countryId'], e);
+        let selectedCountryId = e.detail.item.countryId;
         if(selectedCountryId) {
           this._triggerCountryChangeRequest(selectedCountryId);
         }

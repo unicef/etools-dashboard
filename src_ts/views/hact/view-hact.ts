@@ -7,7 +7,7 @@ export class ViewHact extends PolymerElement {
     return html`
       <style>
         div.container {
-          height: calc(100vh - 160px);
+          height: calc(100vh - 200px);
           width: 100vw;
         }
       </style>

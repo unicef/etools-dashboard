@@ -15,11 +15,11 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-tabs/paper-tab.js';
-import {connect} from 'pwa-helpers/connect-mixin.js';
+// import {connect} from 'pwa-helpers/connect-mixin.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
 import 'etools-piwik-analytics/etools-piwik-analytics.js';
-import {store} from './store';
-import commonData from './reducers/common-data';
+// import {store} from './store';
+// import commonData from './reducers/common-data';
 import './styles/buttons-styles';
 import './styles/page-layout-styles';
 import './styles/shared-styles';
@@ -27,7 +27,7 @@ import './styles/app-theme';
 import {ToastNotificationsMixin} from './components/toast/toast-notifications-mixin';
 import {fireEvent} from './components/utils/fire-custom-event';
 import {UserProfileDataMixin} from './mixins/user-profile-data-mixin';
-import CommonDataMixin from './mixins/common-data-mixin';
+// import CommonDataMixin from './mixins/common-data-mixin';
 import './config/dexie-db-config';
 import './scripts/es6-polyfills';
 import './views/hact/view-hact';
@@ -39,19 +39,20 @@ import './views/map/view-map';
 import './components/page-header';
 import './components/page-footer';
 import {Config} from './config/config';
-import {query, property, observe, customElement} from '@polymer/decorators';
-import {DomRepeatEvent} from './typings/globals.types';
+import {property, observe, customElement} from '@polymer/decorators';
+// import {DomRepeatEvent} from './typings/globals.types';
 
-store.addReducers({
-  commonData
-});
+// store.addReducers({
+//   commonData
+// });
 
 @customElement('app-shell')
-export class AppShell extends connect(store)(
+export class AppShell extends 
   LoadingMixin(
-    CommonDataMixin(
+    // CommonDataMixin(
       ToastNotificationsMixin(
-        UserProfileDataMixin(PolymerElement))))) {
+        UserProfileDataMixin(
+        PolymerElement))) {
 
   public static get template() {
     return html`
@@ -275,7 +276,7 @@ export class AppShell extends connect(store)(
 
   connectedCallback() {
     super.connectedCallback();
-    this.loadCommonData();
+    // this.loadCommonData();
   }
 
   static get observers() {
@@ -364,9 +365,9 @@ export class AppShell extends connect(store)(
   }
 
   // sets export endpoints based on assurance view (detailed/general)
-  @query('hactExport')
-  hactExport: DomRepeatEvent | any;
-  _assuranceSelected() {
-    this.hactExport.items = this.displayDetail ? this.availableDetailYears : this.availableGeneralYears;
-  }
+//   @query('hactExport')
+//   hactExport: DomRepeatEvent | any;
+//   _assuranceSelected() {
+//     this.hactExport.items = this.displayDetail ? this.availableDetailYears : this.availableGeneralYears;
+//   }
 }

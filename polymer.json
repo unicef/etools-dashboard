@@ -9,10 +9,9 @@
     "src/views/trips/view-trips.js",
     "src/views/attachments/view-attachments.js"
   ],
-  "sources": ["images/**/*", "dash/**/*", "bower.json"],
+  "sources": ["images/**/*", "dash/**/*"],
   "extraDependencies": [
     "node_modules/webcomponentsjs/*.js",
-    "node_modules/ramda/dist/*.js",
     "manifest.json"
   ],
   "lint": {

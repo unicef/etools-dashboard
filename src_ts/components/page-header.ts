@@ -5,18 +5,20 @@ import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@unicef-polymer/etools-app-selector/etools-app-selector.js';
 import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
-import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
+// import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
 import './countries-dropdown';
 import '../mixins/user-profile-data-mixin';
 import '../styles/shared-styles';
 import {Config} from '../config/config';
-import {sortBy} from 'ramda';
+// import sortBy from 'ramda/src/sortBy';
+// import * as R from 'ramda';
+import sortBy from 'lodash-es/sortBy';
 import {fireEvent} from '../components/utils/fire-custom-event';
 import {customElement, property} from '@polymer/decorators';
 import {UserProfileDataMixin} from '../mixins/user-profile-data-mixin';
 
 @customElement('page-header')
-export class PageHeader extends EtoolsPageRefreshMixin(UserProfileDataMixin(PolymerElement)) {
+export class PageHeader extends UserProfileDataMixin(PolymerElement) {
   static get template() {
     return html`
     <style include="shared-styles">
@@ -174,7 +176,7 @@ export class PageHeader extends EtoolsPageRefreshMixin(UserProfileDataMixin(Poly
         imgClass: this._getFlagIconClass(arrayItem.business_area_code)
       };
     });
-    arrayObj = sortBy((c) => c.name)(arrayObj);
+    arrayObj = sortBy(arrayObj, (c) => c.name);
     this.set('countries', arrayObj);
   }
 
@@ -190,14 +192,14 @@ export class PageHeader extends EtoolsPageRefreshMixin(UserProfileDataMixin(Poly
   }
 
   _signOut() {
-    this._clearDexieDbs();
+    // this._clearDexieDbs();
     this._clearLocalStorage();
     window.location.href = window.location.origin + '/logout';
   }
 
-  _clearDexieDbs() {
-    window.EtoolsDashboard.DexieDb.delete();
-  }
+  // _clearDexieDbs() {
+  //   window.EtoolsDashboard.DexieDb.delete();
+  // }
 
   _clearLocalStorage() {
     localStorage.clear();

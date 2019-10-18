@@ -36,7 +36,6 @@
     "Promise": true,
     "Polymer": true,
     "PolymerRedux": true,
-    "Dexie": true,
     "EtoolsMixinFactory": true,
     "EtoolsDashboard": true,
     "EtoolsRequestCacheDb": true,
