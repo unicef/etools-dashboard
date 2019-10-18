@@ -29,7 +29,7 @@ import {fireEvent} from './components/utils/fire-custom-event';
 import {UserProfileDataMixin} from './mixins/user-profile-data-mixin';
 // import CommonDataMixin from './mixins/common-data-mixin';
 import './config/dexie-db-config';
-import './scripts/es6-polyfills';
+// import './scripts/es6-polyfills';
 import './views/hact/view-hact';
 import './views/personalized/view-personalized';
 import './views/partnerships/view-partnerships';
