@@ -43,6 +43,7 @@ export class ViewPartnerships extends PolymerElement {
     "&appId=56089b5f-f2cc-4121-8705-58f981db340f" +
     "&autoAuth=true&ctid=77410195-14e1-4fb8-904b-ab1892023667" +
     "&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldCJ9" +
+    "&filterPaneEnabled=False" +
     `&$filter=actionpoints/country_name eq '${country}'` +
     ` and interventions/country_name eq '${country}'` +
     ` and partners/country_name eq '${country}'`;

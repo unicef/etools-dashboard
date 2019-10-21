@@ -5,17 +5,15 @@ import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@unicef-polymer/etools-app-selector/etools-app-selector.js';
 import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
-// import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
 import './countries-dropdown';
 import '../mixins/user-profile-data-mixin';
 import '../styles/shared-styles';
 import {Config} from '../config/config';
-// import sortBy from 'ramda/src/sortBy';
-// import * as R from 'ramda';
 import sortBy from 'lodash-es/sortBy';
 import {fireEvent} from '../components/utils/fire-custom-event';
 import {customElement, property} from '@polymer/decorators';
 import {UserProfileDataMixin} from '../mixins/user-profile-data-mixin';
+import './support-btn';
 
 @customElement('page-header')
 export class PageHeader extends UserProfileDataMixin(PolymerElement) {
@@ -39,7 +37,6 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
         color: var(--light-primary-text-color);
       }
 
-      #refresh,
       #profile {
         color: var(--title-toolbar-secondary-text-color);
       }
@@ -65,10 +62,6 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
         @apply --layout-center;
       }
 
-      etools-page-refresh {
-        margin-left: 24px;
-      }
-
       .titlebar {
         flex: 1;
         font-size: 28px;
@@ -85,6 +78,10 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
         @apply --layout-horizontal;
         @apply --layout-center;
         height: 60px;
+      }
+
+      support-btn {
+        color: var(--light-secondary-text-color);
       }
 
       #second-logo {
@@ -108,8 +105,7 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
         }
       }
     </style>
-    
-   
+
     <app-toolbar sticky="" class="content-align">
       <paper-icon-button id="menuButton" class="light" icon="menu" on-tap="openDrawer"></paper-icon-button>
       <div class="titlebar content-align">
@@ -121,8 +117,8 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
       </div>
       <div class="content-align">
         <countries-dropdown id="countries" countries="[[countries]]" current="[[user.country]]"></countries-dropdown>
+        <support-btn></support-btn>
         <etools-profile-dropdown profile="{{user}}" on-save-profile="_saveProfile" on-sign-out="_signOut"></etools-profile-dropdown>
-        <paper-icon-button icon="refresh" id="refresh" on-tap="refresh" disabled="[[refreshInProgress]]"></paper-icon-button>
       </div>
     </app-toolbar>
 `;
@@ -192,14 +188,9 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
   }
 
   _signOut() {
-    // this._clearDexieDbs();
     this._clearLocalStorage();
     window.location.href = window.location.origin + '/logout';
   }
-
-  // _clearDexieDbs() {
-  //   window.EtoolsDashboard.DexieDb.delete();
-  // }
 
   _clearLocalStorage() {
     localStorage.clear();

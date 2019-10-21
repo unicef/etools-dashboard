@@ -44,6 +44,7 @@ export class ViewPersonalized extends PolymerElement {
     "&autoAuth=true" +
     "&ctid=77410195-14e1-4fb8-904b-ab1892023667" +
     "&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldCJ9" +
+    "&filterPaneEnabled=False" +
     `&$filter=interventions_focalpoints/unicef_focal_point_email eq '${email}'` +
     ` and actionpointsfor/assigned_to_email eq '${email}'` +
     ` and actionpointsby/assigned_by_email eq '${email}'` +

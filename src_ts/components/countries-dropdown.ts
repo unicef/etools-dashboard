@@ -5,17 +5,14 @@ import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
 import {logError} from '@unicef-polymer/etools-behaviors/etools-logging.js';
 import {fireEvent} from '../components/utils/fire-custom-event';
-// import {path} from 'ramda';
-// import * as R from 'ramda';
 import {customElement, property, observe} from '@polymer/decorators';
 import {GenericObject} from '../typings/globals.types';
 import {EndpointsMixin} from '../endpoints/endpoints-mixin';
 
 @customElement('countries-dropdown')
-export class CountriesDropdown extends EtoolsPageRefreshMixin(EndpointsMixin(EtoolsAjaxRequestMixin(PolymerElement))) {
+export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -136,8 +133,8 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EndpointsMixin(Eto
   }
 
   _handleResponse() {
-    fireEvent(this, 'update-main-path', {path: '' });
-    this.refresh();
+    localStorage.clear();
+    window.location.reload(true);
   }
 
   @observe('countries')
