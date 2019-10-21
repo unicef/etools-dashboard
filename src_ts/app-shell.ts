@@ -33,8 +33,10 @@ import './views/trips/view-trips';
 import './views/map/view-map';
 import './components/page-header';
 import './components/page-footer';
-import {Config} from './config/config';
+import {Config, BASE_URL} from './config/config';
 import {property, observe, customElement} from '@polymer/decorators';
+import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
+setRootPath(BASE_URL);
 
 @customElement('app-shell')
 export class AppShell extends 
@@ -49,6 +51,7 @@ export class AppShell extends
           display: block;
           --paper-tab-content: {
             height: auto;
+          }
         }
 
         .top-content-actions-wrapper {
@@ -121,7 +124,7 @@ export class AppShell extends
                   </div>
 
                   <div class="top-content-action" hidden\$="[[!_isActive(page,'partnerships')]]">
-                    <a target="_blank" href="[[csvUrl]]">
+                    <a target="_blank" href="[[rootpath]]/api/v2/interventions/partnership-dash/?format=csv">
                       <paper-button class="action-button">
                         <iron-icon class="dark" icon="file-download"></iron-icon>
                         Export
@@ -167,36 +170,30 @@ export class AppShell extends
                 </div>
               </div>
               <div class="top-content-row">
-                <paper-tabs selected="{{page}}" attr-for-selected="name" noink="" bottom-item="">
+                <paper-tabs selected="{{page}}" attr-for-selected="name" noink bottom-item>
 
-                  <paper-tab name="personalized" link="">
-                    <span class="tab-content">My Dashboard</span>
-                    <!-- <a href="[[rootPath]]personalized" class="tab-content">My Dashboard</a> -->
+                  <paper-tab name="personalized" link>
+                    <a href="[[rootPath]]personalized" class="tab-content">My Dashboard</a>
                   </paper-tab>
 
-                  <paper-tab name="hact" link="">
-                    <span class="tab-content">HACT</span>
-                    <!-- <a href="[[rootPath]]hact" class="tab-content">HACT</a> -->
+                  <paper-tab name="hact" link>
+                    <a href="[[rootPath]]hact" class="tab-content">HACT</a>
                   </paper-tab>
 
-                  <paper-tab name="trips" link="">
-                    <span class="tab-content">Trips</span>
-                    <!-- <a href="[[rootPath]]trips" class="tab-content">Trips</a> -->
+                  <paper-tab name="trips" link>
+                    <a href="[[rootPath]]trips" class="tab-content">Trips</a>
                   </paper-tab>
 
-                  <paper-tab name="partnerships" link="">
-                    <span class="tab-content">Partnerships</span>
-                    <!-- <a href="[[rootPath]]partnerships/overview" class="tab-content">Partnerships</a> -->
+                  <paper-tab name="partnerships" link>
+                    <a href="[[rootPath]]partnerships " class="tab-content">Partnerships</a>
                   </paper-tab>
 
-                  <paper-tab name="map" link="">
-                    <span class="tab-content">Map</span>
-                    <!-- <a href="[[rootPath]]map" class="tab-content">Map</a> -->
+                  <paper-tab name="map" link>
+                    <a href="[[rootPath]]map" class="tab-content">Map</a>
                   </paper-tab>
 
-                  <paper-tab name="attachments" link="">
-                    <span class="tab-content">Document Library</span>
-                    <!-- <a href="[[rootPath]]attachments" class="tab-content">Document Library</a> -->
+                  <paper-tab name="attachments" link>
+                    <a href="[[rootPath]]attachments" class="tab-content">Document Library</a>
                   </paper-tab>
                 </paper-tabs>
               </div>
@@ -206,8 +203,7 @@ export class AppShell extends
           <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="personalized" role="main">
             <view-personalized user="[[user]]" class="page" name="personalized" route="{{route}}"></view-personalized>
             <view-hact name="hact" user="[[user]]"></view-hact>
-            <view-partnerships route="{{subroute}}"
-                               class="page"
+            <view-partnerships class="page"
                                user="[[user]]"
                                name="partnerships"
                                csv-download-url="{{csvUrl}}">

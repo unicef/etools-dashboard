@@ -4,6 +4,8 @@ declare global {
 
 window.EtoolsLogsLevel = 'INFO';
 
+export const BASE_URL = '/dash/';
+
 export const Config = {
   baseSite: window.location.origin,
   basePath: (window.location.port === '8080') ? '/' : '/dash/',
