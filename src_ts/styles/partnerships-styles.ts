@@ -14,6 +14,10 @@ $_documentContainer.innerHTML = `<dom-module id="partnerships-styles">
         padding-right: 8px;
       }
 
+      .text-right {
+        text-align: right;
+      }
+
       div.sections.col-data {
         height: 48px;
         white-space: normal;

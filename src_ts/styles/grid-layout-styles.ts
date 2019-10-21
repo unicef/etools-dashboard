@@ -61,6 +61,10 @@ $_documentContainer.innerHTML = `<dom-module id="grid-layout-styles">
         justify-content: flex-end;
       }
 
+      .center-justified {
+        @apply --layout-center-justified;
+      }
+
       .flex-1 {
           @apply --layout-flex;
       }
