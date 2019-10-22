@@ -1,7 +1,9 @@
+/* shared styles for all views */
+/* not for styling index.html or app-shell */
 import '@polymer/polymer/polymer-element.js';
-const $_documentContainer = document.createElement('template');
+const DocumentContainer = document.createElement('template');
 
-$_documentContainer.innerHTML = `<dom-module id="shared-styles">
+DocumentContainer.innerHTML = `<dom-module id="shared-styles">
   <template>
     <style>
       *[hidden] {
@@ -124,13 +126,4 @@ $_documentContainer.innerHTML = `<dom-module id="shared-styles">
   </template>
 </dom-module>`;
 
-document.head.appendChild($_documentContainer.content);
-
-/* shared styles for all views */
-/* not for styling index.html or pmp-shell */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
-;
+document.head.appendChild(DocumentContainer.content);

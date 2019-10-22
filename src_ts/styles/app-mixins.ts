@@ -3,9 +3,9 @@
 import '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import '@polymer/polymer/lib/elements/custom-style.js';
-const $_documentContainer = document.createElement('template');
+const DocumentContainer = document.createElement('template');
 
-$_documentContainer.innerHTML = `<custom-style>
+DocumentContainer.innerHTML = `<custom-style>
   <style>
     html {
       --nested-content-panel-title: {
@@ -53,4 +53,4 @@ $_documentContainer.innerHTML = `<custom-style>
   </style>
 </custom-style>`;
 
-document.head.appendChild($_documentContainer.content);
+document.head.appendChild(DocumentContainer.content);

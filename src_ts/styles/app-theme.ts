@@ -6,9 +6,9 @@ import '@webcomponents/shadycss/entrypoints/apply-shim.js';
 import '@polymer/polymer/lib/elements/custom-style.js';
 import '@polymer/paper-styles/typography.js';
 import '@polymer/paper-styles/color.js';
-const $_documentContainer = document.createElement('template');
+const DocumentContainer = document.createElement('template');
 
-$_documentContainer.innerHTML = `<custom-style>
+DocumentContainer.innerHTML = `<custom-style>
   <style>
     html {
       --primary-background-color: #FFFFFF;
@@ -80,6 +80,4 @@ $_documentContainer.innerHTML = `<custom-style>
 
 </custom-style>`;
 
-document.head.appendChild($_documentContainer.content);
-
-;
+document.head.appendChild(DocumentContainer.content);

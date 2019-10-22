@@ -73,7 +73,7 @@ export class EtoolsToast extends PolymerElement {
     });
   }
 
-  toastClosed() {
+  public toastClosed() {
     fireEvent(this, 'toast-closed', {
       bubbles: true,
       composed: true
@@ -92,7 +92,7 @@ export class EtoolsToast extends PolymerElement {
     return message.toString().length > 80;
   }
 
-  prepareToastAndGetShowProperties(detail) {
+  public prepareToastAndGetShowProperties(detail) {
     let closeToastBtn: any = this.$.confirmBtn;
     let toast = this.$.toast;
 

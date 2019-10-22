@@ -80,7 +80,11 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
       <template is="dom-if" if="[[countrySelectorVisible]]">
 
         <paper-dropdown-menu id="menu" label="Country" noink="" no-label-float="">
-          <paper-listbox slot="dropdown-content" id="countriesListbox" attr-for-selected="countryId" selected="[[current.id]]" on-iron-select="_countrySelected">
+          <paper-listbox slot="dropdown-content"
+                         id="countriesListbox"
+                         attr-for-selected="countryId"
+                         selected="[[current.id]]"
+                         on-iron-select="_countrySelected">
             <template id="repeat" is="dom-repeat" items="[[countries]]">
               <paper-item country-id="[[item.id]]">
                 [[item.name]]
@@ -97,7 +101,7 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
   current: GenericObject;
 
   @property({type: Object})
-  country: object;
+  public country: object;
 
   @property({type: Array})
   countries: object[];
@@ -106,13 +110,13 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
   countrySelectorVisible: Boolean;
 
   _countrySelected(e) {
-      if (e.detail.item.countryId !== this.current.id) {
-        // send post request to change_coutry endpoint
-        let selectedCountryId = e.detail.item.countryId;
-        if(selectedCountryId) {
-          this._triggerCountryChangeRequest(selectedCountryId);
-        }
+    if (e.detail.item.countryId !== this.current.id) {
+      // send post request to change_coutry endpoint
+      let selectedCountryId = e.detail.item.countryId;
+      if (selectedCountryId) {
+        this._triggerCountryChangeRequest(selectedCountryId);
       }
+    }
   }
 
   _triggerCountryChangeRequest(countryId) {
@@ -124,7 +128,7 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
     this.sendRequest({
       endpoint: this.getEndpoint('changeCountry'),
       method: 'POST',
-      body: { country: countryId }
+      body: {country: countryId}
     }).then(() => {
       this._handleResponse();
     }).catch((err) => {
@@ -149,7 +153,7 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
     // TODO: this should be a larger alert.
     let countriesListbox: any = this.$.countriesListbox;
     countriesListbox.selected = this.current;
-    fireEvent(this, 'toast', { text: 'Something went wrong changing your workspace. Please try again' });
-    fireEvent(this, 'global-loading', { active: false, loadingSource: 'country-change' });
+    fireEvent(this, 'toast', {text: 'Something went wrong changing your workspace. Please try again'});
+    fireEvent(this, 'global-loading', {active: false, loadingSource: 'country-change'});
   }
 }

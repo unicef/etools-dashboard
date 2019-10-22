@@ -7,28 +7,28 @@ import {fireEvent} from '../components/utils/fire-custom-event';
 import {property} from '@polymer/decorators';
 
 export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
-  class DataElementMixinClass extends 
-    EndpointsMixin(
-      AjaxServerErrorsMixin(
-        EtoolsAjaxRequestMixin(baseClass))) {
+  class DataElementMixinClass extends
+      EndpointsMixin(
+        AjaxServerErrorsMixin(
+          EtoolsAjaxRequestMixin(baseClass))) {
 
     @property({type: Object})
     options: object | any = {
       endpoint: null,
-      csrf: true
+      csrf: true,
     };
 
     @property({type: Array, notify: true, readOnly: true})
     data: object[];
 
     @property({type: Array})
-    globalMessage: string = 'An error occurred while trying to fetch the data!';
+    public globalMessage: string = 'An error occurred while trying to fetch the data!';
 
     @property({type: Boolean})
     fireDataLoaded: boolean = false;
 
     @property({type: Object})
-    _refreshInterval: object = null;
+    public _refreshInterval: object = null;
 
     @property({type: String})
     endpointName: string;
@@ -65,21 +65,21 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       });
 
       this.sendRequest(this.options)
-        .then((resp) => {
-          this._handleMyResponse(resp);
-        }).catch((err) => {
-          if (this.options.endpoint.template.indexOf('profile') && err.status === 403) {
-            fireEvent(this, 'forbidden', { bubbles: true, composed: true });
-          }
-          // @ts-ignore
-          this.handleErrorResponse(err);
-        })
-        .finally(() => {
-          fireEvent(this, 'global-loading', {
-            active: false,
-            loadingSource: this.endpointName
+          .then((resp) => {
+            this._handleMyResponse(resp);
+          }).catch((err) => {
+            if (this.options.endpoint.template.indexOf('profile') && err.status === 403) {
+              fireEvent(this, 'forbidden', { bubbles: true, composed: true });
+            }
+            // @ts-ignore
+            this.handleErrorResponse(err);
+          })
+          .finally(() => {
+            fireEvent(this, 'global-loading', {
+              active: false,
+              loadingSource: this.endpointName
+            });
           });
-        });
     }
 
     _handleMyResponse(res) {
@@ -119,5 +119,5 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       }, newEndpoint.exp));
     }
   }
-  return DataElementMixinClass
+  return DataElementMixinClass;
 }

@@ -5,16 +5,14 @@ import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-requ
 import isEmpty from 'lodash-es/isEmpty';
 import {AjaxErrorsParserMixin} from './ajax-errors-parser-mixin';
 import {DataElementMixin} from './data-element-mixin';
-// import {UserPermissionsMixin} from './user-permissions-mixin';
 import {EndpointsMixin} from '../endpoints/endpoints-mixin';
 import {fireEvent} from '../components/utils/fire-custom-event';
 
 export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
   class UserProfileDataMixinClass extends AjaxErrorsParserMixin(
-    DataElementMixin(
-      EtoolsAjaxRequestMixin(
-        EndpointsMixin(
-          // UserPermissionsMixin(
+      DataElementMixin(
+        EtoolsAjaxRequestMixin(
+          EndpointsMixin(
             baseClass as Constructor<PolymerElement>)))) {
     [x: string]: any;
 
@@ -55,7 +53,7 @@ export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(base
     }
 
     _dispatchSaveProfileRequest(profile) {
-      let config = {
+      const config = {
         endpoint: this.getEndpoint(this.endpointName),
         method: 'PATCH',
         body: profile
@@ -85,4 +83,4 @@ export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(base
     }
   }
   return UserProfileDataMixinClass
-}
+};

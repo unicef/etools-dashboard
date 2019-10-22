@@ -38,13 +38,13 @@ export class ViewHact extends PolymerElement {
     // @ts-ignore
     let country = this.user.country.name;
 
-    let embedSource = "https://app.powerbi.com/reportEmbed" +
-    "?reportId=849d1c17-e666-4278-8388-000bb03f1d0c" +
-    "&appId=56089b5f-f2cc-4121-8705-58f981db340f" +
-    "&autoAuth=true" +
-    "&ctid=77410195-14e1-4fb8-904b-ab1892023667" +
-    "&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldCJ9" +
-    "&filterPaneEnabled=False" +
+    let embedSource = 'https://app.powerbi.com/reportEmbed' +
+    '?reportId=849d1c17-e666-4278-8388-000bb03f1d0c' +
+    '&appId=56089b5f-f2cc-4121-8705-58f981db340f' +
+    '&autoAuth=true' +
+    '&ctid=77410195-14e1-4fb8-904b-ab1892023667' +
+    '&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldCJ9' +
+    '&filterPaneEnabled=False' +
     `&$filter=partners/country_name eq '${country}'`;
 
     this.set('embedSource', embedSource);

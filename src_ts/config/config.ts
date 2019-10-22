@@ -1,5 +1,11 @@
 declare global {
-  interface Window {EtoolsLogsLevel: string, EtoolsRequestCacheDb: any, devToolsExtension: any, EtoolsDashboard: any, __REDUX_DEVTOOLS_EXTENSION__?: any}
+  interface Window {
+    EtoolsLogsLevel: string,
+    EtoolsRequestCacheDb: any,
+    devToolsExtension: any,
+    EtoolsDashboard: any,
+    __REDUX_DEVTOOLS_EXTENSION__?: any,
+  }
 }
 
 window.EtoolsLogsLevel = 'INFO';
@@ -15,21 +21,21 @@ export const Config = {
   devDomain: 'etools-dev.unicef.org',
   localDomain: 'localhost',
   loginPath: window.location.origin + '/login/',
-  
+
   _checkEnvironment: function() {
     let location = window.location.href;
     if (location.indexOf(this.stagingDomain) > -1) {
-      return 'STAGING'
+      return 'STAGING';
     }
     if (location.indexOf(this.demoDomain) > -1) {
-      return 'DEMO'
+      return 'DEMO';
     }
     if (location.indexOf(this.devDomain) > -1) {
-      return 'DEVELOPMENT'
-    } 
-    if (location.indexOf(this.localDomain) > -1) {
-      return 'LOCAL'
+      return 'DEVELOPMENT';
     }
-    return null
+    if (location.indexOf(this.localDomain) > -1) {
+      return 'LOCAL';
+    }
+    return null;
   }
 };

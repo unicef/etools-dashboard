@@ -1,5 +1,5 @@
 import {PolymerElement} from '@polymer/polymer/polymer-element';
-import {Constructor} from '../typings/globals.types'
+import {Constructor} from '../typings/globals.types';
 import {property} from '@polymer/decorators';
 
 export function AjaxErrorsParserMixin<T extends Constructor<PolymerElement>>(superClass: T) {

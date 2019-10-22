@@ -1,4 +1,4 @@
-import {PolymerElement}  from '@polymer/polymer/polymer-element.js';
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
 import {Constructor} from '../typings/globals.types';
 
 export function DropdownMixin<T extends Constructor<PolymerElement>>(superClass: T) {
@@ -18,7 +18,7 @@ export function DropdownMixin<T extends Constructor<PolymerElement>>(superClass:
         else if (dropdown.is === 'etools-multi-selection-menu') {
           let menu = dropdown;
           if (menu.selectedValues) {
-            menu.clearValues()
+            menu.clearValues();
           }
         }
       }

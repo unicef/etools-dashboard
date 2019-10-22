@@ -1,8 +1,9 @@
+/* This file will be dedicated to page layout and related layout elements. */
 import '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
-const $_documentContainer = document.createElement('template');
+const DocumentContainer = document.createElement('template');
 
-$_documentContainer.innerHTML = `<dom-module id="page-layout-styles">
+DocumentContainer.innerHTML = `<dom-module id="page-layout-styles">
   <template>
     <style>
       [hidden] {
@@ -130,12 +131,4 @@ $_documentContainer.innerHTML = `<dom-module id="page-layout-styles">
   </template>
 </dom-module>`;
 
-document.head.appendChild($_documentContainer.content);
-
-/* This file will be dedicated to page layout and related layout elements. */
-/*
-  FIXME(polymer-modulizer): the above comments were extracted
-  from HTML and may be out of place here. Review them and
-  then delete this comment!
-*/
-;
+document.head.appendChild(DocumentContainer.content);

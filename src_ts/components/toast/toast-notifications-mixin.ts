@@ -6,9 +6,9 @@ import {property} from '@polymer/decorators';
 import './etools-toast';
 import {EtoolsToast} from './etools-toast';
 
-export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(superClass: T) {
+export () => ToastNotificationsMixin<T extends Constructor<PolymerElement>>(superClass: T) {
   class ToastNotificationsClass extends EtoolsLogsMixin(superClass as Constructor<PolymerElement>) {
-    
+
     @property({type: Object})
     _toast: EtoolsToast = null;
 
@@ -40,7 +40,7 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
         let toastProperties = this._toast.prepareToastAndGetShowProperties(detail);
         this._showToast(toastProperties);
       } else {
-        let alreadyInQueue = this._toastQueue.filter(toastDetail => {
+        let alreadyInQueue = this._toastQueue.filter((toastDetail) => {
           return JSON.stringify(toastDetail) === JSON.stringify(detail);
         });
         if (alreadyInQueue.length === 0) {
@@ -89,5 +89,5 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
       this._toast.show(toastProperties);
     }
   }
-  return ToastNotificationsClass
+  return ToastNotificationsClass;
 }

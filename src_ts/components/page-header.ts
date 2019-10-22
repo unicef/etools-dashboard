@@ -118,7 +118,10 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
       <div class="content-align">
         <countries-dropdown id="countries" countries="[[countries]]" current="[[user.country]]"></countries-dropdown>
         <support-btn></support-btn>
-        <etools-profile-dropdown profile="{{user}}" on-save-profile="_saveProfile" on-sign-out="_signOut"></etools-profile-dropdown>
+        <etools-profile-dropdown profile="{{user}}"
+                                 on-save-profile="_saveProfile"
+                                 on-sign-out="_signOut">
+        </etools-profile-dropdown>
       </div>
     </app-toolbar>
 `;
@@ -131,7 +134,7 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
   user: object;
 
   @property({type: String})
-  environment: string = function() {return Config._checkEnvironment()}();
+  public environment: string = () => Config._checkEnvironment()();
 
   @property({type: Object})
   profile: object;
@@ -169,10 +172,10 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
       return {
         id: arrayItem.id,
         name: arrayItem.name,
-        imgClass: this._getFlagIconClass(arrayItem.business_area_code)
+        imgClass: this._getFlagIconClass(arrayItem.business_area_code),
       };
     });
-    arrayObj = sortBy(arrayObj, (c) => c.name);
+    arrayObj = sortBy(arrayObj, c => c.name);
     this.set('countries', arrayObj);
   }
 

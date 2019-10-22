@@ -74,7 +74,7 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
 
       // create defer object (utils behavior contains to many other unneeded methods to be used)
       const defer = this._getDeferrer();
-        defer.resolve(options);
+      defer.resolve(options);
       return defer.promise;
     }
 
@@ -97,7 +97,7 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
     }
 
     public fireRequest(endpoint: any, endpointTemplateData?: object,
-      requestAdditionalOptions?: object, activeReqKey?: string) {
+    requestAdditionalOptions?: object, activeReqKey?: string) {
       if (!endpoint) {
         console.log('Endpoint name is missing.', 'Endpoints:fireRequest');
         return;
@@ -105,16 +105,16 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
       const defer = this._getDeferrer();
       const self = this;
       this.addTokenToRequestOptions(endpoint, endpointTemplateData)
-        .then(function(requestOptions: any) {
-          const options = self._addAdditionalRequestOptions(requestOptions, requestAdditionalOptions);
-          return self.sendRequest(options, activeReqKey);
-        })
-        .then(function(endpointResponse: any) {
-          defer.resolve(endpointResponse);
-        })
-        .catch(function(error: any) {
-          defer.reject(error);
-        });
+          .then(function(requestOptions: any) {
+            const options = self._addAdditionalRequestOptions(requestOptions, requestAdditionalOptions);
+            return self.sendRequest(options, activeReqKey);
+          })
+          .then(function(endpointResponse: any) {
+            defer.resolve(endpointResponse);
+          })
+          .catch(function(error: any) {
+            defer.reject(error);
+          });
       return defer.promise;
     }
   }

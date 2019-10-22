@@ -1,9 +1,9 @@
 import '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout.js';
 import './app-mixins';
-const $_documentContainer = document.createElement('template');
+const DocumentContainer = document.createElement('template');
 
-$_documentContainer.innerHTML = `<dom-module id="buttons-styles">
+DocumentContainer.innerHTML = `<dom-module id="buttons-styles">
   <template>
     <style>
       :host > * {
@@ -104,4 +104,4 @@ $_documentContainer.innerHTML = `<dom-module id="buttons-styles">
   </template>
 </dom-module>`;
 
-document.head.appendChild($_documentContainer.content);
+document.head.appendChild(DocumentContainer.content);
