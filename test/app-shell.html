@@ -30,15 +30,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </test-fixture>
 
     <script type="module">
-import '../dash/app-shell.js';
-suite('app-shell tests', () => {
-  test('Number in circle should be 1', () => {
-    // just a dummy test
-    let appShell = fixture('AppShell');
-    let contentId = appShell.shadowRoot.querySelector('#layout').id;
-    assert.equal(contentId, 'layout');
-  });
-});
+      import '../dash/app-shell.js';
+      suite('app-shell tests', () => {
+        test('Number in circle should be 1', () => {
+          // just a dummy test
+          let appShell = fixture('AppShell');
+          let contentId = appShell.shadowRoot.querySelector('#layout').id;
+          assert.equal(contentId, 'layout');
+        });
+      });
 </script>
   </body>
 </html>

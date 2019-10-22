@@ -3,13 +3,9 @@ import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-header/app-header.js';
 import '@polymer/app-layout/app-header-layout/app-header-layout.js';
-import '@polymer/app-layout/app-scroll-effects/app-scroll-effects.js';
-import '@polymer/app-layout/app-toolbar/app-toolbar.js';
 import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/iron-pages/iron-pages.js';
-import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@unicef-polymer/etools-dropdown/etools-dropdown.js';
 import '@polymer/paper-menu-button/paper-menu-button.js';
 import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-button/paper-button.js';
@@ -62,10 +58,6 @@ export class AppShell extends
 
         .top-content-action paper-button {
           padding-bottom: 4px;
-        }
-
-        etools-dropdown {
-          max-width: 100px;
         }
 
         .action-button {
