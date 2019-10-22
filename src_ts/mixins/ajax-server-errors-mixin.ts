@@ -4,7 +4,7 @@ import {PolymerElement} from '@polymer/polymer/polymer-element';
 import {Constructor} from '../typings/globals.types';
 import {property, observe} from '@polymer/decorators';
 
-export () => AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
+export function AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
   class AjaxServerErrorsClass extends AjaxErrorsParserMixin(baseClass) {
 
     @property({type: Array, notify: true})

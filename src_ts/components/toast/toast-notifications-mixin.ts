@@ -6,7 +6,7 @@ import {property} from '@polymer/decorators';
 import './etools-toast';
 import {EtoolsToast} from './etools-toast';
 
-export () => ToastNotificationsMixin<T extends Constructor<PolymerElement>>(superClass: T) {
+export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(superClass: T) {
   class ToastNotificationsClass extends EtoolsLogsMixin(superClass as Constructor<PolymerElement>) {
 
     @property({type: Object})
