@@ -134,7 +134,7 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
   user: object;
 
   @property({type: String})
-  public environment: string = () => Config._checkEnvironment()();
+  public environment: string = (() => Config._checkEnvironment())()
 
   @property({type: Object})
   profile: object;

@@ -211,44 +211,44 @@ export class AppShell extends
   }
 
   @property({type: String, reflectToAttribute: true})
-  page: string;
+  public page: string;
 
   @property({type: Object})
-  routeData: object;
+  public routeData: object;
 
   @property({type: String})
-  rootPath: string;
+  public rootPath: string;
 
   @property({type: Boolean})
-  hideExport: boolean;
+  public hideExport: boolean;
 
   @property({type: Array})
-  availableDetailYears: object[] = [
+  public availableDetailYears: object[] = [
     {name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv'},
     {name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv'},
     {name: '2019', endpoint: '/api/v2/partners/hact?&format=csv'}
   ]
 
   @property({type: Array})
-  availableGeneralYears: object[] = [
+  public availableGeneralYears: object[] = [
     {name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv'},
     {name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv'}
   ]
 
   @property({type: Array})
-  chartsExport: object[] = [
+  public chartsExport: object[] = [
     {name: '2018', endpoint: '/api/v2/hact/graph/2018/export'},
     {name: '2019', endpoint: '/api/v2/hact/graph/2019/export'}
   ]
 
   @property({type: Boolean})
-  displayDetail: boolean = false;
+  public displayDetail: boolean = false;
 
   @property({type: Object})
-  user: object;
+  public user: object;
 
   @property({type: String})
-  currentToastMessage: string;
+  public currentToastMessage: string;
 
   static get observers() {
     return [
@@ -261,21 +261,21 @@ export class AppShell extends
     this._initListeners();
   }
 
-  _initListeners() {
+  public _initListeners() {
     this._onForbidden = this._onForbidden.bind(this);
     this.addEventListener('forbidden', this._onForbidden);
   }
 
-  _removeListeners() {
+  public _removeListeners() {
     this.removeEventListener('forbidden', this._onForbidden);
   }
 
-  disconnectedCallback() {
+  public disconnectedCallback() {
     super.disconnectedCallback();
     this._removeListeners();
   }
 
-  _onForbidden() {
+  private _onForbidden() {
     let redirectNotification: any = document.createElement('etools-loading');
     redirectNotification.loadingText = 'Your login session has expired, you are being redirected to login.';
     // redirectNotification.absolute = true;
@@ -286,44 +286,45 @@ export class AppShell extends
     }, 3000);
   }
 
-  _routePageChanged(page) {
+  // @ts-ignore
+  private _routePageChanged(page) {
     // If no page was found in the route data, page will be an empty string.
     // Default to 'personalized' in that case.
     this.set('page', page || 'personalized');
   }
 
   @observe('page')
-  _pageChanged(page) {
+  public _pageChanged(page) {
     // Load page import on demand. Show 404 page if fails
     import(`./views/${page}/view-${page}.js`).then(this._onPageLoad(page).bind(this), this._showPage404.bind(this));
   }
 
-  _onPageLoad(page) {
-    return () => {
-      fireEvent(this, 'page-changed-hact', {page});};
+  private _onPageLoad(page) {
+    return () => fireEvent(this, 'page-changed-hact', {page});
   }
 
-  _showPage404() {
+  private _showPage404() {
     this.set('page', 'view404');
     fireEvent(this, 'toast', {text: 'Oops you hit a 404!', showCloseBtn: true});
   }
 
-  _isActive(page, tab) {
+  // @ts-ignore
+  private _isActive(page, tab) {
     return page === tab;
   }
 
-  _updateUrlTab(tab) {
+  public _updateUrlTab(tab) {
     this.set('hideHactExport', tab === 'hact' ? false : true);
     this.set('hidePartnershipExport', tab === 'partnerships' ? false : true);
     if (!tab) {return;}
     this.set('hideExport', !(tab === 'hact' || tab === 'partnerships'));
   }
 
-  _goToAddTrip() {
+  public _goToAddTrip() {
     window.location.href = '/t2f/edit-travel/-1';
   }
 
-  _export(event) {
+  public _export(event) {
     let endpoint = event.model.item.endpoint;
     window.open(
       `${endpoint}`,
@@ -331,7 +332,7 @@ export class AppShell extends
     );
   }
 
-  _print() {
+  public _print() {
     window.print();
   }
 
