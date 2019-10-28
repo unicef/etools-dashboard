@@ -29,18 +29,14 @@
     "max-len": ["error", { "code": 120 }],
     "camelcase": ["error", {"properties": "never"}],
     "arrow-parens": [2, "as-needed", { "requireForBlockBody": true }],
-    "one-var": ["off"]
+    "one-var": ["off"],
+    "no-import-side-effect": true
   },
   "globals": {
-    "moment": true,
     "Promise": true,
     "Polymer": true,
-    "PolymerRedux": true,
-    "EtoolsMixinFactory": true,
     "EtoolsDashboard": true,
-    "EtoolsRequestCacheDb": true,
     "EtoolsAjaxRequestMixin": true,
-    "EtoolsMixins": true,
     "EtoolsLogsMixin": true,
     "_": true,
     "ShadyCSS": true,

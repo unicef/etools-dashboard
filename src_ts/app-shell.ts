@@ -94,8 +94,8 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
         <!-- Main content -->
         <app-header-layout has-scrolling-region="">
 
-          <app-header slot="header" condenses="" reveals="" effects="waterfall">
-              <page-header id="pageheader" title="eTools" user="[[user]]"></page-header>
+          <app-header slot="header" condenses reveals effects="waterfall">
+            <page-header id="pageheader" title="eTools" user="[[user]]"></page-header>
           </app-header>
           <div class="page-top-content with-tabs">
             <div class="top-content">
@@ -223,19 +223,19 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
   public availableDetailYears: object[] = [
     {name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv'},
     {name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv'},
-    {name: '2019', endpoint: '/api/v2/partners/hact?&format=csv'},
+    {name: '2019', endpoint: '/api/v2/partners/hact?&format=csv'}
   ]
 
   @property({type: Array})
   public availableGeneralYears: object[] = [
     {name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv'},
-    {name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv'},
+    {name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv'}
   ]
 
   @property({type: Array})
   public chartsExport: object[] = [
     {name: '2018', endpoint: '/api/v2/hact/graph/2018/export'},
-    {name: '2019', endpoint: '/api/v2/hact/graph/2019/export'},
+    {name: '2019', endpoint: '/api/v2/hact/graph/2019/export'}
   ]
 
   @property({type: Boolean})
@@ -249,7 +249,7 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
 
   public static get observers() {
     return [
-      '_routePageChanged(routeData.page)',
+      '_routePageChanged(routeData.page)'
     ];
   }
 
@@ -300,7 +300,7 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
   public _print() {
     window.print();
   }
-  
+
   private _onForbidden() {
     const redirectNotification = document.createElement('etools-loading');
     redirectNotification.loadingText = 'Your login session has expired, you are being redirected to login.';

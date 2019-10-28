@@ -30,7 +30,7 @@ export class ViewHact extends PolymerElement {
 
   public static get observers() {
     return [
-      'setEmbedSource(user)',
+      'setEmbedSource(user)'
     ];
   }
 
@@ -38,7 +38,7 @@ export class ViewHact extends PolymerElement {
     // @ts-ignore
     const country = this.user.country.name;
 
-    let embedSource = 'https://app.powerbi.com/reportEmbed' +
+    const embedSource = 'https://app.powerbi.com/reportEmbed' +
     '?reportId=849d1c17-e666-4278-8388-000bb03f1d0c' +
     '&appId=56089b5f-f2cc-4121-8705-58f981db340f' +
     '&autoAuth=true' +

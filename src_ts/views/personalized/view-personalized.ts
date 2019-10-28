@@ -30,7 +30,7 @@ export class ViewPersonalized extends PolymerElement {
 
   public static get observers() {
     return [
-      'setEmbedSource(user)',
+      'setEmbedSource(user)'
     ];
   }
 
@@ -38,7 +38,7 @@ export class ViewPersonalized extends PolymerElement {
     // @ts-ignore
     const email = this.user.email;
 
-    let embedSource = 'https://app.powerbi.com/reportEmbed' +
+    const embedSource = 'https://app.powerbi.com/reportEmbed' +
     '?reportId=1b2bb9b9-402c-4bec-b556-4da8c34123f3' +
     '&appId=56089b5f-f2cc-4121-8705-58f981db340f' +
     '&autoAuth=true' +

@@ -30,7 +30,7 @@ export class ViewPartnerships extends PolymerElement {
 
   public static get observers() {
     return [
-      'setEmbedSource(user)',
+      'setEmbedSource(user)'
     ];
   }
 
@@ -38,7 +38,7 @@ export class ViewPartnerships extends PolymerElement {
     // @ts-ignore
     const country = this.user.country.name;
 
-    let embedSource = 'https://app.powerbi.com/reportEmbed' +
+    const embedSource = 'https://app.powerbi.com/reportEmbed' +
     '?reportId=d807bd5b-f709-47c2-8e6c-9dbd9a86027f' +
     '&appId=56089b5f-f2cc-4121-8705-58f981db340f' +
     '&autoAuth=true&ctid=77410195-14e1-4fb8-904b-ab1892023667' +

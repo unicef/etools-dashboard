@@ -44,7 +44,7 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
 
     public requestToken(endpoint: object) {
       return this.sendRequest({
-        endpoint: endpoint
+        endpoint: endpoint,
       });
     }
 
@@ -75,10 +75,10 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
               const options = self._addAdditionalRequestOptions(requestOptions, requestAdditionalOptions);
               return self.sendRequest(options, activeReqKey);
             })
-            .then(function(endpointResponse: any) {
+            .then((endpointResponse: any) => {
               defer.resolve(endpointResponse);
             })
-            .catch(function(error: any) {
+            .catch((error: any) => {
               defer.reject(error);
             });
         return defer.promise;
@@ -92,7 +92,7 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
 
     protected _addAdditionalRequestOptions(options: GenericObject, requestAdditionalOptions: object) {
       if (requestAdditionalOptions) {
-        Object.keys(requestAdditionalOptions).forEach(function(key: string) {
+        Object.keys(requestAdditionalOptions).forEach((key: string) => {
           switch (key) {
             case 'endpoint':
               break;
@@ -111,7 +111,7 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
     protected _getDeferrer() {
       // create defer object (utils behavior contains too many other unneeded methods to be used)
       const defer: any = {};
-      defer.promise = new Promise(function(resolve, reject) {
+      defer.promise = new Promise((resolve, reject) => {
         defer.resolve = resolve;
         defer.reject = reject;
       });

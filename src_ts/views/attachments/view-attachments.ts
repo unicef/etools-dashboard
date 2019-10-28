@@ -30,7 +30,7 @@ export class ViewAttachments extends PolymerElement {
 
   public static get observers() {
     return [
-      'setEmbedSource(user)',
+      'setEmbedSource(user)'
     ];
   }
 
@@ -38,7 +38,7 @@ export class ViewAttachments extends PolymerElement {
     // @ts-ignore
     const country = this.user.country.name;
 
-    let embedSource = 'https://app.powerbi.com/reportEmbed' +
+    const embedSource = 'https://app.powerbi.com/reportEmbed' +
     '?reportId=f66f2375-535b-4e1c-9acd-dea9d47a52a8' +
     '&appId=56089b5f-f2cc-4121-8705-58f981db340f' +
     '&autoAuth=true' +

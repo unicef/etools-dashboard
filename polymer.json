@@ -9,7 +9,7 @@
     "src/views/trips/view-trips.js",
     "src/views/attachments/view-attachments.js"
   ],
-  "sources": ["images/**/*", "dash/**/*"],
+  "sources": ["images/**/*", "src/**/*", "package.json"],
   "extraDependencies": [
     "node_modules/webcomponentsjs/*.js",
     "manifest.json"

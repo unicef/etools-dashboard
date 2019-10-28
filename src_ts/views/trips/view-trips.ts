@@ -30,7 +30,7 @@ export class ViewTrips extends PolymerElement {
 
   public static get observers() {
     return [
-      'setEmbedSource(user)',
+      'setEmbedSource(user)'
     ];
   }
 
@@ -38,7 +38,7 @@ export class ViewTrips extends PolymerElement {
     // @ts-ignore
     const country = this.user.country.name;
 
-    let embedSource = 'https://app.powerbi.com/reportEmbed' +
+    const embedSource = 'https://app.powerbi.com/reportEmbed' +
     '?reportId=4ff8b2fc-cdca-426e-aad4-5b9cb49a85fd' +
     '&appId=56089b5f-f2cc-4121-8705-58f981db340f' +
     '&autoAuth=true' +
