@@ -128,18 +128,18 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
   }
 
   @property({type: Array})
-  countries: object[];
+  public countries: object[];
 
   @property({type: Object})
-  user: object;
+  public user: object;
 
   @property({type: String})
   public environment: string = (() => Config._checkEnvironment())()
 
   @property({type: Object})
-  profile: object;
+  public profile: object;
 
-  static get observers() {
+  public static get observers() {
     return ['_updateCountriesList(user.countries_available)'];
   }
 
@@ -148,11 +148,11 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
     this._setBgColor();
   }
 
-  openDrawer() {
+  public openDrawer() {
     fireEvent(this, 'drawer');
   }
 
-  _getFlagIconClass(id) {
+  private _getFlagIconClass(id) {
     let flagIdMap = {
       '0': 'us',
       '234R': 'syxb',
@@ -164,7 +164,7 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
     return 'flag-icon ' + 'flag-icon-' + flagIdMap[id];
   }
 
-  _updateCountriesList(countries) {
+  public _updateCountriesList(countries) {
     if (!countries) {
       return;
     }
@@ -179,27 +179,27 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
     this.set('countries', arrayObj);
   }
 
-  _convertCollection(data) {
+  public _convertCollection(data) {
     return data.map((item) => {
       return {label: item.name, value: item.id};
     });
   }
 
-  _saveProfile(e) {
+  public _saveProfile(e) {
     this.set('profile', e.detail.profile);
     this.saveProfile(this.profile);
   }
 
-  _signOut() {
+  public _signOut() {
     this._clearLocalStorage();
     window.location.href = window.location.origin + '/logout';
   }
 
-  _clearLocalStorage() {
+  public _clearLocalStorage() {
     localStorage.clear();
   }
 
-  _setBgColor() {
+  public _setBgColor() {
     // If not production environment, changing header color to red
     if (this.environment) {
       this.updateStyles({'--header-bg-color': 'var(--nonprod-header-color)'});

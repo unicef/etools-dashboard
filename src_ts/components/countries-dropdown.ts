@@ -98,18 +98,18 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
   }
 
   @property({type: Object})
-  current: GenericObject;
+  public current: GenericObject;
 
   @property({type: Object})
   public country: object;
 
   @property({type: Array})
-  countries: object[];
+  public countries: object[];
 
   @property({type: Boolean})
-  countrySelectorVisible: Boolean;
+  public countrySelectorVisible: Boolean;
 
-  _countrySelected(e) {
+  public _countrySelected(e: CustomEvent) {
     if (e.detail.item.countryId !== this.current.id) {
       // send post request to change_coutry endpoint
       let selectedCountryId = e.detail.item.countryId;
@@ -119,7 +119,7 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
     }
   }
 
-  _triggerCountryChangeRequest(countryId) {
+  private _triggerCountryChangeRequest(countryId: number) {
     fireEvent(this, 'global-loading', {
       message: 'Please wait while country is changing...',
       active: true,
@@ -136,19 +136,19 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
     });
   }
 
-  _handleResponse() {
+  private _handleResponse() {
     localStorage.clear();
     window.location.reload(true);
   }
 
   @observe('countries')
-  _countrySelectorUpdate(countries) {
+  public _countrySelectorUpdate(countries: object[]) {
     if (Array.isArray(countries) && (countries.length > 1)) {
       this.set('countrySelectorVisible', true);
     }
   }
 
-  _handleError(error) {
+  private _handleError(error: object) {
     logError('Country change failed!', 'countries-dropdown', error);
     // TODO: this should be a larger alert.
     let countriesListbox: any = this.$.countriesListbox;

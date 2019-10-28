@@ -52,21 +52,19 @@ export class EtoolsToast extends PolymerElement {
   }
 
   @property({type: Object})
-  fitInto: object
+  public fitInto: object
 
-  show(details) {
+  public show(details) {
     let toast: any = this.shadowRoot.getElementById('toast');
     return toast.show(details);
-    // return this.$.toast.show(details);
   }
 
-  toggle() {
+  public toggle() {
     let toast: any = this.shadowRoot.getElementById('toast');
     return toast.toggle();
-    // return this.$.toast.toggle();
   }
 
-  confirmToast() {
+  public confirmToast() {
     fireEvent(this, 'toast-confirm', {
       bubbles: true,
       composed: true
@@ -80,12 +78,12 @@ export class EtoolsToast extends PolymerElement {
     });
   }
 
-  getMessageWrapper() {
+  public getMessageWrapper() {
     // @ts-ignore
     return this.$.toast.$.label;
   }
 
-  _isMultiLine(message) {
+  public _isMultiLine(message: string) {
     if (!message) {
       return false;
     }

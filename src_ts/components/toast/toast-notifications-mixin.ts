@@ -10,13 +10,13 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
   class ToastNotificationsClass extends EtoolsLogsMixin(superClass as Constructor<PolymerElement>) {
 
     @property({type: Object})
-    _toast: EtoolsToast = null;
+    public _toast: EtoolsToast = null;
 
     @property({type: Array})
-    _toastQueue: object[] = [];
+    public _toastQueue: object[] = [];
 
     @property({type: String})
-    currentToastMessage: string = '';
+    public currentToastMessage: string = '';
 
     connectedCallback() {
       super.connectedCallback();
@@ -28,7 +28,7 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
       this.removeEventListener('toast', this.queueToast);
     }
 
-    queueToast(e) {
+    public queueToast(e: CustomEvent) {
       e.stopPropagation();
       let detail = e.detail;
       if (!this._toast) {
@@ -49,7 +49,7 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
       }
     }
 
-    _createToastElement() {
+    private _createToastElement() {
       this.set('_toast', document.createElement('etools-toast'));
       this._toast.set('fitInto', this.$.appHeadLayout);
       this._toast.addEventListener('toast-confirm', this._toggleToast.bind(this, this._toast));
@@ -58,7 +58,7 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
       this._toastAfterRenderSetup();
     }
 
-    _toastAfterRenderSetup() {
+    private _toastAfterRenderSetup() {
       afterNextRender(this._toast, () => {
         // alter message wrapper css
         let messageWrapper = this._toast.getMessageWrapper();
@@ -70,7 +70,7 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
       });
     }
 
-    dequeueToast() {
+    private dequeueToast() {
       this.shift('_toastQueue');
       if (this._toastQueue.length) {
         let toastProperties = this._toast.prepareToastAndGetShowProperties(this._toastQueue[0]);
@@ -78,13 +78,13 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
       }
     }
 
-    _toggleToast(toast) {
+    private _toggleToast(toast) {
       if (toast) {
         toast.toggle();
       }
     }
 
-    _showToast(toastProperties) {
+    private _showToast(toastProperties) {
       this.set('currentToastMessage', toastProperties.text);
       this._toast.show(toastProperties);
     }

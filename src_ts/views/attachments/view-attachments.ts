@@ -23,18 +23,18 @@ export class ViewAttachments extends PolymerElement {
   }
 
   @property({type: String})
-  embedSource: string
+  public embedSource: string
 
   @property({type: Object})
-  user: object
+  public user: object
 
-  static get observers() {
+  public static get observers() {
     return [
       'setEmbedSource(user)'
     ];
   }
 
-  setEmbedSource() {
+  public setEmbedSource() {
     // @ts-ignore
     let country = this.user.country.name;
 

@@ -8,21 +8,21 @@ export function AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(bas
   class AjaxServerErrorsClass extends AjaxErrorsParserMixin(baseClass) {
 
     @property({type: Array, notify: true})
-    serverErrors: object[];
+    public serverErrors: object[];
 
     @property({type: Object})
-    options: object;
+    public options: object;
 
     @property({type: Boolean})
-    useToastEvent: boolean = true;
+    private useToastEvent: boolean = true;
 
     @property({type: String})
-    errorEventName: string = null;
+    public errorEventName: string = null;
 
     @property({type: String})
-    ajaxLoadingMsgSource: string = '';
+    private ajaxLoadingMsgSource: string = '';
 
-    handleErrorResponse(response, ajaxMethod, redirectOn404) {
+    public handleErrorResponse(response, ajaxMethod, redirectOn404) {
       if (redirectOn404 && response.status === 404) {
         fireEvent(this, '404');
         return;
@@ -59,7 +59,7 @@ export function AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(bas
       }
     }
 
-    _fireAjaxErrorEvent(errors) {
+    private _fireAjaxErrorEvent(errors) {
       if (typeof this.errorEventName === 'string' && this.errorEventName !== '') {
         if (typeof errors === 'string') {
           errors = [errors];
@@ -69,7 +69,7 @@ export function AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(bas
     }
 
     @observe('errorEventName')
-    _errorEventNameChange(eventName) {
+    public _errorEventNameChange(eventName) {
       if (typeof eventName === 'string' && eventName !== '') {
         // disable toasts error notifications if eventName is given
         this.set('useToastEvent', false);

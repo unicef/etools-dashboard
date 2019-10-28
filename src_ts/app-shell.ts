@@ -250,7 +250,7 @@ export class AppShell extends
   @property({type: String})
   public currentToastMessage: string;
 
-  static get observers() {
+  public static get observers() {
     return [
       '_routePageChanged(routeData.page)'
     ];
@@ -335,11 +335,4 @@ export class AppShell extends
   public _print() {
     window.print();
   }
-
-  // sets export endpoints based on assurance view (detailed/general)
-//   @query('hactExport')
-//   hactExport: DomRepeatEvent | any;
-//   _assuranceSelected() {
-//     this.hactExport.items = this.displayDetail ? this.availableDetailYears : this.availableGeneralYears;
-//   }
 }

@@ -20,21 +20,21 @@ export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(base
      * Object describing property-related metadata used by Polymer features
      */
     @property({type: String})
-    endpointName: string = 'myProfile';
+    public endpointName: string = 'myProfile';
 
     @property({type: Object, notify: true})
-    user: object;
+    public user: object;
 
     @property({type: Object, readOnly: true, notify: true})
-    permissions: object;
+    public permissions: object;
 
     @property({type: Boolean})
-    _saveActionInProgress: boolean;
+    public _saveActionInProgress: boolean;
 
     @property({type: String})
-    profileSaveLoadingMsgSource: string = 'profile-modal';
+    public profileSaveLoadingMsgSource: string = 'profile-modal';
 
-    saveProfile(profile) {
+    public saveProfile(profile) {
       if (isEmpty(profile)) {
         // empty profile means no changes found
         fireEvent(this, 'toast', {
@@ -52,7 +52,7 @@ export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(base
       this._dispatchSaveProfileRequest(profile);
     }
 
-    _dispatchSaveProfileRequest(profile) {
+    private _dispatchSaveProfileRequest(profile) {
       const config = {
         endpoint: this.getEndpoint(this.endpointName),
         method: 'PATCH',
@@ -67,12 +67,12 @@ export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(base
     }
 
     // called after profile get request on initial load
-    _handleMyResponse(resp) {
+    private _handleMyResponse(resp) {
       this.set('user', resp);
       this._hideProfileSaveLoadingMsg();
     }
 
-    _hideProfileSaveLoadingMsg() {
+    private _hideProfileSaveLoadingMsg() {
       if (this._saveActionInProgress) {
         fireEvent(this, 'global-loading', {
           active: false,

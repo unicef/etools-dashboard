@@ -13,27 +13,27 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
           EtoolsAjaxRequestMixin(baseClass))) {
 
     @property({type: Object})
-    options: object | any = {
+    public options: object | any = {
       endpoint: null,
       csrf: true,
     };
 
     @property({type: Array, notify: true, readOnly: true})
-    data: object[];
+    public data: object[];
 
     @property({type: Array})
     public globalMessage: string = 'An error occurred while trying to fetch the data!';
 
     @property({type: Boolean})
-    fireDataLoaded: boolean = false;
+    private fireDataLoaded: boolean = false;
 
     @property({type: Object})
     public _refreshInterval: object = null;
 
     @property({type: String})
-    endpointName: string;
+    private endpointName: string;
 
-    static get observers() {
+    public static get observers() {
       return [
         '_endpointChanged(options.endpoint)'
       ];
@@ -49,7 +49,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       this._elementReady();
     }
 
-    _elementReady() {
+    private _elementReady() {
       if (!this.endpointName) {
         console.warn('Please specify an endpointName property');
       } else {
@@ -58,7 +58,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       }
     }
 
-    _requestData() {
+    private _requestData() {
       fireEvent(this, 'global-loading', {
         active: true,
         loadingSource: this.endpointName
@@ -82,7 +82,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
           });
     }
 
-    _handleMyResponse(res) {
+    private _handleMyResponse(res) {
       this.set('data', res);
       if (this.fireDataLoaded) {
         // @ts-ignore
@@ -95,7 +95,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       }
     }
 
-    _endpointChanged(newEndpoint) {
+    public _endpointChanged(newEndpoint) {
       if (newEndpoint === undefined) {
         return;
       }
@@ -105,7 +105,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       }
     }
 
-    _removeAutomaticDataRefreshLoop() {
+    private _removeAutomaticDataRefreshLoop() {
       if (this._refreshInterval !== null) {
         // @ts-ignore
         clearInterval(this._refreshInterval);
@@ -113,7 +113,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       }
     }
 
-    _setAutomaticDataRefreshLoop(newEndpoint) {
+    private _setAutomaticDataRefreshLoop(newEndpoint) {
       this.set('_refreshInterval', setInterval(() => {
         this._requestData();
       }, newEndpoint.exp));

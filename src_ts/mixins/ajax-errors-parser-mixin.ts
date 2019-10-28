@@ -6,12 +6,12 @@ export function AjaxErrorsParserMixin<T extends Constructor<PolymerElement>>(sup
   class AjaxErrorsParserClass extends (superClass as Constructor<PolymerElement>) {
 
     @property({type: String})
-    globalMessage: string = 'An error occurred. Please try again later.';
+    public globalMessage: string = 'An error occurred. Please try again later.';
 
     @property({type: String})
-    httpStatus413Msg: string = 'The uploaded file is too large!';
+    public httpStatus413Msg: string = 'The uploaded file is too large!';
 
-    tryGetResponseError(response) {
+    public tryGetResponseError(response) {
       if (response.status === 413) {
         return this.httpStatus413Msg;
       }
@@ -21,7 +21,7 @@ export function AjaxErrorsParserMixin<T extends Constructor<PolymerElement>>(sup
       return response.response || this.globalMessage;
     }
 
-    _getErrorsArray(errors, prepareForToastMsg?: Boolean) {
+    public _getErrorsArray(errors, prepareForToastMsg?: Boolean) {
       let errorsArray = [];
       if (!errors) {
         return errorsArray;
@@ -102,11 +102,11 @@ export function AjaxErrorsParserMixin<T extends Constructor<PolymerElement>>(sup
       return errorsArray;
     }
 
-    _markNestedErrors(errs) {
+    private _markNestedErrors(errs) {
       return errs.map(er => ' ' + er);
     }
 
-    _isArrayOfStrings(arr) {
+    private _isArrayOfStrings(arr) {
       let allStrings = true;
       let i;
       for (i = 0; i < arr.length; i++) {
@@ -118,7 +118,7 @@ export function AjaxErrorsParserMixin<T extends Constructor<PolymerElement>>(sup
       return allStrings;
     }
 
-    formatServerErrorAsText(errors) {
+    private formatServerErrorAsText(errors) {
       let errorsArray = this._getErrorsArray(errors, false);
       if (errorsArray && errorsArray.length) {
         return errorsArray.join('\n');
@@ -126,7 +126,7 @@ export function AjaxErrorsParserMixin<T extends Constructor<PolymerElement>>(sup
       return errors;
     }
 
-    parseRequestErrorsAndShowAsToastMsgs(error, source?, redirectOn404?) {
+    public parseRequestErrorsAndShowAsToastMsgs(error, source?, redirectOn404?) {
       if (redirectOn404 && error.status === 404) {
         if (!source) {
           source = this;
@@ -141,7 +141,7 @@ export function AjaxErrorsParserMixin<T extends Constructor<PolymerElement>>(sup
       this.showErrorAsToastMsg(errorsString, source);
     }
 
-    showErrorAsToastMsg(errorsString, source) {
+    private showErrorAsToastMsg(errorsString, source) {
       if (errorsString) {
         if (!source) {
           source = this;
