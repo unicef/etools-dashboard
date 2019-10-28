@@ -8,7 +8,7 @@ RUN npm install -g typescript
 
 WORKDIR /tmp
 ADD package.json /tmp/
-ADD package-lock.json /tmp/
+COPY package-lock.json /tmp/
 
 RUN npm install --no-save
 

@@ -3,7 +3,7 @@ import {customElement, property} from '@polymer/decorators';
 
 @customElement('view-hact')
 export class ViewHact extends PolymerElement {
-  static get template() {
+  public static get template() {
     return html`
       <style>
         div.container {
@@ -30,13 +30,13 @@ export class ViewHact extends PolymerElement {
 
   public static get observers() {
     return [
-      'setEmbedSource(user)'
+      'setEmbedSource(user)',
     ];
   }
 
   public setEmbedSource() {
     // @ts-ignore
-    let country = this.user.country.name;
+    const country = this.user.country.name;
 
     let embedSource = 'https://app.powerbi.com/reportEmbed' +
     '?reportId=849d1c17-e666-4278-8388-000bb03f1d0c' +

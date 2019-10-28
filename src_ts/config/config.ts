@@ -1,10 +1,12 @@
+import { GenericObject } from "../typings/globals.types";
+
 declare global {
   interface Window {
     EtoolsLogsLevel: string,
-    EtoolsRequestCacheDb: any,
-    devToolsExtension: any,
-    EtoolsDashboard: any,
-    __REDUX_DEVTOOLS_EXTENSION__?: any,
+    EtoolsRequestCacheDb: GenericObject,
+    devToolsExtension: GenericObject,
+    EtoolsDashboard: GenericObject,
+    __REDUX_DEVTOOLS_EXTENSION__?: GenericObject,
   }
 }
 
@@ -13,17 +15,17 @@ window.EtoolsLogsLevel = 'INFO';
 export const BASE_URL = '/dash/';
 
 export const Config = {
-  baseSite: window.location.origin,
   basePath: (window.location.port === '8080') ? '/' : '/dash/',
-  productionDomain: 'etools.unicef.org',
-  stagingDomain: 'etools-staging.unicef.org',
+  baseSite: window.location.origin,
   demoDomain: 'etools-demo.unicef.org',
   devDomain: 'etools-dev.unicef.org',
   localDomain: 'localhost',
   loginPath: window.location.origin + '/login/',
+  productionDomain: 'etools.unicef.org',
+  stagingDomain: 'etools-staging.unicef.org',
 
   _checkEnvironment: function() {
-    let location = window.location.href;
+    const location = window.location.href;
     if (location.indexOf(this.stagingDomain) > -1) {
       return 'STAGING';
     }
@@ -37,5 +39,5 @@ export const Config = {
       return 'LOCAL';
     }
     return null;
-  }
+  },
 };

@@ -1,4 +1,4 @@
-import {Constructor} from '../typings/globals.types';
+import {Constructor, GenericObject} from '../typings/globals.types';
 import {PolymerElement} from '@polymer/polymer/polymer-element.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {Config} from '../config/config';
@@ -10,7 +10,7 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
   class EndpointsMixinClass extends EtoolsAjaxRequestMixin(baseClass as Constructor<PolymerElement>) {
 
     public getEndpoint(endpointName: string, data?: object) {
-      let endpoint = JSON.parse(JSON.stringify(Endpoints[endpointName]));
+      const endpoint = JSON.parse(JSON.stringify(Endpoints[endpointName]));
       if (endpoint && this.endpointHasTemplate(endpoint)) {
         endpoint.url = window.location.origin + template(endpoint.template)(data);
       } else {
@@ -19,22 +19,12 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
       return endpoint;
     }
 
-    public endpointHasTemplate(ep) {
+    public endpointHasTemplate(ep: GenericObject) {
       return ep.hasOwnProperty('template') && !isEmpty(ep.template);
     }
 
     public authorizationTokenMustBeAdded(endpoint: object): boolean {
       return endpoint && ('token' in endpoint);
-    }
-
-    protected _getDeferrer() {
-      // create defer object (utils behavior contains too many other unneeded methods to be used)
-      const defer: any = {};
-      defer.promise = new Promise(function(resolve, reject) {
-        defer.resolve = resolve;
-        defer.reject = reject;
-      });
-      return defer;
     }
 
     public decodeBase64Token(encodedToken: string) {
@@ -58,14 +48,8 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
       });
     }
 
-    protected _buildOptionsWithTokenHeader(options: any, token: string) {
-      options.headers = this.getAuthorizationHeader(token);
-      delete options.endpoint.token; // cleanup token from endpoint object
-      return options;
-    }
-
     public addTokenToRequestOptions(endpointName: string, data: object) {
-      let options: any = {};
+      const options: GenericObject = {};
       try {
         options.endpoint = this.getEndpoint(endpointName, data);
       } catch (e) {
@@ -78,9 +62,37 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
       return defer.promise;
     }
 
-    protected _addAdditionalRequestOptions(options: any, requestAdditionalOptions: any) {
+    public fireRequest(endpoint: any, endpointTemplateData?: object,
+      requestAdditionalOptions?: object, activeReqKey?: string) {
+        if (!endpoint) {
+          console.log('Endpoint name is missing.', 'Endpoints:fireRequest');
+          return;
+        }
+        const defer = this._getDeferrer();
+        const self = this;
+        this.addTokenToRequestOptions(endpoint, endpointTemplateData)
+            .then(function(requestOptions: object) {
+              const options = self._addAdditionalRequestOptions(requestOptions, requestAdditionalOptions);
+              return self.sendRequest(options, activeReqKey);
+            })
+            .then(function(endpointResponse: any) {
+              defer.resolve(endpointResponse);
+            })
+            .catch(function(error: any) {
+              defer.reject(error);
+            });
+        return defer.promise;
+      }
+
+    protected _buildOptionsWithTokenHeader(options: GenericObject, token: string) {
+      options.headers = this.getAuthorizationHeader(token);
+      delete options.endpoint.token; // cleanup token from endpoint object
+      return options;
+    }
+
+    protected _addAdditionalRequestOptions(options: GenericObject, requestAdditionalOptions: object) {
       if (requestAdditionalOptions) {
-        Object.keys(requestAdditionalOptions).forEach(function(key) {
+        Object.keys(requestAdditionalOptions).forEach(function(key: string) {
           switch (key) {
             case 'endpoint':
               break;
@@ -96,26 +108,14 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
       return options;
     }
 
-    public fireRequest(endpoint: any, endpointTemplateData?: object,
-    requestAdditionalOptions?: object, activeReqKey?: string) {
-      if (!endpoint) {
-        console.log('Endpoint name is missing.', 'Endpoints:fireRequest');
-        return;
-      }
-      const defer = this._getDeferrer();
-      const self = this;
-      this.addTokenToRequestOptions(endpoint, endpointTemplateData)
-          .then(function(requestOptions: any) {
-            const options = self._addAdditionalRequestOptions(requestOptions, requestAdditionalOptions);
-            return self.sendRequest(options, activeReqKey);
-          })
-          .then(function(endpointResponse: any) {
-            defer.resolve(endpointResponse);
-          })
-          .catch(function(error: any) {
-            defer.reject(error);
-          });
-      return defer.promise;
+    protected _getDeferrer() {
+      // create defer object (utils behavior contains too many other unneeded methods to be used)
+      const defer: any = {};
+      defer.promise = new Promise(function(resolve, reject) {
+        defer.resolve = resolve;
+        defer.reject = reject;
+      });
+      return defer;
     }
   }
   return EndpointsMixinClass;

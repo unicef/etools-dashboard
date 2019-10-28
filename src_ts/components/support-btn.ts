@@ -7,12 +7,8 @@ import '@polymer/iron-icons/communication-icons';
  * @polymer
  * @customElement
  */
-class SupportBtn extends PolymerElement {
-  static get is() {
-    return 'support-btn';
-  }
-
-  static get template() {
+export class SupportBtn extends PolymerElement {
+  public static get template() {
     return html`
       <style>
         :host(:hover) {
@@ -35,5 +31,3 @@ class SupportBtn extends PolymerElement {
     `;
   }
 }
-
-window.customElements.define('support-btn', SupportBtn);

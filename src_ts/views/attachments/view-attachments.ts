@@ -3,7 +3,7 @@ import {customElement, property} from '@polymer/decorators';
 
 @customElement('view-attachments')
 export class ViewAttachments extends PolymerElement {
-  static get template() {
+  public static get template() {
     return html`
       <style>
         div.container {
@@ -30,13 +30,13 @@ export class ViewAttachments extends PolymerElement {
 
   public static get observers() {
     return [
-      'setEmbedSource(user)'
+      'setEmbedSource(user)',
     ];
   }
 
   public setEmbedSource() {
     // @ts-ignore
-    let country = this.user.country.name;
+    const country = this.user.country.name;
 
     let embedSource = 'https://app.powerbi.com/reportEmbed' +
     '?reportId=f66f2375-535b-4e1c-9acd-dea9d47a52a8' +

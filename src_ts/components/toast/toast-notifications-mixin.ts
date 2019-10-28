@@ -16,21 +16,21 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
     public _toastQueue: object[] = [];
 
     @property({type: String})
-    public currentToastMessage: string = '';
+    public currentToastMessage = '';
 
-    connectedCallback() {
+    public connectedCallback() {
       super.connectedCallback();
       this.addEventListener('toast', this.queueToast);
     }
 
-    disconnectedCallback() {
+    public disconnectedCallback() {
       super.disconnectedCallback();
       this.removeEventListener('toast', this.queueToast);
     }
 
     public queueToast(e: CustomEvent) {
       e.stopPropagation();
-      let detail = e.detail;
+      const detail = e.detail;
       if (!this._toast) {
         this._createToastElement();
       }
@@ -73,7 +73,7 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
     private dequeueToast() {
       this.shift('_toastQueue');
       if (this._toastQueue.length) {
-        let toastProperties = this._toast.prepareToastAndGetShowProperties(this._toastQueue[0]);
+        const toastProperties = this._toast.prepareToastAndGetShowProperties(this._toastQueue[0]);
         this._showToast(toastProperties);
       }
     }

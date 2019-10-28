@@ -3,7 +3,7 @@ import {customElement, property} from '@polymer/decorators';
 
 @customElement('view-partnerships')
 export class ViewPartnerships extends PolymerElement {
-  static get template() {
+  public static get template() {
     return html`
       <style>
         div.container {
@@ -30,13 +30,13 @@ export class ViewPartnerships extends PolymerElement {
 
   public static get observers() {
     return [
-      'setEmbedSource(user)'
+      'setEmbedSource(user)',
     ];
   }
 
   public setEmbedSource() {
     // @ts-ignore
-    let country = this.user.country.name;
+    const country = this.user.country.name;
 
     let embedSource = 'https://app.powerbi.com/reportEmbed' +
     '?reportId=d807bd5b-f709-47c2-8e6c-9dbd9a86027f' +

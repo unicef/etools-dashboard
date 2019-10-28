@@ -3,7 +3,7 @@ import {customElement, property} from '@polymer/decorators';
 
 @customElement('view-personalized')
 export class ViewPersonalized extends PolymerElement {
-  static get template() {
+  public static get template() {
     return html`
       <style>
         div.container {
@@ -30,13 +30,13 @@ export class ViewPersonalized extends PolymerElement {
 
   public static get observers() {
     return [
-      'setEmbedSource(user)'
+      'setEmbedSource(user)',
     ];
   }
 
   public setEmbedSource() {
     // @ts-ignore
-    let email = this.user.email;
+    const email = this.user.email;
 
     let embedSource = 'https://app.powerbi.com/reportEmbed' +
     '?reportId=1b2bb9b9-402c-4bec-b556-4da8c34123f3' +

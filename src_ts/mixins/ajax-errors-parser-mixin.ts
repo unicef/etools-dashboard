@@ -1,17 +1,17 @@
 import {PolymerElement} from '@polymer/polymer/polymer-element';
-import {Constructor} from '../typings/globals.types';
+import {Constructor, GenericObject} from '../typings/globals.types';
 import {property} from '@polymer/decorators';
 
 export function AjaxErrorsParserMixin<T extends Constructor<PolymerElement>>(superClass: T) {
   class AjaxErrorsParserClass extends (superClass as Constructor<PolymerElement>) {
 
     @property({type: String})
-    public globalMessage: string = 'An error occurred. Please try again later.';
+    public globalMessage = 'An error occurred. Please try again later.';
 
     @property({type: String})
-    public httpStatus413Msg: string = 'The uploaded file is too large!';
+    public httpStatus413Msg = 'The uploaded file is too large!';
 
-    public tryGetResponseError(response) {
+    public tryGetResponseError(response: GenericObject) {
       if (response.status === 413) {
         return this.httpStatus413Msg;
       }
@@ -102,11 +102,11 @@ export function AjaxErrorsParserMixin<T extends Constructor<PolymerElement>>(sup
       return errorsArray;
     }
 
-    private _markNestedErrors(errs) {
+    private _markNestedErrors(errs: string[]) {
       return errs.map(er => ' ' + er);
     }
 
-    private _isArrayOfStrings(arr) {
+    private _isArrayOfStrings(arr: string[]) {
       let allStrings = true;
       let i;
       for (i = 0; i < arr.length; i++) {

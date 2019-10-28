@@ -20,7 +20,7 @@ export function AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(bas
     public errorEventName: string = null;
 
     @property({type: String})
-    private ajaxLoadingMsgSource: string = '';
+    private ajaxLoadingMsgSource = '';
 
     public handleErrorResponse(response, ajaxMethod, redirectOn404) {
       if (redirectOn404 && response.status === 404) {
@@ -30,13 +30,13 @@ export function AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(bas
 
       fireEvent(this, 'global-loading', {
         active: false,
-        loadingSource: this.ajaxLoadingMsgSource ? this.ajaxLoadingMsgSource : null
+        loadingSource: this.ajaxLoadingMsgSource ? this.ajaxLoadingMsgSource : null,
       });
 
-      let errors = this.tryGetResponseError(response);
+      const errors = this.tryGetResponseError(response);
 
       let errorMessage = response.message || this.globalMessage;
-      
+
       if (!ajaxMethod) {
         ajaxMethod = 'GET';
       }
@@ -59,20 +59,20 @@ export function AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(bas
       }
     }
 
+    @observe('errorEventName')
+    public _errorEventNameChange(eventName) {
+      if (typeof eventName === 'string' && eventName !== '') {
+        // disable toasts error notifications if eventName is given
+        this.set('useToastEvent', false);
+      }
+    }
+
     private _fireAjaxErrorEvent(errors) {
       if (typeof this.errorEventName === 'string' && this.errorEventName !== '') {
         if (typeof errors === 'string') {
           errors = [errors];
         }
         fireEvent(this, this.errorEventName, errors);
-      }
-    }
-
-    @observe('errorEventName')
-    public _errorEventNameChange(eventName) {
-      if (typeof eventName === 'string' && eventName !== '') {
-        // disable toasts error notifications if eventName is given
-        this.set('useToastEvent', false);
       }
     }
   }

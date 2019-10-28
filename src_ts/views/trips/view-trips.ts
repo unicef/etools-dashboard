@@ -3,7 +3,7 @@ import {customElement, property} from '@polymer/decorators';
 
 @customElement('view-trips')
 export class ViewTrips extends PolymerElement {
-  static get template() {
+  public static get template() {
     return html`
       <style>
         div.container {
@@ -30,13 +30,13 @@ export class ViewTrips extends PolymerElement {
 
   public static get observers() {
     return [
-      'setEmbedSource(user)'
+      'setEmbedSource(user)',
     ];
   }
 
   public setEmbedSource() {
     // @ts-ignore
-    let country = this.user.country.name;
+    const country = this.user.country.name;
 
     let embedSource = 'https://app.powerbi.com/reportEmbed' +
     '?reportId=4ff8b2fc-cdca-426e-aad4-5b9cb49a85fd' +
@@ -46,7 +46,7 @@ export class ViewTrips extends PolymerElement {
     '&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldCJ9' +
     '&filterPaneEnabled=False' +
     `&$filter=travels/country_name eq '${country}'`;
-      
+
     this.set('embedSource', embedSource);
   }
 }

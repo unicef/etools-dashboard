@@ -12,6 +12,7 @@ import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-tabs/paper-tab.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
+import '@unicef-polymer/etools-loading/etools-loading.js';
 import 'etools-piwik-analytics/etools-piwik-analytics.js';
 import './styles/buttons-styles';
 import './styles/page-layout-styles';
@@ -35,11 +36,7 @@ import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
 setRootPath(BASE_URL);
 
 @customElement('app-shell')
-export class AppShell extends 
-  LoadingMixin(
-    ToastNotificationsMixin(
-      UserProfileDataMixin(PolymerElement))) {
-
+export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDataMixin(PolymerElement))) {
   public static get template() {
     return html`
       <style include="page-layout-styles shared-styles buttons-styles">
@@ -226,19 +223,19 @@ export class AppShell extends
   public availableDetailYears: object[] = [
     {name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv'},
     {name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv'},
-    {name: '2019', endpoint: '/api/v2/partners/hact?&format=csv'}
+    {name: '2019', endpoint: '/api/v2/partners/hact?&format=csv'},
   ]
 
   @property({type: Array})
   public availableGeneralYears: object[] = [
     {name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv'},
-    {name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv'}
+    {name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv'},
   ]
 
   @property({type: Array})
   public chartsExport: object[] = [
     {name: '2018', endpoint: '/api/v2/hact/graph/2018/export'},
-    {name: '2019', endpoint: '/api/v2/hact/graph/2019/export'}
+    {name: '2019', endpoint: '/api/v2/hact/graph/2019/export'},
   ]
 
   @property({type: Boolean})
@@ -252,11 +249,11 @@ export class AppShell extends
 
   public static get observers() {
     return [
-      '_routePageChanged(routeData.page)'
+      '_routePageChanged(routeData.page)',
     ];
   }
 
-  ready() {
+  public ready() {
     super.ready();
     this._initListeners();
   }
@@ -275,45 +272,13 @@ export class AppShell extends
     this._removeListeners();
   }
 
-  private _onForbidden() {
-    let redirectNotification: any = document.createElement('etools-loading');
-    redirectNotification.loadingText = 'Your login session has expired, you are being redirected to login.';
-    // redirectNotification.absolute = true;
-    redirectNotification.active = true;
-    document.querySelector('body').appendChild(redirectNotification);
-    setTimeout(() => {
-      window.location.href = Config.loginPath;
-    }, 3000);
-  }
-
-  // @ts-ignore
-  private _routePageChanged(page) {
-    // If no page was found in the route data, page will be an empty string.
-    // Default to 'personalized' in that case.
-    this.set('page', page || 'personalized');
-  }
-
   @observe('page')
-  public _pageChanged(page) {
+  public _pageChanged(page: string) {
     // Load page import on demand. Show 404 page if fails
     import(`./views/${page}/view-${page}.js`).then(this._onPageLoad(page).bind(this), this._showPage404.bind(this));
   }
 
-  private _onPageLoad(page) {
-    return () => fireEvent(this, 'page-changed-hact', {page});
-  }
-
-  private _showPage404() {
-    this.set('page', 'view404');
-    fireEvent(this, 'toast', {text: 'Oops you hit a 404!', showCloseBtn: true});
-  }
-
-  // @ts-ignore
-  private _isActive(page, tab) {
-    return page === tab;
-  }
-
-  public _updateUrlTab(tab) {
+  public _updateUrlTab(tab: string) {
     this.set('hideHactExport', tab === 'hact' ? false : true);
     this.set('hidePartnershipExport', tab === 'partnerships' ? false : true);
     if (!tab) {return;}
@@ -327,12 +292,44 @@ export class AppShell extends
   public _export(event) {
     let endpoint = event.model.item.endpoint;
     window.open(
-      `${endpoint}`,
-      '_blank'
+        `${endpoint}`,
+        '_blank'
     );
   }
 
   public _print() {
     window.print();
+  }
+  
+  private _onForbidden() {
+    const redirectNotification = document.createElement('etools-loading');
+    redirectNotification.loadingText = 'Your login session has expired, you are being redirected to login.';
+    // redirectNotification.absolute = true;
+    redirectNotification.active = true;
+    document.querySelector('body').appendChild(redirectNotification);
+    setTimeout(() => {
+      window.location.href = Config.loginPath;
+    }, 3000);
+  }
+
+  // @ts-ignore
+  private _routePageChanged(page: string) {
+    // If no page was found in the route data, page will be an empty string.
+    // Default to 'personalized' in that case.
+    this.set('page', page || 'personalized');
+  }
+
+  private _onPageLoad(page: string) {
+    return () => fireEvent(this, 'page-changed-hact', {page});
+  }
+
+  private _showPage404() {
+    this.set('page', 'view404');
+    fireEvent(this, 'toast', {text: 'Oops you hit a 404!', showCloseBtn: true});
+  }
+
+  // @ts-ignore
+  private _isActive(page: string, tab: string) {
+    return page === tab;
   }
 }

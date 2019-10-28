@@ -1,5 +1,5 @@
 import {PolymerElement} from '@polymer/polymer/polymer-element.js';
-import {Constructor} from '../typings/globals.types';
+import {Constructor, GenericObject} from '../typings/globals.types';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {EndpointsMixin} from '../endpoints/endpoints-mixin';
 import {AjaxServerErrorsMixin} from './ajax-server-errors-mixin';
@@ -7,15 +7,12 @@ import {fireEvent} from '../components/utils/fire-custom-event';
 import {property} from '@polymer/decorators';
 
 export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
-  class DataElementMixinClass extends
-      EndpointsMixin(
-        AjaxServerErrorsMixin(
-          EtoolsAjaxRequestMixin(baseClass))) {
+  class DataElementMixinClass extends EndpointsMixin(AjaxServerErrorsMixin(EtoolsAjaxRequestMixin(baseClass))) {
 
     @property({type: Object})
     public options: object | any = {
       endpoint: null,
-      csrf: true,
+      csrf: true
     };
 
     @property({type: Array, notify: true, readOnly: true})
@@ -35,16 +32,16 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
 
     public static get observers() {
       return [
-        '_endpointChanged(options.endpoint)'
+        '_endpointChanged(options.endpoint)',
       ];
     }
 
-    disconnectedCallback() {
+    public disconnectedCallback() {
       super.disconnectedCallback();
       this._removeAutomaticDataRefreshLoop();
     }
 
-    ready() {
+    public ready() {
       super.ready();
       this._elementReady();
     }
@@ -69,7 +66,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
             this._handleMyResponse(resp);
           }).catch((err) => {
             if (this.options.endpoint.template.indexOf('profile') && err.status === 403) {
-              fireEvent(this, 'forbidden', { bubbles: true, composed: true });
+              fireEvent(this, 'forbidden', {bubbles: true, composed: true});
             }
             // @ts-ignore
             this.handleErrorResponse(err);
@@ -82,7 +79,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
           });
     }
 
-    private _handleMyResponse(res) {
+    private _handleMyResponse(res: GenericObject) {
       this.set('data', res);
       if (this.fireDataLoaded) {
         // @ts-ignore
@@ -95,7 +92,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       }
     }
 
-    public _endpointChanged(newEndpoint) {
+    public _endpointChanged(newEndpoint: GenericObject) {
       if (newEndpoint === undefined) {
         return;
       }
@@ -113,7 +110,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       }
     }
 
-    private _setAutomaticDataRefreshLoop(newEndpoint) {
+    private _setAutomaticDataRefreshLoop(newEndpoint: GenericObject) {
       this.set('_refreshInterval', setInterval(() => {
         this._requestData();
       }, newEndpoint.exp));

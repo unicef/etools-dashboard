@@ -5,6 +5,6 @@ export const fireEvent = (el: any, eventName: string, eventDetail?: object | str
   el.dispatchEvent(new CustomEvent(eventName, {
     detail: eventDetail,
     bubbles: true,
-    composed: true
+    composed: true,
   }));
 };

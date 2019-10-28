@@ -112,23 +112,30 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
   public _countrySelected(e: CustomEvent) {
     if (e.detail.item.countryId !== this.current.id) {
       // send post request to change_coutry endpoint
-      let selectedCountryId = e.detail.item.countryId;
+      const selectedCountryId = e.detail.item.countryId;
       if (selectedCountryId) {
         this._triggerCountryChangeRequest(selectedCountryId);
       }
     }
   }
 
+  @observe('countries')
+  public _countrySelectorUpdate(countries: object[]) {
+    if (Array.isArray(countries) && (countries.length > 1)) {
+      this.set('countrySelectorVisible', true);
+    }
+  }
+
   private _triggerCountryChangeRequest(countryId: number) {
     fireEvent(this, 'global-loading', {
-      message: 'Please wait while country is changing...',
       active: true,
-      loadingSource: 'country-change'
+      loadingSource: 'country-change',
+      message: 'Please wait while country is changing...',
     });
     this.sendRequest({
+      body: {country: countryId},
       endpoint: this.getEndpoint('changeCountry'),
       method: 'POST',
-      body: {country: countryId}
     }).then(() => {
       this._handleResponse();
     }).catch((err) => {
@@ -139,13 +146,6 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
   private _handleResponse() {
     localStorage.clear();
     window.location.reload(true);
-  }
-
-  @observe('countries')
-  public _countrySelectorUpdate(countries: object[]) {
-    if (Array.isArray(countries) && (countries.length > 1)) {
-      this.set('countrySelectorVisible', true);
-    }
   }
 
   private _handleError(error: object) {
