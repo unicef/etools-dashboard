@@ -94,12 +94,6 @@ DocumentContainer.innerHTML = `<dom-module id="buttons-styles">
       .secondary-btn iron-icon {
         margin-right: 5px;
       }
-
-      /* responsive css rules */
-      @media (min-width: 850px) {
-
-      }
-
     </style>
   </template>
 </dom-module>`;

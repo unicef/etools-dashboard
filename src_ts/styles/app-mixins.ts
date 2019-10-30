@@ -28,7 +28,6 @@ DocumentContainer.innerHTML = `<custom-style>
         height: 58px;
         background: var(--paper-fab-add-color);
         z-index: 51;
-
       };
 
       --basic-btn-style: {

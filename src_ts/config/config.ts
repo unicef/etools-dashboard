@@ -3,10 +3,8 @@ import { GenericObject } from "../typings/globals.types";
 declare global {
   interface Window {
     EtoolsLogsLevel: string,
-    EtoolsRequestCacheDb: GenericObject,
     devToolsExtension: GenericObject,
-    EtoolsDashboard: GenericObject,
-    __REDUX_DEVTOOLS_EXTENSION__?: GenericObject,
+    EtoolsDashboard: GenericObject
   }
 }
 

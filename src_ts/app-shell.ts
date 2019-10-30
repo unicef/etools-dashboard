@@ -21,7 +21,6 @@ import './styles/app-theme';
 import {ToastNotificationsMixin} from './components/toast/toast-notifications-mixin';
 import {fireEvent} from './components/utils/fire-custom-event';
 import {UserProfileDataMixin} from './mixins/user-profile-data-mixin';
-import './config/dexie-db-config';
 import './views/hact/view-hact';
 import './views/personalized/view-personalized';
 import './views/partnerships/view-partnerships';
@@ -105,6 +104,7 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
                 </h1>
 
                 <div class="top-content-actions-wrapper">
+                  <!--
                   <div class="top-content-action" hidden\$="[[!_isActive(page,'personalized')]]">
                     <paper-button class="action-button" on-tap="_print">
                       <iron-icon class="dark" icon="print"></iron-icon>
@@ -148,6 +148,7 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
                       </paper-listbox>
                     </paper-menu-button>
                   </div>
+                  -->
 
                   <div class="top-content-action" hidden\$="[[!_isActive(page,'trips')]]">
                     <paper-button class="primary-btn with-prefix" on-tap="_goToAddTrip">

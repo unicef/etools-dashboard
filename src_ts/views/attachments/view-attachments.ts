@@ -7,7 +7,7 @@ export class ViewAttachments extends PolymerElement {
     return html`
       <style>
         div.container {
-          height: calc(100vh - 200px);
+          height: calc(100vh - 242px);
           width: 100vw
         }
       </style>
