@@ -34,7 +34,7 @@ export class ViewPersonalized extends PolymerElement {
     ];
   }
 
-  public setembedsource(): void {
+  public setEmbedSource(): void {
     // @ts-ignore
     const email = this.user.email;
 

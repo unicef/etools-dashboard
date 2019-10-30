@@ -34,7 +34,7 @@ export class ViewHact extends PolymerElement {
     ];
   }
 
-  public setembedsource(): void {
+  public setEmbedSource(): void {
     // @ts-ignore
     const country = this.user.country.name;
 
