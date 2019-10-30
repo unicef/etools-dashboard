@@ -4,7 +4,7 @@ import {customElement} from '@polymer/decorators';
 
 @customElement('page-footer')
 export class PageFooter extends PolymerElement {
-  public static get template() {
+  public static get template(): HTMLTemplateElement {
     return html`
       <style>
         :host {

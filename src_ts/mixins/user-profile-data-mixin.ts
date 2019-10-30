@@ -33,7 +33,7 @@ export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(base
     @property({type: String})
     public profileSaveLoadingMsgSource = 'profile-modal';
 
-    public saveProfile(profile: GenericObject) {
+    public saveProfile(profile: GenericObject): void {
       if (isEmpty(profile)) {
         // empty profile means no changes found
         fireEvent(this, 'toast', {
@@ -51,7 +51,7 @@ export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(base
       this._dispatchSaveProfileRequest(profile);
     }
 
-    private _dispatchSaveProfileRequest(profile) {
+    private _dispatchSaveProfileRequest(profile): void {
       const config = {
         body: profile,
         endpoint: this.getEndpoint(this.endpointName),
@@ -66,12 +66,12 @@ export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(base
     }
 
     // called after profile get request on initial load
-    private _handleMyResponse(resp) {
+    private _handleMyResponse(resp): void {
       this.set('user', resp);
       this._hideProfileSaveLoadingMsg();
     }
 
-    private _hideProfileSaveLoadingMsg() {
+    private _hideProfileSaveLoadingMsg(): void {
       if (this._saveActionInProgress) {
         fireEvent(this, 'global-loading', {
           active: false,

@@ -22,7 +22,7 @@ export const Config = {
   productionDomain: 'etools.unicef.org',
   stagingDomain: 'etools-staging.unicef.org',
 
-  _checkEnvironment: function() {
+  _checkEnvironment: function(): string {
     const location = window.location.href;
     if (location.indexOf(this.stagingDomain) > -1) {
       return 'STAGING';

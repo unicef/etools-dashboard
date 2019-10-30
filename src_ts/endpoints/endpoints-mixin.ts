@@ -9,7 +9,7 @@ import isEmpty from 'lodash-es/isEmpty';
 export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
   class EndpointsMixinClass extends EtoolsAjaxRequestMixin(baseClass as Constructor<PolymerElement>) {
 
-    public getEndpoint(endpointName: string, data?: object) {
+    public getEndpoint(endpointName: string, data?: object): object {
       const endpoint = JSON.parse(JSON.stringify(Endpoints[endpointName]));
       if (endpoint && this.endpointHasTemplate(endpoint)) {
         endpoint.url = window.location.origin + template(endpoint.template)(data);
@@ -19,7 +19,7 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
       return endpoint;
     }
 
-    public endpointHasTemplate(ep: GenericObject) {
+    public endpointHasTemplate(ep: GenericObject): boolean {
       return ep.hasOwnProperty('template') && !isEmpty(ep.template);
     }
 
@@ -27,22 +27,22 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
       return endpoint && ('token' in endpoint);
     }
 
-    public decodeBase64Token(encodedToken: string) {
+    public decodeBase64Token(encodedToken: string): GenericObject {
       const base64Url = encodedToken.split('.')[1];
       const base64 = base64Url.replace('-', '+').replace('_', '/');
       return JSON.parse(window.atob(base64));
     }
 
-    public tokenIsValid(token: string) {
+    public tokenIsValid(token: string): boolean {
       const decodedToken = this.decodeBase64Token(token);
       return Date.now() < decodedToken.exp;
     }
 
-    public getAuthorizationHeader(token: string) {
+    public getAuthorizationHeader(token: string): object {
       return {'Authorization': 'JWT ' + token};
     }
 
-    public requestToken(endpoint: object) {
+    public requestToken(endpoint: object): void {
       return this.sendRequest({
         endpoint: endpoint,
       });
@@ -63,7 +63,7 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
     }
 
     public fireRequest(endpoint: any, endpointTemplateData?: object,
-      requestAdditionalOptions?: object, activeReqKey?: string) {
+      requestAdditionalOptions?: object, activeReqKey?: string): void {
         if (!endpoint) {
           console.log('Endpoint name is missing.', 'Endpoints:fireRequest');
           return;
@@ -71,7 +71,7 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
         const defer = this._getDeferrer();
         const self = this;
         this.addTokenToRequestOptions(endpoint, endpointTemplateData)
-            .then(function(requestOptions: object) {
+            .then((requestOptions: object) => {
               const options = self._addAdditionalRequestOptions(requestOptions, requestAdditionalOptions);
               return self.sendRequest(options, activeReqKey);
             })
@@ -84,13 +84,13 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
         return defer.promise;
       }
 
-    protected _buildOptionsWithTokenHeader(options: GenericObject, token: string) {
+    protected _buildOptionsWithTokenHeader(options: GenericObject, token: string): object {
       options.headers = this.getAuthorizationHeader(token);
       delete options.endpoint.token; // cleanup token from endpoint object
       return options;
     }
 
-    protected _addAdditionalRequestOptions(options: GenericObject, requestAdditionalOptions: object) {
+    protected _addAdditionalRequestOptions(options: GenericObject, requestAdditionalOptions: object): object {
       if (requestAdditionalOptions) {
         Object.keys(requestAdditionalOptions).forEach((key: string) => {
           switch (key) {
@@ -108,9 +108,9 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
       return options;
     }
 
-    protected _getDeferrer() {
+    protected _getDeferrer(): GenericObject {
       // create defer object (utils behavior contains too many other unneeded methods to be used)
-      const defer: any = {};
+      const defer: GenericObject = {};
       defer.promise = new Promise((resolve, reject) => {
         defer.resolve = resolve;
         defer.reject = reject;

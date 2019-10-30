@@ -6,7 +6,7 @@ export function DropdownMixin<T extends Constructor<PolymerElement>>(superClass:
 
     // Put a button with on-tap="clearDropdown" just before
     // a paper-dropdown-menu to add a clear selection button
-    public clearDropdown(e: GenericObject) {
+    public clearDropdown(e: GenericObject): void {
       let dropdown = e.target.nextElementSibling;
       if (dropdown) {
         if (dropdown.is === 'paper-dropdown-menu') {

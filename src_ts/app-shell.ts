@@ -36,7 +36,7 @@ setRootPath(BASE_URL);
 
 @customElement('app-shell')
 export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDataMixin(PolymerElement))) {
-  public static get template() {
+  public static get template(): HTMLTemplateElement {
     return html`
       <style include="page-layout-styles shared-styles buttons-styles">
         :host {
@@ -224,23 +224,23 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
   public availableDetailYears: object[] = [
     {name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv'},
     {name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv'},
-    {name: '2019', endpoint: '/api/v2/partners/hact?&format=csv'}
+    {name: '2019', endpoint: '/api/v2/partners/hact?&format=csv'},
   ]
 
   @property({type: Array})
   public availableGeneralYears: object[] = [
     {name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv'},
-    {name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv'}
+    {name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv'},
   ]
 
   @property({type: Array})
   public chartsExport: object[] = [
     {name: '2018', endpoint: '/api/v2/hact/graph/2018/export'},
-    {name: '2019', endpoint: '/api/v2/hact/graph/2019/export'}
+    {name: '2019', endpoint: '/api/v2/hact/graph/2019/export'},
   ]
 
   @property({type: Boolean})
-  public displayDetail: boolean = false;
+  public displayDetail = false;
 
   @property({type: Object})
   public user: object;
@@ -248,27 +248,27 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
   @property({type: String})
   public currentToastMessage: string;
 
-  public static get observers() {
+  public static get observers(): string[] {
     return [
       '_routePageChanged(routeData.page)'
     ];
   }
 
-  public ready() {
+  public ready(): void {
     super.ready();
     this._initListeners();
   }
 
-  public _initListeners() {
+  public _initListeners(): void {
     this._onForbidden = this._onForbidden.bind(this);
     this.addEventListener('forbidden', this._onForbidden);
   }
 
-  public _removeListeners() {
+  public _removeListeners(): void {
     this.removeEventListener('forbidden', this._onForbidden);
   }
 
-  public disconnectedCallback() {
+  public disconnectedCallback(): void {
     super.disconnectedCallback();
     this._removeListeners();
   }
@@ -291,18 +291,18 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
   }
 
   public _export(event) {
-    let endpoint = event.model.item.endpoint;
+    const endpoint = event.model.item.endpoint;
     window.open(
         `${endpoint}`,
-        '_blank'
+        '_blank',
     );
   }
 
-  public _print() {
+  public _print(): void {
     window.print();
   }
 
-  private _onForbidden() {
+  private _onForbidden(): void {
     const redirectNotification = document.createElement('etools-loading');
     redirectNotification.loadingText = 'Your login session has expired, you are being redirected to login.';
     // redirectNotification.absolute = true;
@@ -314,7 +314,7 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
   }
 
   // @ts-ignore
-  private _routePageChanged(page: string) {
+  private _routePageChanged(page: string): void {
     // If no page was found in the route data, page will be an empty string.
     // Default to 'personalized' in that case.
     this.set('page', page || 'personalized');
@@ -324,13 +324,13 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
     return () => fireEvent(this, 'page-changed-hact', {page});
   }
 
-  private _showPage404() {
+  private _showPage404(): void {
     this.set('page', 'view404');
     fireEvent(this, 'toast', {text: 'Oops you hit a 404!', showCloseBtn: true});
   }
 
   // @ts-ignore
-  private _isActive(page: string, tab: string) {
+  private _isActive(page: string, tab: string): boolean {
     return page === tab;
   }
 }

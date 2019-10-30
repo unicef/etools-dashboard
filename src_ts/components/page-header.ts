@@ -18,7 +18,7 @@ import { GenericObject } from '../typings/globals.types';
 
 @customElement('page-header')
 export class PageHeader extends UserProfileDataMixin(PolymerElement) {
-  public static get template() {
+  public static get template(): HTMLTemplateElement {
     return html`
       <style include="shared-styles">
         app-toolbar {
@@ -140,20 +140,20 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
   @property({type: Object})
   public profile: object;
 
-  public static get observers() {
+  public static get observers(): string[] {
     return ['_updateCountriesList(user.countries_available)'];
   }
 
-  public ready() {
+  public ready(): void {
     super.ready();
     this._setBgColor();
   }
 
-  public openDrawer() {
+  public openDrawer(): void {
     fireEvent(this, 'drawer');
   }
 
-  public _updateCountriesList(countries: GenericObject[]) {
+  public _updateCountriesList(countries: GenericObject[]): void | object {
     if (!countries) {
       return;
     }
@@ -174,28 +174,28 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
     });
   }
 
-  public _saveProfile(e: CustomEvent) {
+  public _saveProfile(e: CustomEvent): void {
     this.set('profile', e.detail.profile);
     this.saveProfile(this.profile);
   }
 
-  public _signOut() {
+  public _signOut(): void {
     this._clearLocalStorage();
     window.location.href = window.location.origin + '/logout';
   }
 
-  public _clearLocalStorage() {
+  public _clearLocalStorage(): void {
     localStorage.clear();
   }
 
-  public _setBgColor() {
+  public _setBgColor(): void {
     // If not production environment, changing header color to red
     if (this.environment) {
       this.updateStyles({'--header-bg-color': 'var(--nonprod-header-color)'});
     }
   }
   
-  private _getFlagIconClass(id: string) {
+  private _getFlagIconClass(id: string): string {
     let flagIdMap = {
       '0': 'us',
       '2070': 'in',

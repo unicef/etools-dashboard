@@ -7,7 +7,7 @@ import {GenericObject} from '../../typings/globals.types';
 
 @customElement('etools-toast')
 export class EtoolsToast extends PolymerElement {
-  static get template() {
+  static get template(): HTMLTemplateElement {
     return html`
       <style>
         .toast-dismiss-btn {
@@ -61,43 +61,43 @@ export class EtoolsToast extends PolymerElement {
   @property({type: Object})
   public fitInto: object
 
-  public show(details: object) {
+  public show(details: object): void {
     let toast: GenericObject = this.shadowRoot.getElementById('toast');
     return toast.show(details);
   }
 
-  public toggle() {
+  public toggle(): void {
     let toast: GenericObject = this.shadowRoot.getElementById('toast');
     return toast.toggle();
   }
 
-  public confirmToast() {
+  public confirmToast(): void {
     fireEvent(this, 'toast-confirm', {
       bubbles: true,
       composed: true,
     });
   }
 
-  public toastClosed() {
+  public toastClosed(): void {
     fireEvent(this, 'toast-closed', {
       bubbles: true,
       composed: true,
     });
   }
 
-  public getMessageWrapper() {
+  public getMessageWrapper(): HTMLElement {
     // @ts-ignore
     return this.$.toast.$.label;
   }
 
-  public _isMultiLine(message: string) {
+  public _isMultiLine(message: string): boolean {
     if (!message) {
       return false;
     }
     return message.toString().length > 80;
   }
 
-  public prepareToastAndGetShowProperties(detail: GenericObject) {
+  public prepareToastAndGetShowProperties(detail: GenericObject): object {
     const closeToastBtn: GenericObject = this.$.confirmBtn;
     const toast = this.$.toast;
 

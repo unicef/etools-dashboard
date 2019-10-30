@@ -3,7 +3,7 @@ import {customElement, property} from '@polymer/decorators';
 
 @customElement('view-map')
 export class ViewMap extends PolymerElement {
-  public static get template() {
+  public static get template(): HTMLTemplateElement {
     return html`
       <style>
         div.container {
@@ -28,13 +28,13 @@ export class ViewMap extends PolymerElement {
   @property({type: Object})
   public user: object
 
-  public static get observers() {
+  public static get observers(): string[] {
     return [
-      'setEmbedSource(user)'
+      'setEmbedSource(user)',
     ];
   }
 
-  public setEmbedSource() {
+  public setembedsource(): void {
     // @ts-ignore
     const country = this.user.country.name;
 

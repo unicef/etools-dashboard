@@ -22,7 +22,7 @@ export function AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(bas
     @property({type: String})
     private ajaxLoadingMsgSource = '';
 
-    public handleErrorResponse(response, ajaxMethod, redirectOn404) {
+    public handleErrorResponse(response, ajaxMethod, redirectOn404): void {
       if (redirectOn404 && response.status === 404) {
         fireEvent(this, '404');
         return;
@@ -60,14 +60,14 @@ export function AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(bas
     }
 
     @observe('errorEventName')
-    public _errorEventNameChange(eventName) {
+    public _errorEventNameChange(eventName): void {
       if (typeof eventName === 'string' && eventName !== '') {
         // disable toasts error notifications if eventName is given
         this.set('useToastEvent', false);
       }
     }
 
-    private _fireAjaxErrorEvent(errors) {
+    private _fireAjaxErrorEvent(errors): void {
       if (typeof this.errorEventName === 'string' && this.errorEventName !== '') {
         if (typeof errors === 'string') {
           errors = [errors];

@@ -18,17 +18,17 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
     @property({type: String})
     public currentToastMessage = '';
 
-    public connectedCallback() {
+    public connectedCallback(): void {
       super.connectedCallback();
       this.addEventListener('toast', this.queueToast);
     }
 
-    public disconnectedCallback() {
+    public disconnectedCallback(): void {
       super.disconnectedCallback();
       this.removeEventListener('toast', this.queueToast);
     }
 
-    public queueToast(e: CustomEvent) {
+    public queueToast(e: CustomEvent): void {
       e.stopPropagation();
       const detail = e.detail;
       if (!this._toast) {
@@ -49,7 +49,7 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
       }
     }
 
-    private _createToastElement() {
+    private _createToastElement(): void {
       this.set('_toast', document.createElement('etools-toast'));
       this._toast.set('fitInto', this.$.appHeadLayout);
       this._toast.addEventListener('toast-confirm', this._toggleToast.bind(this, this._toast));
@@ -58,7 +58,7 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
       this._toastAfterRenderSetup();
     }
 
-    private _toastAfterRenderSetup() {
+    private _toastAfterRenderSetup(): void {
       afterNextRender(this._toast, () => {
         // alter message wrapper css
         let messageWrapper = this._toast.getMessageWrapper();
@@ -70,7 +70,7 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
       });
     }
 
-    private dequeueToast() {
+    private dequeueToast(): void {
       this.shift('_toastQueue');
       if (this._toastQueue.length) {
         const toastProperties = this._toast.prepareToastAndGetShowProperties(this._toastQueue[0]);
@@ -78,13 +78,13 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
       }
     }
 
-    private _toggleToast(toast) {
+    private _toggleToast(toast): void {
       if (toast) {
         toast.toggle();
       }
     }
 
-    private _showToast(toastProperties) {
+    private _showToast(toastProperties): void {
       this.set('currentToastMessage', toastProperties.text);
       this._toast.show(toastProperties);
     }

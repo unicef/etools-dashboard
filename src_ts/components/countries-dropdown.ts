@@ -13,7 +13,7 @@ import {EndpointsMixin} from '../endpoints/endpoints-mixin';
 
 @customElement('countries-dropdown')
 export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(PolymerElement)) {
-  static get template() {
+  static get template(): HTMLTemplateElement {
     return html`
       <style>
         :host {
@@ -109,7 +109,7 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
   @property({type: Boolean})
   public countrySelectorVisible: Boolean;
 
-  public _countrySelected(e: CustomEvent) {
+  public _countrySelected(e: CustomEvent): void {
     if (e.detail.item.countryId !== this.current.id) {
       // send post request to change_coutry endpoint
       const selectedCountryId = e.detail.item.countryId;
@@ -120,13 +120,13 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
   }
 
   @observe('countries')
-  public _countrySelectorUpdate(countries: object[]) {
+  public _countrySelectorUpdate(countries: object[]): void {
     if (Array.isArray(countries) && (countries.length > 1)) {
       this.set('countrySelectorVisible', true);
     }
   }
 
-  private _triggerCountryChangeRequest(countryId: number) {
+  private _triggerCountryChangeRequest(countryId: number): void {
     fireEvent(this, 'global-loading', {
       active: true,
       loadingSource: 'country-change',
@@ -143,12 +143,12 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
     });
   }
 
-  private _handleResponse() {
+  private _handleResponse(): void {
     localStorage.clear();
     window.location.reload(true);
   }
 
-  private _handleError(error: object) {
+  private _handleError(error: object): void {
     logError('Country change failed!', 'countries-dropdown', error);
     // TODO: this should be a larger alert.
     let countriesListbox: any = this.$.countriesListbox;

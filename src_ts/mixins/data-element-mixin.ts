@@ -30,23 +30,23 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
     @property({type: String})
     private endpointName: string;
 
-    public static get observers() {
+    public static get observers(): string[] {
       return [
         '_endpointChanged(options.endpoint)',
       ];
     }
 
-    public disconnectedCallback() {
+    public disconnectedCallback(): void {
       super.disconnectedCallback();
       this._removeAutomaticDataRefreshLoop();
     }
 
-    public ready() {
+    public ready(): void {
       super.ready();
       this._elementReady();
     }
 
-    private _elementReady() {
+    private _elementReady(): void {
       if (!this.endpointName) {
         console.warn('Please specify an endpointName property');
       } else {
@@ -55,7 +55,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       }
     }
 
-    private _requestData() {
+    private _requestData(): void {
       fireEvent(this, 'global-loading', {
         active: true,
         loadingSource: this.endpointName
@@ -79,7 +79,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
           });
     }
 
-    private _handleMyResponse(res: GenericObject) {
+    private _handleMyResponse(res: GenericObject): void {
       this.set('data', res);
       if (this.fireDataLoaded) {
         // @ts-ignore
@@ -92,7 +92,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       }
     }
 
-    public _endpointChanged(newEndpoint: GenericObject) {
+    public _endpointChanged(newEndpoint: GenericObject): void {
       if (newEndpoint === undefined) {
         return;
       }
@@ -102,7 +102,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       }
     }
 
-    private _removeAutomaticDataRefreshLoop() {
+    private _removeAutomaticDataRefreshLoop(): void {
       if (this._refreshInterval !== null) {
         // @ts-ignore
         clearInterval(this._refreshInterval);
@@ -110,7 +110,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       }
     }
 
-    private _setAutomaticDataRefreshLoop(newEndpoint: GenericObject) {
+    private _setAutomaticDataRefreshLoop(newEndpoint: GenericObject): void {
       this.set('_refreshInterval', setInterval(() => {
         this._requestData();
       }, newEndpoint.exp));
