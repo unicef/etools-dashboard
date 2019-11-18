@@ -88,19 +88,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }, (err) => console.log('Service Worker registration failed: ', err));
       });
     }
-    (function() {
-        // Load webcomponents-loader.js to check and load any polyfills your browser needs
-        const webcomponentsLoaderScript = document.createElement('script');
-        webcomponentsLoaderScript.async = true;
-        webcomponentsLoaderScript.src = BASEURL + 'bower_components/webcomponentsjs/webcomponents-loader.js';
-        document.head.appendChild(webcomponentsLoaderScript);
-        // Load application shell
-        const appShellImport = document.createElement('link');
-        appShellImport.rel = 'import';
-        appShellImport.href = BASEURL + 'dash/app-shell.html';
-        document.head.appendChild(appShellImport);
-      })();
   </script>
+
+<script>
+  window.process = {
+    env: {
+      NODE_ENV: 'production'
+    }
+  };
+</script>
+  
+  <!-- Start of etools Zendesk Widget script -->
+
+  <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=69eb3f61-7900-4d7e-a3e2-9f4b3b28b2ac"></script>
+
+  <!-- End of etools Zendesk Widget script -->
 
   <!-- Add any global styles for body, document, etc. -->
   <style>
@@ -124,7 +126,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <noscript>
     Please enable JavaScript to view this website.
   </noscript>
-  <!-- Built with love using Polymer Starter Kit -->
+
+  <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
+
+  <script type="module" src="src/app-shell.js"></script>
 </body>
 
 </html>

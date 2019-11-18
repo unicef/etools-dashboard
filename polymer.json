@@ -1,31 +1,52 @@
 {
   "entrypoint": "index.html",
-  "shell": "dash/app-shell.html",
+  "shell": "src/app-shell.js",
   "fragments": [
-    "dash/app/views/hact/view-hact.html",
-    "dash/app/views/personalized/view-personalized.html",
-    "dash/app/views/partnerships/view-partnerships.html",
-    "dash/app/views/map/view-map.html",
-    "dash/app/views/trips/view-trips.html",
-    "dash/app/views/attachments/view-attachments.html"
+    "src/views/hact/view-hact.js",
+    "src/views/personalized/view-personalized.js",
+    "src/views/partnerships/view-partnerships.js",
+    "src/views/map/view-map.js",
+    "src/views/trips/view-trips.js",
+    "src/views/attachments/view-attachments.js"
   ],
-  "sources": ["images/**/*", "dash/**/*", "bower.json"],
+  "sources": ["images/**/*", "src/**/*", "package.json"],
   "extraDependencies": [
-    "bower_components/webcomponentsjs/*.js",
+    "node_modules/webcomponentsjs/*.js",
     "manifest.json"
   ],
   "lint": {
-    "rules": ["polymer-2"]
+    "rules": ["polymer-3"]
   },
   "builds": [
     {
-      "preset": "es5-bundled",
-      "name": "dash/es5-bundled"
+      "name": "esm-bundled",
+      "browserCapabilities": [
+        "es2015",
+        "modules"
+      ],
+      "js": {
+        "minify": true
+      },
+      "css": {
+        "minify": true
+      },
+      "html": {
+        "minify": true
+      },
+      "bundle": true,
+      "addServiceWorker": true
     },
     {
+      "name": "es6-bundled",
       "preset": "es6-bundled",
-      "name": "dash/es6-bundled",
-      "browserCapabilities": ["es2015"]
+      "addServiceWorker": true
+    },
+    {
+      "name": "es5-bundled",
+      "preset": "es5-bundled",
+      "addServiceWorker": true
     }
-  ]
+  ],
+  "moduleResolution": "node",
+  "npm": true
 }
