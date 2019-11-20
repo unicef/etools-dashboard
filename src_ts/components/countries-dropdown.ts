@@ -130,12 +130,12 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
     fireEvent(this, 'global-loading', {
       active: true,
       loadingSource: 'country-change',
-      message: 'Please wait while country is changing...',
+      message: 'Please wait while country is changing...'
     });
     this.sendRequest({
       body: {country: countryId},
       endpoint: this.getEndpoint('changeCountry'),
-      method: 'POST',
+      method: 'POST'
     }).then(() => {
       this._handleResponse();
     }).catch((err) => {
@@ -151,7 +151,7 @@ export class CountriesDropdown extends EndpointsMixin(EtoolsAjaxRequestMixin(Pol
   private _handleError(error: object): void {
     logError('Country change failed!', 'countries-dropdown', error);
     // TODO: this should be a larger alert.
-    let countriesListbox: any = this.$.countriesListbox;
+    const countriesListbox: any = this.$.countriesListbox;
     countriesListbox.selected = this.current;
     fireEvent(this, 'toast', {text: 'Something went wrong changing your workspace. Please try again'});
     fireEvent(this, 'global-loading', {active: false, loadingSource: 'country-change'});

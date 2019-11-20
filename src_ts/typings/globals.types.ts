@@ -1,4 +1,4 @@
-import {PolymerElement} from '@polymer/polymer';
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
 
 /*
 * The type Constructor<T> is an alias for the construct signature

@@ -1,4 +1,4 @@
-import { GenericObject } from "../typings/globals.types";
+import { GenericObject } from '../typings/globals.types';
 
 declare global {
   interface Window {
@@ -37,5 +37,5 @@ export const Config = {
       return 'LOCAL';
     }
     return null;
-  },
+  }
 };

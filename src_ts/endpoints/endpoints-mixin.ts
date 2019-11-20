@@ -1,5 +1,5 @@
-import {Constructor, GenericObject} from '../typings/globals.types';
 import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {Constructor, GenericObject} from '../typings/globals.types';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {Config} from '../config/config';
 import {Endpoints} from './endpoints';
@@ -44,7 +44,7 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
 
     public requestToken(endpoint: object): void {
       return this.sendRequest({
-        endpoint: endpoint,
+        endpoint: endpoint
       });
     }
 
@@ -62,27 +62,27 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
       return defer.promise;
     }
 
-    public fireRequest(endpoint: any, endpointTemplateData?: object,
-      requestAdditionalOptions?: object, activeReqKey?: string): void {
-        if (!endpoint) {
-          console.log('Endpoint name is missing.', 'Endpoints:fireRequest');
-          return;
-        }
-        const defer = this._getDeferrer();
-        const self = this;
-        this.addTokenToRequestOptions(endpoint, endpointTemplateData)
-            .then((requestOptions: object) => {
-              const options = self._addAdditionalRequestOptions(requestOptions, requestAdditionalOptions);
-              return self.sendRequest(options, activeReqKey);
-            })
-            .then((endpointResponse: any) => {
-              defer.resolve(endpointResponse);
-            })
-            .catch((error: any) => {
-              defer.reject(error);
-            });
-        return defer.promise;
+    public fireRequest(endpoint: string, endpointTemplateData?: object,
+        requestAdditionalOptions?: object, activeReqKey?: string): void {
+      if (!endpoint) {
+        console.log('Endpoint name is missing.', 'Endpoints:fireRequest');
+        return;
       }
+      const defer = this._getDeferrer();
+      const self = this;
+      this.addTokenToRequestOptions(endpoint, endpointTemplateData)
+          .then((requestOptions: object) => {
+                const options = self._addAdditionalRequestOptions(requestOptions, requestAdditionalOptions);
+                return self.sendRequest(options, activeReqKey);
+          })
+          .then((endpointResponse: any) => {
+                defer.resolve(endpointResponse);
+          })
+          .catch((error: any) => {
+                defer.reject(error);
+          });
+      return defer.promise;
+    }
 
     protected _buildOptionsWithTokenHeader(options: GenericObject, token: string): object {
       options.headers = this.getAuthorizationHeader(token);

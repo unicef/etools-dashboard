@@ -10,22 +10,22 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
   class DataElementMixinClass extends EndpointsMixin(AjaxServerErrorsMixin(EtoolsAjaxRequestMixin(baseClass))) {
 
     @property({type: Object})
-    public options: object | any = {
-      endpoint: null,
-      csrf: true
+    public options: GenericObject = {
+      csrf: true,
+      endpoint: null
     };
 
     @property({type: Array, notify: true, readOnly: true})
     public data: object[];
 
     @property({type: Array})
-    public globalMessage: string = 'An error occurred while trying to fetch the data!';
-
-    @property({type: Boolean})
-    private fireDataLoaded: boolean = false;
+    public globalMessage = 'An error occurred while trying to fetch the data!';
 
     @property({type: Object})
     public _refreshInterval: object = null;
+    
+    @property({type: Boolean})
+    private fireDataLoaded = false;
 
     @property({type: String})
     private endpointName: string;
@@ -44,6 +44,16 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
     public ready(): void {
       super.ready();
       this._elementReady();
+    }
+
+    public _endpointChanged(newEndpoint: GenericObject): void {
+      if (newEndpoint === undefined) {
+        return;
+      }
+      if (newEndpoint && newEndpoint.hasOwnProperty('exp') && newEndpoint.exp > 0) {
+        this._removeAutomaticDataRefreshLoop();
+        this._setAutomaticDataRefreshLoop(newEndpoint);
+      }
     }
 
     private _elementReady(): void {
@@ -89,16 +99,6 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
           // @ts-ignore
           fireEvent(this, this.dataLoadedEventName);
         }
-      }
-    }
-
-    public _endpointChanged(newEndpoint: GenericObject): void {
-      if (newEndpoint === undefined) {
-        return;
-      }
-      if (newEndpoint && newEndpoint.hasOwnProperty('exp') && newEndpoint.exp > 0) {
-        this._removeAutomaticDataRefreshLoop();
-        this._setAutomaticDataRefreshLoop(newEndpoint);
       }
     }
 

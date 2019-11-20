@@ -14,7 +14,7 @@ import {fireEvent} from '../components/utils/fire-custom-event';
 import {customElement, property} from '@polymer/decorators';
 import {UserProfileDataMixin} from '../mixins/user-profile-data-mixin';
 import './support-btn';
-import { GenericObject } from '../typings/globals.types';
+import {GenericObject} from '../typings/globals.types';
 
 @customElement('page-header')
 export class PageHeader extends UserProfileDataMixin(PolymerElement) {
@@ -161,14 +161,14 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
       return {
         id: arrayItem.id,
         imgClass: this._getFlagIconClass(arrayItem.business_area_code),
-        name: arrayItem.name,
+        name: arrayItem.name
       };
     });
     arrayObj = sortBy(arrayObj, c => c.name);
     this.set('countries', arrayObj);
   }
 
-  public _convertCollection(data): object[] {
+  public _convertCollection(data: GenericObject[]): object[] {
     return data.map((item) => {
       return {label: item.name, value: item.id};
     });
@@ -194,7 +194,7 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
       this.updateStyles({'--header-bg-color': 'var(--nonprod-header-color)'});
     }
   }
-  
+
   private _getFlagIconClass(id: string): string {
     let flagIdMap = {
       '0': 'us',

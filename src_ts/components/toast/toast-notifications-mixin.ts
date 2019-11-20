@@ -37,10 +37,10 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
 
       if (!this._toastQueue.length) {
         this.push('_toastQueue', detail);
-        let toastProperties = this._toast.prepareToastAndGetShowProperties(detail);
+        const toastProperties = this._toast.prepareToastAndGetShowProperties(detail);
         this._showToast(toastProperties);
       } else {
-        let alreadyInQueue = this._toastQueue.filter((toastDetail) => {
+        const alreadyInQueue = this._toastQueue.filter((toastDetail) => {
           return JSON.stringify(toastDetail) === JSON.stringify(detail);
         });
         if (alreadyInQueue.length === 0) {
@@ -61,7 +61,7 @@ export function ToastNotificationsMixin<T extends Constructor<PolymerElement>>(s
     private _toastAfterRenderSetup(): void {
       afterNextRender(this._toast, () => {
         // alter message wrapper css
-        let messageWrapper = this._toast.getMessageWrapper();
+        const messageWrapper = this._toast.getMessageWrapper();
         if (messageWrapper) {
           messageWrapper.style.whiteSpace = 'pre-wrap';
         }

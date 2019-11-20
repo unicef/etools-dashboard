@@ -13,16 +13,18 @@ export function AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(bas
     @property({type: Object})
     public options: object;
 
-    @property({type: Boolean})
-    private useToastEvent: boolean = true;
-
     @property({type: String})
     public errorEventName: string = null;
 
-    @property({type: String})
-    private ajaxLoadingMsgSource = '';
+    @property({type: Boolean})
+    private useToastEvent = true;
 
-    public handleErrorResponse(response, ajaxMethod, redirectOn404): void {
+    @property({type: String})
+    private ajaxLoadingMsgSource: string = '';
+
+    public handleErrorResponse(response, ajaxMethod, redirectOn404: boolean): void {
+      let method = ajaxMethod;
+
       if (redirectOn404 && response.status === 404) {
         fireEvent(this, '404');
         return;
@@ -30,7 +32,7 @@ export function AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(bas
 
       fireEvent(this, 'global-loading', {
         active: false,
-        loadingSource: this.ajaxLoadingMsgSource ? this.ajaxLoadingMsgSource : null,
+        loadingSource: this.ajaxLoadingMsgSource ? this.ajaxLoadingMsgSource : null
       });
 
       const errors = this.tryGetResponseError(response);
@@ -38,10 +40,10 @@ export function AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(bas
       let errorMessage = response.message || this.globalMessage;
 
       if (!ajaxMethod) {
-        ajaxMethod = 'GET';
+        method = 'GET';
       }
 
-      if (['POST', 'PATCH', 'DELETE'].indexOf(ajaxMethod) > -1) {
+      if (['POST', 'PATCH', 'DELETE'].indexOf(method) > -1) {
         this.set('serverErrors', this._getErrorsArray(errors, this.useToastEvent));
       }
       this.set('serverErrors', this.serverErrors ? this.serverErrors : []);
@@ -60,19 +62,20 @@ export function AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(bas
     }
 
     @observe('errorEventName')
-    public _errorEventNameChange(eventName): void {
+    public _errorEventNameChange(eventName: string): void {
       if (typeof eventName === 'string' && eventName !== '') {
         // disable toasts error notifications if eventName is given
         this.set('useToastEvent', false);
       }
     }
 
-    private _fireAjaxErrorEvent(errors): void {
+    private _fireAjaxErrorEvent(errors: string | object): void {
+      let errorsObj: object;
       if (typeof this.errorEventName === 'string' && this.errorEventName !== '') {
         if (typeof errors === 'string') {
-          errors = [errors];
+          errorsObj = [errors];
         }
-        fireEvent(this, this.errorEventName, errors);
+        fireEvent(this, this.errorEventName, errorsObj);
       }
     }
   }

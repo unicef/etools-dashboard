@@ -74,14 +74,14 @@ export class EtoolsToast extends PolymerElement {
   public confirmToast(): void {
     fireEvent(this, 'toast-confirm', {
       bubbles: true,
-      composed: true,
+      composed: true
     });
   }
 
   public toastClosed(): void {
     fireEvent(this, 'toast-closed', {
       bubbles: true,
-      composed: true,
+      composed: true
     });
   }
 

@@ -10,16 +10,16 @@ import {fireEvent} from '../components/utils/fire-custom-event';
 
 export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
   class UserProfileDataMixinClass extends AjaxErrorsParserMixin(
-    DataElementMixin(
-      EtoolsAjaxRequestMixin(
-        EndpointsMixin(baseClass as Constructor<PolymerElement>)))) {
+      DataElementMixin(
+          EtoolsAjaxRequestMixin(
+              EndpointsMixin(baseClass as Constructor<PolymerElement>)))) {
     [x: string]: any;
 
     /**
      * Object describing property-related metadata used by Polymer features
      */
     @property({type: String})
-    public endpointName = 'myProfile';
+    public endpointName: string = 'myProfile';
 
     @property({type: Object, notify: true})
     public user: object;
@@ -31,31 +31,31 @@ export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(base
     public _saveActionInProgress: boolean;
 
     @property({type: String})
-    public profileSaveLoadingMsgSource = 'profile-modal';
+    public profileSaveLoadingMsgSource: string = 'profile-modal';
 
     public saveProfile(profile: GenericObject): void {
       if (isEmpty(profile)) {
         // empty profile means no changes found
         fireEvent(this, 'toast', {
           showCloseBtn: true,
-          text: 'There is nothing to save. No change detected on your profile.',
+          text: 'There is nothing to save. No change detected on your profile.'
         });
         return;
       }
       fireEvent(this, 'global-loading', {
         active: true,
         loadingSource: this.profileSaveLoadingMsgSource,
-        message: 'Saving profile data...',
+        message: 'Saving profile data...'
       });
       this.set('_saveActionInProgress', true);
       this._dispatchSaveProfileRequest(profile);
     }
 
-    private _dispatchSaveProfileRequest(profile): void {
+    private _dispatchSaveProfileRequest(profile: GenericObject): void {
       const config = {
         body: profile,
         endpoint: this.getEndpoint(this.endpointName),
-        method: 'PATCH',
+        method: 'PATCH'
       };
       this.sendRequest(config).then((resp) => {
         this._handleMyResponse(resp);
@@ -66,7 +66,7 @@ export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(base
     }
 
     // called after profile get request on initial load
-    private _handleMyResponse(resp): void {
+    private _handleMyResponse(resp: object): void {
       this.set('user', resp);
       this._hideProfileSaveLoadingMsg();
     }
@@ -75,7 +75,7 @@ export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(base
       if (this._saveActionInProgress) {
         fireEvent(this, 'global-loading', {
           active: false,
-          loadingSource: this.profileSaveLoadingMsgSource,
+          loadingSource: this.profileSaveLoadingMsgSource
         });
         this.set('_saveActionInProgress', false);
       }

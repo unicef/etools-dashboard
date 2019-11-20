@@ -21,7 +21,7 @@ export function AjaxErrorsParserMixin<T extends Constructor<PolymerElement>>(sup
       return response.response || this.globalMessage;
     }
 
-    public _getErrorsArray(errors, prepareForToastMsg?: Boolean): string[] {
+    public _getErrorsArray(errors: string | GenericObject, prepareForToastMsg?: Boolean): string[] {
       let errorsArray = [];
       if (!errors) {
         return errorsArray;
@@ -102,31 +102,7 @@ export function AjaxErrorsParserMixin<T extends Constructor<PolymerElement>>(sup
       return errorsArray;
     }
 
-    private _markNestedErrors(errs: string[]): string[] {
-      return errs.map(er => ' ' + er);
-    }
-
-    private _isArrayOfStrings(arr: string[]): boolean{
-      let allStrings = true;
-      let i;
-      for (i = 0; i < arr.length; i++) {
-        if (typeof arr[i] !== 'string') {
-          allStrings = false;
-          break;
-        }
-      }
-      return allStrings;
-    }
-
-    private formatServerErrorAsText(errors): string {
-      let errorsArray = this._getErrorsArray(errors, false);
-      if (errorsArray && errorsArray.length) {
-        return errorsArray.join('\n');
-      }
-      return errors;
-    }
-
-    public parseRequestErrorsAndShowAsToastMsgs(error, source?, redirectOn404?): void {
+    public parseRequestErrorsAndShowAsToastMsgs(error, source?, redirectOn404?: boolean): void {
       if (redirectOn404 && error.status === 404) {
         if (!source) {
           source = this;
@@ -141,7 +117,31 @@ export function AjaxErrorsParserMixin<T extends Constructor<PolymerElement>>(sup
       this.showErrorAsToastMsg(errorsString, source);
     }
 
-    private showErrorAsToastMsg(errorsString, source): void {
+    private _markNestedErrors(errs: string[]): string[] {
+      return errs.map(er => ' ' + er);
+    }
+
+    private _isArrayOfStrings(arr: string[]): boolean {
+      let allStrings = true;
+      let i;
+      for (i = 0; i < arr.length; i++) {
+        if (typeof arr[i] !== 'string') {
+          allStrings = false;
+          break;
+        }
+      }
+      return allStrings;
+    }
+
+    private formatServerErrorAsText(errors: string): string {
+      let errorsArray = this._getErrorsArray(errors, false);
+      if (errorsArray && errorsArray.length) {
+        return errorsArray.join('\n');
+      }
+      return errors;
+    }
+
+    private showErrorAsToastMsg(errorsString, source: GenericObject): void {
       if (errorsString) {
         if (!source) {
           source = this;
