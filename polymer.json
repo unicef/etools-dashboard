@@ -2,20 +2,22 @@
   "entrypoint": "index.html",
   "shell": "src/app-shell.js",
   "fragments": [
-    "src/views/hact/view-hact.js",
-    "src/views/personalized/view-personalized.js",
-    "src/views/partnerships/view-partnerships.js",
-    "src/views/map/view-map.js",
-    "src/views/trips/view-trips.js",
-    "src/views/attachments/view-attachments.js"
+    "src/views/view-hact.js",
+    "src/views/view-personalized.js",
+    "src/views/view-partnerships.js",
+    "src/views/view-map.js",
+    "src/views/view-trips.js",
+    "src/views/view-attachments.js"
   ],
-  "sources": ["images/**/*", "src/**/*", "package.json"],
+  "sources": ["images/**/*", "src/**/*", "package.json", "manifest.json"],
   "extraDependencies": [
-    "node_modules/webcomponentsjs/*.js",
+    "node_modules/@webcomponents/webcomponentsjs/**",
+    "node_modules/web-animations-js/web-animations-next-lite.min.js",
     "manifest.json"
   ],
   "lint": {
-    "rules": ["polymer-3"]
+    "rules": ["polymer-3"],
+    "ignoreWarnings": ["could-not-resolve-reference"]
   },
   "builds": [
     {
