@@ -9,7 +9,7 @@
     "src/views/view-trips.js",
     "src/views/view-attachments.js"
   ],
-  "sources": ["images/**/*", "src/**/*", "package.json", "manifest.json"],
+  "sources": ["images/**/*", "src/**/*", "package.json"],
   "extraDependencies": [
     "node_modules/@webcomponents/webcomponentsjs/**",
     "node_modules/web-animations-js/web-animations-next-lite.min.js",

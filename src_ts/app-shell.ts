@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
 import '@polymer/app-layout/app-header/app-header.js';
@@ -12,6 +12,8 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-tabs/paper-tab.js';
+import {property, observe, customElement} from '@polymer/decorators';
+import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
 import '@unicef-polymer/etools-loading/etools-loading.js';
 import 'etools-piwik-analytics/etools-piwik-analytics.js';
@@ -22,17 +24,9 @@ import './styles/app-theme';
 import {ToastNotificationsMixin} from './components/toast/toast-notifications-mixin';
 import {fireEvent} from './components/utils/fire-custom-event';
 import {UserProfileDataMixin} from './mixins/user-profile-data-mixin';
-import './views/view-hact';
-import './views/view-personalized';
-import './views/view-partnerships';
-import './views/view-attachments';
-import './views/view-trips';
-import './views/view-map';
 import './components/page-header';
 import './components/page-footer';
 import {Config, BASE_URL} from './config/config';
-import {property, observe, customElement} from '@polymer/decorators';
-import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
 setRootPath(BASE_URL);
 
 @customElement('app-shell')
@@ -105,59 +99,12 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
                 </h1>
 
                 <div class="top-content-actions-wrapper">
-                  <!--
-                  <div class="top-content-action" hidden\$="[[!_isActive(page,'personalized')]]">
-                    <paper-button class="action-button" on-tap="_print">
-                      <iron-icon class="dark" icon="print"></iron-icon>
-                      Print
-                    </paper-button>
-                  </div>
-
-                  <div class="top-content-action" hidden\$="[[!_isActive(page,'partnerships')]]">
-                    <a target="_blank" href="[[rootpath]]/api/v2/interventions/partnership-dash/?format=csv">
-                      <paper-button class="action-button">
-                        <iron-icon class="dark" icon="file-download"></iron-icon>
-                        Export
-                      </paper-button>
-                    </a>
-                  </div>
-
-                  <div class="top-content-action" hidden\$="[[!_isActive(subroute.path, '/charts')]]">
-                    <paper-menu-button>
-                      <paper-button class="action-button" icon="file-download" slot="dropdown-trigger">
-                        <iron-icon class="dark" icon="file-download"></iron-icon>
-                        Export
-                      </paper-button>
-                      <paper-listbox slot="dropdown-content">
-                        <template is="dom-repeat" items="[[chartsExport]]">
-                          <paper-item on-tap="_export">{{item.name}}</paper-item>
-                        </template>
-                      </paper-listbox>
-                    </paper-menu-button>
-                  </div>
-
-                  <div class="top-content-action" hidden\$="[[!_isActive(subroute.path, '/assurance')]]">
-                    <paper-menu-button>
-                      <paper-button class="action-button" icon="file-download" slot="dropdown-trigger">
-                        <iron-icon class="dark" icon="file-download"></iron-icon>
-                        Export
-                      </paper-button>
-                      <paper-listbox slot="dropdown-content">
-                        <template id="hactExport" is="dom-repeat" items="[[availableDetailYears]]">
-                          <paper-item on-tap="_export">{{item.name}}</paper-item>
-                        </template>
-                      </paper-listbox>
-                    </paper-menu-button>
-                  </div>
-                  -->
-
                   <div class="top-content-action" hidden\$="[[!_isActive(page,'trips')]]">
                     <paper-button class="primary-btn with-prefix" on-tap="_goToAddTrip">
                       <iron-icon icon="add"></iron-icon>
                       Add New Trip
                     </paper-button>
                   </div>
-
                 </div>
               </div>
               <div class="top-content-row">
@@ -225,19 +172,19 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
   public availableDetailYears: object[] = [
     {name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv'},
     {name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv'},
-    {name: '2019', endpoint: '/api/v2/partners/hact?&format=csv'},
+    {name: '2019', endpoint: '/api/v2/partners/hact?&format=csv'}
   ]
 
   @property({type: Array})
   public availableGeneralYears: object[] = [
     {name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv'},
-    {name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv'},
+    {name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv'}
   ]
 
   @property({type: Array})
   public chartsExport: object[] = [
     {name: '2018', endpoint: '/api/v2/hact/graph/2018/export'},
-    {name: '2019', endpoint: '/api/v2/hact/graph/2019/export'},
+    {name: '2019', endpoint: '/api/v2/hact/graph/2019/export'}
   ]
 
   @property({type: Boolean})
@@ -277,7 +224,7 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
   @observe('page')
   public _pageChanged(page: string) {
     // Load page import on demand. Show 404 page if fails
-    import(`./views/${page}/view-${page}.js`).then(this._onPageLoad(page).bind(this), this._showPage404.bind(this));
+    import(`./views/view-${page}.js`).then(this._onPageLoad(page).bind(this), this._showPage404.bind(this));
   }
 
   public _updateUrlTab(tab: string) {

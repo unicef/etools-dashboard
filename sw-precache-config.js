@@ -12,18 +12,13 @@
 
 module.exports = {
   staticFileGlobs: [
-    'node_modules/webcomponentsjs/webcomponents-loader.js',
-    'manifest.json'
+    'manifest.json',
+    'src/**/*'
   ],
   runtimeCaching: [
     {
-      urlPattern: /\/node_modules\/webcomponentsjs\/.*.js/,
-      handler: 'fastest',
-      options: {
-        cache: {
-          name: 'webcomponentsjs-polyfills-cache'
-        }
-      }
+      urlPattern: /\/node_modules\/webcomponentsjs\//,
+      handler: 'fastest'
     }
   ]
 };
