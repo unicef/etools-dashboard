@@ -12,7 +12,7 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-button/paper-button.js';
 import '@polymer/paper-tabs/paper-tabs.js';
 import '@polymer/paper-tabs/paper-tab.js';
-import {property, observe, customElement} from '@polymer/decorators';
+import {property, customElement} from '@polymer/decorators';
 import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
 import '@unicef-polymer/etools-loading/etools-loading.js';
@@ -156,7 +156,7 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
     `;
   }
 
-  @property({type: String, reflectToAttribute: true})
+  @property({observer: AppShell.prototype._pageChanged, type: String, reflectToAttribute: true})
   public page: string;
 
   @property({type: Object})
@@ -221,12 +221,6 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
     this._removeListeners();
   }
 
-  @observe('page')
-  public _pageChanged(page: string) {
-    // Load page import on demand. Show 404 page if fails
-    import(`./views/view-${page}.js`).then(this._onPageLoad(page).bind(this), this._showPage404.bind(this));
-  }
-
   public _updateUrlTab(tab: string) {
     this.set('hideHactExport', tab === 'hact' ? false : true);
     this.set('hidePartnershipExport', tab === 'partnerships' ? false : true);
@@ -261,17 +255,49 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
     }, 3000);
   }
 
-  // @ts-ignore
-  private _routePageChanged(page: string): void {
+  _routePageChanged(page) {
+    // Show the corresponding page according to the route.
+    //
     // If no page was found in the route data, page will be an empty string.
-    // Default to 'personalized' in that case.
-    this.set('page', page || 'personalized');
-  }
+    // Show 'view1' in that case. And if the page doesn't exist, show 'view404'.
+   if (!page) {
+     this.set('page', 'personalized');
+   } else if (['personalized', 'hact', 'attachments', 'map', 'partnerships', 'trips'].indexOf(page) !== -1) {
+     this.set('page', page);
+   } else {
+     this.set('page', 'view404');
+   }
+ }
 
-  private _onPageLoad(page: string) {
-    return () => fireEvent(this, 'page-changed-hact', {page});
-  }
-
+_pageChanged(page) {
+ // Import the page component on demand.
+ //
+ // Note: `polymer build` doesn't like string concatenation in the import
+ // statement, so break it up.
+ switch (page) {
+   case 'personalized':
+     import('./views/view-personalized.js');
+     break;
+   case 'partnerships':
+     import('./views/view-partnerships.js');
+     break;
+   case 'hact':
+     import('./views/view-hact.js');
+     break;
+   case 'map':
+     import('./views/view-map.js');
+     break;
+   case 'attachments':
+     import('./views/view-attachments.js');
+     break;
+   case 'trips':
+     import('./views/view-trips.js');
+     break;
+   case 'view404':
+    this._showPage404.bind(this);
+     break;
+ }
+}
   private _showPage404(): void {
     this.set('page', 'view404');
     fireEvent(this, 'toast', {text: 'Oops you hit a 404!', showCloseBtn: true});
