@@ -7,7 +7,7 @@ export class ViewPersonalized extends PolymerElement {
     return html`
       <style>
         div.container {
-          height: calc(100vh - 242px);
+          height: 100vh;
           width: 100vw
         }
       </style>
