@@ -44,7 +44,8 @@ export class ViewAttachments extends PolymerElement {
     '&autoAuth=true' +
     '&ctid=77410195-14e1-4fb8-904b-ab1892023667' +
     '&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldCJ9' +
-    `&$filter=attachments/country_name eq '${country}'`;
+    `&$filter=attachments/country_name eq '${country}'` +
+    ` and partner_vendor/country_name eq '${country}'`;
 
     this.set('embedSource', embedSource);
   }
