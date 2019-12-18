@@ -365,7 +365,7 @@
                     class="col-data">[[item.filename]]</a>
                 </div>
                 <div class="created-column">
-                  <span class="col-data">[[item.created]]</span>
+                  <span class="col-data">[[_formatDate(item.created)]]</span>
                 </div>
               </div>
             </data-table-row>
@@ -673,6 +673,9 @@
         this.$.grouped.classList.toggle('light-button');
       }
 
+      _formatDate(date) {
+        return moment(date).format('DD MMM YYYY');
+      }
 
     }
 
