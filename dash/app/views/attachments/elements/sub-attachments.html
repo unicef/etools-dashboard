@@ -71,7 +71,7 @@
             <paper-tooltip>[[item.filename]]</paper-tooltip>
           </data-table-column>
           <data-table-column class="col-20 padding-left">
-            [[item.created]]
+            [[_formatDate(item.created)]]
           </data-table-column>
           <data-table-column class="col-30">
             [[item.source]]
@@ -84,7 +84,7 @@
   <script>
     class SubAttachments extends Polymer.Element {
       static get is() {
-        return 'sub-attachments'
+        return 'sub-attachments';
       }
 
       static get properties() {
@@ -92,7 +92,11 @@
           relatedTo: {
             type: Array
           }
-        }
+        };
+      }
+
+      _formatDate(date) {
+        return moment(date).format('DD MMM YYYY');
       }
     }
 
