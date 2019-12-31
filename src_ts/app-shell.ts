@@ -27,10 +27,15 @@ import {UserProfileDataMixin} from './mixins/user-profile-data-mixin';
 import './components/page-header';
 import './components/page-footer';
 import {Config, BASE_URL} from './config/config';
+import PiwikAnalyticsMixin from './mixins/piwik-analytics-mixin';
 setRootPath(BASE_URL);
 
 @customElement('app-shell')
-export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDataMixin(PolymerElement))) {
+export class AppShell extends LoadingMixin(
+  ToastNotificationsMixin(
+    UserProfileDataMixin(
+      PiwikAnalyticsMixin(PolymerElement)))) {
+
   public static get template(): HTMLTemplateElement {
     return html`
       <style include="page-layout-styles shared-styles buttons-styles">
@@ -75,7 +80,9 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
 
       <etools-piwik-analytics page="[[subroute.prefix]]"
                               user="[[user]]"
-                              toast="[[currentToastMessage]]">
+                              toast="[[currentToastMessage]]"
+                              site-url="https://unisitetracker.unicef.io/"
+                              site-id="[[siteIdent]]">
       </etools-piwik-analytics>
 
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
