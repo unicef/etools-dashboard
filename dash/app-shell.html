@@ -299,19 +299,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           hideExport: Boolean,
 
           availableDetailYears: {
-            type: Array,
-            value: [
-              { name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv' },
-              { name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv' },
-              { name: '2019', endpoint: '/api/v2/partners/hact?&format=csv' }
-            ]
+            type: Array
           },
           availableGeneralYears: {
-            type: Array,
-            value: [
-              { name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv' },
-              { name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv' }
-            ]
+            type: Array
           },
           chartsExport: {
             type: Array,
@@ -340,6 +331,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       connectedCallback() {
         super.connectedCallback();
+        this.set('availableGeneralYears', this._setHactExport(2017, 'general'));
+        this.set('availableDetailYears', this._setHactExport(2017, 'detailed'));
+        this.set('chartsExport', this._setHactExport(2018, 'charts'));
+        this._assuranceSelected();
       }
 
       static get observers() {
@@ -434,6 +429,43 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // sets export endpoints based on assurance view (detailed/general)
       _assuranceSelected() {
         this.$.hactExport.items = this.displayDetail ? this.availableDetailYears : this.availableGeneralYears;
+      }
+
+      // calculates export links for hact general, detail, and charts views, with new links added each calendar year
+      _setHactExport(startYear, view) {
+        const currentYear = (new Date).getFullYear();
+        let array = [];
+
+        // handles all charts links
+        if (view === 'charts') {
+          for (let year = startYear; year <= currentYear; year ++) {
+            let yearObj = {};
+            yearObj.name = year.toString();
+            yearObj.endpoint = `/api/v2/hact/graph/${year}/export`;
+            array.push(yearObj);
+          }
+          return array;
+        }
+
+        // adds historical links (general/detail)
+        for (let year = startYear; year < currentYear; year ++) {
+          let yearObj = {};
+          yearObj.name = year.toString();
+          yearObj.endpoint = `/api/v2/hact/history/?year=${year}&format=csv`;
+          array.push(yearObj);
+        }
+
+        // adds current-year links (general/detail)
+        if (view === 'general') {
+          array.push({
+            name: currentYear.toString(),
+            endpoint: `/api/v2/partners/hact/simple?year=${currentYear}format=csv`
+          });
+        } else if (view === 'detailed') {
+          array.push({ name: currentYear.toString(), endpoint: '/api/v2/partners/hact?format=csv' });
+        }
+
+        return array;
       }
     }
 
