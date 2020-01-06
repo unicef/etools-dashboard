@@ -455,7 +455,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (view === 'general') {
           array.push({
             name: currentYear.toString(),
-            endpoint: `/api/v2/partners/hact/simple?year=${currentYear}format=csv`
+            endpoint: `/api/v2/partners/hact/simple?year=${currentYear}&format=csv`
           });
         } else if (view === 'detailed') {
           array.push({ name: currentYear.toString(), endpoint: '/api/v2/partners/hact?format=csv' });
