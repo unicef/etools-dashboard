@@ -1,7 +1,7 @@
 .gitignore
 demo/*
 test/*
-es6-polyfills.html
 gulpfile.js
 gulp-tasks/*
 build/*
+src/*

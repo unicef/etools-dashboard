@@ -1,10 +1,15 @@
 {
   "extends": ["eslint:recommended", "google"],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 8,
+    "sourceType": "module",
+    "allowImportExportEverywhere": true,
+    "project": "./tsconfig.json"
   },
   "env": {
-    "browser": true
+    "browser": true,
+    "node": true
   },
   "plugins": [
     "html"
@@ -12,28 +17,26 @@
   "rules": {
     "padded-blocks": "off",
     "brace-style": "off",
-    "new-cap": ["error", { "capIsNewExceptions": ["Polymer"], "capIsNewExceptionPattern": "^Etools.." }],
-    "no-var": "off",
-    "no-debugger": "off",
-    "no-undef": "warn",
+    "new-cap": ["off"],
+    "no-var": "warn",
+    "no-tabs": "warn",
+    "prefer-const": "off",
+    "no-debugger": "warn",
+    "no-console": 0,
     "require-jsdoc": "off",
     "valid-jsdoc": "off",
     "comma-dangle": ["error", "never"],
     "max-len": ["error", { "code": 120 }],
     "camelcase": ["error", {"properties": "never"}],
-    "object-curly-spacing": ["warn", "always"]
+    "arrow-parens": [2, "as-needed", { "requireForBlockBody": true }],
+    "one-var": ["off"],
+    "no-import-side-effect": true
   },
   "globals": {
-    "moment": true,
     "Promise": true,
     "Polymer": true,
-    "PolymerRedux": true,
-    "Dexie": true,
-    "EtoolsMixinFactory": true,
     "EtoolsDashboard": true,
-    "EtoolsRequestCacheDb": true,
     "EtoolsAjaxRequestMixin": true,
-    "EtoolsMixins": true,
     "EtoolsLogsMixin": true,
     "_": true,
     "ShadyCSS": true,
