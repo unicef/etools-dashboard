@@ -1,5 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import {customElement, property} from '@polymer/decorators';
+import {Config} from '../config/config';
+import {mapDev, mapProd} from '../endpoints/power-bi-embeds';
 
 @customElement('view-map')
 export class ViewMap extends PolymerElement {
@@ -28,9 +30,12 @@ export class ViewMap extends PolymerElement {
   @property({type: Object})
   public user: object
 
+  @property({type: String})
+  public environment: string = (() => Config._checkEnvironment())()
+
   public static get observers(): string[] {
     return [
-      'setEmbedSource(user)',
+      'setEmbedSource(user)'
     ];
   }
 
@@ -38,12 +43,7 @@ export class ViewMap extends PolymerElement {
     // @ts-ignore
     const country = this.user.country.name;
 
-    const embedSource = 'https://app.powerbi.com/reportEmbed' +
-    '?reportId=d0902539-8039-439b-9683-bb462ae63cf2' +
-    '&appId=56089b5f-f2cc-4121-8705-58f981db340f' +
-    '&autoAuth=true' +
-    '&ctid=77410195-14e1-4fb8-904b-ab1892023667' +
-    '&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldCJ9' +
+    const embedSource = (this.environment ? mapDev : mapProd) +
     `&$filter=interventionslocations/country_name eq '${country}'`;
 
     this.set('embedSource', embedSource);

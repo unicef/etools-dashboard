@@ -1,4 +1,4 @@
-import { GenericObject } from '../typings/globals.types';
+import {GenericObject} from '../typings/globals.types';
 
 declare global {
   interface Window {
