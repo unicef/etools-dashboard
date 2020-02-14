@@ -1,5 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import {customElement, property} from '@polymer/decorators';
+import {Config} from '../config/config';
+import {personalizedDev, personalizedProd} from '../endpoints/power-bi-embeds';
 
 @customElement('view-personalized')
 export class ViewPersonalized extends PolymerElement {
@@ -28,9 +30,12 @@ export class ViewPersonalized extends PolymerElement {
   @property({type: Object})
   public user: object
 
+  @property({type: String})
+  public environment: string = (() => Config._checkEnvironment())()
+
   public static get observers(): string[] {
     return [
-      'setEmbedSource(user)',
+      'setEmbedSource(user)'
     ];
   }
 
@@ -38,13 +43,7 @@ export class ViewPersonalized extends PolymerElement {
     // @ts-ignore
     const email = this.user.email;
 
-    const embedSource = 'https://app.powerbi.com/reportEmbed' +
-    '?reportId=1b2bb9b9-402c-4bec-b556-4da8c34123f3' +
-    '&appId=56089b5f-f2cc-4121-8705-58f981db340f' +
-    '&autoAuth=true' +
-    '&ctid=77410195-14e1-4fb8-904b-ab1892023667' +
-    '&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldCJ9' +
-    '&filterPaneEnabled=False' +
+    const embedSource = (this.environment ? personalizedDev : personalizedProd) +
     `&$filter=interventions_focalpoints/unicef_focal_point_email eq '${email}'` +
     ` and actionpointsfor/assigned_to_email eq '${email}'` +
     ` and actionpointsby/assigned_by_email eq '${email}'` +
