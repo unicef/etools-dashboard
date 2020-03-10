@@ -1,5 +1,6 @@
 import {PolymerElement, html} from '@polymer/polymer/polymer-element';
 import '@polymer/iron-icons/communication-icons';
+import {customElement} from '@polymer/decorators';
 
 /* eslint-disable max-len */
 
@@ -7,6 +8,7 @@ import '@polymer/iron-icons/communication-icons';
  * @polymer
  * @customElement
  */
+@customElement('support-btn')
 export class SupportBtn extends PolymerElement {
   public static get template(): HTMLTemplateElement {
     return html`

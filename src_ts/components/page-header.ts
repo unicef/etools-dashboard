@@ -15,9 +15,10 @@ import {customElement, property} from '@polymer/decorators';
 import {UserProfileDataMixin} from '../mixins/user-profile-data-mixin';
 import './support-btn';
 import {GenericObject} from '../typings/globals.types';
+import PiwikAnalyticsMixin from '../mixins/piwik-analytics-mixin';
 
 @customElement('page-header')
-export class PageHeader extends UserProfileDataMixin(PolymerElement) {
+export class PageHeader extends UserProfileDataMixin(PiwikAnalyticsMixin(PolymerElement)) {
   public static get template(): HTMLTemplateElement {
     return html`
       <style include="shared-styles">
@@ -118,7 +119,7 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
         </div>
         <div class="content-align">
           <countries-dropdown id="countries" countries="[[countries]]" current="[[user.country]]"></countries-dropdown>
-          <support-btn></support-btn>
+          <support-btn on-tap="trackAnalytics" tracker="support"></support-btn>
           <etools-profile-dropdown profile="{{user}}"
                                   on-save-profile="_saveProfile"
                                   on-sign-out="_signOut">
