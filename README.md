@@ -7,7 +7,7 @@ This dashboard is designed to work with the [eTools Infrastructure](https://gith
 
 ## Built With
 
-* [Polymer 3](https://polymer-library.polymer-project.org/) - JavaScript Library
-* [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript Superset
-* [NPM](https://npmjs.org/) - Dependency Management
-* [Power BI](https://powerbi.microsoft.com/) - Business Intelligence Software
+*   [Polymer 3](https://polymer-library.polymer-project.org/) - JavaScript Library
+*   [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript Superset
+*   [NPM](https://npmjs.org/) - Dependency Management
+*   [Power BI](https://powerbi.microsoft.com/) - Business Intelligence Software

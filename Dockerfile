@@ -7,11 +7,11 @@ RUN npm install -g --unsafe-perm polymer-cli
 RUN npm install -g typescript
 
 WORKDIR /tmp
-ADD . /tmp/
+COPY . /tmp/
 RUN npm cache verify
 RUN npm i
 
-RUN tsc || echo done
+RUN tsc || echo "done"
 RUN export NODE_OPTIONS=--max_old_space_size=4096 && polymer build
 
 # ADD . /code/
