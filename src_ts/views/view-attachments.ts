@@ -1,5 +1,7 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import {PolymerElement, html} from '@polymer/polymer';
 import {customElement, property} from '@polymer/decorators';
+import {Config} from '../config/config';
+import {attachmentsDev, attachmentsProd} from '../endpoints/power-bi-embeds';
 
 @customElement('view-attachments')
 export class ViewAttachments extends PolymerElement {
@@ -28,9 +30,12 @@ export class ViewAttachments extends PolymerElement {
   @property({type: Object})
   public user: object
 
+  @property({type: String})
+  public environment: string = (() => Config._checkEnvironment())()
+
   public static get observers(): string[] {
     return [
-      'setEmbedSource(user)',
+      'setEmbedSource(user)'
     ];
   }
 
@@ -38,12 +43,7 @@ export class ViewAttachments extends PolymerElement {
     // @ts-ignore
     const country = this.user.country.name;
 
-    const embedSource = 'https://app.powerbi.com/reportEmbed' +
-    '?reportId=f66f2375-535b-4e1c-9acd-dea9d47a52a8' +
-    '&appId=56089b5f-f2cc-4121-8705-58f981db340f' +
-    '&autoAuth=true' +
-    '&ctid=77410195-14e1-4fb8-904b-ab1892023667' +
-    '&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldCJ9' +
+    const embedSource = (this.environment ? attachmentsDev : attachmentsProd) +
     `&$filter=attachments/country_name eq '${country}'` +
     ` and partner_vendor/country_name eq '${country}'`;
 
