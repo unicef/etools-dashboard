@@ -1,7 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import {customElement, property} from '@polymer/decorators';
 import {Config} from '../config/config';
-import {partnershipsDev, partnershipsProd} from '../endpoints/power-bi-embeds';
+import {partnershipsProd} from '../endpoints/power-bi-embeds';
 
 @customElement('view-partnerships')
 export class ViewPartnerships extends PolymerElement {
@@ -43,10 +43,11 @@ export class ViewPartnerships extends PolymerElement {
     // @ts-ignore
     const country = this.user.country.name;
 
-    const embedSource = (this.environment ? partnershipsDev : partnershipsProd) +
-    `&$filter=actionpoints/country_name eq '${country}'` +
-    ` and interventions/country_name eq '${country}'` +
-    ` and partners/country_name eq '${country}'`;
+    const embedSource = partnershipsProd +
+    `&$filter=interventions/country_name eq '${country}'` +
+    ` and partners/country_name eq '${country}'` +
+    ` and agreements/country_name eq '${country}'` +
+    ` and funds_by_intervention/country_name eq '${country}'`;
 
     this.set('embedSource', embedSource);
   }

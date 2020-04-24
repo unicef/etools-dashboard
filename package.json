@@ -42,7 +42,7 @@
     "@polymer/paper-toast": "^3.0.0-pre.18",
     "@polymer/polymer": "^3.1.0",
     "@types/lodash-es": "^4.17.3",
-    "@unicef-polymer/etools-app-selector": "^3.1.0",
+    "@unicef-polymer/etools-app-selector": "^3.1.5",
     "@unicef-polymer/etools-behaviors": "^3.0.1",
     "@unicef-polymer/etools-loading": "^4.0.1",
     "@unicef-polymer/etools-profile-dropdown": "^4.0.1-rc.1",
