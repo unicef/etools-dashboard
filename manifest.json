@@ -1,7 +1,7 @@
 {
   "name": "eTools - Dashboard",
   "short_name": "eTools - Dashboard",
-  "start_url": "/?homescreen=1",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#0099ff",
   "background_color": "#ffffff",
