@@ -33,7 +33,8 @@ export const partnershipsDev = 'https://app.powerbi.com/reportEmbed?reportId=58b
   '&autoAuth=true&ctid=77410195-14e1-4fb8-904b-ab1892023667' +
   '&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldC8ifQ%3D%3D';
 
-export const partnershipsProd = 'https://app.powerbi.com/reportEmbed?reportId=46a091cf-7d94-4515-a6ce-c0081cd4b2d7' +
+export const partnershipsProd = 'https://app.powerbi.com/reportEmbed?reportId=c1f6e227-94f1-4a93-bfed-f86b208b5dd9' +
+  '&appId=56089b5f-f2cc-4121-8705-58f981db340f' +
   '&autoAuth=true&ctid=77410195-14e1-4fb8-904b-ab1892023667' +
   '&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldC8ifQ%3D%3D';
 
