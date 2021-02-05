@@ -12,7 +12,7 @@ function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
      /**
      * Format date string to any format supported by dayjs
      */
-    prettyDate(dateString, format) {
+    prettyDate(dateString, format?) {
       let date = this._convertDate(dateString);
       return (!date) ? '' : this._utcDate(date, format);
     }
