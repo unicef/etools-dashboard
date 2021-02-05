@@ -15,6 +15,9 @@
     "node_modules/web-animations-js/web-animations-next-lite.min.js",
     "node_modules/dayjs/dayjs.min.js",
     "node_modules/dayjs/plugin/utc.js",
+    "node_modules/dayjs/plugin/isBetween.js",
+    "node_modules/dayjs/plugin/isSameOrBefore.js",
+    "node_modules/dayjs/plugin/isSameOrAfter.js"
     "manifest.json"
   ],
   "lint": {
