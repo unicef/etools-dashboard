@@ -23,12 +23,12 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
 
     @property({type: Object})
     public _refreshInterval: object = null;
-    
+
     @property({type: Boolean})
     private fireDataLoaded = false;
 
     @property({type: String})
-    private endpointName: string;
+    endpointName: string;
 
     public static get observers(): string[] {
       return [
@@ -118,3 +118,5 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
   }
   return DataElementMixinClass;
 }
+
+export default DataElementMixin;
