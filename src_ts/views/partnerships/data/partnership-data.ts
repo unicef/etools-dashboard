@@ -12,13 +12,10 @@ import includes from 'lodash-es/includes'
 
 
 @customElement('partnership-data')
-class PartnershipData extends DateMixin(DataElementMixin(PolymerElement)) {
+export class PartnershipData extends DateMixin(DataElementMixin(PolymerElement)) {
 
     @property({type: Boolean})
     active = false;
-
-    @property({type: String})
-    endpointName = 'csoDashboard';
 
     @property({type: Object})
     currentQuery = null;
@@ -40,6 +37,8 @@ class PartnershipData extends DateMixin(DataElementMixin(PolymerElement)) {
 
     @property({type: Boolean, notify: true})
     presetsLoaded = false;
+
+    endpointName = 'csoDashboard';
 
     @property({type: Array,  notify: true})
     presetFilters: [

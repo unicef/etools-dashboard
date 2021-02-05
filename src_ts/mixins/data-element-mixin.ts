@@ -28,7 +28,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
     private fireDataLoaded = false;
 
     @property({type: String})
-    private endpointName: string;
+    endpointName: string;
 
     public static get observers(): string[] {
       return [

@@ -9,13 +9,10 @@ import includes from 'lodash-es/includes'
 
 
 @customElement('partnership-overview-data')
-class PartnershipOverviewData extends DataElementMixin(PolymerElement) {
+export class PartnershipOverviewData extends DataElementMixin(PolymerElement) {
 
     @property({type: Boolean})
     active = false;
-
-    @property({type: String})
-    endpointName = 'partnershipsOverview';
 
     @property({type: Object})
     currentQuery = null;
@@ -43,6 +40,8 @@ class PartnershipOverviewData extends DataElementMixin(PolymerElement) {
 
     @property({type: String})
     displayOrder = 'asc';
+
+    endpointName = 'partnershipsOverview';
 
     @property({type: Array,  notify: true})
     presetFilters: [
