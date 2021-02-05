@@ -1,6 +1,6 @@
 import {merge} from 'ramda';
 
-
+// TODO - remove what's not used
 const initial = {
   // countryProgrammes: [],
   offices: [],
@@ -70,26 +70,6 @@ export const staticDataReducer = (state = initial, action) => {
     case 'SET_AGREEMENTS':
       return merge(state, {
         agreements: action.agreements
-      });
-
-    case 'SET_INTERVENTIONS':
-      return merge(state, {
-        interventions: action.interventions
-      });
-
-    case 'SET_GRANTS':
-      return merge(state, {
-        grants: action.grants
-      });
-
-    case 'SET_DONORS':
-      return merge(state, {
-        donors: action.donors
-      });
-
-    case 'SET_RESULTS':
-      return merge(state, {
-        results: action.results
       });
 
     case 'SET_CLUSTERS':
