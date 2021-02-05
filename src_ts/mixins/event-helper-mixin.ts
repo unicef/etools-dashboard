@@ -1,5 +1,5 @@
 import {PolymerElement} from '@polymer/polymer';
-import {Constructor, GenericObject} from '../typings/globals.types';
+import {Constructor} from '../typings/globals.types';
 
 /**
  * @polymer
