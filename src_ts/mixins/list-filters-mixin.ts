@@ -2,6 +2,7 @@ import {property} from '@polymer/decorators';
 import {PolymerElement} from '@polymer/polymer';
 import isEmpty from 'lodash-es/isEmpty';
 import {Constructor} from '../typings/globals.types';
+import DatePickerLite from '@unicef-polymer/etools-date-time/datepicker-lite';
 declare const dayjs: any;
 
 /**
@@ -95,7 +96,7 @@ function ListFiltersMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
      * Check filter type. Filter type can be:
      *  - 'dropdown'(dropdown created using polymer catalog elements)
      *  - 'esmm' (etools-searchable-multiselection-menu)
-     *  - 'datepicker' (etools-datepicker)
+     *  - 'datepicker' (datepicker-lite)
      */
     filterTypeIs(expentedType, checkedTypeValue) {
       return expentedType === checkedTypeValue;
@@ -126,12 +127,12 @@ function ListFiltersMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
     }
 
     // change event for a etools-datepicker filter
-    _filterDateHasChanged(event) {
-      if (!event.detail.jsonDate) {
+    _filterDateHasChanged(event: CustomEvent) {
+      if (!event.detail.date) {
         return;
       }
-      let filterPath = event.target.getAttribute('data-filter-path');
-      let selectedDate = new Date(event.detail.jsonDate);
+      let filterPath = (event.target as DatePickerLite).getAttribute('data-filter-path')!;
+      const selectedDate = new Date(event.detail.date);
       this.set(filterPath, dayjs(selectedDate).format('YYYY-MM-DD'));
     }
 

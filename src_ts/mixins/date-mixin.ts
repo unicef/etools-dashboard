@@ -64,28 +64,6 @@ function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
       return date ? this._getDateWithoutTimezoneOffset(date) : new Date();
     }
 
-    prepareDatepickerDate(dateString) {
-      let date = this._convertDate(dateString);
-      if (!date) {
-        return new Date();
-      }
-      return this._getDateWithoutTimezoneOffset(date);
-    }
-
-    /*
-     * Open input field assigned(as prefix or suffix) etools-datepicker on tap.
-     * Make sure you also have the data-selector attribute set on the input field.
-     */
-    openDatePicker(event) {
-      let id = event.target.getAttribute('data-selector');
-      if (id) {
-        let datePicker: any = this.shadowRoot.querySelector('#' + id);
-        if (datePicker) {
-          datePicker.open = true;
-        }
-      }
-    }
-
     /*
      * Diff between 2 dates
      */
