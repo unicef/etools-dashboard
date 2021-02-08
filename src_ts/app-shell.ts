@@ -16,6 +16,7 @@ import {property, customElement} from '@polymer/decorators';
 import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
 import '@unicef-polymer/etools-loading/etools-loading.js';
+import {sendRequest} from '@unicef-polymer/etools-ajax/etools-ajax-request';
 import 'etools-piwik-analytics/etools-piwik-analytics.js';
 import './styles/buttons-styles';
 import './styles/page-layout-styles';
@@ -27,6 +28,10 @@ import {UserProfileDataMixin} from './mixins/user-profile-data-mixin';
 import './components/page-header';
 import './components/page-footer';
 import {Config, BASE_URL} from './config/config';
+import {Endpoints} from './endpoints/endpoints';
+import {store} from './redux/store';
+import {setOffices, setSectors, setStatic} from './redux/actions/static-data';
+
 setRootPath(BASE_URL);
 
 @customElement('app-shell')
@@ -137,7 +142,7 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
               </div>
             </div>
           </div>
-          
+
           <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="personalized" role="main">
             <view-personalized user="[[user]]" class="page" name="personalized" route="{{route}}"></view-personalized>
             <view-hact name="hact" user="[[user]]"></view-hact>
@@ -214,6 +219,25 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
 
   public _removeListeners(): void {
     this.removeEventListener('forbidden', this._onForbidden);
+  }
+
+  connectedCallback() {
+    this.getAppStaticData();
+  }
+
+  getAppStaticData() {
+    this.getSectors();
+    this.getDropdownsStaticData();
+    this.getOffices();
+  }
+  getSectors() {
+    sendRequest({endpoint: Endpoints.sectors}).then(resp => store.dispatch(setSectors(resp)));
+  }
+  getDropdownsStaticData() {
+    sendRequest({endpoint: Endpoints.static}).then(resp => store.dispatch(setStatic(resp)));
+  }
+  getOffices() {
+    sendRequest({endpoint: Endpoints.offices}).then(resp => store.dispatch(setOffices(resp)));
   }
 
   public disconnectedCallback(): void {
