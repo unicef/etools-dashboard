@@ -17,7 +17,7 @@
     "node_modules/dayjs/plugin/utc.js",
     "node_modules/dayjs/plugin/isBetween.js",
     "node_modules/dayjs/plugin/isSameOrBefore.js",
-    "node_modules/dayjs/plugin/isSameOrAfter.js"
+    "node_modules/dayjs/plugin/isSameOrAfter.js",
     "manifest.json"
   ],
   "lint": {

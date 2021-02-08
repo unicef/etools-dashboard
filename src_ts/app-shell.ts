@@ -222,6 +222,7 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
   }
 
   connectedCallback() {
+    super.connectedCallback();
     this.getAppStaticData();
   }
 
