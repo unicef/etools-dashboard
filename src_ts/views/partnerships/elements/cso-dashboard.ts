@@ -39,13 +39,14 @@ import {PartnershipsStyles} from '../../../styles/partnerships-styles';
 import {connect} from 'pwa-helpers/connect-mixin';
 import {RootState, store} from '../../../redux/store';
 import get from 'lodash-es/get';
+import {EndpointsMixin} from '../../../endpoints/endpoints-mixin';
 
 
 @customElement('cso-dashboard')
 export class CsoDashboard extends connect(store)(CommonGeneralMixin(
   ListFiltersMixin(
     PaginationWithFiltersMixin(
-      DateMixin(PolymerElement))))) {
+      DateMixin(EndpointsMixin(PolymerElement)))))) {
 
   static get template() {
     return html`

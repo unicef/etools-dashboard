@@ -30,5 +30,10 @@ export const Endpoints = {
     template: '/api/v2/partners/dashboard/',
     exp: 6 * 60 * 60 * 1000, // 6h
     cacheTableName: 'partnershipsOverview'
+  },
+  csoDashboard: {
+    template: '/api/v2/interventions/partnership-dash/',
+    exp: 6 * 60 * 60 * 1000, // 6h
+    cacheTableName: 'csoDashboard'
   }
 };
