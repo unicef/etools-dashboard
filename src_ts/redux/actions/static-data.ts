@@ -1,5 +1,5 @@
-import dayjs from 'dayjs';
 import {compose, map, head, propOr, pick, range, isEmpty} from 'ramda';
+declare const dayjs: any;
 
 export const setCountryProgrammes = (data = []) => {
   return {
