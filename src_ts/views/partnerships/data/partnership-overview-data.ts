@@ -3,10 +3,7 @@ import {customElement, property} from '@polymer/decorators';
 import DataElementMixin from '../../../mixins/data-element-mixin';
 import {fireEvent} from '../../../components/utils/fire-custom-event';
 import Dexie from 'dexie';
-import intersection from 'lodash-es/intersection';
-import keys from 'lodash-es/keys';
-import includes from 'lodash-es/includes'
-
+import {intersection, equals, any, keys, contains} from 'ramda';
 
 @customElement('partnership-overview-data')
 export class PartnershipOverviewData extends DataElementMixin(PolymerElement) {
@@ -53,9 +50,9 @@ export class PartnershipOverviewData extends DataElementMixin(PolymerElement) {
 
     @property({type: Object})
     predicates = {
-      searchString: (qs, partner) => qs.length ? includes(qs.toLowerCase(), partner.name.toLowerCase()) || includes(qs.toLowerCase(), partner.vendor_number) : true,
+      searchString: (qs, partner) => qs.length ? contains(qs.toLowerCase(), partner.name.toLowerCase()) || contains(qs.toLowerCase(), partner.vendor_number) : true,
       sectors: (sectors, partner) => sectors.length && partner.sections ? !!intersection(sectors, partner.sections.split('|')).length : true,
-      name: (name, partner) => name.length ? name.includes(partner) : true,
+      name: (name, partner) => name.length ? any(equals(partner), name) : true,
       outstanding: (outstanding, partner) => outstanding ? !!parseInt(partner.outstanding_dct_amount_more_than_9_months_usd) : true,
       partnerType: (type, partner) => type.length ? !!intersection(type, partner.partner_type).length : true
     };

@@ -4,12 +4,7 @@ import DataElementMixin from '../../../mixins/data-element-mixin';
 import DateMixin from '../../../mixins/date-mixin';
 import {fireEvent} from '../../../components/utils/fire-custom-event';
 import Dexie from 'dexie';
-import isEmpty from 'lodash-es/isEmpty';
-import intersection from 'lodash-es/intersection';
-import trim from 'lodash-es/trim';
-import keys from 'lodash-es/keys';
-import includes from 'lodash-es/includes'
-
+import {isEmpty, intersection, trim, keys, contains} from 'ramda';
 
 @customElement('partnership-data')
 export class PartnershipData extends DateMixin(DataElementMixin(PolymerElement)) {
@@ -54,12 +49,12 @@ export class PartnershipData extends DateMixin(DataElementMixin(PolymerElement))
     predicates = {
       searchString: (qs, partner) => {
         return qs.length && partner.partner_vendor_number ?
-          includes(qs.toLowerCase(), partner.partner_name.toLowerCase()) || includes(qs.toLowerCase(), partner.partner_vendor_number) :
-            qs.length ? includes(qs.toLowerCase(), partner.partner_name.toLowerCase()) : true;
+          contains(qs.toLowerCase(), partner.partner_name.toLowerCase()) || contains(qs.toLowerCase(), partner.partner_vendor_number) :
+            qs.length ? contains(qs.toLowerCase(), partner.partner_name.toLowerCase()) : true;
       },
       sectors: (sectors, partner)=> sectors.length ? !!intersection(sectors, [trim(partner.sections)]).length : true,
       offices: (offices, partner)=> offices.length ? !!intersection(offices, partner.offices_names.split(',')).length : true,
-      status: (status, partner)=> status.length ? (includes(partner.status, status) ? true : false) : true,
+      status: (status, partner)=> status.length ? (contains(partner.status, status) ? true : false) : true,
       startAfterDate: (date, partner)=> isEmpty(partner.start) ? true : !isEmpty(date) ? this.prepareDate(partner.start) > this.prepareDate(date): true,
       endBeforeDate: (date, partner)=> isEmpty(partner.end) ? true : !isEmpty(date) ? this.prepareDate(partner.end) < this.prepareDate(date) : true,
       startBeforeDate: (date, partner)=> isEmpty(partner.start) ? true : !isEmpty(date) ? this.prepareDate(partner.start) < this.prepareDate(date) : true,
