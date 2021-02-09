@@ -140,7 +140,7 @@ export class ViewPartnerships extends CommonGeneralMixin(PolymerElement) {
     } else if (tab === 'cso') {
       this.set('csoActive', true);
       this.set('overviewActive', false);
-      this.set('csvDownloadUrl', this.csvDownloadUrlCso)
+      this.set('csvDownloadUrl', this.csvDownloadUrlCso);
       this.$.overview.classList.add('dark-button');
       this.$.csoDash.classList.add('light-button');
     }
