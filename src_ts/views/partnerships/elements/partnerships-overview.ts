@@ -30,13 +30,16 @@ import '../../../components/data-table/data-table-header';
 import '../../../components/data-table/data-table-column';
 import '../../../components/data-table/data-table-row';
 import '../../../components/data-table/data-table-footer';
+import {RootState, store} from '../../../redux/store';
+import {connect} from 'pwa-helpers/connect-mixin';
+import get from 'lodash-es/get';
 declare const dayjs: any;
 
 @customElement('partnerships-overview')
-export class PartnershipsOverview extends CommonGeneralMixin(
+export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
   ListFiltersMixin(
     PaginationWithFiltersMixin(
-      DateMixin(EndpointsMixin(PolymerElement))))) {
+      DateMixin(EndpointsMixin(PolymerElement)))))) {
 
   static get template() {
     return html`
@@ -425,6 +428,11 @@ export class PartnershipsOverview extends CommonGeneralMixin(
       '_updateUrl(qs, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded, initComplete, selectedSectors, selectedPartners, selectedOffices, selectedOutstanding, selectedTypes, active)',
       '_init(active, sectors, requiredDataLoaded)'
     ];
+  }
+
+  stateChanged(state: RootState) {
+    this.sectors = state.sectors;
+    this.partnerTypes = get(state, 'static.partner_types');
   }
 
   _init(active, sectors, requiredDataLoaded) {

@@ -120,7 +120,7 @@ export class ViewPartnerships extends CommonGeneralMixin(PolymerElement) {
   @property({type: Boolean, notify: true})
   overviewActive = false;
 
-  @property({type: Object,  notify: true})
+  @property({type: Object, notify: true})
   route!: GenericObject;
 
   static get observers(): string[] {

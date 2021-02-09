@@ -10,6 +10,12 @@ declare global {
   }
 }
 
+export interface RootState {
+  offices: [],
+  sectors: [],
+  static: null
+}
+
 
 // Sets up a Chrome extension for time travel debugging.
 // See https://github.com/zalmoxisus/redux-devtools-extension for more information.

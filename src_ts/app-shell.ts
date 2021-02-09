@@ -147,7 +147,8 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
           <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="personalized" role="main">
             <view-personalized user="[[user]]" class="page" name="personalized" route="{{route}}"></view-personalized>
             <view-hact name="hact" user="[[user]]"></view-hact>
-            <view-partnerships class="page"
+            <view-partnerships route="{{subroute}}"
+                               class="page"
                                user="[[user]]"
                                name="partnerships"
                                csv-download-url="{{csvUrl}}">
