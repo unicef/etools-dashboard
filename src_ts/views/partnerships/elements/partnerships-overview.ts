@@ -1,6 +1,17 @@
 /* eslint-disable max-len */
 import {customElement, property} from '@polymer/decorators';
 import {html, PolymerElement} from '@polymer/polymer';
+import '@polymer/paper-icon-button/paper-icon-button';
+import '@polymer/paper-input/paper-input';
+import '@polymer/paper-item/paper-icon-item';
+import '@polymer/paper-toggle-button/paper-toggle-button';
+import '@polymer/paper-menu-button/paper-menu-button';
+import '@polymer/paper-tooltip/paper-tooltip';
+import '@polymer/paper-button/paper-button';
+import '@polymer/iron-icon/iron-icon';
+import '@polymer/paper-listbox/paper-listbox';
+import '@polymer/iron-flex-layout/iron-flex-layout';
+import '@unicef-polymer/etools-dropdown/etools-dropdown-multi';
 import CommonGeneralMixin from '../../../mixins/common-general-mixin';
 import DateMixin from '../../../mixins/date-mixin';
 import ListFiltersMixin from '../../../mixins/list-filters-mixin';
@@ -15,6 +26,10 @@ import {Debouncer} from '@polymer/polymer/lib/utils/debounce';
 import {timeOut} from '@polymer/polymer/lib/utils/async';
 import {EndpointsMixin} from '../../../endpoints/endpoints-mixin';
 import '../data/partnership-overview-data';
+import '../../../components/data-table/data-table-header';
+import '../../../components/data-table/data-table-column';
+import '../../../components/data-table/data-table-row';
+import '../../../components/data-table/data-table-footer';
 declare const dayjs: any;
 
 @customElement('partnerships-overview')

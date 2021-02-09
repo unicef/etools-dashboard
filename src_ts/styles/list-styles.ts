@@ -27,7 +27,8 @@ export const ListStyles = html`<style>
   }
 
   .listControls {
-    @apply --layout-horizontal;
+    display: flex !important;
+    flex-direction: row;
     padding-top: 8px;
     padding-bottom: 8px;
     min-height: 86px;
@@ -38,8 +39,9 @@ export const ListStyles = html`<style>
   .fixed-controls,
   .wrap-controls .filter,
   .controls-wrapper {
-    @apply --layout-horizontal;
-    @apply --layout-center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 
   .wrap-controls, .wrap {

@@ -625,7 +625,7 @@ export class CsoDashboard extends CommonGeneralMixin(
           propName: 'endAfterDate',
           xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
         }
-      ];
+    ];
 
       _updateFiltersDebouncer!: Debouncer | null;
 
