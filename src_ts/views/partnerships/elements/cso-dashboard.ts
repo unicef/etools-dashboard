@@ -117,13 +117,10 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
       .status {
         padding-left: 8px;
       }
-
       .blocked-partner-container {
         background-color: #FFA149;
         @apply --layout-vertical;
         @apply --layout-center-justified;
-        -webkit-border-radius: 50%;
-        -moz-border-radius: 50%;
         border-radius: 50%;
       }
 
@@ -133,8 +130,8 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
         bottom: 3px;
       }
 
-      .delete-partner:after {
-        content: "\00d7";
+      .delete-partner::after {
+        content: "\\00d7";
         color: rgba(255, 255, 255, 1);
         position: absolute;
         z-index: 1;
