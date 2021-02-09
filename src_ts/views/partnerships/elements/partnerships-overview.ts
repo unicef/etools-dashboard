@@ -14,6 +14,7 @@ import {identity, compose, map, join, prop, isEmpty} from 'ramda';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce';
 import {timeOut} from '@polymer/polymer/lib/utils/async';
 import {EndpointsMixin} from '../../../endpoints/endpoints-mixin';
+import '../data/partnership-overview-data';
 declare const dayjs: any;
 
 @customElement('partnerships-overview')

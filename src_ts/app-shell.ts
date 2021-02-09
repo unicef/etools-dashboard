@@ -31,6 +31,7 @@ import {Config, BASE_URL} from './config/config';
 import {Endpoints} from './endpoints/endpoints';
 import {store} from './redux/store';
 import {setOffices, setSectors, setStatic} from './redux/actions/static-data';
+import './config/dexie-db-config';
 
 setRootPath(BASE_URL);
 
