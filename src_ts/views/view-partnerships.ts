@@ -159,8 +159,8 @@ export class ViewPartnerships extends CommonGeneralMixin(PolymerElement) {
   }
 
   _toggleDashView(_target) {
-    let pages = this.$.partnershipsPages as IronPagesElement;
-    pages.selectNext();
+    let ironPages = this.$.partnershipsPages as IronPagesElement;
+    ironPages.selectNext();
   }
 }
 

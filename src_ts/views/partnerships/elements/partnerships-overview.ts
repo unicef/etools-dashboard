@@ -11,6 +11,7 @@ import '@polymer/paper-button/paper-button';
 import '@polymer/iron-icon/iron-icon';
 import '@polymer/paper-listbox/paper-listbox';
 import '@polymer/iron-flex-layout/iron-flex-layout';
+import '@polymer/iron-icons/maps-icons';
 import '@unicef-polymer/etools-dropdown/etools-dropdown-multi';
 import CommonGeneralMixin from '../../../mixins/common-general-mixin';
 import DateMixin from '../../../mixins/date-mixin';
