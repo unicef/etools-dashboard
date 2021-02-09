@@ -17,7 +17,7 @@ import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
 import {timeOut} from '@polymer/polymer/lib/utils/async.js';
 
 import '@unicef-polymer/etools-dropdown/etools-dropdown-multi';
-import '@unicef-polymer/etools-datepicker/etools-datepicker-button';
+import '@unicef-polymer/etools-date-time/datepicker-lite';
 import '@unicef-polymer/etools-info-tooltip/etools-info-tooltip';
 
 import {GenericObject} from '../../../typings/globals.types';
@@ -248,20 +248,19 @@ export class CsoDashboard extends CommonGeneralMixin(
           </template>
 
           <!-- date pickers -->
-          <template is="dom-if"
-                    if="[[filterTypeIs('datepicker', filter.type)]]">
+          <template is="dom-if" if="[[filterTypeIs('datepicker', filter.type)]]">
             <div class="filter">
-              <etools-date-input id$="datepicker_[[filter.path]]"
-                                label="[[filter.filterName]]"
-                                placeholder="&#8212;"
-                                value="{{filter.dateSelected}}"
-                                format="D MMM YYYY"
-                                on-date-has-changed="_filterDateHasChanged"
-                                data-filter-path$="[[filter.path]]"
-                                fire-date-has-changed
-                                no-init
-                                show-clear-btn>
-              </etools-date-input>
+              <datepicker-lite
+                id$="datepicker_[[filter.path]]"
+                label="[[filter.filterName]]"
+                placeholder="&#8212;"
+                value="{{filter.dateSelected}}"
+                on-date-has-changed="_filterDateHasChanged"
+                data-filter-path$="[[filter.path]]"
+                fire-date-has-changed
+                selected-date-display-format="D MMM YYYY"
+              >
+              </datepicker-lite>
             </div>
           </template>
         </template>

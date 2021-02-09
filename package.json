@@ -47,6 +47,7 @@
     "@unicef-polymer/etools-behaviors": "^3.0.1",
     "@unicef-polymer/etools-loading": "^4.0.1",
     "@unicef-polymer/etools-profile-dropdown": "^4.0.1-rc.1",
+    "@unicef-polymer/etools-date-time": "^1.0.5",
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "child_process": "^1.0.2",
     "cryptiles": ">=4.1.2",
