@@ -40,12 +40,12 @@ export class PartnershipOverviewData extends DataElementMixin(PolymerElement) {
 
     endpointName = 'partnershipsOverview';
 
-    @property({type: Array,  notify: true})
-    presetFilters: [
-      { total: 0, id: '1', title: 'IPs with no recent Programmatic Visits (in the past 180 days)', status: '', filteredPartnershipsOverview: [] },
-      { total: 0, id: '2', title: 'IPs with no Programmatic Visits', status: '', filteredPartnershipsOverview: [] },
-      { total: 0, id: '3', title: 'IPs requiring new PCA in the coming CP', status: '', filteredPartnershipsOverview: [] },
-      { total: 0, id: '4', title: 'IPs with active PD without a signed PCA', status: '', filteredPartnershipsOverview: [] }
+    @property({type: Array, notify: true})
+    presetFilters = [
+      {total: 0, id: '1', title: 'IPs with no recent Programmatic Visits (in the past 180 days)', status: '', filteredPartnershipsOverview: []},
+      {total: 0, id: '2', title: 'IPs with no Programmatic Visits', status: '', filteredPartnershipsOverview: []},
+      {total: 0, id: '3', title: 'IPs requiring new PCA in the coming CP', status: '', filteredPartnershipsOverview: []},
+      {total: 0, id: '4', title: 'IPs with active PD without a signed PCA', status: '', filteredPartnershipsOverview: []}
     ];
 
     @property({type: Object})
@@ -59,17 +59,17 @@ export class PartnershipOverviewData extends DataElementMixin(PolymerElement) {
 
     createPresetFilters(results) {
       return [
-        results.clone().filter((partner) => partner.alert_no_recent_pv),
-        results.clone().filter((partner) => partner.alert_no_pv),
-        results.clone().filter((partner) => partner.alert_pca_required),
-        results.clone().filter((partner) => partner.alert_active_pd_for_ended_pca)
+        results.clone().filter(partner => partner.alert_no_recent_pv),
+        results.clone().filter(partner => partner.alert_no_pv),
+        results.clone().filter(partner => partner.alert_pca_required),
+        results.clone().filter(partner => partner.alert_active_pd_for_ended_pca)
       ];
     }
 
     query(params) {
-      fireEvent(this, 'global-loading', { active: true, loadingSource: 'partnership-overview-data' });
+      fireEvent(this, 'global-loading', {active: true, loadingSource: 'partnership-overview-data'});
 
-      const { order, sortBy } = params;
+      const {order, sortBy} = params;
       const predKeys = keys(this.predicates);
       window.EtoolsDashboard.DexieDb.transaction(
         'r',
@@ -84,13 +84,13 @@ export class PartnershipOverviewData extends DataElementMixin(PolymerElement) {
           this.set('presetResults', this.createPresetFilters(queryResultCopy));
           const callPred = (pred, partner) => this.predicates[pred](params[pred], partner);
           queryResult = queryResult.filter(
-            (partner) => predKeys.reduce((acc, pred) => acc && callPred(pred, partner), true)
+            partner => predKeys.reduce((acc, pred) => acc && callPred(pred, partner), true)
           );
           return Dexie.Promise.all([
             queryResult.count(),
             queryResult.sortBy(sortBy || 'name'),
             allPartners.clone().toArray(),
-            ...this.presetResults.map((res) => res.sortBy(sortBy || 'name'))
+            ...this.presetResults.map(res => res.sortBy(sortBy || 'name'))
           ]);
         }).then((countAndResult) => {
           this._setTotalResults(countAndResult[0]);
@@ -106,9 +106,9 @@ export class PartnershipOverviewData extends DataElementMixin(PolymerElement) {
           } else {
             this.set('presetsLoaded', true);
           }
-        }).catch((err) => console.error('Error querying partnerships-overview: ', err))
+        }).catch(err => console.error('Error querying partnerships-overview: ', err))
         .finally(() => {
-          fireEvent(this, 'global-loading', { loadingSource: 'partnership-overview-data' });
+          fireEvent(this, 'global-loading', {loadingSource: 'partnership-overview-data'});
         });
     }
 }

@@ -10,7 +10,6 @@ import '@polymer/paper-item/paper-icon-item';
 import '@polymer/paper-input/paper-input';
 import '@polymer/iron-icon/iron-icon';
 import '@polymer/iron-pages/iron-pages';
-import '@polymer/app-route/app-route';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 import '@polymer/paper-styles/element-styles/paper-material-styles';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce.js';
@@ -37,13 +36,17 @@ import {GridLayoutStyles} from '../../../styles/grid-layout-styles';
 import {ListStyles} from '../../../styles/list-styles';
 import {FilterStyles} from '../../../styles/filter-styles';
 import {PartnershipsStyles} from '../../../styles/partnerships-styles';
+import {connect} from 'pwa-helpers/connect-mixin';
+import {RootState, store} from '../../../redux/store';
+import get from 'lodash-es/get';
+import {EndpointsMixin} from '../../../endpoints/endpoints-mixin';
 
 
 @customElement('cso-dashboard')
-export class CsoDashboard extends CommonGeneralMixin(
+export class CsoDashboard extends connect(store)(CommonGeneralMixin(
   ListFiltersMixin(
     PaginationWithFiltersMixin(
-      DateMixin(PolymerElement)))) {
+      DateMixin(EndpointsMixin(PolymerElement)))))) {
 
   static get template() {
     return html`
@@ -51,134 +54,132 @@ export class CsoDashboard extends CommonGeneralMixin(
       <style include="shared-styles iron-flex page-layout-styles
                     paper-material-styles">
 
-        .no-header-line {
-          --header-bottom-line: none;
-        }
+      .no-header-line {
+        --header-bottom-line: none;
+      }
 
-        span.title {
-          color: var(--accent-color);
-          font-weight: 500;
-        }
+      span.title {
+        color: var(--accent-color);
+        font-weight: 500;
+      }
 
-        data-table-header * {
-          box-sizing: border-box;
-        }
+      data-table-header * {
+        box-sizing: border-box;
+      }
 
-        data-table-row div[slot="row-data"] div:not(:first-child) span,
-        data-table-header div data-table-column data-table-column {
-          justify-content: flex-end;
-        }
+      data-table-row div[slot="row-data"] div:not(:first-child) span,
+      data-table-header div data-table-column data-table-column {
+        justify-content: flex-end;
+      }
 
-        data-table-row div[slot="row-data"] div span {
-          display: flex;
-          align-items: center;
-        }
+      data-table-row div[slot="row-data"] div span {
+        display: flex;
+        align-items: center;
+      }
 
+      data-table-header {
+        height: 95px;
+      }
+
+      .blue-col {
+        background-color: rgb(222, 242, 254);
+        max-width: 100%;
+      }
+
+      .green-col {
+        background-color: rgb(237, 247, 223);
+        max-width: 100%;
+      }
+
+      .justify-end {
+        justify-content: flex-end;
+      }
+
+      .to-date {
+        background-image: -webkit-linear-gradient(135deg, rgb(222, 242, 254) 50%, rgb(237, 247, 223) 50%);
+        height: 48px;
+        max-width: 48px;
+      }
+
+      .red-icon {
+        fill: rgb(231, 66, 45);
+      }
+
+      .blue-icon {
+        fill: rgb(26, 154, 250);
+      }
+
+      data-table-row div div span.ip-pd {
+        display: block;
+        padding-top: 4px;
+        padding-right: 8px;
+      }
+
+      .status {
+        padding-left: 8px;
+      }
+      .blocked-partner-container {
+        background-color: #FFA149;
+        @apply --layout-vertical;
+        @apply --layout-center-justified;
+        border-radius: 50%;
+      }
+
+      .delete-partner {
+        color: #ea4022;
+        position: relative;
+        bottom: 3px;
+      }
+
+      .delete-partner::after {
+        content: "\\00d7";
+        color: rgba(255, 255, 255, 1);
+        position: absolute;
+        z-index: 1;
+        bottom: 4.5px;
+        width: 12px;
+        height: 12px;
+        left: 5.5px;
+        font-weight: bold;
+        font-size: xx-small;
+      }
+
+      .blocked-partner-container,
+      .delete-partner {
+        height: 16px;
+        width: 16px;
+        flex-basis: auto;
+        align-items: center;
+      }
+
+      iron-icon.blocked-partner {
+        color: rgba(255, 255, 255, 1);
+        height: 12px;
+        width: 12px;
+      }
+
+      .title {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .partner-icons-group {
+        display: inline-flex;
+      }
+
+      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
         data-table-header {
-          height: 95px;
+          height: 110px;
+          padding-bottom: 0;
         }
 
-        .blue-col {
-          background-color: rgb(222, 242, 254);
-          max-width: 100%;
-        }
-
-        .green-col {
-          background-color: rgb(237, 247, 223);
-          max-width: 100%;
-        }
-
-        .justify-end {
-          justify-content: flex-end;
-        }
-
-        .to-date {
-          background-image: -webkit-linear-gradient(135deg, rgb(222, 242, 254) 50%, rgb(237, 247, 223) 50%);
+        div.paper-material.listControls {
           height: 48px;
-          max-width: 48px;
         }
+      }
 
-        .red-icon {
-          fill: rgb(231, 66, 45);
-        }
-
-        .blue-icon {
-          fill: rgb(26, 154, 250);
-        }
-
-        data-table-row div div span.ip-pd {
-          display: block;
-          padding-top: 4px;
-          padding-right: 8px;
-        }
-
-        .status {
-          padding-left: 8px;
-        }
-
-        .blocked-partner-container {
-          background-color: #FFA149;
-          @apply --layout-vertical;
-          @apply --layout-center-justified;
-          -webkit-border-radius: 50%;
-          -moz-border-radius: 50%;
-          border-radius: 50%;
-        }
-
-        .delete-partner {
-          color: #ea4022;
-          position: relative;
-          bottom: 3px;
-        }
-
-        .delete-partner:after {
-          content: "\00d7";
-          color: rgba(255, 255, 255, 1);
-          position: absolute;
-          z-index: 1;
-          bottom: 4.5px;
-          width: 12px;
-          height: 12px;
-          left: 5.5px;
-          font-weight: bold;
-          font-size: xx-small;
-        }
-
-        .blocked-partner-container,
-        .delete-partner {
-          height: 16px;
-          width: 16px;
-          flex-basis: auto;
-          align-items: center;
-        }
-
-        iron-icon.blocked-partner {
-          color: rgba(255, 255, 255, 1);
-          height: 12px;
-          width: 12px;
-        }
-
-        .title {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .partner-icons-group {
-          display: inline-flex;
-        }
-
-        @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-          data-table-header {
-            height: 110px;
-            padding-bottom: 0;
-          }
-
-          div.paper-material.listControls {
-            height: 48px;
-          }
-        }
-      </style>
+    </style>
 
     <partnership-data id="partnerships"
                       filtered-partnerships="{{filteredPartnerships}}"
@@ -625,7 +626,14 @@ export class CsoDashboard extends CommonGeneralMixin(
           propName: 'endAfterDate',
           xf: xs => this.prettyDate(xs, 'YYYY-MM-DD')
         }
-      ];
+    ];
+
+
+    stateChanged(state: RootState) {
+      this.sectors = state.sectors;
+      this.offices = state.offices;
+      this.statuses = get(state, 'static.intervention_status');
+    }
 
       _updateFiltersDebouncer!: Debouncer | null;
 

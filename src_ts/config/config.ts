@@ -4,7 +4,8 @@ declare global {
   interface Window {
     EtoolsLogsLevel: string,
     devToolsExtension: GenericObject,
-    EtoolsDashboard: GenericObject
+    EtoolsDashboard: GenericObject,
+    EtoolsRequestCacheDb: any
   }
 }
 

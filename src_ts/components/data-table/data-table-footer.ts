@@ -1,9 +1,9 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element';
 import {customElement, property} from '@polymer/decorators/lib/decorators';
-import '@polymer/paper-listbox';
-import '@polymer/paper-item';
-import '@polymer/paper-dropdown-menu';
-import '@polymer/paper-icon-button';
+import '@polymer/paper-listbox/paper-listbox';
+import '@polymer/paper-item/paper-item';
+import '@polymer/paper-dropdown-menu/paper-dropdown-menu';
+import '@polymer/paper-icon-button/paper-icon-button';
 
 @customElement('data-table-footer')
 export class DataTableFooter extends PolymerElement {
