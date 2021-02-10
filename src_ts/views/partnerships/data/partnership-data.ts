@@ -8,7 +8,7 @@ import isEmpty from 'lodash-es/isEmpty';
 import intersection from 'lodash-es/intersection';
 import trim from 'lodash-es/trim';
 import keys from 'lodash-es/keys';
-import includes from 'lodash-es/includes'
+import includes from 'lodash-es/includes';
 
 
 @customElement('partnership-data')

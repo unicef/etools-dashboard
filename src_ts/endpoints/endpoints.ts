@@ -24,6 +24,16 @@ export const Endpoints = {
   offices: {
     url: '/api/offices/',
     exp: 6 * 60 * 60 * 1000,
-    cachingkey: 'offices'
+    cachingKey: 'offices'
+  },
+  partnershipsOverview: {
+    template: '/api/v2/partners/dashboard/',
+    exp: 6 * 60 * 60 * 1000, // 6h
+    cacheTableName: 'partnershipsOverview'
+  },
+  csoDashboard: {
+    template: '/api/v2/interventions/partnership-dash/',
+    exp: 6 * 60 * 60 * 1000, // 6h
+    cacheTableName: 'csoDashboard'
   }
 };

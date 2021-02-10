@@ -1,6 +1,18 @@
 /* eslint-disable max-len */
 import {customElement, property} from '@polymer/decorators';
 import {html, PolymerElement} from '@polymer/polymer';
+import '@polymer/paper-icon-button/paper-icon-button';
+import '@polymer/paper-input/paper-input';
+import '@polymer/paper-item/paper-icon-item';
+import '@polymer/paper-toggle-button/paper-toggle-button';
+import '@polymer/paper-menu-button/paper-menu-button';
+import '@polymer/paper-tooltip/paper-tooltip';
+import '@polymer/paper-button/paper-button';
+import '@polymer/iron-icon/iron-icon';
+import '@polymer/paper-listbox/paper-listbox';
+import '@polymer/iron-flex-layout/iron-flex-layout';
+import '@polymer/iron-icons/maps-icons';
+import '@unicef-polymer/etools-dropdown/etools-dropdown-multi';
 import CommonGeneralMixin from '../../../mixins/common-general-mixin';
 import DateMixin from '../../../mixins/date-mixin';
 import ListFiltersMixin from '../../../mixins/list-filters-mixin';
@@ -14,13 +26,21 @@ import {identity, compose, map, join, prop, isEmpty} from 'ramda';
 import {Debouncer} from '@polymer/polymer/lib/utils/debounce';
 import {timeOut} from '@polymer/polymer/lib/utils/async';
 import {EndpointsMixin} from '../../../endpoints/endpoints-mixin';
+import '../data/partnership-overview-data';
+import '../../../components/data-table/data-table-header';
+import '../../../components/data-table/data-table-column';
+import '../../../components/data-table/data-table-row';
+import '../../../components/data-table/data-table-footer';
+import {RootState, store} from '../../../redux/store';
+import {connect} from 'pwa-helpers/connect-mixin';
+import get from 'lodash-es/get';
 declare const dayjs: any;
 
 @customElement('partnerships-overview')
-export class PartnershipsOverview extends CommonGeneralMixin(
+export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
   ListFiltersMixin(
     PaginationWithFiltersMixin(
-      DateMixin(EndpointsMixin(PolymerElement))))) {
+      DateMixin(EndpointsMixin(PolymerElement)))))) {
 
   static get template() {
     return html`
@@ -409,6 +429,11 @@ export class PartnershipsOverview extends CommonGeneralMixin(
       '_updateUrl(qs, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded, initComplete, selectedSectors, selectedPartners, selectedOffices, selectedOutstanding, selectedTypes, active)',
       '_init(active, sectors, requiredDataLoaded)'
     ];
+  }
+
+  stateChanged(state: RootState) {
+    this.sectors = state.sectors;
+    this.partnerTypes = get(state, 'static.partner_types');
   }
 
   _init(active, sectors, requiredDataLoaded) {

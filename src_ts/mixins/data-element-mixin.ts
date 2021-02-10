@@ -32,7 +32,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
 
     public static get observers(): string[] {
       return [
-        '_endpointChanged(options.endpoint)',
+        '_endpointChanged(options.endpoint)'
       ];
     }
 

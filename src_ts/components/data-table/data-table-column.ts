@@ -120,7 +120,7 @@ export class DataTableColumn extends PolymerElement {
             <slot></slot>
           </span>
       </div>
-  
+
       <div id="iconWrapper" class="icon-wrapper">
         <iron-icon id="up" icon="arrow-upward"></iron-icon>
         <iron-icon id="down" icon="arrow-downward"></iron-icon>
@@ -153,12 +153,12 @@ export class DataTableColumn extends PolymerElement {
     fireEvent(this, 'sort-changed', {field: this.field, direction: this.direction});
   }
 
-  @observe('headingAlign')
-  _changeHeadingAlign() {
-    if (!isEmpty(this.groupHeading)) {
-      (this.$.heading as any).updateStyles({['group-heading.text-align']: this.headingAlign});
-    }
-  }
+  // @observe('headingAlign')
+  // _changeHeadingAlign() {
+  //   if (!isEmpty(this.groupHeading)) {
+  //     (this.$.heading as any).updateStyles({['group-heading.text-align']: this.headingAlign});
+  //   }
+  // }
 
   @observe('groupHeading')
   @observe('spaceAround')

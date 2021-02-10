@@ -14,6 +14,9 @@ export class ViewPartnerships extends CommonGeneralMixin(PolymerElement) {
   public static get template(): HTMLTemplateElement {
     return html`
     <style include="paper-material-styles">
+      :host {
+        padding: 24px;
+      }
       .view-toggle {
         display: flex;
         justify-content: flex-end;
@@ -117,7 +120,7 @@ export class ViewPartnerships extends CommonGeneralMixin(PolymerElement) {
   @property({type: Boolean, notify: true})
   overviewActive = false;
 
-  @property({type: Object,  notify: true})
+  @property({type: Object, notify: true})
   route!: GenericObject;
 
   static get observers(): string[] {
@@ -137,7 +140,7 @@ export class ViewPartnerships extends CommonGeneralMixin(PolymerElement) {
     } else if (tab === 'cso') {
       this.set('csoActive', true);
       this.set('overviewActive', false);
-      this.set('csvDownloadUrl', this.csvDownloadUrlCso)
+      this.set('csvDownloadUrl', this.csvDownloadUrlCso);
       this.$.overview.classList.add('dark-button');
       this.$.csoDash.classList.add('light-button');
     }
@@ -156,8 +159,8 @@ export class ViewPartnerships extends CommonGeneralMixin(PolymerElement) {
   }
 
   _toggleDashView(_target) {
-    let pages = this.$.partnershipsPages as IronPagesElement;
-    pages.selectNext();
+    let ironPages = this.$.partnershipsPages as IronPagesElement;
+    ironPages.selectNext();
   }
 }
 
