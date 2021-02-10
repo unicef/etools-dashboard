@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
@@ -32,6 +33,15 @@ import {Endpoints} from './endpoints/endpoints';
 import {store} from './redux/store';
 import {setOffices, setSectors, setStatic} from './redux/actions/static-data';
 import './config/dexie-db-config';
+
+declare const dayjs: any;
+declare const dayjs_plugin_utc: any;
+declare const dayjs_plugin_isSameOrBefore: any;
+declare const dayjs_plugin_isBetween: any;
+
+dayjs.extend(dayjs_plugin_utc);
+dayjs.extend(dayjs_plugin_isSameOrBefore);
+dayjs.extend(dayjs_plugin_isBetween);
 
 setRootPath(BASE_URL);
 
