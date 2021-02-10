@@ -62,9 +62,13 @@ export class PartnershipData extends DateMixin(DataElementMixin(PolymerElement))
           contains(qs.toLowerCase(), partner.partner_name.toLowerCase()) || contains(qs.toLowerCase(), partner.partner_vendor_number) :
             qs.length ? contains(qs.toLowerCase(), partner.partner_name.toLowerCase()) : true;
       },
+      status: (status, partner)=> status.length ? (contains(partner.status, status) ? true : false) : true,
+      startAfterDate: (date, partner)=> isEmpty(partner.start) ? true : !isEmpty(date) ? this.prepareDate(partner.start) > this.prepareDate(date): true,
+      endBeforeDate: (date, partner)=> isEmpty(partner.end) ? true : !isEmpty(date) ? this.prepareDate(partner.end) < this.prepareDate(date) : true,
+      startBeforeDate: (date, partner)=> isEmpty(partner.start) ? true : !isEmpty(date) ? this.prepareDate(partner.start) < this.prepareDate(date) : true,
+      endAfterDate: (date, partner)=> isEmpty(partner.end) ? true : !isEmpty(date) ? this.prepareDate(partner.end) > this.prepareDate(date) : true,
       sectors: (sectors, partner)=> sectors.length ? !!intersection(sectors, [trim(partner.sections)]).length : true,
-      offices: (offices, partner)=> offices.length ? !!intersection(offices, partner.offices_names.split(',')).length : true,
-      status: (status, partner)=> status.length ? (contains(partner.status, status) ? true : false) : true
+      offices: (offices, partner)=> offices.length ? !!intersection(offices, partner.offices_names.split(',')).length : true
 
     };
 
