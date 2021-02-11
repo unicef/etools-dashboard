@@ -54,6 +54,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
           overflow: hidden;
           text-overflow: ellipsis;
           padding-right: 8px;
+          color: var(--primary-color);
         }
 
         .map-icon {

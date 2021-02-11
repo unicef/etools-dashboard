@@ -162,6 +162,7 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        color: var(--primary-color);
       }
 
       .partner-icons-group {
