@@ -36,6 +36,7 @@ import {connect} from 'pwa-helpers/connect-mixin';
 import get from 'lodash-es/get';
 declare const dayjs: any;
 
+
 @customElement('partnerships-overview')
 export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
   ListFiltersMixin(
@@ -54,6 +55,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
           overflow: hidden;
           text-overflow: ellipsis;
           padding-right: 8px;
+          color: var(--primary-color);
         }
 
         .map-icon {
@@ -137,18 +139,20 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
           <template is="dom-if"
                     if="[[filterTypeIs('esmm', filter.type)]]">
             <div class="filter esmm">
-              <etools-dropdown-multi label="[[filter.filterName]]"
-                                     placeholder="&#8212;"
-                                     disabled$="[[!filter.selectionOptions.length]]"
-                                     options="[[filter.selectionOptions]]"
-                                     option-value="[[filter.optionValue]]"
-                                     option-label="[[filter.optionLabel]]"
-                                     trigger-value-change-event
-                                     on-etools-selected-items-changed="esmmValueChanged"
-                                     data-filter-path$="[[filter.path]]"
-                                     min-width="300px"
-                                     horizontal-align="left"
-                                     no-dynamic-align>
+              <etools-dropdown-multi
+                    label="[[filter.filterName]]"
+                    placeholder="&#8212;"
+                    disabled$="[[!filter.selectionOptions.length]]"
+                    options="[[filter.selectionOptions]]"
+                    option-value="[[filter.optionValue]]"
+                    option-label="[[filter.optionLabel]]"
+                    selected-values="{{filter.selectedValue}}"
+                    trigger-value-change-event
+                    on-etools-selected-items-changed="esmmValueChanged"
+                    data-filter-path$="[[filter.path]]"
+                    min-width="300px"
+                    horizontal-align="left"
+                    no-dynamic-align>
               </etools-dropdown-multi>
             </div>
           </template>
@@ -172,9 +176,8 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
             filters
           </paper-button>
           <paper-listbox multi slot="dropdown-content" selected-values="[2]">
-            <template is="dom-repeat"
-                      items="[[listFilterOptions]]">
-              <paper-icon-item on-tap="selectFilter">
+            <template is="dom-repeat" items="[[listFilterOptions]]">
+              <paper-icon-item on-tap="selectFilter" selected$="[[item.selected]]">
                 <iron-icon icon="check" slot="item-icon" hidden$="[[!item.selected]]"></iron-icon>
                 [[item.filterName]]
               </paper-icon-item>
@@ -405,7 +408,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
         {
           qName: 'sectors',
           propName: 'selectedSectors',
-          xf: compose(join('|'), map(prop('value')))
+          xf: compose(join('|'))
         },
         {
           qName: 'name',
@@ -420,7 +423,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
         {
           qName: 'partner_types',
           propName: 'selectedTypes',
-          xf: compose(join('|'), map(prop('value')))
+          xf: compose(join('|'))
         }
   ];
 
@@ -448,7 +451,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
     this.set('sortOrder', params.sort ? params.sort : 'asc');
     this.set('orderBy', params.sortBy || '');
     this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
-    this.set('selectedPartners', params.partners ? params.partners: []); // this._setSelectedPartners(params.partners) : []);
+    this.set('selectedPartners', params.partners ? this._setSelectedPartners(params.partners) : []);
     this.set('selectedTypes', params.partner_types ? this._setSelectedTypes(params.partner_types) : []);
     this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px';
     this._initListFilters();
@@ -466,7 +469,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
           optionValue: 'id',
           optionLabel: 'name',
           selectionOptions: this.allPartners,
-          alreadySelected: [],
+          selectedValue: [],
           path: 'selectedPartners',
           selected: false
         },
@@ -476,7 +479,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
           optionValue: 'value',
           optionLabel: 'label',
           selectionOptions: this.sectors,
-          alreadySelected: [],
+          selectedValue: [],
           path: 'selectedSectors',
           selected: false
         },
@@ -486,7 +489,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
         //   optionValue: 'id',
         //   optionLabel: 'name',
         //   selectionOptions: this.offices,
-        //   alreadySelected: [],
+        //   selectedValue: [],
         //   path: 'selectedOffices',
         //   selected: false
         // },
@@ -502,7 +505,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
           optionValue: 'value',
           optionLabel: 'label',
           selectionOptions: this.partnerTypes,
-          alreadySelected: [],
+          selectedValue: [],
           path: 'selectedTypes',
           selected: false
         }
@@ -516,15 +519,15 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
   _updateSelectedFiltersValues() {
     this._updateFiltersDebouncer = Debouncer.debounce(
       this._updateFiltersDebouncer,
-      timeOut.after(20), () => {
+      timeOut.after(100), () => {
       let filtersValues = [
         {
           filterName: 'Section/Cluster',
-          selectedValue: map(prop('value'), this.selectedSectors)
+          selectedValue: this.selectedSectors
         },
         {
           filterName: 'Partner Name',
-          selectedValue: map(prop('name'), this.selectedPartners)
+          selectedValue: this.selectedPartners
         },
         {
           filterName: 'Outstanding DCT >9?',
@@ -532,7 +535,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
         },
         {
           filterName: 'Partner Type',
-          selectedValue: map(prop('value'), this.selectedTypes)
+          selectedValue: this.selectedTypes
         }
       ];
       this.updateShownFilters(filtersValues);
@@ -562,6 +565,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
     if ( !this.active || !this.initComplete || !this.requiredDataLoaded) {
       return;
     }
+
     const qs = this.buildQueryString();
     const currentRoute = this.route.prefix + this.route.path;
     if (qs !== null) {
@@ -598,7 +602,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
   _filterPartnershipsOverviewData() {
     this.$.partnershipsOverview.query({
       searchString: this.qs,
-      sectors: map(prop('label'), this.selectedSectors),
+      sectors: this._labelsToValues(this.sectors, this.selectedSectors),
       name: this.selectedPartners,
       // costCentre: this.selectedOffices,
       outstanding: this.selectedOutstanding,
@@ -606,8 +610,15 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
       order: this.sortOrder,
       pageSize: this.pageSize,
       pageNumber: this.pageNumber,
-      partnerType: map(prop('label'), this.selectedTypes)
+      partnerType: this.selectedTypes
     });
+  }
+
+  _labelsToValues(arrData: any[], arrSelected: any[]) {
+    if(!Array.isArray(arrSelected) || !arrSelected.length) {
+      return [];
+    }
+    return arrData.filter(x => arrSelected.includes(x.value)).map(x => x.label);
   }
 
   _requiredDataLoaded(event) {
@@ -625,7 +636,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
   _setSelectedSectors(sectorsStr) {
     const sectorsArr = sectorsStr.split('|');
     if (!isEmpty(sectorsArr)) {
-      return this.sectors.filter(s => sectorsArr.indexOf(s.value) > -1);
+      return this.sectors.filter(s => sectorsArr.includes(String(s.value))).map(x => x.value);
     }
     return [];
   }
@@ -633,7 +644,15 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
   _setSelectedTypes(typesStr) {
     const typesArr = typesStr.split('|');
     if (!isEmpty(typesArr)) {
-      return this.partnerTypes.filter(s => typesArr.indexOf(s.value) > -1);
+      return this.partnerTypes.filter(s => typesArr.includes(String(s.value))).map(x => x.value);
+    }
+    return [];
+  }
+
+  _setSelectedPartners(partnersStr) {
+    const partnersArr = partnersStr.split('|');
+    if (!isEmpty(partnersArr)) {
+      return this.allPartners.filter((s) => partnersArr.includes(s.name));
     }
     return [];
   }

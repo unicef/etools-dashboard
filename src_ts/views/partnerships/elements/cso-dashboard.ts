@@ -237,7 +237,7 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
                                     options="[[filter.selectionOptions]]"
                                     option-value="[[filter.optionValue]]"
                                     option-label="[[filter.optionLabel]]"
-                                    selected-values="[[filter.alreadySelected]]"
+                                    selected-values="[[filter.selectedValue]]"
                                     trigger-value-change-event
                                     on-etools-selected-items-changed="esmmValueChanged"
                                     data-filter-path$="[[filter.path]]"

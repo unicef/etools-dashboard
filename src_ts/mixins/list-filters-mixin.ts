@@ -3,6 +3,7 @@ import {PolymerElement} from '@polymer/polymer';
 import isEmpty from 'lodash-es/isEmpty';
 import {Constructor} from '../typings/globals.types';
 import DatePickerLite from '@unicef-polymer/etools-date-time/datepicker-lite';
+import {EtoolsDropdownMultiEl} from '@unicef-polymer/etools-dropdown/etools-dropdown-multi';
 declare const dayjs: any;
 
 /**
@@ -72,7 +73,7 @@ function ListFiltersMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
       for (let i = 0; i < this.selectedFilters.length; i++) {
         if (this.selectedFilters[i].filterName === filterName) {
           selectedFilterIndex = i;
-          this.selectedFilters[i].alreadySelected = null;
+          this.selectedFilters[i].selectedValue = null;
           break;
         }
       }
@@ -104,8 +105,9 @@ function ListFiltersMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
 
     // 'esmm' (etools-searchable-multiselection-menu) filter value changed
     esmmValueChanged(event) {
-      let filterPath = event.target.getAttribute('data-filter-path');
-      let filterVal = event.detail.selectedItems;
+      const dropdownMultiEl = event.target as EtoolsDropdownMultiEl;
+      const filterPath = dropdownMultiEl.getAttribute('data-filter-path')!;
+      const filterVal = event.detail.selectedItems.map((v: any) => v[dropdownMultiEl.optionValue!]);
       this.set(filterPath, filterVal);
     }
 
@@ -138,65 +140,71 @@ function ListFiltersMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
 
     // update shown filters
     updateShownFilters(filters) {
-      let i;
-      filters = isEmpty(filters) ? [] : filters;
+      filters = Array.isArray(filters) ? filters : [];
       if (filters.length) {
         filters.forEach((filter) => {
           // check available filters
+          const filterObj = this._findInListFilterOptions(filter.filterName);
+          if (!filterObj) {
+            return;
+          }
+
+          const idxInFilterOptions = this.listFilterOptions.findIndex((f) => f.filterName === filter.filterName);
+          if (
+            (filter.selected || this.filterHasSelectedValue(filter.selectedValue, filterObj.type)) &&
+            !this._isAlreadySelected(filterObj)
+          ) {
+            // filter not selected => select filter
+            this.push('selectedFilters', JSON.parse(JSON.stringify(filterObj)));
+            this.set(['listFilterOptions', idxInFilterOptions, 'selected'], true);
+          }
+
           if (this._validateFilterSelectedValue(filter.selectedValue)) {
-            let foundInAvailable = false;
-            if (this.listFilterOptions instanceof Array && this.listFilterOptions.length > 0) {
-              for (i = 0; i < this.listFilterOptions.length; i++) {
-                if (this.listFilterOptions[i].filterName === filter.filterName) {
-                  const type = this.listFilterOptions[i].type;
-                  let filterPath = 'listFilterOptions.' + i;
-                  if (type === 'esmm' || type === 'dropdown') {
-                    // update esmm dropdown selection
-                    this.set(filterPath + '.alreadySelected', filter.selectedValue);
-                  } else if (type === 'datepicker') {
-                    // update datepicker selection
-                    this.set(filterPath + '.dateSelected', filter.selectedValue);
-                  }
-                  this.set(filterPath + '.selected', true);
-                  this._disableFilter(filter, filterPath);
-                  // add filter to selected filters list
-                  this.push('selectedFilters', this.listFilterOptions[i]);
-                  foundInAvailable = true;
-                  break;
-                }
-              }
-            }
-            // if the filter is not in available filters lists,
             // search it in selected filters lists and update selected value
-            if (!foundInAvailable) {
-              if (this.selectedFilters instanceof Array && this.selectedFilters.length > 0) {
-                for (i = 0; i < this.selectedFilters.length; i++) {
-                  if (this.selectedFilters[i].filterName === filter.filterName) {
-                    let filterPath = '';
-                    if (this.selectedFilters[i].type === 'esmm' || this.selectedFilters[i].type === 'dropdown') {
-                      // update esmm dropdown selection
-                      filterPath = 'selectedFilters.' + i;
-                      this.set(filterPath + '.alreadySelected', filter.selectedValue);
-                    } else if (this.selectedFilters[i].type === 'datepicker') {
-                      // update datepicker selection
-                      filterPath = 'selectedFilters.' + i;
-                      this.set(filterPath + '.dateSelected', filter.selectedValue);
-                    }
-                    this._disableFilter(filter, filterPath);
-                    break;
-                  }
-                }
+            if (this.selectedFilters instanceof Array && this.selectedFilters.length > 0) {
+              const idxInSelFilters = this.selectedFilters.findIndex((f) => f.filterName === filter.filterName);
+
+              if (idxInSelFilters > -1) {
+                this.updateSelectedValueInFilter(filterObj.type, ['selectedFilters', idxInSelFilters], filter.selectedValue);
+                this._disableFilter(filter, idxInSelFilters);
               }
             }
           }
         });
-        // refresh available filters and remove those selected
       }
     }
 
-    _disableFilter(filterUpdateData, filterPath) {
-      if (filterUpdateData.hasOwnProperty('disabled') && filterPath !== '') {
-        this.set(filterPath + '.disabled', filterUpdateData.disabled);
+    updateSelectedValueInFilter(filterType: string, filterPath: [string, number], selectedValue: any) {
+      this.set([...filterPath, 'selectedValue'], selectedValue);
+      if (filterType === 'paper-toggle') {
+        this.notifyPath([...filterPath, 'selectedValue'].join('.'));
+      }
+    }
+
+    _findInListFilterOptions(filterName: string) {
+      return this.listFilterOptions instanceof Array
+        ? this.listFilterOptions.find((f) => f.filterName === filterName)
+        : null;
+    }
+
+    filterHasSelectedValue(selectedValue: any, filterType: string) {
+      switch (filterType) {
+        case 'esmm':
+          return (
+            selectedValue &&
+            ((typeof selectedValue === 'string' && selectedValue !== '') ||
+              (Array.isArray(selectedValue) && selectedValue.length > 0))
+          );
+        case 'toggle':
+          return selectedValue === true;
+        default:
+          return false;
+      }
+    }
+
+    _disableFilter(filter: any, idxInSelFilters: number) {
+      if (Object.prototype.hasOwnProperty.call(filter, 'disabled')) {
+        this.set(['selectedFilters', idxInSelFilters, 'disabled'], filter.disabled);
       }
     }
   }
