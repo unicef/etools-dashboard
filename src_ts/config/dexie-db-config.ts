@@ -1,8 +1,8 @@
 import Dexie from 'dexie';
 
 window.EtoolsDashboard = window.EtoolsDashboard || {};
-EtoolsDashboard.DexieDb = new Dexie('dashApp');
-EtoolsDashboard.DexieDb.version(1).stores({
+window.EtoolsDashboard.DexieDb = new Dexie('dashApp');
+window.EtoolsDashboard.DexieDb.version(1).stores({
   collectionsList: 'name, expire',
   partners: 'id, name',
   csoDashboard: 'intervention_id, partner_name',
@@ -14,6 +14,4 @@ EtoolsDashboard.DexieDb.version(1).stores({
   partnershipsOverview: 'id, name, total_ct_cp, total_ct_ytd, action_points, days_last_pv'
 });
 
-let etoolsAjaxDefaultDexieDbPrefix = 'dashboard';
-
-window.EtoolsRequestCacheDb = window.EtoolsRequestCacheDb || EtoolsDashboard.DexieDb;
+window.EtoolsRequestCacheDb = window.EtoolsRequestCacheDb || window.EtoolsDashboard.DexieDb;

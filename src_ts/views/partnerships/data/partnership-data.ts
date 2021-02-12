@@ -1,3 +1,4 @@
+/* eslint-disable no-invalid-this */
 /* eslint-disable max-len */
 import {PolymerElement} from '@polymer/polymer';
 import {customElement, property} from '@polymer/decorators';
@@ -128,8 +129,9 @@ export class PartnershipData extends DateMixin(DataElementMixin(PolymerElement))
           ...this.presetResults.map((res: any) => res.sortBy(sortBy || 'partner_name'))
         ]);
       }).then((countAndResult) => {
-
+        // @ts-ignore
         this._setTotalResults(countAndResult[0]);
+        // @ts-ignore
         this._setFilteredPartnerships(countAndResult[1]);
         let presetFilterResults = countAndResult.slice(2);
         presetFilterResults.forEach((elem, indx) => {

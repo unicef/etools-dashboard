@@ -34,6 +34,8 @@ import '../../../components/data-table/data-table-footer';
 import {RootState, store} from '../../../redux/store';
 import {connect} from 'pwa-helpers/connect-mixin';
 import get from 'lodash-es/get';
+import {PartnershipOverviewData} from '../data/partnership-overview-data';
+import {DataTableFooter} from '../../../components/data-table/data-table-footer';
 declare const dayjs: any;
 
 @customElement('partnerships-overview')
@@ -41,6 +43,8 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
   ListFiltersMixin(
     PaginationWithFiltersMixin(
       DateMixin(EndpointsMixin(PolymerElement)))))) {
+  [x: string]: any;
+  orderBy: any;
 
   static get template() {
     return html`
@@ -451,7 +455,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
     this.set('selectedSectors', params.sectors ? this._setSelectedSectors(params.sectors) : []);
     this.set('selectedPartners', params.partners ? params.partners: []); // this._setSelectedPartners(params.partners) : []);
     this.set('selectedTypes', params.partner_types ? this._setSelectedTypes(params.partner_types) : []);
-    this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px';
+    (this.$.alertsPanel as HTMLElement).style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px';
     this._initListFilters();
     this.set('initComplete', true);
     this._updateSelectedFiltersValues();
@@ -546,19 +550,27 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
     }
     this._initListFilters;
     if (this.currentFilter !== 'custom') {
+      // @ts-ignore
       this.$.partnerListTemplate.items = this.presetFilters[this.currentFilter-1].filteredPartnershipsOverview.slice(
-          this.visibleRange[0]-1,
-          this.visibleRange[1]
+        // @ts-ignore
+        this.visibleRange[0]-1,
+        // @ts-ignore
+        this.visibleRange[1]
         );
     } else if (this.filteredPartnershipsOverview) {
+      // @ts-ignore
       this.$.partnerListTemplate.items = this.filteredPartnershipsOverview.slice(
+          // @ts-ignore
           this.visibleRange[0]-1,
+          // @ts-ignore
           this.visibleRange[1]
         );
     }
   }
 
+  // @ts-ignore
   _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded,
+    // @ts-ignore
     initComplete, selectedSectors, selectedPartners, selectedOutstanding, selectedTypes) {
     if ( !this.active || !this.initComplete || !this.requiredDataLoaded) {
       return;
@@ -587,17 +599,20 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
       if (this.currentFilter === 'custom') {
         pks = this.filteredPartnershipsOverview.map(partner => prop('id', partner));
       } else {
+        // @ts-ignore
         pks = this.presetFilters[this.currentFilter-1].filteredPartnershipsOverview.map(
           partner => prop('id', partner)
         );
       }
       let pksString = pks.join(',');
+      // @ts-ignore
       return `${this.getEndpoint('partnershipsOverview').url}?pk=${pksString}&format=csv`;
     }
+    return '';
   }
 
   _filterPartnershipsOverviewData() {
-    this.$.partnershipsOverview.query({
+    (this.$.partnershipsOverview as PartnershipOverviewData).query({
       searchString: this.qs,
       sectors: map(prop('label'), this.selectedSectors),
       name: this.selectedPartners,
@@ -626,7 +641,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
   _setSelectedSectors(sectorsStr) {
     const sectorsArr = sectorsStr.split('|');
     if (!isEmpty(sectorsArr)) {
-      return this.sectors.filter(s => sectorsArr.indexOf(s.value) > -1);
+      return this.sectors.filter((s: any) => sectorsArr.indexOf(s.value) > -1);
     }
     return [];
   }
@@ -634,7 +649,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
   _setSelectedTypes(typesStr) {
     const typesArr = typesStr.split('|');
     if (!isEmpty(typesArr)) {
-      return this.partnerTypes.filter(s => typesArr.indexOf(s.value) > -1);
+      return this.partnerTypes.filter((s: any)=> typesArr.indexOf(s.value) > -1);
     }
     return [];
   }
@@ -687,10 +702,10 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
 
     // reset styling for all filter buttons
     this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(
-      b => b.style.opacity = '0'
+      (b: HTMLElement) => b.style.opacity = '0'
     );
     this.shadowRoot.querySelectorAll('.filter-name').forEach(
-      r => r.style.color = ''
+      (r: HTMLElement) => r.style.color = ''
     );
 
     if (this.currentFilter === clickedFilter.id) {
@@ -709,11 +724,11 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
 
     // toggle custom filters visibility and footer totals source
     if (this.currentFilter === 'custom') {
-      this.$.customFilterPanel.hidden = false;
-      this.$.partnershipsOverviewFooter.filteredTotalResults = this.totalResults;
+      (this.$.customFilterPanel as HTMLElement).hidden = false;
+      (this.$.partnershipsOverviewFooter as DataTableFooter).filteredTotalResults = this.totalResults;
     } else {
-      this.$.customFilterPanel.hidden = true;
-      this.$.partnershipsOverviewFooter.filteredTotalResults = clickedFilter.total;
+      (this.$.customFilterPanel as HTMLElement).hidden = true;
+      (this.$.partnershipsOverviewFooter as DataTableFooter).filteredTotalResults = clickedFilter.total;
     }
   }
 
@@ -734,6 +749,8 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
           return row.alert_pca_required;
         case '4':
           return row.alert_active_pd_for_ended_pca;
+        default:
+          return '';
       }
     };
   }

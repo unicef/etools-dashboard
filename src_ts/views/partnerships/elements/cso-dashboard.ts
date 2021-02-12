@@ -804,7 +804,9 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
         }
       }
 
+      // @ts-ignore
       _updateUrl(query, pageNumber, pageSize, sortOrder, orderBy, requiredDataLoaded,
+        // @ts-ignore
         initComplete, selectedSectors, selectedOffices, selectedStatuses, startAfterDate, endBeforeDate, startBeforeDate, endAfterDate) {
 
         if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
@@ -1019,6 +1021,8 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
               return row.status === 'ended'
                 && !row.has_final_partnership_review
                 && parseInt(row.disbursement_usd) >= 100000;
+            default:
+              return '';
           }
         };
       }
