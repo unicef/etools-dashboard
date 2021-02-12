@@ -1,4 +1,4 @@
-FROM node:11.9.0-alpine as builder
+FROM node:14.15.1-alpine3.12 as builder
 RUN apk update
 RUN apk add --update bash
 
@@ -19,7 +19,7 @@ RUN export NODE_OPTIONS=--max_old_space_size=4096 && polymer build
 # RUN cp -a /tmp/node_modules /code/node_modules
 # RUN npm run build
 
-FROM node:11.9.0-alpine
+FROM node:14.15.1-alpine3.12
 RUN apk update
 RUN apk add --update bash
 

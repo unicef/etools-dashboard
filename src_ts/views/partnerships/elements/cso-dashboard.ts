@@ -1,3 +1,5 @@
+/* eslint-disable no-invalid-this */
+/* eslint-disable max-len */
 /* eslint-disable camelcase */
 
 import {customElement, property} from '@polymer/decorators';
@@ -40,6 +42,8 @@ import {connect} from 'pwa-helpers/connect-mixin';
 import {RootState, store} from '../../../redux/store';
 import get from 'lodash-es/get';
 import {EndpointsMixin} from '../../../endpoints/endpoints-mixin';
+import {PartnershipData} from '../data/partnership-data';
+import {DataTableFooter} from '../../../components/data-table/data-table-footer';
 
 
 @customElement('cso-dashboard')
@@ -47,6 +51,7 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
   ListFiltersMixin(
     PaginationWithFiltersMixin(
       DateMixin(EndpointsMixin(PolymerElement)))))) {
+  orderBy: any;
 
   static get template() {
     return html`
@@ -120,8 +125,9 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
       }
       .blocked-partner-container {
         background-color: #FFA149;
-        @apply --layout-vertical;
-        @apply --layout-center-justified;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         border-radius: 50%;
       }
 
@@ -629,6 +635,8 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
         }
     ];
 
+    presetFilters: any;
+
 
     stateChanged(state: RootState) {
       this.sectors = state.sectors;
@@ -664,7 +672,8 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
         this.set('endBeforeDate', params.endBefore ? params.endBefore : '');
         this.set('startBeforeDate', params.startBefore ? params.startBefore : '');
         this.set('endAfterDate', params.endAfter ? params.endAfter : '');
-        this.$.alertsPanel.style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px';
+
+        (this.$.alertsPanel as HTMLElement).style.height = ((this.$.alertsPanel.childElementCount - 1) / 2 * 36) + 'px';
         this._initListFilters();
         this.set('initComplete', true);
         this._updateSelectedFiltersValues();
@@ -777,13 +786,19 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
 
       rangeChanged() {
         if (this.currentFilter !== 'custom') {
-          this.$.csoListTemplate.items = this.presetFilters[this.currentFilter-1].filteredPartnerships.slice(
+          // @ts-ignore
+          (this.$.csoListTemplate as any).items = this.presetFilters[this.currentFilter-1].filteredPartnerships.slice(
+              // @ts-ignore
               this.visibleRange[0]-1,
+              // @ts-ignore
               this.visibleRange[1]
             );
         } else if (this.filteredPartnerships) {
+          // @ts-ignore
           this.$.csoListTemplate.items = this.filteredPartnerships.slice(
+              // @ts-ignore
               this.visibleRange[0]-1,
+              // @ts-ignore
               this.visibleRange[1]
             );
         }
@@ -823,17 +838,19 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
           }, '');
           query = query.split('|').join(',');
         } else {
+          // @ts-ignore
           let pks = this.presetFilters[this.currentFilter-1].filteredPartnerships.map(
             partner => prop('intervention_id', partner)
           );
           pks.join(',');
           query = `pk=${pks}&`;
         }
+        // @ts-ignore
         return `${this.getEndpoint('csoDashboard').url}?${query}format=csv`;
       }
 
       _filterPartnershipsData() {
-        this.$.partnerships.query({
+        (this.$.partnerships as PartnershipData).query({
           searchString: this.qs,
           sectors: map(prop('label'), this.selectedSectors),
           offices: map(prop('name'), this.selectedOffices),
@@ -864,7 +881,7 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
         let officesIdsArr = officesStr.split('|');
         if (!isEmpty(officesIdsArr)) {
           officesIdsArr = officesIdsArr.map(n => parseInt(n, 10));
-          return this.offices.filter(o => officesIdsArr.includes(parseInt(o.id, 10)));
+          return this.offices.filter((o: any) => officesIdsArr.includes(parseInt(o.id, 10)));
         }
         return [];
       }
@@ -872,7 +889,7 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
       _setSelectedSectors(sectorsStr) {
         const sectorsArr = sectorsStr.split('|');
         if (!isEmpty(sectorsArr)) {
-          const selectedSectors = this.sectors.filter((s) => {
+          const selectedSectors = this.sectors.filter((s: any) => {
             return sectorsArr.indexOf(s.value) > -1;
           });
           return selectedSectors;
@@ -885,7 +902,7 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
         if (isEmpty(this.statuses)) {
           return [];
         }
-        return this.statuses.filter((status) => {
+        return this.statuses.filter((status: any) => {
           return statusesStrArr.indexOf(status.value) > -1;
         });
       }
@@ -947,10 +964,10 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
 
         // reset styling for all filter buttons
         this.shadowRoot.querySelectorAll('paper-icon-button.clear-button').forEach(
-          b => b.style.opacity = '0'
+          (b: HTMLElement) => b.style.opacity = '0'
         );
         this.shadowRoot.querySelectorAll('.filter-name').forEach(
-          r => r.style.color = ''
+          (r: HTMLElement) => r.style.color = ''
         );
 
         if (this.currentFilter === clickedFilter.id) {
@@ -969,11 +986,11 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
 
         // toggle custom filters visibility and footer totals source
         if (this.currentFilter === 'custom') {
-          this.$.customFilterPanel.hidden = false;
-          this.$.csoDashboardFooter.filteredTotalResults = this.totalResults;
+          (this.$.customFilterPanel as HTMLElement).hidden = false;
+          (this.$.csoDashboardFooter as DataTableFooter).filteredTotalResults = this.totalResults;
         } else {
-          this.$.customFilterPanel.hidden = true;
-          this.$.csoDashboardFooter.filteredTotalResults = clickedFilter.total;
+          (this.$.customFilterPanel as HTMLElement).hidden = true;
+          (this.$.csoDashboardFooter as DataTableFooter).filteredTotalResults = clickedFilter.total;
         }
         this.set('csvDownloadUrl', this._buildCsvDownloadUrl());
       }
