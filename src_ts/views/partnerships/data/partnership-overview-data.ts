@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {PolymerElement} from '@polymer/polymer';
 import {customElement, property} from '@polymer/decorators';
 import DataElementMixin from '../../../mixins/data-element-mixin';
@@ -93,7 +94,9 @@ export class PartnershipOverviewData extends DataElementMixin(PolymerElement) {
             ...this.presetResults.map(res => res.sortBy(sortBy || 'name'))
           ]);
         }).then((countAndResult) => {
+          // @ts-ignore
           this._setTotalResults(countAndResult[0]);
+          // @ts-ignore
           this._setFilteredPartnershipsOverview(countAndResult[1]);
           this.set('allPartners', countAndResult[2]);
           let presetFilterResults = countAndResult.slice(3);

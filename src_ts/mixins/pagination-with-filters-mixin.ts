@@ -1,7 +1,7 @@
 import {property} from '@polymer/decorators';
 import {PolymerElement} from '@polymer/polymer';
 import isEmpty from 'lodash-es/isEmpty';
-import {Constructor, GenericObject} from '../typings/globals.types';
+import {Constructor} from '../typings/globals.types';
 
 /**
  * @polymer

@@ -1,6 +1,6 @@
 import {PolymerElement} from '@polymer/polymer';
 import isEmpty from 'lodash-es/isEmpty';
-import {Constructor, GenericObject} from '../typings/globals.types';
+import {Constructor} from '../typings/globals.types';
 import DateMixin from './date-mixin';
 
 /**
