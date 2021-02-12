@@ -1,6 +1,6 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element';
 import {customElement, observe, property} from '@polymer/decorators/lib/decorators';
-import {isEmpty} from 'lodash-es';
+import isEmpty from 'lodash-es/isEmpty';
 import {fireEvent} from '../utils/fire-custom-event';
 import '@polymer/iron-icons';
 
