@@ -38,7 +38,7 @@ export class PartnershipData extends DateMixin(DataElementMixin(PolymerElement))
     endpointName = 'csoDashboard';
 
     @property({type: Array, notify: true})
-    presetFilters: [
+    presetFilters = [
         { total: 0, id: '1',
          title: 'PD/SSFA with passed start date and no FR was added', status: '(signed)',
          filteredPartnerships: [] },
