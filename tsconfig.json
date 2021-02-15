@@ -11,8 +11,7 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "outDir": "src",
-    "sourceMap": true
+    "outDir": "src"
   },
   "include": [
     "src_ts/**/*.ts"
