@@ -2,22 +2,28 @@ FROM node:14.15.1-alpine3.12 as builder
 RUN apk update
 RUN apk add --update bash
 
+RUN node -v
+RUN npm -v
+
 RUN apk add git
+
 RUN npm install -g --unsafe-perm polymer-cli
 RUN npm install -g typescript
 
 WORKDIR /tmp
-COPY . /tmp/
-RUN npm cache verify
-RUN npm i
+ADD package.json /tmp/
+ADD package-lock.json /tmp/
+
+RUN npm install --no-save
+
+ADD . /code/
+WORKDIR /code
+
+RUN cp -a /tmp/node_modules /code/node_modules
 
 RUN tsc || echo "done"
 RUN export NODE_OPTIONS=--max_old_space_size=4096 && polymer build
 
-# ADD . /code/
-# WORKDIR /code
-# RUN cp -a /tmp/node_modules /code/node_modules
-# RUN npm run build
 
 FROM node:14.15.1-alpine3.12
 RUN apk update
