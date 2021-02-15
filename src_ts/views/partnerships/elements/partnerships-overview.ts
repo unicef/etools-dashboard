@@ -83,7 +83,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
         }
 
         .blue-text {
-          color: #24a0fc;
+          color: var(--primary-color);
         }
 
         iron-icon.clock-icon.warning {
@@ -243,7 +243,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
           <div slot="row-data">
             <div class="col-3">
               [[row.vendor_number]]<br>
-              <a href="[[baseSite]]/pmp/partners/[[row.id]]/details"
+              <a class="blue-text" href="[[baseSite]]/pmp/partners/[[row.id]]/details"
                 app-name="pmp"
                 page="partners"
                 id="[[row.id]]/details"
@@ -278,7 +278,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
               </div>
             </div>
             <div class="col-1 text-right">
-              <a href="[[baseSite]]/apd/action-points/list?partner=[[row.id]]&status=open">[[row.action_points]]</a>
+              <a class="blue-text" href="[[baseSite]]/apd/action-points/list?partner=[[row.id]]&status=open">[[row.action_points]]</a>
             </div>
             <div class="col-1 text-right">
               <template is="dom-if" if="[[_checkCoreValuesAssessmentAlert(row.core_value_assessment_expiring)]]">

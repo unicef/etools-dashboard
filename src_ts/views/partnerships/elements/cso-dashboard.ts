@@ -37,6 +37,7 @@ import '../data/partnership-data';
 import {GridLayoutStyles} from '../../../styles/grid-layout-styles';
 import {ListStyles} from '../../../styles/list-styles';
 import {FilterStyles} from '../../../styles/filter-styles';
+import {dashIcons} from '../../../styles/dash-icons';
 import {PartnershipsStyles} from '../../../styles/partnerships-styles';
 import {connect} from 'pwa-helpers/connect-mixin';
 import {RootState, store} from '../../../redux/store';
@@ -55,7 +56,7 @@ export class CsoDashboard extends connect(store)(CommonGeneralMixin(
 
   static get template() {
     return html`
-      ${GridLayoutStyles} ${ListStyles} ${FilterStyles} ${PartnershipsStyles}
+      ${GridLayoutStyles} ${ListStyles} ${FilterStyles} ${PartnershipsStyles} ${dashIcons}
       <style include="shared-styles iron-flex page-layout-styles
                     paper-material-styles">
 

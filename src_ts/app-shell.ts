@@ -115,6 +115,16 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
                 </h1>
 
                 <div class="top-content-actions-wrapper">
+
+                <div class="top-content-action" hidden$="[[!_isActive(page,'partnerships')]]">
+                  <a target="_blank" href="[[csvUrl]]">
+                    <paper-button class="action-button">
+                      <iron-icon class="dark" icon="file-download"></iron-icon>
+                      Export
+                    </paper-button>
+                  </a>
+                </div>
+
                   <div class="top-content-action" hidden\$="[[!_isActive(page,'trips')]]">
                     <paper-button class="primary-btn with-prefix" on-tap="_goToAddTrip">
                       <iron-icon icon="add"></iron-icon>
