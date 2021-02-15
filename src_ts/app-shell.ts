@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {PolymerElement, html} from '@polymer/polymer';
 import '@polymer/app-layout/app-drawer/app-drawer.js';
 import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
@@ -16,6 +17,7 @@ import {property, customElement} from '@polymer/decorators';
 import {setRootPath} from '@polymer/polymer/lib/utils/settings.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
 import '@unicef-polymer/etools-loading/etools-loading.js';
+import {sendRequest} from '@unicef-polymer/etools-ajax/etools-ajax-request';
 import 'etools-piwik-analytics/etools-piwik-analytics.js';
 import './styles/buttons-styles';
 import './styles/page-layout-styles';
@@ -27,6 +29,20 @@ import {UserProfileDataMixin} from './mixins/user-profile-data-mixin';
 import './components/page-header';
 import './components/page-footer';
 import {Config, BASE_URL} from './config/config';
+import {Endpoints} from './endpoints/endpoints';
+import {store} from './redux/store';
+import {setOffices, setSectors, setStatic} from './redux/actions/static-data';
+import './config/dexie-db-config';
+
+declare const dayjs: any;
+declare const dayjs_plugin_utc: any;
+declare const dayjs_plugin_isSameOrBefore: any;
+declare const dayjs_plugin_isBetween: any;
+
+dayjs.extend(dayjs_plugin_utc);
+dayjs.extend(dayjs_plugin_isSameOrBefore);
+dayjs.extend(dayjs_plugin_isBetween);
+
 setRootPath(BASE_URL);
 
 @customElement('app-shell')
@@ -99,6 +115,16 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
                 </h1>
 
                 <div class="top-content-actions-wrapper">
+
+                <div class="top-content-action" hidden$="[[!_isActive(page,'partnerships')]]">
+                  <a target="_blank" href="[[csvUrl]]">
+                    <paper-button class="action-button">
+                      <iron-icon class="dark" icon="file-download"></iron-icon>
+                      Export
+                    </paper-button>
+                  </a>
+                </div>
+
                   <div class="top-content-action" hidden\$="[[!_isActive(page,'trips')]]">
                     <paper-button class="primary-btn with-prefix" on-tap="_goToAddTrip">
                       <iron-icon icon="add"></iron-icon>
@@ -123,7 +149,7 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
                   </paper-tab>
 
                   <paper-tab name="partnerships" link>
-                    <a href="[[rootPath]]partnerships " class="tab-content">Partnerships</a>
+                    <a href="[[rootPath]]partnerships/overview" class="tab-content">Partnerships</a>
                   </paper-tab>
 
                   <paper-tab name="map" link>
@@ -137,11 +163,12 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
               </div>
             </div>
           </div>
-          
+
           <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="personalized" role="main">
             <view-personalized user="[[user]]" class="page" name="personalized" route="{{route}}"></view-personalized>
             <view-hact name="hact" user="[[user]]"></view-hact>
-            <view-partnerships class="page"
+            <view-partnerships route="{{subroute}}"
+                               class="page"
                                user="[[user]]"
                                name="partnerships"
                                csv-download-url="{{csvUrl}}">
@@ -214,6 +241,26 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
 
   public _removeListeners(): void {
     this.removeEventListener('forbidden', this._onForbidden);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.getAppStaticData();
+  }
+
+  getAppStaticData() {
+    this.getSectors();
+    this.getDropdownsStaticData();
+    this.getOffices();
+  }
+  getSectors() {
+    sendRequest({endpoint: Endpoints.sectors}).then(resp => store.dispatch(setSectors(resp)));
+  }
+  getDropdownsStaticData() {
+    sendRequest({endpoint: Endpoints.static}).then(resp => store.dispatch(setStatic(resp)));
+  }
+  getOffices() {
+    sendRequest({endpoint: Endpoints.offices}).then(resp => store.dispatch(setOffices(resp)));
   }
 
   public disconnectedCallback(): void {
