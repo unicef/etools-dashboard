@@ -243,7 +243,7 @@ export class PartnershipsOverview extends connect(store)(CommonGeneralMixin(
           <div slot="row-data">
             <div class="col-3">
               [[row.vendor_number]]<br>
-              <a class="blue-text" href="[[baseSite]]/pmp/partners/[[row.id]]/details"
+              <a href="[[baseSite]]/pmp/partners/[[row.id]]/details"
                 app-name="pmp"
                 page="partners"
                 id="[[row.id]]/details"
