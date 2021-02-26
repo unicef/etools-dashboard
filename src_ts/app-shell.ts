@@ -149,7 +149,7 @@ export class AppShell extends LoadingMixin(ToastNotificationsMixin(UserProfileDa
                   </paper-tab>
 
                   <paper-tab name="partnerships" link>
-                    <a href="[[rootPath]]partnerships/overview" class="tab-content">Partnerships</a>
+                    <a href="[[rootPath]]partnerships" class="tab-content">Partnerships</a>
                   </paper-tab>
 
                   <paper-tab name="map" link>
