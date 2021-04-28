@@ -1,7 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import {customElement, property} from '@polymer/decorators';
 import {Config} from '../config/config';
-import {hactProd} from '../endpoints/power-bi-embeds';
+import {hactDev, hactProd} from '../endpoints/power-bi-embeds';
 
 @customElement('view-hact')
 export class ViewHact extends PolymerElement {
@@ -43,7 +43,7 @@ export class ViewHact extends PolymerElement {
     // @ts-ignore
     const country = this.user.country.name;
 
-    const embedSource = hactProd +
+    const embedSource = (this.environment ? hactDev : hactProd) +
     '&filterPaneEnabled=False' +
     `&$filter=partners/country_name eq '${country}'`;
 
