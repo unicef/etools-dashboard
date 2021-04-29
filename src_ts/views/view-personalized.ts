@@ -1,7 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import {customElement, property} from '@polymer/decorators';
 import {Config} from '../config/config';
-import {personalizedProd} from '../endpoints/power-bi-embeds';
+import {personalizedDev, personalizedProd} from '../endpoints/power-bi-embeds';
 
 @customElement('view-personalized')
 export class ViewPersonalized extends PolymerElement {
@@ -43,7 +43,7 @@ export class ViewPersonalized extends PolymerElement {
     // @ts-ignore
     const email = this.user.email;
 
-    const embedSource = personalizedProd +
+    const embedSource =   (this.environment ? personalizedDev : personalizedProd) +
     `&$filter=interventions_focalpoints/unicef_focal_point_email eq '${email}'` +
     ` and actionpointsfor/assigned_to_email eq '${email}'` +
     ` and actionpointsby/assigned_by_email eq '${email}'` +
