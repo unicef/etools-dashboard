@@ -1,7 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import {customElement, property} from '@polymer/decorators';
 import {Config} from '../config/config';
-import {mapDev, mapProd} from '../endpoints/power-bi-embeds';
+import {mapProd} from '../endpoints/power-bi-embeds';
 
 @customElement('view-map')
 export class ViewMap extends PolymerElement {
