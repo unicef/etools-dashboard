@@ -1,5 +1,5 @@
 import {Config} from '../config/config';
-import {partnershipsProd} from '../endpoints/power-bi-embeds';
+import {partnershipsDev, partnershipsProd} from '../endpoints/power-bi-embeds';
 import {PolymerElement, html} from '@polymer/polymer';
 import {customElement, property} from '@polymer/decorators';
 
@@ -42,7 +42,7 @@ export class ViewPartnerships extends PolymerElement {
   public setEmbedSource(): void {
     // @ts-ignore
     const country = this.user.country.name;
-    const embedSource = partnershipsProd +
+    const embedSource = (this.environment ? partnershipsDev : partnershipsProd) +
     `&$filter=interventions/country_name eq '${country}'` +
     ` and partners/country_name eq '${country}'` +
     ` and agreements/country_name eq '${country}'` +
