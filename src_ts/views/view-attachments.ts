@@ -1,7 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import {customElement, property} from '@polymer/decorators';
 import {Config} from '../config/config';
-import {attachmentsProd, attachmentsDev} from '../endpoints/power-bi-embeds';
+import {attachmentsProd} from '../endpoints/power-bi-embeds';
 
 @customElement('view-attachments')
 export class ViewAttachments extends PolymerElement {
@@ -43,7 +43,7 @@ export class ViewAttachments extends PolymerElement {
     // @ts-ignore
     const country = this.user.country.name;
 
-    const embedSource = (this.environment ? attachmentsDev : attachmentsProd) +
+    const embedSource = attachmentsProd +
     `&$filter=attachments/country_name eq '${country}'` +
     ` and partner_vendor/country_name eq '${country}'`;
 
