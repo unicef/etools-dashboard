@@ -45,7 +45,7 @@ export class ViewMap extends PolymerElement {
 
     const embedSource = mapProd +
     `&$filter=interventionslocations/country_name eq '${country}'` +
-    ` and fundsreservationitem/schema_name eq '${country.toLowerCase()}`;
+    ` and fundsreservationitem/schema_name eq '${country.toLowerCase()}'`;
     this.set('embedSource', embedSource);
   }
 }
