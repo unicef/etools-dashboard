@@ -41,6 +41,7 @@ export class ViewAttachments extends PolymerElement {
 
   public setEmbedSource(): void {
     // @ts-ignore
+    const country = this.user.country.name;
     const attachmentsCountry = country.split(' ').join('_');
 
     const embedSource = attachmentsProd +
