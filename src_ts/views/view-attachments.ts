@@ -41,11 +41,11 @@ export class ViewAttachments extends PolymerElement {
 
   public setEmbedSource(): void {
     // @ts-ignore
-    const country = this.user.country.name;
+    const attachmentsCountry = country.split(' ').join('_');
 
     const embedSource = attachmentsProd +
-    `&$filter=attachments/country_name eq '${country}'` +
-    ` and partner_vendor/country_name eq '${country}'`;
+    `&$filter=attachments/country_name eq '${attachmentsCountry}'` +
+    ` and partner_vendor/country_name eq '${attachmentsCountry}'`;
 
     this.set('embedSource', embedSource);
   }
