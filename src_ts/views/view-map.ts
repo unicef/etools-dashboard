@@ -1,7 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import {customElement, property} from '@polymer/decorators';
 import {Config} from '../config/config';
-import {mapDev, mapProd} from '../endpoints/power-bi-embeds';
+import {mapProd} from '../endpoints/power-bi-embeds';
 
 @customElement('view-map')
 export class ViewMap extends PolymerElement {
@@ -43,9 +43,9 @@ export class ViewMap extends PolymerElement {
     // @ts-ignore
     const country = this.user.country.name;
 
-    const embedSource = (this.environment ? mapDev : mapProd) +
-    `&$filter=interventionslocations/country_name eq '${country}'`;
-
+    const embedSource = mapProd +
+    `&$filter=interventionslocations/country_name eq '${country}'` +
+    ` and fundsreservationitem/schema_name eq '${country.toLowerCase()}'`;
     this.set('embedSource', embedSource);
   }
 }

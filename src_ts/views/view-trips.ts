@@ -1,7 +1,7 @@
 import {PolymerElement, html} from '@polymer/polymer';
 import {customElement, property} from '@polymer/decorators';
 import {Config} from '../config/config';
-import {tripsDev, tripsProd} from '../endpoints/power-bi-embeds';
+import {tripsProd} from '../endpoints/power-bi-embeds';
 
 @customElement('view-trips')
 export class ViewTrips extends PolymerElement {
@@ -43,7 +43,7 @@ export class ViewTrips extends PolymerElement {
     // @ts-ignore
     const country = this.user.country.name;
 
-    const embedSource = (this.environment ? tripsDev : tripsProd) +
+    const embedSource = tripsProd +
     `&$filter=travels/country_name eq '${country}'`;
 
     this.set('embedSource', embedSource);
