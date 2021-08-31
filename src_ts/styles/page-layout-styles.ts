@@ -92,7 +92,7 @@ DocumentContainer.innerHTML = `<dom-module id="page-layout-styles">
       }
       
       .top-content-action {
-        @apply --layout-vertical;
+        @apply --layout-horizontal;
         @apply --layout-center-justified;
       }
 
