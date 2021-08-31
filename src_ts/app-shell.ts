@@ -129,6 +129,32 @@ export class AppShell extends LoadingMixin(
                 <h1 main-title="">Dashboard</h1>
 
                 <div class="top-content-actions-wrapper">
+                  <div class="top-content-action"
+                       hidden$="[[!_isActive(page, 'hact')]]"
+                  >
+                    <paper-menu-button>
+                      <paper-button class="action-button" icon="file-download" slot="dropdown-trigger">
+                        <iron-icon class="dark" icon="file-download"></iron-icon>
+                        Exports
+                      </paper-button>
+                      <paper-listbox slot="dropdown-content">
+                        <template id="hactExport" is="dom-repeat" items="[[currentYearHactExports]]">
+                          <paper-item on-tap="_export">{{item.name}}</paper-item>
+                        </template>
+                      </paper-listbox>
+                    </paper-menu-button>
+                    <paper-menu-button>
+                      <paper-button class="action-button" icon="file-download" slot="dropdown-trigger">
+                        <iron-icon class="dark" icon="file-download"></iron-icon>
+                        Historical Exports
+                      </paper-button>
+                      <paper-listbox slot="dropdown-content">
+                        <template id="hactExport" is="dom-repeat" items="[[historicalHactExports]]">
+                          <paper-item on-tap="_export">{{item.name}}</paper-item>
+                        </template>
+                      </paper-listbox>
+                    </paper-menu-button>
+                  </div>
                   <div
                     class="top-content-action"
                     hidden$="[[!_isActive(page,'partnerships')]]"
@@ -196,6 +222,12 @@ export class AppShell extends LoadingMixin(
                       >Document Library</a
                     >
                   </paper-tab>
+
+                  <template is="dom-if" if="{{embedSource.length}}">
+                    <paper-tab name="custom" link>
+                      <a href="[[rootPath]]custom" class="tab-content">Custom</a>
+                    </paper-tab>
+                  </template>
                 </paper-tabs>
               </div>
             </div>
@@ -240,6 +272,12 @@ export class AppShell extends LoadingMixin(
               user="[[user]]"
               name="attachments"
             ></view-attachments>
+            <view-custom
+              route="{{route}}"
+              class="page"
+              user="[[user]]"
+              name="custom"
+            ></view-custom>
           </iron-pages>
           <page-footer></page-footer>
         </app-header-layout>
@@ -264,23 +302,10 @@ export class AppShell extends LoadingMixin(
   public hideExport: boolean;
 
   @property({ type: Array })
-  public availableDetailYears: object[] = [
-    { name: '2017', endpoint: '/api/v2/hact/history/?year=2017&format=csv' },
-    { name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv' },
-    { name: '2019', endpoint: '/api/v2/partners/hact?&format=csv' },
-  ];
+  public currentYearHactExports: object[];
 
   @property({ type: Array })
-  public availableGeneralYears: object[] = [
-    { name: '2018', endpoint: '/api/v2/hact/history/?year=2018&format=csv' },
-    { name: '2019', endpoint: '/api/v2/partners/hact/simple?&format=csv' },
-  ];
-
-  @property({ type: Array })
-  public chartsExport: object[] = [
-    { name: '2018', endpoint: '/api/v2/hact/graph/2018/export' },
-    { name: '2019', endpoint: '/api/v2/hact/graph/2019/export' },
-  ];
+  public historicalHactExports: object[];
 
   @property({ type: Boolean })
   public displayDetail = false;
@@ -291,8 +316,11 @@ export class AppShell extends LoadingMixin(
   @property({ type: String })
   public currentToastMessage: string;
 
+  @property({type: String})
+  public embedSource: string
+
   public static get observers(): string[] {
-    return ['_routePageChanged(routeData.page)'];
+    return ['_routePageChanged(routeData.page)', 'setEmbedSource(user)'];
   }
 
   public ready(): void {
@@ -311,7 +339,19 @@ export class AppShell extends LoadingMixin(
 
   connectedCallback() {
     super.connectedCallback();
+    let currentYear = (new Date).getFullYear();
     this.getAppStaticData();
+    this.set('historicalHactExports', this._setHactExport(2017));
+    this.set('currentYearHactExports', [
+      { name: 'Table', endpoint: '/api/v2/partners/hact?format=csv' },
+      { name: 'Charts', endpoint: `/api/v2/hact/graph/${currentYear}/export`}
+    ]);
+  }
+
+  public setEmbedSource(): void {
+    // @ts-ignore
+    const embedSource = this.user.country.custom_dashboards.bi_url;
+    this.set('embedSource', embedSource);
   }
 
   getAppStaticData() {
@@ -389,6 +429,7 @@ export class AppShell extends LoadingMixin(
         'map',
         'partnerships',
         'trips',
+        'custom'
       ].indexOf(page) !== -1
     ) {
       this.set('page', page);
@@ -421,6 +462,9 @@ export class AppShell extends LoadingMixin(
       case 'trips':
         import('./views/view-trips.js');
         break;
+      case 'custom':
+        import('./views/view-custom.js');
+        break;
       case 'view404':
         this._showPage404.bind(this);
         break;
@@ -437,5 +481,29 @@ export class AppShell extends LoadingMixin(
   // @ts-ignore
   private _isActive(page: string, tab: string): boolean {
     return page === tab;
+  }
+
+  // calculates export links for hact general, detail, and charts views, with new links added each calendar year
+  private _setHactExport(startYear: number) {
+    const currentYear = (new Date).getFullYear();
+    let array = [];
+
+    // handles all charts links
+    for (let year: number = startYear; year < currentYear; year++) {
+      let yearObj = {name: '', endpoint: ''};
+      yearObj.name = 'Charts ' + year.toString();
+      yearObj.endpoint = `/api/v2/hact/graph/${year}/export`;
+      array.push(yearObj);
+    }
+
+    // adds detail links
+    for (let year: number = startYear; year < currentYear; year++) {
+      let yearObj = {name: '', endpoint: ''};
+      yearObj.name = 'Table ' + year.toString();
+      yearObj.endpoint = `/api/v2/hact/history/?year=${year}&format=csv`;
+      array.push(yearObj);
+    }
+
+    return array;
   }
 }
