@@ -1,9 +1,7 @@
 node_modules/
 build/
-bower_components/
 dist/
+src/
 .tmp
 .idea
 .vscode
-*.sublime-project
-*.sublime-workspace

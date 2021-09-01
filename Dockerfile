@@ -1,25 +1,38 @@
-FROM node:8-alpine
+FROM node:14.15.1-alpine3.12 as builder
 RUN apk update
-
 RUN apk add --update bash
 
+RUN node -v
+RUN npm -v
+
 RUN apk add git
-RUN npm i -g npm@5.6.0
-RUN npm install -g --unsafe-perm bower polymer-cli
 
-ENV NODE_OPTIONS --max-old-space-size=3072
+RUN npm install -g --unsafe-perm polymer-cli
+RUN npm install -g typescript
+
 WORKDIR /tmp
-ADD bower.json /tmp/
 ADD package.json /tmp/
+ADD package-lock.json /tmp/
 
-RUN npm install
-RUN bower --allow-root install
+RUN npm install --no-save
 
-RUN mkdir /code/
 ADD . /code/
 WORKDIR /code
+
 RUN cp -a /tmp/node_modules /code/node_modules
-RUN cp -a /tmp/bower_components /code/bower_components
-RUN npm run build
+
+RUN tsc || echo "done"
+RUN export NODE_OPTIONS=--max_old_space_size=4096 && polymer build
+
+
+FROM node:14.15.1-alpine3.12
+RUN apk update
+RUN apk add --update bash
+
+WORKDIR /code
+RUN npm install express --no-save
+RUN npm install browser-capabilities@1.1.3 --no-save
+COPY --from=builder /code/express.js /code/express.js
+COPY --from=builder /code/build /code/build
 EXPOSE 8080
 CMD ["node", "express.js"]

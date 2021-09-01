@@ -16,11 +16,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     
     <title>App Shell</title>
     
-    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="../bower_components/web-component-tester/browser.js"></script>
+    <script src="../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+    <script src="../../wct-browser-legacy/browser.js"></script>
     
     <!-- Import the element to test -->
-    <link rel="import" href="../dash/app-shell.html">
+    <script type="module" src="../dash/app-shell.js"></script>
   </head>
   <body>
     <test-fixture id="AppShell">
@@ -29,7 +29,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </template>
     </test-fixture>
 
-    <script>
+    <script type="module">
+      import '../dash/app-shell.js';
       suite('app-shell tests', () => {
         test('Number in circle should be 1', () => {
           // just a dummy test
@@ -38,6 +39,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           assert.equal(contentId, 'layout');
         });
       });
-    </script>
+</script>
   </body>
 </html>
