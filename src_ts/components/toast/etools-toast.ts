@@ -1,9 +1,9 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/paper-toast/paper-toast.js';
 import '@polymer/paper-button/paper-button.js';
-import {fireEvent} from '../../components/utils/fire-custom-event';
-import {property, customElement} from '@polymer/decorators';
-import {GenericObject} from '../../typings/globals.types';
+import { fireEvent } from '../../utils/fire-custom-event';
+import { property, customElement } from '@polymer/decorators';
+import { GenericObject } from '../../typings/globals.types';
 
 @customElement('etools-toast')
 export class EtoolsToast extends PolymerElement {
@@ -15,7 +15,7 @@ export class EtoolsToast extends PolymerElement {
             padding: 8px;
             min-width: 16px;
             margin: 0 -8px 0 24px;
-          };
+          }
         }
 
         .toast-dismiss-btn-general-style {
@@ -29,7 +29,7 @@ export class EtoolsToast extends PolymerElement {
             min-width: 16px;
             margin: 16px -8px -8px 0;
             @apply --layout-self-end;
-          };
+          }
         }
 
         .toast-general-style {
@@ -50,16 +50,25 @@ export class EtoolsToast extends PolymerElement {
         }
       </style>
 
-      <paper-toast id="toast" class="toast-general-style" on-iron-overlay-closed="toastClosed" fit-into="[[fitInto]]">
-        <paper-button id="confirmBtn" on-click="confirmToast" class="toast-dismiss-btn-general-style">
+      <paper-toast
+        id="toast"
+        class="toast-general-style"
+        on-iron-overlay-closed="toastClosed"
+        fit-into="[[fitInto]]"
+      >
+        <paper-button
+          id="confirmBtn"
+          on-click="confirmToast"
+          class="toast-dismiss-btn-general-style"
+        >
           Ok
         </paper-button>
       </paper-toast>
     `;
   }
 
-  @property({type: Object})
-  public fitInto: object
+  @property({ type: Object })
+  public fitInto: object;
 
   public show(details: object): void {
     let toast: GenericObject = this.shadowRoot.getElementById('toast');
@@ -74,14 +83,14 @@ export class EtoolsToast extends PolymerElement {
   public confirmToast(): void {
     fireEvent(this, 'toast-confirm', {
       bubbles: true,
-      composed: true
+      composed: true,
     });
   }
 
   public toastClosed(): void {
     fireEvent(this, 'toast-closed', {
       bubbles: true,
-      composed: true
+      composed: true,
     });
   }
 
@@ -120,7 +129,10 @@ export class EtoolsToast extends PolymerElement {
     let toastProperties = JSON.parse(JSON.stringify(detail));
 
     toastProperties.duration = 0;
-    if (typeof detail === 'object' && typeof detail.showCloseBtn !== 'undefined') {
+    if (
+      typeof detail === 'object' &&
+      typeof detail.showCloseBtn !== 'undefined'
+    ) {
       if (detail.showCloseBtn === true) {
         closeToastBtn.removeAttribute('hidden');
       } else {

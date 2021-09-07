@@ -10,7 +10,7 @@ import '../../mixins/user-profile-data-mixin';
 import '../../styles/shared-styles';
 import { Config } from '../../config/config';
 import sortBy from 'lodash-es/sortBy';
-import { fireEvent } from '../utils/fire-custom-event';
+import { fireEvent } from '../../utils/fire-custom-event';
 import { customElement, property } from '@polymer/decorators';
 import { UserProfileDataMixin } from '../../mixins/user-profile-data-mixin';
 import './support-btn';
