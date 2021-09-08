@@ -1,9 +1,9 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { Constructor, GenericObject } from '../typings/globals.types';
+import { Constructor, GenericObject } from '../../typings/globals.types';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import { EndpointsMixin } from '../endpoints/endpoints-mixin';
+import { EndpointsMixin } from '../../endpoints/endpoints-mixin';
 import { AjaxServerErrorsMixin } from './ajax-server-errors-mixin';
-import { fireEvent } from '../utils/fire-custom-event';
+import { fireEvent } from '../../utils/fire-custom-event';
 import { property } from '@polymer/decorators';
 
 export function DataElementMixin<T extends Constructor<PolymerElement>>(

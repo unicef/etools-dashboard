@@ -1,15 +1,17 @@
-import {PolymerElement} from '@polymer/polymer';
+import { PolymerElement } from '@polymer/polymer';
 import isEmpty from 'lodash-es/isEmpty';
-import {Constructor} from '../typings/globals.types';
+import { Constructor } from '../../typings/globals.types';
 import DateMixin from './date-mixin';
 
 /**
  * @polymer
  * @mixinFunction
  */
-function CommonGeneralMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
+function CommonGeneralMixin<T extends Constructor<PolymerElement>>(
+  baseClass: T
+) {
   class CommonGeneralClass extends DateMixin(baseClass) {
-     /**
+    /**
      * Prepare and return the string value we have to display on the interface.
      * Ex: partners and agreements lists data values.
      */
@@ -38,8 +40,11 @@ function CommonGeneralMixin<T extends Constructor<PolymerElement>>(baseClass: T)
       // Using replace state to change the URL here ensures the browser's
       // back button doesn't take you through every query
       let currentState = window.history.state;
-      window.history.replaceState(currentState, null,
-        routePath + (qs && !isEmpty(qs) ? '?' + qs : ''));
+      window.history.replaceState(
+        currentState,
+        null,
+        routePath + (qs && !isEmpty(qs) ? '?' + qs : '')
+      );
 
       if (dispatchLocationChange) {
         // This event lets app-location and app-route know
@@ -52,11 +57,13 @@ function CommonGeneralMixin<T extends Constructor<PolymerElement>>(baseClass: T)
       let files = [];
       if (typeof fileUrl === 'string' && fileUrl !== '') {
         let fileName = this.getFileNameFromURL(fileUrl);
-        files = [{
-          id: null,
-          file_name: fileName,
-          path: fileUrl
-        }];
+        files = [
+          {
+            id: null,
+            file_name: fileName,
+            path: fileUrl,
+          },
+        ];
       }
       return files;
     }
@@ -106,7 +113,7 @@ function CommonGeneralMixin<T extends Constructor<PolymerElement>>(baseClass: T)
     }
 
     getCurrencyPrefix(type) {
-      return type === 'USD' ? '$': '';
+      return type === 'USD' ? '$' : '';
     }
 
     capitalizeWord(word) {
@@ -121,14 +128,20 @@ function CommonGeneralMixin<T extends Constructor<PolymerElement>>(baseClass: T)
 
     goToPage(e) {
       // @ts-ignore
-      let path = [this.baseSite, e.target.getAttribute('app-name'),
-        e.target.getAttribute('page')].join('/') + '/' + e.target.id;
+      let path =
+        [
+          this.baseSite,
+          e.target.getAttribute('app-name'),
+          e.target.getAttribute('page'),
+        ].join('/') +
+        '/' +
+        e.target.id;
       this.manageClickEvent(e, path);
     }
 
     _allHaveValues(...args) {
       const self = this;
-      const result = args.reduce(function(hasVal, prop) {
+      const result = args.reduce(function (hasVal, prop) {
         return !isEmpty(self[prop]) && !!self[prop] && hasVal;
       }, true);
       return result;
@@ -143,20 +156,20 @@ function CommonGeneralMixin<T extends Constructor<PolymerElement>>(baseClass: T)
     }
 
     strippedSpace(str) {
-      return str.split(',')
-        .map((item) => {
-          return item[0] === ' ' ? item.slice(1) : item;
-        });
+      return str.split(',').map((item) => {
+        return item[0] === ' ' ? item.slice(1) : item;
+      });
     }
 
     paramStrParseToArray(str, optionsCollection, valueProp = 'value') {
       if (!str) {
         return null;
       }
-      const arr = str.split('|').map(val => Number(val) || val);
-      return optionsCollection.filter(option => arr.indexOf(option[valueProp]) > -1);
+      const arr = str.split('|').map((val) => Number(val) || val);
+      return optionsCollection.filter(
+        (option) => arr.indexOf(option[valueProp]) > -1
+      );
     }
-
   }
   return CommonGeneralClass;
 }

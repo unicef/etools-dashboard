@@ -1,7 +1,7 @@
 import { AjaxErrorsParserMixin } from './ajax-errors-parser-mixin';
-import { fireEvent } from '../utils/fire-custom-event';
+import { fireEvent } from '../../utils/fire-custom-event';
 import { PolymerElement } from '@polymer/polymer/polymer-element';
-import { Constructor } from '../typings/globals.types';
+import { Constructor } from '../../typings/globals.types';
 import { property, observe } from '@polymer/decorators';
 
 export function AjaxServerErrorsMixin<T extends Constructor<PolymerElement>>(

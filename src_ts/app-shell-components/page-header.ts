@@ -6,15 +6,14 @@ import '@polymer/paper-icon-button/paper-icon-button.js';
 import '@unicef-polymer/etools-app-selector/etools-app-selector.js';
 import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
 import './countries-dropdown';
-import '../../mixins/user-profile-data-mixin';
-import '../../styles/shared-styles';
-import { Config } from '../../config/config';
+import '../styles/shared-styles';
+import { Config } from '../config/config';
 import sortBy from 'lodash-es/sortBy';
-import { fireEvent } from '../../utils/fire-custom-event';
+import { fireEvent } from '../utils/fire-custom-event';
 import { customElement, property } from '@polymer/decorators';
-import { UserProfileDataMixin } from '../../mixins/user-profile-data-mixin';
+import { UserProfileDataMixin } from '../common/mixins/user-profile-data-mixin';
 import './support-btn';
-import { GenericObject } from '../../typings/globals.types';
+import { GenericObject } from '../typings/globals.types';
 
 @customElement('page-header')
 export class PageHeader extends UserProfileDataMixin(PolymerElement) {
@@ -31,8 +30,8 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
           bottom: 1px;
           margin-left: 24px;
           min-height: 30px;
-          background: url('../../../images/etools_logo_icon.png') no-repeat
-            center left;
+          background: url('../../images/etools_logo_icon.png') no-repeat center
+            left;
           background-size: auto 48px;
           padding-left: 48px;
           font-size: 30px;

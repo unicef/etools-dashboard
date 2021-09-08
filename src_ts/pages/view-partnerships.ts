@@ -5,7 +5,7 @@ import '@polymer/app-route/app-route';
 import '@polymer/paper-styles/element-styles/paper-material-styles';
 import './partnerships/elements/cso-dashboard';
 import './partnerships/elements/partnerships-overview';
-import CommonGeneralMixin from '../mixins/common-general-mixin';
+import CommonGeneralMixin from '../common/mixins/common-general-mixin';
 import { IronPagesElement } from '@polymer/iron-pages';
 import { GenericObject } from '../typings/globals.types';
 

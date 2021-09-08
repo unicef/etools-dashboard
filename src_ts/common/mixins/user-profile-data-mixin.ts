@@ -1,12 +1,12 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { Constructor, GenericObject } from '../typings/globals.types';
+import { Constructor, GenericObject } from '../../typings/globals.types';
 import { property } from '@polymer/decorators';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin';
 import isEmpty from 'lodash-es/isEmpty';
 import { AjaxErrorsParserMixin } from './ajax-errors-parser-mixin';
 import { DataElementMixin } from './data-element-mixin';
-import { EndpointsMixin } from '../endpoints/endpoints-mixin';
-import { fireEvent } from '../utils/fire-custom-event';
+import { EndpointsMixin } from '../../endpoints/endpoints-mixin';
+import { fireEvent } from '../../utils/fire-custom-event';
 
 export function UserProfileDataMixin<T extends Constructor<PolymerElement>>(
   baseClass: T

@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { PolymerElement } from '@polymer/polymer';
 import { customElement, property } from '@polymer/decorators';
-import DataElementMixin from '../../../mixins/data-element-mixin';
+import DataElementMixin from '../../../common/mixins/data-element-mixin';
 import { fireEvent } from '../../../utils/fire-custom-event';
 import Dexie from 'dexie';
 import { intersection, equals, any, keys, contains } from 'ramda';

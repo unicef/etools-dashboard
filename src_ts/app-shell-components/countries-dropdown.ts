@@ -7,10 +7,10 @@ import '@polymer/paper-item/paper-item.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
 import { logError } from '@unicef-polymer/etools-behaviors/etools-logging.js';
-import { fireEvent } from '../../utils/fire-custom-event';
+import { fireEvent } from '../utils/fire-custom-event';
 import { customElement, property, observe } from '@polymer/decorators';
-import { GenericObject } from '../../typings/globals.types';
-import { EndpointsMixin } from '../../endpoints/endpoints-mixin';
+import { GenericObject } from '../typings/globals.types';
+import { EndpointsMixin } from '../endpoints/endpoints-mixin';
 
 @customElement('countries-dropdown')
 export class CountriesDropdown extends EtoolsPageRefreshMixin(
