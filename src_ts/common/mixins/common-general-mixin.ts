@@ -130,6 +130,7 @@ function CommonGeneralMixin<T extends Constructor<PolymerElement>>(
       // @ts-ignore
       let path =
         [
+          // @ts-ignore
           this.baseSite,
           e.target.getAttribute('app-name'),
           e.target.getAttribute('page'),

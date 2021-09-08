@@ -870,6 +870,7 @@ export class CsoDashboard extends connect(store)(
     if (this.currentFilter !== 'custom') {
       // @ts-ignore
       (this.$.csoListTemplate as any).items = this.presetFilters[
+        // @ts-ignore
         this.currentFilter - 1
       ].filteredPartnerships.slice(
         // @ts-ignore
@@ -890,21 +891,8 @@ export class CsoDashboard extends connect(store)(
 
   // @ts-ignore
   _updateUrl(
-    query,
-    pageNumber,
-    pageSize,
-    sortOrder,
-    orderBy,
-    requiredDataLoaded,
     // @ts-ignore
-    initComplete,
-    selectedSectors,
-    selectedOffices,
-    selectedStatuses,
-    startAfterDate,
-    endBeforeDate,
-    startBeforeDate,
-    endAfterDate
+    initComplete
   ) {
     if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
       return;
@@ -940,6 +928,7 @@ export class CsoDashboard extends connect(store)(
     } else {
       // @ts-ignore
       let pks = this.presetFilters[
+        // @ts-ignore
         this.currentFilter - 1
       ].filteredPartnerships.map((partner) => prop('intervention_id', partner));
       pks.join(',');

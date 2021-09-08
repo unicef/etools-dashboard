@@ -631,6 +631,7 @@ export class PartnershipsOverview extends connect(store)(
     if (this.currentFilter !== 'custom') {
       // @ts-ignore
       this.$.partnerListTemplate.items = this.presetFilters[
+        // @ts-ignore
         this.currentFilter - 1
       ].filteredPartnershipsOverview.slice(
         // @ts-ignore
@@ -651,20 +652,7 @@ export class PartnershipsOverview extends connect(store)(
   }
 
   // @ts-ignore
-  _updateUrl(
-    query,
-    pageNumber,
-    pageSize,
-    sortOrder,
-    orderBy,
-    requiredDataLoaded,
-    // @ts-ignore
-    initComplete,
-    selectedSectors,
-    selectedPartners,
-    selectedOutstanding,
-    selectedTypes
-  ) {
+  _updateUrl() {
     if (!this.active || !this.initComplete || !this.requiredDataLoaded) {
       return;
     }
@@ -696,12 +684,14 @@ export class PartnershipsOverview extends connect(store)(
       } else {
         // @ts-ignore
         pks = this.presetFilters[
+          // @ts-ignore
           this.currentFilter - 1
         ].filteredPartnershipsOverview.map((partner) => prop('id', partner));
       }
       let pksString = pks.join(',');
       // @ts-ignore
       return `${
+        // @ts-ignore
         this.getEndpoint('partnershipsOverview').url
       }?pk=${pksString}&format=csv`;
     }
