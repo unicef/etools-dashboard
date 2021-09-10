@@ -12,7 +12,7 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: Install node modules
-          command: rm -rf node_modules/etools-* & npm install
+          command: rm -rf node_modules/@unicef-polymer-* & npm install
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
