@@ -2,13 +2,13 @@
   "entrypoint": "index.html",
   "shell": "src/app-shell.js",
   "fragments": [
-    "src/views/view-hact.js",
-    "src/views/view-personalized.js",
-    "src/views/view-partnerships.js",
-    "src/views/view-map.js",
-    "src/views/view-trips.js",
-    "src/views/view-attachments.js",
-    "src/views/view-custom.js"
+    "src/pages/view-hact.js",
+    "src/pages/view-personalized.js",
+    "src/pages/view-partnerships.js",
+    "src/pages/view-map.js",
+    "src/pages/view-trips.js",
+    "src/pages/view-attachments.js",
+    "src/pages/view-custom.js"
   ],
   "sources": ["images/**/*", "src/**/*", "package.json"],
   "extraDependencies": [
@@ -28,10 +28,7 @@
   "builds": [
     {
       "name": "esm-bundled",
-      "browserCapabilities": [
-        "es2015",
-        "modules"
-      ],
+      "browserCapabilities": ["es2015", "modules"],
       "js": {
         "minify": true
       },
