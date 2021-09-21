@@ -42,9 +42,11 @@ export class ViewTrips extends PolymerElement {
   public setEmbedSource(): void {
     // @ts-ignore
     const country = this.user.country.name;
+    // handles Cote D'Ivoire edge case
+    let fixedCountry = country.replace(/[']/g, "\'\'" )
 
     const embedSource = tripsProd +
-    `&$filter=travels/country_name eq '${country}'`;
+    `&$filter=travels/country_name eq '${fixedCountry}'`;
 
     this.set('embedSource', embedSource);
   }
