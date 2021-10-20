@@ -233,9 +233,7 @@ export class AppShell extends LoadingMixin(
                   </paper-tab>
 
                   <paper-tab name="partnerships" link>
-                    <a
-                      href="[[rootPath]]partnerships/overview"
-                      class="tab-content"
+                    <a href="[[rootPath]]partnerships" class="tab-content"
                       >Partnerships</a
                     >
                   </paper-tab>
