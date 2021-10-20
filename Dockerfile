@@ -1,4 +1,4 @@
-FROM node:14.15.1-alpine3.12 as builder
+FROM node:12-alpine3.12 as builder
 RUN apk update
 RUN apk add --update bash
 
@@ -14,7 +14,7 @@ WORKDIR /tmp
 ADD package.json /tmp/
 ADD package-lock.json /tmp/
 
-RUN npm install --no-save
+RUN npm ci
 
 ADD . /code/
 WORKDIR /code
@@ -25,7 +25,7 @@ RUN tsc || echo "done"
 RUN export NODE_OPTIONS=--max_old_space_size=4096 && polymer build
 
 
-FROM node:14.15.1-alpine3.12
+FROM node:12-alpine3.12
 RUN apk update
 RUN apk add --update bash
 
