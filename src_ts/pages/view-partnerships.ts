@@ -42,12 +42,14 @@ export class ViewPartnerships extends PolymerElement {
   public setEmbedSource(): void {
     // @ts-ignore
     const country = this.user.country.name;
+    // handles Cote D'Ivoire edge case
+    let fixedCountry = country.replace(/[']/g, "''");
     const embedSource =
       partnershipsProd +
-      `&$filter=interventions/country_name eq '${country}'` +
-      ` and partners/country_name eq '${country}'` +
-      ` and agreements/country_name eq '${country}'` +
-      ` and funds_by_intervention/country_name eq '${country}'`;
+      `&$filter=interventions/country_name eq '${fixedCountry}'` +
+      ` and partners/country_name eq '${fixedCountry}'` +
+      ` and agreements/country_name eq '${fixedCountry}'` +
+      ` and funds_by_intervention/country_name eq '${fixedCountry}'`;
     this.set('embedSource', embedSource);
   }
 }
