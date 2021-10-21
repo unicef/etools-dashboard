@@ -23,11 +23,11 @@ import './styles/buttons-styles';
 import './styles/page-layout-styles';
 import './styles/shared-styles';
 import './styles/app-theme';
-import { ToastNotificationsMixin } from './components/toast/toast-notifications-mixin';
-import { fireEvent } from './components/utils/fire-custom-event';
-import { UserProfileDataMixin } from './mixins/user-profile-data-mixin';
-import './components/page-header';
-import './components/page-footer';
+import { ToastNotificationsMixin } from './common/toast/toast-notifications-mixin';
+import { fireEvent } from './utils/fire-custom-event';
+import { UserProfileDataMixin } from './common/mixins/user-profile-data-mixin';
+import './app-shell-components/page-header';
+import './app-shell-components/page-footer';
 import { Config, BASE_URL } from './config/config';
 import { Endpoints } from './endpoints/endpoints';
 import { store } from './redux/store';
@@ -129,28 +129,55 @@ export class AppShell extends LoadingMixin(
                 <h1 main-title="">Dashboard</h1>
 
                 <div class="top-content-actions-wrapper">
-                  <div class="top-content-action"
-                       hidden$="[[!_isActive(page, 'hact')]]"
+                  <div
+                    class="top-content-action"
+                    hidden$="[[!_isActive(page, 'hact')]]"
                   >
                     <paper-menu-button>
-                      <paper-button class="action-button" icon="file-download" slot="dropdown-trigger">
-                        <iron-icon class="dark" icon="file-download"></iron-icon>
+                      <paper-button
+                        class="action-button"
+                        icon="file-download"
+                        slot="dropdown-trigger"
+                      >
+                        <iron-icon
+                          class="dark"
+                          icon="file-download"
+                        ></iron-icon>
                         Exports
                       </paper-button>
                       <paper-listbox slot="dropdown-content">
-                        <template id="hactExport" is="dom-repeat" items="[[currentYearHactExports]]">
-                          <paper-item on-tap="_export">{{item.name}}</paper-item>
+                        <template
+                          id="hactExport"
+                          is="dom-repeat"
+                          items="[[currentYearHactExports]]"
+                        >
+                          <paper-item on-tap="_export"
+                            >{{item.name}}</paper-item
+                          >
                         </template>
                       </paper-listbox>
                     </paper-menu-button>
                     <paper-menu-button>
-                      <paper-button class="action-button" icon="file-download" slot="dropdown-trigger">
-                        <iron-icon class="dark" icon="file-download"></iron-icon>
+                      <paper-button
+                        class="action-button"
+                        icon="file-download"
+                        slot="dropdown-trigger"
+                      >
+                        <iron-icon
+                          class="dark"
+                          icon="file-download"
+                        ></iron-icon>
                         Historical Exports
                       </paper-button>
                       <paper-listbox slot="dropdown-content">
-                        <template id="hactExport" is="dom-repeat" items="[[historicalHactExports]]">
-                          <paper-item on-tap="_export">{{item.name}}</paper-item>
+                        <template
+                          id="hactExport"
+                          is="dom-repeat"
+                          items="[[historicalHactExports]]"
+                        >
+                          <paper-item on-tap="_export"
+                            >{{item.name}}</paper-item
+                          >
                         </template>
                       </paper-listbox>
                     </paper-menu-button>
@@ -225,7 +252,9 @@ export class AppShell extends LoadingMixin(
 
                   <template is="dom-if" if="{{embedSource.length}}">
                     <paper-tab name="custom" link>
-                      <a href="[[rootPath]]custom" class="tab-content">Custom</a>
+                      <a href="[[rootPath]]custom" class="tab-content"
+                        >Custom</a
+                      >
                     </paper-tab>
                   </template>
                 </paper-tabs>
@@ -316,8 +345,8 @@ export class AppShell extends LoadingMixin(
   @property({ type: String })
   public currentToastMessage: string;
 
-  @property({type: String})
-  public embedSource: string
+  @property({ type: String })
+  public embedSource: string;
 
   public static get observers(): string[] {
     return ['_routePageChanged(routeData.page)', 'setEmbedSource(user)'];
@@ -339,12 +368,12 @@ export class AppShell extends LoadingMixin(
 
   connectedCallback() {
     super.connectedCallback();
-    let currentYear = (new Date).getFullYear();
+    let currentYear = new Date().getFullYear();
     this.getAppStaticData();
     this.set('historicalHactExports', this._setHactExport(2017));
     this.set('currentYearHactExports', [
       { name: 'Table', endpoint: '/api/v2/partners/hact?format=csv' },
-      { name: 'Charts', endpoint: `/api/v2/hact/graph/${currentYear}/export`}
+      { name: 'Charts', endpoint: `/api/v2/hact/graph/${currentYear}/export` },
     ]);
   }
 
@@ -429,7 +458,7 @@ export class AppShell extends LoadingMixin(
         'map',
         'partnerships',
         'trips',
-        'custom'
+        'custom',
       ].indexOf(page) !== -1
     ) {
       this.set('page', page);
@@ -445,25 +474,25 @@ export class AppShell extends LoadingMixin(
     // statement, so break it up.
     switch (page) {
       case 'personalized':
-        import('./views/view-personalized.js');
+        import('./pages/view-personalized.js');
         break;
       case 'partnerships':
-        import('./views/view-partnerships.js');
+        import('./pages/view-partnerships.js');
         break;
       case 'hact':
-        import('./views/view-hact.js');
+        import('./pages/view-hact.js');
         break;
       case 'map':
-        import('./views/view-map.js');
+        import('./pages/view-map.js');
         break;
       case 'attachments':
-        import('./views/view-attachments.js');
+        import('./pages/view-attachments.js');
         break;
       case 'trips':
-        import('./views/view-trips.js');
+        import('./pages/view-trips.js');
         break;
       case 'custom':
-        import('./views/view-custom.js');
+        import('./pages/view-custom.js');
         break;
       case 'view404':
         this._showPage404.bind(this);
@@ -485,12 +514,12 @@ export class AppShell extends LoadingMixin(
 
   // calculates export links for hact general, detail, and charts views, with new links added each calendar year
   private _setHactExport(startYear: number) {
-    const currentYear = (new Date).getFullYear();
+    const currentYear = new Date().getFullYear();
     let array = [];
 
     // handles all charts links
     for (let year: number = startYear; year < currentYear; year++) {
-      let yearObj = {name: '', endpoint: ''};
+      let yearObj = { name: '', endpoint: '' };
       yearObj.name = 'Charts ' + year.toString();
       yearObj.endpoint = `/api/v2/hact/graph/${year}/export`;
       array.push(yearObj);
@@ -498,7 +527,7 @@ export class AppShell extends LoadingMixin(
 
     // adds detail links
     for (let year: number = startYear; year < currentYear; year++) {
-      let yearObj = {name: '', endpoint: ''};
+      let yearObj = { name: '', endpoint: '' };
       yearObj.name = 'Table ' + year.toString();
       yearObj.endpoint = `/api/v2/hact/history/?year=${year}&format=csv`;
       array.push(yearObj);

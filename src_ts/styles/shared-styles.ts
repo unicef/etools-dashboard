@@ -1,4 +1,4 @@
-/* shared styles for all views */
+/* shared styles for all pages */
 /* not for styling index.html or app-shell */
 import '@polymer/polymer/polymer-element.js';
 const DocumentContainer = document.createElement('template');

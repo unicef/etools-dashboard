@@ -1,39 +1,40 @@
-import {PolymerElement} from '@polymer/polymer/polymer-element.js';
-import {Constructor, GenericObject} from '../typings/globals.types';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { Constructor, GenericObject } from '../../typings/globals.types';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {EndpointsMixin} from '../endpoints/endpoints-mixin';
-import {AjaxServerErrorsMixin} from './ajax-server-errors-mixin';
-import {fireEvent} from '../components/utils/fire-custom-event';
-import {property} from '@polymer/decorators';
+import { EndpointsMixin } from '../../endpoints/endpoints-mixin';
+import { AjaxServerErrorsMixin } from './ajax-server-errors-mixin';
+import { fireEvent } from '../../utils/fire-custom-event';
+import { property } from '@polymer/decorators';
 
-export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
-  class DataElementMixinClass extends EndpointsMixin(AjaxServerErrorsMixin(EtoolsAjaxRequestMixin(baseClass))) {
-
-    @property({type: Object})
+export function DataElementMixin<T extends Constructor<PolymerElement>>(
+  baseClass: T
+) {
+  class DataElementMixinClass extends EndpointsMixin(
+    AjaxServerErrorsMixin(EtoolsAjaxRequestMixin(baseClass))
+  ) {
+    @property({ type: Object })
     public options: GenericObject = {
       csrf: true,
-      endpoint: null
+      endpoint: null,
     };
 
-    @property({type: Array, notify: true, readOnly: true})
+    @property({ type: Array, notify: true, readOnly: true })
     public data: object[];
 
-    @property({type: Array})
+    @property({ type: Array })
     public globalMessage = 'An error occurred while trying to fetch the data!';
 
-    @property({type: Object})
+    @property({ type: Object })
     public _refreshInterval: object = null;
 
-    @property({type: Boolean})
+    @property({ type: Boolean })
     private fireDataLoaded = false;
 
-    @property({type: String})
+    @property({ type: String })
     endpointName: string;
 
     public static get observers(): string[] {
-      return [
-        '_endpointChanged(options.endpoint)'
-      ];
+      return ['_endpointChanged(options.endpoint)'];
     }
 
     public disconnectedCallback(): void {
@@ -50,7 +51,11 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       if (newEndpoint === undefined) {
         return;
       }
-      if (newEndpoint && newEndpoint.hasOwnProperty('exp') && newEndpoint.exp > 0) {
+      if (
+        newEndpoint &&
+        newEndpoint.hasOwnProperty('exp') &&
+        newEndpoint.exp > 0
+      ) {
         this._removeAutomaticDataRefreshLoop();
         this._setAutomaticDataRefreshLoop(newEndpoint);
       }
@@ -68,25 +73,29 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
     private _requestData(): void {
       fireEvent(this, 'global-loading', {
         active: true,
-        loadingSource: this.endpointName
+        loadingSource: this.endpointName,
       });
 
       this.sendRequest(this.options)
-          .then((resp) => {
-            this._handleMyResponse(resp);
-          }).catch((err) => {
-            if (this.options.endpoint.template.indexOf('profile') && err.status === 403) {
-              fireEvent(this, 'forbidden', {bubbles: true, composed: true});
-            }
-            // @ts-ignore
-            this.handleErrorResponse(err);
-          })
-          .finally(() => {
-            fireEvent(this, 'global-loading', {
-              active: false,
-              loadingSource: this.endpointName
-            });
+        .then((resp) => {
+          this._handleMyResponse(resp);
+        })
+        .catch((err) => {
+          if (
+            this.options.endpoint.template.indexOf('profile') &&
+            err.status === 403
+          ) {
+            fireEvent(this, 'forbidden', { bubbles: true, composed: true });
+          }
+          // @ts-ignore
+          this.handleErrorResponse(err);
+        })
+        .finally(() => {
+          fireEvent(this, 'global-loading', {
+            active: false,
+            loadingSource: this.endpointName,
           });
+        });
     }
 
     private _handleMyResponse(res: GenericObject): void {
@@ -94,7 +103,9 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
       if (this.fireDataLoaded) {
         // @ts-ignore
         if (!this.dataLoadedEventName) {
-          console.warn('Please specify data loaded event name(dataLoadedEventName property)');
+          console.warn(
+            'Please specify data loaded event name(dataLoadedEventName property)'
+          );
         } else {
           // @ts-ignore
           fireEvent(this, this.dataLoadedEventName);
@@ -111,9 +122,12 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(baseClas
     }
 
     private _setAutomaticDataRefreshLoop(newEndpoint: GenericObject): void {
-      this.set('_refreshInterval', setInterval(() => {
-        this._requestData();
-      }, newEndpoint.exp));
+      this.set(
+        '_refreshInterval',
+        setInterval(() => {
+          this._requestData();
+        }, newEndpoint.exp)
+      );
     }
   }
   return DataElementMixinClass;

@@ -1,33 +1,33 @@
-import {property} from '@polymer/decorators';
-import {PolymerElement} from '@polymer/polymer';
+import { property } from '@polymer/decorators';
+import { PolymerElement } from '@polymer/polymer';
 import isEmpty from 'lodash-es/isEmpty';
-import {Constructor} from '../typings/globals.types';
+import { Constructor } from '../../typings/globals.types';
 
 /**
  * @polymer
  * @mixinFunction
  */
-function PaginationWithFiltersMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
+function PaginationWithFiltersMixin<T extends Constructor<PolymerElement>>(
+  baseClass: T
+) {
   class PaginationWithFiltersClass extends baseClass {
-
-    @property({type: Number})
+    @property({ type: Number })
     pageNumber!: number;
 
-    @property({type: Number})
+    @property({ type: Number })
     pageSize!: number;
 
-    @property({type: String})
+    @property({ type: String })
     sortOrder!: string;
 
-    @property({type: String})
+    @property({ type: String })
     qs!: string;
 
-    @property({type: Number})
+    @property({ type: Number })
     debounceTime: {
-      type: Number,
-      value: 100
-    }
-
+      type: Number;
+      value: 100;
+    };
 
     ready() {
       this.addEventListener('sort-changed', this.sortOrderChanged as any);
@@ -54,7 +54,7 @@ function PaginationWithFiltersMixin<T extends Constructor<PolymerElement>>(baseC
       this.set('pageNumber', 1);
     }
 
-    sortOrderChanged({detail: {direction, field}}) {
+    sortOrderChanged({ detail: { direction, field } }) {
       this.set('debounceTime', 150);
       this.set('sortOrder', direction);
       if (field) {
@@ -62,12 +62,16 @@ function PaginationWithFiltersMixin<T extends Constructor<PolymerElement>>(baseC
       }
     }
 
-    buildQueryString(hasPagination=true) {
+    buildQueryString(hasPagination = true) {
       // @ts-ignore
-      return this.params.reduce((acc, {qName, propName, xf}) => {
-        return isEmpty(this[propName]) ? acc
-          : `${acc}&${qName}=${xf(this[propName])}`;
-      }, hasPagination ? `page=${this.pageNumber}&size=${this.pageSize}` : '');
+      return this.params.reduce(
+        (acc, { qName, propName, xf }) => {
+          return isEmpty(this[propName])
+            ? acc
+            : `${acc}&${qName}=${xf(this[propName])}`;
+        },
+        hasPagination ? `page=${this.pageNumber}&size=${this.pageSize}` : ''
+      );
     }
   }
   return PaginationWithFiltersClass;

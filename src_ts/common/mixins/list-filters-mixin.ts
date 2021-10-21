@@ -1,7 +1,7 @@
-import {property} from '@polymer/decorators';
-import {PolymerElement} from '@polymer/polymer';
+import { property } from '@polymer/decorators';
+import { PolymerElement } from '@polymer/polymer';
 import isEmpty from 'lodash-es/isEmpty';
-import {Constructor} from '../typings/globals.types';
+import { Constructor } from '../../typings/globals.types';
 import DatePickerLite from '@unicef-polymer/etools-date-time/datepicker-lite';
 declare const dayjs: any;
 
@@ -11,11 +11,10 @@ declare const dayjs: any;
  */
 function ListFiltersMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
   class ListFiltersClass extends baseClass {
+    @property({ type: Array })
+    listFilterOptions!: any[];
 
-    @property({type: Array})
-    listFilterOptions!: any[] ;
-
-    @property({type: Array})
+    @property({ type: Array })
     selectedFilters!: any[];
 
     /**
@@ -26,23 +25,27 @@ function ListFiltersMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
       // init add filter menu options
       this.setProperties({
         listFilterOptions: filterOptions,
-        selectedFilters: []
+        selectedFilters: [],
       });
     }
 
     _isAlreadySelected(filter: any) {
       return Boolean(
-        this.selectedFilters.find((sF: any) => sF.filterName === filter.filterName)
+        this.selectedFilters.find(
+          (sF: any) => sF.filterName === filter.filterName
+        )
       );
     }
 
     // select a filter from ADD FILTER menu
-    selectFilter({model: {item: selectedOption, index: selectedIdx}}) {
+    selectFilter({ model: { item: selectedOption, index: selectedIdx } }) {
       if (!this._isAlreadySelected(selectedOption)) {
         this.push('selectedFilters', selectedOption);
         this.set(['listFilterOptions', selectedIdx, 'selected'], true);
       } else {
-        let paredFilters = this.selectedFilters.filter(fil => fil.filterName != selectedOption.filterName);
+        let paredFilters = this.selectedFilters.filter(
+          (fil) => fil.filterName != selectedOption.filterName
+        );
         this._clearFilterSelection(selectedOption);
         this.set('selectedFilters', paredFilters);
         this.set(['listFilterOptions', selectedIdx, 'selected'], false);
@@ -54,7 +57,14 @@ function ListFiltersMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
         if (filter.singleSelection) {
           this.set(filter.path, null);
         } else {
-          this.set(filter.path, (filter.type === 'esmm') ? [] : (filter.type === 'datepicker' ? '' : null));
+          this.set(
+            filter.path,
+            filter.type === 'esmm'
+              ? []
+              : filter.type === 'datepicker'
+              ? ''
+              : null
+          );
         }
       }
     }
@@ -80,7 +90,7 @@ function ListFiltersMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
       if (selectedFilterIndex > -1) {
         // remove filter
         this.splice('selectedFilters', selectedFilterIndex, 1);
-        const resetValue = Array.isArray(this[path]) ? []: null;
+        const resetValue = Array.isArray(this[path]) ? [] : null;
         this.set(path, resetValue);
       }
     }
@@ -116,7 +126,7 @@ function ListFiltersMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
 
       let filterVal = event.detail.selectedItems;
       if (Array.isArray(filterVal)) {
-        filterVal = filterVal.map((xs)=> {
+        filterVal = filterVal.map((xs) => {
           if (typeof xs === 'object') {
             return xs[valueProp];
           }
@@ -131,7 +141,9 @@ function ListFiltersMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
       if (!event.detail.date) {
         return;
       }
-      let filterPath = (event.target as DatePickerLite).getAttribute('data-filter-path')!;
+      let filterPath = (event.target as DatePickerLite).getAttribute(
+        'data-filter-path'
+      )!;
       const selectedDate = new Date(event.detail.date);
       this.set(filterPath, dayjs(selectedDate).format('YYYY-MM-DD'));
     }
@@ -145,17 +157,28 @@ function ListFiltersMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
           // check available filters
           if (this._validateFilterSelectedValue(filter.selectedValue)) {
             let foundInAvailable = false;
-            if (this.listFilterOptions instanceof Array && this.listFilterOptions.length > 0) {
+            if (
+              this.listFilterOptions instanceof Array &&
+              this.listFilterOptions.length > 0
+            ) {
               for (i = 0; i < this.listFilterOptions.length; i++) {
-                if (this.listFilterOptions[i].filterName === filter.filterName) {
+                if (
+                  this.listFilterOptions[i].filterName === filter.filterName
+                ) {
                   const type = this.listFilterOptions[i].type;
                   let filterPath = 'listFilterOptions.' + i;
                   if (type === 'esmm' || type === 'dropdown') {
                     // update esmm dropdown selection
-                    this.set(filterPath + '.alreadySelected', filter.selectedValue);
+                    this.set(
+                      filterPath + '.alreadySelected',
+                      filter.selectedValue
+                    );
                   } else if (type === 'datepicker') {
                     // update datepicker selection
-                    this.set(filterPath + '.dateSelected', filter.selectedValue);
+                    this.set(
+                      filterPath + '.dateSelected',
+                      filter.selectedValue
+                    );
                   }
                   this.set(filterPath + '.selected', true);
                   this._disableFilter(filter, filterPath);
@@ -169,18 +192,32 @@ function ListFiltersMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
             // if the filter is not in available filters lists,
             // search it in selected filters lists and update selected value
             if (!foundInAvailable) {
-              if (this.selectedFilters instanceof Array && this.selectedFilters.length > 0) {
+              if (
+                this.selectedFilters instanceof Array &&
+                this.selectedFilters.length > 0
+              ) {
                 for (i = 0; i < this.selectedFilters.length; i++) {
-                  if (this.selectedFilters[i].filterName === filter.filterName) {
+                  if (
+                    this.selectedFilters[i].filterName === filter.filterName
+                  ) {
                     let filterPath = '';
-                    if (this.selectedFilters[i].type === 'esmm' || this.selectedFilters[i].type === 'dropdown') {
+                    if (
+                      this.selectedFilters[i].type === 'esmm' ||
+                      this.selectedFilters[i].type === 'dropdown'
+                    ) {
                       // update esmm dropdown selection
                       filterPath = 'selectedFilters.' + i;
-                      this.set(filterPath + '.alreadySelected', filter.selectedValue);
+                      this.set(
+                        filterPath + '.alreadySelected',
+                        filter.selectedValue
+                      );
                     } else if (this.selectedFilters[i].type === 'datepicker') {
                       // update datepicker selection
                       filterPath = 'selectedFilters.' + i;
-                      this.set(filterPath + '.dateSelected', filter.selectedValue);
+                      this.set(
+                        filterPath + '.dateSelected',
+                        filter.selectedValue
+                      );
                     }
                     this._disableFilter(filter, filterPath);
                     break;
