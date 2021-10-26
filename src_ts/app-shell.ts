@@ -25,7 +25,6 @@ import './styles/shared-styles';
 import './styles/app-theme';
 import { ToastNotificationsMixin } from './common/toast/toast-notifications-mixin';
 import { fireEvent } from './utils/fire-custom-event';
-import { UserProfileDataMixin } from './common/mixins/user-profile-data-mixin';
 import './app-shell-components/page-header';
 import './app-shell-components/page-footer';
 import { Config, BASE_URL } from './config/config';
@@ -47,7 +46,7 @@ setRootPath(BASE_URL);
 
 @customElement('app-shell')
 export class AppShell extends LoadingMixin(
-  ToastNotificationsMixin(UserProfileDataMixin(PolymerElement))
+  ToastNotificationsMixin(PolymerElement)
 ) {
   public static get template(): HTMLTemplateElement {
     return html`

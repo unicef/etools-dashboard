@@ -2,15 +2,15 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { Constructor, GenericObject } from '../../typings/globals.types';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import { EndpointsMixin } from '../../endpoints/endpoints-mixin';
-import { AjaxServerErrorsMixin } from './ajax-server-errors-mixin';
 import { fireEvent } from '../../utils/fire-custom-event';
 import { property } from '@polymer/decorators';
+import { parseRequestErrorsAndShowAsToastMsgs } from '@unicef-polymer/etools-ajax/ajax-error-parser';
 
 export function DataElementMixin<T extends Constructor<PolymerElement>>(
   baseClass: T
 ) {
   class DataElementMixinClass extends EndpointsMixin(
-    AjaxServerErrorsMixin(EtoolsAjaxRequestMixin(baseClass))
+    EtoolsAjaxRequestMixin(baseClass)
   ) {
     @property({ type: Object })
     public options: GenericObject = {
@@ -87,8 +87,7 @@ export function DataElementMixin<T extends Constructor<PolymerElement>>(
           ) {
             fireEvent(this, 'forbidden', { bubbles: true, composed: true });
           }
-          // @ts-ignore
-          this.handleErrorResponse(err);
+          parseRequestErrorsAndShowAsToastMsgs(err, this);
         })
         .finally(() => {
           fireEvent(this, 'global-loading', {
