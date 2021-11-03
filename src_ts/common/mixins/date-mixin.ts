@@ -1,5 +1,5 @@
-import {PolymerElement} from '@polymer/polymer';
-import {Constructor} from '../typings/globals.types';
+import { PolymerElement } from '@polymer/polymer';
+import { Constructor } from '../../typings/globals.types';
 
 declare const dayjs: any;
 
@@ -9,27 +9,31 @@ declare const dayjs: any;
  */
 function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
   class DateClass extends baseClass {
-     /**
+    /**
      * Format date string to any format supported by dayjs
      */
     prettyDate(dateString, format?) {
       let date = this._convertDate(dateString);
-      return (!date) ? '' : this._utcDate(date, format);
+      return !date ? '' : this._utcDate(date, format);
     }
 
     prettyDateWithoutOffset(dateString, format) {
       let date = this.prepareDate(dateString);
-      return (!date) ? '' : this._utcDate(date, format);
+      return !date ? '' : this._utcDate(date, format);
     }
 
     _utcDate(date, format) {
-      return (!date) ? '' : dayjs.utc(date).format(format ? format : 'D MMM YYYY');
+      return !date
+        ? ''
+        : dayjs.utc(date).format(format ? format : 'D MMM YYYY');
     }
-
 
     _convertDate(dateString, noZTimezoneOffset?) {
       if (typeof dateString === 'string' && dateString !== '') {
-        dateString = (dateString.indexOf('T') === -1) ? (dateString + 'T00:00:00') : dateString;
+        dateString =
+          dateString.indexOf('T') === -1
+            ? dateString + 'T00:00:00'
+            : dateString;
         /**
          * `Z` (zero time offset) will ensure `new Date` will create the date in UTC,
          *  and then it will apply local timezone
@@ -40,7 +44,8 @@ function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
          *  d.toGMTString() == "Wed, 25 Apr 2018 00:00:00 GMT"
          * @type {string}
          */
-        dateString += (noZTimezoneOffset || dateString.indexOf('Z') >= 0) ? '' : 'Z';
+        dateString +=
+          noZTimezoneOffset || dateString.indexOf('Z') >= 0 ? '' : 'Z';
         let date = new Date(dateString);
         let isValid = this.isValidDate(date);
         if (!isValid) {
@@ -71,8 +76,12 @@ function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
       if (!unit) {
         unit = 'days';
       }
-      if (typeof firstDateString === 'string' && firstDateString !== '' &&
-          typeof secondDateString === 'string' && secondDateString !== '') {
+      if (
+        typeof firstDateString === 'string' &&
+        firstDateString !== '' &&
+        typeof secondDateString === 'string' &&
+        secondDateString !== ''
+      ) {
         let firstDate = new Date(firstDateString);
         let secondDate = new Date(secondDateString);
 
@@ -116,11 +125,18 @@ function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
       }
       let date = new Date(current);
       let currentDate = this.isValidDate(date) ? dayjs() : dayjs(date);
-      return currentDate.isBetween(dayjs(startDate), dayjs(endDate), null, '[]');
+      return currentDate.isBetween(
+        dayjs(startDate),
+        dayjs(endDate),
+        null,
+        '[]'
+      );
     }
 
     isValidDate(date) {
-      return (date instanceof Date === false) ? false : (date.toString() !== 'Invalid Date');
+      return date instanceof Date === false
+        ? false
+        : date.toString() !== 'Invalid Date';
     }
 
     getTodayDateStr() {

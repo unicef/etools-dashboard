@@ -42,10 +42,12 @@ export class ViewMap extends PolymerElement {
   public setEmbedSource(): void {
     // @ts-ignore
     const country = this.user.country.name;
+    // handles Cote D'Ivoire edge case
+    let fixedCountry = country.replace(/[']/g, "\'\'" )
 
     const embedSource = mapProd +
-    `&$filter=interventionslocations/country_name eq '${country}'` +
-    ` and fundsreservationitem/country_name eq '${country}'`;
+    `&$filter=interventionslocations/country_name eq '${fixedCountry}'` +
+    ` and fundsreservationitem/country_name eq '${fixedCountry}'`;
     this.set('embedSource', embedSource);
   }
 }

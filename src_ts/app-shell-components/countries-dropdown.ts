@@ -1,4 +1,4 @@
-import {PolymerElement, html} from '@polymer/polymer/polymer-element.js';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-if.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
@@ -6,14 +6,16 @@ import '@polymer/paper-listbox/paper-listbox.js';
 import '@polymer/paper-item/paper-item.js';
 import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
-import {logError} from '@unicef-polymer/etools-behaviors/etools-logging.js';
-import {fireEvent} from '../components/utils/fire-custom-event';
-import {customElement, property, observe} from '@polymer/decorators';
-import {GenericObject} from '../typings/globals.types';
-import {EndpointsMixin} from '../endpoints/endpoints-mixin';
+import { logError } from '@unicef-polymer/etools-behaviors/etools-logging.js';
+import { fireEvent } from '../utils/fire-custom-event';
+import { customElement, property, observe } from '@polymer/decorators';
+import { GenericObject } from '../typings/globals.types';
+import { EndpointsMixin } from '../endpoints/endpoints-mixin';
 
 @customElement('countries-dropdown')
-export class CountriesDropdown extends EtoolsPageRefreshMixin(EndpointsMixin(EtoolsAjaxRequestMixin(PolymerElement))) {
+export class CountriesDropdown extends EtoolsPageRefreshMixin(
+  EndpointsMixin(EtoolsAjaxRequestMixin(PolymerElement))
+) {
   static get template(): HTMLTemplateElement {
     return html`
       <style>
@@ -28,30 +30,32 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EndpointsMixin(Eto
         paper-dropdown-menu {
           width: 160px;
           --paper-input-container-color: var(--light-secondary-text-color);
-          --paper-input-container-focus-color: var(--light-secondary-text-color);
+          --paper-input-container-focus-color: var(
+            --light-secondary-text-color
+          );
           --paper-input-container-underline: {
             display: none;
-          };
+          }
 
           --paper-input-container-underline-focus: {
             display: none;
-          };
+          }
 
           --paper-input-container-underline-disabled: {
             display: none;
-          };
+          }
 
           --paper-input-container-input: {
             color: var(--light-primary-text-color);
-          };
+          }
 
           --paper-dropdown-menu-icon: {
             color: var(--light-icon-color);
-          };
+          }
 
           --paper-input-container-label: {
             top: 4px;
-          };
+          }
 
           --paper-input-container-input: {
             margin-bottom: 2px;
@@ -79,35 +83,38 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EndpointsMixin(Eto
       </style>
 
       <template is="dom-if" if="[[countrySelectorVisible]]">
-
-        <paper-dropdown-menu id="menu" label="Country" noink="" no-label-float="">
-          <paper-listbox slot="dropdown-content"
-                         id="countriesListbox"
-                         attr-for-selected="countryId"
-                         selected="[[current.id]]"
-                         on-iron-select="_countrySelected">
+        <paper-dropdown-menu
+          id="menu"
+          label="Country"
+          noink=""
+          no-label-float=""
+        >
+          <paper-listbox
+            slot="dropdown-content"
+            id="countriesListbox"
+            attr-for-selected="countryId"
+            selected="[[current.id]]"
+            on-iron-select="_countrySelected"
+          >
             <template id="repeat" is="dom-repeat" items="[[countries]]">
-              <paper-item country-id="[[item.id]]">
-                [[item.name]]
-              </paper-item>
+              <paper-item country-id="[[item.id]]"> [[item.name]] </paper-item>
             </template>
           </paper-listbox>
-
         </paper-dropdown-menu>
       </template>
     `;
   }
 
-  @property({type: Object})
+  @property({ type: Object })
   public current: GenericObject;
 
-  @property({type: Object})
+  @property({ type: Object })
   public country: object;
 
-  @property({type: Array})
+  @property({ type: Array })
   public countries: object[];
 
-  @property({type: Boolean})
+  @property({ type: Boolean })
   public countrySelectorVisible: Boolean;
 
   public _countrySelected(e: CustomEvent): void {
@@ -122,7 +129,7 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EndpointsMixin(Eto
 
   @observe('countries')
   public _countrySelectorUpdate(countries: object[]): void {
-    if (Array.isArray(countries) && (countries.length > 1)) {
+    if (Array.isArray(countries) && countries.length > 1) {
       this.set('countrySelectorVisible', true);
     }
   }
@@ -131,17 +138,19 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EndpointsMixin(Eto
     fireEvent(this, 'global-loading', {
       active: true,
       loadingSource: 'country-change',
-      message: 'Please wait while country is changing...'
+      message: 'Please wait while country is changing...',
     });
     this.sendRequest({
-      body: {country: countryId},
+      body: { country: countryId },
       endpoint: this.getEndpoint('changeCountry'),
-      method: 'POST'
-    }).then(() => {
-      this._handleResponse();
-    }).catch((err) => {
-      this._handleError(err);
-    });
+      method: 'POST',
+    })
+      .then(() => {
+        this._handleResponse();
+      })
+      .catch((err) => {
+        this._handleError(err);
+      });
   }
 
   private _handleResponse(): void {
@@ -154,7 +163,12 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(EndpointsMixin(Eto
     // TODO: this should be a larger alert.
     const countriesListbox: any = this.$.countriesListbox;
     countriesListbox.selected = this.current;
-    fireEvent(this, 'toast', {text: 'Something went wrong changing your workspace. Please try again'});
-    fireEvent(this, 'global-loading', {active: false, loadingSource: 'country-change'});
+    fireEvent(this, 'toast', {
+      text: 'Something went wrong changing your workspace. Please try again',
+    });
+    fireEvent(this, 'global-loading', {
+      active: false,
+      loadingSource: 'country-change',
+    });
   }
 }

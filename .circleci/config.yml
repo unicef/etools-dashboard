@@ -1,35 +1,32 @@
 version: 2
 jobs:
-  test:
+  lint:
     working_directory: ~/code
     # The primary container is an instance of the first list image listed. Your build commands run in this container.
     docker:
       # - image: robertavram/etools-dash-base:tst
-      - image: node:11.9.0
+      - image: node:12.18.3
     steps:
       - checkout
       - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install node modules
-          command: rm -rf node_modules/etools-* & npm install
+          command: npm ci
       - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
       - run:
           name: Polymer3 Build
           command: npm run build
-      - run:
-          name: Run Tests
-          command: ./node_modules/.bin/gulp test --pc
 
   build_and_deploy:
     working_directory: ~/code
     # The primary container is an instance of the first list image listed. Your build commands run in this container.
     docker:
       # - image: robertavram/etools-dash-base:tst
-      - image: node:11.9.0
+      - image: node:12.18.3
     steps:
       - checkout
       - setup_remote_docker:
@@ -50,7 +47,7 @@ jobs:
             curl -L -o /tmp/docker-$VER.tgz https://get.docker.com/builds/Linux/x86_64/docker-$VER.tgz
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin
-           # build and push Docker image
+          # build and push Docker image
       - run:
           name: Building the image
           command: |
@@ -85,16 +82,16 @@ jobs:
 
 workflows:
   version: 2
-  build_and_test:
+  build_and_lint:
     jobs:
-      - test
+      - lint
       - build_and_deploy:
           requires:
-            - test
+            - lint
           filters:
             branches:
               only:
                 - master
                 - staging
                 - develop
-                - prp-refactoring
+                - node-v
