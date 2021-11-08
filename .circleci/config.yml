@@ -5,7 +5,7 @@ jobs:
     # The primary container is an instance of the first list image listed. Your build commands run in this container.
     docker:
       # - image: robertavram/etools-dash-base:tst
-      - image: node:12.18.3
+      - image: node:12.22.7
     steps:
       - checkout
       - restore_cache:
@@ -26,7 +26,7 @@ jobs:
     # The primary container is an instance of the first list image listed. Your build commands run in this container.
     docker:
       # - image: robertavram/etools-dash-base:tst
-      - image: node:12.18.3
+      - image: node:12.22.7
     steps:
       - checkout
       - setup_remote_docker:
@@ -94,4 +94,3 @@ workflows:
                 - master
                 - staging
                 - develop
-                - node-v

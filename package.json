@@ -12,7 +12,7 @@
     "build": "export NODE_OPTIONS=--max_old_space_size=8192 && npm run tsToJs && npm run build:static",
     "tsToJs": "tsc --skipLibCheck",
     "tsEslint": "eslint src_ts/**",
-    "start": "gulp prpl-server serve",
+    "start": "tsc --watch --preserveWatchOutput & polymer serve -H 0.0.0.0 -p 8080",
     "build:prpl-server": "polymer build --auto-base-path && gulp prpl-server",
     "build:static": "polymer build",
     "serve:prpl-server": "prpl-server --root server/build",
