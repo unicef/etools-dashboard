@@ -382,10 +382,29 @@ export class AppShell extends LoadingMixin(
     this.set('embedSource', embedSource);
   }
 
+  getCurrentUser() {
+    return sendRequest({ endpoint: Endpoints.myProfile })
+      .then((response: any) => {
+        return response;
+      })
+      .catch((error: any) => {
+        if ([403, 401].includes(error.status)) {
+          window.location.href = window.location.origin + '/login';
+        }
+        throw error;
+      });
+  }
+
   getAppStaticData() {
-    this.getSectors();
-    this.getDropdownsStaticData();
-    this.getOffices();
+    this.getCurrentUser().then((user: any) => {
+      if (user) {
+        this.user = user;
+
+        this.getSectors();
+        this.getDropdownsStaticData();
+        this.getOffices();
+      }
+    });
   }
   getSectors() {
     sendRequest({ endpoint: Endpoints.sectors }).then((resp) =>
