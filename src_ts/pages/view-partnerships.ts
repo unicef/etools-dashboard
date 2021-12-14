@@ -15,10 +15,7 @@ export class ViewPartnerships extends CommonGeneralMixin(PolymerElement) {
     return html`
       <style include="paper-material-styles">
         :host {
-          padding-top: 24px;
-          padding-bottom: 24px;
-          padding-left: 15px;
-          padding-right: 10px;
+          padding: 24px;
         }
         .view-toggle {
           display: flex;
