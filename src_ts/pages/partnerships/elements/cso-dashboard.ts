@@ -13,6 +13,7 @@ import '@polymer/paper-input/paper-input';
 import '@polymer/iron-icon/iron-icon';
 import '@polymer/iron-pages/iron-pages';
 import '@polymer/iron-flex-layout/iron-flex-layout';
+import '@polymer/iron-flex-layout/iron-flex-layout-classes';
 import '@polymer/paper-styles/element-styles/paper-material-styles';
 import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
 import { timeOut } from '@polymer/polymer/lib/utils/async.js';
