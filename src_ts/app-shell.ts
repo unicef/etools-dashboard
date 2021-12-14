@@ -18,7 +18,7 @@ import { setRootPath } from '@polymer/polymer/lib/utils/settings.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
 import '@unicef-polymer/etools-loading/etools-loading.js';
 import { sendRequest } from '@unicef-polymer/etools-ajax/etools-ajax-request';
-import 'etools-piwik-analytics/etools-piwik-analytics.js';
+import '@unicef-polymer/etools-piwik-analytics/etools-piwik-analytics.js';
 import './styles/buttons-styles';
 import './styles/page-layout-styles';
 import './styles/shared-styles';
