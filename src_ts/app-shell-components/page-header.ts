@@ -11,12 +11,11 @@ import { Config } from '../config/config';
 import sortBy from 'lodash-es/sortBy';
 import { fireEvent } from '../utils/fire-custom-event';
 import { customElement, property } from '@polymer/decorators';
-import { UserProfileDataMixin } from '../common/mixins/user-profile-data-mixin';
 import './support-btn';
 import { GenericObject } from '../typings/globals.types';
 
 @customElement('page-header')
-export class PageHeader extends UserProfileDataMixin(PolymerElement) {
+export class PageHeader extends PolymerElement {
   public static get template(): HTMLTemplateElement {
     return html`
       <style include="shared-styles">
@@ -134,11 +133,7 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
             current="[[user.country]]"
           ></countries-dropdown>
           <support-btn></support-btn>
-          <etools-profile-dropdown
-            profile="{{user}}"
-            on-save-profile="_saveProfile"
-            on-sign-out="_signOut"
-          >
+          <etools-profile-dropdown profile="{{user}}" on-sign-out="_signOut">
           </etools-profile-dropdown>
         </div>
       </app-toolbar>
@@ -189,11 +184,6 @@ export class PageHeader extends UserProfileDataMixin(PolymerElement) {
     return data.map((item) => {
       return { label: item.name, value: item.id };
     });
-  }
-
-  public _saveProfile(e: CustomEvent): void {
-    this.set('profile', e.detail.profile);
-    this.saveProfile(this.profile);
   }
 
   public _signOut(): void {

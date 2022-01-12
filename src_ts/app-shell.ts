@@ -18,14 +18,13 @@ import { setRootPath } from '@polymer/polymer/lib/utils/settings.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
 import '@unicef-polymer/etools-loading/etools-loading.js';
 import { sendRequest } from '@unicef-polymer/etools-ajax/etools-ajax-request';
-import 'etools-piwik-analytics/etools-piwik-analytics.js';
+import '@unicef-polymer/etools-piwik-analytics/etools-piwik-analytics.js';
 import './styles/buttons-styles';
 import './styles/page-layout-styles';
 import './styles/shared-styles';
 import './styles/app-theme';
 import { ToastNotificationsMixin } from './common/toast/toast-notifications-mixin';
 import { fireEvent } from './utils/fire-custom-event';
-import { UserProfileDataMixin } from './common/mixins/user-profile-data-mixin';
 import './app-shell-components/page-header';
 import './app-shell-components/page-footer';
 import { Config, BASE_URL } from './config/config';
@@ -47,7 +46,7 @@ setRootPath(BASE_URL);
 
 @customElement('app-shell')
 export class AppShell extends LoadingMixin(
-  ToastNotificationsMixin(UserProfileDataMixin(PolymerElement))
+  ToastNotificationsMixin(PolymerElement)
 ) {
   public static get template(): HTMLTemplateElement {
     return html`
@@ -381,10 +380,29 @@ export class AppShell extends LoadingMixin(
     this.set('embedSource', embedSource);
   }
 
+  getCurrentUser() {
+    return sendRequest({ endpoint: Endpoints.myProfile })
+      .then((response: any) => {
+        return response;
+      })
+      .catch((error: any) => {
+        if ([403, 401].includes(error.status)) {
+          window.location.href = window.location.origin + '/login';
+        }
+        throw error;
+      });
+  }
+
   getAppStaticData() {
-    this.getSectors();
-    this.getDropdownsStaticData();
-    this.getOffices();
+    this.getCurrentUser().then((user: any) => {
+      if (user) {
+        this.user = user;
+
+        this.getSectors();
+        this.getDropdownsStaticData();
+        this.getOffices();
+      }
+    });
   }
   getSectors() {
     sendRequest({ endpoint: Endpoints.sectors }).then((resp) =>
