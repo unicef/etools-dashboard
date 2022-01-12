@@ -18,7 +18,7 @@ import { setRootPath } from '@polymer/polymer/lib/utils/settings.js';
 import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
 import '@unicef-polymer/etools-loading/etools-loading.js';
 import { sendRequest } from '@unicef-polymer/etools-ajax/etools-ajax-request';
-import 'etools-piwik-analytics/etools-piwik-analytics.js';
+import '@unicef-polymer/etools-piwik-analytics/etools-piwik-analytics.js';
 import './styles/buttons-styles';
 import './styles/page-layout-styles';
 import './styles/shared-styles';
@@ -395,10 +395,29 @@ export class AppShell extends LoadingMixin(
     this.set('embedSource', embedSource);
   }
 
+  getCurrentUser() {
+    return sendRequest({ endpoint: Endpoints.myProfile })
+      .then((response: any) => {
+        return response;
+      })
+      .catch((error: any) => {
+        if ([403, 401].includes(error.status)) {
+          window.location.href = window.location.origin + '/login';
+        }
+        throw error;
+      });
+  }
+
   getAppStaticData() {
-    this.getSectors();
-    this.getDropdownsStaticData();
-    this.getOffices();
+    this.getCurrentUser().then((user: any) => {
+      if (user) {
+        this.user = user;
+
+        this.getSectors();
+        this.getDropdownsStaticData();
+        this.getOffices();
+      }
+    });
   }
   getSectors() {
     sendRequest({ endpoint: Endpoints.sectors }).then((resp) =>
