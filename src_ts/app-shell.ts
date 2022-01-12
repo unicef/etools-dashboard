@@ -239,6 +239,12 @@ export class AppShell extends LoadingMixin(
                     >
                   </paper-tab>
 
+                  <paper-tab name="fam" link>
+                    <a href="[[rootPath]]fam" class="tab-content"
+                      >Financial Assurance</a
+                    >
+                  </paper-tab>
+
                   <paper-tab name="map" link>
                     <a href="[[rootPath]]map" class="tab-content">Map</a>
                   </paper-tab>
@@ -282,6 +288,13 @@ export class AppShell extends LoadingMixin(
               csv-download-url="{{csvUrl}}"
             >
             </view-partnerships>
+            <view-fam
+              route="{{subroute}}"
+              class="page"
+              user="[[user]]"
+              name="fam"
+            >
+            </view-fam>
             <view-trips
               route="{{route}}"
               class="page"
@@ -477,6 +490,7 @@ export class AppShell extends LoadingMixin(
         'partnerships',
         'trips',
         'custom',
+        'fam',
       ].indexOf(page) !== -1
     ) {
       this.set('page', page);
@@ -496,6 +510,9 @@ export class AppShell extends LoadingMixin(
         break;
       case 'partnerships':
         import('./pages/view-partnerships.js');
+        break;
+      case 'fam':
+        import('./pages/view-fam.js');
         break;
       case 'hact':
         import('./pages/view-hact.js');
