@@ -490,6 +490,7 @@ export class AppShell extends LoadingMixin(
         'partnerships',
         'trips',
         'custom',
+        'fam',
       ].indexOf(page) !== -1
     ) {
       this.set('page', page);
