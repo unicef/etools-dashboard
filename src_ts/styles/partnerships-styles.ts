@@ -1,4 +1,4 @@
-import {html} from '@polymer/polymer/polymer-element.js';
+import { html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-flex-layout/iron-flex-layout';
 
 // language=HTML
@@ -42,7 +42,7 @@ export const PartnershipsStyles = html`<style>
     width: 50%;
   }
 
-  .alert-row div[slot="row-data"] {
+  .alert-row div[slot='row-data'] {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     box-sizing: border-box;
     width: 100%;
@@ -51,7 +51,6 @@ export const PartnershipsStyles = html`<style>
   .alerts-panel {
     display: flex;
     flex-wrap: wrap;
-    flex-direction: column;
   }
 
   .filter-name {
@@ -60,18 +59,18 @@ export const PartnershipsStyles = html`<style>
   }
 
   .filter-name:hover {
-    color: #0099FF;
+    color: #0099ff;
   }
 
   .alerts-title {
-    color: rgba(0,0,0,0.54);
+    color: rgba(0, 0, 0, 0.54);
     font-size: 13px;
     font-weight: 500;
     line-height: 15px;
   }
 
   .alerts-comment {
-    color: rgba(0,0,0,0.54);
+    color: rgba(0, 0, 0, 0.54);
     font-size: 10px;
     font-weight: 500;
     line-height: 15px;
@@ -83,11 +82,11 @@ export const PartnershipsStyles = html`<style>
   }
 
   .clear-button {
-    opacity: 0.0;
+    opacity: 0;
   }
 
-  div[slot="row-data"] {
+  div[slot='row-data'] {
     margin-top: 0;
     margin-bottom: 0;
   }
-</style>`
+</style>`;
