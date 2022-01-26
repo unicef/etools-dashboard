@@ -281,16 +281,16 @@ export class AppShell extends LoadingMixin(
             <view-partnerships
               route="{{subroute}}"
               class="page"
-              user="[[user]]"
               name="partnerships"
               csv-download-url="{{csvUrl}}"
+              country-code="[[countryDetails.business_area_code]]"
             >
             </view-partnerships>
             <view-fam
               route="{{subroute}}"
               class="page"
-              user="[[user]]"
               name="fam"
+              country-code="[[countryDetails.business_area_code]]"
             >
             </view-fam>
             <view-trips
@@ -358,6 +358,9 @@ export class AppShell extends LoadingMixin(
   @property({ type: String })
   public embedSource: string;
 
+  @property({ type: Object })
+  countryDetails!: any;
+
   public static get observers(): string[] {
     return ['_routePageChanged(routeData.page)', 'setEmbedSource(user)'];
   }
@@ -366,6 +369,8 @@ export class AppShell extends LoadingMixin(
     super.ready();
     this._initListeners();
   }
+
+  public setCountryBusinessAreaCode() {}
 
   public _initListeners(): void {
     this._onForbidden = this._onForbidden.bind(this);
@@ -416,6 +421,12 @@ export class AppShell extends LoadingMixin(
         this.getOffices();
       }
     });
+  }
+
+  getCountryDetails() {
+    sendRequest({ endpoint: Endpoints.userCountry }).then(
+      (resp) => (this.countryDetails = resp && resp.length ? resp[0] : {})
+    );
   }
   getSectors() {
     sendRequest({ endpoint: Endpoints.sectors }).then((resp) =>
