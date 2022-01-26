@@ -370,8 +370,6 @@ export class AppShell extends LoadingMixin(
     this._initListeners();
   }
 
-  public setCountryBusinessAreaCode() {}
-
   public _initListeners(): void {
     this._onForbidden = this._onForbidden.bind(this);
     this.addEventListener('forbidden', this._onForbidden);
@@ -415,7 +413,7 @@ export class AppShell extends LoadingMixin(
     this.getCurrentUser().then((user: any) => {
       if (user) {
         this.user = user;
-
+        this.getCountryDetails();
         this.getSectors();
         this.getDropdownsStaticData();
         this.getOffices();
