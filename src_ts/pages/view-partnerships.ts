@@ -42,7 +42,7 @@ export class ViewPartnerships extends PolymerElement {
   public setEmbedSource(): void {
     const embedSource =
       partnershipsProd +
-      `&filter=business_area/area_code eq ` +
+      `&$filter=business_area/area_code eq ` +
       this.countryCode;
     this.set('embedSource', embedSource);
   }
