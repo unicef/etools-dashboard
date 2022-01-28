@@ -37,7 +37,10 @@ export class ViewFam extends PolymerElement {
 
   public setEmbedSource(): void {
     const embedSource =
-      famProd + `&$filter=business_area/area_code eq ` + this.countryCode;
+      famProd +
+      `&$filter=business_area/area_code eq '` +
+      this.countryCode +
+      `'`;
     this.set('embedSource', embedSource);
   }
 }
