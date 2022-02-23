@@ -28,24 +28,19 @@ export class ViewFam extends PolymerElement {
   @property({ type: String })
   public embedSource: string;
 
-  @property({ type: Object })
-  public user: object;
+  @property({ type: String })
+  countryCode!: string;
 
   public static get observers(): string[] {
-    return ['setEmbedSource(user)'];
+    return ['setEmbedSource(countryCode)'];
   }
 
   public setEmbedSource(): void {
-    // @ts-ignore
-    const country = this.user.country.name;
-    // handles Cote D'Ivoire edge case
-    let fixedCountry = country.replace(/[']/g, "''");
     const embedSource =
       famProd +
-      `&$filter=interventions/country_name eq '${fixedCountry}'` +
-      ` and partners/country_name eq '${fixedCountry}'` +
-      ` and agreements/country_name eq '${fixedCountry}'` +
-      ` and funds_by_intervention/country_name eq '${fixedCountry}'`;
+      `&$filter=business_area/area_code eq '` +
+      this.countryCode +
+      `'`;
     this.set('embedSource', embedSource);
   }
 }

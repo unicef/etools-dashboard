@@ -94,3 +94,4 @@ workflows:
                 - master
                 - staging
                 - develop
+                - filter-by-country
