@@ -1,10 +1,9 @@
-import { Config } from '../config/config';
-import { partnershipsProd } from '../endpoints/power-bi-embeds';
 import { PolymerElement, html } from '@polymer/polymer';
 import { customElement, property } from '@polymer/decorators';
+import { famProd } from '../endpoints/power-bi-embeds';
 
-@customElement('view-partnerships')
-export class ViewPartnerships extends PolymerElement {
+@customElement('view-fam')
+export class ViewFam extends PolymerElement {
   public static get template(): HTMLTemplateElement {
     return html`
       <style>
@@ -30,9 +29,6 @@ export class ViewPartnerships extends PolymerElement {
   public embedSource: string;
 
   @property({ type: String })
-  public environment: string = (() => Config._checkEnvironment())();
-
-  @property({ type: String })
   countryCode!: string;
 
   public static get observers(): string[] {
@@ -41,7 +37,7 @@ export class ViewPartnerships extends PolymerElement {
 
   public setEmbedSource(): void {
     const embedSource =
-      partnershipsProd +
+      famProd +
       `&$filter=business_area/area_code eq '` +
       this.countryCode +
       `'`;
