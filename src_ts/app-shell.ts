@@ -232,10 +232,14 @@ export class AppShell extends LoadingMixin(
                   </paper-tab>
 
                   <paper-tab name="partnerships" link>
-                    <a
-                      href="[[rootPath]]partnerships/overview"
-                      class="tab-content"
+                    <a href="[[rootPath]]partnerships" class="tab-content"
                       >Partnerships</a
+                    >
+                  </paper-tab>
+
+                  <paper-tab name="fam" link>
+                    <a href="[[rootPath]]fam" class="tab-content"
+                      >Financial Assurance</a
                     >
                   </paper-tab>
 
@@ -277,11 +281,18 @@ export class AppShell extends LoadingMixin(
             <view-partnerships
               route="{{subroute}}"
               class="page"
-              user="[[user]]"
               name="partnerships"
               csv-download-url="{{csvUrl}}"
+              country-code="[[countryDetails.business_area_code]]"
             >
             </view-partnerships>
+            <view-fam
+              route="{{subroute}}"
+              class="page"
+              name="fam"
+              country-code="[[countryDetails.business_area_code]]"
+            >
+            </view-fam>
             <view-trips
               route="{{route}}"
               class="page"
@@ -347,6 +358,9 @@ export class AppShell extends LoadingMixin(
   @property({ type: String })
   public embedSource: string;
 
+  @property({ type: Object })
+  countryDetails!: any;
+
   public static get observers(): string[] {
     return ['_routePageChanged(routeData.page)', 'setEmbedSource(user)'];
   }
@@ -399,12 +413,18 @@ export class AppShell extends LoadingMixin(
     this.getCurrentUser().then((user: any) => {
       if (user) {
         this.user = user;
-
+        this.getCountryDetails();
         this.getSectors();
         this.getDropdownsStaticData();
         this.getOffices();
       }
     });
+  }
+
+  getCountryDetails() {
+    sendRequest({ endpoint: Endpoints.userCountry }).then(
+      (resp) => (this.countryDetails = resp && resp.length ? resp[0] : {})
+    );
   }
   getSectors() {
     sendRequest({ endpoint: Endpoints.sectors }).then((resp) =>
@@ -477,6 +497,7 @@ export class AppShell extends LoadingMixin(
         'partnerships',
         'trips',
         'custom',
+        'fam',
       ].indexOf(page) !== -1
     ) {
       this.set('page', page);
@@ -496,6 +517,9 @@ export class AppShell extends LoadingMixin(
         break;
       case 'partnerships':
         import('./pages/view-partnerships.js');
+        break;
+      case 'fam':
+        import('./pages/view-fam.js');
         break;
       case 'hact':
         import('./pages/view-hact.js');
