@@ -41,8 +41,8 @@ export const partnershipsDev =
   '&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1yZWRpcmVjdC5hbmFseXNpcy53aW5kb3dzLm5ldC8ifQ%3D%3D';
 
 export const partnershipsProd =
-  'https://app.powerbi.com/reportEmbed?reportId=33741a46-bce2-497a-a987-90c590bebec9' +
-  '&autoAuth=true&ctid=77410195-14e1-4fb8-904b-ab1892023667&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1qLXByaW1hcnktcmVkaXJlY3QuYW5hbHlzaXMud2luZG93cy5uZXQvIn0%3D';
+  'https://app.powerbi.com/reportEmbed?reportId=f1adc7a6-3501-4b4a-a30c-fd1edfda60a4' +
+  '&appId=56089b5f-f2cc-4121-8705-58f981db340f&autoAuth=true&ctid=77410195-14e1-4fb8-904b-ab1892023667&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1qLXByaW1hcnktcmVkaXJlY3QuYW5hbHlzaXMud2luZG93cy5uZXQvIn0%3D';
 
 //  'https://app.powerbi.com/reportEmbed?reportId=46a091cf-7d94-4515-a6ce-c0081cd4b2d7' +
 //   '&autoAuth=true&ctid=77410195-14e1-4fb8-904b-ab1892023667' +
