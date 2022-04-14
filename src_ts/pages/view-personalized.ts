@@ -1,7 +1,10 @@
-import {PolymerElement, html} from '@polymer/polymer';
-import {customElement, property} from '@polymer/decorators';
-import {Config} from '../config/config';
-import {personalizedProd} from '../endpoints/power-bi-embeds';
+import { PolymerElement, html } from '@polymer/polymer';
+import { customElement, property } from '@polymer/decorators';
+import { Config } from '../config/config';
+import {
+  personalizedDev,
+  personalizedProd,
+} from '../endpoints/power-bi-embeds';
 
 @customElement('view-personalized')
 export class ViewPersonalized extends PolymerElement {
@@ -10,45 +13,51 @@ export class ViewPersonalized extends PolymerElement {
       <style>
         div.container {
           height: 100vh;
-          width: 100vw
+          width: 100vw;
         }
       </style>
       <div class="container">
-        <iframe width="100%"
-                height="100%"
-                src="[[embedSource]]"
-                frameborder="0"
-                allowFullScreen="true">
+        <iframe
+          width="100%"
+          height="100%"
+          src="[[embedSource]]"
+          frameborder="0"
+          allowfullscreen="true"
+        >
         </iframe>
       </div>
     `;
   }
 
-  @property({type: String})
-  public embedSource: string
+  @property({ type: String })
+  public embedSource: string;
 
-  @property({type: Object})
-  public user: object
+  @property({ type: Object })
+  public user: object;
 
-  @property({type: String})
-  public environment: string = (() => Config._checkEnvironment())()
+  @property({ type: String })
+  public environment: string = (() => Config._checkEnvironment())();
 
   public static get observers(): string[] {
-    return [
-      'setEmbedSource(user)'
-    ];
+    return ['setEmbedSource(user)'];
   }
 
   public setEmbedSource(): void {
     // @ts-ignore
     const email = this.user.email;
 
-    const embedSource =   personalizedProd +
-    `&$filter=interventions_focalpoints/unicef_focal_point_email eq '${email}'` +
-    ` and actionpointsfor/assigned_to_email eq '${email}'` +
-    ` and actionpointsby/assigned_by_email eq '${email}'` +
-    ` and tripsby/supervisor_email eq '${email}'` +
-    ` and tripsfor/traveler_email eq '${email}'`;
+    let embedSource = '';
+    if (this.environment?.includes('DEV')) {
+      embedSource = personalizedDev + `filter=user/email eq '${email}'`;
+    } else {
+      embedSource =
+        personalizedProd +
+        `&$filter=interventions_focalpoints/unicef_focal_point_email eq '${email}'` +
+        ` and actionpointsfor/assigned_to_email eq '${email}'` +
+        ` and actionpointsby/assigned_by_email eq '${email}'` +
+        ` and tripsby/supervisor_email eq '${email}'` +
+        ` and tripsfor/traveler_email eq '${email}'`;
+    }
 
     this.set('embedSource', embedSource);
   }
