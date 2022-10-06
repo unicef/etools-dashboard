@@ -130,6 +130,35 @@ export class AppShell extends LoadingMixin(
                 <div class="top-content-actions-wrapper">
                   <div
                     class="top-content-action"
+                    hidden$="[[!_isActive(page, 'hact')]]"
+                  >
+                    <paper-menu-button>
+                      <paper-button
+                        class="action-button"
+                        icon="file-download"
+                        slot="dropdown-trigger"
+                      >
+                        <iron-icon
+                          class="dark"
+                          icon="file-download"
+                        ></iron-icon>
+                        Historical Exports
+                      </paper-button>
+                      <paper-listbox slot="dropdown-content">
+                        <template
+                          id="hactExport"
+                          is="dom-repeat"
+                          items="[[historicalHactExports]]"
+                        >
+                          <paper-item on-tap="_export"
+                            >{{item.name}}</paper-item
+                          >
+                        </template>
+                      </paper-listbox>
+                    </paper-menu-button>
+                  </div>
+                  <div
+                    class="top-content-action"
                     hidden$="[[!_isActive(page,'partnerships')]]"
                   >
                     <a target="_blank" href="[[csvUrl]]">
@@ -328,7 +357,13 @@ export class AppShell extends LoadingMixin(
 
   connectedCallback() {
     super.connectedCallback();
+    let currentYear = new Date().getFullYear();
     this.getAppStaticData();
+    this.set('historicalHactExports', this._setHactExport(2017));
+    this.set('currentYearHactExports', [
+      { name: 'Table', endpoint: '/api/v2/partners/hact?format=csv' },
+      { name: 'Charts', endpoint: `/api/v2/hact/graph/${currentYear}/export` },
+    ]);
   }
 
   public setEmbedSource(): void {
@@ -389,6 +424,7 @@ export class AppShell extends LoadingMixin(
   }
 
   public _updateUrlTab(tab: string) {
+    this.set('hideHactExport', tab === 'hact' ? false : true);
     this.set('hidePartnershipExport', tab === 'partnerships' ? false : true);
     if (!tab) {
       return;
@@ -492,5 +528,29 @@ export class AppShell extends LoadingMixin(
   // @ts-ignore
   private _isActive(page: string, tab: string): boolean {
     return page === tab;
+  }
+
+  // calculates export links for hact general, detail, and charts views, with new links added each calendar year
+  private _setHactExport(startYear: number) {
+    const currentYear = new Date().getFullYear();
+    let array = [];
+
+    // handles all charts links
+    for (let year: number = startYear; year < currentYear; year++) {
+      let yearObj = { name: '', endpoint: '' };
+      yearObj.name = 'Charts ' + year.toString();
+      yearObj.endpoint = `/api/v2/hact/graph/${year}/export`;
+      array.push(yearObj);
+    }
+
+    // adds detail links
+    for (let year: number = startYear; year < currentYear; year++) {
+      let yearObj = { name: '', endpoint: '' };
+      yearObj.name = 'Table ' + year.toString();
+      yearObj.endpoint = `/api/v2/hact/history/?year=${year}&format=csv`;
+      array.push(yearObj);
+    }
+
+    return array;
   }
 }
