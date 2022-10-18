@@ -142,30 +142,6 @@ export class AppShell extends LoadingMixin(
                           class="dark"
                           icon="file-download"
                         ></iron-icon>
-                        Exports
-                      </paper-button>
-                      <paper-listbox slot="dropdown-content">
-                        <template
-                          id="hactExport"
-                          is="dom-repeat"
-                          items="[[currentYearHactExports]]"
-                        >
-                          <paper-item on-tap="_export"
-                            >{{item.name}}</paper-item
-                          >
-                        </template>
-                      </paper-listbox>
-                    </paper-menu-button>
-                    <paper-menu-button>
-                      <paper-button
-                        class="action-button"
-                        icon="file-download"
-                        slot="dropdown-trigger"
-                      >
-                        <iron-icon
-                          class="dark"
-                          icon="file-download"
-                        ></iron-icon>
                         Historical Exports
                       </paper-button>
                       <paper-listbox slot="dropdown-content">
