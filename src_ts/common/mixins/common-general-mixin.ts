@@ -69,7 +69,7 @@ function CommonGeneralMixin<T extends Constructor<PolymerElement>>(
     }
 
     getFileNameFromURL(url) {
-      return url.substr(url.lastIndexOf('/') + 1);
+      return url.substring(url.lastIndexOf('/') + 1);
     }
 
     /**
