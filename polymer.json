@@ -6,6 +6,8 @@
     "src/pages/view-personalized.js",
     "src/pages/view-partnerships.js",
     "src/pages/view-fam.js",
+    "src/pages/view-fmm.js",
+    "src/pages/view-fmp.js",
     "src/pages/view-map.js",
     "src/pages/view-trips.js",
     "src/pages/view-attachments.js",
