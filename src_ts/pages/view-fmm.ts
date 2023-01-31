@@ -38,7 +38,7 @@ export class ViewFMM extends PolymerElement {
   public setEmbedSource(): void {
     const embedSource =
       fmmProd +
-      `&$filter=fm_ontrack/area_code eq '` +
+      `&$filter=fm_ontrack/Area_Code eq '` +
       this.countryCode +
       `'`;
     this.set('embedSource', embedSource);
