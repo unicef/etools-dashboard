@@ -219,6 +219,18 @@ export class AppShell extends LoadingMixin(
                     >
                   </paper-tab>
 
+                  <paper-tab name="fmm" link>
+                    <a href="[[rootPath]]fmm" class="tab-content"
+                      >FM Management</a
+                    >
+                  </paper-tab>
+
+                  <paper-tab name="fmp" link>
+                    <a href="[[rootPath]]fmp" class="tab-content"
+                      >FM Programme</a
+                    >
+                  </paper-tab>
+
                   <paper-tab name="map" link>
                     <a href="[[rootPath]]map" class="tab-content">Map</a>
                   </paper-tab>
@@ -269,6 +281,20 @@ export class AppShell extends LoadingMixin(
               country-code="[[countryDetails.business_area_code]]"
             >
             </view-fam>
+            <view-fmm
+              route="{{subroute}}"
+              class="page"
+              name="fmm"
+              country-code="[[countryDetails.business_area_code]]"
+            >
+            </view-fmm>
+            <view-fmp
+              route="{{subroute}}"
+              class="page"
+              name="fmp"
+              country-code="[[countryDetails.business_area_code]]"
+            >
+            </view-fmp>
             <view-trips
               route="{{route}}"
               class="page"
@@ -474,6 +500,8 @@ export class AppShell extends LoadingMixin(
         'trips',
         'custom',
         'fam',
+        'fmm',
+        'fmp',
       ].indexOf(page) !== -1
     ) {
       this.set('page', page);
@@ -496,6 +524,12 @@ export class AppShell extends LoadingMixin(
         break;
       case 'fam':
         import('./pages/view-fam.js');
+        break;
+      case 'fmm':
+        import('./pages/view-fmm.js');
+        break;
+      case 'fmp':
+        import('./pages/view-fmp.js');
         break;
       case 'hact':
         import('./pages/view-hact.js');
