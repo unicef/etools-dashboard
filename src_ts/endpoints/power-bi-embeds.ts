@@ -69,3 +69,12 @@ export const famProd =
   'https://app.powerbi.com/reportEmbed?reportId=cedc26ee-f627-43dd-8216-5fa3e699f16e&appId=56089b5f-f2cc-4121-8705-58f981db340f' +
   '&autoAuth=true&ctid=77410195-14e1-4fb8-904b-ab1892023667&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLW5vcnRoLWV1cm9wZS1qLXByaW1hcnktcmVkaXJlY3QuYW5hbHlzaXMud2luZG93cy5uZXQvIn0%3D' +
   '&filterPaneEnabled=false&navContentPaneEnabled=false';
+
+  export const fmmProd =
+  'https://app.powerbi.com/reportEmbed?reportId=047c4b59-f6f5-4b93-9381-c711d6cfca36&appId=2df1d7e6-b6fb-4cd4-862b-269605b8575a'+
+  '&autoAuth=true&ctid=77410195-14e1-4fb8-904b-ab1892023667';
+
+
+  export const fmpProd =
+  'https://app.powerbi.com/reportEmbed?reportId=9f15f945-59fc-4765-a2bf-2315fff33ef4&appId=2df1d7e6-b6fb-4cd4-862b-269605b8575a'+
+  '&autoAuth=true&ctid=77410195-14e1-4fb8-904b-ab1892023667';
