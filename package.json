@@ -42,9 +42,9 @@
     "@polymer/paper-toast": "^3.0.1",
     "@polymer/paper-toggle-button": "^3.0.1",
     "@polymer/paper-tooltip": "^3.0.1",
-    "@polymer/polymer": "^3.4.1",
+    "@polymer/polymer": "^3.5.1",
     "@types/lodash-es": "^4.17.5",
-    "@unicef-polymer/etools-ajax": "^4.3.4",
+    "@unicef-polymer/etools-ajax": "^4.4.2",
     "@unicef-polymer/etools-app-selector": "^3.1.8",
     "@unicef-polymer/etools-behaviors": "^3.0.5",
     "@unicef-polymer/etools-date-time": "^1.0.6",
@@ -61,7 +61,8 @@
     "ramda": "^0.27.1",
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.1",
-    "stringstream": ">=0.0.6"
+    "stringstream": ">=0.0.6",
+    "dexie": ">=3.2.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.10.1",
@@ -76,6 +77,24 @@
     "gulp-replace": "^1.0.0",
     "js-yaml": "^4.0.0",
     "polymer-cli": "^1.9.11",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "ua-parser-js": ">=1.0.33",
+    "ajv": ">=6.12.6",
+    "follow-redirects": ">=1.14.9",
+    "shelljs": ">=0.8.5",
+    "node-fetch": ">=2.6.7",
+    "path-parse": ">=1.0.7",
+    "mout": ">=1.2.4",
+    "urijs": ">=1.19.11",
+    "thenify": ">=3.3.1",
+    "json5": ">=2.2.3",
+    "qs": ">=6.5.3",
+    "decode-uri-component": ">=0.2.2",
+    "engine.io": ">=3.6.1",
+    "socket.io": ">=2.5.0",
+    "socket.io-parser": ">=3.3.3",
+    "async": ">=2.6.4",
+    "wd": ">=1.14.0",
+    "minimatch": ">=3.1.2"
   }
 }
