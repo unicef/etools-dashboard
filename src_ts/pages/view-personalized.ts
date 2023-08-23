@@ -52,7 +52,7 @@ export class ViewPersonalized extends PolymerElement {
     } else {
       embedSource =
         personalizedProd +
-        `&amp;$filter=interventions_focalpoints/unicef_focal_point_email eq '${email}'` +
+        `&$filter=interventions_focalpoints/unicef_focal_point_email eq '${email}'` +
         ` and actionpointsfor/assigned_to_email eq '${email}'` +
         ` and actionpointsby/assigned_by_email eq '${email}'` +
         ` and tripsby/supervisor_email eq '${email}'` +
