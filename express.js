@@ -6,15 +6,12 @@ const basedir = __dirname + '/build/'; // eslint-disable-line
 
 function getSourcesPath(request) {
   let clientCapabilities = browserCapabilities.browserCapabilities(
-      request.headers['user-agent']);
+    request.headers['user-agent']
+  );
 
   clientCapabilities = new Set(clientCapabilities); // eslint-disable-line
   if (clientCapabilities.has('modules')) {
     return basedir + 'esm-bundled/';
-  } else if (clientCapabilities.has('es2015')) {
-    return basedir + 'es6-bundled/';
-  } else {
-    return basedir + 'es5-bundled/';
   }
 }
 
@@ -23,11 +20,11 @@ app.use('/dash/', (req, res, next) => {
   express.static(sourceFolder)(req, res, next);
 });
 
-app.get(/.*service-worker\.js/, function(req, res) {
+app.get(/.*service-worker\.js/, function (req, res) {
   res.sendFile(getSourcesPath(req) + 'service-worker.js');
 });
 
-app.get(/.*manifest\.json/, function(req, res) {
+app.get(/.*manifest\.json/, function (req, res) {
   res.sendFile(getSourcesPath(req) + 'manifest.json');
 });
 
