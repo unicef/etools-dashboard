@@ -1,18 +1,20 @@
 var express = require('express'); // eslint-disable-line
 var browserCapabilities = require('browser-capabilities'); // eslint-disable-line
+const UAParser = require('ua-parser-js').UAParser; // eslint-disable-line
 
 const app = express();
 const basedir = __dirname + '/build/'; // eslint-disable-line
 
-function getSourcesPath(request) {
-  let clientCapabilities = browserCapabilities.browserCapabilities(
-    request.headers['user-agent']
-  );
-
-  clientCapabilities = new Set(clientCapabilities); // eslint-disable-line
-  if (clientCapabilities.has('modules')) {
-    return basedir + 'esm-bundled/';
-  }
+function getSourcesPath(request, filePath = '') {
+  const userAgent = request.headers['user-agent'];
+  let clientCapabilities = browserCapabilities.browserCapabilities(userAgent);
+  const browserName = new UAParser(userAgent).getBrowser().name || '';
+  // skip Edge because browser-capabilities library is outdated
+  const needToUpgrade =
+    !clientCapabilities.has('modules') && browserName !== 'Edge';
+  return needToUpgrade
+    ? `${basedir}esm-bundled/upgrade-browser.html`
+    : `${basedir}esm-bundled/${filePath}`;
 }
 
 app.use('/dash/', (req, res, next) => {
