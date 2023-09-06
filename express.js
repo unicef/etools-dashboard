@@ -10,7 +10,8 @@ function getSourcesPath(request) {
   );
 
   clientCapabilities = new Set(clientCapabilities); // eslint-disable-line
-  if (clientCapabilities.has('modules')) {
+  // skip Edge because browser-capabilities library is outdated
+  if (clientCapabilities.has('modules') && browserName !== 'Edge') {
     return basedir + 'esm-bundled/';
   }
 }
