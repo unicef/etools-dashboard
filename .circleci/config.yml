@@ -94,4 +94,3 @@ workflows:
                 - master
                 - staging
                 - develop
-                - fix-for-edge
