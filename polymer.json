@@ -15,6 +15,7 @@
   ],
   "sources": ["images/**/*", "src/**/*", "package.json"],
   "extraDependencies": [
+    "upgrade-browser.html",
     "node_modules/@webcomponents/webcomponentsjs/**",
     "node_modules/web-animations-js/web-animations-next-lite.min.js",
     "node_modules/dayjs/dayjs.min.js",
