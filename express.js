@@ -6,9 +6,8 @@ const app = express();
 const basedir = __dirname + '/build/'; // eslint-disable-line
 
 function getSourcesPath(request) {
-  let clientCapabilities = browserCapabilities.browserCapabilities(
-    request.headers['user-agent']
-  );
+  const userAgent = request.headers['user-agent'];
+  let clientCapabilities = browserCapabilities.browserCapabilities(userAgent);
 
   clientCapabilities = new Set(clientCapabilities); // eslint-disable-line
   const browserName = new UAParser(userAgent).getBrowser().name || '';
