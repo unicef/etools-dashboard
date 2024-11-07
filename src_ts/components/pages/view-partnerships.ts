@@ -1,9 +1,9 @@
-import { Config } from '../config/config';
-import { partnershipsProd } from '../endpoints/power-bi-embeds';
-import { PolymerElement, html } from '@polymer/polymer';
-import { customElement, property } from '@polymer/decorators';
+import { Config } from "../../config/config";
+import { partnershipsProd } from "../../endpoints/power-bi-embeds";
+import { PolymerElement, html } from "@polymer/polymer";
+import { customElement, property } from "@polymer/decorators";
 
-@customElement('view-partnerships')
+@customElement("view-partnerships")
 export class ViewPartnerships extends PolymerElement {
   public static get template(): HTMLTemplateElement {
     return html`
@@ -36,7 +36,7 @@ export class ViewPartnerships extends PolymerElement {
   countryCode!: string;
 
   public static get observers(): string[] {
-    return ['setEmbedSource(countryCode)'];
+    return ["setEmbedSource(countryCode)"];
   }
 
   public setEmbedSource(): void {
@@ -45,6 +45,6 @@ export class ViewPartnerships extends PolymerElement {
       `&$filter=business_area/area_code eq '` +
       this.countryCode +
       `'`;
-    this.set('embedSource', embedSource);
+    this.set("embedSource", embedSource);
   }
 }

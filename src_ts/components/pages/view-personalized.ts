@@ -1,12 +1,12 @@
-import { PolymerElement, html } from '@polymer/polymer';
-import { customElement, property } from '@polymer/decorators';
-import { Config } from '../config/config';
+import { PolymerElement, html } from "@polymer/polymer";
+import { customElement, property } from "@polymer/decorators";
+import { Config } from "../../config/config";
 import {
   personalizedDev,
   personalizedProd,
-} from '../endpoints/power-bi-embeds';
+} from "../../endpoints/power-bi-embeds";
 
-@customElement('view-personalized')
+@customElement("view-personalized")
 export class ViewPersonalized extends PolymerElement {
   public static get template(): HTMLTemplateElement {
     return html`
@@ -39,15 +39,15 @@ export class ViewPersonalized extends PolymerElement {
   public environment: string = (() => Config._checkEnvironment())();
 
   public static get observers(): string[] {
-    return ['setEmbedSource(user)'];
+    return ["setEmbedSource(user)"];
   }
 
   public setEmbedSource(): void {
     // @ts-ignore
     const email = this.user.email;
 
-    let embedSource = '';
-    if (this.environment?.includes('DEV')) {
+    let embedSource = "";
+    if (this.environment?.includes("DEV")) {
       embedSource = personalizedDev + `&filter=user/email eq '${email}'`;
     } else {
       embedSource =
@@ -59,6 +59,6 @@ export class ViewPersonalized extends PolymerElement {
         ` and tripsfor/traveler_email eq '${email}'`;
     }
 
-    this.set('embedSource', embedSource);
+    this.set("embedSource", embedSource);
   }
 }

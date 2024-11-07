@@ -1,18 +1,18 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import '@polymer/polymer/lib/elements/dom-if.js';
-import '@polymer/polymer/lib/elements/dom-repeat.js';
-import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js';
-import '@polymer/paper-listbox/paper-listbox.js';
-import '@polymer/paper-item/paper-item.js';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import EtoolsPageRefreshMixin from '@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js';
-import { logError } from '@unicef-polymer/etools-behaviors/etools-logging.js';
-import { fireEvent } from '../utils/fire-custom-event';
-import { customElement, property, observe } from '@polymer/decorators';
-import { GenericObject } from '../typings/globals.types';
-import { EndpointsMixin } from '../endpoints/endpoints-mixin';
+import { PolymerElement, html } from "@polymer/polymer/polymer-element.js";
+import "@polymer/polymer/lib/elements/dom-if.js";
+import "@polymer/polymer/lib/elements/dom-repeat.js";
+import "@polymer/paper-dropdown-menu/paper-dropdown-menu.js";
+import "@polymer/paper-listbox/paper-listbox.js";
+import "@polymer/paper-item/paper-item.js";
+import EtoolsAjaxRequestMixin from "@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js";
+import EtoolsPageRefreshMixin from "@unicef-polymer/etools-behaviors/etools-page-refresh-mixin.js";
+import { logError } from "@unicef-polymer/etools-behaviors/etools-logging.js";
+import { fireEvent } from "../../utils/fire-custom-event";
+import { customElement, property, observe } from "@polymer/decorators";
+import { GenericObject } from "../../typings/globals.types";
+import { EndpointsMixin } from "../../endpoints/endpoints-mixin";
 
-@customElement('countries-dropdown')
+@customElement("countries-dropdown")
 export class CountriesDropdown extends EtoolsPageRefreshMixin(
   EndpointsMixin(EtoolsAjaxRequestMixin(PolymerElement))
 ) {
@@ -127,23 +127,23 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(
     }
   }
 
-  @observe('countries')
+  @observe("countries")
   public _countrySelectorUpdate(countries: object[]): void {
     if (Array.isArray(countries) && countries.length > 1) {
-      this.set('countrySelectorVisible', true);
+      this.set("countrySelectorVisible", true);
     }
   }
 
   private _triggerCountryChangeRequest(countryId: number): void {
-    fireEvent(this, 'global-loading', {
+    fireEvent(this, "global-loading", {
       active: true,
-      loadingSource: 'country-change',
-      message: 'Please wait while country is changing...',
+      loadingSource: "country-change",
+      message: "Please wait while country is changing...",
     });
     this.sendRequest({
       body: { country: countryId },
-      endpoint: this.getEndpoint('changeCountry'),
-      method: 'POST',
+      endpoint: this.getEndpoint("changeCountry"),
+      method: "POST",
     })
       .then(() => {
         this._handleResponse();
@@ -159,16 +159,16 @@ export class CountriesDropdown extends EtoolsPageRefreshMixin(
   }
 
   private _handleError(error: object): void {
-    logError('Country change failed!', 'countries-dropdown', error);
+    logError("Country change failed!", "countries-dropdown", error);
     // TODO: this should be a larger alert.
     const countriesListbox: any = this.$.countriesListbox;
     countriesListbox.selected = this.current;
-    fireEvent(this, 'toast', {
-      text: 'Something went wrong changing your workspace. Please try again',
+    fireEvent(this, "toast", {
+      text: "Something went wrong changing your workspace. Please try again",
     });
-    fireEvent(this, 'global-loading', {
+    fireEvent(this, "global-loading", {
       active: false,
-      loadingSource: 'country-change',
+      loadingSource: "country-change",
     });
   }
 }

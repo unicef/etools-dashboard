@@ -1,20 +1,20 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import '@polymer/app-layout/app-toolbar/app-toolbar.js';
-import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@polymer/iron-flex-layout/iron-flex-layout.js';
-import '@polymer/paper-icon-button/paper-icon-button.js';
-import '@unicef-polymer/etools-app-selector/etools-app-selector.js';
-import '@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js';
-import './countries-dropdown';
-import '../styles/shared-styles';
-import { Config } from '../config/config';
-import sortBy from 'lodash-es/sortBy';
-import { fireEvent } from '../utils/fire-custom-event';
-import { customElement, property } from '@polymer/decorators';
-import './support-btn';
-import { GenericObject } from '../typings/globals.types';
+import { PolymerElement, html } from "@polymer/polymer/polymer-element.js";
+import "@polymer/app-layout/app-toolbar/app-toolbar.js";
+import "@polymer/paper-icon-button/paper-icon-button.js";
+import "@polymer/iron-flex-layout/iron-flex-layout.js";
+import "@polymer/paper-icon-button/paper-icon-button.js";
+import "@unicef-polymer/etools-app-selector/etools-app-selector.js";
+import "@unicef-polymer/etools-profile-dropdown/etools-profile-dropdown.js";
+import "./countries-dropdown";
+import "../../styles/shared-styles";
+import { Config } from "../../config/config";
+import sortBy from "lodash-es/sortBy";
+import { fireEvent } from "../../utils/fire-custom-event";
+import { customElement, property } from "@polymer/decorators";
+import "./support-btn";
+import { GenericObject } from "../../typings/globals.types";
 
-@customElement('page-header')
+@customElement("page-header")
 export class PageHeader extends PolymerElement {
   public static get template(): HTMLTemplateElement {
     return html`
@@ -153,7 +153,7 @@ export class PageHeader extends PolymerElement {
   public profile: object;
 
   public static get observers(): string[] {
-    return ['_updateCountriesList(user.countries_available)'];
+    return ["_updateCountriesList(user.countries_available)"];
   }
 
   public ready(): void {
@@ -162,7 +162,7 @@ export class PageHeader extends PolymerElement {
   }
 
   public openDrawer(): void {
-    fireEvent(this, 'drawer');
+    fireEvent(this, "drawer");
   }
 
   public _updateCountriesList(countries: GenericObject[]): void | object {
@@ -177,7 +177,7 @@ export class PageHeader extends PolymerElement {
       };
     });
     arrayObj = sortBy(arrayObj, (c) => c.name);
-    this.set('countries', arrayObj);
+    this.set("countries", arrayObj);
   }
 
   public _convertCollection(data: GenericObject[]): object[] {
@@ -188,7 +188,7 @@ export class PageHeader extends PolymerElement {
 
   public _signOut(): void {
     this._clearLocalStorage();
-    window.location.href = window.location.origin + '/logout';
+    window.location.href = window.location.origin + "/logout";
   }
 
   public _clearLocalStorage(): void {
@@ -198,19 +198,19 @@ export class PageHeader extends PolymerElement {
   public _setBgColor(): void {
     // If not production environment, changing header color to red
     if (this.environment) {
-      this.updateStyles({ '--header-bg-color': 'var(--nonprod-header-color)' });
+      this.updateStyles({ "--header-bg-color": "var(--nonprod-header-color)" });
     }
   }
 
   private _getFlagIconClass(id: string): string {
     let flagIdMap = {
-      '0': 'us',
-      '2070': 'in',
-      '234R': 'syxb',
-      '2490': 'lb',
-      '4020': 'su',
-      '4140': 'sy',
+      "0": "us",
+      "2070": "in",
+      "234R": "syxb",
+      "2490": "lb",
+      "4020": "su",
+      "4140": "sy",
     };
-    return 'flag-icon ' + 'flag-icon-' + flagIdMap[id];
+    return "flag-icon " + "flag-icon-" + flagIdMap[id];
   }
 }

@@ -25,13 +25,13 @@ import './styles/shared-styles';
 import './styles/app-theme';
 import { ToastNotificationsMixin } from './common/toast/toast-notifications-mixin';
 import { fireEvent } from './utils/fire-custom-event';
-import './app-shell-components/page-header';
-import './app-shell-components/page-footer';
-import { Config, BASE_URL } from './config/config';
-import { Endpoints } from './endpoints/endpoints';
-import { store } from './redux/store';
-import { setOffices, setSectors, setStatic } from './redux/actions/static-data';
-import './config/dexie-db-config';
+import "./components/appshell/page-header";
+import "./components/appshell/page-footer";
+import { Config, BASE_URL } from "./config/config";
+import { Endpoints } from "./endpoints/endpoints";
+import { store } from "./redux/store";
+import { setOffices, setSectors, setStatic } from "./redux/actions/static-data";
+import "./config/dexie-db-config";
 import dayjs from "dayjs";
 import dayJsUtc from "dayjs/plugin/utc";
 import dayJsIsSameOrBefore from "dayjs/plugin/isSameOrBefore";
@@ -43,7 +43,7 @@ dayjs.extend(dayJsIsBetween);
 
 setRootPath(BASE_URL);
 
-@customElement('app-shell')
+@customElement("app-shell")
 export class AppShell extends LoadingMixin(
   ToastNotificationsMixin(PolymerElement)
 ) {
@@ -363,7 +363,7 @@ export class AppShell extends LoadingMixin(
   countryDetails!: any;
 
   public static get observers(): string[] {
-    return ['_routePageChanged(routeData.page)', 'setEmbedSource(user)'];
+    return ["_routePageChanged(routeData.page)", "setEmbedSource(user)"];
   }
 
   public ready(): void {
@@ -373,28 +373,28 @@ export class AppShell extends LoadingMixin(
 
   public _initListeners(): void {
     this._onForbidden = this._onForbidden.bind(this);
-    this.addEventListener('forbidden', this._onForbidden);
+    this.addEventListener("forbidden", this._onForbidden);
   }
 
   public _removeListeners(): void {
-    this.removeEventListener('forbidden', this._onForbidden);
+    this.removeEventListener("forbidden", this._onForbidden);
   }
 
   connectedCallback() {
     super.connectedCallback();
     let currentYear = new Date().getFullYear();
     this.getAppStaticData();
-    this.set('historicalHactExports', this._setHactExport(2017));
-    this.set('currentYearHactExports', [
-      { name: 'Table', endpoint: '/api/v2/partners/hact?format=csv' },
-      { name: 'Charts', endpoint: `/api/v2/hact/graph/${currentYear}/export` },
+    this.set("historicalHactExports", this._setHactExport(2017));
+    this.set("currentYearHactExports", [
+      { name: "Table", endpoint: "/api/v2/partners/hact?format=csv" },
+      { name: "Charts", endpoint: `/api/v2/hact/graph/${currentYear}/export` },
     ]);
   }
 
   public setEmbedSource(): void {
     // @ts-ignore
     const embedSource = this.user.country.custom_dashboards.bi_url;
-    this.set('embedSource', embedSource);
+    this.set("embedSource", embedSource);
   }
 
   getCurrentUser() {
@@ -404,7 +404,7 @@ export class AppShell extends LoadingMixin(
       })
       .catch((error: any) => {
         if ([403, 401].includes(error.status)) {
-          window.location.href = window.location.origin + '/login';
+          window.location.href = window.location.origin + "/login";
         }
         throw error;
       });
@@ -449,21 +449,21 @@ export class AppShell extends LoadingMixin(
   }
 
   public _updateUrlTab(tab: string) {
-    this.set('hideHactExport', tab === 'hact' ? false : true);
-    this.set('hidePartnershipExport', tab === 'partnerships' ? false : true);
+    this.set("hideHactExport", tab === "hact" ? false : true);
+    this.set("hidePartnershipExport", tab === "partnerships" ? false : true);
     if (!tab) {
       return;
     }
-    this.set('hideExport', !(tab === 'hact' || tab === 'partnerships'));
+    this.set("hideExport", !(tab === "hact" || tab === "partnerships"));
   }
 
   public _goToAddTrip() {
-    window.location.href = '/t2f/edit-travel/-1';
+    window.location.href = "/t2f/edit-travel/-1";
   }
 
   public _export(event) {
     const endpoint = event.model.item.endpoint;
-    window.open(`${endpoint}`, '_blank');
+    window.open(`${endpoint}`, "_blank");
   }
 
   public _print(): void {
@@ -471,12 +471,12 @@ export class AppShell extends LoadingMixin(
   }
 
   private _onForbidden(): void {
-    const redirectNotification = document.createElement('etools-loading');
+    const redirectNotification = document.createElement("etools-loading");
     redirectNotification.loadingText =
-      'Your login session has expired, you are being redirected to login.';
+      "Your login session has expired, you are being redirected to login.";
     // redirectNotification.absolute = true;
     redirectNotification.active = true;
-    document.querySelector('body').appendChild(redirectNotification);
+    document.querySelector("body").appendChild(redirectNotification);
     setTimeout(() => {
       window.location.href = Config.loginPath;
     }, 3000);
@@ -488,24 +488,24 @@ export class AppShell extends LoadingMixin(
     // If no page was found in the route data, page will be an empty string.
     // Show 'view1' in that case. And if the page doesn't exist, show 'view404'.
     if (!page) {
-      this.set('page', 'personalized');
+      this.set("page", "personalized");
     } else if (
       [
-        'personalized',
-        'hact',
-        'attachments',
-        'map',
-        'partnerships',
-        'trips',
-        'custom',
-        'fam',
-        'fmm',
-        'fmp',
+        "personalized",
+        "hact",
+        "attachments",
+        "map",
+        "partnerships",
+        "trips",
+        "custom",
+        "fam",
+        "fmm",
+        "fmp",
       ].indexOf(page) !== -1
     ) {
-      this.set('page', page);
+      this.set("page", page);
     } else {
-      this.set('page', 'view404');
+      this.set("page", "view404");
     }
   }
 
@@ -515,45 +515,45 @@ export class AppShell extends LoadingMixin(
     // Note: `polymer build` doesn't like string concatenation in the import
     // statement, so break it up.
     switch (page) {
-      case 'personalized':
-        import('./pages/view-personalized.js');
+      case "personalized":
+        import("./components/pages/view-personalized.js");
         break;
-      case 'partnerships':
-        import('./pages/view-partnerships.js');
+      case "partnerships":
+        import("./components/pages/view-partnerships.js");
         break;
-      case 'fam':
-        import('./pages/view-fam.js');
+      case "fam":
+        import("./components/pages/view-fam.js");
         break;
-      case 'fmm':
-        import('./pages/view-fmm.js');
+      case "fmm":
+        import("./components/pages/view-fmm.js");
         break;
-      case 'fmp':
-        import('./pages/view-fmp.js');
+      case "fmp":
+        import("./components/pages/view-fmp.js");
         break;
-      case 'hact':
-        import('./pages/view-hact.js');
+      case "hact":
+        import("./components/pages/view-hact.js");
         break;
-      case 'map':
-        import('./pages/view-map.js');
+      case "map":
+        import("./components/pages/view-map.js");
         break;
-      case 'attachments':
-        import('./pages/view-attachments.js');
+      case "attachments":
+        import("./components/pages/view-attachments.js");
         break;
-      case 'trips':
-        import('./pages/view-trips.js');
+      case "trips":
+        import("./components/pages/view-trips.js");
         break;
-      case 'custom':
-        import('./pages/view-custom.js');
+      case "custom":
+        import("./components/pages/view-custom.js");
         break;
-      case 'view404':
+      case "view404":
         this._showPage404.bind(this);
         break;
     }
   }
   private _showPage404(): void {
-    this.set('page', 'view404');
-    fireEvent(this, 'toast', {
-      text: 'Oops you hit a 404!',
+    this.set("page", "view404");
+    fireEvent(this, "toast", {
+      text: "Oops you hit a 404!",
       showCloseBtn: true,
     });
   }
@@ -570,16 +570,16 @@ export class AppShell extends LoadingMixin(
 
     // handles all charts links
     for (let year: number = startYear; year < currentYear; year++) {
-      let yearObj = { name: '', endpoint: '' };
-      yearObj.name = 'Charts ' + year.toString();
+      let yearObj = { name: "", endpoint: "" };
+      yearObj.name = "Charts " + year.toString();
       yearObj.endpoint = `/api/v2/hact/graph/${year}/export`;
       array.push(yearObj);
     }
 
     // adds detail links
     for (let year: number = startYear; year < currentYear; year++) {
-      let yearObj = { name: '', endpoint: '' };
-      yearObj.name = 'Table ' + year.toString();
+      let yearObj = { name: "", endpoint: "" };
+      yearObj.name = "Table " + year.toString();
       yearObj.endpoint = `/api/v2/hact/history/?year=${year}&format=csv`;
       array.push(yearObj);
     }
