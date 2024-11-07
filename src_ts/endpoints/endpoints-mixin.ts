@@ -1,20 +1,23 @@
 import {PolymerElement} from '@polymer/polymer/polymer-element.js';
 import {Constructor, GenericObject} from '../typings/globals.types';
-import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
-import {Config} from '../config/config';
+import EtoolsAjaxRequestMixin from "@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js";
 import {Endpoints} from './endpoints';
 import template from 'lodash-es/template';
 import isEmpty from 'lodash-es/isEmpty';
+import { Environment } from "@unicef-polymer/etools-utils/dist/singleton/environment";
 
 export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
   class EndpointsMixinClass extends EtoolsAjaxRequestMixin(baseClass as Constructor<PolymerElement>) {
 
     public getEndpoint(endpointName: string, data?: object): object {
-      const endpoint = JSON.parse(JSON.stringify(Endpoints[endpointName]));
+      const endpoint = JSON.parse(
+        JSON.stringify((Endpoints as any)[endpointName])
+      );
       if (endpoint && this.endpointHasTemplate(endpoint)) {
-        endpoint.url = window.location.origin + template(endpoint.template)(data);
+        endpoint.url =
+          window.location.origin + template(endpoint.template)(data);
       } else {
-        endpoint.url = Config.baseSite + endpoint.url;
+        endpoint.url = Environment.baseUrl + endpoint.url;
       }
       return endpoint;
     }
@@ -70,17 +73,20 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
       }
       const defer = this._getDeferrer();
       const self = this;
-      this.addTokenToRequestOptions(endpoint, endpointTemplateData)
-          .then((requestOptions: object) => {
-                const options = self._addAdditionalRequestOptions(requestOptions, requestAdditionalOptions);
-                return self.sendRequest(options, activeReqKey);
-          })
-          .then((endpointResponse: any) => {
-                defer.resolve(endpointResponse);
-          })
-          .catch((error: any) => {
-                defer.reject(error);
-          });
+      this.addTokenToRequestOptions(endpoint, endpointTemplateData as any)
+        .then((requestOptions: object) => {
+          const options = self._addAdditionalRequestOptions(
+            requestOptions,
+            requestAdditionalOptions as any
+          );
+          return self.sendRequest(options, activeReqKey);
+        })
+        .then((endpointResponse: any) => {
+          defer.resolve(endpointResponse);
+        })
+        .catch((error: any) => {
+          defer.reject(error);
+        });
       return defer.promise;
     }
 
@@ -98,10 +104,14 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
               break;
             case 'headers':
               // add additional headers
-              options.headers = Object.assign({}, options.headers, requestAdditionalOptions[key]);
+              options.headers = Object.assign(
+                {},
+                options.headers,
+                (requestAdditionalOptions as any)[key]
+              );
               break;
             default:
-              options[key] = requestAdditionalOptions[key];
+              options[key] = (requestAdditionalOptions as any)[key];
           }
         });
       }

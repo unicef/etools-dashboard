@@ -1,7 +1,7 @@
 /* This file will be dedicated to page layout and related layout elements. */
-import '@polymer/polymer/polymer-element.js';
-import '@polymer/iron-flex-layout/iron-flex-layout.js';
-const DocumentContainer = document.createElement('template');
+import "@polymer/polymer/polymer-element.js";
+import "@polymer/iron-flex-layout/iron-flex-layout.js";
+const DocumentContainer = document.createElement("template");
 
 DocumentContainer.innerHTML = `<dom-module id="page-layout-styles">
   <template>
@@ -15,10 +15,6 @@ DocumentContainer.innerHTML = `<dom-module id="page-layout-styles">
 
       app-header {
         background-color: #2A3B46;  /* TODO: replace with app-theme var */
-      }
-
-      iron-pages[role="main"] {
-        @apply --layout-flex;
       }
 
       div.paper-material {
@@ -104,24 +100,6 @@ DocumentContainer.innerHTML = `<dom-module id="page-layout-styles">
 
       .top-content-action paper-button iron-icon {
         margin-right: 10px;
-      }
-
-      .page-top-content paper-tab .top-content-row paper-tabs {
-        --paper-tabs-selection-bar-color: var(--accent-color);
-      }
-
-      .page-top-content paper-tab, .top-content-row paper-tab {
-        --paper-tab-ink: var(--accent-color);
-        padding: 0 24px;
-      }
-
-      .page-top-content paper-tab .tab-content,  .top-content-row paper-tab .tab-content {
-        color: var(--dark-secondary-text-color);
-        text-transform: uppercase;
-      }
-
-      .page-top-content paper-tab.iron-selected .tab-content,  .top-content-row paper-tab.iron-selected .tab-content {
-        color: var(--accent-color);
       }
 
       .content-section:not(:first-of-type) {

@@ -1,60 +1,62 @@
-/* eslint-disable camelcase */
-import { PolymerElement, html } from '@polymer/polymer';
-import '@polymer/app-layout/app-drawer/app-drawer.js';
-import '@polymer/app-layout/app-drawer-layout/app-drawer-layout.js';
-import '@polymer/app-layout/app-header/app-header.js';
-import '@polymer/app-layout/app-header-layout/app-header-layout.js';
-import '@polymer/app-layout/app-scroll-effects/effects/waterfall.js';
-import '@polymer/app-route/app-location.js';
-import '@polymer/app-route/app-route.js';
-import '@polymer/iron-pages/iron-pages.js';
-import '@polymer/paper-menu-button/paper-menu-button.js';
-import '@polymer/paper-listbox/paper-listbox.js';
-import '@polymer/paper-button/paper-button.js';
-import '@polymer/paper-tabs/paper-tabs.js';
-import '@polymer/paper-tabs/paper-tab.js';
-import { property, customElement } from '@polymer/decorators';
-import { setRootPath } from '@polymer/polymer/lib/utils/settings.js';
-import LoadingMixin from '@unicef-polymer/etools-loading/etools-loading-mixin.js';
-import '@unicef-polymer/etools-loading/etools-loading.js';
-import { sendRequest } from '@unicef-polymer/etools-ajax/etools-ajax-request';
-import '@unicef-polymer/etools-piwik-analytics/etools-piwik-analytics.js';
-import './styles/buttons-styles';
-import './styles/page-layout-styles';
-import './styles/shared-styles';
-import './styles/app-theme';
-import { ToastNotificationsMixin } from './common/toast/toast-notifications-mixin';
-import { fireEvent } from './utils/fire-custom-event';
+import { html, LitElement } from "lit";
+
+import { property, customElement } from "lit/decorators.js";
+import "@unicef-polymer/etools-unicef/src/etools-app-layout/app-drawer";
+import "@unicef-polymer/etools-unicef/src/etools-app-layout/app-drawer-layout";
+import "@unicef-polymer/etools-unicef/src/etools-app-layout/app-header";
+import "@unicef-polymer/etools-unicef/src/etools-app-layout/app-header-layout";
+import "@unicef-polymer/etools-unicef/src/etools-app-layout/app-footer";
+import "@unicef-polymer/etools-unicef/src/etools-toasts/etools-toasts";
+
+import "@polymer/paper-menu-button/paper-menu-button.js";
+import "@polymer/paper-listbox/paper-listbox.js";
+import "@polymer/paper-button/paper-button.js";
+
+import { EtoolsLoading } from "@unicef-polymer/etools-unicef/src/etools-loading/etools-loading.js";
+import { LoadingMixin } from "@unicef-polymer/etools-unicef/src/etools-loading/etools-loading-mixin";
+import "@unicef-polymer/etools-unicef/src/etools-loading/etools-loading.js";
+import { sendRequest } from "@unicef-polymer/etools-ajax/etools-ajax-request";
+import "@unicef-polymer/etools-piwik-analytics/etools-piwik-analytics.js";
+import "./components/styles/buttons-styles";
+import "./components/styles/page-layout-styles";
+import "./components/styles/shared-styles";
+import "./components/styles/app-theme";
 import "./components/appshell/page-header";
-import "./components/appshell/page-footer";
-import { Config, BASE_URL } from "./config/config";
 import { Endpoints } from "./endpoints/endpoints";
-import { store } from "./redux/store";
-import { setOffices, setSectors, setStatic } from "./redux/actions/static-data";
+import { RootState, store } from "./redux/store";
+
+import "./config/config";
 import "./config/dexie-db-config";
+import { EtoolsRouteDetails } from "@unicef-polymer/etools-utils/dist/interfaces/router.interfaces";
+import { navigate } from "./redux/actions/app";
+import {
+  connect,
+  installRouter,
+} from "@unicef-polymer/etools-utils/dist/pwa.utils";
+import "./routing/routes";
+import { Environment } from "@unicef-polymer/etools-utils/dist/singleton/environment";
+import { createDynamicDialog } from "@unicef-polymer/etools-unicef/src/etools-dialog/dynamic-dialog";
+import { initializeIcons } from "@unicef-polymer/etools-unicef/src/etools-icons/etools-icons";
+import "@unicef-polymer/etools-modules-common/dist/layout/etools-tabs";
+
 import dayjs from "dayjs";
 import dayJsUtc from "dayjs/plugin/utc";
 import dayJsIsSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import dayJsIsBetween from "dayjs/plugin/isBetween";
+import { EtoolsRouter } from "@unicef-polymer/etools-utils/dist/singleton/router";
 
 dayjs.extend(dayJsUtc);
 dayjs.extend(dayJsIsSameOrBefore);
 dayjs.extend(dayJsIsBetween);
 
-setRootPath(BASE_URL);
-
+initializeIcons();
 @customElement("app-shell")
-export class AppShell extends LoadingMixin(
-  ToastNotificationsMixin(PolymerElement)
-) {
-  public static get template(): HTMLTemplateElement {
+export class AppShell extends LoadingMixin(connect(store)(LitElement)) {
+  render() {
     return html`
-      <style include="page-layout-styles shared-styles buttons-styles">
+      <style>
         :host {
-          display: block;
-          --paper-tab-content: {
-            height: auto;
-          }
+          --app-drawer-width: 0;
         }
 
         .top-content-actions-wrapper {
@@ -76,10 +78,6 @@ export class AppShell extends LoadingMixin(
           padding: inherit;
         }
 
-        iron-pages {
-          display: flex;
-        }
-
         paper-menu-button {
           padding: 0;
         }
@@ -90,35 +88,21 @@ export class AppShell extends LoadingMixin(
       </style>
 
       <etools-piwik-analytics
-        page="[[subroute.prefix]]"
-        user="[[user]]"
-        toast="[[currentToastMessage]]"
+        .page="${Environment.basePath + this.mainPage}"
+        .user="${this.user}"
       >
       </etools-piwik-analytics>
 
-      <app-location route="{{route}}" url-space-regex="^[[rootPath]]">
-      </app-location>
-
-      <app-route
-        route="{{route}}"
-        pattern="[[rootPath]]:page"
-        data="{{routeData}}"
-        tail="{{subroute}}"
-      ></app-route>
-      <app-route
-        route="{{subroute}}"
-        pattern="/:tab"
-        data="{{subrouteData}}"
-      ></app-route>
+      <etools-toasts></etools-toasts>
 
       <app-drawer-layout id="layout" force-narrow="" fullbleed="">
         <!-- Main content -->
         <app-header-layout has-scrolling-region="">
-          <app-header slot="header" condenses reveals effects="waterfall">
+          <app-header slot="header" condenses reveals>
             <page-header
               id="pageheader"
               title="eTools"
-              user="[[user]]"
+              .profile="${this.user}"
             ></page-header>
           </app-header>
           <div class="page-top-content with-tabs">
@@ -129,7 +113,7 @@ export class AppShell extends LoadingMixin(
                 <div class="top-content-actions-wrapper">
                   <div
                     class="top-content-action"
-                    hidden$="[[!_isActive(page, 'hact')]]"
+                    ?hidden="${!this.isActivePage(this.mainPage, "hact")}"
                   >
                     <paper-menu-button>
                       <paper-button
@@ -147,9 +131,9 @@ export class AppShell extends LoadingMixin(
                         <template
                           id="hactExport"
                           is="dom-repeat"
-                          items="[[historicalHactExports]]"
+                          .items="${this.historicalHactExports}"
                         >
-                          <paper-item on-tap="_export"
+                          <paper-item click="this._export"
                             >{{item.name}}</paper-item
                           >
                         </template>
@@ -158,9 +142,12 @@ export class AppShell extends LoadingMixin(
                   </div>
                   <div
                     class="top-content-action"
-                    hidden$="[[!_isActive(page,'partnerships')]]"
+                    ?hidden="${!this.isActivePage(
+                      this.mainPage,
+                      "partnerships"
+                    )}"
                   >
-                    <a target="_blank" href="[[csvUrl]]">
+                    <a target="_blank" .href="${this.csvUrl}">
                       <paper-button class="action-button">
                         <iron-icon
                           class="dark"
@@ -173,11 +160,11 @@ export class AppShell extends LoadingMixin(
 
                   <div
                     class="top-content-action"
-                    hidden$="[[!_isActive(page,'trips')]]"
+                    ?hidden="${!this.isActivePage(this.mainPage, "trips")}"
                   >
                     <paper-button
                       class="primary-btn with-prefix"
-                      on-tap="_goToAddTrip"
+                      @click="${this.goToAddTrip}"
                     >
                       <iron-icon icon="add"></iron-icon>
                       Add New Trip
@@ -186,184 +173,178 @@ export class AppShell extends LoadingMixin(
                 </div>
               </div>
               <div class="top-content-row">
-                <paper-tabs
-                  selected="{{page}}"
-                  attr-for-selected="name"
-                  noink
-                  bottom-item
-                >
-                  <paper-tab name="personalized" link>
-                    <a href="[[rootPath]]personalized" class="tab-content"
-                      >My Dashboard</a
-                    >
-                  </paper-tab>
-
-                  <paper-tab name="hact" link>
-                    <a href="[[rootPath]]hact" class="tab-content">HACT</a>
-                  </paper-tab>
-
-                  <paper-tab name="trips" link>
-                    <a href="[[rootPath]]trips" class="tab-content">Trips</a>
-                  </paper-tab>
-
-                  <paper-tab name="partnerships" link>
-                    <a href="[[rootPath]]partnerships" class="tab-content"
-                      >Partnerships</a
-                    >
-                  </paper-tab>
-
-                  <paper-tab name="fam" link>
-                    <a href="[[rootPath]]fam" class="tab-content"
-                      >Financial Assurance</a
-                    >
-                  </paper-tab>
-
-                  <paper-tab name="fmm" link>
-                    <a href="[[rootPath]]fmm" class="tab-content"
-                      >FM Management</a
-                    >
-                  </paper-tab>
-
-                  <paper-tab name="fmp" link>
-                    <a href="[[rootPath]]fmp" class="tab-content"
-                      >FM Programme</a
-                    >
-                  </paper-tab>
-
-                  <paper-tab name="map" link>
-                    <a href="[[rootPath]]map" class="tab-content">Map</a>
-                  </paper-tab>
-
-                  <paper-tab name="attachments" link>
-                    <a href="[[rootPath]]attachments" class="tab-content"
-                      >Document Library</a
-                    >
-                  </paper-tab>
-
-                  <template is="dom-if" if="{{embedSource.length}}">
-                    <paper-tab name="custom" link>
-                      <a href="[[rootPath]]custom" class="tab-content"
-                        >Custom</a
-                      >
-                    </paper-tab>
-                  </template>
-                </paper-tabs>
+                <etools-tabs-lit
+                  id="tabs"
+                  .tabs="${this.tabs}"
+                  .activeTab="${this.mainPage}"
+                  border-bottom
+                  @sl-tab-show="${this.tabChanged}"
+                ></etools-tabs-lit>
               </div>
             </div>
           </div>
 
-          <iron-pages
-            selected="[[page]]"
-            attr-for-selected="name"
-            fallback-selection="personalized"
-            role="main"
-          >
-            <view-personalized
-              user="[[user]]"
-              class="page"
-              name="personalized"
-              route="{{route}}"
-            ></view-personalized>
-            <view-hact name="hact" user="[[user]]"></view-hact>
-            <view-partnerships
-              route="{{subroute}}"
-              class="page"
-              name="partnerships"
-              csv-download-url="{{csvUrl}}"
-              country-code="[[countryDetails.business_area_code]]"
-            >
-            </view-partnerships>
-            <view-fam
-              route="{{subroute}}"
-              class="page"
-              name="fam"
-              country-code="[[countryDetails.business_area_code]]"
-            >
-            </view-fam>
-            <view-fmm
-              route="{{subroute}}"
-              class="page"
-              name="fmm"
-              country-code="[[countryDetails.business_area_code]]"
-            >
-            </view-fmm>
-            <view-fmp
-              route="{{subroute}}"
-              class="page"
-              name="fmp"
-              country-code="[[countryDetails.business_area_code]]"
-            >
-            </view-fmp>
-            <view-trips
-              route="{{route}}"
-              class="page"
-              name="trips"
-              user="[[user]]"
-            ></view-trips>
-            <view-map
-              route="{{route}}"
-              user="[[user]]"
-              class="page"
-              name="map"
-            ></view-map>
-            <view-attachments
-              route="{{route}}"
-              class="page"
-              user="[[user]]"
-              name="attachments"
-            ></view-attachments>
-            <view-custom
-              route="{{route}}"
-              class="page"
-              user="[[user]]"
-              name="custom"
-            ></view-custom>
-          </iron-pages>
-          <page-footer></page-footer>
+          ${this.isActivePage(this.mainPage, "personalized")
+            ? html`<view-personalized
+                .user="${this.user}"
+                class="page"
+                name="personalized"
+              ></view-personalized>`
+            : html``}
+          ${this.isActivePage(this.mainPage, "hact")
+            ? html`<view-hact name="hact" .user="${this.user}"></view-hact>`
+            : html``}
+          ${this.isActivePage(this.mainPage, "partnerships")
+            ? html`<view-partnerships
+                class="page"
+                name="partnerships"
+                csv-download-url="${this.csvUrl}"
+                country-code="${this.countryDetails?.business_area_code}"
+              >
+              </view-partnerships>`
+            : html``}
+          ${this.isActivePage(this.mainPage, "fam")
+            ? html`<view-fam
+                class="page"
+                name="fam"
+                country-code="${this.countryDetails?.business_area_code}"
+              >
+              </view-fam>`
+            : html``}
+          ${this.isActivePage(this.mainPage, "fmm")
+            ? html`<view-fmm
+                class="page"
+                name="fmm"
+                country-code="${this.countryDetails?.business_area_code}"
+              >
+              </view-fmm>`
+            : html``}
+          ${this.isActivePage(this.mainPage, "fmp")
+            ? html`<view-fmp
+                class="page"
+                name="fmp"
+                country-code="${this.countryDetails?.business_area_code}"
+              >
+              </view-fmp>`
+            : html``}
+          ${this.isActivePage(this.mainPage, "trips")
+            ? html`<view-trips
+                class="page"
+                name="trips"
+                .user="${this.user}"
+              ></view-trips>`
+            : html``}
+          ${this.isActivePage(this.mainPage, "map")
+            ? html`<view-map
+                .user="${this.user}"
+                class="page"
+                name="map"
+              ></view-map>`
+            : html``}
+          ${this.isActivePage(this.mainPage, "attachments")
+            ? html`<view-attachments
+                class="page"
+                .user="${this.user}"
+                name="attachments"
+              ></view-attachments>`
+            : html``}
+          ${this.isActivePage(this.mainPage, "custom")
+            ? html`<view-custom
+                class="page"
+                .user="${this.user}"
+                name="custom"
+              ></view-custom>`
+            : html``}
+          ${this.isActivePage(this.mainPage, "page-not-found")
+            ? html`<page-not-found></page-not-found>`
+            : html``}
+          <app-footer></app-footer>
         </app-header-layout>
       </app-drawer-layout>
     `;
   }
 
-  @property({
-    observer: AppShell.prototype._pageChanged,
-    type: String,
-    reflectToAttribute: true,
-  })
-  public page: string;
-
   @property({ type: Object })
-  public routeData: object;
+  routeDetails!: EtoolsRouteDetails;
 
   @property({ type: String })
-  public rootPath: string;
+  mainPage = ""; // routeName
 
-  @property({ type: Boolean })
-  public hideExport: boolean;
+  @property({ type: String })
+  subPage: string | null = null; // subRouteName
+
+  @property({ type: String })
+  public rootPath!: string;
 
   @property({ type: Array })
-  public currentYearHactExports: object[];
+  public currentYearHactExports!: object[];
 
   @property({ type: Array })
-  public historicalHactExports: object[];
+  public historicalHactExports!: object[];
 
   @property({ type: Boolean })
   public displayDetail = false;
 
   @property({ type: Object })
-  public user: object;
+  public user!: any;
 
   @property({ type: String })
-  public currentToastMessage: string;
-
-  @property({ type: String })
-  public embedSource: string;
+  public embedSource!: string;
 
   @property({ type: Object })
   countryDetails!: any;
 
-  public static get observers(): string[] {
-    return ["_routePageChanged(routeData.page)", "setEmbedSource(user)"];
+  @property({ type: String })
+  csvUrl = "";
+
+  @property({ type: Array })
+  tabs: any[] = [];
+
+  public setTabs() {
+    this.tabs = [
+      {
+        tab: "personalized",
+        tabLabel: "My Dashboard",
+      },
+      {
+        tab: "hact",
+        tabLabel: "HACT",
+      },
+      {
+        tab: "trips",
+        tabLabel: "Trips",
+      },
+      {
+        tab: "partnerships",
+        tabLabel: "Partnerships",
+      },
+      {
+        tab: "fam",
+        tabLabel: "Financial Assurance",
+      },
+      {
+        tab: "fmm",
+        tabLabel: "FM Management",
+      },
+      {
+        tab: "fmp",
+        tabLabel: "FM Programme",
+      },
+      {
+        tab: "map",
+        tabLabel: "Map",
+      },
+      {
+        tab: "attachments",
+        tabLabel: "Document Library",
+      },
+      {
+        tab: "custom",
+        tabLabel: "Custom",
+        hidden: !this.embedSource,
+      },
+    ];
+    this.requestUpdate();
   }
 
   public ready(): void {
@@ -382,19 +363,51 @@ export class AppShell extends LoadingMixin(
 
   connectedCallback() {
     super.connectedCallback();
+
+    this.checkAppVersion();
+    installRouter((location) =>
+      store.dispatch(
+        navigate(decodeURIComponent(location.pathname + location.search))
+      )
+    );
+
     let currentYear = new Date().getFullYear();
     this.getAppStaticData();
-    this.set("historicalHactExports", this._setHactExport(2017));
-    this.set("currentYearHactExports", [
+    this.historicalHactExports = this._setHactExport(2017);
+    this.currentYearHactExports = [
       { name: "Table", endpoint: "/api/v2/partners/hact?format=csv" },
       { name: "Charts", endpoint: `/api/v2/hact/graph/${currentYear}/export` },
-    ]);
+    ];
+    this.setTabs();
   }
 
-  public setEmbedSource(): void {
-    // @ts-ignore
-    const embedSource = this.user.country.custom_dashboards.bi_url;
-    this.set("embedSource", embedSource);
+  public disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this._removeListeners();
+  }
+
+  stateChanged(state: RootState) {
+    this.routeDetails = state.app!.routeDetails;
+    this.mainPage = state.app!.routeDetails!.routeName;
+    this.subPage = state.app!.routeDetails!.subRouteName;
+  }
+
+  updated(changedProperties: any) {
+    if (
+      changedProperties.hasOwnProperty("user") &&
+      this.embedSource !== this.user.country.custom_dashboards.bi_url
+    ) {
+      this.embedSource = this.user.country.custom_dashboards.bi_url;
+      this.setTabs();
+    }
+  }
+
+  tabChanged(e: CustomEvent) {
+    const newTabName: string = e.detail.name;
+    if (newTabName === this.activeTab) {
+      return;
+    }
+    EtoolsRouter.updateAppLocation(Environment.basePath + newTabName);
   }
 
   getCurrentUser() {
@@ -415,9 +428,11 @@ export class AppShell extends LoadingMixin(
       if (user) {
         this.user = user;
         this.getCountryDetails();
-        this.getSectors();
-        this.getDropdownsStaticData();
-        this.getOffices();
+
+        // Seems to not be used
+        // this.getSectors();
+        // this.getDropdownsStaticData();
+        // this.getOffices();
       }
     });
   }
@@ -427,140 +442,75 @@ export class AppShell extends LoadingMixin(
       (resp) => (this.countryDetails = resp && resp.length ? resp[0] : {})
     );
   }
-  getSectors() {
-    sendRequest({ endpoint: Endpoints.sectors }).then((resp) =>
-      store.dispatch(setSectors(resp))
-    );
-  }
-  getDropdownsStaticData() {
-    sendRequest({ endpoint: Endpoints.static }).then((resp) =>
-      store.dispatch(setStatic(resp))
-    );
-  }
-  getOffices() {
-    sendRequest({ endpoint: Endpoints.offices }).then((resp) =>
-      store.dispatch(setOffices(resp))
-    );
-  }
 
-  public disconnectedCallback(): void {
-    super.disconnectedCallback();
-    this._removeListeners();
-  }
+  // Seems to not be used
+  // getSectors() {
+  //   sendRequest({ endpoint: Endpoints.sectors }).then((resp) =>
+  //     store.dispatch(setSectors(resp))
+  //   );
+  // }
+  // getDropdownsStaticData() {
+  //   sendRequest({ endpoint: Endpoints.static }).then((resp) =>
+  //     store.dispatch(setStatic(resp))
+  //   );
+  // }
+  // getOffices() {
+  //   sendRequest({ endpoint: Endpoints.offices }).then((resp) =>
+  //     store.dispatch(setOffices(resp))
+  //   );
+  // }
 
-  public _updateUrlTab(tab: string) {
-    this.set("hideHactExport", tab === "hact" ? false : true);
-    this.set("hidePartnershipExport", tab === "partnerships" ? false : true);
-    if (!tab) {
-      return;
-    }
-    this.set("hideExport", !(tab === "hact" || tab === "partnerships"));
-  }
-
-  public _goToAddTrip() {
+  goToAddTrip() {
     window.location.href = "/t2f/edit-travel/-1";
   }
 
-  public _export(event) {
+  public _export(event: any) {
     const endpoint = event.model.item.endpoint;
     window.open(`${endpoint}`, "_blank");
   }
 
-  public _print(): void {
-    window.print();
-  }
-
   private _onForbidden(): void {
-    const redirectNotification = document.createElement("etools-loading");
+    const redirectNotification = document.createElement(
+      "etools-loading"
+    ) as EtoolsLoading;
     redirectNotification.loadingText =
       "Your login session has expired, you are being redirected to login.";
     // redirectNotification.absolute = true;
     redirectNotification.active = true;
-    document.querySelector("body").appendChild(redirectNotification);
+    document.querySelector("body")?.appendChild(redirectNotification);
     setTimeout(() => {
-      window.location.href = Config.loginPath;
+      window.location.href = window.location.origin + "/login/";
     }, 3000);
   }
 
-  _routePageChanged(page) {
-    // Show the corresponding page according to the route.
-    //
-    // If no page was found in the route data, page will be an empty string.
-    // Show 'view1' in that case. And if the page doesn't exist, show 'view404'.
-    if (!page) {
-      this.set("page", "personalized");
-    } else if (
-      [
-        "personalized",
-        "hact",
-        "attachments",
-        "map",
-        "partnerships",
-        "trips",
-        "custom",
-        "fam",
-        "fmm",
-        "fmp",
-      ].indexOf(page) !== -1
-    ) {
-      this.set("page", page);
-    } else {
-      this.set("page", "view404");
-    }
+  protected isActiveMainPage(
+    currentPageName: string,
+    expectedPageName: string
+  ): boolean {
+    return currentPageName === expectedPageName;
   }
 
-  _pageChanged(page) {
-    // Import the page component on demand.
-    //
-    // Note: `polymer build` doesn't like string concatenation in the import
-    // statement, so break it up.
-    switch (page) {
-      case "personalized":
-        import("./components/pages/view-personalized.js");
-        break;
-      case "partnerships":
-        import("./components/pages/view-partnerships.js");
-        break;
-      case "fam":
-        import("./components/pages/view-fam.js");
-        break;
-      case "fmm":
-        import("./components/pages/view-fmm.js");
-        break;
-      case "fmp":
-        import("./components/pages/view-fmp.js");
-        break;
-      case "hact":
-        import("./components/pages/view-hact.js");
-        break;
-      case "map":
-        import("./components/pages/view-map.js");
-        break;
-      case "attachments":
-        import("./components/pages/view-attachments.js");
-        break;
-      case "trips":
-        import("./components/pages/view-trips.js");
-        break;
-      case "custom":
-        import("./components/pages/view-custom.js");
-        break;
-      case "view404":
-        this._showPage404.bind(this);
-        break;
-    }
-  }
-  private _showPage404(): void {
-    this.set("page", "view404");
-    fireEvent(this, "toast", {
-      text: "Oops you hit a 404!",
-      showCloseBtn: true,
-    });
+  protected isActiveSubPage(
+    currentSubPageName: string,
+    expectedSubPageNames: string
+  ): boolean {
+    const subPages: string[] = expectedSubPageNames.split("|");
+    return subPages.indexOf(currentSubPageName) > -1;
   }
 
-  // @ts-ignore
-  private _isActive(page: string, tab: string): boolean {
-    return page === tab;
+  protected isActivePage(
+    pageName: string,
+    expectedPageName: string,
+    currentSubPageName?: string | null,
+    expectedSubPageNames?: string
+  ): boolean {
+    if (!this.isActiveMainPage(pageName, expectedPageName)) {
+      return false;
+    }
+    if (currentSubPageName && expectedSubPageNames) {
+      return this.isActiveSubPage(currentSubPageName, expectedSubPageNames);
+    }
+    return true;
   }
 
   // calculates export links for hact general, detail, and charts views, with new links added each calendar year
@@ -585,5 +535,55 @@ export class AppShell extends LoadingMixin(
     }
 
     return array;
+  }
+
+  checkAppVersion() {
+    fetch("version.json")
+      .then((res) => res.json())
+      .then((version) => {
+        if (
+          version.revision != document.getElementById("buildRevNo")!.innerText
+        ) {
+          console.log("version.json", version.revision);
+          console.log(
+            "buildRevNo ",
+            document.getElementById("buildRevNo")!.innerText
+          );
+          this._showConfirmNewVersionDialog();
+        }
+      });
+  }
+
+  _showConfirmNewVersionDialog() {
+    const msg = document.createElement("span");
+    msg.innerText = "A new version of the app is available. Refresh page?";
+    const conf: any = {
+      size: "md",
+      closeCallback: this._onConfirmNewVersion.bind(this),
+      content: msg,
+    };
+    const confirmNewVersionDialog = createDynamicDialog(conf);
+    setTimeout(() => {
+      const dialog = confirmNewVersionDialog.shadowRoot?.querySelector(
+        "#dialog"
+      ) as any;
+      if (dialog) {
+        dialog.style.zIndex = 9999999;
+      }
+    }, 0);
+    confirmNewVersionDialog.opened = true;
+  }
+
+  _onConfirmNewVersion(e: CustomEvent) {
+    if (e.detail.confirmed) {
+      if (navigator.serviceWorker) {
+        caches.keys().then((cacheNames) => {
+          cacheNames.forEach((cacheName) => {
+            caches.delete(cacheName);
+          });
+          location.reload();
+        });
+      }
+    }
   }
 }

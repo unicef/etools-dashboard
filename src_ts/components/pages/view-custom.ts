@@ -1,50 +1,52 @@
-import {PolymerElement, html} from '@polymer/polymer';
-import {customElement, property} from '@polymer/decorators';
+import { html, css, LitElement } from "lit";
+import { customElement, property } from "lit/decorators.js";
 
-@customElement('view-custom')
-export class ViewCustom extends PolymerElement {
-  public static get template(): HTMLTemplateElement {
+@customElement("view-custom")
+export class ViewCustom extends LitElement {
+  // Define component styles
+  static styles = css`
+    .container {
+      height: 100vh;
+      width: 100vw;
+    }
+    #no-embed-msg {
+      padding: 24px 48px;
+    }
+  `;
+
+  @property({ type: String })
+  public embedSource: string = "";
+
+  @property({ type: Object })
+  public user: any;
+
+  // Observe changes to user property and update embedSource accordingly
+  updated(changedProperties: Map<string | number | symbol, unknown>) {
+    if (changedProperties.has("user")) {
+      this.embedSource = this.user?.country?.custom_dashboards?.bi_url || "";
+    }
+  }
+
+  render() {
     return html`
-      <style>
-        div.container {
-          height: 100vh;
-          width: 100vw
-        }
-        #no-embed-msg {
-          padding: 24px 48px;
-        }
-      </style>
-      <template is="dom-if" if="{{embedSource.length}}">
-        <div class="container">
-          <iframe width="100%"
-                  height="100%"
-                  src="[[embedSource]]"
-                  frameborder="0"
-                  allowFullScreen="true">
-          </iframe>
-        </div>
-      </template>
-      <template is="dom-if" if="{{!embedSource.length}}">
-        <div id="no-embed-msg">Ask your workspace administrator to set a custom Power BI embed code.</div>
-      </template>
+      ${this.embedSource
+        ? html`
+            <div class="container">
+              <iframe
+                width="100%"
+                height="100%"
+                .src="${this.embedSource}"
+                frameborder="0"
+                allowfullscreen="true"
+              ></iframe>
+            </div>
+          `
+        : html`
+            <div id="no-embed-msg">
+              Ask your workspace administrator to set a custom Power BI embed
+              code.
+            </div>
+          `}
     `;
-  }
-
-  @property({type: String})
-  public embedSource: string
-
-  @property({type: Object})
-  public user: object
-
-  public static get observers(): string[] {
-    return [
-      'setEmbedSource(user)'
-    ];
-  }
-
-  public setEmbedSource(): void {
-    // @ts-ignore
-    const embedSource = this.user.country.custom_dashboards.bi_url;
-    this.set('embedSource', embedSource);
   }
 }

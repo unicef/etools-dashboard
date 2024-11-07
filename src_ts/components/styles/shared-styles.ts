@@ -1,7 +1,7 @@
 /* shared styles for all pages */
 /* not for styling index.html or app-shell */
-import '@polymer/polymer/polymer-element.js';
-const DocumentContainer = document.createElement('template');
+import "@polymer/polymer/polymer-element.js";
+const DocumentContainer = document.createElement("template");
 
 DocumentContainer.innerHTML = `<dom-module id="shared-styles">
   <template>
@@ -30,32 +30,6 @@ DocumentContainer.innerHTML = `<dom-module id="shared-styles">
 
       #tabs {
         height: 48px;
-      }
-
-      paper-tabs {
-        color: var(--light-primary-text-color);
-        --paper-tabs-selection-bar-color: var(--accent-color);
-        --paper-tabs: {
-          font-size: 14px;
-          font-weight: 500;
-          text-transform: uppercase;
-        };
-      }
-
-      paper-tabs > * {
-        --paper-tab-ink: var(--accent-color);
-        --paper-tab-content-unselected: {
-          color: var(--light-secondary-text-color);
-        };
-      }
-
-      .tab-link {
-        @apply --layout-horizontal;
-        @apply --layout-center-center;
-      }
-
-      iron-pages[hidden] {
-        display: none;
       }
 
       .paper-material {
