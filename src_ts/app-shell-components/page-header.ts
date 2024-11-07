@@ -29,8 +29,8 @@ export class PageHeader extends PolymerElement {
           bottom: 1px;
           margin-left: 24px;
           min-height: 30px;
-          background: url('../../images/etools_logo_icon.png') no-repeat center
-            left;
+          background: url("../../assets/images/etools_logo_icon.png") no-repeat
+            center left;
           background-size: auto 48px;
           padding-left: 48px;
           font-size: 30px;
@@ -120,7 +120,7 @@ export class PageHeader extends PolymerElement {
           ></etools-app-selector>
           <img
             id="second-logo"
-            src$="[[importPath]]images/etools-logo-color-white.svg"
+            src$="[[importPath]]assets/images/etools-logo-color-white.svg"
           />
           <template is="dom-if" if="[[environment]]">
             <div class="envWarning">- [[environment]] TESTING ENVIRONMENT</div>

@@ -32,15 +32,14 @@ import { Endpoints } from './endpoints/endpoints';
 import { store } from './redux/store';
 import { setOffices, setSectors, setStatic } from './redux/actions/static-data';
 import './config/dexie-db-config';
+import dayjs from "dayjs";
+import dayJsUtc from "dayjs/plugin/utc";
+import dayJsIsSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import dayJsIsBetween from "dayjs/plugin/isBetween";
 
-declare const dayjs: any;
-declare const dayjs_plugin_utc: any;
-declare const dayjs_plugin_isSameOrBefore: any;
-declare const dayjs_plugin_isBetween: any;
-
-dayjs.extend(dayjs_plugin_utc);
-dayjs.extend(dayjs_plugin_isSameOrBefore);
-dayjs.extend(dayjs_plugin_isBetween);
+dayjs.extend(dayJsUtc);
+dayjs.extend(dayJsIsSameOrBefore);
+dayjs.extend(dayJsIsBetween);
 
 setRootPath(BASE_URL);
 

@@ -1,7 +1,9 @@
 import { PolymerElement } from '@polymer/polymer';
 import { Constructor } from '../../typings/globals.types';
+import dayjs from "dayjs";
+import dayJsUtc from "dayjs/plugin/utc";
 
-declare const dayjs: any;
+dayjs.extend(dayJsUtc);
 
 /**
  * @polymer
@@ -12,27 +14,33 @@ function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
     /**
      * Format date string to any format supported by dayjs
      */
-    prettyDate(dateString, format?) {
+    prettyDate(dateString: string, format?: string | undefined) {
       let date = this._convertDate(dateString);
-      return !date ? '' : this._utcDate(date, format);
+      return !date ? "" : this._utcDate(date, format);
     }
 
-    prettyDateWithoutOffset(dateString, format) {
+    prettyDateWithoutOffset(dateString: any, format: any) {
       let date = this.prepareDate(dateString);
-      return !date ? '' : this._utcDate(date, format);
+      return !date ? "" : this._utcDate(date, format);
     }
 
-    _utcDate(date, format) {
+    _utcDate(
+      date: string | number | Date | dayjs.Dayjs | null | undefined,
+      format: string | undefined
+    ) {
       return !date
-        ? ''
-        : dayjs.utc(date).format(format ? format : 'D MMM YYYY');
+        ? ""
+        : dayjs.utc(date).format(format ? format : "D MMM YYYY");
     }
 
-    _convertDate(dateString, noZTimezoneOffset?) {
-      if (typeof dateString === 'string' && dateString !== '') {
+    _convertDate(
+      dateString: string | number | Date | string[],
+      noZTimezoneOffset?: undefined
+    ) {
+      if (typeof dateString === "string" && dateString !== "") {
         dateString =
-          dateString.indexOf('T') === -1
-            ? dateString + 'T00:00:00'
+          dateString.indexOf("T") === -1
+            ? dateString + "T00:00:00"
             : dateString;
         /**
          * `Z` (zero time offset) will ensure `new Date` will create the date in UTC,
@@ -45,18 +53,18 @@ function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
          * @type {string}
          */
         dateString +=
-          noZTimezoneOffset || dateString.indexOf('Z') >= 0 ? '' : 'Z';
+          noZTimezoneOffset || dateString.indexOf("Z") >= 0 ? "" : "Z";
         let date = new Date(dateString);
         let isValid = this.isValidDate(date);
         if (!isValid) {
-          console.warn('Date conversion unsuccessful: ' + dateString);
+          console.warn("Date conversion unsuccessful: " + dateString);
         }
         return isValid ? date : null;
       }
       return null;
     }
 
-    _getDateWithoutTimezoneOffset(date) {
+    _getDateWithoutTimezoneOffset(date: Date) {
       let userTimezoneOffset = date.getTimezoneOffset() * 60000;
       return new Date(date.getTime() + userTimezoneOffset);
     }
@@ -64,7 +72,7 @@ function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
     /*
      * Prepare date from string
      */
-    prepareDate(dateString) {
+    prepareDate(dateString: any) {
       let date = this._convertDate(dateString);
       return date ? this._getDateWithoutTimezoneOffset(date) : new Date();
     }
@@ -72,15 +80,19 @@ function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
     /*
      * Diff between 2 dates
      */
-    dateDiff(firstDateString, secondDateString, unit) {
+    dateDiff(
+      firstDateString: string | number | Date,
+      secondDateString: string | number | Date,
+      unit: string | undefined
+    ) {
       if (!unit) {
-        unit = 'days';
+        unit = "days";
       }
       if (
-        typeof firstDateString === 'string' &&
-        firstDateString !== '' &&
-        typeof secondDateString === 'string' &&
-        secondDateString !== ''
+        typeof firstDateString === "string" &&
+        firstDateString !== "" &&
+        typeof secondDateString === "string" &&
+        secondDateString !== ""
       ) {
         let firstDate = new Date(firstDateString);
         let secondDate = new Date(secondDateString);
@@ -94,7 +106,10 @@ function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
       return null;
     }
 
-    getMaxDateStr(d1Str, d2Str) {
+    getMaxDateStr(
+      d1Str: string | number | Date,
+      d2Str: string | number | Date
+    ) {
       // TODO: optimize this
       let d1 = new Date(d1Str);
       let d2 = new Date(d2Str);
@@ -113,15 +128,19 @@ function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
       }
     }
 
-    isFutureDate(dateStr) {
+    isFutureDate(dateStr: string | number | Date) {
       return dayjs.utc().isBefore(dayjs.utc(new Date(dateStr)));
     }
 
-    dateIsBetween(start, end, current) {
+    dateIsBetween(
+      start: string | number | Date,
+      end: string | number | Date,
+      current: string | number | Date
+    ) {
       let startDate = new Date(start);
       let endDate = new Date(end);
       if (!this.isValidDate(startDate) || !this.isValidDate(endDate)) {
-        throw new Error('Both start and end dates must valid.');
+        throw new Error("Both start and end dates must valid.");
       }
       let date = new Date(current);
       let currentDate = this.isValidDate(date) ? dayjs() : dayjs(date);
@@ -129,25 +148,31 @@ function DateMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
         dayjs(startDate),
         dayjs(endDate),
         null,
-        '[]'
+        "[]"
       );
     }
 
-    isValidDate(date) {
+    isValidDate(date: Date) {
       return date instanceof Date === false
         ? false
-        : date.toString() !== 'Invalid Date';
+        : date.toString() !== "Invalid Date";
     }
 
     getTodayDateStr() {
-      return dayjs().format('YYYY-MM-DD');
+      return dayjs().format("YYYY-MM-DD");
     }
 
-    dateIsBefore(dateToCheckStr, dateStr) {
+    dateIsBefore(
+      dateToCheckStr: string | number | Date | dayjs.Dayjs | null | undefined,
+      dateStr: string | number | Date | dayjs.Dayjs | null | undefined
+    ) {
       return dayjs(dateToCheckStr).isBefore(dateStr);
     }
 
-    dateIsAfter(dateToCheckStr, dateStr) {
+    dateIsAfter(
+      dateToCheckStr: string | number | Date | dayjs.Dayjs | null | undefined,
+      dateStr: string | number | Date | dayjs.Dayjs | null | undefined
+    ) {
       return dayjs(dateToCheckStr).isAfter(dateStr);
     }
   }

@@ -36,7 +36,8 @@ import { connect } from 'pwa-helpers/connect-mixin';
 import get from 'lodash-es/get';
 import { PartnershipOverviewData } from '../data/partnership-overview-data';
 import { DataTableFooter } from '../../../common/data-table/data-table-footer';
-declare const dayjs: any;
+import dayjs from "dayjs";
+
 
 @customElement('partnerships-overview')
 export class PartnershipsOverview extends connect(store)(

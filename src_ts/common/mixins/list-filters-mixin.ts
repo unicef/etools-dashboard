@@ -3,7 +3,7 @@ import { PolymerElement } from '@polymer/polymer';
 import isEmpty from 'lodash-es/isEmpty';
 import { Constructor } from '../../typings/globals.types';
 import DatePickerLite from '@unicef-polymer/etools-date-time/datepicker-lite';
-declare const dayjs: any;
+import dayjs from "dayjs";
 
 /**
  * @polymer
