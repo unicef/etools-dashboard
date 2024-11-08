@@ -1,101 +1,74 @@
-import '@polymer/polymer/polymer-element.js';
-import '@polymer/iron-flex-layout/iron-flex-layout.js';
-import './app-mixins';
-const DocumentContainer = document.createElement('template');
+import {css} from 'lit';
 
-DocumentContainer.innerHTML = `<dom-module id="buttons-styles">
-  <template>
-    <style>
-      :host > * {
-        --primary-button-default: {
-          color: var(--light-primary-text-color, #fff);
-          font-weight: bold;
-          padding: 5px 10px;
-        };
+// language=HTML
+export const buttonsStyles = css`
+  etools-button.default,
+  etools-button.primary,
+  etools-button.info,
+  etools-button.success,
+  etools-button.error {
+    padding: 6px 8px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
 
-         --primary-button-with-prefix: {
-          padding: 5px 10px 5px 16px;
-        };
-      }
+  etools-button.default.left-icon,
+  etools-button.primary.left-icon,
+  etools-button.info.left-icon,
+  etools-button.success.left-icon,
+  etools-button.error.left-icon {
+    padding-inline-end: 12px;
+  }
 
-      .buttons-section {
-        border-top: 1px solid var(--dark-divider-color);
-        padding: 25px;
-      }
+  etools-button.default.right-icon,
+  etools-button.primary.right-icon,
+  etools-button.info.right-icon,
+  etools-button.success.right-icon,
+  etools-button.error.right-icon {
+    padding-inline-start: 12px;
+  }
 
-      .buttons-section.horizontal {
-        @apply --layout-horizontal;
-      }
+  etools-button.default.left-icon etools-icon,
+  etools-button.primary.left-icon etools-icon,
+  etools-button.success.left-icon etools-icon,
+  etools-button.error.left-icon etools-icon {
+    margin-inline-end: 10px;
+  }
 
-      .buttons-section.vertical {
-        @apply --layout-vertical;
-      }
+  etools-button.info.left-icon etools-icon {
+    margin-inline-end: 4px;
+  }
 
-      a.text-button {
-        color: var(--ecp-header-bg);
-        text-transform: uppercase;
-        cursor: pointer;
-        padding-bottom: 8px;
-      }
+  etools-button.default.right-icon etools-icon,
+  etools-button.primary.right-icon etools-icon,
+  etools-button.info.right-icon etools-icon,
+  etools-button.success.right-icon etools-icon,
+  etools-button.error.right-icon etools-icon {
+    margin-inline-start: 10px;
+  }
 
-      .buttons-section.vertical .primary-btn:not(:first-of-type) {
-        margin-top: 15px;
-      }
+  etools-button.default {
+    color: var(--default-btn-color, #ffffff);
+    background-color: var(--default-btn-bg-color, rgba(0, 0, 0, 0.45));
+  }
 
-      .primary-btn {
-        background-color: var(--primary-color, #0099ff);
-        --paper-button: {
-          @apply --primary-button-default;
-        };
-      }
-      
-      .primary-btn[disabled] {
-        background-color: var(--light-disabled-icon-color);
-      }
+  etools-button.primary {
+    color: var(--primary-btn-color, #ffffff);
+    background-color: var(--primary-btn-bg-color, var(--primary-color));
+  }
 
-      .danger-btn {
-        background-color: #E54F2E; /* TODO: replace with app-theme var */
-      }
+  etools-button.info {
+    color: var(--primary-color, #0099ff);
+    align-self: center;
+  }
 
-      .warning-btn {
-        background-color: #F7A14B; /* TODO: replace with app-theme var */
-      }
+  etools-button.success {
+    color: var(--success-btn-color, #ffffff);
+    background-color: var(--success-btn-bg-color, var(--success-color));
+  }
 
-      .success-btn {
-        background-color: #75c300; /* TODO: replace with app-theme var */;
-      }
-
-      .primary-btn.with-prefix {
-        --paper-button: {
-          @apply --primary-button-default;
-          @apply --primary-button-with-prefix;
-        };
-      }
-
-      paper-button.w100 {
-        width: 100%;
-        margin-right: 0;
-        margin-left: 0;
-      }
-
-      .secondary-btn-wrapper {
-        width: 100%;
-        --paper-input-container-input: {
-          @apply --basic-btn-style;
-        };
-      }
-
-      .secondary-btn {
-        --paper-button: {
-          @apply --basic-btn-style;
-        };
-      }
-
-      .secondary-btn iron-icon {
-        margin-right: 5px;
-      }
-    </style>
-  </template>
-</dom-module>`;
-
-document.head.appendChild(DocumentContainer.content);
+  etools-button.error {
+    color: var(--error-btn-color, #ffffff);
+    background-color: var(--error-btn-bg-color, var(--error-color));
+  }
+`;

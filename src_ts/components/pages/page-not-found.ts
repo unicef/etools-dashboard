@@ -1,14 +1,13 @@
-import { PolymerElement, html } from "@polymer/polymer";
-import { customElement } from "@polymer/decorators";
+import {PolymerElement, html} from '@polymer/polymer';
+import {customElement} from '@polymer/decorators';
 
-@customElement("page-not-found")
+@customElement('page-not-found')
 export class PageNotFound extends PolymerElement {
   public static get template(): HTMLTemplateElement {
     return html`
       <style>
         div.container {
           height: 100vh;
-          width: 100vw;
         }
       </style>
       <div class="container">

@@ -1,33 +1,32 @@
-import { html, css, LitElement } from "lit";
-import { customElement, property } from "lit/decorators.js";
-import { attachmentsProd } from "../../endpoints/power-bi-embeds";
+import {html, css, LitElement} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
+import {attachmentsProd} from '../../endpoints/power-bi-embeds';
 
-@customElement("view-attachments")
+@customElement('view-attachments')
 export class ViewAttachments extends LitElement {
   // CSS for the component
   static styles = css`
     .container {
       height: 100vh;
-      width: 100vw;
     }
   `;
 
-  @property({ type: String })
-  public embedSource: string = "";
+  @property({type: String})
+  public embedSource = '';
 
-  @property({ type: Object })
+  @property({type: Object})
   public user: any;
 
   // Observe changes to the user property and update embedSource accordingly
   updated(changedProperties: Map<string | number | symbol, unknown>) {
-    if (changedProperties.has("user")) {
+    if (changedProperties.has('user')) {
       this.setEmbedSource();
     }
   }
 
   private setEmbedSource(): void {
-    const country = this.user?.country?.name || "";
-    const attachmentsCountry = country.replace(/\s+/g, "_");
+    const country = this.user?.country?.name || '';
+    const attachmentsCountry = country.replace(/\s+/g, '_');
 
     this.embedSource =
       `${attachmentsProd}&$filter=attachments/country_name eq '${attachmentsCountry}'` +
@@ -38,6 +37,7 @@ export class ViewAttachments extends LitElement {
     return html`
       <div class="container">
         <iframe
+          title="view-attachments"
           width="100%"
           height="100%"
           .src="${this.embedSource}"

@@ -8,10 +8,10 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 
-import { Reducer } from "redux";
-import { UPDATE_ROUTE_DETAILS, UPDATE_DRAWER_STATE } from "../actions/app";
-import { RootAction } from "../store";
-import { EtoolsRouteDetails } from "@unicef-polymer/etools-utils/dist/interfaces/router.interfaces";
+import {Reducer} from 'redux';
+import {UPDATE_ROUTE_DETAILS, UPDATE_DRAWER_STATE} from '../actions/app';
+import {RootAction} from '../store';
+import {EtoolsRouteDetails} from '@unicef-polymer/etools-utils/dist/interfaces/router.interfaces';
 
 export interface AppState {
   routeDetails: EtoolsRouteDetails;
@@ -20,7 +20,7 @@ export interface AppState {
 
 const INITIAL_STATE: AppState = {
   routeDetails: {} as EtoolsRouteDetails,
-  drawerOpened: false,
+  drawerOpened: false
 };
 
 const app: Reducer<AppState, RootAction> = (state = INITIAL_STATE, action) => {
@@ -28,12 +28,12 @@ const app: Reducer<AppState, RootAction> = (state = INITIAL_STATE, action) => {
     case UPDATE_ROUTE_DETAILS:
       return {
         ...state,
-        routeDetails: action.routeDetails,
+        routeDetails: action.routeDetails
       };
     case UPDATE_DRAWER_STATE:
       return {
         ...state,
-        drawerOpened: action.opened,
+        drawerOpened: action.opened
       };
     default:
       return state;

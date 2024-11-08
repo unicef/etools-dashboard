@@ -1,129 +1,157 @@
-import {html} from '@polymer/polymer/polymer-element.js';
-import '@polymer/iron-flex-layout/iron-flex-layout';
+import {html} from 'lit';
 
 // language=HTML
-export const GridLayoutStyles = html`<style>
+export const gridLayoutStylesLit = html` <style>
+  .w100 {
+    width: 100%;
+  }
+
   .layout-horizontal,
   .layout-vertical {
     box-sizing: border-box;
   }
+
   .layout-horizontal {
-    @apply --layout-horizontal;
+    flex-direction: row;
   }
-  .layout-vertical {
-    @apply --layout-vertical;
+
+  .layout-vertical,
+  .col.layout-vertical {
+    flex-direction: column;
   }
-  .row-h {
-    @apply --layout-horizontal;
+
+  .layout-wrap {
+    flex-wrap: wrap;
   }
-  .row-v {
-    @apply --layout-vertical;
-  }
-  .flex-c {
-    /* flex container */
-    @apply --layout-flex;
-  }
-  .row-h, .row-v {
+
+  .row-padding {
     padding: 16px 24px;
   }
-  .row-h + .row-h, .row-v + .row-v {
-    margin-top: 20px;
+
+  .row-padding-h {
+    padding-inline-start: 24px;
+    padding-inline-end: 24px;
   }
-  .row-h:first-child + .row-v {
-    margin-top: 0;
+
+  .row-padding-v {
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
-  .no-overflow {
-    /* used to prevent flexbox to change it's size if content grows */
-    overflow: hidden;
+
+  .space-between {
+    justify-content: space-between;
   }
-  .align-center {
+
+  .align-items-center {
     align-items: center;
   }
+
+  .row-h {
+    flex-direction: row;
+  }
+
+  .row-v {
+    flex-direction: column;
+  }
+
+  .flex-c {
+    /* flex container */
+    flex: 1;
+  }
+
+  .row-h,
+  .row-v {
+    padding: 16px 24px;
+  }
+
+  .row-v.t-border,
+  .row-h.t-border {
+    border-top: 1px solid var(--light-divider-color);
+  }
+
+  .row-v.b-border,
+  .row-h.b-border {
+    border-bottom: 1px solid var(--light-divider-color);
+  }
+
+  .row-v.header-row,
+  .row-h.header-row {
+    color: var(--secondary-text-color);
+    border-bottom: 1px solid var(--light-divider-color);
+    font-weight: 600;
+  }
+
+  .row-v.header-row > .col,
+  .row-h.header-row > .col {
+    line-height: 24px;
+  }
+
+  .table .row-h:not(.header-row) {
+    border-top: 1px solid var(--light-divider-color);
+  }
+
+  .table.form-fields .row-h:not(.header-row) {
+    padding: 8px 24px;
+  }
+
+  .row-second-bg {
+    background-color: var(--light-theme-background-color);
+  }
+
   .center-align {
     justify-content: center;
     align-items: center;
     text-align: center;
   }
 
-  .start-align {
-    align-items: flex-start;
-  }
-  .align-baseline {
-    align-items: baseline;
-  }
-
-  .justify-start {
-    justify-content: flex-start;
-  }
-
-  .justify-end {
+  .right-align {
+    flex-direction: row;
     justify-content: flex-end;
+    align-items: center;
+    text-align: right;
   }
 
-  .center-justified {
-    @apply --layout-center-justified;
+  .bottom-aligned {
+    align-items: flex-end;
   }
 
-  .flex-1 {
-      @apply --layout-flex;
-  }
-
-  .space-between {
-    @apply --layout-justified;
-  }
-
-  .space-around {
-    @apply --layout-around-justified;
+  .no-overflow {
+    /* used to prevent flexbox to change it's size if content grows */
+    overflow: hidden;
   }
 
   .col {
-    @apply --layout-horizontal;
+    flex-direction: row;
     box-sizing: border-box;
   }
-  .col:not(:first-child) {
-    padding-left: 24px;
-  }
 
-  .col-half {
-    flex: 0 0 4.166666667%;
-    max-width: 4.166666667%;
+  .col:not(:first-of-type) {
+    padding-inline-start: 24px;
   }
 
   .col-1 {
-    flex: 0 0 8.33333333%;
-    max-width: 8.33333333%;
+    flex: 0 0 8.333333333%;
+    max-width: 8.333333333%;
   }
 
   .col-2 {
     flex: 0 0 16.66666667%;
     max-width: 16.66666667%;
   }
-  .col-20 {
-    flex: 0 0 20%;
-    max-width: 20%;
-  }
 
   .col-3 {
     flex: 0 0 25%;
     max-width: 25%;
-  }
-  .col-30 {
-    flex: 0 0 30%;
-    max-width: 30%;
   }
 
   .col-4 {
     flex: 0 0 33.333333%;
     max-width: 33.333333%;
   }
-  .col-40 {
-    flex: 0 0 40%;
-    max-width: 40%;
-  }
 
   .col-5 {
-    flex: 0 0 41.666666%;
-    max-width: 41.666666%;
+    flex: 0 0 41.66666667%;
+    max-width: 41.66666667%;
   }
 
   .col-6 {
@@ -132,13 +160,13 @@ export const GridLayoutStyles = html`<style>
   }
 
   .col-7 {
-    flex: 0 0 58.33333%;
-    max-width: 58.33333%
+    flex: 0 0 58.333333%;
+    max-width: 58.333333%;
   }
 
   .col-8 {
-    flex: 0 0 66.66666%;
-    max-width: 66.66666%;
+    flex: 0 0 66.66666667%;
+    max-width: 66.66666667%;
   }
 
   .col-9 {
@@ -151,13 +179,10 @@ export const GridLayoutStyles = html`<style>
     max-width: 83.33333333%;
   }
 
-  .col-11 {
-    flex: 0 0 91.66666667%;
-    max-width: 91.66666667%;
-  }
-
   .col-12 {
     flex: 0 0 100%;
     max-width: 100%;
   }
+
+  /* TODO: more classes will e added if needed */
 </style>`;

@@ -1,21 +1,17 @@
 import {PolymerElement} from '@polymer/polymer/polymer-element.js';
 import {Constructor, GenericObject} from '../typings/globals.types';
-import EtoolsAjaxRequestMixin from "@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js";
+import EtoolsAjaxRequestMixin from '@unicef-polymer/etools-ajax/etools-ajax-request-mixin.js';
 import {Endpoints} from './endpoints';
 import template from 'lodash-es/template';
 import isEmpty from 'lodash-es/isEmpty';
-import { Environment } from "@unicef-polymer/etools-utils/dist/singleton/environment";
+import {Environment} from '@unicef-polymer/etools-utils/dist/singleton/environment';
 
 export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass: T) {
   class EndpointsMixinClass extends EtoolsAjaxRequestMixin(baseClass as Constructor<PolymerElement>) {
-
     public getEndpoint(endpointName: string, data?: object): object {
-      const endpoint = JSON.parse(
-        JSON.stringify((Endpoints as any)[endpointName])
-      );
+      const endpoint = JSON.parse(JSON.stringify((Endpoints as any)[endpointName]));
       if (endpoint && this.endpointHasTemplate(endpoint)) {
-        endpoint.url =
-          window.location.origin + template(endpoint.template)(data);
+        endpoint.url = window.location.origin + template(endpoint.template)(data);
       } else {
         endpoint.url = Environment.baseUrl + endpoint.url;
       }
@@ -23,11 +19,11 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
     }
 
     public endpointHasTemplate(ep: GenericObject): boolean {
-      return ep.hasOwnProperty('template') && !isEmpty(ep.template);
+      return ep.prototype?.hasOwnProperty.call('template') && !isEmpty(ep.template);
     }
 
     public authorizationTokenMustBeAdded(endpoint: object): boolean {
-      return endpoint && ('token' in endpoint);
+      return endpoint && 'token' in endpoint;
     }
 
     public decodeBase64Token(encodedToken: string): GenericObject {
@@ -42,7 +38,7 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
     }
 
     public getAuthorizationHeader(token: string): object {
-      return {'Authorization': 'JWT ' + token};
+      return {Authorization: 'JWT ' + token};
     }
 
     public requestToken(endpoint: object): void {
@@ -65,21 +61,21 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
       return defer.promise;
     }
 
-    public fireRequest(endpoint: string, endpointTemplateData?: object,
-        requestAdditionalOptions?: object, activeReqKey?: string): void {
+    public fireRequest(
+      endpoint: string,
+      endpointTemplateData?: object,
+      requestAdditionalOptions?: object,
+      activeReqKey?: string
+    ): void {
       if (!endpoint) {
         console.log('Endpoint name is missing.', 'Endpoints:fireRequest');
         return;
       }
       const defer = this._getDeferrer();
-      const self = this;
       this.addTokenToRequestOptions(endpoint, endpointTemplateData as any)
         .then((requestOptions: object) => {
-          const options = self._addAdditionalRequestOptions(
-            requestOptions,
-            requestAdditionalOptions as any
-          );
-          return self.sendRequest(options, activeReqKey);
+          const options = this._addAdditionalRequestOptions(requestOptions, requestAdditionalOptions as any);
+          return this.sendRequest(options, activeReqKey);
         })
         .then((endpointResponse: any) => {
           defer.resolve(endpointResponse);
@@ -104,11 +100,7 @@ export function EndpointsMixin<T extends Constructor<PolymerElement>>(baseClass:
               break;
             case 'headers':
               // add additional headers
-              options.headers = Object.assign(
-                {},
-                options.headers,
-                (requestAdditionalOptions as any)[key]
-              );
+              options.headers = Object.assign({}, options.headers, (requestAdditionalOptions as any)[key]);
               break;
             default:
               options[key] = (requestAdditionalOptions as any)[key];
