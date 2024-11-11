@@ -112,9 +112,9 @@ export class AppShell extends LoadingMixin(connect(store)(LitElement)) {
 
       <etools-toasts></etools-toasts>
 
-      <app-drawer-layout id="layout" force-narrow="" fullbleed="">
+      <app-drawer-layout id="layout" force-narrow="" fullbleed>
         <!-- Main content -->
-        <app-header-layout has-scrolling-region="">
+        <app-header-layout has-scrolling-region fullbleed>
           <app-header slot="header" condenses reveals>
             <page-header id="pageheader" title="eTools" .profile="${this.user}"></page-header>
           </app-header>

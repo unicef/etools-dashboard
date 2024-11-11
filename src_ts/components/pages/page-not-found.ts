@@ -1,15 +1,15 @@
-import {PolymerElement, html} from '@polymer/polymer';
-import {customElement} from '@polymer/decorators';
+import {html, LitElement} from 'lit';
+import {customElement} from 'lit/decorators.js';
+import {layoutStyles} from '@unicef-polymer/etools-unicef/src/styles/layout-styles';
 
 @customElement('page-not-found')
-export class PageNotFound extends PolymerElement {
-  public static get template(): HTMLTemplateElement {
+export class PageNotFound extends LitElement {
+  static get styles() {
+    return [layoutStyles];
+  }
+
+  render() {
     return html`
-      <style>
-        div.container {
-          height: 100vh;
-        }
-      </style>
       <div class="container">
         <h2>Oops! You hit a 404</h2>
         <p>
