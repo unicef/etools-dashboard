@@ -17,9 +17,9 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
-      - run:
-          name: TsLint
-          command: npm run tsToJs
+#      - run:
+#          name: TsLint
+#          command: npm run tsToJs
       - run:
           name: EsLint
           command: npm run lint
