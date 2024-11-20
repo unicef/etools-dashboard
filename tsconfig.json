@@ -12,6 +12,7 @@
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "allowUmdGlobalAccess": true,
     "noEmitHelpers": true,
     "importHelpers": true,
     "outDir": "src",
