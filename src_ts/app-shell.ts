@@ -17,7 +17,7 @@ import {pageContentHeaderSlottedStyles} from '@unicef-polymer/etools-modules-com
 import {EtoolsLoading} from '@unicef-polymer/etools-unicef/src/etools-loading/etools-loading.js';
 import {LoadingMixin} from '@unicef-polymer/etools-unicef/src/etools-loading/etools-loading-mixin';
 import '@unicef-polymer/etools-unicef/src/etools-loading/etools-loading.js';
-import {sendRequest} from '@unicef-polymer/etools-ajax/etools-ajax-request';
+import {sendRequest} from '@unicef-polymer/etools-utils/dist/etools-ajax/ajax-request';
 import '@unicef-polymer/etools-piwik-analytics/etools-piwik-analytics.js';
 import './components/appshell/page-header';
 import {Endpoints} from './endpoints/endpoints';
