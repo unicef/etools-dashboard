@@ -74,7 +74,6 @@
     "mout": ">=1.2.4",
     "node-fetch": ">=2.6.7",
     "path-parse": ">=1.0.7",
-    "polymer-cli": "^1.9.11",
     "prettier": "~2.5.1",
     "qs": ">=6.5.3",
     "rollup": "^2.79.1",
