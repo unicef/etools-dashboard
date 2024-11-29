@@ -23,6 +23,17 @@ export class ViewFam extends LitElement {
       this.embedSource = `${famProd}&$filter=business_area/area_code eq '${this.countryCode}'`;
     }
   }
+  static get observedAttributes() {
+    return ['country-code']; // Watch for the `country-code` attribute
+  }
+
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+    super.attributeChangedCallback(name, oldValue, newValue);
+    if (name === 'country-code' && oldValue !== newValue) {
+      this.countryCode = newValue || ''; // Update property when attribute changes
+      this.embedSource = `${famProd}&$filter=business_area/area_code eq '${this.countryCode}'`;
+    }
+  }
 
   render() {
     return html`

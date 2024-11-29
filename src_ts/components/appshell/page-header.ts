@@ -38,7 +38,7 @@ export class PageHeader extends LitElement {
         }
       </style>
 
-      <app-toolbar sticky class="layout-horizontal align-items-center" hide-app-menu>
+      <app-toolbar sticky class="layout-horizontal align-items-center" hide-app-menu .profile=${this.profile}>
         <div slot="dropdowns">
           <countries-dropdown
             id="countries"

@@ -81,6 +81,9 @@ export class AppShell extends LoadingMixin(connect(store)(LitElement)) {
         :host-context([dir='rtl']) reason-display {
           --text-padding: 26px 80px 26px 24px;
         }
+        div[slot='tabs'] {
+          width: 100%;
+        }
         sl-tab-group {
           --indicator-color: var(--primary-color);
           max-width: calc(100% - 2px);
@@ -159,7 +162,7 @@ export class AppShell extends LoadingMixin(connect(store)(LitElement)) {
                   </div>
                 </div>
                 <div slot="tabs">
-                  <sl-tab-group @sl-tab-show="${this.tabChanged}" no-scroll-controls>
+                  <sl-tab-group @sl-tab-show="${this.tabChanged}">
                     ${this.tabs?.map(
                       (t) =>
                         html` <sl-tab
@@ -380,9 +383,11 @@ export class AppShell extends LoadingMixin(connect(store)(LitElement)) {
   getAppStaticData() {
     this.getCurrentUser().then((user: any) => {
       if (user) {
+        if (!user.is_unicef_user) {
+          window.location.href = window.location.origin + '/menu/';
+        }
         this.user = user;
         this.getCountryDetails();
-
         // Seems to not be used
         // this.getSectors();
         // this.getDropdownsStaticData();
@@ -392,9 +397,10 @@ export class AppShell extends LoadingMixin(connect(store)(LitElement)) {
   }
 
   getCountryDetails() {
-    sendRequest({endpoint: Endpoints.userCountry}).then(
-      (resp) => (this.countryDetails = resp && resp.length ? resp[0] : {})
-    );
+    sendRequest({endpoint: Endpoints.userCountry}).then((resp) => {
+      this.countryDetails = resp && resp.length ? resp[0] : {};
+      this.requestUpdate();
+    });
   }
 
   // Seems to not be used
