@@ -77,11 +77,9 @@ export const famProd =
   '&filterPaneEnabled=false&navContentPaneEnabled=false';
 
 export const fmmProd =
-  'https://app.powerbi.com/reportEmbed?reportId=047c4b59-f6f5-4b93-9381' +
-  '-c711d6cfca36&appId=2df1d7e6-b6fb-4cd4-862b-269605b8575a' +
-  '&autoAuth=true&ctid=77410195-14e1-4fb8-904b-ab1892023667';
+  'https://app.powerbi.com/reportEmbed?reportId=07564ef9-c664-4f97-8e06-b099cb13f8b0&' +
+  'appId=56089b5f-f2cc-4121-8705-58f981db340f&autoAuth=true&ctid=77410195-14e1-4fb8-904b-ab1892023667';
 
 export const fmpProd =
-  'https://app.powerbi.com/reportEmbed?reportId=9f15f945-59fc-4765-a2bf' +
-  '-2315fff33ef4&appId=2df1d7e6-b6fb-4cd4-862b-269605b8575a' +
-  '&autoAuth=true&ctid=77410195-14e1-4fb8-904b-ab1892023667';
+  'https://app.powerbi.com/reportEmbed?reportId=0a32ac1f-6250-427b-a835-d39797d52334&' +
+  'appId=56089b5f-f2cc-4121-8705-58f981db340f&autoAuth=true&ctid=77410195-14e1-4fb8-904b-ab1892023667';

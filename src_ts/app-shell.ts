@@ -142,7 +142,7 @@ export class AppShell extends LoadingMixin(connect(store)(LitElement)) {
                         </sl-menu>
                       </sl-dropdown>
                     </div>
-
+                    <!--TODO consider if this export is still needed-->
                     <a
                       target="_blank"
                       .href="${this.csvUrl}"
