@@ -8,7 +8,7 @@ import {lazyReducerEnhancer} from '@unicef-polymer/etools-utils/dist/pwa.utils';
 declare global {
   interface Window {
     process?: Record<string, any>;
-    /* eslint-disable-next-line no-undef */
+
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
   }
 }
