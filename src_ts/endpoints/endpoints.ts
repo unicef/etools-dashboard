@@ -1,39 +1,39 @@
 export const Endpoints = {
   changeCountry: {
-    url: '/api/v3/users/changecountry/',
+    url: '/api/v3/users/changecountry/'
   },
   countries: {
-    url: '/api/countries/',
+    url: '/api/countries/'
   },
   myProfile: {
-    url: '/api/v3/users/profile/',
+    url: '/api/v3/users/profile/'
   },
   userCountry: {
-    url: '/api/v3/users/country/',
+    url: '/api/v3/users/country/'
   },
   static: {
     url: '/api/v2/dropdowns/static/',
     exp: 6 * 60 * 60 * 1000, // 6h
-    cachingKey: 'static',
+    cachingKey: 'static'
   },
   sectors: {
     url: '/api/reports/sectors/',
     exp: 6 * 60 * 60 * 1000,
-    cachingKey: 'sectors',
+    cachingKey: 'sectors'
   },
   offices: {
     url: '/api/offices/',
     exp: 6 * 60 * 60 * 1000,
-    cachingKey: 'offices',
+    cachingKey: 'offices'
   },
   partnershipsOverview: {
     template: '/api/v2/partners/dashboard/',
     exp: 6 * 60 * 60 * 1000, // 6h
-    cacheTableName: 'partnershipsOverview',
+    cacheTableName: 'partnershipsOverview'
   },
   csoDashboard: {
     template: '/api/v2/interventions/partnership-dash/',
     exp: 6 * 60 * 60 * 1000, // 6h
-    cacheTableName: 'csoDashboard',
-  },
+    cacheTableName: 'csoDashboard'
+  }
 };
