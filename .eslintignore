@@ -1,7 +1,0 @@
-.gitignore
-demo/*
-test/*
-gulpfile.js
-gulp-tasks/*
-build/*
-src/*
