@@ -5,7 +5,7 @@ jobs:
     # The primary container is an instance of the first list image listed. Your build commands run in this container.
     docker:
       # - image: robertavram/etools-dash-base:tst
-      - image: node:14.21
+      - image: node:20.18.1
     steps:
       - checkout
       - restore_cache:
@@ -29,7 +29,7 @@ jobs:
     # The primary container is an instance of the first list image listed. Your build commands run in this container.
     docker:
       # - image: robertavram/etools-dash-base:tst
-      - image: node:14.21
+      - image: node:20.18.1
     steps:
       - checkout
       - setup_remote_docker:
@@ -81,3 +81,4 @@ workflows:
                 - staging
                 - develop
                 - sh-migration
+                - node_20.18.0_shoelace_2.18.0
