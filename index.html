@@ -1,44 +1,29 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <!doctype html>
 <html lang="en">
-
   <head>
     <meta charset="utf-8">
-    <meta name="generator" content="Polymer Starter Kit">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
     <title>eTools | Dashboard</title>
-    <meta name="description" content="UNICEF Dashboard">
+    <meta name="generator" content="PWA Starter Kit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Etools Frontend Template description">
 
     <!--
-        The `<base>` tag below is present to support two advanced deployment options:
-        1) Differential serving. 2) Serving from a non-root path.
+      The `<base>` tag below is present to support two advanced deployment options:
+      1) Differential serving. 2) Serving from a non-root path.
 
-        Instead of manually editing the `<base>` tag yourself, you should generally either:
-        a) Add a `basePath` property to the build configuration in your `polymer.json`.
-        b) Use the `--base-path` command-line option for `polymer build`.
-
-        Note: If you intend to serve from a non-root path, see [polymer-root-path] below.
-      -->
+      Instead of manually editing the `<base>` tag yourself, you should generally either:
+      a) Add a `basePath` property to the build configuration in your `polymer.json`.
+      b) Use the `--base-path` command-line option for `polymer build`.
+    -->
     <base href="/dash/">
 
-    <link rel="icon" href="images/favicon.ico">
+    <link rel="icon" href="assets/images/favicon.ico">
 
     <!-- See https://goo.gl/OOhYW5 -->
     <link rel="manifest" href="manifest.json">
 
     <!-- See https://goo.gl/qRE0vM -->
-    <meta name="theme-color" content="#0099ff">
+    <meta name="theme-color" content="#3f51b5">
 
     <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -50,14 +35,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="apple-mobile-web-app-title" content="eTools - Dashboard">
 
     <!-- Homescreen icons -->
-    <link rel="apple-touch-icon" href="images/manifest/icon-48x48.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/manifest/icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="96x96" href="images/manifest/icon-96x96.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="images/manifest/icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="images/manifest/icon-192x192.png">
+    <link rel="apple-touch-icon" href="assets/images/manifest/icon-48x48.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/images/manifest/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="assets/images/manifest/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="assets/images/manifest/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="assets/images/manifest/icon-192x192.png">
 
     <!-- Tile icon for Windows 8 (144x144 + tile color) -->
-    <meta name="msapplication-TileImage" content="images/manifest/icon-144x144.png">
+    <meta name="msapplication-TileImage" content="assets/images/manifest/icon-144x144.png">
     <meta name="msapplication-TileColor" content="#3f51b5">
     <meta name="msapplication-tap-highlight" content="no">
 
@@ -65,80 +50,101 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@username">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="eTools - Dashboard">
-    <meta property="og:image" content="images/manifest/icon-144x144.png" />
+    <meta property="og:site_name" content="my-app">
+    <meta property="og:image" content="assets/images/manifest/icon-144x144.png" />
+
+   <!-- Performance tip: hint to the browser to start the handshake for the fonts site -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="preconnect" crossorigin="anonymous" href="https://fonts.googleapis.com">
+    <link rel="preconnect" crossorigin="anonymous" href="https://fonts.gstatic.com">
+
+    <link rel="preload" as="style" crossorigin="anonymous" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,300,300italic,400italic,500,500italic,700,700italic&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" crossorigin="anonymous" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,300,300italic,400italic,500,500italic,700,700italic&display=swap"></noscript>
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.18.0/dist/themes/light.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.18.0/dist/themes/light.css"></noscript>
+    <link rel="preload" href="assets/css/app-theme.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="assets/css/app-theme.css"></noscript>
 
     <script>
-      'use strict';
-      /**
-       * [polymer-root-path]
-       *
-       * By default, we set `Polymer.rootPath` to the server root path (`/`).
-       * Leave this line unchanged if you intend to serve your app from the root
-       * path (e.g., with URLs like `my.domain/` and `my.domain/view1`).
-       *
-       * If you intend to serve your app from a non-root path (e.g., with URLs
-       * like `my.domain/my-app/` and `my.domain/my-app/view1`), edit this line
-       * to indicate the path from which you'll be serving, including leading
-       * and trailing slashes (e.g., `/my-app/`).
-       */
-      const BASEURL = '/dash/';
-      window.Polymer = {
-        rootPath: BASEURL
-      };
-
       // Load and register pre-caching Service Worker
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('service-worker.js', {
-            scope: Polymer.rootPath
-          }, (err) => console.log('Service Worker registration failed: ', err));
+            scope: '/dash/',
+          });
         });
       }
-    </script>
 
-    <script>
+      // Redux assumes `process.env.NODE_ENV` exists in the ES module build.
+      // https://github.com/reactjs/redux/issues/2907
       window.process = { env: { NODE_ENV: 'production' } };
     </script>
-
     <!-- Start of etools Zendesk Widget script -->
 
     <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=69eb3f61-7900-4d7e-a3e2-9f4b3b28b2ac"></script>
 
     <!-- End of etools Zendesk Widget script -->
-
     <!-- Add any global styles for body, document, etc. -->
     <style>
       body {
         margin: 0;
-        font-family: 'Roboto', 'Noto', sans-serif;
-        font-size: 14px;
+        font-family: var(--sl-font-sans, 'Roboto, Noto, sans-serif');
+        font-size: var(--etools-font-size-14, 14px);
         font-weight: 400;
         line-height: 1.5;
         min-height: 100vh;
-        /* we can not use app-theme color variables here, IE11 can not apply them */
-        background-color: #eeeeee;
-        color: rgba(0, 0, 0, 0.87);
+        background-color: var(--secondary-background-color);
+        color: var(--primary-text-color);
+        -webkit-font-smoothing: antialiased;
+      }
+      * {
+        outline: none;
       }
 
+      #loading-animation {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: rgba(35,57,68, 0.15);
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        align-content: center;
+        justify-content: center;
+      }
+
+      #loading-animation img {
+        width: 200px;
+        margin: 8px;
+      }
+      #loading-animation span {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        justify-content: center;
+      }
     </style>
+    <link rel="preload" as="image" href="assets/images/etools-logo-color-white.svg" />
+    <link rel="preload" as="image" href="assets/images/loading.svg" />
   </head>
-
-<body>
-  <app-shell></app-shell>
-  <noscript>
-    Please enable JavaScript to view this website.
-  </noscript>
-
-  <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  <script src="node_modules/web-animations-js/web-animations-next-lite.min.js"></script>
-  <script src="node_modules/dayjs/dayjs.min.js"></script>
-  <script src="node_modules/dayjs/plugin/utc.js"></script>
-  <script src="node_modules/dayjs/plugin/isBetween.js"></script>
-  <script src="node_modules/dayjs/plugin/isSameOrBefore.js"></script>
-  <script src="node_modules/dayjs/plugin/isSameOrAfter.js"></script>
-
-  <script type="module" src="src/app-shell.js"></script>
-</body>
-
+  <body>
+    <div id="buildRevNo" style="display: none">revNo</div>
+    <div id="buildDate" style="display: none">bDate</div>
+    <app-shell appTitle="eTools - Dashboard">
+      <div id="loading-animation">
+        <span>
+          <img src="assets/images/etools-logo-color-white.svg" alt="UNICEF Logo">
+          <img src="assets/images/loading.svg" alt="loading animation">
+        </span>
+      </div>
+    </app-shell>
+    <noscript>
+      Please enable JavaScript to view this website.
+    </noscript>
+    <!-- Built with love using PWA Starter Kit -->
+    <script type="module" src="src/app-shell.js" defer></script>
+  </body>
 </html>
