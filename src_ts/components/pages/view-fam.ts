@@ -14,7 +14,7 @@ export class ViewFam extends LitElement {
   @property({type: String})
   public embedSource = '';
 
-  @property({type: String})
+  @property({type: String, attribute: 'country-code'})
   public countryCode: string = '';
 
   // Update embedSource whenever countryCode changes
