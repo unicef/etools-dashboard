@@ -28,78 +28,20 @@ const updateStoreRouteDetails: ActionCreator<AppActionUpdateRouteDetails> = (rou
   };
 };
 
-const loadPageComponents: ActionCreator<ThunkResult> = (routeDetails: EtoolsRouteDetails) => (dispatch) => {
+const loadPageComponents: ActionCreator<ThunkResult> = (routeDetails: EtoolsRouteDetails) => async (dispatch: any) => {
   if (!routeDetails) {
     // invalid route => redirect to page not found
     EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
     return;
   }
 
-  if (routeDetails.routeName === 'page-not-found') {
-    import('../../components/pages/page-not-found.js');
-  } else {
-    switch (routeDetails.routeName) {
-      case 'personalized':
-        import('../../components/pages/view-personalized.js').catch((error) => {
-          console.log('Error at loadPageComponents', error);
-          EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
-        });
-        break;
-      case 'partnerships':
-        import('../../components/pages/view-partnerships.js').catch((error) => {
-          console.log('Error at loadPageComponents', error);
-          EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
-        });
-        break;
-      case 'fam':
-        import('../../components/pages/view-fam.js').catch((error) => {
-          console.log('Error at loadPageComponents', error);
-          EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
-        });
-        break;
-      case 'fmm':
-        import('../../components/pages/view-fmm.js').catch((error) => {
-          console.log('Error at loadPageComponents', error);
-          EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
-        });
-        break;
-      case 'fmp':
-        import('../../components/pages/view-fmp.js').catch((error) => {
-          console.log('Error at loadPageComponents', error);
-          EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
-        });
-        break;
-      case 'hact':
-        import('../../components/pages/view-hact.js').catch((error) => {
-          console.log('Error at loadPageComponents', error);
-          EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
-        });
-        break;
-      case 'map':
-        import('../../components/pages/view-map.js').catch((error) => {
-          console.log('Error at loadPageComponents', error);
-          EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
-        });
-        break;
-      case 'attachments':
-        import('../../components/pages/view-attachments.js').catch((error) => {
-          console.log('Error at loadPageComponents', error);
-          EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
-        });
-        break;
-      case 'trips':
-        import('../../components/pages/view-trips.js').catch((error) => {
-          console.log('Error at loadPageComponents', error);
-          EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
-        });
-        break;
-      case 'custom':
-        import('../../components/pages/view-custom.js').catch((error) => {
-          console.log('Error at loadPageComponents', error);
-          EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
-        });
-        break;
-    }
+  const page = routeDetails.routeName;
+
+  try {
+    await import(`../../components/pages/view-${page}.ts`);
+  } catch {
+    console.log(`No file imports configuration found: ${page}!`);
+    EtoolsRouter.updateAppLocation(EtoolsRouter.getRedirectPath(EtoolsRedirectPath.NOT_FOUND));
   }
 
   // add page details to redux store, to be used in other components
@@ -113,7 +55,7 @@ export const updateDrawerState: ActionCreator<AppActionUpdateDrawerState> = (ope
   };
 };
 
-export const navigate: ActionCreator<ThunkResult> = (path: string) => (dispatch) => {
+export const navigate: ActionCreator<ThunkResult> = (path: string) => (dispatch: any) => {
   // Check if path matches a valid app route, use route details to load required page components
 
   // if app route is accessed, redirect to default route (if not already on it)
