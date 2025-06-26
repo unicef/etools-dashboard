@@ -218,7 +218,7 @@ export class AppShell extends LoadingMixin(connect(store)(LitElement)) {
           ${this.isActivePage(this.mainPage, 'custom')
             ? html` <view-custom class="page" .user="${this.user}" name="custom"></view-custom>`
             : html``}
-          ${this.isActivePage(this.mainPage, 'page-not-found') ? html` <page-not-found></page-not-found>` : html``}
+          ${this.isActivePage(this.mainPage, 'not-found') ? html` <page-not-found></page-not-found>` : html``}
           <app-footer></app-footer>
         </app-header-layout>
       </app-drawer-layout>
@@ -388,10 +388,6 @@ export class AppShell extends LoadingMixin(connect(store)(LitElement)) {
         }
         this.user = user;
         this.getCountryDetails();
-        // Seems to not be used
-        // this.getSectors();
-        // this.getDropdownsStaticData();
-        // this.getOffices();
       }
     });
   }
@@ -402,23 +398,6 @@ export class AppShell extends LoadingMixin(connect(store)(LitElement)) {
       this.requestUpdate();
     });
   }
-
-  // Seems to not be used
-  // getSectors() {
-  //   sendRequest({ endpoint: Endpoints.sectors }).then((resp) =>
-  //     store.dispatch(setSectors(resp))
-  //   );
-  // }
-  // getDropdownsStaticData() {
-  //   sendRequest({ endpoint: Endpoints.static }).then((resp) =>
-  //     store.dispatch(setStatic(resp))
-  //   );
-  // }
-  // getOffices() {
-  //   sendRequest({ endpoint: Endpoints.offices }).then((resp) =>
-  //     store.dispatch(setOffices(resp))
-  //   );
-  // }
 
   goToAddTrip() {
     window.location.href = '/t2f/edit-travel/-1';
