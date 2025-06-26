@@ -17,9 +17,6 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
-#      - run:
-#          name: TsLint
-#          command: npm run tsToJs
       - run:
           name: EsLint
           command: npm run lint
@@ -80,5 +77,4 @@ workflows:
                 - master
                 - staging
                 - develop
-                - sh-migration
-                - node_20.18.0_shoelace_2.18.0
+                - dynamic_imports

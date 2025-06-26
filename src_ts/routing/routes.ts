@@ -8,7 +8,7 @@ import {Environment} from '@unicef-polymer/etools-utils/dist/singleton/environme
 EtoolsRouter.init({
   baseUrl: Environment.basePath,
   redirectPaths: {
-    notFound: '/page-not-found',
+    notFound: '/not-found',
     default: '/personalized'
   },
   redirectedPathsToSubpageLists: []
@@ -25,7 +25,7 @@ const availablePages = [
   'fam',
   'fmm',
   'fmp',
-  'page-not-found'
+  'not-found'
 ];
 
 EtoolsRouter.addRoute(new RegExp(`^$`), (params: EtoolsRouteCallbackParams): EtoolsRouteDetails => {
