@@ -142,17 +142,6 @@ export class AppShell extends LoadingMixin(connect(store)(LitElement)) {
                         </sl-menu>
                       </sl-dropdown>
                     </div>
-                    <!--TODO consider if this export is still needed-->
-                    <a
-                      target="_blank"
-                      .href="${this.csvUrl}"
-                      ?hidden="${!this.isActivePage(this.mainPage, 'partnerships')}"
-                    >
-                      <etools-button variant="text" class="neutral">
-                        <etools-icon class="dark" name="file-download"></etools-icon>
-                        Export
-                      </etools-button>
-                    </a>
                     <div ?hidden="${!this.isActivePage(this.mainPage, 'trips')}">
                       <etools-button variant="primary" @click="${this.goToAddTrip}">
                         <etools-icon name="add"></etools-icon>
