@@ -35,7 +35,7 @@ const terserConfig = {
 const copyConfig = {
   targets: [
     {src: 'manifest.json', dest: 'src'},
-    { src: 'version.json', dest: 'src' },
+    {src: 'version.json', dest: 'src'},
     {src: 'assets', dest: 'src'},
     {src: 'index.html', dest: 'src'}
   ]
